@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.ui.component.editor.impl.TextFileEditor;
+import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
@@ -45,6 +46,7 @@ public class EditorRegistry {
      */
     private void loadDescriptions() {
         addDescription(TextFileEditor.DESCRIPTION);
+        addDescription(PostFilterEditor.DESCRIPTION);
     }
 
     /**

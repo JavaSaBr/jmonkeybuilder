@@ -124,6 +124,49 @@
     -fx-rotate: 90;
 }
 
+
+/* Transparent ListView */
+.transparent-list-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-effect: null;
+}
+
+.transparent-list-view:focused {
+    -fx-background-color: transparent;
+}
+
+.transparent-list-view > .virtual-flow > .corner {
+    -fx-background-color: derive(-fx-base,-1%);
+}
+
+.transparent-list-view:focused > .virtual-flow > .clipped-container > .sheet > .transparent-list-cell:filled:selected {
+    -fx-background: -fx-color-500;
+    -fx-table-cell-border-color: transparent;
+    -fx-text-fill: -fx-font-color;
+}
+
+.transparent-list-view:focused > .virtual-flow > .clipped-container > .sheet > .transparent-list-cell:focused  {
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-text-fill: -fx-font-color;
+}
+
+/* Transparent ListCell */
+.transparent-list-cell {
+    -fx-background: transparent;
+    -fx-background-color: -fx-background;
+    -fx-text-fill: -fx-font-color;
+}
+
+.transparent-list-cell:filled:selected {
+    -fx-background: -fx-selection-bar-non-focused;
+    -fx-table-cell-border-color: transparent;
+    -fx-text-fill: -fx-font-color;
+}
+
+
 /** TransparentButton */
 
 .toolbar-button {

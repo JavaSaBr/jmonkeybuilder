@@ -1,10 +1,12 @@
 package com.ss.editor.ui.component.editor;
 
+import com.ss.editor.state.editor.EditorState;
+
 import java.nio.file.Path;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
+import rlib.util.array.Array;
 
 /**
  * Интерфейс для реализации редактора.
@@ -50,6 +52,14 @@ public interface FileEditor {
     /**
      * Сохранить изменения.
      */
-    public void doSave();
+    public default void doSave() {
 
+    }
+
+    /**
+     * @return 3D части редактора либо null.
+     */
+    public default Array<EditorState> getStates() {
+        return null;
+    }
 }

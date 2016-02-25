@@ -1,5 +1,8 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import com.ss.editor.Editor;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
 
@@ -15,6 +18,8 @@ import javafx.scene.layout.VBox;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.Messages.FILE_EDITOR_ACTION_SAVE;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
@@ -28,6 +33,14 @@ import static com.ss.editor.ui.css.CSSIds.FILE_EDITOR_TOOLBAR;
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
+
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final Editor EDITOR = Editor.getInstance();
+
+    /**
+     * Список 3D частей этого редактора.
+     */
+    private final Array<EditorState> editorStates;
 
     /**
      * Изменялся ли документ.
@@ -45,8 +58,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private Path file;
 
     public AbstractFileEditor() {
+        this.editorStates = ArrayFactory.newArray(EditorState.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         createContent();
+    }
+
+    /**
+     * Зарегистрировать 3D часть редактора.
+     */
+    protected void addEditorState(final EditorState editorState) {
+        this.editorStates.add(editorState);
     }
 
     /**
@@ -161,7 +182,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    public void doSave() {
+    public Array<EditorState> getStates() {
+        return editorStates;
+    }
 
+    @Override
+    public String toString() {
+        return "AbstractFileEditor{" +
+                "editorStates=" + editorStates +
+                ", dirtyProperty=" + dirtyProperty +
+                ", file=" + file +
+                '}';
     }
 }

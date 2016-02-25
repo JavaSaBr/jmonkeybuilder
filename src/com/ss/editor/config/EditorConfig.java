@@ -137,6 +137,8 @@ public final class EditorConfig implements AssetEventListener {
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
 
         this.screenSize = ScreenSize.sizeOf(prefs.get(PREF_GRAPHIC_SCREEN_SIZE, "1244x700"));
+        //FIXME убрать когда будут настройки
+        this.screenSize = ScreenSize.sizeOf("1600x900");
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 

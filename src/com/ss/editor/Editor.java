@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
 import com.jme3.post.FilterPostProcessor;
@@ -127,6 +128,11 @@ public class Editor extends SimpleApplication {
      */
     private EditorFXScene scene;
 
+    /**
+     * Процессор пост эффетков.
+     */
+    private FilterPostProcessor postProcessor;
+
     private Editor() {
         this.lock = new StampedLock();
     }
@@ -187,6 +193,9 @@ public class Editor extends SimpleApplication {
 
         LOGGER.info(this, "OS: " + system.getDistribution());
 
+        final AssetManager assetManager = getAssetManager();
+        assetManager.registerLocator("", FolderAssetLocator.class);
+
         final AudioRenderer audioRenderer = getAudioRenderer();
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
@@ -195,7 +204,7 @@ public class Editor extends SimpleApplication {
 
         ExecutorManager.getInstance();
 
-        final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, assetManager, inputManager);
+        final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, this.assetManager, inputManager);
 
         for (final CursorType type : CursorType.values()) {
             cursorDisplayProvider.setup(type);
@@ -204,7 +213,7 @@ public class Editor extends SimpleApplication {
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
 
-        final FilterPostProcessor postProcessor = new FilterPostProcessor(assetManager);
+        postProcessor = new FilterPostProcessor(this.assetManager);
         postProcessor.initialize(renderManager, viewPort);
 
         viewPort.addProcessor(postProcessor);
@@ -269,5 +278,12 @@ public class Editor extends SimpleApplication {
 
         listener.setLocation(cam.getLocation());
         listener.setRotation(cam.getRotation());
+    }
+
+    /**
+     * @return процессор пост эффетков.
+     */
+    public FilterPostProcessor getPostProcessor() {
+        return postProcessor;
     }
 }

@@ -46,3 +46,11 @@
     -fx-background-color: -fx-color-panel-200;
     -fx-padding: 10, 0, 0, 0;
 }
+
+#PostFilterEditorMaterialListContainer {
+    -fx-background-color: -fx-color-panel-200;
+    -fx-alignment: top-left;
+    -fx-min-width: 300;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}

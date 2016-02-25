@@ -20,6 +20,8 @@ public class Messages {
     public static final String FILE_EDITOR_ACTION_SAVE;
     public static final String FILE_EDITOR_TEXT_EDITOR;
 
+    public static final String POST_FILTER_EDITOR_MATERIAL_LABEL;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -32,5 +34,7 @@ public class Messages {
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
         FILE_EDITOR_TEXT_EDITOR = bundle.getString("FileEditorTextEditor");
+
+        POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
     }
 }

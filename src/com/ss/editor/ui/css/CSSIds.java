@@ -18,4 +18,6 @@ public interface CSSIds {
 
     public static final String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
 
+
+    public static final String POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER = "PostFilterEditorMaterialListContainer";
 }

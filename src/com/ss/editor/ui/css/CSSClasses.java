@@ -18,6 +18,8 @@ public interface CSSClasses {
 
     public static final String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
     public static final String TRANSPARENT_TREE_CELL = "transparent-tree-cell";
+    public static final String TRANSPARENT_LIST_VIEW = "transparent-list-view";
+    public static final String TRANSPARENT_LIST_CELL = "transparent-list-cell";
 
     public static final String TOOLBAR_BUTTON = "toolbar-button";
 }
