@@ -1,0 +1,154 @@
+
+/* Main Fonts */
+.main-font-13 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 13;
+}
+
+.main-font-14 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 14;
+}
+
+.main-font-14-bold {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 14;
+    -fx-font-style: "Bold";
+}
+
+.main-font-15 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 15;
+}
+
+.main-font-15-bold {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 15;
+    -fx-font-style: "Bold";
+}
+
+.main-font-15-bold-with-shadow {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 15;
+    -fx-font-style: "Bold";
+    -fx-effect: dropshadow(one-pass-box, black, 2, 1, 1, 1);
+}
+
+.main-font-17 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 17;
+}
+
+.main-font-20 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 20;
+}
+
+/* Transparent TreeView */
+.transparent-tree-view {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-effect: null;
+}
+
+.transparent-tree-view:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+    -fx-effect: null;
+}
+
+.transparent-tree-view *.scroll-bar:horizontal,
+.transparent-tree-view *.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.transparent-tree-view .scroll-bar:horizontal .track,
+.transparent-tree-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-radius: 0;
+    -fx-effect: null;
+}
+
+.transparent-tree-view .scroll-bar:horizontal .increment-button ,
+.transparent-tree-view .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: orange;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+}
+
+.transparent-tree-view .scroll-bar:vertical .increment-button ,
+.transparent-tree-view .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+}
+
+.transparent-tree-view .scroll-bar .increment-arrow,
+.transparent-tree-view .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* Transparent TreeCell */
+
+.transparent-tree-cell {
+    -fx-background: transparent;
+    -fx-padding: 0.25em; /* 3 */
+    -fx-indent: 1em;
+}
+.transparent-tree-cell .label {
+    -fx-padding: 0.0em 0.0em 0.0em 0.25em; /* 0 0 0 3 */
+}
+.transparent-tree-cell > .tree-disclosure-node,
+.transparent-tree-table-row-cell > .tree-disclosure-node {
+    -fx-padding: 4 6 4 8;
+    -fx-background-color: transparent;
+}
+.transparent-tree-cell > .tree-disclosure-node > .arrow,
+.transparent-tree-table-row-cell > .tree-disclosure-node > .arrow {
+    -fx-background-color: -fx-font-color;
+    -fx-padding: 0.333333em 0.229em 0.333333em 0.229em; /* 4 */
+    -fx-shape: "M 0 -3.5 L 4 0 L 0 3.5 z";
+}
+.transparent-tree-cell:expanded > .tree-disclosure-node > .arrow,
+.transparent-tree-table-row-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-rotate: 90;
+}
+
+/** TransparentButton */
+
+.toolbar-button {
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 0, 0, 0, 0; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-cursor: hand;
+    -fx-effect: -fx-material-shadow-control;
+}
+
+.toolbar-button:hover {
+    -fx-body-color: -fx-color-400;
+}
+
+.toolbar-button:armed {
+    -fx-body-color: -fx-color-600;
+}
+
+.toolbar-button:focused {
+}

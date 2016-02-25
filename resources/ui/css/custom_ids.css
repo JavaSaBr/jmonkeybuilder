@@ -1,0 +1,39 @@
+
+#EditorBarComponent {
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#MainSplitPane {
+    -fx-background-color: transparent;
+}
+
+#AssetComponent {
+    -fx-background-color: -fx-color-panel-100;
+    -fx-alignment: top-center;
+    -fx-effect: null;
+    -fx-border-color: red;
+    -fx-border-width: 0;
+}
+
+#AssetComponentBar {
+    -fx-background-color: transparent;
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center-right;
+}
+
+#AssetComponentBarButton {
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 30;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+
+#AssetComponentResourceTreeCell {
+}
