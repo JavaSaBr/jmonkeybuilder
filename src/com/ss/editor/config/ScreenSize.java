@@ -1,12 +1,12 @@
 package com.ss.editor.config;
 
+import java.awt.*;
+
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
-
-import java.awt.*;
 
 import static java.lang.Math.max;
 

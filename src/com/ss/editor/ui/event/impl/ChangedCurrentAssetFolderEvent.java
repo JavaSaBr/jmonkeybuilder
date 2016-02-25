@@ -21,10 +21,16 @@ public class ChangedCurrentAssetFolderEvent extends SceneEvent {
         super(EVENT_TYPE);
     }
 
+    /**
+     * @param newAssetFolder новая папка Asset.
+     */
     public void setNewAssetFolder(final Path newAssetFolder) {
         set(ASSET, newAssetFolder);
     }
 
+    /**
+     * @return новая папка Asset.
+     */
     public Path getNewAssetFolder() {
         return get(ASSET);
     }

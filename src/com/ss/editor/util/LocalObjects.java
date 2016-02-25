@@ -4,7 +4,8 @@ import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
-import org.sample.client.GameThread;
+import com.ss.editor.EditorThread;
+
 
 /**
  * Контейнер локальных объектов.
@@ -17,7 +18,7 @@ public class LocalObjects {
     private static final int LIMIT = SIZE - 1;
 
     public static final LocalObjects get() {
-        return ((GameThread) Thread.currentThread()).getLocalObects();
+        return ((EditorThread) Thread.currentThread()).getLocalObects();
     }
 
     /**

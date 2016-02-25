@@ -1,16 +1,15 @@
 package com.ss.editor.ui.event;
 
+import com.ss.editor.manager.ExecutorManager;
+
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import org.sample.client.game.task.impl.NotifyFXEventTask;
-import org.sample.client.manager.GameTaskManager;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
-import rlib.util.pools.Foldable;
 
 /**
  * Менеджер слушателей событий UI JavaFX.
@@ -70,9 +69,8 @@ public class FXEventManager {
         if (Platform.isFxApplicationThread()) {
             notifyImpl(event);
         } else {
-
-            final GameTaskManager taskManager = GameTaskManager.getInstance();
-            taskManager.addFXTask(NotifyFXEventTask.getInstance(event));
+            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            executorManager.addFXTask(() -> notifyImpl(event));
         }
     }
 
@@ -102,13 +100,9 @@ public class FXEventManager {
         }
 
         if (event instanceof ConsumeableEvent && !event.isConsumed()) {
-            final GameTaskManager taskManager = GameTaskManager.getInstance();
-            taskManager.addFXTask(NotifyFXEventTask.getInstance(event));
+            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            executorManager.addFXTask(() -> notifyImpl(event));
             return;
-        }
-
-        if (event instanceof Foldable) {
-            ((Foldable) event).release();
         }
     }
 }

@@ -5,14 +5,19 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.system.AppSettings;
 import com.ss.editor.Editor;
-import com.ss.editor.config.ScreenSize;
-
-import org.sample.client.GameContext;
-import org.sample.client.SampleGame;
+import com.ss.editor.EditorContext;
 
 import java.awt.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 
 /**
  * Набор настроек, изменяемых пользователем.
@@ -21,11 +26,15 @@ import java.util.prefs.Preferences;
  */
 public final class EditorConfig implements AssetEventListener {
 
+    private static final Logger LOGGER = LoggerManager.getLogger(EditorConfig.class);
+
     public static final String EDITOR_NAME = "jME3 SpaceShift Editor";
 
     public static final String GRAPHICS_ALIAS = "Graphics";
+    public static final String ASSET_ALIAS = "ASSET";
 
     public static final String PREF_GRAPHIC_SCREEN_SIZE = GRAPHICS_ALIAS + "." + "screenSize";
+    public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
 
     private static EditorConfig instance;
 
@@ -45,7 +54,12 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * Используемое разрешение экрана.
      */
-    private ScreenSize screenSize;
+    private volatile ScreenSize screenSize;
+
+    /**
+     * Текущий выбранный Asset.
+     */
+    private volatile Path currentAsset;
 
     @Override
     @SuppressWarnings("rawtypes")
@@ -82,6 +96,20 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return текущий выбранный Asset.
+     */
+    public Path getCurrentAsset() {
+        return currentAsset;
+    }
+
+    /**
+     * @param currentAsset текущий выбранный Asset.
+     */
+    public void setCurrentAsset(Path currentAsset) {
+        this.currentAsset = currentAsset;
+    }
+
+    /**
      * @return настройки движка.
      */
     public AppSettings getSettings() {
@@ -91,7 +119,7 @@ public final class EditorConfig implements AssetEventListener {
         final DisplayMode displayMode = device.getDisplayMode();
 
         final AppSettings settings = new AppSettings(true);
-        settings.setRenderer("CUSTOM" + GameContext.class.getName());
+        settings.setRenderer("CUSTOM" + EditorContext.class.getName());
         settings.setTitle(EDITOR_NAME);
         settings.setFullscreen(false);
         settings.setResolution(screenSize.getWidth(), screenSize.getHeight());
@@ -109,6 +137,16 @@ public final class EditorConfig implements AssetEventListener {
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
 
         this.screenSize = ScreenSize.sizeOf(prefs.get(PREF_GRAPHIC_SCREEN_SIZE, "1244x700"));
+
+        final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
+
+        if(currentAssetURI != null) {
+            try {
+                this.currentAsset = Paths.get(new URI(currentAssetURI));
+            } catch (URISyntaxException e) {
+                LOGGER.error(e);
+            }
+        }
     }
 
     /**
@@ -119,6 +157,16 @@ public final class EditorConfig implements AssetEventListener {
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
 
         prefs.put(PREF_GRAPHIC_SCREEN_SIZE, getScreenSize().toString());
+
+        if(currentAsset != null) {
+            prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());
+        } else {
+            prefs.remove(PREF_CURRENT_ASSET);
+        }
+
+        if(currentAsset != null && !Files.exists(currentAsset)) {
+            currentAsset = null;
+        }
 
         try {
             prefs.flush();

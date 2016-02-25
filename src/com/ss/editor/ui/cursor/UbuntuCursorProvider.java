@@ -6,10 +6,11 @@ import com.jme3.asset.plugins.ClasspathLocator;
 import com.jme3.cursors.plugins.JmeCursor;
 import com.jme3.input.InputManager;
 import com.jme3x.jfx.cursor.CursorDisplayProvider;
-import com.ss.client.executor.impl.GameThreadExecutor;
-import com.ss.client.game.task.impl.ChangeCursorTask;
+import com.ss.editor.Editor;
+import com.ss.editor.manager.ExecutorManager;
 import com.sun.javafx.cursor.CursorFrame;
 import com.sun.javafx.cursor.CursorType;
+
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.dictionary.DictionaryFactory;
@@ -22,27 +23,29 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
 
     private static final Logger LOGGER = LoggerManager.getLogger(UbuntuCursorProvider.class);
 
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     private static final ObjectDictionary<CursorType, String> CURSOR_TEXTURE_MAPPING = DictionaryFactory.newObjectDictionary();
 
     static {
-        CURSOR_TEXTURE_MAPPING.put(CursorType.CLOSED_HAND, "ui/fx/cursor/ubuntu/Ubuntu link.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.CROSSHAIR, "ui/fx/cursor/ubuntu/Ubuntu Precision.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.DEFAULT, "ui/fx/cursor/ubuntu/Ubuntu Normal Select.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.E_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu horozontal.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.H_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu horozontal.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.HAND, "ui/fx/cursor/ubuntu/Ubuntu link.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.MOVE, "ui/fx/cursor/ubuntu/The Real Ubuntu Move.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.N_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu vertical.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.NE_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu diagonal 2.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.NW_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu diagonal 1.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.OPEN_HAND, "ui/fx/cursor/ubuntu/Ubuntu link.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.S_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu vertical.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.SE_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu diagonal 1.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.SW_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu diagonal 2.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.TEXT, "ui/fx/cursor/ubuntu/Ubuntu Text.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.V_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu vertical.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.W_RESIZE, "ui/fx/cursor/ubuntu/Ubuntu horozontal.cur");
-        CURSOR_TEXTURE_MAPPING.put(CursorType.WAIT, "ui/fx/cursor/ubuntu/Ubuntu Busy.ani");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.CLOSED_HAND, "ui/cursor/ubuntu/Ubuntu link.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.CROSSHAIR, "ui/cursor/ubuntu/Ubuntu Precision.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.DEFAULT, "ui/cursor/ubuntu/Ubuntu Normal Select.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.E_RESIZE, "ui/cursor/ubuntu/Ubuntu horozontal.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.H_RESIZE, "ui/cursor/ubuntu/Ubuntu horozontal.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.HAND, "ui/cursor/ubuntu/Ubuntu link.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.MOVE, "ui/cursor/ubuntu/The Real Ubuntu Move.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.N_RESIZE, "ui/cursor/ubuntu/Ubuntu vertical.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.NE_RESIZE, "ui/cursor/ubuntu/Ubuntu diagonal 2.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.NW_RESIZE, "ui/cursor/ubuntu/Ubuntu diagonal 1.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.OPEN_HAND, "ui/cursor/ubuntu/Ubuntu link.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.S_RESIZE, "ui/cursor/ubuntu/Ubuntu vertical.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.SE_RESIZE, "ui/cursor/ubuntu/Ubuntu diagonal 1.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.SW_RESIZE, "ui/cursor/ubuntu/Ubuntu diagonal 2.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.TEXT, "ui/cursor/ubuntu/Ubuntu Text.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.V_RESIZE, "ui/cursor/ubuntu/Ubuntu vertical.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.W_RESIZE, "ui/cursor/ubuntu/Ubuntu horozontal.cur");
+        CURSOR_TEXTURE_MAPPING.put(CursorType.WAIT, "ui/cursor/ubuntu/Ubuntu Busy.ani");
     }
 
     /**
@@ -115,7 +118,10 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
             return;
         }
 
-        final GameThreadExecutor executor = GameThreadExecutor.getInstance();
-        executor.addToExecute(ChangeCursorTask.getInstance(cursor));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+            final Editor editor = Editor.getInstance();
+            final InputManager inputManager = editor.getInputManager();
+            inputManager.setMouseCursor(cursor);
+        });
     }
 }

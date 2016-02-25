@@ -1,10 +1,11 @@
 package com.ss.editor;
 
+import com.ss.editor.util.LocalObjects;
+
 import org.lwjgl.LWJGLException;
-import org.sample.client.util.LocalObjects;
 
 /**
- * Модель игрового потока.
+ * Модель потока редактора.
  *
  * @author Ronn
  */

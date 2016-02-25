@@ -2,10 +2,11 @@ package com.ss.editor.document;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import rlib.data.AbstractStreamDocument;
-import rlib.util.VarTable;
 
 import java.io.InputStream;
+
+import rlib.data.AbstractStreamDocument;
+import rlib.util.VarTable;
 
 /**
  * Реализация парсинга конфигурации из файла.

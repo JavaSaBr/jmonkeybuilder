@@ -1,18 +1,25 @@
 package com.ss.editor.ui.util;
 
+import com.ss.editor.ui.component.ScreenComponent;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Objects;
+
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.util.Duration;
-import org.sample.client.ui.component.ScreenComponent;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import rlib.util.array.ArrayFactory;
 
 /**
  * Набор утилитных методов для работы с UI.
@@ -20,10 +27,6 @@ import java.lang.reflect.Field;
  * @author Ronn
  */
 public class UIUtils {
-
-
-	public static final int TARGET_SCREEN_HEIGHT = 1080;
-	public static final int TARGET_SCREEN_WIDTH = 1920;
 
 	/**
 	 * Поиск всех компонентов экрана.
@@ -34,14 +37,74 @@ public class UIUtils {
 			container.add((ScreenComponent) node);
 		}
 
-		if(node instanceof Parent) {
-			for(final Node children : ((Parent) node).getChildrenUnmodifiable()) {
-				fillComponents(container, children);
-			}
+        if(node instanceof SplitPane) {
+            final ObservableList<Node> items = ((SplitPane) node).getItems();
+            items.forEach(child -> fillComponents(container, child));
+        }
+
+		if(!(node instanceof Parent)) {
+			return;
 		}
+
+        final ObservableList<Node> nodes = ((Parent) node).getChildrenUnmodifiable();
+        nodes.forEach(child -> fillComponents(container, child));
 	}
 
-	public static final void addTo(TreeItem<? super Object> item, TreeItem<? super Object> parent) {
+	/**
+	 * Поиск всех компонентов экрана.
+	 */
+	public static <T extends Node> Array<T> fillComponents(final Node node, final Class<T> type) {
+		final Array<T> container = ArrayFactory.newArray(type);
+        fillComponents(container, node, type);
+        return container;
+	}
+
+    /**
+     * Поиск всех компонентов.
+     */
+    public static <T extends Node> void fillComponents(final Array<T> container, final Node node, final Class<T> type) {
+
+        if(type.isInstance(container)) {
+            container.add(type.cast(node));
+        }
+
+        if(!(node instanceof Parent)) {
+            return;
+        }
+
+        final ObservableList<Node> nodes = ((Parent) node).getChildrenUnmodifiable();
+        nodes.forEach(child -> fillComponents(container, child, type));
+    }
+
+    /**
+     * Поиск всех элементов меню.
+     */
+    public static Array<MenuItem> getAllItems(final MenuBar menuBar) {
+
+        final Array<MenuItem> container = ArrayFactory.newArray(MenuItem.class);
+
+        final ObservableList<Menu> menus = menuBar.getMenus();
+        menus.forEach(menu -> getAllItems(container, menu));
+
+        return container;
+    }
+
+    /**
+     * Поиск всех элементов меню.
+     */
+    public static void getAllItems(final Array<MenuItem> container, final MenuItem menuItem) {
+
+        container.add(menuItem);
+
+        if(!(menuItem instanceof Menu)) {
+            return;
+        }
+
+        final ObservableList<MenuItem> items = ((Menu) menuItem).getItems();
+        items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
+    }
+
+	public static void addTo(TreeItem<? super Object> item, TreeItem<? super Object> parent) {
 		final ObservableList<TreeItem<Object>> children = parent.getChildren();
 		children.add(item);
 	}
@@ -126,15 +189,15 @@ public class UIUtils {
 		return null;
 	}
 
-	public static TreeItem<Object> findItemForValue(TreeItem<Object> root, Object object) {
+	public static <T> TreeItem<T> findItemForValue(TreeItem<T> root, Object object) {
 
-		final ObservableList<TreeItem<Object>> children = root.getChildren();
+		final ObservableList<TreeItem<T>> children = root.getChildren();
 
 		if(!children.isEmpty()) {
 
-			for(TreeItem<Object> treeItem : children) {
+			for(TreeItem<T> treeItem : children) {
 
-				final TreeItem<Object> result = findItemForValue(treeItem, object);
+				final TreeItem<T> result = findItemForValue(treeItem, object);
 
 				if(result != null) {
 					return result;
@@ -142,10 +205,35 @@ public class UIUtils {
 			}
 		}
 
-		if(root.getValue() == object) {
+		if(Objects.equals(root.getValue(), object)) {
 			return root;
 		}
 
 		return null;
+	}
+
+	public static <T> Array<TreeItem<T>> getAllItems(final TreeView<T> treeView) {
+
+		final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
+
+		final TreeItem<T> root = treeView.getRoot();
+		final ObservableList<TreeItem<T>> children = root.getChildren();
+
+		for(final TreeItem<T> child : children) {
+			getAllItems(container, child);
+		}
+
+		return container;
+	}
+
+	public static <T> void getAllItems(final Array<TreeItem<T>> container, final TreeItem<T> root) {
+
+        container.add(root);
+
+		final ObservableList<TreeItem<T>> children = root.getChildren();
+
+		for(final TreeItem<T> child : children) {
+			getAllItems(container, child);
+		}
 	}
 }

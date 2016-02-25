@@ -1,7 +1,19 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
 /**
- * Created by ronn on 24.02.16.
+ * Реализация элемента для отображения загрузки.
+ *
+ * @author Ronn.
  */
-public class ResourceLoadingElement {
+public class ResourceLoadingElement extends ResourceElement {
+
+    private static final ResourceLoadingElement INSTANCE = new ResourceLoadingElement();
+
+    public static ResourceLoadingElement getInstance() {
+        return INSTANCE;
+    }
+
+    public ResourceLoadingElement() {
+        super(null);
+    }
 }

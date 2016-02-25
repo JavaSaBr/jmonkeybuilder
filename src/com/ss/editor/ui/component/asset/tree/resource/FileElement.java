@@ -1,7 +1,15 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import java.nio.file.Path;
+
 /**
- * Created by ronn on 24.02.16.
+ * Реализация элемента для файла.
+ *
+ * @author Ronn
  */
-public class FileElement {
+public class FileElement extends ResourceElement {
+
+    public FileElement(final Path file) {
+        super(file);
+    }
 }

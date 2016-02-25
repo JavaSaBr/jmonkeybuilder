@@ -6,24 +6,24 @@ package com.ss.editor.ui.css;
  * @author Ronn
  */
 public enum CSSFont {
-    ROBOTO_BLACK_14("Roboto Black", "/ui/fonts/Roboto-Black.ttf", 0);
+    ROBOTO_BLACK("Roboto Black", "/ui/fonts/Roboto-Black.ttf", 0);
 
     public static final CSSFont[] FONTS = values();
 
     /**
      * Название шрифта.
      */
-    private String name;
+    private final String name;
 
     /**
      * Путь для загрузки шрифта.
      */
-    private String path;
+    private final String path;
 
     /**
      * Размер шрифта.
      */
-    private float size;
+    private final float size;
 
     private CSSFont(final String name, final String path, final float size) {
         this.name = name;

@@ -1,7 +1,89 @@
 package com.ss.editor.ui.component.asset.tree;
 
+import com.ss.editor.manager.IconManager;
+import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
+
+import java.nio.file.Path;
+
+import javafx.geometry.Side;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
+import rlib.ui.util.FXUtils;
+import rlib.util.StringUtils;
+
+import static com.ss.editor.manager.IconManager.DEFAULT_FILE_ICON_SIZE;
+import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
+import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_TREE_CELL;
+import static com.ss.editor.ui.css.CSSIds.ASSET_COMPONENT_RESOURCE_TREE_CELL;
+
 /**
- * Created by ronn on 24.02.16.
+ * Реализация ячейки ресурса для дерева ресурсов.
+ *
+ * @author Ronn
  */
-public class ResourceTreeCell {
+public class ResourceTreeCell extends TreeCell<ResourceElement> {
+
+    public static final Callback<TreeView<ResourceElement>, TreeCell<ResourceElement>> CELL_FACTORY = param -> new ResourceTreeCell();
+
+    private static final IconManager ICON_MANAGER = IconManager.getInstance();
+
+    public ResourceTreeCell() {
+        setId(ASSET_COMPONENT_RESOURCE_TREE_CELL);
+        setMinHeight(20);
+        setOnMouseClicked(this::processClick);
+
+        FXUtils.addClassTo(this, TRANSPARENT_TREE_CELL);
+        FXUtils.addClassTo(this, MAIN_FONT_13);
+    }
+
+    /**
+     * Процесс обработки клика на элемент дерева.
+     */
+    private void processClick(final MouseEvent event) {
+
+        final ResourceElement item = getItem();
+
+        if(item == null || event.getButton() != MouseButton.SECONDARY) {
+            return;
+        }
+
+        final ResourceTree treeView = (ResourceTree) getTreeView();
+        treeView.updateContextMenu(item);
+
+        final ContextMenu contextMenu = treeView.getContextMenu();
+
+        if(contextMenu == null) {
+            return;
+        }
+
+        contextMenu.show(this, Side.BOTTOM, 0, 0);
+    }
+
+    @Override
+    protected void updateItem(final ResourceElement item, boolean empty) {
+        super.updateItem(item, empty);
+
+        if(item == null) {
+            setText(StringUtils.EMPTY);
+            setGraphic(null);
+            return;
+        } else if(item instanceof ResourceLoadingElement) {
+            setText(StringUtils.EMPTY);
+            setGraphic(new ProgressIndicator());
+            return;
+        }
+
+        final Path file = item.getFile();
+        final Path fileName = file.getFileName();
+
+        setText(fileName.toString());
+        setGraphic(new ImageView(ICON_MANAGER.getIcon(file, DEFAULT_FILE_ICON_SIZE)));
+    }
 }

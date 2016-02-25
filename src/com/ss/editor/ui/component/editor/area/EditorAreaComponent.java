@@ -1,7 +1,15 @@
 package com.ss.editor.ui.component.editor.area;
 
+import javafx.scene.control.TabPane;
+
 /**
- * Created by ronn on 24.02.16.
+ * Компонент для реализации области редакторов.
+ *
+ * @author Ronn
  */
-public class EditorAreaComponent {
+public class EditorAreaComponent extends TabPane {
+
+    public EditorAreaComponent() {
+      //  FXUtils.addDebugBackgroundColor(this);
+    }
 }

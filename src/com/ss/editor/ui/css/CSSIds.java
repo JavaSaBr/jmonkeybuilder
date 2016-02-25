@@ -7,4 +7,13 @@ package com.ss.editor.ui.css;
  */
 public interface CSSIds {
 
+    public static final String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+
+    public static final String MAIN_SPLIT_PANEL = "MainSplitPane";
+
+    public static final String ASSET_COMPONENT = "AssetComponent";
+    public static final String ASSET_COMPONENT_BAR = "AssetComponentBar";
+    public static final String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CELL = "AssetComponentResourceTreeCell";
+
 }

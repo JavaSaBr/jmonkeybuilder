@@ -20,7 +20,7 @@ public final class EditorContext extends LwjglDisplay {
     /**
      * Игровой поток рендера экрана.
      */
-    private GameThread thread;
+    private EditorThread thread;
 
     @Override
     public void create(final boolean waitFor) {
@@ -30,7 +30,7 @@ public final class EditorContext extends LwjglDisplay {
         }
 
         try {
-            thread = new GameThread(this);
+            thread = new EditorThread(this);
             thread.setPriority(Thread.MAX_PRIORITY);
         } catch (final LWJGLException e) {
             LOGGER.warning(e);
@@ -47,7 +47,7 @@ public final class EditorContext extends LwjglDisplay {
     /**
      * @return игровой поток рендера экрана.
      */
-    public GameThread getThread() {
+    public EditorThread getThread() {
         return thread;
     }
 

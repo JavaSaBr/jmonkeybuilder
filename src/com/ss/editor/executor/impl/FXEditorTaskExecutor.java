@@ -2,17 +2,13 @@ package com.ss.editor.executor.impl;
 
 import com.sun.javafx.application.PlatformImpl;
 
-import org.sample.client.SampleGame;
-import org.sample.client.game.task.GameTask;
-import org.sample.client.util.LocalObjects;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import rlib.concurrent.util.ConcurrentUtils;
 import rlib.util.array.Array;
 
 /**
- * Реализация исполнителья игровых задач по обновлению FX UI.
+ * Реализация исполнителья задач по обновлению FX UI.
  *
  * @author Ronn
  */
@@ -21,30 +17,22 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     private static final int EXECUTE_LIMIT = 300;
 
     /**
-     * Контейнер локальных объектов для потока JavaFX.
-     */
-    private final LocalObjects fxLocal;
-
-    /**
      * Задча по выполнению подзадач в потоке JavaFX.
      */
-    private final Runnable fxTask = () -> doExecute(getExecute(), getExecuted(), getFxLocal(), SampleGame.getInstance());
+    private final Runnable fxTask = () -> doExecute(getExecute(), getExecuted());
 
     public FXEditorTaskExecutor() {
         setName(FXEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
-
-        this.fxLocal = new LocalObjects();
-
         start();
     }
 
     /**
      * Процесс обновления состояния задач.
      */
-    protected void doExecute(final Array<GameTask> execute, final Array<GameTask> executed, final LocalObjects local, final SampleGame game) {
+    protected void doExecute(final Array<Runnable> execute, final Array<Runnable> executed) {
 
-        final GameTask[] array = execute.array();
+        final Runnable[] array = execute.array();
 
         for (int i = 0, length = execute.size(); i < length; ) {
 
@@ -52,15 +40,12 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
 
             try {
 
-                final long currentTime = SampleGame.getCurrentTime();
-
                 for (int count = 0, limit = EXECUTE_LIMIT; count < limit && i < length; count++, i++) {
 
-                    final GameTask task = array[i];
+                    final Runnable task = array[i];
+                    task.run();
 
-                    if (task.execute(local, currentTime)) {
-                        executed.add(task);
-                    }
+                    executed.add(task);
                 }
 
             } catch (final Exception e) {
@@ -70,13 +55,13 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     }
 
     @Override
-    public void execute(final GameTask gameTask) {
+    public void execute(final Runnable task) {
         lock();
         try {
 
-            final Array<GameTask> waitTasks = getWaitTasks();
-            waitTasks.slowRemove(gameTask);
-            waitTasks.add(gameTask);
+            final Array<Runnable> waitTasks = getWaitTasks();
+            waitTasks.slowRemove(task);
+            waitTasks.add(task);
 
             final AtomicBoolean wait = getWait();
 
@@ -93,19 +78,12 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         }
     }
 
-    /**
-     * @return контейнер локальных объектов для потока JavaFX.
-     */
-    public LocalObjects getFxLocal() {
-        return fxLocal;
-    }
-
     @Override
     public void run() {
 
-        final Array<GameTask> execute = getExecute();
-        final Array<GameTask> executed = getExecuted();
-        final Array<GameTask> waitTasks = getWaitTasks();
+        final Array<Runnable> execute = getExecute();
+        final Array<Runnable> executed = getExecuted();
+        final Array<Runnable> waitTasks = getWaitTasks();
 
         final AtomicBoolean wait = getWait();
 
@@ -152,8 +130,6 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
             } finally {
                 unlock();
             }
-
-            executed.forEach(FINISH_TASK_FUNC);
         }
     }
 }

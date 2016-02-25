@@ -1,50 +1,62 @@
 package com.ss.editor.ui.event;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javafx.event.Event;
-import javafx.event.EventTarget;
 import javafx.event.EventType;
-import rlib.util.pools.Foldable;
 
 /**
  * Базавая реализация события сцены javaFX UI.
  * 
  * @author Ronn
  */
-public class SceneEvent extends Event implements Foldable {
+public class SceneEvent extends Event {
 
 	private static final long serialVersionUID = 6827900349094865635L;
 
-	public static final EventType<SceneEvent> EVENT_TYPE = new EventType<SceneEvent>(SceneEvent.class.getSimpleName());
+	public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
 
-	public SceneEvent(final Object source, final EventTarget target, final EventType<? extends Event> eventType) {
-		super(source, target, eventType);
+    /**
+     * Мапа с параметрами события.
+     */
+	private Map<Object, Object> values;
+
+	public SceneEvent(final Object source, final EventType<? extends Event> eventType) {
+		super(source, null, eventType);
 	}
 
 	public SceneEvent(final EventType<? extends Event> eventType) {
 		super(eventType);
 	}
 
-	/**
-	 * @param target новая цель события.
-	 */
-	public void setTarget(final EventTarget target) {
-		this.target = target;
-	}
+    /**
+     * Вставка параметра для события.
+     *
+     * @param key ключ параметра.
+     * @param value значение параметра.
+     */
+    public void set(Object key, Object value) {
 
-	@Override
-	public void finalyze() {
+        if(values == null) {
+            values = new HashMap<>();
+        }
 
-		final EventTarget target = getTarget();
+        values.put(key, value);
+    }
 
-		if(target instanceof Foldable) {
-			((Foldable) target).release();
-		}
+    /**
+     * Получение параметра события.
+     *
+     * @param key ключ параметра.
+     * @return значение параметра или null.
+     */
+    public <T> T get(Object key) {
 
-		setTarget(null);
-	}
+        if(values == null) {
+            return null;
+        }
 
-	@Override
-	public void reinit() {
-		this.consumed = false;
-	}
+        return (T) values.get(key);
+    }
 }
