@@ -16,4 +16,6 @@ public interface CSSIds {
     public static final String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CELL = "AssetComponentResourceTreeCell";
 
+    public static final String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
+
 }

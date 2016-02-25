@@ -37,3 +37,12 @@
 
 #AssetComponentResourceTreeCell {
 }
+
+#FileEditorToolbar {
+    -fx-alignment: center-left;
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-background-color: -fx-color-panel-200;
+    -fx-padding: 10, 0, 0, 0;
+}

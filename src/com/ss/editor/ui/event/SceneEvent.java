@@ -1,10 +1,9 @@
 package com.ss.editor.ui.event;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javafx.event.Event;
 import javafx.event.EventType;
+import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.ObjectDictionary;
 
 /**
  * Базавая реализация события сцены javaFX UI.
@@ -18,9 +17,9 @@ public class SceneEvent extends Event {
 	public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
 
     /**
-     * Мапа с параметрами события.
+     * Таблица с параметрами события.
      */
-	private Map<Object, Object> values;
+	private ObjectDictionary<Object, Object> values;
 
 	public SceneEvent(final Object source, final EventType<? extends Event> eventType) {
 		super(source, null, eventType);
@@ -36,10 +35,10 @@ public class SceneEvent extends Event {
      * @param key ключ параметра.
      * @param value значение параметра.
      */
-    public void set(Object key, Object value) {
+    public void set(final Object key, final Object value) {
 
         if(values == null) {
-            values = new HashMap<>();
+            values = DictionaryFactory.newObjectDictionary();
         }
 
         values.put(key, value);
@@ -51,7 +50,7 @@ public class SceneEvent extends Event {
      * @param key ключ параметра.
      * @return значение параметра или null.
      */
-    public <T> T get(Object key) {
+    public <T> T get(final Object key) {
 
         if(values == null) {
             return null;

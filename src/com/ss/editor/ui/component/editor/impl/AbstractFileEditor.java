@@ -1,0 +1,167 @@
+package com.ss.editor.ui.component.editor.impl;
+
+import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.editor.FileEditor;
+
+import java.nio.file.Path;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+import rlib.ui.util.FXUtils;
+
+import static com.ss.editor.Messages.FILE_EDITOR_ACTION_SAVE;
+import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
+import static com.ss.editor.ui.css.CSSIds.FILE_EDITOR_TOOLBAR;
+
+/**
+ * Базовая реализация редактора.
+ *
+ * @author Ronn
+ */
+public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
+
+    /**
+     * Изменялся ли документ.
+     */
+    private final BooleanProperty dirtyProperty;
+
+    /**
+     * Корневой элемент редактора.
+     */
+    private R root;
+
+    /**
+     * Редактируемый файл.
+     */
+    private Path file;
+
+    public AbstractFileEditor() {
+        this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
+        createContent();
+    }
+
+    /**
+     * Создание контента.
+     */
+    protected void createContent() {
+
+        final VBox container = new VBox();
+
+        HBox toolbar = null;
+
+        if(needToolbar()) {
+
+            toolbar = new HBox();
+            toolbar.setId(FILE_EDITOR_TOOLBAR);
+
+            createToolbar(toolbar);
+
+            FXUtils.addToPane(toolbar, container);
+            FXUtils.bindFixedWidth(toolbar, container.widthProperty());
+        }
+
+        root = createRoot();
+
+        createContent(root);
+
+        FXUtils.addToPane(root, container);
+
+        if(toolbar != null) {
+            FXUtils.bindFixedHeight(root, container.heightProperty().subtract(toolbar.heightProperty()));
+        } else {
+            FXUtils.bindFixedHeight(root, container.heightProperty());
+        }
+
+        FXUtils.bindFixedWidth(root, container.widthProperty());
+    }
+
+    /**
+     * Создание тулбара.
+     */
+    protected void createToolbar(final HBox container) {
+    }
+
+    /**
+     * Создание акшена для сохранения изменений.
+     */
+    protected Button createSaveAction() {
+
+        Button action = new Button();
+        action.setId(FILE_EDITOR_ACTION_SAVE);
+        action.setGraphic(new ImageView(Icons.SAVE_24));
+        action.setOnAction(event -> doSave());
+        action.disableProperty().bind(dirtyProperty().not());
+
+        FXUtils.addClassTo(action, TOOLBAR_BUTTON);
+
+        return action;
+    }
+
+    /**
+     * @return нужен ли тулбар для этого редактора.
+     */
+    protected boolean needToolbar() {
+        return false;
+    }
+
+    /**
+     * @return создание корневого элемента для основного контента редактора.
+     */
+    protected abstract R createRoot();
+
+    /**
+     * Создание контента редактора.
+     */
+    protected abstract void createContent(final R root);
+
+    @Override
+    public Pane getPage() {
+        return (Pane) root.getParent();
+    }
+
+    @Override
+    public Path getEditFile() {
+        return file;
+    }
+
+    @Override
+    public String getFileName() {
+        return file.getFileName().toString();
+    }
+
+    @Override
+    public void openFile(final Path file) {
+        this.file = file;
+    }
+
+    @Override
+    public BooleanProperty dirtyProperty() {
+        return dirtyProperty;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return dirtyProperty.get();
+    }
+
+    /**
+     * Указать есть ли изменения в редакторе.
+     */
+    protected void setDirty(final boolean dirty) {
+        this.dirtyProperty.setValue(dirty);
+    }
+
+    @Override
+    public void doSave() {
+
+    }
+}
