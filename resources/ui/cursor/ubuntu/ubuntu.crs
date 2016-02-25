@@ -1,0 +1,45 @@
+﻿[Arrow]
+Path=Ubuntu Normal Select.cur
+
+[Help]
+Path=Ubuntu Help Select.cur
+
+[AppStarting]
+Path=Ubuntu Working in Background.ani
+
+[Wait]
+Path=Ubuntu Busy.ani
+
+[Crosshair]
+Path=Ubuntu Precision.cur
+
+[IBeam]
+Path=Ubuntu Text.cur
+
+[NWPen]
+Path=Ubuntu Handwriting .cur
+
+[No]
+Path=Ubuntu Unavailable.cur
+
+[SizeNS]
+Path=Ubuntu vertical.cur
+
+[SizeWE]
+Path=Ubuntu horozontal.cur
+
+[SizeNWSE]
+Path=Ubuntu diagonal 1.cur
+
+[SizeNESW]
+Path=Ubuntu diagonal 2.cur
+
+[UpArrow]
+Path=Ubuntu alt select.cur
+
+[Hand]
+Path=Ubuntu link.cur
+
+[SizeAll]
+Path=The Real Ubuntu Move.cur
+
