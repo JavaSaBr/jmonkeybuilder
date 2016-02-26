@@ -4,6 +4,8 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.ChaseCamera;
+import com.jme3.light.DirectionalLight;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -25,6 +27,11 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     private final ChaseCamera chaseCamera;
 
     /**
+     * Источник света для chase камеры.
+     */
+    private final DirectionalLight lightForChaseCamera;
+
+    /**
      * Рутовый узел.
      */
     private final Node stateNode;
@@ -32,6 +39,11 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     public AbstractEditorState() {
         this.stateNode = new Node(getClass().getSimpleName());
         this.chaseCamera = needChaseCamera()? createChaseCamera() : null;
+        this.lightForChaseCamera = needLightForChaseCamera()? createLightForChaseCamera() : null;
+
+        if(lightForChaseCamera != null) {
+            stateNode.addLight(lightForChaseCamera);
+        }
     }
 
     /**
@@ -83,11 +95,18 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
         return false;
     }
 
+    /**
+     * Нужен ли источник света для chase камеры.
+     */
+    protected boolean needLightForChaseCamera() {
+        return false;
+    }
+
     protected ChaseCamera createChaseCamera() {
 
         final Camera camera = EDITOR.getCamera();
 
-        final ChaseCamera chaser = new ChaseCamera(camera, stateNode, EDITOR.getInputManager());
+        final ChaseCamera chaser = new ChaseCamera(camera, getNodeForChaseCamera(), EDITOR.getInputManager());
         chaser.setDragToRotate(true);
         chaser.setMinVerticalRotation(-FastMath.HALF_PI);
         chaser.setMaxDistance(1000);
@@ -96,5 +115,43 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
         chaser.setZoomSensitivity(5);
 
         return chaser;
+    }
+
+    /**
+     * @return источник света для chase камеры.
+     */
+    protected DirectionalLight createLightForChaseCamera() {
+
+        final DirectionalLight directionalLight = new DirectionalLight();
+        directionalLight.setColor(ColorRGBA.White);
+
+        return directionalLight;
+    }
+
+    /**
+     * @return узел на который должна смотреть камера.
+     */
+    protected Node getNodeForChaseCamera() {
+        return stateNode;
+    }
+
+    /**
+     * @return источник света для chase камеры.
+     */
+    protected DirectionalLight getLightForChaseCamera() {
+        return lightForChaseCamera;
+    }
+
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+
+        final ChaseCamera chaseCamera = getChaseCamera();
+        final DirectionalLight lightForChaseCamera = getLightForChaseCamera();
+
+        if(chaseCamera != null && lightForChaseCamera != null) {
+            final Camera camera = EDITOR.getCamera();
+            lightForChaseCamera.setDirection(camera.getDirection());
+        }
     }
 }

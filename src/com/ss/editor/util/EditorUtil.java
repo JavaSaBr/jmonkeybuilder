@@ -6,8 +6,10 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.config.EditorConfig;
 
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -204,5 +206,19 @@ public abstract class EditorUtil {
     public static String timeFormat(final long time) {
         final SimpleDateFormat format = LOCATE_DATE_FORMAT.get();
         return format.format(new Date(time));
+    }
+
+    /**
+     * Получение пути к указанному ресурсу относительно текущего Asset.
+     *
+     * @param file интересуемый файл.
+     * @return относительный путь к файлу.
+     */
+    public static Path getAssetFile(final Path file) {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
+        return currentAsset.relativize(file);
     }
 }
