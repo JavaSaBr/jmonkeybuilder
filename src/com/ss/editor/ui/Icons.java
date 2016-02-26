@@ -15,6 +15,7 @@ public interface Icons {
 
     public static final Image REFRESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png");
     public static final Image REMOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png");
+    public static final Image CLOSE_16 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png");
 
     public static final Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png");
     public static final Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png");

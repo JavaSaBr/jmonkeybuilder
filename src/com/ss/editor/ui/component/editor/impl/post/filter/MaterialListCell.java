@@ -16,6 +16,7 @@ import rlib.util.StringUtils;
 import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_LIST_CELL;
+import static com.ss.editor.ui.css.CSSIds.POST_FILTER_EDITOR_CELL_REMOVE_BUTTON;
 import static javafx.geometry.Pos.CENTER_LEFT;
 
 /**
@@ -43,6 +44,7 @@ public class MaterialListCell extends ListCell<Material> {
         setAlignment(CENTER_LEFT);
 
         removeButton = new Button();
+        removeButton.setId(POST_FILTER_EDITOR_CELL_REMOVE_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_16));
         removeButton.setOnAction(event -> processRemove());
 

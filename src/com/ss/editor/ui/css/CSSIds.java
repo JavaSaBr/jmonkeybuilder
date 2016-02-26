@@ -18,6 +18,16 @@ public interface CSSIds {
 
     public static final String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
 
-
     public static final String POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER = "PostFilterEditorMaterialListContainer";
+    public static final String POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON = "PostFilterEditorAddMaterialButton";
+    public static final String POST_FILTER_EDITOR_CELL_REMOVE_BUTTON = "PostFilterEditorCellRemoveButton";
+
+    public static final String EDITOR_DIALOG_BACKGROUND = "EditorDialogBackground";
+    public static final String EDITOR_DIALOG_HEADER = "EditorDialogHeader";
+    public static final String EDITOR_DIALOG_HEADER_BUTTON_CLOSE = "EditorDialogHeaderButtonClose";
+
+    public static final String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
+    public static final String ASSET_EDITOR_DIALOG_BUTTON_OK = "AssetEditorDialogButtonOk";
+    public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL = "AssetEditorDialogButtonCancel";
+
 }

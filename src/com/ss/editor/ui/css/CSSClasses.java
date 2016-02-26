@@ -21,5 +21,7 @@ public interface CSSClasses {
     public static final String TRANSPARENT_LIST_VIEW = "transparent-list-view";
     public static final String TRANSPARENT_LIST_CELL = "transparent-list-cell";
 
+    public static final String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
+
     public static final String TOOLBAR_BUTTON = "toolbar-button";
 }

@@ -22,6 +22,10 @@ public class Messages {
 
     public static final String POST_FILTER_EDITOR_MATERIAL_LABEL;
 
+    public static final String ASSET_EDITOR_DIALOG_TITLE;
+    public static final String ASSET_EDITOR_DIALOG_BUTTON_OK;
+    public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -36,5 +40,9 @@ public class Messages {
         FILE_EDITOR_TEXT_EDITOR = bundle.getString("FileEditorTextEditor");
 
         POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
+
+        ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
+        ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
+        ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
     }
 }

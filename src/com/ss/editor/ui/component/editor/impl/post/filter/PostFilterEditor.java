@@ -8,6 +8,8 @@ import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
+import com.ss.editor.ui.scene.EditorFXScene;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -35,6 +37,7 @@ import static com.ss.editor.Messages.POST_FILTER_EDITOR_MATERIAL_LABEL;
 import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_LIST_VIEW;
+import static com.ss.editor.ui.css.CSSIds.POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON;
 import static com.ss.editor.ui.css.CSSIds.POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER;
 import static javafx.geometry.Pos.CENTER_LEFT;
 import static javafx.geometry.Pos.TOP_RIGHT;
@@ -45,6 +48,10 @@ import static javafx.geometry.Pos.TOP_RIGHT;
  * @author Ronn
  */
 public class PostFilterEditor extends AbstractFileEditor<StackPane> {
+
+    public static final Insets ADD_MATERIAL_OFFSET = new Insets(3, 0, 0, 0);
+    public static final Insets TITLE_CONTAINER_OFFSET = new Insets(0, 0, 0, 5);
+    public static final Insets TITLE_LABEL_OFFSET = new Insets(0, 0, 0, 3);
 
     public static final EditorDescription DESCRIPTION;
 
@@ -107,7 +114,9 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         materialsView.setMinHeight(24);
 
         addMaterial = new Button();
+        addMaterial.setId(POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON);
         addMaterial.setGraphic(new ImageView(Icons.ADD_24));
+        addMaterial.setOnAction(event -> processAdd());
 
         final HBox titleContainer = new HBox(addMaterial, titleLabel);
 
@@ -121,9 +130,20 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         FXUtils.addToPane(materialsView, materialListContainer);
         FXUtils.addToPane(materialListContainer, root);
 
-        VBox.setMargin(addMaterial, new Insets(3, 0, 0, 5));
-        VBox.setMargin(titleContainer, new Insets(0, 0, 0, 4));
-        HBox.setMargin(titleLabel, new Insets(0, 0, 0, 3));
+        VBox.setMargin(addMaterial, ADD_MATERIAL_OFFSET);
+        VBox.setMargin(titleContainer, TITLE_CONTAINER_OFFSET);
+        HBox.setMargin(titleLabel, TITLE_LABEL_OFFSET);
+    }
+
+    /**
+     * Обработка добавления материала.
+     */
+    private void processAdd() {
+
+        final EditorFXScene scene = EDITOR.getScene();
+
+        final AssetEditorDialog dialog = new AssetEditorDialog(this::addMaterial);
+        dialog.show(scene.getWindow());
     }
 
     /**
@@ -151,13 +171,13 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         dragEvent.consume();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addMaterial(relativize));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addRelativeMaterial(relativize));
     }
 
     /**
      * Процесс добавления материала.
      */
-    private void addMaterial(Path relativize) {
+    private void addRelativeMaterial(final Path relativize) {
 
         final MaterialKey materialKey = new MaterialKey(relativize.toString());
 
@@ -175,6 +195,21 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
             final ObservableList<Material> items = materialsView.getItems();
             items.add(material);
         });
+    }
+
+    /**
+     * Процесс добавления материала.
+     */
+    private void addMaterial(final Path file) {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
+        if(currentAsset == null) {
+            return;
+        }
+
+        addRelativeMaterial(currentAsset.relativize(file));
     }
 
     /**

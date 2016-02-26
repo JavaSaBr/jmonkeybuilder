@@ -14,6 +14,7 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
+import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_MENU_ITEM;
 
 /**
  * Реализация меню бара для редактора.
@@ -37,6 +38,7 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
 
         final Array<MenuItem> allItems = UIUtils.getAllItems(this);
         allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, MAIN_FONT_13));
+        allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, TRANSPARENT_MENU_ITEM));
     }
 
     private Menu createAssetMenu() {
