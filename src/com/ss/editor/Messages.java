@@ -28,6 +28,7 @@ public class Messages {
 
     public static final String MATERIAL_TEXTURES_COMPONENT_TITLE;
     public static final String MATERIAL_COLORS_COMPONENT_TITLE;
+    public static final String MATERIAL_OTHER_COMPONENT_TITLE;
 
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
@@ -57,6 +58,7 @@ public class Messages {
 
         MATERIAL_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialTexturesComponentTitle");
         MATERIAL_COLORS_COMPONENT_TITLE = bundle.getString("MaterialColorsComponentTitle");
+        MATERIAL_OTHER_COMPONENT_TITLE = bundle.getString("MaterialOtherComponentTitle");
 
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT = bundle.getString("Texture2DMaterialParamControlRepeat");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP = bundle.getString("Texture2DMaterialParamControlFlip");

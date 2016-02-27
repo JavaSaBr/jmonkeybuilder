@@ -740,7 +740,6 @@
     -fx-body-color: -fx-color-500;
 }
 
-
 /* ColorPicker */
 
 .color-picker {
@@ -795,11 +794,12 @@
     -fx-translate-y: -0.4166667em;
 }
 
-.custom-color-dialog  {
+.custom-color-dialog {
     -fx-background-color: -fx-background;
     -fx-padding: 1.25em;
     -fx-spacing: 1.25em;
 }
+
 .custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
     -fx-border-color: derive(-fx-base, -20%);
     -fx-border-width: 2px;
@@ -839,7 +839,6 @@
     -fx-body-color: green;
 }
 
-
 .custom-color-dialog .controls-pane #settings-pane #center-pill {
     -fx-background-color: green;
 }
@@ -847,7 +846,6 @@
 .custom-color-dialog .controls-pane #settings-pane #right-pill {
     -fx-background-color: green;
 }
-
 
 .custom-color-dialog .controls-pane #settings-pane .settings-label {
     -fx-min-width: 5.75em;
@@ -885,8 +883,7 @@
 
 .custom-color-dialog .controls-pane .customcolor-controls-background {
     -fx-background-color: -fx-text-box-border, -fx-control-inner-background;
-    -fx-background-insets:
-    0.8333333em 0 0.4166667em 0,
+    -fx-background-insets: 0.8333333em 0 0.4166667em 0,
     1em 0.166667em 0.5833333em 0.166667em;
     -fx-background-radius: 0.3333333em, 0.166667em;
 }
@@ -899,4 +896,90 @@
     -fx-spacing: 0.333333em;
     -fx-padding: 1em 0 0 0;
     -fx-alignment: bottom-right;
+}
+
+/* Spinner */
+
+.spinner {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
+
+.spinner:focused,
+.spinner:contains-focus {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
+
+.spinner > .text-field {
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color, linear-gradient(to top,
+    -fx-color-0 0%,
+    -fx-color-0 8%,
+    transparent 8%);
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
+
+.spinner:focused > .text-field,
+.spinner:contains-focus > .text-field {
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color, linear-gradient(to top,
+    -fx-color-500 0%,
+    -fx-color-500 8%,
+    transparent 8%);
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+}
+
+.spinner .increment-arrow {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.spinner .increment-arrow-button {
+    -fx-background-color: transparent;
+    /*Change the two 0's here to -1 to get rid of the horizontal line */
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+    -fx-padding: 0.333335em 0.666667em 0.333335em 0.666667em; /* 5 8 3 8 */
+}
+
+.spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+    -fx-padding: 0.333335em 0.666667em 0.333335em 0.666667em; /* 3 8 5 8 */
+}
+
+.spinner:focused .increment-arrow-button,
+.spinner:contains-focus .increment-arrow-button,
+.spinner:focused .decrement-arrow-button,
+.spinner:contains-focus .decrement-arrow-button {
+    -fx-background-color: transparent;
+}
+
+.spinner .increment-arrow-button .increment-arrow {
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 0 0 -1 0, 0;
+    -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
+    -fx-shape: "M 0 4 h 7 l -3.5 -4 z";
+}
+
+.spinner .decrement-arrow-button .decrement-arrow {
+    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
+    -fx-background-insets: 0 0 -1 0, 0;
+    -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
 }

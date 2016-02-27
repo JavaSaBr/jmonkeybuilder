@@ -57,6 +57,11 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     private MaterialColorsComponent materialColorsComponent;
 
     /**
+     * Компонент для редактирования различных параметров.
+     */
+    private MaterialOtherParamsComponent materialOtherParamsComponent;
+
+    /**
      * Текущий редактируемый материал.
      */
     private Material currentMaterial;
@@ -102,10 +107,12 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         materialTexturesComponent = new MaterialTexturesComponent();
         materialColorsComponent = new MaterialColorsComponent();
+        materialOtherParamsComponent = new MaterialOtherParamsComponent();
 
         final ObservableList<TitledPane> panes = accordion.getPanes();
         panes.add(materialTexturesComponent);
         panes.add(materialColorsComponent);
+        panes.add(materialOtherParamsComponent);
 
         FXUtils.addToPane(accordion, parameterContainer);
         FXUtils.addToPane(parameterContainer, root);
@@ -129,6 +136,13 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         return materialColorsComponent;
     }
 
+    /**
+     * @return компонент для редактирования различных параметров.
+     */
+    public MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
+        return materialOtherParamsComponent;
+    }
+
     @Override
     public void openFile(final Path file) {
         super.openFile(file);
@@ -149,6 +163,9 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         final MaterialColorsComponent materialColorsComponent = getMaterialColorsComponent();
         materialColorsComponent.buildFor(material);
+
+        final MaterialOtherParamsComponent materialOtherParamsComponent = getMaterialOtherParamsComponent();
+        materialOtherParamsComponent.buildFor(material);
     }
 
     @Override

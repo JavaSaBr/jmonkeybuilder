@@ -38,6 +38,7 @@ public interface CSSIds {
     public static final String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
     public static final String MATERIAL_PARAM_CONTROL_BUTTON = "MaterialParamControlButton";
     public static final String MATERIAL_PARAM_CONTROL_CHECKBOX = "MaterialParamControlCheckbox";
+    public static final String MATERIAL_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
 
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW = "Texture2DMaterialParamControlPreview";
 }

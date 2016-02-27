@@ -151,8 +151,23 @@
     -fx-max-width: -fx-min-width;
 }
 
+#MaterialParamControlSpinner {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 84;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #MaterialParamControlCheckbox {
     -fx-alignment: center;
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 #MaterialParamControlCheckbox > .box {

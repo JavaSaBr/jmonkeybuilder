@@ -99,6 +99,13 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
+     * @return надпись с названием параметра.
+     */
+    protected Label getParamNameLabel() {
+        return paramNameLabel;
+    }
+
+    /**
      * Инициализация контрола.
      */
     protected void reload() {

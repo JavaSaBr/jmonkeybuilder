@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import rlib.ui.util.FXUtils;
 
 import static com.ss.editor.Messages.COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
+import static java.lang.Math.min;
 
 /**
  * Реализация контрола для выбора цвета.
@@ -134,6 +135,11 @@ public class ColorMaterialParamControl extends MaterialParamControl {
 
         final ColorRGBA color = (ColorRGBA) param.getValue();
 
-        colorPicker.setValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+        final float red = min(color.getRed(), 1F);
+        final float green = min(color.getGreen(), 1F);
+        final float blue = min(color.getBlue(), 1F);
+        final float alpha = min(color.getAlpha(), 1F);
+
+        colorPicker.setValue(new Color(red, green, blue, alpha));
     }
 }
