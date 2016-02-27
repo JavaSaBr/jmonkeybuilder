@@ -5,6 +5,7 @@ import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetTreeEvent;
 
 import java.nio.file.Path;
@@ -37,6 +38,23 @@ public class AssetComponent extends VBox implements ScreenComponent {
         setId(CSSIds.ASSET_COMPONENT);
         createContent();
         FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetTreeEvent.EVENT_TYPE, event -> processRefresh());
+        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
+    }
+
+    /**
+     * Обработка смены дериктории Asset.
+     */
+    private void processChangeAsset() {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
+        if(currentAsset == null) {
+            return;
+        }
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.fill(currentAsset);
     }
 
     /**
