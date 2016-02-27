@@ -1,5 +1,6 @@
 package com.ss.editor.ui.util;
 
+import com.jme3.math.ColorRGBA;
 import com.ss.editor.ui.component.ScreenComponent;
 
 import java.lang.reflect.Constructor;
@@ -16,6 +17,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
@@ -235,5 +237,10 @@ public class UIUtils {
 		for(final TreeItem<T> child : children) {
 			getAllItems(container, child);
 		}
+	}
+
+
+	public static ColorRGBA convertColor(final Color newValue) {
+		return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), (float) newValue.getOpacity());
 	}
 }

@@ -286,6 +286,7 @@
 
     -fx-background-color: -fx-background;
 
+    -fx-color-0: white;
     -fx-color-50: #FFEBEE;
     -fx-color-100: #FFCDD2;
     -fx-color-200: #EF9A9A;
@@ -603,7 +604,7 @@
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-border-insets: 0;
-    -fx-padding: 0, 0, 0, 0; /* 4 8 4 8 */
+    -fx-padding: 4, 8, 4, 8; /* 4 8 4 8 */
     -fx-text-fill: -fx-text-base-color;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
@@ -716,4 +717,186 @@
     -fx-effect: -fx-material-shadow-panel;
     -fx-font-family: "Roboto Lt";
     -fx-font-size: 13;
+}
+
+/* Toggle Button */
+.toggle-button {
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 2, 2, 2, 2; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+    -fx-cursor: hand;
+    -fx-effect: -fx-material-shadow-control;
+}
+
+.toggle-button:selected {
+    -fx-body-color: -fx-color-500;
+}
+
+
+/* ColorPicker */
+
+.color-picker {
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color, linear-gradient(to top,
+    -fx-color-0 0%,
+    -fx-color-0 8%,
+    transparent 8%);
+}
+
+.custom-color-dialog > .color-rect-pane {
+    -fx-spacing: 0.75em;
+    -fx-pref-height: 16.666667em;
+    -fx-alignment: top-left;
+    -fx-fill-height: true;
+}
+
+.custom-color-dialog .color-rect-pane .color-rect {
+    -fx-min-width: 16.666667em;
+    -fx-min-height: 16.666667em;
+}
+
+.custom-color-dialog .color-rect-pane .color-rect-border {
+    -fx-border-color: derive(-fx-base, -20%);
+}
+
+.custom-color-dialog > .color-rect-pane #color-rect-indicator {
+    -fx-background-color: null;
+    -fx-border-color: white;
+    -fx-border-radius: 0.4166667em;
+    -fx-translate-x: -0.4166667em;
+    -fx-translate-y: -0.4166667em;
+    -fx-pref-width: 0.833333em;
+    -fx-pref-height: 0.833333em;
+    -fx-effect: dropshadow(three-pass-box, black, 2, 0.0, 0, 1);
+}
+
+.custom-color-dialog > .color-rect-pane > .color-bar {
+    -fx-min-width: 1.666667em;
+    -fx-min-height: 16.666667em;
+    -fx-max-width: 1.666667em;
+    -fx-border-color: derive(-fx-base, -20%);
+}
+
+.custom-color-dialog > .color-rect-pane > .color-bar > #color-bar-indicator {
+    -fx-border-radius: 0.333333em;
+    -fx-border-color: white;
+    -fx-effect: dropshadow(three-pass-box, black, 2, 0.0, 0, 1);
+    -fx-pref-width: 2em;
+    -fx-pref-height: 0.833333em;
+    -fx-translate-x: -0.1666667em;
+    -fx-translate-y: -0.4166667em;
+}
+
+.custom-color-dialog  {
+    -fx-background-color: -fx-background;
+    -fx-padding: 1.25em;
+    -fx-spacing: 1.25em;
+}
+.custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
+    -fx-border-color: derive(-fx-base, -20%);
+    -fx-border-width: 2px;
+}
+
+.custom-color-dialog .controls-pane .current-new-color-grid .color-rect {
+    -fx-min-width: 10.666667em;
+    -fx-min-height: 1.75em;
+    -fx-pref-width: 10.666667em;
+    -fx-pref-height: 1.75em;
+}
+
+.custom-color-dialog .transparent-pattern {
+    -fx-background-image: url("pattern-transparent.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: auto;
+}
+
+.custom-color-dialog .controls-pane #spacer1 {
+    -fx-min-height: 0.1666667em;
+    -fx-max-height: 0.1666667em;
+    -fx-pref-height: 0.1666667em;
+}
+
+.custom-color-dialog .controls-pane #spacer2 {
+    -fx-min-height: 1em;
+    -fx-max-height: 1em;
+    -fx-pref-height: 1em;
+}
+
+.custom-color-dialog .controls-pane #settings-pane {
+    -fx-hgap: 0.4166667em;
+    -fx-vgap: 0.3333333em;
+}
+
+.custom-color-dialog .controls-pane #settings-pane #left-pill {
+    -fx-body-color: green;
+}
+
+
+.custom-color-dialog .controls-pane #settings-pane #center-pill {
+    -fx-background-color: green;
+}
+
+.custom-color-dialog .controls-pane #settings-pane #right-pill {
+    -fx-background-color: green;
+}
+
+
+.custom-color-dialog .controls-pane #settings-pane .settings-label {
+    -fx-min-width: 5.75em;
+}
+
+.custom-color-dialog .controls-pane #settings-pane .settings-unit {
+    -fx-max-width: 1em;
+}
+
+.custom-color-dialog .controls-pane #settings-pane .slider {
+    -fx-pref-width: 8.25em;
+}
+
+.custom-color-dialog .controls-pane .color-input-field {
+    -fx-pref-column-count: 3;
+    -fx-max-width: 3.25em;
+    -fx-min-width: 3.25em;
+    -fx-pref-width: 3.25em;
+}
+
+.custom-color-dialog .controls-pane .web-field {
+    -fx-pref-column-count: 6;
+    -fx-pref-width: 8.25em;
+}
+
+.custom-color-dialog .controls-pane #spacer-side {
+    -fx-min-width: 0.5em;
+    -fx-pref-width: 0.5em;
+}
+
+.custom-color-dialog .controls-pane #spacer-bottom {
+    -fx-pref-height: 0.833333em;
+    -fx-min-height: 0.833333em;
+}
+
+.custom-color-dialog .controls-pane .customcolor-controls-background {
+    -fx-background-color: -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets:
+    0.8333333em 0 0.4166667em 0,
+    1em 0.166667em 0.5833333em 0.166667em;
+    -fx-background-radius: 0.3333333em, 0.166667em;
+}
+
+.custom-color-dialog .controls-pane .current-new-color-grid .label {
+    -fx-padding: 0 0 0 0.4166667em;
+}
+
+.custom-color-dialog .controls-pane #buttons-hbox {
+    -fx-spacing: 0.333333em;
+    -fx-padding: 1em 0 0 0;
+    -fx-alignment: bottom-right;
 }

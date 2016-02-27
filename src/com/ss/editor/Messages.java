@@ -27,11 +27,14 @@ public class Messages {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
 
     public static final String MATERIAL_TEXTURES_COMPONENT_TITLE;
+    public static final String MATERIAL_COLORS_COMPONENT_TITLE;
 
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
+
+    public static final String COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
 
     static {
 
@@ -53,10 +56,13 @@ public class Messages {
         ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
 
         MATERIAL_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialTexturesComponentTitle");
+        MATERIAL_COLORS_COMPONENT_TITLE = bundle.getString("MaterialColorsComponentTitle");
 
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT = bundle.getString("Texture2DMaterialParamControlRepeat");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP = bundle.getString("Texture2DMaterialParamControlFlip");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD = bundle.getString("Texture2DMaterialParamControlAdd");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE = bundle.getString("Texture2DMaterialParamControlRemove");
+
+        COLOR_MATERIAL_PARAM_CONTROL_REMOVE = bundle.getString("ColorMaterialParamControlRemove");
     }
 }

@@ -88,23 +88,23 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         Tooltip.install(texturePreview, textureTooltip);
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_BUTTON);
+        addButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         addButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD));
         addButton.setGraphic(new ImageView(Icons.ADD_18));
         addButton.setOnAction(event -> processAdd());
 
         repeatButton = new CheckBox();
-        repeatButton.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_CHECKBOX);
+        repeatButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         repeatButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT));
         repeatButton.selectedProperty().addListener((observable1, oldValue1, newValue) -> processChangeRepeat(newValue));
 
         flipButton = new CheckBox();
-        flipButton.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_CHECKBOX);
+        flipButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         flipButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP));
         flipButton.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeFlip(newValue));
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_BUTTON);
+        removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE));
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
         removeButton.setOnAction(event -> processRemove());

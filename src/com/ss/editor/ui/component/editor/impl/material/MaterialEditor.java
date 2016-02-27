@@ -52,6 +52,11 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     private MaterialTexturesComponent materialTexturesComponent;
 
     /**
+     * Компонетн для редактирования цветов.
+     */
+    private MaterialColorsComponent materialColorsComponent;
+
+    /**
      * Текущий редактируемый материал.
      */
     private Material currentMaterial;
@@ -96,12 +101,18 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         parameterContainer.setId(MATERIAL_EDITOR_PARAMETER_CONTAINER);
 
         materialTexturesComponent = new MaterialTexturesComponent();
+        materialColorsComponent = new MaterialColorsComponent();
 
         final ObservableList<TitledPane> panes = accordion.getPanes();
         panes.add(materialTexturesComponent);
+        panes.add(materialColorsComponent);
 
         FXUtils.addToPane(accordion, parameterContainer);
         FXUtils.addToPane(parameterContainer, root);
+
+        accordion.setExpandedPane(materialTexturesComponent);
+
+        FXUtils.bindFixedHeight(accordion, parameterContainer.heightProperty());
     }
 
     /**
@@ -109,6 +120,13 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private MaterialTexturesComponent getMaterialTexturesComponent() {
         return materialTexturesComponent;
+    }
+
+    /**
+     * @return компонетн для редактирования цветов.
+     */
+    private MaterialColorsComponent getMaterialColorsComponent() {
+        return materialColorsComponent;
     }
 
     @Override
@@ -128,6 +146,9 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         final MaterialTexturesComponent materialTexturesComponent = getMaterialTexturesComponent();
         materialTexturesComponent.buildFor(material);
+
+        final MaterialColorsComponent materialColorsComponent = getMaterialColorsComponent();
+        materialColorsComponent.buildFor(material);
     }
 
     @Override

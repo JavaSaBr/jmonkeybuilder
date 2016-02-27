@@ -141,6 +141,38 @@
     -fx-max-width: -fx-min-width;
 }
 
+
+#MaterialParamControlButton {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#MaterialParamControlCheckbox {
+    -fx-alignment: center;
+}
+
+#MaterialParamControlCheckbox > .box {
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#MaterialParamControlCheckbox > .box > .mark {
+    -fx-min-height: 15;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 15;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #Texture2DMaterialParamControlPreview {
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
@@ -152,33 +184,3 @@
     -fx-border-width: 1;
 }
 
-#Texture2DMaterialParamControlButton {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#Texture2DMaterialParamControlCheckbox {
-    -fx-alignment: center;
-}
-
-#Texture2DMaterialParamControlCheckbox > .box {
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#Texture2DMaterialParamControlCheckbox > .box > .mark {
-    -fx-min-height: 15;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 15;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}

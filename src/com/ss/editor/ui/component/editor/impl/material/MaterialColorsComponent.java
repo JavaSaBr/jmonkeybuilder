@@ -4,7 +4,8 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
-import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
+import com.ss.editor.Messages;
+import com.ss.editor.ui.control.material.ColorMaterialParamControl;
 
 import java.util.Collection;
 
@@ -14,8 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-
-import static com.ss.editor.Messages.MATERIAL_TEXTURES_COMPONENT_TITLE;
 
 /**
  * Реализация компонента конфигурирования цветов материала.
@@ -27,7 +26,7 @@ public class MaterialColorsComponent extends TitledPane {
     public static final Insets CONTROL_OFFSET = new Insets(3, 0, 0, 0);
 
     /**
-     * Контейнер контролов для изменения текстур.
+     * Контейнер контролов для изменения цветов.
      */
     private final VBox container;
 
@@ -38,19 +37,19 @@ public class MaterialColorsComponent extends TitledPane {
 
     public MaterialColorsComponent() {
         this.container = new VBox();
-        setText(MATERIAL_TEXTURES_COMPONENT_TITLE);
+        setText(Messages.MATERIAL_COLORS_COMPONENT_TITLE);
         setContent(container);
     }
 
     /**
-     * @return контейнер контролов для изменения текстур.
+     * @return контейнер контролов для изменения цветов.
      */
     private VBox getContainer() {
         return container;
     }
 
     /**
-     * Построение настроек текстур для материала.
+     * Построение настроек цветов для материала.
      */
     public void buildFor(final Material material) {
         setCurrentMaterial(material);
@@ -69,9 +68,9 @@ public class MaterialColorsComponent extends TitledPane {
 
         final VarType varType = matParam.getVarType();
 
-        if(varType == VarType.Texture2D) {
+        if(varType == VarType.Vector4) {
 
-            final Texture2DMaterialParamControl control = new Texture2DMaterialParamControl(material, matParam.getName());
+            final ColorMaterialParamControl control = new ColorMaterialParamControl(material, matParam.getName());
 
             FXUtils.addToPane(control, getContainer());
 
