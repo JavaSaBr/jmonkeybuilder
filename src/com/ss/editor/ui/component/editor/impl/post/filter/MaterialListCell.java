@@ -45,7 +45,7 @@ public class MaterialListCell extends ListCell<Material> {
 
         removeButton = new Button();
         removeButton.setId(POST_FILTER_EDITOR_CELL_REMOVE_BUTTON);
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_16));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
         removeButton.setOnAction(event -> processRemove());
 
         FXUtils.addClassTo(removeButton, TOOLBAR_BUTTON);

@@ -8,6 +8,7 @@ import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
@@ -41,6 +42,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final Editor EDITOR = Editor.getInstance();
 
     public EditorAreaComponent() {
+        setId(CSSIds.EDITOR_AREA_COMPONENT);
 
         final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {

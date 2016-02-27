@@ -196,5 +196,22 @@
 .toolbar-button:focused {
 }
 
+.toolbar-button:selected {
+    -fx-body-color: -fx-color-panel-900;
+}
+
 .transparent-menu-item {
+}
+
+.file-editor-toolbar-button {
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 30;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.material-param-control {
+    -fx-alignment: center-left;
 }

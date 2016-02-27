@@ -91,7 +91,7 @@ public class EditorFXSceneBuilder {
         final SplitPane splitContainer = new SplitPane(assetComponent, editorAreaComponent);
         splitContainer.setId(MAIN_SPLIT_PANEL);
 
-        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> splitContainer.setDividerPosition(0, 0.2)), 500);
+        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> splitContainer.setDividerPosition(0, 0.1)), 500);
 
         FXUtils.addToPane(splitContainer, container);
         FXUtils.addToPane(barComponent, container);

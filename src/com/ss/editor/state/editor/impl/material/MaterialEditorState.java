@@ -2,16 +2,16 @@ package com.ss.editor.state.editor.impl.material;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.util.SkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 
@@ -24,6 +24,8 @@ import com.ss.editor.state.editor.impl.AbstractEditorState;
 public class MaterialEditorState extends AbstractEditorState {
 
     public static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
 
     public static enum ModelType {
         SPHERE,
@@ -65,15 +67,11 @@ public class MaterialEditorState extends AbstractEditorState {
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
         this.testQuad = new Geometry("Quad", new Quad(4, 4));
+        this.testQuad.setLocalTranslation(QUAD_OFFSET);
         this.lightEnabled = true;
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(modelNode);
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/path.hdr", SkyFactory.EnvMapType.EquirectMap);
-
-        stateNode.attachChild(sky);
     }
 
     /**
@@ -248,5 +246,21 @@ public class MaterialEditorState extends AbstractEditorState {
         }
 
         setLightEnabled(enabled);
+    }
+
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+
+        final Geometry testQuad = getTestQuad();
+
+        if(testQuad.getParent() != null) {
+
+            final Quaternion localRotation = testQuad.getLocalRotation();
+            final Camera camera = EDITOR.getCamera();
+
+            localRotation.lookAt(camera.getLocation(), camera.getUp());
+            testQuad.setLocalRotation(localRotation);
+        }
     }
 }

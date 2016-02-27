@@ -58,7 +58,8 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         this.tooltip = new Tooltip();
 
-        Tooltip.install(this, tooltip);
+        //FIXME надо сделать как-то подругому :)
+       // Tooltip.install(this, tooltip);
 
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);

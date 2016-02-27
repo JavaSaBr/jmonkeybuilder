@@ -27,7 +27,7 @@ public class AssetBarComponent extends HBox {
 
         final Button refreshAction = new Button();
         refreshAction.setId(ASSET_COMPONENT_BAR_BUTTON);
-        refreshAction.setGraphic(new ImageView(Icons.REFRESH_16));
+        refreshAction.setGraphic(new ImageView(Icons.REFRESH_18));
         refreshAction.setOnAction(event -> FX_EVENT_MANAGER.notify(new RequestedRefreshAssetTreeEvent()));
 
         FXUtils.addClassTo(refreshAction, TOOLBAR_BUTTON);

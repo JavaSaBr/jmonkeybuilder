@@ -18,6 +18,7 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import rlib.ui.util.FXUtils;
+import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
@@ -37,6 +38,16 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final ArrayComparator<ResourceElement> COMPARATOR = ResourceElement::compareTo;
+    private static final ArrayComparator<ResourceElement> NAME_COMPARATOR = (first, second) -> {
+
+        final Path firstFile = first.getFile();
+        final String firstName = firstFile.getFileName().toString();
+
+        final Path secondFile = second.getFile();
+        final String secondName = secondFile.getFileName().toString();
+
+        return StringUtils.compareIgnoreCase(firstName, secondName);
+    };
 
     /**
      * Развернутые элементы.
@@ -270,6 +281,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
 
         final Array<ResourceElement> children = element.getChildren();
+        children.sort(NAME_COMPARATOR);
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
         items.forEach(this::fill);

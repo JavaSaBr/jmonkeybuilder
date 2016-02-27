@@ -15,6 +15,7 @@
     -fx-effect: null;
     -fx-border-color: red;
     -fx-border-width: 0;
+    -fx-min-width: 250;
 }
 
 #AssetComponentBar {
@@ -34,8 +35,11 @@
     -fx-max-width: -fx-min-width;
 }
 
-
 #AssetComponentResourceTreeCell {
+}
+
+#EditorAreaComponent {
+    -fx-min-width: 500;
 }
 
 #FileEditorToolbar {
@@ -86,6 +90,7 @@
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-cursor: move;
 }
 
 #EditorDialogHeaderButtonClose {
@@ -118,6 +123,62 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#MaterialEditorParameterContainer {
+    -fx-background-color: -fx-color-panel-200;
+    -fx-alignment: top-left;
+    -fx-min-width: 300;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#MaterialParamControlParamName {
+    -fx-min-width: 140;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#Texture2DMaterialParamControlPreview {
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 30;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-border-color: -fx-color-panel-50;
+    -fx-border-width: 1;
+}
+
+#Texture2DMaterialParamControlButton {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#Texture2DMaterialParamControlCheckbox {
+    -fx-alignment: center;
+}
+
+#Texture2DMaterialParamControlCheckbox > .box {
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#Texture2DMaterialParamControlCheckbox > .box > .mark {
+    -fx-min-height: 15;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 15;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }

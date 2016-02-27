@@ -21,7 +21,7 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.Messages.FILE_EDITOR_ACTION_SAVE;
+import static com.ss.editor.ui.css.CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSIds.FILE_EDITOR_TOOLBAR;
 
@@ -117,12 +117,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected Button createSaveAction() {
 
         Button action = new Button();
-        action.setId(FILE_EDITOR_ACTION_SAVE);
         action.setGraphic(new ImageView(Icons.SAVE_24));
         action.setOnAction(event -> doSave());
         action.disableProperty().bind(dirtyProperty().not());
 
         FXUtils.addClassTo(action, TOOLBAR_BUTTON);
+        FXUtils.addClassTo(action, FILE_EDITOR_TOOLBAR_BUTTON);
 
         return action;
     }

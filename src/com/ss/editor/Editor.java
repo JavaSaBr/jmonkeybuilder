@@ -17,9 +17,11 @@ import com.ss.editor.config.ScreenSize;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.IconManager;
+import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.cursor.UbuntuCursorProvider;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.UIUtils;
 import com.sun.javafx.cursor.CursorType;
 
 import java.io.IOException;
@@ -218,11 +220,14 @@ public class Editor extends SimpleApplication {
 
         viewPort.addProcessor(postProcessor);
 
+        InitializeManager.register(JavaFXImageManager.class);
         InitializeManager.register(IconManager.class);
         InitializeManager.initialize();
 
         fxContainer = JmeFxContainer.install(this, guiNode, true, cursorDisplayProvider);
         scene = EditorFXSceneBuilder.build(fxContainer);
+
+        UIUtils.overrideTooltipBehavior(300, 2000, 500);
     }
 
     /**

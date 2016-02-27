@@ -60,7 +60,7 @@ public class EditorDialog extends AbstractPopupDialog {
 
         final Button closeButton = new Button();
         closeButton.setId(EDITOR_DIALOG_HEADER_BUTTON_CLOSE);
-        closeButton.setGraphic(new ImageView(Icons.CLOSE_16));
+        closeButton.setGraphic(new ImageView(Icons.CLOSE_18));
         closeButton.setOnAction(event -> hide());
         closeButton.setCursor(HAND);
 

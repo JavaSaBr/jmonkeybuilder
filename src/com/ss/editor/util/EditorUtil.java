@@ -221,4 +221,32 @@ public abstract class EditorUtil {
 
         return currentAsset.relativize(file);
     }
+
+    /**
+     * Получение абсолютного пути к указанному ресурса из Asset.
+     *
+     * @param assetFile интересуемый файл.
+     * @return абсолютный путь к файлу.
+     */
+    public static Path getRealFile(final Path assetFile) {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
+        return currentAsset.resolve(assetFile);
+    }
+
+    /**
+     * Получение абсолютного пути к указанному ресурса из Asset.
+     *
+     * @param assetFile интересуемый файл.
+     * @return абсолютный путь к файлу.
+     */
+    public static Path getRealFile(final String assetFile) {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
+        return currentAsset.resolve(assetFile);
+    }
 }

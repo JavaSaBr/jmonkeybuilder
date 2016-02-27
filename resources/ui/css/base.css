@@ -709,3 +709,11 @@
 .menu {
     -fx-cursor: hand;
 }
+
+.tooltip {
+    -fx-background-color: -fx-color-panel-900;
+    -fx-background-radius: 0;
+    -fx-effect: -fx-material-shadow-panel;
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 13;
+}

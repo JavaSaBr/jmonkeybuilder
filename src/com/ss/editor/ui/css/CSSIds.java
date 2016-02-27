@@ -16,6 +16,8 @@ public interface CSSIds {
     public static final String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CELL = "AssetComponentResourceTreeCell";
 
+    public static final String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
+
     public static final String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
 
     public static final String POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER = "PostFilterEditorMaterialListContainer";
@@ -30,4 +32,12 @@ public interface CSSIds {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_OK = "AssetEditorDialogButtonOk";
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL = "AssetEditorDialogButtonCancel";
 
+    public static final String MATERIAL_EDITOR_PARAMETER_CONTAINER = "MaterialEditorParameterContainer";
+
+
+    public static final String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
+
+    public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW = "Texture2DMaterialParamControlPreview";
+    public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_BUTTON = "Texture2DMaterialParamControlButton";
+    public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_CHECKBOX = "Texture2DMaterialParamControlCheckbox";
 }
