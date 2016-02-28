@@ -96,6 +96,8 @@ public class ResourceManager {
             fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
         });
+
+        reload();
     }
 
     /**

@@ -149,9 +149,16 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
         final ChaseCamera chaseCamera = getChaseCamera();
         final DirectionalLight lightForChaseCamera = getLightForChaseCamera();
 
-        if (chaseCamera != null && lightForChaseCamera != null) {
+        if (chaseCamera != null && lightForChaseCamera != null && needUpdateChaseCameraLight()) {
             final Camera camera = EDITOR.getCamera();
             lightForChaseCamera.setDirection(camera.getDirection());
         }
+    }
+
+    /**
+     * @return нужно ли обновлять направление света.
+     */
+    protected boolean needUpdateChaseCameraLight() {
+        return false;
     }
 }

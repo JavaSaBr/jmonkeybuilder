@@ -1,5 +1,6 @@
 package com.ss.editor.manager;
 
+import com.ss.editor.FileExtensions;
 import com.ss.editor.ui.Icons;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiReader;
@@ -30,16 +31,23 @@ public class JavaFXImageManager {
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFXImageManager.class);
 
     private static final Array<String> FX_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> JIMI_FORMATS = ArrayFactory.newArray(String.class);
     private static final Array<String> IMAGE_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
-        FX_FORMATS.add("png");
-        FX_FORMATS.add("jpg");
-        FX_FORMATS.add("gif");
+
+        FX_FORMATS.add(FileExtensions.IMAGE_PNG);
+        FX_FORMATS.add(FileExtensions.IMAGE_JPG);
+        FX_FORMATS.add(FileExtensions.IMAGE_JPEG);
+        FX_FORMATS.add(FileExtensions.IMAGE_GIF);
+
+        JIMI_FORMATS.add(FileExtensions.IMAGE_TGA);
+        JIMI_FORMATS.add(FileExtensions.IMAGE_BMP);
+        JIMI_FORMATS.add(FileExtensions.IMAGE_TIFF);
 
         IMAGE_FORMATS.addAll(FX_FORMATS);
-        IMAGE_FORMATS.add("tga");
-        IMAGE_FORMATS.add("bmp");
+        IMAGE_FORMATS.addAll(JIMI_FORMATS);
+        IMAGE_FORMATS.add(FileExtensions.IMAGE_DDS);
     }
 
     /**
@@ -48,7 +56,6 @@ public class JavaFXImageManager {
     public static boolean isImage(final Path file) {
 
         final Path fileName = file.getFileName();
-
         final String extension = FileUtils.getExtension(fileName.toString());
 
         return IMAGE_FORMATS.contains(extension);
@@ -83,6 +90,8 @@ public class JavaFXImageManager {
 
         if (FX_FORMATS.contains(extension)) {
             return new Image(file.toUri().toString(), width, height, false, false);
+        } else if(!JIMI_FORMATS.contains(extension)) {
+            return Icons.IMAGE_512;
         }
 
         try {
@@ -92,7 +101,7 @@ public class JavaFXImageManager {
             final java.awt.Image awtImage = reader.getImage();
 
             if (awtImage == null) {
-                return Icons.IMAGE_24;
+                return Icons.IMAGE_512;
             }
 
             final java.awt.Image newImage = awtImage.getScaledInstance(width, height, java.awt.Image.SCALE_FAST);
@@ -119,6 +128,6 @@ public class JavaFXImageManager {
             LOGGER.warning("can't read " + file);
         }
 
-        return Icons.IMAGE_24;
+        return Icons.IMAGE_512;
     }
 }

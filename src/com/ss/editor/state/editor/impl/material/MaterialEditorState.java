@@ -2,19 +2,23 @@ package com.ss.editor.state.editor.impl.material;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
+import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.util.SkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
-
 
 /**
  * Реализация 3D части редактирования материала.
@@ -26,30 +30,54 @@ public class MaterialEditorState extends AbstractEditorState {
     public static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
+
+    private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
+
+        @Override
+        public void done(final LightProbe result) {
+
+            if(!isInitialized()) {
+                return;
+            }
+
+            attachModelNode();
+        }
+    };
+
     /**
      * Тестовый бокс.
      */
     private final Geometry testBox;
+
     /**
      * Тестовая сфера.
      */
     private final Geometry testSphere;
+
     /**
      * Тестовая плоскость.
      */
     private final Geometry testQuad;
+
     /**
      * Узел для размещения тестовой модели.
      */
     private Node modelNode;
+
     /**
      * Текущий режим.
      */
     private ModelType currentModelType;
+
     /**
      * Активирован ли свет камеры.
      */
     private boolean lightEnabled;
+
+    /**
+     * Кол-во кадров.
+     */
+    private int frame;
 
     public MaterialEditorState() {
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
@@ -58,6 +86,20 @@ public class MaterialEditorState extends AbstractEditorState {
         this.testQuad.setLocalTranslation(QUAD_OFFSET);
         this.lightEnabled = true;
 
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr", SkyFactory.EnvMapType.EquirectMap);
+
+        final Node stateNode = getStateNode();
+        stateNode.attachChild(sky);
+
+        final DirectionalLight light = getLightForChaseCamera();
+        light.setDirection(new Vector3f(-0.897672F, -0.2953406F, -0.32704628F));
+    }
+
+    /**
+     * Активая узла с моделями.
+     */
+    private void attachModelNode() {
         final Node stateNode = getStateNode();
         stateNode.attachChild(modelNode);
     }
@@ -154,6 +196,8 @@ public class MaterialEditorState extends AbstractEditorState {
         if (currentModelType != null) {
             changeModeImpl(currentModelType);
         }
+
+        frame = 0;
     }
 
     @Override
@@ -162,6 +206,9 @@ public class MaterialEditorState extends AbstractEditorState {
 
         final Node modelNode = getModelNode();
         modelNode.detachAllChildren();
+
+        final Node stateNode = getStateNode();
+        stateNode.detachChild(modelNode);
     }
 
     @Override
@@ -240,6 +287,10 @@ public class MaterialEditorState extends AbstractEditorState {
     public void update(float tpf) {
         super.update(tpf);
 
+        if(frame == 2) {
+            EDITOR.updateProbe(probeHandler);
+        }
+
         final Geometry testQuad = getTestQuad();
 
         if (testQuad.getParent() != null) {
@@ -250,6 +301,13 @@ public class MaterialEditorState extends AbstractEditorState {
             localRotation.lookAt(camera.getLocation(), camera.getUp());
             testQuad.setLocalRotation(localRotation);
         }
+
+        frame++;
+    }
+
+    @Override
+    protected boolean needUpdateChaseCameraLight() {
+        return false;
     }
 
     public static enum ModelType {

@@ -4,6 +4,11 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
+import com.jme3.environment.EnvironmentCamera;
+import com.jme3.environment.LightProbeFactory;
+import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.light.LightProbe;
+import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -48,7 +53,15 @@ public class Editor extends SimpleApplication {
 
     private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
 
+    private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<LightProbe>() {
+
+        @Override
+        public void done(LightProbe result) {
+        }
+    };
+
     private static final Editor EDITOR = new Editor();
+
 
     public static Editor getInstance() {
         return EDITOR;
@@ -120,6 +133,16 @@ public class Editor extends SimpleApplication {
      * Синхронизатор.
      */
     private final StampedLock lock;
+
+    /**
+     * Камера окружения.
+     */
+    private EnvironmentCamera environmentCamera;
+
+    /**
+     * Свет окружения сцены.
+     */
+    private LightProbe lightProbe;
 
     /**
      * Контейнер UI JavaFX.
@@ -202,6 +225,8 @@ public class Editor extends SimpleApplication {
         final AudioRenderer audioRenderer = getAudioRenderer();
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
+        cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 1000);
+
         final Node guiNode = getGuiNode();
         guiNode.detachAllChildren();
 
@@ -226,10 +251,15 @@ public class Editor extends SimpleApplication {
         InitializeManager.register(FileIconManager.class);
         InitializeManager.initialize();
 
+        environmentCamera = new EnvironmentCamera(64, new Vector3f(0, 0, 0));
+
+        stateManager.attach(environmentCamera);
         fxContainer = JmeFxContainer.install(this, guiNode, true, cursorDisplayProvider);
         scene = EditorFXSceneBuilder.build(fxContainer);
 
         UIUtils.overrideTooltipBehavior(300, 2000, 500);
+
+        createProbe();
     }
 
     /**
@@ -292,5 +322,43 @@ public class Editor extends SimpleApplication {
      */
     public FilterPostProcessor getPostProcessor() {
         return postProcessor;
+    }
+
+    /**
+     * Процесс создание пробы окружения.
+     */
+    private void createProbe() {
+
+        final EnvironmentCamera environmentCamera = getEnvironmentCamera();
+
+        if (environmentCamera.getApplication() == null) {
+            final EditorThreadExecutor gameThreadExecutor = EditorThreadExecutor.getInstance();
+            gameThreadExecutor.addToExecute(this::createProbe);
+            return;
+        }
+
+        lightProbe = LightProbeFactory.makeProbe(getEnvironmentCamera(), rootNode, EMPTY_JOB_ADAPTER);
+        rootNode.addLight(lightProbe);
+    }
+
+    /**
+     * Обновить пробу окружения.
+     */
+    public void updateProbe(final JobProgressAdapter<LightProbe> progressAdapter) {
+        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, progressAdapter);
+    }
+
+    /**
+     * @return свет окружения сцены.
+     */
+    public LightProbe getLightProbe() {
+        return lightProbe;
+    }
+
+    /**
+     * @return камера окружения сцены.
+     */
+    public EnvironmentCamera getEnvironmentCamera() {
+        return environmentCamera;
     }
 }

@@ -275,4 +275,13 @@ public abstract class EditorUtil {
 
         return true;
     }
+
+    public static String normalizePath(final Path path) {
+
+        if(File.separatorChar == '/') {
+            return path.toString();
+        }
+
+        return path.toString().replace("\\", "/");
+    }
 }

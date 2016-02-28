@@ -27,6 +27,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
@@ -43,6 +45,15 @@ import static com.ss.editor.ui.css.CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREV
 public class Texture2DMaterialParamControl extends MaterialParamControl {
 
     public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
+
+    private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
+
+    static {
+        TEXTURE_EXTENSIONS.add("png");
+        TEXTURE_EXTENSIONS.add("jpg");
+        TEXTURE_EXTENSIONS.add("tga");
+        TEXTURE_EXTENSIONS.add("dds");
+    }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -212,6 +223,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final EditorFXScene scene = EDITOR.getScene();
 
         final AssetEditorDialog dialog = new AssetEditorDialog(this::addTexture);
+        dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
         dialog.show(scene.getWindow());
     }
 

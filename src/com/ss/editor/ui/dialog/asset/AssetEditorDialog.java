@@ -21,7 +21,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
 import rlib.ui.util.FXUtils;
+import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
@@ -61,13 +63,19 @@ public class AssetEditorDialog extends EditorDialog {
         this.consumer = consumer;
     }
 
+    /**
+     * @param extensionFilter список фильтруемых расширений.
+     */
+    public void setExtensionFilter(final Array<String> extensionFilter) {
+        resourceTree.setExtensionFilter(extensionFilter);
+    }
+
     @Override
     protected void createContent(final VBox root) {
 
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
         final Consumer<ResourceElement> openFunction = element -> {
 
             hide();
@@ -77,11 +85,9 @@ public class AssetEditorDialog extends EditorDialog {
         };
 
         resourceTree = new ResourceTree(openFunction, true);
-        resourceTree.fill(editorConfig.getCurrentAsset());
         resourceTree.prefHeightProperty().bind(root.heightProperty());
         resourceTree.prefWidthProperty().bind(root.widthProperty());
         resourceTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelected(newValue));
-
 
         final VBox previewContainer = new VBox();
         previewContainer.setId(ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
@@ -96,6 +102,14 @@ public class AssetEditorDialog extends EditorDialog {
         FXUtils.addToPane(container, root);
 
         HBox.setMargin(previewContainer, PREVIEW_OFFSET);
+    }
+
+    @Override
+    public void show(Window owner) {
+        super.show(owner);
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        resourceTree.fill(editorConfig.getCurrentAsset());
     }
 
     /**
@@ -196,6 +210,6 @@ public class AssetEditorDialog extends EditorDialog {
 
     @Override
     protected Point getSize() {
-        return new Point(900, 600);
+        return new Point(1200, 700);
     }
 }

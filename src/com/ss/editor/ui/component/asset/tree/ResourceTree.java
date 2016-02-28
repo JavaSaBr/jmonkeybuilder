@@ -95,6 +95,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private final boolean readOnly;
 
+    /**
+     * Список фильтруемых расширений.
+     */
+    private Array<String> extensionFilter;
+
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_FUNCTION, readOnly);
     }
@@ -110,6 +115,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setCellFactory(CELL_FACTORY);
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
+    }
+
+    /**
+     * @param extensionFilter список фильтруемых расширений.
+     */
+    public void setExtensionFilter(Array<String> extensionFilter) {
+        this.extensionFilter = extensionFilter;
+    }
+
+    /**
+     * @return список фильтруемых расширений.
+     */
+    private Array<String> getExtensionFilter() {
+        return extensionFilter;
     }
 
     /**
@@ -276,6 +295,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         fill(newRoot);
 
+        final Array<String> extensionFilter = getExtensionFilter();
+
+        if(extensionFilter != null) {
+            cleanup(newRoot);
+        }
+
         EXECUTOR_MANAGER.addFXTask(() -> setRoot(newRoot));
     }
 
@@ -355,14 +380,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void fill(final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
+        final Array<String> extensionFilter = getExtensionFilter();
 
-        if (!element.hasChildren()) {
+        if (!element.hasChildren(extensionFilter)) {
             return;
         }
 
         final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
 
-        final Array<ResourceElement> children = element.getChildren();
+        final Array<ResourceElement> children = element.getChildren(extensionFilter);
         children.sort(NAME_COMPARATOR);
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
@@ -474,4 +500,32 @@ public class ResourceTree extends TreeView<ResourceElement> {
     public Consumer<ResourceElement> getOpenFunction() {
         return openFunction;
     }
+
+    /**
+     * Очистка дерева от пустых узлов.
+     */
+    public boolean cleanup(final TreeItem<ResourceElement> treeItem) {
+
+        final ResourceElement element = treeItem.getValue();
+
+        if(element instanceof FileElement) {
+            return false;
+        }
+
+        final ObservableList<TreeItem<ResourceElement>> children = treeItem.getChildren();
+
+        for (int i = children.size() - 1; i >= 0; i--) {
+            cleanup(children.get(i));
+        }
+
+        if(children.isEmpty() && treeItem.getParent() != null) {
+            final TreeItem<ResourceElement> parent = treeItem.getParent();
+            final ObservableList<TreeItem<ResourceElement>> parentChildren = parent.getChildren();
+            parentChildren.remove(treeItem);
+            return true;
+        }
+
+        return false;
+    }
+
 }

@@ -44,7 +44,7 @@
 
 #FileEditorToolbar {
     -fx-alignment: center-left;
-    -fx-min-height: 30;
+    -fx-min-height: 34;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-background-color: -fx-color-panel-200;
@@ -138,10 +138,10 @@
 #AssetEditorDialogPreviewContainer {
     -fx-border-color: -fx-color-0;
     -fx-border-width: 1;
-    -fx-min-height: 256;
+    -fx-min-height: 600;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 256;
+    -fx-min-width: 600;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }

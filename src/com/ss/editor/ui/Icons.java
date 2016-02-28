@@ -30,4 +30,6 @@ public interface Icons {
     public static final Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png");
     public static final Image ADD_CIRCLE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add_circle.png");
     public static final Image IMAGE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/image.png");
+
+    public static final Image IMAGE_512 = ICON_MANAGER.getImage("/ui/icons/512/image.png");
 }

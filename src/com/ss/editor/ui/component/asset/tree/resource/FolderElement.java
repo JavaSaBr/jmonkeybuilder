@@ -5,6 +5,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -21,7 +22,7 @@ public class FolderElement extends ResourceElement {
         super(file);
     }
 
-    public Array<ResourceElement> getChildren() {
+    public Array<ResourceElement> getChildren(final Array<String> extensionFilter) {
 
         if (!Files.isDirectory(file)) {
             return null;
@@ -30,7 +31,20 @@ public class FolderElement extends ResourceElement {
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
 
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
-            stream.forEach(child -> elements.add(createFor(child)));
+            stream.forEach(child -> {
+
+                if(Files.isDirectory(child) || extensionFilter == null) {
+                    elements.add(createFor(child));
+                    return;
+                }
+
+                final String extension = FileUtils.getExtension(child.getFileName().toString());
+
+                if(extensionFilter.contains(extension)) {
+                    elements.add(createFor(child));
+                }
+            });
+
         } catch (IOException e) {
             LOGGER.warning(this, e);
         }
@@ -39,7 +53,7 @@ public class FolderElement extends ResourceElement {
     }
 
     @Override
-    public boolean hasChildren() {
+    public boolean hasChildren(Array<String> extensionFilter) {
         return true;
     }
 }

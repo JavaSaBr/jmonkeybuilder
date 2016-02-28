@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.activation.FileTypeMap;
+import javax.activation.MimetypesFileTypeMap;
+
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -26,6 +29,8 @@ public class FileIconManager {
     private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
+
+    private static final FileTypeMap FILE_TYPE_MAP = MimetypesFileTypeMap.getDefaultFileTypeMap();
 
     private static FileIconManager instance;
 
@@ -65,6 +70,12 @@ public class FileIconManager {
             LOGGER.warning(e);
         }
 
+        if(contentType == null && FILE_TYPE_MAP != null) {
+            contentType = FILE_TYPE_MAP.getContentType(path.toFile());
+        }
+
+        LOGGER.info("contentType " + contentType + " for " + path);
+
         if (contentType != null) {
             contentType = contentType.replace("/", "-");
         }
@@ -78,11 +89,13 @@ public class FileIconManager {
         final Path mimeTypes = Paths.get("/ui/icons/faenza/mimetypes");
 
         Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
-        String url = iconPath.toString();
+        String url = EditorUtil.normalizePath(iconPath);
+
+        LOGGER.info("url " + url);
 
         if (!EditorUtil.checkExists(url)) {
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
-            url = iconPath.toString();
+            url = EditorUtil.normalizePath(iconPath);
         }
 
         return getImage(url);
