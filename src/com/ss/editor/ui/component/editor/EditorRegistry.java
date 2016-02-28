@@ -4,6 +4,7 @@ import com.ss.editor.ui.component.editor.impl.TextFileEditor;
 import com.ss.editor.ui.component.editor.impl.material.MaterialEditor;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
@@ -86,6 +87,10 @@ public class EditorRegistry {
      * @return редактор для этого файла или null.
      */
     public FileEditor createEditorFor(final Path file) {
+
+        if(Files.isDirectory(file)) {
+            return null;
+        }
 
         final String extension = FileUtils.getExtension(file.getFileName().toString());
 

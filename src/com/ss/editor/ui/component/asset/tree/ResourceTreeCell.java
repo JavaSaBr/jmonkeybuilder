@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.asset.tree;
 
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
+import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 
@@ -110,7 +111,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         final ResourceElement item = getItem();
 
-        if (item == null) {
+        if (item == null || item instanceof FolderElement) {
             return;
         }
 

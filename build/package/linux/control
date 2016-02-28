@@ -1,0 +1,9 @@
+Package: jme3-spaceshift-editor
+Version: 0.1
+Section: tool
+Maintainer: spaceshift.ru <javasabr@gmail.com>
+Priority: optional
+Architecture: amd64
+Provides: jme3-spaceshift-editor
+Homepage: https://spaceshift.ru/
+Description: Editor for jMonkeyEngine 3 by SpaceShift Team

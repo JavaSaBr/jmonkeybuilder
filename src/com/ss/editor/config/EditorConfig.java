@@ -28,8 +28,6 @@ public final class EditorConfig implements AssetEventListener {
 
     private static final Logger LOGGER = LoggerManager.getLogger(EditorConfig.class);
 
-    public static final String EDITOR_NAME = "jME3 SpaceShift Editor";
-
     public static final String GRAPHICS_ALIAS = "Graphics";
     public static final String ASSET_ALIAS = "ASSET";
 
@@ -116,7 +114,7 @@ public final class EditorConfig implements AssetEventListener {
 
         final AppSettings settings = new AppSettings(true);
         settings.setRenderer("CUSTOM" + EditorContext.class.getName());
-        settings.setTitle(EDITOR_NAME);
+        settings.setTitle(Config.TITLE + " " + Config.VERSION);
         settings.setFullscreen(false);
         settings.setResolution(screenSize.getWidth(), screenSize.getHeight());
         settings.setFrequency(displayMode.getRefreshRate());
