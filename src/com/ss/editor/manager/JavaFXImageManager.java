@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
+import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -40,7 +41,7 @@ public class JavaFXImageManager {
 
     public static JavaFXImageManager getInstance() {
 
-        if(instance == null) {
+        if (instance == null) {
             instance = new JavaFXImageManager();
         }
 
@@ -48,13 +49,14 @@ public class JavaFXImageManager {
     }
 
     public JavaFXImageManager() {
+        InitializeManager.valid(getClass());
     }
 
     /**
      * Получение упрощенного превью текстуры.
      *
-     * @param file файл с текстурой.
-     * @param width ширина для превью.
+     * @param file   файл с текстурой.
+     * @param width  ширина для превью.
      * @param height высота для превью.
      * @return загруженное изображение.
      */
@@ -62,7 +64,7 @@ public class JavaFXImageManager {
 
         final String extension = FileUtils.getExtension(file.getFileName().toString());
 
-        if(FX_FORMATS.contains(extension)) {
+        if (FX_FORMATS.contains(extension)) {
             return new Image(file.toUri().toString(), width, height, false, false);
         }
 
@@ -72,7 +74,7 @@ public class JavaFXImageManager {
 
             final java.awt.Image awtImage = reader.getImage();
 
-            if(awtImage == null) {
+            if (awtImage == null) {
                 return Icons.IMAGE_24;
             }
 
@@ -87,7 +89,7 @@ public class JavaFXImageManager {
 
             Image javaFXImage = null;
 
-            try(final OutputStream out = Files.newOutputStream(tempFile)) {
+            try (final OutputStream out = Files.newOutputStream(tempFile)) {
                 ImageIO.write(bufferedImage, "png", out);
                 javaFXImage = new Image(tempFile.toUri().toString());
             }

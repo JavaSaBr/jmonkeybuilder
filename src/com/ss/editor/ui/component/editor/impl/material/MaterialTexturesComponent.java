@@ -80,7 +80,7 @@ public class MaterialTexturesComponent extends TitledPane {
         final Runnable changeHandler = getChangeHandler();
         final VarType varType = matParam.getVarType();
 
-        if(varType == VarType.Texture2D) {
+        if (varType == VarType.Texture2D) {
 
             final Texture2DMaterialParamControl control = new Texture2DMaterialParamControl(changeHandler, material, matParam.getName());
 

@@ -30,7 +30,7 @@ public class ExecutorManager {
 
     public static ExecutorManager getInstance() {
 
-        if(instance == null) {
+        if (instance == null) {
             instance = new ExecutorManager();
         }
 
@@ -151,7 +151,7 @@ public class ExecutorManager {
      * Отправить на выполнение задачу.
      *
      * @param runnable выполняемая задача.
-     * @param timeout задержка перед выполнением.
+     * @param timeout  задержка перед выполнением.
      */
     public void schedule(final Runnable runnable, final long timeout) {
         scheduledExecutorService.schedule(runnable, timeout, TimeUnit.MILLISECONDS);

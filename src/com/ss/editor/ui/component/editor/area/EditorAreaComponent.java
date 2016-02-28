@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.editor.area;
 import com.jme3.app.state.AppStateManager;
 import com.ss.editor.Editor;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.IconManager;
+import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.editor.EditorRegistry;
@@ -22,7 +22,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
 
-import static com.ss.editor.manager.IconManager.DEFAULT_FILE_ICON_SIZE;
+import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 
 /**
  * Компонент для реализации области редакторов.
@@ -38,7 +38,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
-    private static final IconManager ICON_MANAGER = IconManager.getInstance();
+    private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
     public EditorAreaComponent() {
@@ -56,13 +56,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Обработка смены отображаемого редактора.
      *
      * @param prevTab предыдущий редактор.
-     * @param newTab новый редактор.
+     * @param newTab  новый редактор.
      */
     private void processShowEditor(final Tab prevTab, final Tab newTab) {
 
         final AppStateManager stateManager = EDITOR.getStateManager();
 
-        if(prevTab != null) {
+        if (prevTab != null) {
 
             final ObservableMap<Object, Object> properties = prevTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
@@ -71,7 +71,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             states.forEach(stateManager::detach);
         }
 
-        if(newTab == null) {
+        if (newTab == null) {
             return;
         }
 
@@ -90,7 +90,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Path file = event.getFile();
         final FileEditor editor = EDITOR_REGISTRY.createEditorFor(file);
 
-        if(editor == null) {
+        if (editor == null) {
             return;
         }
 
@@ -114,7 +114,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         properties.put(KEY_EDITOR, editor);
 
         editor.dirtyProperty().addListener((observable, oldValue, newValue) -> {
-            tab.setText(newValue == Boolean.TRUE? "*" + editor.getFileName() : editor.getFileName());
+            tab.setText(newValue == Boolean.TRUE ? "*" + editor.getFileName() : editor.getFileName());
         });
 
         final ObservableList<Tab> tabs = getTabs();

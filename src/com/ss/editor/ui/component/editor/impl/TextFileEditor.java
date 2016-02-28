@@ -94,17 +94,17 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @param initContent контент на момент открытия документа.
-     */
-    public void setInitContent(String initContent) {
-        this.initContent = initContent;
-    }
-
-    /**
      * @return контент на момент открытия документа.
      */
     public String getInitContent() {
         return initContent;
+    }
+
+    /**
+     * @param initContent контент на момент открытия документа.
+     */
+    public void setInitContent(String initContent) {
+        this.initContent = initContent;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         final TextArea textArea = getTextArea();
         final String newContent = textArea.getText();
 
-        try(final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
             out.print(newContent);
         } catch (final IOException e) {
             LOGGER.warning(this, e);

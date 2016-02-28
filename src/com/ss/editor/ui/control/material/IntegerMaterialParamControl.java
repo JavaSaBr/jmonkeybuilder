@@ -59,7 +59,7 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
      */
     private void processChange(final Integer newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
@@ -73,7 +73,7 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
 
         final Material material = getMaterial();
 
-        if(newValue == null) {
+        if (newValue == null) {
             material.clearParam(getParameterName());
         } else {
             material.setInt(getParameterName(), newValue);

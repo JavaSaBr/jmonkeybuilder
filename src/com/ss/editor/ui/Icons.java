@@ -1,6 +1,6 @@
 package com.ss.editor.ui;
 
-import com.ss.editor.manager.IconManager;
+import com.ss.editor.manager.FileIconManager;
 
 import javafx.scene.image.Image;
 
@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
  */
 public interface Icons {
 
-    public static final IconManager ICON_MANAGER = IconManager.getInstance();
+    public static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     public static final Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
     public static final Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");

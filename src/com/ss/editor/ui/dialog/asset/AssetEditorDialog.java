@@ -104,7 +104,7 @@ public class AssetEditorDialog extends EditorDialog {
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
         final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
 
-        if(selectedItem == null) {
+        if (selectedItem == null) {
             hide();
             return;
         }

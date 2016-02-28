@@ -16,8 +16,9 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.config.ScreenSize;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.IconManager;
+import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.cursor.UbuntuCursorProvider;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -48,7 +49,7 @@ public class Editor extends SimpleApplication {
     private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
 
     private static final Editor EDITOR = new Editor();
-
+    
     public static Editor getInstance() {
         return EDITOR;
     }
@@ -65,7 +66,7 @@ public class Editor extends SimpleApplication {
         System.setProperty("prism.cacheshapes", "true");
 
         // инициализация конфига
-        if(Config.DEV_DEBUG) {
+        if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
         }
 
@@ -220,8 +221,9 @@ public class Editor extends SimpleApplication {
 
         viewPort.addProcessor(postProcessor);
 
+        InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
-        InitializeManager.register(IconManager.class);
+        InitializeManager.register(FileIconManager.class);
         InitializeManager.initialize();
 
         fxContainer = JmeFxContainer.install(this, guiNode, true, cursorDisplayProvider);

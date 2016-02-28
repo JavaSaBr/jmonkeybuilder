@@ -23,16 +23,16 @@ public class FolderElement extends ResourceElement {
 
     public Array<ResourceElement> getChildren() {
 
-        if(!Files.isDirectory(file)) {
+        if (!Files.isDirectory(file)) {
             return null;
         }
 
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
 
-        try(final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
+        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
             stream.forEach(child -> elements.add(createFor(child)));
         } catch (IOException e) {
-           LOGGER.warning(this, e);
+            LOGGER.warning(this, e);
         }
 
         return elements;

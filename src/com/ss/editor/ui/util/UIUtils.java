@@ -25,52 +25,52 @@ import rlib.util.array.ArrayFactory;
 
 /**
  * Набор утилитных методов для работы с UI.
- * 
+ *
  * @author Ronn
  */
 public class UIUtils {
 
-	/**
-	 * Поиск всех компонентов экрана.
-	 */
-	public static void fillComponents(final Array<ScreenComponent> container, final Node node) {
+    /**
+     * Поиск всех компонентов экрана.
+     */
+    public static void fillComponents(final Array<ScreenComponent> container, final Node node) {
 
-		if(node instanceof ScreenComponent) {
-			container.add((ScreenComponent) node);
-		}
+        if (node instanceof ScreenComponent) {
+            container.add((ScreenComponent) node);
+        }
 
-        if(node instanceof SplitPane) {
+        if (node instanceof SplitPane) {
             final ObservableList<Node> items = ((SplitPane) node).getItems();
             items.forEach(child -> fillComponents(container, child));
         }
 
-		if(!(node instanceof Parent)) {
-			return;
-		}
+        if (!(node instanceof Parent)) {
+            return;
+        }
 
         final ObservableList<Node> nodes = ((Parent) node).getChildrenUnmodifiable();
         nodes.forEach(child -> fillComponents(container, child));
-	}
+    }
 
-	/**
-	 * Поиск всех компонентов экрана.
-	 */
-	public static <T extends Node> Array<T> fillComponents(final Node node, final Class<T> type) {
-		final Array<T> container = ArrayFactory.newArray(type);
+    /**
+     * Поиск всех компонентов экрана.
+     */
+    public static <T extends Node> Array<T> fillComponents(final Node node, final Class<T> type) {
+        final Array<T> container = ArrayFactory.newArray(type);
         fillComponents(container, node, type);
         return container;
-	}
+    }
 
     /**
      * Поиск всех компонентов.
      */
     public static <T extends Node> void fillComponents(final Array<T> container, final Node node, final Class<T> type) {
 
-        if(type.isInstance(container)) {
+        if (type.isInstance(container)) {
             container.add(type.cast(node));
         }
 
-        if(!(node instanceof Parent)) {
+        if (!(node instanceof Parent)) {
             return;
         }
 
@@ -98,7 +98,7 @@ public class UIUtils {
 
         container.add(menuItem);
 
-        if(!(menuItem instanceof Menu)) {
+        if (!(menuItem instanceof Menu)) {
             return;
         }
 
@@ -106,141 +106,144 @@ public class UIUtils {
         items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
     }
 
-	public static void addTo(TreeItem<? super Object> item, TreeItem<? super Object> parent) {
-		final ObservableList<TreeItem<Object>> children = parent.getChildren();
-		children.add(item);
-	}
+    public static void addTo(TreeItem<? super Object> item, TreeItem<? super Object> parent) {
+        final ObservableList<TreeItem<Object>> children = parent.getChildren();
+        children.add(item);
+    }
 
-	private UIUtils() {
-		throw new RuntimeException();
-	}
+    /**
+     * Override tooltip timeout.
+     */
+    public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis, int closeDelayInMillis) {
 
-	/**
-	 * Override tooltip timeout.
-	 */
-	public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis, int closeDelayInMillis) {
+        try {
 
-		try {
+            Class<?> tooltipBehaviourClass = null;
+            Class<?>[] declaredClasses = Tooltip.class.getDeclaredClasses();
 
-			Class<?> tooltipBehaviourClass = null;
-			Class<?>[] declaredClasses = Tooltip.class.getDeclaredClasses();
+            for (Class<?> declaredClass : declaredClasses) {
+                if (declaredClass.getCanonicalName().equals("javafx.scene.control.Tooltip.TooltipBehavior")) {
+                    tooltipBehaviourClass = declaredClass;
+                    break;
+                }
+            }
 
-			for(Class<?> declaredClass : declaredClasses) {
-				if(declaredClass.getCanonicalName().equals("javafx.scene.control.Tooltip.TooltipBehavior")) {
-					tooltipBehaviourClass = declaredClass;
-					break;
-				}
-			}
+            if (tooltipBehaviourClass == null) {
+                return;
+            }
 
-			if(tooltipBehaviourClass == null) {
-				return;
-			}
+            Constructor<?> constructor = tooltipBehaviourClass.getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
 
-			Constructor<?> constructor = tooltipBehaviourClass.getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
+            if (constructor == null) {
+                return;
+            }
 
-			if(constructor == null) {
-				return;
-			}
+            constructor.setAccessible(true);
 
-			constructor.setAccessible(true);
+            Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis), new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
 
-			Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis), new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
+            if (tooltipBehaviour == null) {
+                return;
+            }
 
-			if(tooltipBehaviour == null) {
-				return;
-			}
+            Field field = Tooltip.class.getDeclaredField("BEHAVIOR");
 
-			Field field = Tooltip.class.getDeclaredField("BEHAVIOR");
+            if (field == null) {
+                return;
+            }
 
-			if(field == null) {
-				return;
-			}
+            field.setAccessible(true);
 
-			field.setAccessible(true);
+            // Cache the default behavior if needed.
+            field.get(Tooltip.class);
+            field.set(Tooltip.class, tooltipBehaviour);
 
-			// Cache the default behavior if needed.
-			field.get(Tooltip.class);
-			field.set(Tooltip.class, tooltipBehaviour);
+        } catch (Exception e) {
+            System.out.println("Aborted setup due to error:" + e.getMessage());
+        }
+    }
 
-		} catch(Exception e) {
-			System.out.println("Aborted setup due to error:" + e.getMessage());
-		}
-	}
+    public static TreeItem<Object> findItemForValue(TreeView<Object> treeView, Object object) {
 
-	public static TreeItem<Object> findItemForValue(TreeView<Object> treeView, Object object) {
+        final TreeItem<Object> root = treeView.getRoot();
+        final ObservableList<TreeItem<Object>> children = root.getChildren();
 
-		final TreeItem<Object> root = treeView.getRoot();
-		final ObservableList<TreeItem<Object>> children = root.getChildren();
+        if (!children.isEmpty()) {
 
-		if(!children.isEmpty()) {
+            for (TreeItem<Object> treeItem : children) {
 
-			for(TreeItem<Object> treeItem : children) {
+                final TreeItem<Object> result = findItemForValue(treeItem, object);
 
-				final TreeItem<Object> result = findItemForValue(treeItem, object);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
 
-				if(result != null) {
-					return result;
-				}
-			}
-		}
+        if (root.getValue() == object) {
+            return root;
+        }
 
-		if(root.getValue() == object) {
-			return root;
-		}
+        return null;
+    }
 
-		return null;
-	}
+    public static <T> TreeItem<T> findItemForValue(TreeItem<T> root, Object object) {
 
-	public static <T> TreeItem<T> findItemForValue(TreeItem<T> root, Object object) {
+        final ObservableList<TreeItem<T>> children = root.getChildren();
 
-		final ObservableList<TreeItem<T>> children = root.getChildren();
+        if (!children.isEmpty()) {
 
-		if(!children.isEmpty()) {
+            for (TreeItem<T> treeItem : children) {
 
-			for(TreeItem<T> treeItem : children) {
+                final TreeItem<T> result = findItemForValue(treeItem, object);
 
-				final TreeItem<T> result = findItemForValue(treeItem, object);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
 
-				if(result != null) {
-					return result;
-				}
-			}
-		}
+        if (Objects.equals(root.getValue(), object)) {
+            return root;
+        }
 
-		if(Objects.equals(root.getValue(), object)) {
-			return root;
-		}
+        return null;
+    }
 
-		return null;
-	}
+    public static <T> Array<TreeItem<T>> getAllItems(final TreeView<T> treeView) {
 
-	public static <T> Array<TreeItem<T>> getAllItems(final TreeView<T> treeView) {
+        final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
 
-		final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
+        final TreeItem<T> root = treeView.getRoot();
+        final ObservableList<TreeItem<T>> children = root.getChildren();
 
-		final TreeItem<T> root = treeView.getRoot();
-		final ObservableList<TreeItem<T>> children = root.getChildren();
+        for (final TreeItem<T> child : children) {
+            getAllItems(container, child);
+        }
 
-		for(final TreeItem<T> child : children) {
-			getAllItems(container, child);
-		}
+        return container;
+    }
 
-		return container;
-	}
-
-	public static <T> void getAllItems(final Array<TreeItem<T>> container, final TreeItem<T> root) {
+    public static <T> void getAllItems(final Array<TreeItem<T>> container, final TreeItem<T> root) {
 
         container.add(root);
 
-		final ObservableList<TreeItem<T>> children = root.getChildren();
+        final ObservableList<TreeItem<T>> children = root.getChildren();
 
-		for(final TreeItem<T> child : children) {
-			getAllItems(container, child);
-		}
-	}
+        for (final TreeItem<T> child : children) {
+            getAllItems(container, child);
+        }
+    }
 
+    /**
+     * Конвертирование Color в ColorRGBA.
+     */
+    public static ColorRGBA convertColor(final Color newValue) {
+        return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), (float) newValue.getOpacity());
+    }
 
-	public static ColorRGBA convertColor(final Color newValue) {
-		return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), (float) newValue.getOpacity());
-	}
+    private UIUtils() {
+        throw new RuntimeException();
+    }
+
 }

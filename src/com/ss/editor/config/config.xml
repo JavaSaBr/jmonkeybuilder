@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <list>
-	<set name="Server.host" value="localhost" />
-	<set name="Server.port" value="1000" />
-	
-	<set name="Network.readBufferSize" value="8388608" />
-	<set name="Network.writeBufferSize" value="8388608" />
-	<set name="Network.groupSize" value="1" />
-	<set name="Network.threadPriority" value="5" />
+    <set name="Server.host" value="localhost"/>
+    <set name="Server.port" value="1000"/>
 
-	<set name="Dev.debug" value="false" />
+    <set name="Network.readBufferSize" value="8388608"/>
+    <set name="Network.writeBufferSize" value="8388608"/>
+    <set name="Network.groupSize" value="1"/>
+    <set name="Network.threadPriority" value="5"/>
+
+    <set name="Dev.debug" value="false"/>
 </list>

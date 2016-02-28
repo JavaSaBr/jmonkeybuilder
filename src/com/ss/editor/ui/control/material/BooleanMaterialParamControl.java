@@ -53,7 +53,7 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
      */
     private void processChange(final Boolean newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 

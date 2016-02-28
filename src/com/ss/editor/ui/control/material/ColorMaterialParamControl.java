@@ -70,9 +70,9 @@ public class ColorMaterialParamControl extends MaterialParamControl {
      */
     private void processChange(final Color newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
-        } else if(newValue == null) {
+        } else if (newValue == null) {
             processRemove();
             return;
         }

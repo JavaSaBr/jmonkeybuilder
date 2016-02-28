@@ -39,20 +39,6 @@ public class EditorDescription {
     }
 
     /**
-     * @param editorName название редактора.
-     */
-    public void setEditorName(final String editorName) {
-        this.editorName = editorName;
-    }
-
-    /**
-     * @param constructor конструктор редактора.
-     */
-    public void setConstructor(final Callable<FileEditor> constructor) {
-        this.constructor = constructor;
-    }
-
-    /**
      * @return набор расширений, поддерживаемых этим редактором.
      */
     public Array<String> getExtensions() {
@@ -67,10 +53,24 @@ public class EditorDescription {
     }
 
     /**
+     * @param constructor конструктор редактора.
+     */
+    public void setConstructor(final Callable<FileEditor> constructor) {
+        this.constructor = constructor;
+    }
+
+    /**
      * @return название редактора.
      */
     public String getEditorName() {
         return editorName;
+    }
+
+    /**
+     * @param editorName название редактора.
+     */
+    public void setEditorName(final String editorName) {
+        this.editorName = editorName;
     }
 
     @Override

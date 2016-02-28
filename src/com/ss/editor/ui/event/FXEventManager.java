@@ -54,6 +54,25 @@ public class FXEventManager {
     }
 
     /**
+     * Удаление обработчика событий javaFX UI.
+     *
+     * @param eventType    тип событий.
+     * @param eventHandler обработчик событий.
+     */
+    public void removeEventHandler(final EventType<? extends Event> eventType, final EventHandler<? super Event> eventHandler) {
+
+        final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
+
+        Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
+
+        if (handlers == null) {
+            return;
+        }
+
+        handlers.slowRemove(eventHandler);
+    }
+
+    /**
      * @return словарь обработчиков событий.
      */
     protected ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> getEventHandlers() {

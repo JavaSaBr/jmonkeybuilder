@@ -2,7 +2,7 @@ package com.ss.editor.ui.css;
 
 /**
  * Интерфейс с набором констант ID используемых в CSS.
- * 
+ *
  * @author Ronn
  */
 public interface CSSIds {
@@ -32,6 +32,8 @@ public interface CSSIds {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_OK = "AssetEditorDialogButtonOk";
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL = "AssetEditorDialogButtonCancel";
 
+    public static final String MATERIAL_EDITOR_TOOLBAR_LABEL = "MaterialEditorToolbarLabel";
+    public static final String MATERIAL_EDITOR_TOOLBAR_BOX = "MaterialEditorToolbarBox";
     public static final String MATERIAL_EDITOR_PARAMETER_CONTAINER = "MaterialEditorParameterContainer";
 
 

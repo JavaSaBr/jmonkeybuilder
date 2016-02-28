@@ -62,19 +62,15 @@ public final class EditorConfig implements AssetEventListener {
     private volatile Path currentAsset;
 
     @Override
-    @SuppressWarnings("rawtypes")
     public void assetDependencyNotFound(final AssetKey parentKey, final AssetKey dependentAssetKey) {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
     public void assetLoaded(final AssetKey key) {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
     public void assetRequested(final AssetKey key) {
-
         if (key instanceof TextureKey) {
             //TODO можно указывать анизатропную фильтрацию
             ((TextureKey) key).setAnisotropy(0);
@@ -142,7 +138,7 @@ public final class EditorConfig implements AssetEventListener {
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
-        if(currentAssetURI != null) {
+        if (currentAssetURI != null) {
             try {
                 this.currentAsset = Paths.get(new URI(currentAssetURI));
             } catch (URISyntaxException e) {
@@ -160,13 +156,13 @@ public final class EditorConfig implements AssetEventListener {
 
         prefs.put(PREF_GRAPHIC_SCREEN_SIZE, getScreenSize().toString());
 
-        if(currentAsset != null) {
+        if (currentAsset != null) {
             prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());
         } else {
             prefs.remove(PREF_CURRENT_ASSET);
         }
 
-        if(currentAsset != null && !Files.exists(currentAsset)) {
+        if (currentAsset != null && !Files.exists(currentAsset)) {
             currentAsset = null;
         }
 

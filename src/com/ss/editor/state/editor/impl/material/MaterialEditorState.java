@@ -26,38 +26,26 @@ public class MaterialEditorState extends AbstractEditorState {
     public static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
-
-    public static enum ModelType {
-        SPHERE,
-        BOX,
-        QUAD,
-    }
-
     /**
      * Тестовый бокс.
      */
     private final Geometry testBox;
-
     /**
      * Тестовая сфера.
      */
     private final Geometry testSphere;
-
     /**
      * Тестовая плоскость.
      */
     private final Geometry testQuad;
-
     /**
      * Узел для размещения тестовой модели.
      */
     private Node modelNode;
-
     /**
      * Текущий режим.
      */
     private ModelType currentModelType;
-
     /**
      * Активирован ли свет камеры.
      */
@@ -163,7 +151,7 @@ public class MaterialEditorState extends AbstractEditorState {
 
         final ModelType currentModelType = getCurrentModelType();
 
-        if(currentModelType != null) {
+        if (currentModelType != null) {
             changeModeImpl(currentModelType);
         }
     }
@@ -207,17 +195,17 @@ public class MaterialEditorState extends AbstractEditorState {
     }
 
     /**
-     * @param lightEnabled активирован ли свет камеры.
-     */
-    private void setLightEnabled(boolean lightEnabled) {
-        this.lightEnabled = lightEnabled;
-    }
-
-    /**
      * @return активирован ли свет камеры.
      */
     private boolean isLightEnabled() {
         return lightEnabled;
+    }
+
+    /**
+     * @param lightEnabled активирован ли свет камеры.
+     */
+    private void setLightEnabled(boolean lightEnabled) {
+        this.lightEnabled = lightEnabled;
     }
 
     /**
@@ -232,16 +220,16 @@ public class MaterialEditorState extends AbstractEditorState {
      */
     private void updateLightEnabledImpl(boolean enabled) {
 
-        if(enabled == isLightEnabled()) {
+        if (enabled == isLightEnabled()) {
             return;
         }
 
         final DirectionalLight light = getLightForChaseCamera();
         final Node stateNode = getStateNode();
 
-        if(enabled) {
+        if (enabled) {
             stateNode.addLight(light);
-        } else{
+        } else {
             stateNode.removeLight(light);
         }
 
@@ -254,7 +242,7 @@ public class MaterialEditorState extends AbstractEditorState {
 
         final Geometry testQuad = getTestQuad();
 
-        if(testQuad.getParent() != null) {
+        if (testQuad.getParent() != null) {
 
             final Quaternion localRotation = testQuad.getLocalRotation();
             final Camera camera = EDITOR.getCamera();
@@ -262,5 +250,11 @@ public class MaterialEditorState extends AbstractEditorState {
             localRotation.lookAt(camera.getLocation(), camera.getUp());
             testQuad.setLocalRotation(localRotation);
         }
+    }
+
+    public static enum ModelType {
+        SPHERE,
+        BOX,
+        QUAD,
     }
 }

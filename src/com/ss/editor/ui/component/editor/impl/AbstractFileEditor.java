@@ -79,7 +79,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         HBox toolbar = null;
 
-        if(needToolbar()) {
+        if (needToolbar()) {
 
             toolbar = new HBox();
             toolbar.setId(FILE_EDITOR_TOOLBAR);
@@ -96,7 +96,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         FXUtils.addToPane(root, container);
 
-        if(toolbar != null) {
+        if (toolbar != null) {
             FXUtils.bindFixedHeight(root, container.heightProperty().subtract(toolbar.heightProperty()));
         } else {
             FXUtils.bindFixedHeight(root, container.heightProperty());

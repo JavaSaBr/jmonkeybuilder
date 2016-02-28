@@ -127,6 +127,21 @@
     -fx-max-width: -fx-min-width;
 }
 
+#MaterialEditorToolbarLabel {
+    -fx-min-height: 28;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#MaterialEditorToolbarBox {
+    -fx-min-height: 28;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 400;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #MaterialEditorParameterContainer {
     -fx-background-color: -fx-color-panel-200;
     -fx-alignment: top-left;
@@ -140,7 +155,6 @@
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
-
 
 #MaterialParamControlButton {
     -fx-min-height: 24;

@@ -11,6 +11,6 @@ import java.nio.file.Path;
 public class ResourceElementFactory {
 
     public static ResourceElement createFor(final Path file) {
-        return Files.isDirectory(file)? new FolderElement(file) : new FileElement(file);
+        return Files.isDirectory(file) ? new FolderElement(file) : new FileElement(file);
     }
 }

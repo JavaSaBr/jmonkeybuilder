@@ -117,7 +117,7 @@ public class PostFilterEditorState extends AbstractEditorState {
 
             final MaterialKey key = (MaterialKey) material.getKey();
 
-            if(filters.containsKey(key)) {
+            if (filters.containsKey(key)) {
                 return;
             }
 
@@ -147,7 +147,7 @@ public class PostFilterEditorState extends AbstractEditorState {
             final MaterialKey key = (MaterialKey) material.getKey();
             final GenericFilter genericFilter = filters.remove(key);
 
-            if(genericFilter == null) {
+            if (genericFilter == null) {
                 return;
             }
 

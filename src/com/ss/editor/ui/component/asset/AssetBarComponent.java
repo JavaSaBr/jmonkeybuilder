@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.asset;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.RequestedRefreshAssetTreeEvent;
+import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -28,7 +28,7 @@ public class AssetBarComponent extends HBox {
         final Button refreshAction = new Button();
         refreshAction.setId(ASSET_COMPONENT_BAR_BUTTON);
         refreshAction.setGraphic(new ImageView(Icons.REFRESH_18));
-        refreshAction.setOnAction(event -> FX_EVENT_MANAGER.notify(new RequestedRefreshAssetTreeEvent()));
+        refreshAction.setOnAction(event -> FX_EVENT_MANAGER.notify(new RequestedRefreshAssetEvent()));
 
         FXUtils.addClassTo(refreshAction, TOOLBAR_BUTTON);
         FXUtils.addToPane(refreshAction, this);

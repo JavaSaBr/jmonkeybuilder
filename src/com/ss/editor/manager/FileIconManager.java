@@ -12,26 +12,27 @@ import java.util.Map;
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
+import rlib.manager.InitializeManager;
 
 import static java.lang.String.valueOf;
 
 /**
- * Менеджер по работе с иконками.
+ * Менеджер по работе с иконками файлов.
  *
  * @author Ronn
  */
-public class IconManager {
+public class FileIconManager {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(IconManager.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
-    private static IconManager instance;
+    private static FileIconManager instance;
 
-    public static IconManager getInstance() {
+    public static FileIconManager getInstance() {
 
-        if(instance == null) {
-            instance = new IconManager();
+        if (instance == null) {
+            instance = new FileIconManager();
         }
 
         return instance;
@@ -42,7 +43,8 @@ public class IconManager {
      */
     private final Map<String, Image> imageCache;
 
-    public IconManager() {
+    public FileIconManager() {
+        InitializeManager.valid(getClass());
         this.imageCache = new HashMap<>();
     }
 
@@ -63,13 +65,13 @@ public class IconManager {
             LOGGER.warning(e);
         }
 
-        if(contentType != null) {
+        if (contentType != null) {
             contentType = contentType.replace("/", "-");
         }
 
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "none";
-        } else if("inode-directory".equals(contentType)) {
+        } else if ("inode-directory".equals(contentType)) {
             contentType = "folder";
         }
 
@@ -78,7 +80,7 @@ public class IconManager {
         Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
         String url = iconPath.toString();
 
-        if(!EditorUtil.checkExists(url)) {
+        if (!EditorUtil.checkExists(url)) {
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
             url = iconPath.toString();
         }
@@ -86,11 +88,14 @@ public class IconManager {
         return getImage(url);
     }
 
+    /**
+     * Получение картинки по адрессу.
+     */
     public Image getImage(final String url) {
 
         Image image = imageCache.get(url);
 
-        if(image == null) {
+        if (image == null) {
             image = new Image(url);
             imageCache.put(url, image);
         }

@@ -22,6 +22,17 @@ public class ScreenSize {
     public static final int SCREEN_SIZE_MIN_WIDTH = 1244;
 
     /**
+     * Сортировщик размеров экрана.
+     */
+    private static final ArrayComparator<ScreenSize> COMPARATOR = (first, second) -> {
+
+        final int firstTotal = first.getHeight() * first.getWidth();
+        final int secondTotal = second.getHeight() * second.getWidth();
+
+        return -(firstTotal - secondTotal);
+    };
+
+    /**
      * Таблица доступных расширений экрана.
      */
     private static final ObjectDictionary<String, ScreenSize> SCREEN_SIZE_TABLE = DictionaryFactory.newObjectDictionary();
@@ -30,6 +41,33 @@ public class ScreenSize {
      * Список доступных разрешений.
      */
     private static ScreenSize[] values;
+
+    /**
+     * Строковый вид.
+     */
+    private final String size;
+
+    /**
+     * Ширина экрана.
+     */
+    private final int width;
+
+    /**
+     * Высота кэрана.
+     */
+    private final int height;
+
+    /**
+     * Поддерживается ли полный экран.
+     */
+    private final boolean fullscreenSupported;
+
+    private ScreenSize(final int width, final int height, final boolean fullscreenSupported) {
+        this.width = width;
+        this.height = height;
+        this.size = width + "x" + height;
+        this.fullscreenSupported = fullscreenSupported;
+    }
 
     /**
      * Инициализация списка доступных разрешений экрана.
@@ -91,44 +129,6 @@ public class ScreenSize {
      */
     public static ScreenSize[] values() {
         return values;
-    }
-
-    /**
-     * Строковый вид.
-     */
-    private final String size;
-
-    /**
-     * Ширина экрана.
-     */
-    private final int width;
-
-    /**
-     * Высота кэрана.
-     */
-    private final int height;
-
-    /**
-     * Сортировщик размеров экрана.
-     */
-    private static final ArrayComparator<ScreenSize> COMPARATOR = (first, second) -> {
-
-        final int firstTotal = first.getHeight() * first.getWidth();
-        final int secondTotal = second.getHeight() * second.getWidth();
-
-        return -(firstTotal - secondTotal);
-    };
-
-    /**
-     * Поддерживается ли полный экран.
-     */
-    private final boolean fullscreenSupported;
-
-    private ScreenSize(final int width, final int height, final boolean fullscreenSupported) {
-        this.width = width;
-        this.height = height;
-        this.size = width + "x" + height;
-        this.fullscreenSupported = fullscreenSupported;
     }
 
     @Override

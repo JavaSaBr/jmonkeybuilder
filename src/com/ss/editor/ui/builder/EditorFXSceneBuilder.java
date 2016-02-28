@@ -53,7 +53,7 @@ public class EditorFXSceneBuilder {
 
     public static EditorFXScene build(final JmeFxContainer fxContainer) {
 
-        for(final CSSFont font : CSSFont.FONTS) {
+        for (final CSSFont font : CSSFont.FONTS) {
             Font.loadFont(EditorUtil.getInputStream(font.getPath()), font.getSize());
         }
 

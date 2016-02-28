@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree;
 
-import com.ss.editor.manager.IconManager;
+import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 
@@ -26,7 +26,7 @@ import javafx.util.Callback;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
-import static com.ss.editor.manager.IconManager.DEFAULT_FILE_ICON_SIZE;
+import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
 import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_TREE_CELL;
 import static com.ss.editor.ui.css.CSSIds.ASSET_COMPONENT_RESOURCE_TREE_CELL;
@@ -41,7 +41,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
     public static final Callback<TreeView<ResourceElement>, TreeCell<ResourceElement>> CELL_FACTORY = param -> new ResourceTreeCell();
 
-    private static final IconManager ICON_MANAGER = IconManager.getInstance();
+    private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     /**
      * Всплывающая подсказка.
@@ -59,7 +59,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         this.tooltip = new Tooltip();
 
         //FIXME надо сделать как-то подругому :)
-       // Tooltip.install(this, tooltip);
+        // Tooltip.install(this, tooltip);
 
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
@@ -80,13 +80,13 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         final ResourceElement item = getItem();
 
-        if(item == null) {
+        if (item == null) {
             return;
         }
 
         final Path file = item.getFile();
 
-        if(!Files.exists(file)) {
+        if (!Files.exists(file)) {
             return;
         }
 
@@ -107,7 +107,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         final ResourceElement item = getItem();
 
-        if(item == null || event.getButton() != MouseButton.SECONDARY) {
+        if (item == null || event.getButton() != MouseButton.SECONDARY) {
             return;
         }
 
@@ -116,7 +116,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         final ContextMenu contextMenu = treeView.getContextMenu();
 
-        if(contextMenu == null) {
+        if (contextMenu == null) {
             return;
         }
 
@@ -127,12 +127,12 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     protected void updateItem(final ResourceElement item, boolean empty) {
         super.updateItem(item, empty);
 
-        if(item == null) {
+        if (item == null) {
             setText(StringUtils.EMPTY);
             updateTooltip(StringUtils.EMPTY);
             setGraphic(null);
             return;
-        } else if(item instanceof ResourceLoadingElement) {
+        } else if (item instanceof ResourceLoadingElement) {
             setText(StringUtils.EMPTY);
             updateTooltip(StringUtils.EMPTY);
             setGraphic(new ProgressIndicator());

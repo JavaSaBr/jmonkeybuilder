@@ -26,6 +26,8 @@ public class Messages {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_OK;
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
 
+    public static final String MATERIAL_EDITOR_MATERIAL_TYPE_LABEL;
+
     public static final String MATERIAL_TEXTURES_COMPONENT_TITLE;
     public static final String MATERIAL_COLORS_COMPONENT_TITLE;
     public static final String MATERIAL_OTHER_COMPONENT_TITLE;
@@ -46,7 +48,7 @@ public class Messages {
     public static final String MATERIAL_RENDER_STATE_DEPTH_WRITE;
     public static final String MATERIAL_RENDER_STATE_COLOR_WRITE;
     public static final String MATERIAL_RENDER_STATE_DEPTH_TEST;
-    public static final String MATERIAL_RENDER_STATE_WIREFAME;
+    public static final String MATERIAL_RENDER_STATE_WIREFRAME;
 
     static {
 
@@ -87,6 +89,8 @@ public class Messages {
         MATERIAL_RENDER_STATE_DEPTH_WRITE = bundle.getString("MaterialRenderStateDepthWrite");
         MATERIAL_RENDER_STATE_COLOR_WRITE = bundle.getString("MaterialRenderStateColorWrite");
         MATERIAL_RENDER_STATE_DEPTH_TEST = bundle.getString("MaterialRenderStateDepthTest");
-        MATERIAL_RENDER_STATE_WIREFAME = bundle.getString("MaterialRenderStateWireframe");
+        MATERIAL_RENDER_STATE_WIREFRAME = bundle.getString("MaterialRenderStateWireframe");
+
+        MATERIAL_EDITOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialEditorMaterialTypeLabel");
     }
 }

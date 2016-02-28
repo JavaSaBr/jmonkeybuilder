@@ -28,10 +28,6 @@ public class EditorRegistry {
 
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
-    public static EditorRegistry getInstance() {
-        return INSTANCE;
-    }
-
     /**
      * Таблица с описаниями редакторов.
      */
@@ -40,6 +36,10 @@ public class EditorRegistry {
     public EditorRegistry() {
         this.editorDescriptions = DictionaryFactory.newObjectDictionary();
         loadDescriptions();
+    }
+
+    public static EditorRegistry getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -70,7 +70,7 @@ public class EditorRegistry {
 
             Array<EditorDescription> descriptions = editorDescriptions.get(extension);
 
-            if(descriptions == null) {
+            if (descriptions == null) {
                 descriptions = ArrayFactory.newArray(EditorDescription.class);
                 editorDescriptions.put(extension, descriptions);
             }
@@ -95,15 +95,15 @@ public class EditorRegistry {
 
         Array<EditorDescription> descriptions = editorDescriptions.get(extension);
 
-        if(descriptions != null) {
+        if (descriptions != null) {
             description = descriptions.first();
         } else {
 
             descriptions = editorDescriptions.get(ALL_FORMATS);
-            description = descriptions == null? null : descriptions.first();
+            description = descriptions == null ? null : descriptions.first();
         }
 
-        if(description == null) {
+        if (description == null) {
             return null;
         }
 

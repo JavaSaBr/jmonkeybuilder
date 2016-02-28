@@ -60,7 +60,7 @@ public class MaterialListCell extends ListCell<Material> {
 
         final Material item = getItem();
 
-        if(item == null) {
+        if (item == null) {
             return;
         }
 
@@ -71,7 +71,7 @@ public class MaterialListCell extends ListCell<Material> {
     protected void updateItem(final Material item, final boolean empty) {
         super.updateItem(item, empty);
 
-        if(item == null) {
+        if (item == null) {
             setText(StringUtils.EMPTY);
             setGraphic(null);
             return;

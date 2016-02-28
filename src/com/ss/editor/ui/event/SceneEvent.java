@@ -7,37 +7,37 @@ import rlib.util.dictionary.ObjectDictionary;
 
 /**
  * Базавая реализация события сцены javaFX UI.
- * 
+ *
  * @author Ronn
  */
 public class SceneEvent extends Event {
 
-	private static final long serialVersionUID = 6827900349094865635L;
+    private static final long serialVersionUID = 6827900349094865635L;
 
-	public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
+    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
 
     /**
      * Таблица с параметрами события.
      */
-	private ObjectDictionary<Object, Object> values;
+    private ObjectDictionary<Object, Object> values;
 
-	public SceneEvent(final Object source, final EventType<? extends Event> eventType) {
-		super(source, null, eventType);
-	}
+    public SceneEvent(final Object source, final EventType<? extends Event> eventType) {
+        super(source, null, eventType);
+    }
 
-	public SceneEvent(final EventType<? extends Event> eventType) {
-		super(eventType);
-	}
+    public SceneEvent(final EventType<? extends Event> eventType) {
+        super(eventType);
+    }
 
     /**
      * Вставка параметра для события.
      *
-     * @param key ключ параметра.
+     * @param key   ключ параметра.
      * @param value значение параметра.
      */
     public void set(final Object key, final Object value) {
 
-        if(values == null) {
+        if (values == null) {
             values = DictionaryFactory.newObjectDictionary();
         }
 
@@ -52,7 +52,7 @@ public class SceneEvent extends Event {
      */
     public <T> T get(final Object key) {
 
-        if(values == null) {
+        if (values == null) {
             return null;
         }
 

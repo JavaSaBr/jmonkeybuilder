@@ -38,7 +38,7 @@ public class OpenAssetAction extends MenuItem {
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAsset = config.getCurrentAsset();
-        final File currentFolder = currentAsset == null? null : currentAsset.toFile();
+        final File currentFolder = currentAsset == null ? null : currentAsset.toFile();
 
         if (currentFolder == null) {
             chooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -55,7 +55,7 @@ public class OpenAssetAction extends MenuItem {
 
         final Path newAsset = folder.toPath();
 
-        if(newAsset.equals(currentAsset)) {
+        if (newAsset.equals(currentAsset)) {
             return;
         }
 

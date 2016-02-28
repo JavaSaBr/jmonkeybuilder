@@ -22,16 +22,16 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
-     * @param file открываемый файл.
-     */
-    public void setFile(final Path file) {
-        set(FILE, file);
-    }
-
-    /**
      * @return открываемый файл.
      */
     public Path getFile() {
         return get(FILE);
+    }
+
+    /**
+     * @param file открываемый файл.
+     */
+    public void setFile(final Path file) {
+        set(FILE, file);
     }
 }

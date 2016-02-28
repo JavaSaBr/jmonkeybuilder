@@ -78,7 +78,7 @@ public class MaterialColorsComponent extends TitledPane {
 
         final VarType varType = matParam.getVarType();
 
-        if(varType != VarType.Vector4) {
+        if (varType != VarType.Vector4) {
             return;
         }
 

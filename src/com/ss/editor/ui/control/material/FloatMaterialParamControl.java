@@ -59,10 +59,10 @@ public class FloatMaterialParamControl extends MaterialParamControl {
      */
     private void processChange(final Double newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
-        
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(newValue));
     }
 
@@ -73,7 +73,7 @@ public class FloatMaterialParamControl extends MaterialParamControl {
 
         final Material material = getMaterial();
 
-        if(newValue == null) {
+        if (newValue == null) {
             material.clearParam(getParameterName());
         } else {
             material.setFloat(getParameterName(), newValue.floatValue());

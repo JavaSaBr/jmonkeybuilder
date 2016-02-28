@@ -29,14 +29,14 @@ public class FolderAssetLocator implements AssetLocator {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        if(currentAsset == null) {
+        if (currentAsset == null) {
             return null;
         }
 
         final String name = key.getName();
         final Path resolve = currentAsset.resolve(name);
 
-        if(!Files.exists(resolve)) {
+        if (!Files.exists(resolve)) {
             return null;
         }
 

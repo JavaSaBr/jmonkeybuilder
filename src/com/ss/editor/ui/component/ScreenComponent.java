@@ -2,21 +2,21 @@ package com.ss.editor.ui.component;
 
 /**
  * Интерфейс для реализации компонента сцены экрана.
- * 
+ *
  * @author Ronn
  */
 public interface ScreenComponent {
 
-	/**
-	 * @return индентификатор компонента.
-	 */
-	public default String getComponentId() {
-		return null;
-	}
+    /**
+     * @return индентификатор компонента.
+     */
+    public default String getComponentId() {
+        return null;
+    }
 
-	/**
-	 * Уведомление о завершении построения сцены.
-	 */
-	public default void notifyFinishBuild() {
-	}
+    /**
+     * Уведомление о завершении построения сцены.
+     */
+    public default void notifyFinishBuild() {
+    }
 }

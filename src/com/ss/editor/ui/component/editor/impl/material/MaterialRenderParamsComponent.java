@@ -113,17 +113,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
     }
 
     /**
-     * @param ignoreListeners флаг игнорирования слушателей.
-     */
-    private void setIgnoreListeners(final boolean ignoreListeners) {
-        this.ignoreListeners = ignoreListeners;
-    }
-
-    /**
      * @return флаг игнорирования слушателей.
      */
     private boolean isIgnoreListeners() {
         return ignoreListeners;
+    }
+
+    /**
+     * @param ignoreListeners флаг игнорирования слушателей.
+     */
+    private void setIgnoreListeners(final boolean ignoreListeners) {
+        this.ignoreListeners = ignoreListeners;
     }
 
     /**
@@ -182,7 +182,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
         depthTestCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_DEPTH_TEST);
         depthTestCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeDepthTest(newValue));
 
-        wireframeCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_WIREFAME);
+        wireframeCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_WIREFRAME);
         wireframeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeWireframe(newValue));
 
         final HBox faceCullModeContainer = new HBox(faceCullModeLabel, faceCullModeComboBox);
@@ -231,6 +231,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены Wireframe.
      */
     private void processChangeWireframe(final Boolean newValue) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeWireframeImpl(newValue));
     }
 
@@ -250,6 +255,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены DepthTest.
      */
     private void processChangeDepthTest(final Boolean newValue) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeDepthTestImpl(newValue));
     }
 
@@ -269,6 +279,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены ColorWrite.
      */
     private void processChangeColorWrite(final Boolean newValue) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeColorWriteImpl(newValue));
     }
 
@@ -288,7 +303,12 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены DepthWrite.
      */
     private void pointChangeDepthWrite(final Boolean newValue) {
-       EXECUTOR_MANAGER.addEditorThreadTask(() ->  pointChangeDepthWriteImpl(newValue));
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> pointChangeDepthWriteImpl(newValue));
     }
 
     /**
@@ -307,6 +327,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены PointSprite.
      */
     private void processChangePointSprite(final Boolean newValue) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangePointSpriteImpl(newValue));
     }
 
@@ -345,6 +370,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены PolyOffset Factor.
      */
     private void processChangeFactor(final String newFactor) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         try {
             EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeFactorImpl(parseFloat(newFactor)));
         } catch (final NumberFormatException ignored) {
@@ -367,6 +397,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены Blend Mode.
      */
     private void processChange(final BlendMode blendMode) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(blendMode));
     }
 
@@ -386,6 +421,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены FaceCull Mode.
      */
     private void processChange(final FaceCullMode faceCullMode) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(faceCullMode));
     }
 
@@ -515,16 +555,16 @@ public class MaterialRenderParamsComponent extends TitledPane {
     }
 
     /**
-     * @param currentMaterial текущий отображаемый материал.
-     */
-    private void setCurrentMaterial(final Material currentMaterial) {
-        this.currentMaterial = currentMaterial;
-    }
-
-    /**
      * @return текущий отображаемый материал.
      */
     private Material getCurrentMaterial() {
         return currentMaterial;
+    }
+
+    /**
+     * @param currentMaterial текущий отображаемый материал.
+     */
+    private void setCurrentMaterial(final Material currentMaterial) {
+        this.currentMaterial = currentMaterial;
     }
 }

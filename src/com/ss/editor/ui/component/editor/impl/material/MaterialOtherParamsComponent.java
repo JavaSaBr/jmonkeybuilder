@@ -85,15 +85,15 @@ public class MaterialOtherParamsComponent extends TitledPane {
 
         MaterialParamControl control = null;
 
-        if(varType == VarType.Boolean) {
+        if (varType == VarType.Boolean) {
             control = new BooleanMaterialParamControl(changeHandler, material, matParam.getName());
-        } else if(varType == VarType.Int) {
+        } else if (varType == VarType.Int) {
             control = new IntegerMaterialParamControl(changeHandler, material, matParam.getName());
-        } else if(varType == VarType.Float) {
+        } else if (varType == VarType.Float) {
             control = new FloatMaterialParamControl(changeHandler, material, matParam.getName());
         }
 
-        if(control == null) {
+        if (control == null) {
             return;
         }
 

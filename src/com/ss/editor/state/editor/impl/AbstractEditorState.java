@@ -38,10 +38,10 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
 
     public AbstractEditorState() {
         this.stateNode = new Node(getClass().getSimpleName());
-        this.chaseCamera = needChaseCamera()? createChaseCamera() : null;
-        this.lightForChaseCamera = needLightForChaseCamera()? createLightForChaseCamera() : null;
+        this.chaseCamera = needChaseCamera() ? createChaseCamera() : null;
+        this.lightForChaseCamera = needLightForChaseCamera() ? createLightForChaseCamera() : null;
 
-        if(lightForChaseCamera != null) {
+        if (lightForChaseCamera != null) {
             stateNode.addLight(lightForChaseCamera);
         }
     }
@@ -69,7 +69,7 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
 
         final ChaseCamera chaseCamera = getChaseCamera();
 
-        if(chaseCamera != null) {
+        if (chaseCamera != null) {
             chaseCamera.setEnabled(true);
         }
     }
@@ -83,7 +83,7 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
 
         final ChaseCamera chaseCamera = getChaseCamera();
 
-        if(chaseCamera != null) {
+        if (chaseCamera != null) {
             chaseCamera.setEnabled(false);
         }
     }
@@ -149,7 +149,7 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
         final ChaseCamera chaseCamera = getChaseCamera();
         final DirectionalLight lightForChaseCamera = getLightForChaseCamera();
 
-        if(chaseCamera != null && lightForChaseCamera != null) {
+        if (chaseCamera != null && lightForChaseCamera != null) {
             final Camera camera = EDITOR.getCamera();
             lightForChaseCamera.setDirection(camera.getDirection());
         }

@@ -77,7 +77,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
 
-        if(element instanceof FileElement) {
+        if (element instanceof FileElement) {
             items.add(new OpenFileAction(element));
         }
 
@@ -97,7 +97,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final TreeItem<ResourceElement> currentRoot = getRoot();
 
-        if(currentRoot != null) {
+        if (currentRoot != null) {
             setRoot(null);
         }
 
@@ -128,7 +128,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAsset = config.getCurrentAsset();
 
-        if(currentAsset == null) {
+        if (currentAsset == null) {
             setRoot(null);
             return;
         }
@@ -156,7 +156,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(this);
             allItems.forEach(item -> {
 
-                if(!item.isExpanded()) {
+                if (!item.isExpanded()) {
                     return;
                 }
 
@@ -220,7 +220,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
                 final TreeItem<ResourceElement> item = findItemForValue(newRoot, element);
 
-                if(item == null) {
+                if (item == null) {
                     return;
                 }
 
@@ -274,7 +274,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement element = treeItem.getValue();
 
-        if(!element.hasChildren()) {
+        if (!element.hasChildren()) {
             return;
         }
 

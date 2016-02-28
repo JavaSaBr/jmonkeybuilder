@@ -2,12 +2,16 @@ package com.ss.editor.ui.component.editor.impl.material;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
+import com.jme3.material.MaterialDef;
+import com.ss.editor.Messages;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
@@ -15,6 +19,8 @@ import java.nio.file.Path;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
@@ -22,6 +28,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.array.Array;
 
 import static com.ss.editor.ui.css.CSSIds.MATERIAL_EDITOR_PARAMETER_CONTAINER;
 import static javafx.geometry.Pos.TOP_RIGHT;
@@ -35,16 +42,16 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
+    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
+
+    private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
+    private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
+
     static {
         DESCRIPTION.setConstructor(MaterialEditor::new);
         DESCRIPTION.setEditorName("MaterialEditor");
         DESCRIPTION.addExtension("j3m");
     }
-
-    /**
-     * Обработчик внесенич изменений.
-     */
-    private final Runnable changeHandler;
 
     /**
      * 3D часть редактора.
@@ -96,10 +103,38 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private ToggleButton lightButton;
 
+    /**
+     * Список доступных типов материалов.
+     */
+    private ComboBox<String> materialDefinitionBox;
+
+    /**
+     * Обработчик внесенич изменений.
+     */
+    private Runnable changeHandler;
+
+    /**
+     * Игнорировать ли слушателей.
+     */
+    private boolean ignoreListeners;
+
     public MaterialEditor() {
-        this.changeHandler = this::handleChanges;
         this.editorState = new MaterialEditorState();
         addEditorState(editorState);
+    }
+
+    /**
+     * @param ignoreListeners игнорировать ли слушателей.
+     */
+    private void setIgnoreListeners(boolean ignoreListeners) {
+        this.ignoreListeners = ignoreListeners;
+    }
+
+    /**
+     * @return игнорировать ли слушателей.
+     */
+    private boolean isIgnoreListeners() {
+        return ignoreListeners;
     }
 
     /**
@@ -130,7 +165,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         final VBox parameterContainer = new VBox();
         parameterContainer.setId(MATERIAL_EDITOR_PARAMETER_CONTAINER);
 
-        final Runnable changeHandler = getChangeHandler();
+        changeHandler = this::handleChanges;
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);
@@ -189,22 +224,55 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         final MaterialEditorState editorState = getEditorState();
         editorState.changeMode(ModelType.BOX);
-        editorState.updateMaterial(material);
 
-        final ToggleButton cubeButton = getCubeButton();
-        cubeButton.setSelected(true);
+        reload(material);
+    }
 
-        final MaterialTexturesComponent materialTexturesComponent = getMaterialTexturesComponent();
-        materialTexturesComponent.buildFor(material);
+    /**
+     * Загрузка материала.
+     */
+    private void reload(final Material material) {
 
-        final MaterialColorsComponent materialColorsComponent = getMaterialColorsComponent();
-        materialColorsComponent.buildFor(material);
+        setIgnoreListeners(true);
+        try {
 
-        final MaterialOtherParamsComponent materialOtherParamsComponent = getMaterialOtherParamsComponent();
-        materialOtherParamsComponent.buildFor(material);
+            final MaterialEditorState editorState = getEditorState();
+            editorState.updateMaterial(material);
 
-        final MaterialRenderParamsComponent materialRenderParamsComponent = getMaterialRenderParamsComponent();
-        materialRenderParamsComponent.buildFor(material);
+            final ToggleButton cubeButton = getCubeButton();
+            cubeButton.setSelected(true);
+
+            final MaterialTexturesComponent materialTexturesComponent = getMaterialTexturesComponent();
+            materialTexturesComponent.buildFor(material);
+
+            final MaterialColorsComponent materialColorsComponent = getMaterialColorsComponent();
+            materialColorsComponent.buildFor(material);
+
+            final MaterialOtherParamsComponent materialOtherParamsComponent = getMaterialOtherParamsComponent();
+            materialOtherParamsComponent.buildFor(material);
+
+            final MaterialRenderParamsComponent materialRenderParamsComponent = getMaterialRenderParamsComponent();
+            materialRenderParamsComponent.buildFor(material);
+
+            final ComboBox<String> materialDefinitionBox = getMaterialDefinitionBox();
+            final ObservableList<String> items = materialDefinitionBox.getItems();
+
+            final Array<String> availableMaterialDefinitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
+            availableMaterialDefinitions.forEach(items::add);
+
+            final MaterialDef materialDef = material.getMaterialDef();
+            materialDefinitionBox.getSelectionModel().select(materialDef.getAssetName());
+
+        } finally {
+            setIgnoreListeners(false);
+        }
+    }
+
+    /**
+     * @return список доступных типов материалов.
+     */
+    private ComboBox<String> getMaterialDefinitionBox() {
+        return materialDefinitionBox;
     }
 
     @Override
@@ -232,11 +300,20 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
+        final Label materialDefinitionLabel = new Label(Messages.MATERIAL_EDITOR_MATERIAL_TYPE_LABEL + ":");
+        materialDefinitionLabel.setId(CSSIds.MATERIAL_EDITOR_TOOLBAR_LABEL);
+
+        materialDefinitionBox = new ComboBox<>();
+        materialDefinitionBox.setId(CSSIds.MATERIAL_EDITOR_TOOLBAR_BOX);
+        materialDefinitionBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChangeType(newValue));
+
         FXUtils.addToPane(createSaveAction(), container);
         FXUtils.addToPane(cubeButton, container);
         FXUtils.addToPane(sphereButton, container);
         FXUtils.addToPane(planeButton, container);
         FXUtils.addToPane(lightButton, container);
+        FXUtils.addToPane(materialDefinitionLabel, container);
+        FXUtils.addToPane(materialDefinitionBox, container);
 
         FXUtils.addClassTo(cubeButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(cubeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
@@ -246,9 +323,41 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         FXUtils.addClassTo(planeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.MAIN_FONT_13);
 
-        HBox.setMargin(cubeButton, new Insets(0, 0, 0, 3));
-        HBox.setMargin(lightButton, new Insets(0, 0, 0, 6));
+        HBox.setMargin(cubeButton, SMALL_OFFSET);
+        HBox.setMargin(lightButton, BIG_OFFSET);
+        HBox.setMargin(materialDefinitionLabel, BIG_OFFSET);
+    }
+
+    /**
+     * Обработка смены типа материала.
+     */
+    private void processChangeType(final String newType) {
+
+        if(isIgnoreListeners()) {
+            return;
+        }
+
+        processChangeTypeImpl(newType);
+    }
+
+    /**
+     * Процесс смены типа материала.
+     */
+    private void processChangeTypeImpl(final String newType) {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Material newMaterial = new Material(assetManager, newType);
+        newMaterial.getAdditionalRenderState();
+
+        EXECUTOR_MANAGER.addFXTask(() -> {
+            reload(newMaterial);
+
+            final Runnable changeHandler = getChangeHandler();
+            changeHandler.run();
+        });
     }
 
     /**
@@ -260,7 +369,6 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     *
      * @return кнопка активации модели куба.
      */
     private ToggleButton getCubeButton() {
@@ -268,7 +376,6 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     *
      * @return кнопка активации модели плоскости.
      */
     private ToggleButton getPlaneButton() {
@@ -276,7 +383,6 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     *
      * @return кнопка активации модели сферы.
      */
     private ToggleButton getSphereButton() {
@@ -288,7 +394,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private void changeModelType(final ToggleButton button, final Boolean newValue) {
 
-        if(newValue == Boolean.FALSE) {
+        if (newValue == Boolean.FALSE) {
             return;
         }
 
@@ -298,21 +404,21 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         final ToggleButton sphereButton = getSphereButton();
         final ToggleButton planeButton = getPlaneButton();
 
-        if(button == cubeButton) {
+        if (button == cubeButton) {
             sphereButton.setSelected(false);
             planeButton.setSelected(false);
             sphereButton.setDisable(false);
             planeButton.setDisable(false);
             cubeButton.setDisable(true);
             editorState.changeMode(ModelType.BOX);
-        } else if(button == sphereButton) {
+        } else if (button == sphereButton) {
             cubeButton.setSelected(false);
             planeButton.setSelected(false);
             cubeButton.setDisable(false);
             planeButton.setDisable(false);
             sphereButton.setDisable(true);
             editorState.changeMode(ModelType.SPHERE);
-        } else if(button == planeButton) {
+        } else if (button == planeButton) {
             sphereButton.setSelected(false);
             cubeButton.setSelected(false);
             sphereButton.setDisable(false);
@@ -323,17 +429,17 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * @param currentMaterial текущий редактируемый материал.
-     */
-    private void setCurrentMaterial(final Material currentMaterial) {
-        this.currentMaterial = currentMaterial;
-    }
-
-    /**
      * @return текущий редактируемый материал.
      */
     private Material getCurrentMaterial() {
         return currentMaterial;
+    }
+
+    /**
+     * @param currentMaterial текущий редактируемый материал.
+     */
+    private void setCurrentMaterial(final Material currentMaterial) {
+        this.currentMaterial = currentMaterial;
     }
 
     /**

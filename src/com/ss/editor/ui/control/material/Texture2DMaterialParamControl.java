@@ -142,11 +142,11 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     private void processChangeRepeat(final Boolean newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() ->  processChangeRepeatImpl(newValue));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeRepeatImpl(newValue));
     }
 
     /**
@@ -158,7 +158,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final MatParamTexture textureParam = material.getTextureParam(getParameterName());
         final Texture2D texture2D = (Texture2D) textureParam.getValue();
 
-        if(newValue) {
+        if (newValue) {
             texture2D.setWrap(Texture.WrapMode.Repeat);
         } else {
             texture2D.setWrap(Texture.WrapMode.EdgeClamp);
@@ -174,7 +174,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     private void processChangeFlip(final Boolean newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
@@ -195,7 +195,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Texture texture = assetManager.loadTexture(textureKey);
 
-        if(texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
+        if (texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
             texture.setWrap(Texture.WrapMode.Repeat);
         }
 
@@ -240,7 +240,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         final Texture texture = assetManager.loadTexture(key);
 
-        if(repeatButton.isSelected()) {
+        if (repeatButton.isSelected()) {
             texture.setWrap(Texture.WrapMode.Repeat);
         }
 
