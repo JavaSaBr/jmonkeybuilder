@@ -42,6 +42,11 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
+     * Обработчик внесенич изменений.
+     */
+    private final Runnable changeHandler;
+
+    /**
      * 3D часть редактора.
      */
     private final MaterialEditorState editorState;
@@ -60,6 +65,11 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      * Компонент для редактирования различных параметров.
      */
     private MaterialOtherParamsComponent materialOtherParamsComponent;
+
+    /**
+     * Компонент для редактирования настроек рендера материала.
+     */
+    private MaterialRenderParamsComponent materialRenderParamsComponent;
 
     /**
      * Текущий редактируемый материал.
@@ -87,8 +97,23 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     private ToggleButton lightButton;
 
     public MaterialEditor() {
+        this.changeHandler = this::handleChanges;
         this.editorState = new MaterialEditorState();
         addEditorState(editorState);
+    }
+
+    /**
+     * Обработка внесения изменений.
+     */
+    private void handleChanges() {
+
+    }
+
+    /**
+     * @return обработчик внесенич изменений.
+     */
+    private Runnable getChangeHandler() {
+        return changeHandler;
     }
 
     @Override
@@ -105,14 +130,18 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         final VBox parameterContainer = new VBox();
         parameterContainer.setId(MATERIAL_EDITOR_PARAMETER_CONTAINER);
 
-        materialTexturesComponent = new MaterialTexturesComponent();
-        materialColorsComponent = new MaterialColorsComponent();
-        materialOtherParamsComponent = new MaterialOtherParamsComponent();
+        final Runnable changeHandler = getChangeHandler();
+
+        materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
+        materialColorsComponent = new MaterialColorsComponent(changeHandler);
+        materialOtherParamsComponent = new MaterialOtherParamsComponent(changeHandler);
+        materialRenderParamsComponent = new MaterialRenderParamsComponent(changeHandler);
 
         final ObservableList<TitledPane> panes = accordion.getPanes();
         panes.add(materialTexturesComponent);
         panes.add(materialColorsComponent);
         panes.add(materialOtherParamsComponent);
+        panes.add(materialRenderParamsComponent);
 
         FXUtils.addToPane(accordion, parameterContainer);
         FXUtils.addToPane(parameterContainer, root);
@@ -139,8 +168,15 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     /**
      * @return компонент для редактирования различных параметров.
      */
-    public MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
+    private MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
         return materialOtherParamsComponent;
+    }
+
+    /**
+     * @return компонент для редактирования настроек рендера материала.
+     */
+    private MaterialRenderParamsComponent getMaterialRenderParamsComponent() {
+        return materialRenderParamsComponent;
     }
 
     @Override
@@ -166,6 +202,9 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         final MaterialOtherParamsComponent materialOtherParamsComponent = getMaterialOtherParamsComponent();
         materialOtherParamsComponent.buildFor(material);
+
+        final MaterialRenderParamsComponent materialRenderParamsComponent = getMaterialRenderParamsComponent();
+        materialRenderParamsComponent.buildFor(material);
     }
 
     @Override

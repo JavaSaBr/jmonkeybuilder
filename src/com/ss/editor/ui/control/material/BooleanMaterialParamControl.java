@@ -28,8 +28,8 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox checkBox;
 
-    public BooleanMaterialParamControl(final Material material, final String parameterName) {
-        super(material, parameterName);
+    public BooleanMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+        super(changeHandler, material, parameterName);
     }
 
     @Override

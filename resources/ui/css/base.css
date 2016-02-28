@@ -621,8 +621,8 @@
     -fx-body-color: transparent;
     -fx-background-radius: 0;
     -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-50 0%,
-    -fx-color-50 8%,
+    -fx-color-0 0%,
+    -fx-color-0 8%,
     transparent 8%);
     -fx-padding: 0, 0, 0, 0; /* 4 8 4 8 */
     -fx-text-fill: -fx-text-base-color;
@@ -982,4 +982,32 @@
     -fx-background-insets: 0 0 -1 0, 0;
     -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
     -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+
+/** Text Field  */
+.text-input {
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color, linear-gradient(to top,
+    -fx-color-0 0%,
+    -fx-color-0 8%,
+    transparent 8%);
+    -fx-background-insets: 0, 0;
+    -fx-background-radius: 0;
+    -fx-highlight-fill: derive(-fx-control-inner-background, -20%);
+    -fx-highlight-text-fill: -fx-text-inner-color;
+    -fx-prompt-text-fill: -fx-text-inner-color;
+    -fx-cursor: text;
+    -fx-padding: 0 0.666667em 0 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-effect: null;
+}
+
+.text-input:focused {
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-prompt-text-fill: transparent;
+    -fx-background-color: -fx-body-color, linear-gradient(to top,
+    -fx-color-500 0%,
+    -fx-color-500 8%,
+    transparent 8%);
 }

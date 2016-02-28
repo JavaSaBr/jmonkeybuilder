@@ -41,4 +41,6 @@ public interface CSSIds {
     public static final String MATERIAL_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
 
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW = "Texture2DMaterialParamControlPreview";
+
+    public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD = "MaterialRenderStatePolyOffsetField";
 }

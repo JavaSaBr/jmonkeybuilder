@@ -29,8 +29,8 @@ public class FloatMaterialParamControl extends MaterialParamControl {
      */
     private Spinner<Double> spinner;
 
-    public FloatMaterialParamControl(final Material material, final String parameterName) {
-        super(material, parameterName);
+    public FloatMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+        super(changeHandler, material, parameterName);
     }
 
     @Override

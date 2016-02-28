@@ -26,19 +26,27 @@ public class MaterialColorsComponent extends TitledPane {
     public static final Insets CONTROL_OFFSET = new Insets(3, 0, 0, 0);
 
     /**
+     * Обработчик внесения изменений.
+     */
+    private final Runnable changeHandler;
+
+    /**
      * Контейнер контролов для изменения цветов.
      */
     private final VBox container;
 
-    /**
-     * Текущий отображаемый материал.
-     */
-    private Material currentMaterial;
-
-    public MaterialColorsComponent() {
+    public MaterialColorsComponent(final Runnable changeHandler) {
+        this.changeHandler = changeHandler;
         this.container = new VBox();
         setText(Messages.MATERIAL_COLORS_COMPONENT_TITLE);
         setContent(container);
+    }
+
+    /**
+     * @return обработчик внесения изменений.
+     */
+    private Runnable getChangeHandler() {
+        return changeHandler;
     }
 
     /**
@@ -52,7 +60,6 @@ public class MaterialColorsComponent extends TitledPane {
      * Построение настроек цветов для материала.
      */
     public void buildFor(final Material material) {
-        setCurrentMaterial(material);
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
@@ -75,17 +82,10 @@ public class MaterialColorsComponent extends TitledPane {
             return;
         }
 
-        final ColorMaterialParamControl control = new ColorMaterialParamControl(material, matParam.getName());
+        final ColorMaterialParamControl control = new ColorMaterialParamControl(getChangeHandler(), material, matParam.getName());
 
         FXUtils.addToPane(control, getContainer());
 
         VBox.setMargin(control, CONTROL_OFFSET);
-    }
-
-    /**
-     * @param currentMaterial текущий отображаемый материал.
-     */
-    private void setCurrentMaterial(final Material currentMaterial) {
-        this.currentMaterial = currentMaterial;
     }
 }

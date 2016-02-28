@@ -27,16 +27,17 @@ public class MaterialTexturesComponent extends TitledPane {
     public static final Insets CONTROL_OFFSET = new Insets(3, 0, 0, 0);
 
     /**
+     * Обработчик внесения изменений.
+     */
+    private final Runnable changeHandler;
+
+    /**
      * Контейнер контролов для изменения текстур.
      */
     private final VBox container;
 
-    /**
-     * Текущий отображаемый материал.
-     */
-    private Material currentMaterial;
-
-    public MaterialTexturesComponent() {
+    public MaterialTexturesComponent(final Runnable changeHandler) {
+        this.changeHandler = changeHandler;
         this.container = new VBox();
         setText(MATERIAL_TEXTURES_COMPONENT_TITLE);
         setContent(container);
@@ -50,10 +51,16 @@ public class MaterialTexturesComponent extends TitledPane {
     }
 
     /**
+     * @return обработчик внесения изменений.
+     */
+    private Runnable getChangeHandler() {
+        return changeHandler;
+    }
+
+    /**
      * Построение настроек текстур для материала.
      */
     public void buildFor(final Material material) {
-        setCurrentMaterial(material);
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
@@ -65,24 +72,21 @@ public class MaterialTexturesComponent extends TitledPane {
         materialParams.forEach(matParam -> buildFor(matParam, material));
     }
 
+    /**
+     * Построение контрола для этого параметра.
+     */
     private void buildFor(final MatParam matParam, final Material material) {
 
+        final Runnable changeHandler = getChangeHandler();
         final VarType varType = matParam.getVarType();
 
         if(varType == VarType.Texture2D) {
 
-            final Texture2DMaterialParamControl control = new Texture2DMaterialParamControl(material, matParam.getName());
+            final Texture2DMaterialParamControl control = new Texture2DMaterialParamControl(changeHandler, material, matParam.getName());
 
             FXUtils.addToPane(control, getContainer());
 
             VBox.setMargin(control, CONTROL_OFFSET);
         }
-    }
-
-    /**
-     * @param currentMaterial текущий отображаемый материал.
-     */
-    private void setCurrentMaterial(final Material currentMaterial) {
-        this.currentMaterial = currentMaterial;
     }
 }

@@ -37,8 +37,8 @@ public class ColorMaterialParamControl extends MaterialParamControl {
      */
     private ColorPicker colorPicker;
 
-    public ColorMaterialParamControl(final Material material, final String parameterName) {
-        super(material, parameterName);
+    public ColorMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+        super(changeHandler, material, parameterName);
     }
 
     @Override

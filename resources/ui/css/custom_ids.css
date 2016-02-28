@@ -199,3 +199,11 @@
     -fx-border-width: 1;
 }
 
+#MaterialRenderStatePolyOffsetField {
+    -fx-min-width: 30;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}

@@ -68,8 +68,8 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox flipButton;
 
-    public Texture2DMaterialParamControl(final Material material, final String parameterName) {
-        super(material, parameterName);
+    public Texture2DMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+        super(changeHandler, material, parameterName);
     }
 
     @Override

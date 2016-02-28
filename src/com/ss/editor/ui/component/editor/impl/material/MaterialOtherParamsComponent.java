@@ -30,16 +30,17 @@ public class MaterialOtherParamsComponent extends TitledPane {
     public static final Insets CONTROL_OFFSET = new Insets(3, 0, 0, 0);
 
     /**
+     * Обрбаотчик внесения изменений.
+     */
+    private final Runnable changeHandler;
+
+    /**
      * Контейнер контролов различных параметров.
      */
     private final VBox container;
 
-    /**
-     * Текущий отображаемый материал.
-     */
-    private Material currentMaterial;
-
-    public MaterialOtherParamsComponent() {
+    public MaterialOtherParamsComponent(final Runnable changeHandler) {
+        this.changeHandler = changeHandler;
         this.container = new VBox();
         setText(MATERIAL_OTHER_COMPONENT_TITLE);
         setContent(container);
@@ -53,10 +54,16 @@ public class MaterialOtherParamsComponent extends TitledPane {
     }
 
     /**
+     * @return обрбаотчик внесения изменений.
+     */
+    private Runnable getChangeHandler() {
+        return changeHandler;
+    }
+
+    /**
      * Построение настроек для материала.
      */
     public void buildFor(final Material material) {
-        setCurrentMaterial(material);
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
@@ -73,16 +80,17 @@ public class MaterialOtherParamsComponent extends TitledPane {
      */
     private void buildFor(final MatParam matParam, final Material material) {
 
+        final Runnable changeHandler = getChangeHandler();
         final VarType varType = matParam.getVarType();
 
         MaterialParamControl control = null;
 
         if(varType == VarType.Boolean) {
-            control = new BooleanMaterialParamControl(material, matParam.getName());
+            control = new BooleanMaterialParamControl(changeHandler, material, matParam.getName());
         } else if(varType == VarType.Int) {
-            control = new IntegerMaterialParamControl(material, matParam.getName());
+            control = new IntegerMaterialParamControl(changeHandler, material, matParam.getName());
         } else if(varType == VarType.Float) {
-            control = new FloatMaterialParamControl(material, matParam.getName());
+            control = new FloatMaterialParamControl(changeHandler, material, matParam.getName());
         }
 
         if(control == null) {
@@ -92,12 +100,5 @@ public class MaterialOtherParamsComponent extends TitledPane {
         FXUtils.addToPane(control, getContainer());
 
         VBox.setMargin(control, CONTROL_OFFSET);
-    }
-
-    /**
-     * @param currentMaterial текущий отображаемый материал.
-     */
-    private void setCurrentMaterial(final Material currentMaterial) {
-        this.currentMaterial = currentMaterial;
     }
 }

@@ -29,8 +29,8 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
      */
     private Spinner<Integer> spinner;
 
-    public IntegerMaterialParamControl(final Material material, final String parameterName) {
-        super(material, parameterName);
+    public IntegerMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+        super(changeHandler, material, parameterName);
     }
 
     @Override

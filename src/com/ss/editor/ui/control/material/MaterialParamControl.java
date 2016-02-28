@@ -2,8 +2,6 @@ package com.ss.editor.ui.control.material;
 
 import com.jme3.material.Material;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
@@ -20,9 +18,9 @@ import static com.ss.editor.ui.css.CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME;
 public class MaterialParamControl extends HBox {
 
     /**
-     * Свойство о том что было что-то изменено этим контролом.
+     * Обработчик внесения изменений.
      */
-    private BooleanProperty changedProperty;
+    private final Runnable changeHandler;
 
     /**
      * Текущий материал.
@@ -44,8 +42,8 @@ public class MaterialParamControl extends HBox {
      */
     private boolean ignoreListeners;
 
-    public MaterialParamControl(final Material material, final String parameterName) {
-        this.changedProperty = new SimpleBooleanProperty(this, "changed", false);
+    public MaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+        this.changeHandler = changeHandler;
         this.material = material;
         this.parameterName = parameterName;
 
@@ -58,17 +56,10 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
-     * @return свойство о том что было что-то изменено этим контролом.
-     */
-    public BooleanProperty changedProperty() {
-        return changedProperty;
-    }
-
-    /**
      * Уведомить о измнении чего-то.
      */
     protected void changed() {
-        this.changedProperty.setValue(true);
+        changeHandler.run();
     }
 
     /**
