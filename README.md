@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.01 #
+# jMonkeyEngine 3 SpaceShift Editor 0.1 #
 
 
 ### How do I get set up? ###
