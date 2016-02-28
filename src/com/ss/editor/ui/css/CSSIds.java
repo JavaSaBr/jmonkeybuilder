@@ -33,6 +33,7 @@ public interface CSSIds {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     public static final String ASSET_EDITOR_DIALOG_BUTTON_OK = "AssetEditorDialogButtonOk";
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL = "AssetEditorDialogButtonCancel";
+    public static final String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "AssetEditorDialogPreviewContainer";
 
     public static final String MATERIAL_EDITOR_TOOLBAR_LABEL = "MaterialEditorToolbarLabel";
     public static final String MATERIAL_EDITOR_TOOLBAR_BOX = "MaterialEditorToolbarBox";

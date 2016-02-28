@@ -30,11 +30,28 @@ public class JavaFXImageManager {
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFXImageManager.class);
 
     private static final Array<String> FX_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> IMAGE_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
         FX_FORMATS.add("png");
         FX_FORMATS.add("jpg");
         FX_FORMATS.add("gif");
+
+        IMAGE_FORMATS.addAll(FX_FORMATS);
+        IMAGE_FORMATS.add("tga");
+        IMAGE_FORMATS.add("bmp");
+    }
+
+    /**
+     * Определение, является ли файл картинкой.
+     */
+    public static boolean isImage(final Path file) {
+
+        final Path fileName = file.getFileName();
+
+        final String extension = FileUtils.getExtension(fileName.toString());
+
+        return IMAGE_FORMATS.contains(extension);
     }
 
     private static JavaFXImageManager instance;
