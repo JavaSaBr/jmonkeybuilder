@@ -16,9 +16,13 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER;
 
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
 
     public static final String FILE_EDITOR_ACTION_SAVE;
-    public static final String FILE_EDITOR_TEXT_EDITOR;
 
     public static final String POST_FILTER_EDITOR_MATERIAL_LABEL;
 
@@ -50,6 +54,10 @@ public class Messages {
     public static final String MATERIAL_RENDER_STATE_DEPTH_TEST;
     public static final String MATERIAL_RENDER_STATE_WIREFRAME;
 
+    public static final String TEXT_FILE_EDITOR_NAME;
+    public static final String POST_FILTER_EDITOR_NAME;
+    public static final String MATERIAL_EDITOR_NAME;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -59,9 +67,13 @@ public class Messages {
         EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponent.asset.openAsset.DirectoryChooser");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenWithFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE = bundle.getString("AssetComponentResourceTreeContextMenuCopyFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuCutFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuPasteFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFile");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
-        FILE_EDITOR_TEXT_EDITOR = bundle.getString("FileEditorTextEditor");
 
         POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
 
@@ -92,5 +104,9 @@ public class Messages {
         MATERIAL_RENDER_STATE_WIREFRAME = bundle.getString("MaterialRenderStateWireframe");
 
         MATERIAL_EDITOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialEditorMaterialTypeLabel");
+
+        TEXT_FILE_EDITOR_NAME = bundle.getString("TextFileEditorName");
+        POST_FILTER_EDITOR_NAME = bundle.getString("PostFilterEditorName");
+        MATERIAL_EDITOR_NAME = bundle.getString("MaterialEditorName");
     }
 }

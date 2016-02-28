@@ -8,11 +8,15 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.config.EditorConfig;
 
+import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
 import rlib.util.StringUtils;
 
 /**
@@ -21,6 +25,8 @@ import rlib.util.StringUtils;
  * @author Ronn
  */
 public abstract class EditorUtil {
+
+    public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = new ThreadLocal<SimpleDateFormat>() {
 
@@ -248,5 +254,25 @@ public abstract class EditorUtil {
         final Path currentAsset = editorConfig.getCurrentAsset();
 
         return currentAsset.resolve(assetFile);
+    }
+
+    /**
+     * @return есть ли в буфере обмена файл.
+     */
+    public static boolean hasFileInClipboard() {
+
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+
+        if (clipboard == null) {
+            return false;
+        }
+
+        final List<File> files = (List<File>) clipboard.getContent(DataFormat.FILES);
+
+        if (files == null || files.isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 }

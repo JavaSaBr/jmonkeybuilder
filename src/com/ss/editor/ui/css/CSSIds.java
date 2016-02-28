@@ -20,6 +20,8 @@ public interface CSSIds {
 
     public static final String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
 
+    public static final String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
+
     public static final String POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER = "PostFilterEditorMaterialListContainer";
     public static final String POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON = "PostFilterEditorAddMaterialButton";
     public static final String POST_FILTER_EDITOR_CELL_REMOVE_BUTTON = "PostFilterEditorCellRemoveButton";

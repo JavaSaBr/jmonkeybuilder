@@ -35,6 +35,7 @@ import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
+import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.serializer.MaterialSerializer.serializeToString;
 import static com.ss.editor.ui.css.CSSIds.MATERIAL_EDITOR_PARAMETER_CONTAINER;
 import static javafx.geometry.Pos.TOP_RIGHT;
@@ -48,16 +49,16 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
+    static {
+        DESCRIPTION.setConstructor(MaterialEditor::new);
+        DESCRIPTION.setEditorName(MATERIAL_EDITOR_NAME);
+        DESCRIPTION.addExtension("j3m");
+    }
+
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
     private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
-
-    static {
-        DESCRIPTION.setConstructor(MaterialEditor::new);
-        DESCRIPTION.setEditorName("MaterialEditor");
-        DESCRIPTION.addExtension("j3m");
-    }
 
     /**
      * 3D часть редактора.
@@ -367,6 +368,8 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         FXUtils.addClassTo(materialDefinitionBox, CSSClasses.MAIN_FONT_13);
 
         HBox.setMargin(cubeButton, SMALL_OFFSET);
+        HBox.setMargin(sphereButton, SMALL_OFFSET);
+        HBox.setMargin(planeButton, SMALL_OFFSET);
         HBox.setMargin(lightButton, BIG_OFFSET);
         HBox.setMargin(materialDefinitionLabel, BIG_OFFSET);
     }
@@ -376,7 +379,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private void processChangeType(final String newType) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 

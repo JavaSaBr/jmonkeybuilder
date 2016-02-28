@@ -6,6 +6,8 @@ import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
+import com.ss.editor.ui.event.impl.CreatedFileEvent;
+import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 
 import java.nio.file.Path;
@@ -39,6 +41,30 @@ public class AssetComponent extends VBox implements ScreenComponent {
         createContent();
         FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefresh());
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
+        FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
+    }
+
+    /**
+     * Обработка появления нового файла в Asset.
+     */
+    private void processEvent(final CreatedFileEvent event) {
+
+        final Path file = event.getFile();
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.notifyCreated(file);
+    }
+
+    /**
+     * Обработка удаления файла из Asset.
+     */
+    private void processEvent(final DeletedFileEvent event) {
+
+        final Path file = event.getFile();
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.notifyDeleted(file);
     }
 
     /**

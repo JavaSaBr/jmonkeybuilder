@@ -117,4 +117,45 @@ public class EditorRegistry {
 
         return null;
     }
+
+    /**
+     * Создание редактора для указанного файла.
+     *
+     * @param description описание выбранного редактора.
+     * @param file        редактируемый файл.
+     * @return редактор для этого файла или null.
+     */
+    public FileEditor createEditorFor(final EditorDescription description, final Path file) {
+
+        final Callable<FileEditor> constructor = description.getConstructor();
+
+        try {
+            return constructor.call();
+        } catch (Exception e) {
+            LOGGER.warning(e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Получить список доступных редакторов для этого файла.
+     */
+    public Array<EditorDescription> getAvailableEditorsFor(final Path file) {
+
+        final Array<EditorDescription> result = ArrayFactory.newArray(EditorDescription.class);
+        final String extension = FileUtils.getExtension(file.getFileName().toString());
+
+        final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
+
+        Array<EditorDescription> descriptions = editorDescriptions.get(extension);
+
+        if (descriptions != null) {
+            result.addAll(descriptions);
+        }
+
+        result.addAll(editorDescriptions.get(ALL_FORMATS));
+
+        return result;
+    }
 }

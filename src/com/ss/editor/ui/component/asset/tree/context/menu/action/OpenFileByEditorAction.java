@@ -1,19 +1,18 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
 import javafx.scene.control.MenuItem;
-
-import static com.ss.editor.Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
 
 /**
  * Реализация действия по открытию файла.
  *
  * @author Ronn
  */
-public class OpenFileAction extends MenuItem {
+public class OpenFileByEditorAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
@@ -22,9 +21,15 @@ public class OpenFileAction extends MenuItem {
      */
     private final ResourceElement element;
 
-    public OpenFileAction(final ResourceElement element) {
+    /**
+     * Описание редактора.
+     */
+    private final EditorDescription description;
+
+    public OpenFileByEditorAction(final ResourceElement element, final EditorDescription description) {
         this.element = element;
-        setText(ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE);
+        this.description = description;
+        setText(description.getEditorName());
         setOnAction(event -> processOpen());
     }
 
@@ -35,6 +40,7 @@ public class OpenFileAction extends MenuItem {
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
         event.setFile(element.getFile());
+        event.setDescription(description);
 
         FX_EVENT_MANAGER.notify(event);
     }

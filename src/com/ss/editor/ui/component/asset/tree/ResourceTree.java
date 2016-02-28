@@ -2,21 +2,32 @@ package com.ss.editor.ui.component.asset.tree;
 
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.CopyFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.CutFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.PasteFileAction;
 import com.ss.editor.ui.component.asset.tree.resource.FileElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
@@ -49,6 +60,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
         return StringUtils.compareIgnoreCase(firstName, secondName);
     };
 
+    private static final ArrayComparator<TreeItem<ResourceElement>> ITEM_COMPARATOR = (first, second) -> {
+
+        final ResourceElement firstElement = first.getValue();
+        final ResourceElement secondElement = second.getValue();
+
+        return NAME_COMPARATOR.compare(firstElement, secondElement);
+    };
+
     /**
      * Развернутые элементы.
      */
@@ -66,6 +85,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
 
         setCellFactory(CELL_FACTORY);
+        setOnKeyPressed(this::processKey);
         setShowRoot(true);
     }
 
@@ -74,11 +94,27 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     public void updateContextMenu(final ResourceElement element) {
 
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
 
+        final Path file = element.getFile();
+
         if (element instanceof FileElement) {
             items.add(new OpenFileAction(element));
+            items.add(new OpenWithFileAction(element));
+            items.add(new CopyFileAction(element));
+            items.add(new CutFileAction(element));
+        }
+
+        if (EditorUtil.hasFileInClipboard()) {
+            items.add(new PasteFileAction(element));
+        }
+
+        if (!currentAsset.equals(file)) {
+            items.add(new DeleteFileAction(element));
         }
 
         final Array<MenuItem> allItems = ArrayFactory.newArray(MenuItem.class);
@@ -188,10 +224,16 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
     }
 
+    /**
+     * Отобразить прогресс прогрузки.
+     */
     private void showLoading() {
         setRoot(new TreeItem<>(ResourceLoadingElement.getInstance()));
     }
 
+    /**
+     * Запустить фоновое построение дерева.
+     */
     private void startBackgroundFill(final Path assetFolder) {
 
         final ResourceElement rootElement = createFor(assetFolder);
@@ -203,6 +245,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
         EXECUTOR_MANAGER.addFXTask(() -> setRoot(newRoot));
     }
 
+    /**
+     * Запустить фоновое обновление дерева.
+     */
     private void startBackgroundRefresh(final Path assetFolder) {
 
         final ResourceElement rootElement = createFor(assetFolder);
@@ -270,6 +315,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
         });
     }
 
+    /**
+     * Заполнить узел.
+     */
     private void fill(final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
@@ -285,5 +333,100 @@ public class ResourceTree extends TreeView<ResourceElement> {
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
         items.forEach(this::fill);
+    }
+
+    /**
+     * Уведомление о созданном файле.
+     *
+     * @param file созданный файл.
+     */
+    public void notifyCreated(final Path file) {
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+        final Path folder = file.getParent();
+
+        if (!folder.startsWith(currentAsset)) {
+            return;
+        }
+
+        final ResourceElement element = ResourceElementFactory.createFor(folder);
+
+        TreeItem<ResourceElement> folderItem = UIUtils.findItemForValue(getRoot(), element);
+
+        if (folderItem == null) {
+            notifyCreated(folder);
+            folderItem = UIUtils.findItemForValue(getRoot(), folder);
+        }
+
+        if (folderItem == null) {
+            return;
+        }
+
+        final ObservableList<TreeItem<ResourceElement>> children = folderItem.getChildren();
+        children.add(new TreeItem<>(ResourceElementFactory.createFor(file)));
+        children.sorted(ITEM_COMPARATOR);
+    }
+
+    /**
+     * Уведомление об удаленном файле.
+     */
+    public void notifyDeleted(final Path file) {
+
+        final ResourceElement element = ResourceElementFactory.createFor(file);
+        final TreeItem<ResourceElement> treeItem = UIUtils.findItemForValue(getRoot(), element);
+
+        if (treeItem == null) {
+            return;
+        }
+
+        final TreeItem<ResourceElement> parent = treeItem.getParent();
+
+        if (parent == null) {
+            return;
+        }
+
+        final ObservableList<TreeItem<ResourceElement>> children = parent.getChildren();
+        children.remove(treeItem);
+    }
+
+    /**
+     * Обработка нажатий на хоткеи.
+     */
+    private void processKey(final KeyEvent event) {
+
+        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+        final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
+
+        if(selectedItem == null) {
+            return;
+        }
+
+        final ResourceElement item = selectedItem.getValue();
+
+        if(item == null || item instanceof ResourceLoadingElement || !event.isControlDown()) {
+            return;
+        }
+
+        final KeyCode keyCode = event.getCode();
+
+        if(keyCode == KeyCode.C && item instanceof FileElement) {
+
+            final CopyFileAction action = new CopyFileAction(item);
+            final EventHandler<ActionEvent> onAction = action.getOnAction();
+            onAction.handle(null);
+
+        } else if(keyCode == KeyCode.X && item instanceof FileElement) {
+
+            final CutFileAction action = new CutFileAction(item);
+            final EventHandler<ActionEvent> onAction = action.getOnAction();
+            onAction.handle(null);
+
+        } else if(keyCode == KeyCode.V && EditorUtil.hasFileInClipboard()) {
+
+            final PasteFileAction action = new PasteFileAction(item);
+            final EventHandler<ActionEvent> onAction = action.getOnAction();
+            onAction.handle(null);
+        }
     }
 }

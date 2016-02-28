@@ -34,6 +34,7 @@ import rlib.util.FileUtils;
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
 import static com.ss.editor.Messages.POST_FILTER_EDITOR_MATERIAL_LABEL;
+import static com.ss.editor.Messages.POST_FILTER_EDITOR_NAME;
 import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_LIST_VIEW;
@@ -53,10 +54,10 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     public static final Insets TITLE_CONTAINER_OFFSET = new Insets(0, 0, 0, 5);
     public static final Insets TITLE_LABEL_OFFSET = new Insets(0, 0, 0, 3);
 
-    public static final EditorDescription DESCRIPTION;
+    public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
-        DESCRIPTION = new EditorDescription();
+        DESCRIPTION.setEditorName(POST_FILTER_EDITOR_NAME);
         DESCRIPTION.setConstructor(PostFilterEditor::new);
         DESCRIPTION.addExtension(POST_FILTER_VIEW);
     }

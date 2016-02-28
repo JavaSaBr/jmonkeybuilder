@@ -42,38 +42,38 @@ public class MaterialSerializer {
         final RenderState.BlendMode blendMode = renderState.getBlendMode();
         final RenderState.FaceCullMode faceCullMode = renderState.getFaceCullMode();
 
-        if(blendMode != RenderState.BlendMode.Off) {
+        if (blendMode != RenderState.BlendMode.Off) {
             builder.append("      Blend ").append(blendMode.name()).append('\n');
         }
 
-        if(faceCullMode != RenderState.FaceCullMode.Back) {
+        if (faceCullMode != RenderState.FaceCullMode.Back) {
             builder.append("      FaceCull ").append(faceCullMode.name()).append('\n');
         }
 
-        if(renderState.isWireframe()) {
+        if (renderState.isWireframe()) {
             builder.append("      Wireframe On\n");
         }
 
-        if(!renderState.isDepthTest()) {
+        if (!renderState.isDepthTest()) {
             builder.append("      DepthTest Off\n");
         }
 
-        if(!renderState.isDepthWrite()) {
+        if (!renderState.isDepthWrite()) {
             builder.append("      DepthWrite Off\n");
         }
 
-        if(!renderState.isColorWrite()) {
+        if (!renderState.isColorWrite()) {
             builder.append("      ColorWrite Off\n");
         }
 
-        if(renderState.isPointSprite()) {
+        if (renderState.isPointSprite()) {
             builder.append("      PointSprite On\n");
         }
 
         final float polyOffsetFactor = renderState.getPolyOffsetFactor();
         final float polyOffsetUnits = renderState.getPolyOffsetUnits();
 
-        if(polyOffsetFactor != 0 || polyOffsetUnits != 0) {
+        if (polyOffsetFactor != 0 || polyOffsetUnits != 0) {
             builder.append("      PolyOffset ").append(polyOffsetFactor).append(' ').append(polyOffsetUnits).append('\n');
         }
 
@@ -88,20 +88,21 @@ public class MaterialSerializer {
         switch (varType) {
             case Int:
             case Float:
-            case Boolean: return String.valueOf(value);
-            case Vector4:{
+            case Boolean:
+                return String.valueOf(value);
+            case Vector4: {
 
-                if(value instanceof ColorRGBA) {
+                if (value instanceof ColorRGBA) {
                     final ColorRGBA color = (ColorRGBA) value;
                     return color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha();
-                } else if(value instanceof Vector4f) {
+                } else if (value instanceof Vector4f) {
                     final Vector4f vector4f = (Vector4f) value;
                     return vector4f.getX() + " " + vector4f.getY() + " " + vector4f.getZ() + " " + vector4f.getW();
                 }
 
                 break;
             }
-            case Vector3:{
+            case Vector3: {
                 final Vector3f vector3f = (Vector3f) value;
                 return vector3f.getX() + " " + vector3f.getY() + " " + vector3f.getZ();
             }
@@ -112,11 +113,11 @@ public class MaterialSerializer {
 
                 final StringBuilder builder = new StringBuilder();
 
-                if(textureKey.isFlipY()) {
+                if (textureKey.isFlipY()) {
                     builder.append("Flip ");
                 }
 
-                if(texture2D.getWrap(Texture.WrapAxis.T) == Texture.WrapMode.Repeat) {
+                if (texture2D.getWrap(Texture.WrapAxis.T) == Texture.WrapMode.Repeat) {
                     builder.append("Repeat ");
                 }
 

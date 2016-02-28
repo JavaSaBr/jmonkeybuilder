@@ -6,6 +6,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.ScreenComponent;
+import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSIds;
@@ -88,7 +89,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void processOpenFile(final RequestedOpenFileEvent event) {
 
         final Path file = event.getFile();
-        final FileEditor editor = EDITOR_REGISTRY.createEditorFor(file);
+        final EditorDescription description = event.getDescription();
+        final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
 
         if (editor == null) {
             return;

@@ -707,6 +707,37 @@
     -fx-cursor: hand;
 }
 
+.menu-item > .left-container {
+    -fx-padding: 0.458em 0.791em 0.458em 0.458em;
+}
+
+.menu-item > .graphic-container {
+    -fx-padding: 0em 0.333em 0em 0em;
+}
+
+.menu-item >.label {
+    -fx-padding: 0em 0.5em 0em 0em;
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.menu-item:focused {
+    -fx-background: -fx-selection-bar;
+    -fx-background-color: -fx-background;
+    -fx-text-fill:  -fx-text-background-color;
+}
+.menu-item:focused > .label {
+    -fx-text-fill: white;
+}
+.menu-item:hover > .label {
+    -fx-text-fill: white;
+}
+.menu-item > .right-container {
+    -fx-padding: 0em 0em 0em 0.5em;
+}
+.menu-item:show-mnemonics > .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
+}
+
 .menu {
     -fx-cursor: hand;
 }
@@ -1010,4 +1041,37 @@
     -fx-color-500 0%,
     -fx-color-500 8%,
     transparent 8%);
+}
+
+
+/* TextArea */
+
+.text-area {
+    -fx-padding: 0;
+    -fx-cursor: default;
+    -fx-background-color: transparent;
+}
+
+.text-area > .scroll-pane {
+    -fx-background-color: null;
+}
+.text-area > .scroll-pane > .scroll-bar:horizontal {
+    -fx-background-radius: 0 0 2 2;
+}
+.text-area > .scroll-pane > .scroll-bar:vertical {
+    -fx-background-radius: 0 2 2 0;
+}
+.text-area > .scroll-pane > .corner {
+    -fx-background-radius: 0 0 2 0;
+}
+.text-area .content {
+    /*the is 1px less top and bottom than TextInput because of scrollpane border */
+    -fx-padding: 3 3 3 3; /* 3 7 3 7 */
+    -fx-cursor: text;
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+.text-area:focused .content {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
 }

@@ -15,6 +15,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
+import rlib.util.StringUtils;
+
+import static com.ss.editor.ui.css.CSSIds.TEXT_EDITOR_TEXT_AREA;
 
 /**
  * Реализация редактора текстовых файлов.
@@ -27,7 +30,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
     static {
         DESCRIPTION.setConstructor(TextFileEditor::new);
-        DESCRIPTION.setEditorName(Messages.FILE_EDITOR_TEXT_EDITOR);
+        DESCRIPTION.setEditorName(Messages.TEXT_FILE_EDITOR_NAME);
         DESCRIPTION.addExtension(EditorRegistry.ALL_FORMATS);
     }
 
@@ -50,6 +53,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     protected void createContent(final VBox root) {
 
         textArea = new TextArea();
+        textArea.setId(TEXT_EDITOR_TEXT_AREA);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
 
         FXUtils.addToPane(textArea, root);
@@ -87,7 +91,11 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
         final byte[] content = FileUtils.getContent(file);
 
-        setInitContent(new String(content));
+        if (content == null) {
+            setInitContent(StringUtils.EMPTY);
+        } else {
+            setInitContent(new String(content));
+        }
 
         final TextArea textArea = getTextArea();
         textArea.setText(getInitContent());

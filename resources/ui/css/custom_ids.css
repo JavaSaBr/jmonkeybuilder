@@ -51,6 +51,14 @@
     -fx-padding: 10, 0, 0, 0;
 }
 
+#TextEditorTextArea {
+    -fx-background-color: -fx-color-panel-200;
+}
+
+#TextEditorTextArea .content {
+    -fx-background-color: -fx-color-panel-200;
+}
+
 #PostFilterEditorMaterialListContainer {
     -fx-background-color: -fx-color-panel-200;
     -fx-alignment: top-left;
