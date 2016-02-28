@@ -122,7 +122,10 @@ public class PostFilterEditorState extends AbstractEditorState {
             }
 
             filters.put(key, genericFilter);
-            postProcessor.addFilter(genericFilter);
+
+            if(isInitialized()) {
+                postProcessor.addFilter(genericFilter);
+            }
 
         } finally {
             filters.writeUnlock();
@@ -151,7 +154,9 @@ public class PostFilterEditorState extends AbstractEditorState {
                 return;
             }
 
-            postProcessor.removeFilter(genericFilter);
+            if(isInitialized()) {
+                postProcessor.removeFilter(genericFilter);
+            }
 
         } finally {
             filters.writeUnlock();

@@ -3,19 +3,30 @@ package com.ss.editor.ui.component.editor.impl.post.filter;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
+import com.ss.editor.FileExtensions;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.model.file.PostFilterViewFile;
+import com.ss.editor.serializer.PostFilterViewSerializer;
 import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
+import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.EditorUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,6 +41,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
+import rlib.util.StringUtils;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
@@ -63,6 +75,11 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
+     * Слушатель изменений файлов.
+     */
+    private final EventHandler<Event> fileChangedHandler;
+
+    /**
      * 3D часть этого редактора.
      */
     private final PostFilterEditorState editorState;
@@ -77,9 +94,53 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
      */
     private Button addMaterial;
 
+    /**
+     * Текущий открытый файл.
+     */
+    private PostFilterViewFile currentFile;
+
+    /**
+     * Оригинальное содержимое документа.
+     */
+    private String originalContent;
+
+    /**
+     * Игнорировать ли слушателей.
+     */
+    private boolean ignoreListeners;
+
     public PostFilterEditor() {
         this.editorState = new PostFilterEditorState();
+        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
+    }
+
+    /**
+     * @param ignoreListeners игнорировать ли слушателей.
+     */
+    private void setIgnoreListeners(boolean ignoreListeners) {
+        this.ignoreListeners = ignoreListeners;
+    }
+
+    /**
+     * @return игнорировать ли слушателей.
+     */
+    private boolean isIgnoreListeners() {
+        return ignoreListeners;
+    }
+
+    /**
+     * @param originalContent оригинальное содержимое документа.
+     */
+    private void setOriginalContent(String originalContent) {
+        this.originalContent = originalContent;
+    }
+
+    /**
+     * @return оригинальное содержимое документа.
+     */
+    private String getOriginalContent() {
+        return originalContent;
     }
 
     @Override
@@ -90,6 +151,121 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     @Override
     protected void createToolbar(final HBox container) {
         FXUtils.addToPane(createSaveAction(), container);
+    }
+
+    @Override
+    public void openFile(final Path file) {
+        super.openFile(file);
+
+        final PostFilterViewFile currentFile = PostFilterViewSerializer.deserialize(file);
+
+        final byte[] content = FileUtils.getContent(file);
+
+        if (content == null) {
+            setOriginalContent(StringUtils.EMPTY);
+        } else {
+            setOriginalContent(new String(content));
+        }
+
+        setCurrentFile(currentFile);
+
+        setIgnoreListeners(true);
+        try {
+
+            final List<String> materials = currentFile.getMaterials();
+            materials.forEach(assetName -> addRelativeMaterial(Paths.get(assetName)));
+
+        } finally {
+            setIgnoreListeners(false);
+        }
+
+        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    }
+
+    @Override
+    public void notifyClosed() {
+        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    }
+
+    /**
+     * @return слушатель изменений файлов.
+     */
+    private EventHandler<Event> getFileChangedHandler() {
+        return fileChangedHandler;
+    }
+
+    /**
+     * Обработка уведомления об изминении файла.
+     */
+    private void processChangedFile(final FileChangedEvent event) {
+
+        final Path file = event.getFile();
+        final String fileName = file.getFileName().toString();
+
+        if(!fileName.endsWith(FileExtensions.JME_MATERIAL)) {
+            return;
+        }
+
+        final Path assetFile = EditorUtil.getAssetFile(file);
+
+        final PostFilterViewFile currentFile = getCurrentFile();
+        final List<String> materials = currentFile.getMaterials();
+
+        if(!materials.contains(assetFile.toString())) {
+            return;
+        }
+
+        final MaterialKey materialKey = new MaterialKey(assetFile.toString());
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
+        final Material material = assetManager.loadAsset(materialKey);
+
+        editorState.removeFilter(material);
+        editorState.addFilter(material);
+    }
+
+    /**
+     * Обработка внесения изменений.
+     */
+    private void handleChange() {
+
+        final PostFilterViewFile currentFile = getCurrentFile();
+        final String newContent = PostFilterViewSerializer.serializeToString(currentFile);
+        final String originalContent = getOriginalContent();
+
+        EXECUTOR_MANAGER.addFXTask(() -> setDirty(!StringUtils.equals(originalContent, newContent)));
+    }
+
+    @Override
+    public void doSave() {
+
+        final PostFilterViewFile currentFile = getCurrentFile();
+        final String newContent = PostFilterViewSerializer.serializeToString(currentFile);
+
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
+            out.print(newContent);
+        } catch (final IOException e) {
+            LOGGER.warning(this, e);
+        }
+
+        setDirty(false);
+        notifyFileChanged();
+    }
+
+    /**
+     * @param currentFile текущий открытый файл.
+     */
+    private void setCurrentFile(final PostFilterViewFile currentFile) {
+        this.currentFile = currentFile;
+    }
+
+    /**
+     * @return текущий открытый файл.
+     */
+    private PostFilterViewFile getCurrentFile() {
+        return currentFile;
     }
 
     @Override
@@ -105,7 +281,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         materialListContainer.setId(POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER);
 
         final Label titleLabel = new Label();
-        titleLabel.setText(POST_FILTER_EDITOR_MATERIAL_LABEL);
+        titleLabel.setText(POST_FILTER_EDITOR_MATERIAL_LABEL + ":");
         titleLabel.setAlignment(CENTER_LEFT);
 
         materialsView = new ListView<>();
@@ -172,7 +348,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         dragEvent.consume();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addRelativeMaterial(relativize));
+        addRelativeMaterial(relativize);
     }
 
     /**
@@ -187,6 +363,8 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
         final Material material = assetManager.loadAsset(materialKey);
 
         editorState.addFilter(material);
@@ -196,6 +374,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
             final ObservableList<Material> items = materialsView.getItems();
             items.add(material);
         });
+
+        if (!isIgnoreListeners()) {
+
+            final PostFilterViewFile currentFile = getCurrentFile();
+            currentFile.addMaterial(materialKey.getName());
+
+            handleChange();
+        }
     }
 
     /**
@@ -231,6 +417,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
             final ObservableList<Material> items = materialsView.getItems();
             items.remove(material);
         });
+
+        if (!isIgnoreListeners()) {
+
+            final PostFilterViewFile currentFile = getCurrentFile();
+            currentFile.removeMaterial(materialKey.getName());
+
+            handleChange();
+        }
     }
 
     /**

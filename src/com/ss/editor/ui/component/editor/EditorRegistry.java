@@ -88,7 +88,7 @@ public class EditorRegistry {
      */
     public FileEditor createEditorFor(final Path file) {
 
-        if(Files.isDirectory(file)) {
+        if (Files.isDirectory(file)) {
             return null;
         }
 

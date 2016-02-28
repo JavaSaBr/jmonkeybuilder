@@ -5,6 +5,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.FileChangedEvent;
 
 import java.nio.file.Path;
 
@@ -35,6 +37,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -184,6 +187,17 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Override
     public Array<EditorState> getStates() {
         return editorStates;
+    }
+
+    /**
+     * Уведомление всех об изменении редактируемого файла.
+     */
+    protected void notifyFileChanged() {
+
+        final FileChangedEvent event = new FileChangedEvent();
+        event.setFile(getEditFile());
+
+        FX_EVENT_MANAGER.notify(event);
     }
 
     @Override

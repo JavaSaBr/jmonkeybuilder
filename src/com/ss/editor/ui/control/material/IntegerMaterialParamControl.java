@@ -8,6 +8,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import javafx.geometry.Insets;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
@@ -37,7 +38,7 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
     protected void createComponents() {
         super.createComponents();
 
-        final SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(-50, 50, 0, 1);
+        final SpinnerValueFactory<Integer> valueFactory = new IntegerSpinnerValueFactory(-500, 500, 0, 1);
 
         spinner = new Spinner<>();
         spinner.setId(MATERIAL_PARAM_CONTROL_SPINNER);

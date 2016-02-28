@@ -398,31 +398,31 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
         final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
 
-        if(selectedItem == null) {
+        if (selectedItem == null) {
             return;
         }
 
         final ResourceElement item = selectedItem.getValue();
 
-        if(item == null || item instanceof ResourceLoadingElement || !event.isControlDown()) {
+        if (item == null || item instanceof ResourceLoadingElement || !event.isControlDown()) {
             return;
         }
 
         final KeyCode keyCode = event.getCode();
 
-        if(keyCode == KeyCode.C && item instanceof FileElement) {
+        if (keyCode == KeyCode.C && item instanceof FileElement) {
 
             final CopyFileAction action = new CopyFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
 
-        } else if(keyCode == KeyCode.X && item instanceof FileElement) {
+        } else if (keyCode == KeyCode.X && item instanceof FileElement) {
 
             final CutFileAction action = new CutFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
 
-        } else if(keyCode == KeyCode.V && EditorUtil.hasFileInClipboard()) {
+        } else if (keyCode == KeyCode.V && EditorUtil.hasFileInClipboard()) {
 
             final PasteFileAction action = new PasteFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();

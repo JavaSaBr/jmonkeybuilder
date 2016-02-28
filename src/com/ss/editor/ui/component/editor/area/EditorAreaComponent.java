@@ -14,7 +14,9 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
 import java.nio.file.Path;
+import java.util.List;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.scene.control.SingleSelectionModel;
@@ -45,12 +47,38 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     public EditorAreaComponent() {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
 
+        final ObservableList<Tab> tabs = getTabs();
+        tabs.addListener((ListChangeListener<Tab>) this::processChangeTabs);
+
         final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             EXECUTOR_MANAGER.addEditorThreadTask(() -> processShowEditor(oldValue, newValue));
         });
 
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
+    }
+
+    /**
+     * Обработка закрытия редакторов.
+     */
+    private void processChangeTabs(final ListChangeListener.Change<? extends Tab> change) {
+
+        if(!change.next()) {
+            return;
+        }
+
+        final List<? extends Tab> removed = change.getRemoved();
+
+        if(removed == null || removed.isEmpty()) {
+            return;
+        }
+
+        removed.forEach(tab -> {
+
+            final ObservableMap<Object, Object> properties = tab.getProperties();
+            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            fileEditor.notifyClosed();
+        });
     }
 
     /**

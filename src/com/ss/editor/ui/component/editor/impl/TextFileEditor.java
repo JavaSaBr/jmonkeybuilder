@@ -37,7 +37,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * Контент на момент открытия документа.
      */
-    private String initContent;
+    private String originalContent;
 
     /**
      * Область для редактирования текста.
@@ -61,7 +61,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     private void updateDirty(final String newValue) {
-        setDirty(!getInitContent().equals(newValue));
+        setDirty(!getOriginalContent().equals(newValue));
     }
 
     @Override
@@ -92,27 +92,27 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         final byte[] content = FileUtils.getContent(file);
 
         if (content == null) {
-            setInitContent(StringUtils.EMPTY);
+            setOriginalContent(StringUtils.EMPTY);
         } else {
-            setInitContent(new String(content));
+            setOriginalContent(new String(content));
         }
 
         final TextArea textArea = getTextArea();
-        textArea.setText(getInitContent());
+        textArea.setText(getOriginalContent());
     }
 
     /**
      * @return контент на момент открытия документа.
      */
-    public String getInitContent() {
-        return initContent;
+    public String getOriginalContent() {
+        return originalContent;
     }
 
     /**
-     * @param initContent контент на момент открытия документа.
+     * @param originalContent контент на момент открытия документа.
      */
-    public void setInitContent(String initContent) {
-        this.initContent = initContent;
+    public void setOriginalContent(final String originalContent) {
+        this.originalContent = originalContent;
     }
 
     @Override
@@ -128,7 +128,8 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
             LOGGER.warning(this, e);
         }
 
-        setInitContent(newContent);
+        setOriginalContent(newContent);
         updateDirty(newContent);
+        notifyFileChanged();
     }
 }

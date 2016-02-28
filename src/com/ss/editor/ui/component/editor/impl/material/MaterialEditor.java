@@ -179,6 +179,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         setOriginal(content);
         setDirty(false);
+        notifyFileChanged();
     }
 
     /**
@@ -257,6 +258,8 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
 
         final Path assetFile = EditorUtil.getAssetFile(file);
         final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
         final Material material = assetManager.loadMaterial(assetFile.toString());
 
         final MaterialEditorState editorState = getEditorState();

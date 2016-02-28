@@ -62,4 +62,11 @@ public interface FileEditor {
     public default Array<EditorState> getStates() {
         return null;
     }
+
+    /**
+     * Уведомление редактора о том что его закрыли.
+     */
+    public default void notifyClosed() {
+
+    }
 }
