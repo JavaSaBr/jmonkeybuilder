@@ -348,6 +348,11 @@ public class MaterialRenderParamsComponent extends TitledPane {
     }
 
     private void processChangeUnits(final String newUnits) {
+
+        if (isIgnoreListeners()) {
+            return;
+        }
+
         try {
             EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeUnitsImpl(parseFloat(newUnits)));
         } catch (final NumberFormatException ignored) {

@@ -14,6 +14,9 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
@@ -28,8 +31,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
+import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
+import static com.ss.editor.serializer.MaterialSerializer.serializeToString;
 import static com.ss.editor.ui.css.CSSIds.MATERIAL_EDITOR_PARAMETER_CONTAINER;
 import static javafx.geometry.Pos.TOP_RIGHT;
 
@@ -114,6 +120,11 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     private Runnable changeHandler;
 
     /**
+     * Оригинальный материал.
+     */
+    private String original;
+
+    /**
      * Игнорировать ли слушателей.
      */
     private boolean ignoreListeners;
@@ -142,6 +153,31 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private void handleChanges() {
 
+        final Material currentMaterial = getCurrentMaterial();
+
+        final String original = getOriginal();
+        final String content = serializeToString(currentMaterial);
+
+        final boolean dirty = !StringUtils.equals(original, content);
+
+        EXECUTOR_MANAGER.addFXTask(() -> setDirty(dirty));
+    }
+
+    @Override
+    public void doSave() {
+        super.doSave();
+
+        final Material currentMaterial = getCurrentMaterial();
+        final String content = serializeToString(currentMaterial);
+
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
+            out.print(content);
+        } catch (final IOException e) {
+            LOGGER.warning(this, e);
+        }
+
+        setOriginal(content);
+        setDirty(false);
     }
 
     /**
@@ -225,6 +261,9 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         final MaterialEditorState editorState = getEditorState();
         editorState.changeMode(ModelType.BOX);
 
+        final String original = new String(FileUtils.getContent(file));
+
+        setOriginal(original);
         reload(material);
     }
 
@@ -232,6 +271,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      * Загрузка материала.
      */
     private void reload(final Material material) {
+        setCurrentMaterial(material);
 
         setIgnoreListeners(true);
         try {
@@ -447,5 +487,19 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private MaterialEditorState getEditorState() {
         return editorState;
+    }
+
+    /**
+     * @param original оригинальный материал.
+     */
+    private void setOriginal(String original) {
+        this.original = original;
+    }
+
+    /**
+     * @return оригинальный материал.
+     */
+    private String getOriginal() {
+        return original;
     }
 }

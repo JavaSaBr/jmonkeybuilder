@@ -49,7 +49,7 @@ public class Editor extends SimpleApplication {
     private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
 
     private static final Editor EDITOR = new Editor();
-    
+
     public static Editor getInstance() {
         return EDITOR;
     }
