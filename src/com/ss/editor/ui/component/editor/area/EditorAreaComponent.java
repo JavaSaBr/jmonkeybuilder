@@ -63,13 +63,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      */
     private void processChangeTabs(final ListChangeListener.Change<? extends Tab> change) {
 
-        if(!change.next()) {
+        if (!change.next()) {
             return;
         }
 
         final List<? extends Tab> removed = change.getRemoved();
 
-        if(removed == null || removed.isEmpty()) {
+        if (removed == null || removed.isEmpty()) {
             return;
         }
 

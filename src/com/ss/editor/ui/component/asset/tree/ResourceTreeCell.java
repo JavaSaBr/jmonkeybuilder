@@ -1,16 +1,14 @@
 package com.ss.editor.ui.component.asset.tree;
 
 import com.ss.editor.manager.FileIconManager;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
@@ -111,7 +109,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         final ResourceElement item = getItem();
 
-        if (item == null || item instanceof FolderElement) {
+        if (item == null) {
             return;
         }
 
@@ -129,11 +127,9 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
             contextMenu.show(this, Side.BOTTOM, 0, 0);
 
-        } else if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() > 1) {
-
-            final OpenFileAction action = new OpenFileAction(item);
-            final EventHandler<ActionEvent> onAction = action.getOnAction();
-            onAction.handle(null);
+        } else if (!(item instanceof FolderElement) && event.getButton() == MouseButton.PRIMARY && event.getClickCount() > 1) {
+            final Consumer<ResourceElement> openFunction = treeView.getOpenFunction();
+            openFunction.accept(item);
         }
     }
 

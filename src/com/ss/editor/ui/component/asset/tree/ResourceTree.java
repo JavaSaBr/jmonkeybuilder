@@ -17,6 +17,7 @@ import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -68,6 +69,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
         return NAME_COMPARATOR.compare(firstElement, secondElement);
     };
 
+    private static final Consumer<ResourceElement> DEFAULT_FUNCTION = element -> {
+        final OpenFileAction action = new OpenFileAction(element);
+        final EventHandler<ActionEvent> onAction = action.getOnAction();
+        onAction.handle(null);
+    };
+
     /**
      * Развернутые элементы.
      */
@@ -78,7 +85,23 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private final Array<ResourceElement> selectedElements;
 
-    public ResourceTree() {
+    /**
+     * Функция окрытия файла.
+     */
+    private final Consumer<ResourceElement> openFunction;
+
+    /**
+     * Режим только чтения.
+     */
+    private final boolean readOnly;
+
+    public ResourceTree(final boolean readOnly) {
+        this(DEFAULT_FUNCTION, readOnly);
+    }
+
+    public ResourceTree(final Consumer<ResourceElement> openFunction, final boolean readOnly) {
+        this.openFunction = openFunction;
+        this.readOnly = readOnly;
         this.expandedElements = ArrayFactory.newConcurrentAtomicArray(ResourceElement.class);
         this.selectedElements = ArrayFactory.newConcurrentAtomicArray(ResourceElement.class);
 
@@ -90,9 +113,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * @return режим только чтения.
+     */
+    private boolean isReadOnly() {
+        return readOnly;
+    }
+
+    /**
      * Обновление контекстного меню под указанный элемент.
      */
     public void updateContextMenu(final ResourceElement element) {
+
+        if(isReadOnly()) {
+            return;
+        }
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -395,6 +429,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private void processKey(final KeyEvent event) {
 
+        if(isReadOnly()) {
+            return;
+        }
+
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
         final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
 
@@ -428,5 +466,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
         }
+    }
+
+    /**
+     * @return функция окрытия файла.
+     */
+    public Consumer<ResourceElement> getOpenFunction() {
+        return openFunction;
     }
 }

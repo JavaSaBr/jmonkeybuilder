@@ -51,8 +51,15 @@ public class AssetEditorDialog extends EditorDialog {
     protected void createContent(final VBox root) {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Consumer<ResourceElement> openFunction = element -> {
 
-        resourceTree = new ResourceTree();
+            hide();
+
+            final Consumer<Path> consumer = getConsumer();
+            consumer.accept(element.getFile());
+        };
+
+        resourceTree = new ResourceTree(openFunction, true);
         resourceTree.fill(editorConfig.getCurrentAsset());
         resourceTree.prefHeightProperty().bind(root.heightProperty());
 

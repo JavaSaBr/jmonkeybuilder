@@ -123,7 +123,7 @@ public class PostFilterEditorState extends AbstractEditorState {
 
             filters.put(key, genericFilter);
 
-            if(isInitialized()) {
+            if (isInitialized()) {
                 postProcessor.addFilter(genericFilter);
             }
 
@@ -154,7 +154,7 @@ public class PostFilterEditorState extends AbstractEditorState {
                 return;
             }
 
-            if(isInitialized()) {
+            if (isInitialized()) {
                 postProcessor.removeFilter(genericFilter);
             }
 

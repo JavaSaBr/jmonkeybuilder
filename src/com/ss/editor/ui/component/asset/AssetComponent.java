@@ -94,7 +94,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     private void createContent() {
 
         this.barComponent = new AssetBarComponent();
-        this.resourceTree = new ResourceTree();
+        this.resourceTree = new ResourceTree(false);
 
         FXUtils.addToPane(barComponent, this);
         FXUtils.addToPane(resourceTree, this);

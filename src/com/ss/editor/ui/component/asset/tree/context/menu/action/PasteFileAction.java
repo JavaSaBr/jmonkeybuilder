@@ -61,9 +61,12 @@ public class PasteFileAction extends MenuItem {
         }
 
         final Path currentFile = element.getFile();
-        final Path file = files.get(0).toPath();
-
         final boolean isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
+
+        files.forEach(file -> pasteFile(clipboard, currentFile, file.toPath(), isCut));
+    }
+
+    private void pasteFile(Clipboard clipboard, Path currentFile, Path file, boolean isCut) {
 
         if (Files.isDirectory(currentFile)) {
 
