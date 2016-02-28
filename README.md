@@ -1,5 +1,7 @@
 # jMonkeyEngine 3 SpaceShift Editor 0.1 #
 
+Download 0.1
+https://yadi.sk/d/88RnCHjVpfNGu
 
 ### How do I get set up? ###
 
