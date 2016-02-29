@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.creator;
 
 import com.ss.editor.ui.component.creator.impl.MaterialFileCreator;
+import com.ss.editor.ui.component.creator.impl.PostFilterViewFileCreator;
 
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
@@ -33,6 +34,7 @@ public class FileCreatorRegistry {
     public FileCreatorRegistry() {
         this.descriptions = ArrayFactory.newArray(FileCreatorDescription.class);
         addDescription(MaterialFileCreator.DESCRIPTION);
+        addDescription(PostFilterViewFileCreator.DESCRIPTION);
     }
 
     /**

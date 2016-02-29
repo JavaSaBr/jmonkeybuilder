@@ -7,6 +7,7 @@ import com.jme3.audio.Environment;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
@@ -36,6 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.locks.StampedLock;
 
+import javafx.scene.Parent;
 import rlib.concurrent.atomic.AtomicInteger;
 import rlib.logging.Logger;
 import rlib.logging.LoggerLevel;
@@ -284,6 +286,17 @@ public class Editor extends SimpleApplication {
     @Override
     public void update() {
 
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        final InputManager inputManager = getInputManager();
+        final EditorFXScene scene = getScene();
+        final Parent root = scene.getRoot();
+
+        if(inputManager.isCursorVisible() && root.isMouseTransparent()) {
+            executorManager.addFXTask(() -> root.setMouseTransparent(false));
+        } else if(!inputManager.isCursorVisible() && !root.isMouseTransparent()) {
+            executorManager.addFXTask(() -> root.setMouseTransparent(true));
+        }
+
         final JmeFxContainer fxContainer = getFxContainer();
 
         final long stamp = syncLock();
@@ -343,7 +356,7 @@ public class Editor extends SimpleApplication {
      * Обновить пробу окружения.
      */
     public void updateProbe(final JobProgressAdapter<LightProbe> progressAdapter) {
-        LightProbeFactory.updateProbe(lightProbe, environmentCamera, rootNode, progressAdapter);
+        LightProbeFactory.updateProbe(getLightProbe(), getEnvironmentCamera(), rootNode, progressAdapter);
     }
 
     /**

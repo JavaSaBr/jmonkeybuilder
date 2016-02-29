@@ -67,6 +67,9 @@ public class Messages {
     public static final String MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL;
     public static final String MATERIAL_FILE_CREATOR_FILE_DESCRIPTION;
 
+    public static final String POST_FILTER_VIEW_FILE_CREATOR_TITLE;
+    public static final String POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -126,5 +129,8 @@ public class Messages {
         MATERIAL_FILE_CREATOR_TITLE = bundle.getString("MaterialFileCreatorTitle");
         MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileCreatorMaterialTypeLabel");
         MATERIAL_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("MaterialFileCreatorFileDescription");
+
+        POST_FILTER_VIEW_FILE_CREATOR_TITLE = bundle.getString("PostFilterViewFileCreatorTitle");
+        POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("PostFilterViewFileCreatorFileDescription");
     }
 }
