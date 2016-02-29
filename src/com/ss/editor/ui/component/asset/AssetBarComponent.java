@@ -20,7 +20,7 @@ import static com.ss.editor.ui.css.CSSIds.ASSET_COMPONENT_BAR_BUTTON;
  */
 public class AssetBarComponent extends HBox {
 
-    public static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     public AssetBarComponent() {
         setId(CSSIds.ASSET_COMPONENT_BAR);

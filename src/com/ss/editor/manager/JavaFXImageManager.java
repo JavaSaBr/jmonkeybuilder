@@ -90,7 +90,7 @@ public class JavaFXImageManager {
 
         if (FX_FORMATS.contains(extension)) {
             return new Image(file.toUri().toString(), width, height, false, false);
-        } else if(!JIMI_FORMATS.contains(extension)) {
+        } else if (!JIMI_FORMATS.contains(extension)) {
             return Icons.IMAGE_512;
         }
 

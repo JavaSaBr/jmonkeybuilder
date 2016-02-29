@@ -36,7 +36,7 @@ public class MaterialEditorState extends AbstractEditorState {
         @Override
         public void done(final LightProbe result) {
 
-            if(!isInitialized()) {
+            if (!isInitialized()) {
                 return;
             }
 
@@ -287,7 +287,7 @@ public class MaterialEditorState extends AbstractEditorState {
     public void update(float tpf) {
         super.update(tpf);
 
-        if(frame == 2) {
+        if (frame == 2) {
             EDITOR.updateProbe(probeHandler);
         }
 

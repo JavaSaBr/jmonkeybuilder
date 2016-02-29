@@ -5,6 +5,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.CopyFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.CutFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.PasteFileAction;
@@ -100,6 +101,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private Array<String> extensionFilter;
 
+    /**
+     * Пост загрузачный обработчик.
+     */
+    private Runnable onLoadHandler;
+
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_FUNCTION, readOnly);
     }
@@ -132,6 +138,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * @param onLoadHandler пост загрузачный обработчик.
+     */
+    public void setOnLoadHandler(Runnable onLoadHandler) {
+        this.onLoadHandler = onLoadHandler;
+    }
+
+    /**
+     * @return пост загрузачныый обработчик.
+     */
+    private Runnable getOnLoadHandler() {
+        return onLoadHandler;
+    }
+
+    /**
      * @return режим только чтения.
      */
     private boolean isReadOnly() {
@@ -143,7 +163,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     public void updateContextMenu(final ResourceElement element) {
 
-        if(isReadOnly()) {
+        if (isReadOnly()) {
             return;
         }
 
@@ -154,6 +174,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final ObservableList<MenuItem> items = contextMenu.getItems();
 
         final Path file = element.getFile();
+
+        items.add(new NewFileAction(element));
 
         if (element instanceof FileElement) {
             items.add(new OpenFileAction(element));
@@ -297,11 +319,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final Array<String> extensionFilter = getExtensionFilter();
 
-        if(extensionFilter != null) {
+        if (extensionFilter != null) {
             cleanup(newRoot);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> setRoot(newRoot));
+        EXECUTOR_MANAGER.addFXTask(() -> {
+
+            setRoot(newRoot);
+
+            final Runnable onLoadHandler = getOnLoadHandler();
+
+            if (onLoadHandler != null) {
+                onLoadHandler.run();
+            }
+        });
     }
 
     /**
@@ -338,8 +369,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
 
         EXECUTOR_MANAGER.addFXTask(() -> {
+
             setRoot(newRoot);
             restoreSelection();
+
+            final Runnable onLoadHandler = getOnLoadHandler();
+
+            if (onLoadHandler != null) {
+                onLoadHandler.run();
+            }
         });
     }
 
@@ -455,7 +493,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private void processKey(final KeyEvent event) {
 
-        if(isReadOnly()) {
+        if (isReadOnly()) {
             return;
         }
 
@@ -508,7 +546,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement element = treeItem.getValue();
 
-        if(element instanceof FileElement) {
+        if (element instanceof FileElement) {
             return false;
         }
 
@@ -518,7 +556,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             cleanup(children.get(i));
         }
 
-        if(children.isEmpty() && treeItem.getParent() != null) {
+        if (children.isEmpty() && treeItem.getParent() != null) {
             final TreeItem<ResourceElement> parent = treeItem.getParent();
             final ObservableList<TreeItem<ResourceElement>> parentChildren = parent.getChildren();
             parentChildren.remove(treeItem);
@@ -528,4 +566,31 @@ public class ResourceTree extends TreeView<ResourceElement> {
         return false;
     }
 
+    /**
+     * Развернуть девео до указанного файла.
+     */
+    public void expandTo(final Path file, boolean needSelect) {
+
+        final ResourceElement element = ResourceElementFactory.createFor(file);
+        final TreeItem<ResourceElement> treeItem = UIUtils.findItemForValue(getRoot(), element);
+
+        if (treeItem == null) {
+            return;
+        }
+
+        TreeItem<ResourceElement> parent = treeItem;
+
+        while (parent != null) {
+            parent.setExpanded(true);
+            parent = parent.getParent();
+        }
+
+        if (needSelect) {
+            EXECUTOR_MANAGER.addFXTask(() -> {
+                final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+                selectionModel.select(treeItem);
+                scrollTo(getRow(treeItem));
+            });
+        }
+    }
 }

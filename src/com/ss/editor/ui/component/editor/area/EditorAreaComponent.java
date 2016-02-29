@@ -6,11 +6,15 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.ScreenComponent;
+import com.ss.editor.ui.component.creator.FileCreator;
+import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
 import java.nio.file.Path;
@@ -38,6 +42,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     public static final String KEY_EDITOR = "editor";
 
+    private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
@@ -48,7 +53,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
 
         final ObservableList<Tab> tabs = getTabs();
-        tabs.addListener((ListChangeListener<Tab>) this::processChangeTabs);
+        tabs.addListener(this::processChangeTabs);
 
         final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -56,6 +61,24 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         });
 
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE, event -> processCreateFile((RequestedCreateFileEvent) event));
+    }
+
+    /**
+     * Обработка запроса на создание нового файла.
+     */
+    private void processCreateFile(final RequestedCreateFileEvent event) {
+
+        final Path file = event.getFile();
+        final FileCreatorDescription description = event.getDescription();
+
+        final FileCreator fileCreator = CREATOR_REGISTRY.newCreator(description, file);
+
+        if (fileCreator == null) {
+            return;
+        }
+
+        fileCreator.start(file);
     }
 
     /**

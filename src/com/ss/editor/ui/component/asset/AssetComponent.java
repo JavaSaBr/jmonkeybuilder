@@ -24,7 +24,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
     public static final String COMPONENT_ID = "AssetComponent";
 
-    public static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * Компонент тулбара дерева.
@@ -54,6 +54,10 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.notifyCreated(file);
+
+        if(event.isNeedSelect()) {
+            resourceTree.expandTo(file, true);
+        }
     }
 
     /**

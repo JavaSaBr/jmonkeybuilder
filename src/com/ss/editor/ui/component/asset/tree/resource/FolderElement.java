@@ -33,14 +33,14 @@ public class FolderElement extends ResourceElement {
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(file)) {
             stream.forEach(child -> {
 
-                if(Files.isDirectory(child) || extensionFilter == null) {
+                if (Files.isDirectory(child) || extensionFilter == null) {
                     elements.add(createFor(child));
                     return;
                 }
 
                 final String extension = FileUtils.getExtension(child.getFileName().toString());
 
-                if(extensionFilter.contains(extension)) {
+                if (extensionFilter.contains(extension)) {
                     elements.add(createFor(child));
                 }
             });

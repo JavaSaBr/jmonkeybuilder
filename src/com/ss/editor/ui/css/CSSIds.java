@@ -29,16 +29,15 @@ public interface CSSIds {
     public static final String EDITOR_DIALOG_BACKGROUND = "EditorDialogBackground";
     public static final String EDITOR_DIALOG_HEADER = "EditorDialogHeader";
     public static final String EDITOR_DIALOG_HEADER_BUTTON_CLOSE = "EditorDialogHeaderButtonClose";
+    public static final String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
+    public static final String EDITOR_DIALOG_BUTTON_CANCEL = "EditorDialogButtonCancel";
 
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
-    public static final String ASSET_EDITOR_DIALOG_BUTTON_OK = "AssetEditorDialogButtonOk";
-    public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL = "AssetEditorDialogButtonCancel";
     public static final String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "AssetEditorDialogPreviewContainer";
 
     public static final String MATERIAL_EDITOR_TOOLBAR_LABEL = "MaterialEditorToolbarLabel";
     public static final String MATERIAL_EDITOR_TOOLBAR_BOX = "MaterialEditorToolbarBox";
     public static final String MATERIAL_EDITOR_PARAMETER_CONTAINER = "MaterialEditorParameterContainer";
-
 
     public static final String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
     public static final String MATERIAL_PARAM_CONTROL_BUTTON = "MaterialParamControlButton";
@@ -48,4 +47,7 @@ public interface CSSIds {
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW = "Texture2DMaterialParamControlPreview";
 
     public static final String MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD = "MaterialRenderStatePolyOffsetField";
+
+    public static final String FILE_CREATOR_LABEL = "FileCreatorLabel";
+    public static final String FILE_CREATOR_TEXT_FIELD = "FileCreatorTextField";
 }

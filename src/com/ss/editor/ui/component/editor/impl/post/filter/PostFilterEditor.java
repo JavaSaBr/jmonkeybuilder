@@ -42,6 +42,8 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
@@ -66,12 +68,17 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     public static final Insets TITLE_CONTAINER_OFFSET = new Insets(0, 0, 0, 5);
     public static final Insets TITLE_LABEL_OFFSET = new Insets(0, 0, 0, 3);
 
+    private static final Array<String> MATERIAL_EXTENSION = ArrayFactory.newArray(String.class);
+
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
+
         DESCRIPTION.setEditorName(POST_FILTER_EDITOR_NAME);
         DESCRIPTION.setConstructor(PostFilterEditor::new);
         DESCRIPTION.addExtension(POST_FILTER_VIEW);
+
+        MATERIAL_EXTENSION.add(FileExtensions.JME_MATERIAL);
     }
 
     /**
@@ -320,6 +327,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         final EditorFXScene scene = EDITOR.getScene();
 
         final AssetEditorDialog dialog = new AssetEditorDialog(this::addMaterial);
+        dialog.setExtensionFilter(MATERIAL_EXTENSION);
         dialog.show(scene.getWindow());
     }
 

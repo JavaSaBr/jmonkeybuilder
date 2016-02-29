@@ -15,6 +15,7 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET;
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER;
 
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE;
@@ -58,6 +59,14 @@ public class Messages {
     public static final String POST_FILTER_EDITOR_NAME;
     public static final String MATERIAL_EDITOR_NAME;
 
+    public static final String FILE_CREATOR_BUTTON_OK;
+    public static final String FILE_CREATOR_BUTTON_CANCEL;
+    public static final String FILE_CREATOR_FILE_NAME_LABEL;
+
+    public static final String MATERIAL_FILE_CREATOR_TITLE;
+    public static final String MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL;
+    public static final String MATERIAL_FILE_CREATOR_FILE_DESCRIPTION;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -66,6 +75,7 @@ public class Messages {
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponent.asset.openAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponent.asset.openAsset.DirectoryChooser");
 
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenWithFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE = bundle.getString("AssetComponentResourceTreeContextMenuCopyFile");
@@ -108,5 +118,13 @@ public class Messages {
         TEXT_FILE_EDITOR_NAME = bundle.getString("TextFileEditorName");
         POST_FILTER_EDITOR_NAME = bundle.getString("PostFilterEditorName");
         MATERIAL_EDITOR_NAME = bundle.getString("MaterialEditorName");
+
+        FILE_CREATOR_BUTTON_OK = bundle.getString("FileCreatorButtonOk");
+        FILE_CREATOR_BUTTON_CANCEL = bundle.getString("FileCreatorButtonCancel");
+        FILE_CREATOR_FILE_NAME_LABEL = bundle.getString("FileCreatorFileNameLabel");
+
+        MATERIAL_FILE_CREATOR_TITLE = bundle.getString("MaterialFileCreatorTitle");
+        MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileCreatorMaterialTypeLabel");
+        MATERIAL_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("MaterialFileCreatorFileDescription");
     }
 }

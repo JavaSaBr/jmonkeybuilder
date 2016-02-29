@@ -17,7 +17,6 @@ import java.util.List;
 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import rlib.util.StringUtils;
 
 /**
  * Набор полезных утилит для разработки.
@@ -57,6 +56,9 @@ public abstract class EditorUtil {
         return Object.class.getResource(path) != null;
     }
 
+    /**
+     * Поимк геометрии в этом узле.
+     */
     public static Geometry findGeometry(final Spatial spatial) {
 
         if (!(spatial instanceof Node)) {
@@ -118,38 +120,6 @@ public abstract class EditorUtil {
         return Object.class.getResourceAsStream(path);
     }
 
-    public static final String getSplitNumber(final long value, final char split) {
-
-        String string = String.valueOf(value);
-
-        if (string.length() > 3) {
-
-            final StringBuilder builder = new StringBuilder(string.length() * 2);
-
-            final int end = string.startsWith("-") ? 1 : 0;
-
-            for (int i = string.length() - 1, g = 0; i >= end; i--, g++) {
-
-                final char ch = string.charAt(i);
-
-                builder.insert(0, ch);
-
-                if (g == 2 && i > end) {
-                    builder.insert(0, split);
-                    g = -1;
-                }
-            }
-
-            if (string.startsWith("-")) {
-                builder.insert(0, '-');
-            }
-
-            string = builder.toString();
-        }
-
-        return string;
-    }
-
     /**
      * Получение имя пользователя текущей системы.
      *
@@ -157,22 +127,6 @@ public abstract class EditorUtil {
      */
     public static final String getUserName() {
         return System.getProperty("user.name");
-    }
-
-    /**
-     * Есть ли узел с указанным названии.
-     */
-    public static boolean hasNode(final Spatial spatial, final String nodeName) {
-
-        int i = 0;
-
-        for (Node parent = spatial.getParent(); parent != null; parent = parent.getParent(), i++) {
-            if (StringUtils.equals(parent.getName(), nodeName)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -276,9 +230,12 @@ public abstract class EditorUtil {
         return true;
     }
 
-    public static String normalizePath(final Path path) {
+    /**
+     * Нормализация пути для обращения к ресурсу в classpath.
+     */
+    public static String toClasspath(final Path path) {
 
-        if(File.separatorChar == '/') {
+        if (File.separatorChar == '/') {
             return path.toString();
         }
 

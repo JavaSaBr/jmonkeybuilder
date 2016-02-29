@@ -24,7 +24,7 @@ public class ExecutorManager {
 
     private static final Runtime RUNTIME = Runtime.getRuntime();
 
-    public static final int PROP_BACKGROUND_TASK_EXECUTORS = RUNTIME.availableProcessors();
+    private static final int PROP_BACKGROUND_TASK_EXECUTORS = RUNTIME.availableProcessors();
 
     private static ExecutorManager instance;
 

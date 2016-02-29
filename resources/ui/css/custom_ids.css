@@ -110,29 +110,29 @@
     -fx-max-width: -fx-min-width;
 }
 
+#EditorDialogButtonOk {
+    -fx-min-height: 28;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#EditorDialogButtonCancel {
+    -fx-min-height: 28;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
     -fx-min-height: 45;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-}
-
-#AssetEditorDialogButtonOk {
-    -fx-min-height: 28;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 150;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#AssetEditorDialogButtonCancel {
-    -fx-min-height: 28;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 150;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
 }
 
 #AssetEditorDialogPreviewContainer {
@@ -236,6 +236,22 @@
     -fx-min-width: 30;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#FileCreatorLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 120;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#FileCreatorTextField {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;

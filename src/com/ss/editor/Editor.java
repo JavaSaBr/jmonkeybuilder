@@ -35,7 +35,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.locks.StampedLock;
-import java.util.logging.Level;
 
 import rlib.concurrent.atomic.AtomicInteger;
 import rlib.logging.Logger;
@@ -61,7 +60,6 @@ public class Editor extends SimpleApplication {
     };
 
     private static final Editor EDITOR = new Editor();
-
 
     public static Editor getInstance() {
         return EDITOR;
@@ -108,7 +106,7 @@ public class Editor extends SimpleApplication {
     protected static void configureLogger() {
 
         // выключаем стандартный логгер
-        java.util.logging.Logger.getLogger("").setLevel(Level.SEVERE);
+        // java.util.logging.Logger.getLogger("").setLevel(Level.SEVERE);
 
         // настраиваем логгер
         LoggerLevel.DEBUG.setEnabled(false);

@@ -16,9 +16,24 @@ public class CreatedFileEvent extends SceneEvent {
     public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, CreatedFileEvent.class.getSimpleName());
 
     public static final String FILE = "file";
+    public static final String NEED_SELECT = "need_select";
 
     public CreatedFileEvent() {
         super(EVENT_TYPE);
+    }
+
+    /**
+     * @param needSelect нужно ли выбрать этот файл.
+     */
+    public void setNeedSelect(boolean needSelect) {
+        set(NEED_SELECT, needSelect);
+    }
+
+    /**
+     * @return нужно ли выбрать этот файл.
+     */
+    public boolean isNeedSelect() {
+        return get(NEED_SELECT) == Boolean.TRUE;
     }
 
     /**

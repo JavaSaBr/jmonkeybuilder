@@ -2,6 +2,7 @@ package com.ss.editor.ui.dialog.asset;
 
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -26,10 +27,10 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
 import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER;
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_OK;
 import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER;
+import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_CANCEL;
+import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_OK;
 
 /**
  * Реализация диалога для выбора объекта из Asset.
@@ -40,9 +41,10 @@ public class AssetEditorDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+    private static final Insets PREVIEW_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
 
-    private static final Insets PREVIEW_OFFSET = new Insets(0, 15, 0, 0);
-    public static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * Функция для использования выбранного ресурса.
@@ -105,11 +107,15 @@ public class AssetEditorDialog extends EditorDialog {
     }
 
     @Override
-    public void show(Window owner) {
+    public void show(final Window owner) {
         super.show(owner);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
+
+        final ResourceTree resourceTree = getResourceTree();
         resourceTree.fill(editorConfig.getCurrentAsset());
+
+        EXECUTOR_MANAGER.addFXTask(resourceTree::requestFocus);
     }
 
     /**
@@ -126,7 +132,7 @@ public class AssetEditorDialog extends EditorDialog {
 
         final ImageView imageView = getImageView();
 
-        if(newValue == null) {
+        if (newValue == null) {
             imageView.setImage(null);
             return;
         }
@@ -134,7 +140,7 @@ public class AssetEditorDialog extends EditorDialog {
         final ResourceElement element = newValue.getValue();
         final Path file = element.getFile();
 
-        if(Files.isDirectory(file) || !JavaFXImageManager.isImage(file)) {
+        if (Files.isDirectory(file) || !JavaFXImageManager.isImage(file)) {
             imageView.setImage(null);
             return;
         }
@@ -151,11 +157,11 @@ public class AssetEditorDialog extends EditorDialog {
         container.setId(ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         final Button okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
-        okButton.setId(ASSET_EDITOR_DIALOG_BUTTON_OK);
+        okButton.setId(EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processSelect());
 
         final Button cancelButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
+        cancelButton.setId(EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addToPane(okButton, container);

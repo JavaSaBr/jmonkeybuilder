@@ -1,7 +1,5 @@
 package com.ss.editor.executor.impl;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -11,8 +9,6 @@ import rlib.util.array.ArrayFactory;
  * @author Ronn
  */
 public class EditorThreadExecutor {
-
-    private static final Logger LOGGER = LoggerManager.getLogger(EditorThreadExecutor.class);
 
     private static final EditorThreadExecutor INSTANCE = new EditorThreadExecutor();
 

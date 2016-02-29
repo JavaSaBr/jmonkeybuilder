@@ -20,7 +20,6 @@ public class FolderAssetLocator implements AssetLocator {
 
     @Override
     public void setRootPath(String rootPath) {
-
     }
 
     @Override

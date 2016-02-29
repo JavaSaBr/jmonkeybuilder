@@ -33,7 +33,6 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
 
     /**
      * @return список элементов, содержащихся в этом.
-     * @param extensionFilter
      */
     public Array<ResourceElement> getChildren(final Array<String> extensionFilter) {
         return null;
@@ -41,7 +40,6 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
 
     /**
      * @return есть ли у этого элемента дочерние.
-     * @param extensionFilter
      */
     public boolean hasChildren(final Array<String> extensionFilter) {
         return false;

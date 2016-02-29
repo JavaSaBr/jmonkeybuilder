@@ -98,6 +98,24 @@
     -fx-padding: 0;
 }
 
+.transparent-tree-view > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
+    -fx-background: -fx-color-panel-50;
+    -fx-background-insets: 0;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.transparent-tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
+    -fx-background: -fx-color-500;
+    -fx-background-insets: 0;
+    -fx-table-cell-border-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+
+
 /* Transparent TreeCell */
 
 .transparent-tree-cell {
@@ -105,22 +123,20 @@
     -fx-padding: 0.25em; /* 3 */
     -fx-indent: 1em;
 }
+
 .transparent-tree-cell .label {
     -fx-padding: 0.0em 0.0em 0.0em 0.25em; /* 0 0 0 3 */
 }
-.transparent-tree-cell > .tree-disclosure-node,
-.transparent-tree-table-row-cell > .tree-disclosure-node {
+.transparent-tree-cell > .tree-disclosure-node {
     -fx-padding: 4 6 4 8;
     -fx-background-color: transparent;
 }
-.transparent-tree-cell > .tree-disclosure-node > .arrow,
-.transparent-tree-table-row-cell > .tree-disclosure-node > .arrow {
+.transparent-tree-cell > .tree-disclosure-node > .arrow {
     -fx-background-color: -fx-font-color;
     -fx-padding: 0.333333em 0.229em 0.333333em 0.229em; /* 4 */
     -fx-shape: "M 0 -3.5 L 4 0 L 0 3.5 z";
 }
-.transparent-tree-cell:expanded > .tree-disclosure-node > .arrow,
-.transparent-tree-table-row-cell:expanded > .tree-disclosure-node > .arrow {
+.transparent-tree-cell:expanded > .tree-disclosure-node > .arrow {
     -fx-rotate: 90;
 }
 

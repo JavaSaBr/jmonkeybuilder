@@ -25,7 +25,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.util.EditorUtil.normalizePath;
+import static com.ss.editor.util.EditorUtil.toClasspath;
 
 /**
  * Менеджер по работе с ресурсами.
@@ -76,7 +76,7 @@ public class ResourceManager {
         final ClassPathScanner scanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
         scanner.scanning(path -> {
 
-            if (!path.contains("jME")) {
+            if (!path.contains("jme3-core")) {
                 return false;
             } else if (path.contains("natives")) {
                 return false;
@@ -117,7 +117,7 @@ public class ResourceManager {
             final Array<String> materialDefinitions = getMaterialDefinitions();
             materialDefinitions.writeLock();
             try {
-                materialDefinitions.fastRemove(normalizePath(assetFile));
+                materialDefinitions.fastRemove(toClasspath(assetFile));
             } finally {
                 materialDefinitions.writeUnlock();
             }
@@ -140,7 +140,7 @@ public class ResourceManager {
             materialDefinitions.writeLock();
             try {
 
-                final String resource = normalizePath(assetFile);
+                final String resource = toClasspath(assetFile);
 
                 if (!materialDefinitions.contains(resource)) {
                     materialDefinitions.add(resource);
@@ -241,7 +241,7 @@ public class ResourceManager {
 
                 if (filename.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
                     final Path assetFile = EditorUtil.getAssetFile(file);
-                    materialDefinitions.add(normalizePath(assetFile));
+                    materialDefinitions.add(toClasspath(assetFile));
                 }
             };
 

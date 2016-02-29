@@ -49,7 +49,7 @@ public class EditorFXSceneBuilder {
      */
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.css";
 
-    public static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     public static EditorFXScene build(final JmeFxContainer fxContainer) {
 
