@@ -25,6 +25,8 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 
+import static com.ss.editor.util.EditorUtil.normalizePath;
+
 /**
  * Менеджер по работе с ресурсами.
  *
@@ -115,7 +117,7 @@ public class ResourceManager {
             final Array<String> materialDefinitions = getMaterialDefinitions();
             materialDefinitions.writeLock();
             try {
-                materialDefinitions.fastRemove(assetFile.toString());
+                materialDefinitions.fastRemove(normalizePath(assetFile));
             } finally {
                 materialDefinitions.writeUnlock();
             }
@@ -138,8 +140,10 @@ public class ResourceManager {
             materialDefinitions.writeLock();
             try {
 
-                if (!materialDefinitions.contains(assetFile)) {
-                    materialDefinitions.add(filename);
+                final String resource = normalizePath(assetFile);
+
+                if (!materialDefinitions.contains(resource)) {
+                    materialDefinitions.add(resource);
                 }
 
             } finally {
@@ -237,7 +241,7 @@ public class ResourceManager {
 
                 if (filename.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
                     final Path assetFile = EditorUtil.getAssetFile(file);
-                    materialDefinitions.add(assetFile.toString());
+                    materialDefinitions.add(normalizePath(assetFile));
                 }
             };
 

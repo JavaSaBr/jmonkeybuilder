@@ -17,6 +17,7 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 
+import static com.ss.editor.util.EditorUtil.normalizePath;
 import static java.lang.String.valueOf;
 
 /**
@@ -89,13 +90,13 @@ public class FileIconManager {
         final Path mimeTypes = Paths.get("/ui/icons/faenza/mimetypes");
 
         Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
-        String url = EditorUtil.normalizePath(iconPath);
+        String url = normalizePath(iconPath);
 
         LOGGER.info("url " + url);
 
         if (!EditorUtil.checkExists(url)) {
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
-            url = EditorUtil.normalizePath(iconPath);
+            url = normalizePath(iconPath);
         }
 
         return getImage(url);
