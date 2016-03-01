@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.input.ChaseCamera;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
@@ -20,6 +21,8 @@ import com.jme3.util.SkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 
+import rlib.geom.util.AngleUtils;
+
 /**
  * Реализация 3D части редактирования материала.
  *
@@ -30,6 +33,10 @@ public class MaterialEditorState extends AbstractEditorState {
     public static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
+    private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
+
+    private static final float H_ROTATION = AngleUtils.degreeToRadians(75);
+    private static final float V_ROTATION = AngleUtils.degreeToRadians(25);
 
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
@@ -93,7 +100,11 @@ public class MaterialEditorState extends AbstractEditorState {
         stateNode.attachChild(sky);
 
         final DirectionalLight light = getLightForChaseCamera();
-        light.setDirection(new Vector3f(-0.897672F, -0.2953406F, -0.32704628F));
+        light.setDirection(LIGHT_DIRECTION);
+
+        final ChaseCamera chaseCamera = getChaseCamera();
+        chaseCamera.setDefaultHorizontalRotation(H_ROTATION);
+        chaseCamera.setDefaultVerticalRotation(V_ROTATION);
     }
 
     /**

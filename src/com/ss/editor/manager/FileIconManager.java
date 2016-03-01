@@ -120,8 +120,6 @@ public class FileIconManager {
         Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
         String url = toClasspath(iconPath);
 
-        LOGGER.info("url " + url);
-
         if (!EditorUtil.checkExists(url)) {
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
             url = toClasspath(iconPath);

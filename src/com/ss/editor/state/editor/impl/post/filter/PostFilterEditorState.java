@@ -108,7 +108,7 @@ public class PostFilterEditorState extends AbstractEditorState {
 
     private void addFilterImpl(Material material) {
 
-        final GenericFilter genericFilter = new GenericFilter(material, true, true);
+        final GenericFilter genericFilter = new GenericFilter(material, false, true);
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
 
         final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters = getFilters();
