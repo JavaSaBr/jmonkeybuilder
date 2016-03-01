@@ -99,9 +99,9 @@ public class FileIconManager {
             LOGGER.warning(e);
         }
 
-        if(Files.isDirectory(path)) {
+        if (Files.isDirectory(path)) {
             contentType = "folder";
-        } else if(contentType == null) {
+        } else if (contentType == null) {
             final String extension = FileUtils.getExtension(path);
             contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
         }

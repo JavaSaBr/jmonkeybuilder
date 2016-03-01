@@ -93,7 +93,6 @@ public class GraphicsDialog extends EditorDialog {
     }
 
     /**
-     *
      * @param ignoreListeners Игнорировать ли слушателей.
      */
     private void setIgnoreListeners(boolean ignoreListeners) {
@@ -101,7 +100,6 @@ public class GraphicsDialog extends EditorDialog {
     }
 
     /**
-     *
      * @return Игнорировать ли слушателей.
      */
     private boolean isIgnoreListeners() {
@@ -235,7 +233,7 @@ public class GraphicsDialog extends EditorDialog {
      */
     private void validate() {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
@@ -257,19 +255,19 @@ public class GraphicsDialog extends EditorDialog {
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
 
-        if(currentScreenSize != screenSize) {
+        if (currentScreenSize != screenSize) {
             needRestart++;
         }
 
-        if(currentFXAA != fxaa) {
+        if (currentFXAA != fxaa) {
             needRestart++;
         }
 
-        if(anisotropy != currentAnisotropy) {
+        if (anisotropy != currentAnisotropy) {
             needRestart++;
         }
 
-        if(needRestart > 0) {
+        if (needRestart > 0) {
             messageLabel.setText(Messages.GRAPHICS_DIALOG_MESSAGE);
         } else {
             messageLabel.setText(StringUtils.EMPTY);
@@ -339,15 +337,15 @@ public class GraphicsDialog extends EditorDialog {
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
 
-        if(currentScreenSize != screenSize) {
+        if (currentScreenSize != screenSize) {
             needRestart++;
         }
 
-        if(currentFXAA != fxaa) {
+        if (currentFXAA != fxaa) {
             needRestart++;
         }
 
-        if(anisotropy != currentAnisotropy) {
+        if (anisotropy != currentAnisotropy) {
             needRestart++;
         }
 
@@ -356,7 +354,7 @@ public class GraphicsDialog extends EditorDialog {
         editorConfig.setScreenSize(screenSize);
         editorConfig.save();
 
-        if(needRestart > 0) {
+        if (needRestart > 0) {
             System.exit(2);
         }
     }

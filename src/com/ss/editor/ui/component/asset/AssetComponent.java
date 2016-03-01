@@ -55,7 +55,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.notifyCreated(file);
 
-        if(event.isNeedSelect()) {
+        if (event.isNeedSelect()) {
             resourceTree.expandTo(file, true);
         }
     }

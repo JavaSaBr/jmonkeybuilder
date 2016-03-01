@@ -84,9 +84,9 @@ public class MaterialFileCreator extends AbstractFileCreator {
 
         final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
 
-        if(definitions.contains("Common/MatDefs/Light/PBRLighting.j3md")) {
+        if (definitions.contains("Common/MatDefs/Light/PBRLighting.j3md")) {
             selectionModel.select("Common/MatDefs/Light/PBRLighting.j3md");
-        } else if(definitions.contains("Common/MatDefs/Light/Lighting.j3md")) {
+        } else if (definitions.contains("Common/MatDefs/Light/Lighting.j3md")) {
             selectionModel.select("Common/MatDefs/Light/Lighting.j3md");
         } else {
             selectionModel.select(definitions.first());

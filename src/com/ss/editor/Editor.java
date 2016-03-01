@@ -249,7 +249,7 @@ public class Editor extends SimpleApplication {
         postProcessor = new FilterPostProcessor(this.assetManager);
         postProcessor.initialize(renderManager, viewPort);
 
-        if(editorConfig.isFXAA()) {
+        if (editorConfig.isFXAA()) {
 
             final FXAAFilter filter = new FXAAFilter();
             filter.setEnabled(true);
@@ -308,9 +308,9 @@ public class Editor extends SimpleApplication {
         final EditorFXScene scene = getScene();
         final Parent root = scene.getRoot();
 
-        if(inputManager.isCursorVisible() && root.isMouseTransparent()) {
+        if (inputManager.isCursorVisible() && root.isMouseTransparent()) {
             executorManager.addFXTask(() -> root.setMouseTransparent(false));
-        } else if(!inputManager.isCursorVisible() && !root.isMouseTransparent()) {
+        } else if (!inputManager.isCursorVisible() && !root.isMouseTransparent()) {
             executorManager.addFXTask(() -> root.setMouseTransparent(true));
         }
 
