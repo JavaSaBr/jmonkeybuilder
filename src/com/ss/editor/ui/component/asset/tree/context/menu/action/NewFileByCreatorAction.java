@@ -8,7 +8,7 @@ import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import javafx.scene.control.MenuItem;
 
 /**
- * Реализация действия по созданию файла файла.
+ * Реализация действия по созданию файла.
  *
  * @author Ronn
  */
@@ -22,7 +22,7 @@ public class NewFileByCreatorAction extends MenuItem {
     private final ResourceElement element;
 
     /**
-     * Описание создателя.
+     * Описание создателя файлов.
      */
     private final FileCreatorDescription description;
 
@@ -34,7 +34,7 @@ public class NewFileByCreatorAction extends MenuItem {
     }
 
     /**
-     * Процесс открытия файла.
+     * Процесс создания файла.
      */
     private void processCreate() {
 

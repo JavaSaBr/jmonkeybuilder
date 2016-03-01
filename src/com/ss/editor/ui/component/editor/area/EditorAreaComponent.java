@@ -2,6 +2,9 @@ package com.ss.editor.ui.component.editor.area;
 
 import com.jme3.app.state.AppStateManager;
 import com.ss.editor.Editor;
+import com.ss.editor.file.converter.FileConverter;
+import com.ss.editor.file.converter.FileConverterDescription;
+import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.state.editor.EditorState;
@@ -14,6 +17,7 @@ import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
 import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
@@ -42,6 +46,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     public static final String KEY_EDITOR = "editor";
 
+    private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
     private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -62,6 +67,24 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE, event -> processCreateFile((RequestedCreateFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RequestedConvertFileEvent.EVENT_TYPE, event -> processConvertFile((RequestedConvertFileEvent) event));
+    }
+
+    /**
+     * Обработка запроса на конвертирование файла.
+     */
+    private void processConvertFile(final RequestedConvertFileEvent event) {
+
+        final Path file = event.getFile();
+        final FileConverterDescription description = event.getDescription();
+
+        final FileConverter converter = FILE_CONVERTER_REGISTRY.newCreator(description, file);
+
+        if (converter == null) {
+            return;
+        }
+
+        converter.convert(file);
     }
 
     /**

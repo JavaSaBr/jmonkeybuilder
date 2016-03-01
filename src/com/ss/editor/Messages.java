@@ -24,6 +24,7 @@ public class Messages {
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE;
 
     public static final String FILE_EDITOR_ACTION_SAVE;
 
@@ -80,6 +81,7 @@ public class Messages {
     public static final String GRAPHICS_DIALOG_BUTTON_CANCEL;
     public static final String GRAPHICS_DIALOG_MESSAGE;
 
+    public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
     static {
 
@@ -99,6 +101,7 @@ public class Messages {
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuCutFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuPasteFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuConvertFile");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
 
@@ -154,5 +157,7 @@ public class Messages {
         GRAPHICS_DIALOG_BUTTON_OK = bundle.getString("GraphicsDialogButtonOk");
         GRAPHICS_DIALOG_BUTTON_CANCEL = bundle.getString("GraphicsDialogButtonCancel");
         GRAPHICS_DIALOG_MESSAGE = bundle.getString("GraphicsDialogMessage");
+
+        BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
     }
 }

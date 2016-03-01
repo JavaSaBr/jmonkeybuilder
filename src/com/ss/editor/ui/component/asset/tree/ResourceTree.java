@@ -1,7 +1,10 @@
 package com.ss.editor.ui.component.asset.tree;
 
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.file.converter.FileConverterDescription;
+import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.ConvertFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.CopyFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.CutFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -20,6 +23,7 @@ import com.ss.editor.util.EditorUtil;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -48,6 +52,7 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
  */
 public class ResourceTree extends TreeView<ResourceElement> {
 
+    private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final ArrayComparator<ResourceElement> COMPARATOR = ResourceElement::compareTo;
@@ -178,10 +183,17 @@ public class ResourceTree extends TreeView<ResourceElement> {
         items.add(new NewFileAction(element));
 
         if (element instanceof FileElement) {
+
             items.add(new OpenFileAction(element));
             items.add(new OpenWithFileAction(element));
             items.add(new CopyFileAction(element));
             items.add(new CutFileAction(element));
+
+            final Array<FileConverterDescription> descriptions = FILE_CONVERTER_REGISTRY.getDescriptions(file);
+
+            if (!descriptions.isEmpty()) {
+                items.add(new ConvertFileAction(element, descriptions));
+            }
         }
 
         if (EditorUtil.hasFileInClipboard()) {
@@ -463,7 +475,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ObservableList<TreeItem<ResourceElement>> children = folderItem.getChildren();
         children.add(new TreeItem<>(ResourceElementFactory.createFor(file)));
-        children.sorted(ITEM_COMPARATOR);
+
+        FXCollections.sort(children, ITEM_COMPARATOR);
     }
 
     /**
