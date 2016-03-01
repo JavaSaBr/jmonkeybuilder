@@ -102,6 +102,10 @@ public class ScreenSize {
             container.add(new ScreenSize(1600, 900, false));
         }
 
+        if (maxWidth >= 1850 && maxHeight >= 1000) {
+            container.add(new ScreenSize(1850, 1000, false));
+        }
+
         if (maxWidth >= 1366 && maxHeight >= 768) {
             container.add(new ScreenSize(1366, 768, false));
         }

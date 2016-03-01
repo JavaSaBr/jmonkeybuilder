@@ -38,7 +38,7 @@ public class FolderElement extends ResourceElement {
                     return;
                 }
 
-                final String extension = FileUtils.getExtension(child.getFileName().toString());
+                final String extension = FileUtils.getExtension(child);
 
                 if (extensionFilter.contains(extension)) {
                     elements.add(createFor(child));

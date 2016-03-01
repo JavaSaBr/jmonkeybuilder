@@ -344,7 +344,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         }
 
         final Path file = files.get(0).toPath();
-        final String extension = FileUtils.getExtension(file.getFileName().toString());
+        final String extension = FileUtils.getExtension(file);
 
         if (!JME_MATERIAL.equals(extension)) {
             return;
@@ -455,7 +455,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         }
 
         final Path file = files.get(0).toPath();
-        final String extension = FileUtils.getExtension(file.getFileName().toString());
+        final String extension = FileUtils.getExtension(file);
 
         if (!JME_MATERIAL.equals(extension)) {
             return;

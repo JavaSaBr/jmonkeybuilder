@@ -9,8 +9,10 @@ import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FXAAFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
@@ -215,16 +217,19 @@ public class Editor extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
+        final EditorConfig editorConfig = EditorConfig.getInstance();
         final OperatingSystem system = new OperatingSystem();
 
         LOGGER.info(this, "OS: " + system.getDistribution());
 
         final AssetManager assetManager = getAssetManager();
         assetManager.registerLocator("", FolderAssetLocator.class);
+        assetManager.addAssetEventListener(EditorConfig.getInstance());
 
         final AudioRenderer audioRenderer = getAudioRenderer();
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
+        viewPort.setBackgroundColor(ColorRGBA.Gray);
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 1000);
 
         final Node guiNode = getGuiNode();
@@ -243,6 +248,18 @@ public class Editor extends SimpleApplication {
 
         postProcessor = new FilterPostProcessor(this.assetManager);
         postProcessor.initialize(renderManager, viewPort);
+
+        if(editorConfig.isFXAA()) {
+
+            final FXAAFilter filter = new FXAAFilter();
+            filter.setEnabled(true);
+            filter.setSubPixelShift(1.0f / 4.0f);
+            filter.setVxOffset(0.0f);
+            filter.setSpanMax(8.0f);
+            filter.setReduceMul(1.0f / 8.0f);
+
+            postProcessor.addFilter(filter);
+        }
 
         viewPort.addProcessor(postProcessor);
 

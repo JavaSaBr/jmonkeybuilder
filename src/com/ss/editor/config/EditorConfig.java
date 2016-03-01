@@ -32,6 +32,9 @@ public final class EditorConfig implements AssetEventListener {
     public static final String ASSET_ALIAS = "ASSET";
 
     public static final String PREF_GRAPHIC_SCREEN_SIZE = GRAPHICS_ALIAS + "." + "screenSize";
+    public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
+    public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
+
     public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
 
     private static EditorConfig instance;
@@ -55,6 +58,16 @@ public final class EditorConfig implements AssetEventListener {
     private volatile ScreenSize screenSize;
 
     /**
+     * Уровень анизатропной фильтрации.
+     */
+    private volatile int anisotropy;
+
+    /**
+     * Включено ли FXAA.
+     */
+    private volatile boolean fxaa;
+
+    /**
      * Текущий выбранный Asset.
      */
     private volatile Path currentAsset;
@@ -70,9 +83,36 @@ public final class EditorConfig implements AssetEventListener {
     @Override
     public void assetRequested(final AssetKey key) {
         if (key instanceof TextureKey) {
-            //TODO можно указывать анизатропную фильтрацию
-            ((TextureKey) key).setAnisotropy(0);
+            ((TextureKey) key).setAnisotropy(getAnisotropy());
         }
+    }
+
+    /**
+     * @param anisotropy уровень анизатропной фильтрации.
+     */
+    public void setAnisotropy(int anisotropy) {
+        this.anisotropy = anisotropy;
+    }
+
+    /**
+     * @return уровень анизатропной фильтрации.
+     */
+    public int getAnisotropy() {
+        return anisotropy;
+    }
+
+    /**
+     * @param fxaa включено ли FXAA.
+     */
+    public void setFXAA(boolean fxaa) {
+        this.fxaa = fxaa;
+    }
+
+    /**
+     * @return включено ли FXAA.
+     */
+    public boolean isFXAA() {
+        return fxaa;
     }
 
     /**
@@ -131,8 +171,8 @@ public final class EditorConfig implements AssetEventListener {
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
 
         this.screenSize = ScreenSize.sizeOf(prefs.get(PREF_GRAPHIC_SCREEN_SIZE, "1244x700"));
-        //FIXME убрать когда будут настройки
-        this.screenSize = ScreenSize.sizeOf("1600x900");
+        this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
+        this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -153,6 +193,8 @@ public final class EditorConfig implements AssetEventListener {
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
 
         prefs.put(PREF_GRAPHIC_SCREEN_SIZE, getScreenSize().toString());
+        prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
+        prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
 
         if (currentAsset != null) {
             prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());

@@ -92,7 +92,7 @@ public class EditorRegistry {
             return null;
         }
 
-        final String extension = FileUtils.getExtension(file.getFileName().toString());
+        final String extension = FileUtils.getExtension(file);
 
         EditorDescription description = null;
 
@@ -149,7 +149,7 @@ public class EditorRegistry {
     public Array<EditorDescription> getAvailableEditorsFor(final Path file) {
 
         final Array<EditorDescription> result = ArrayFactory.newArray(EditorDescription.class);
-        final String extension = FileUtils.getExtension(file.getFileName().toString());
+        final String extension = FileUtils.getExtension(file);
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
 

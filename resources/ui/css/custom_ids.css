@@ -256,3 +256,29 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
+
+#GraphicsDialogMessageLabel {
+    -fx-alignment: center;
+    -fx-min-height: 35;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-fill: -fx-color-400;
+    -fx-text-fill: -fx-color-400;
+    -fx-wrap-text: true;
+}
+
+#GraphicsDialogLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 200;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#GraphicsDialogField {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}

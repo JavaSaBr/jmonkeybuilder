@@ -91,6 +91,7 @@ public class EditorDialog extends AbstractPopupDialog {
      */
     protected void createActions(final VBox root) {
 
+
     }
 
     /**

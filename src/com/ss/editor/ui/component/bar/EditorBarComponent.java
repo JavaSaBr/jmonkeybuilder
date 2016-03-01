@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.bar;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
+import com.ss.editor.ui.component.bar.action.OpenSettingsAction;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 
@@ -35,6 +36,7 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
 
         final ObservableList<Menu> menus = getMenus();
         menus.add(createAssetMenu());
+        menus.add(createSettingsMenu());
 
         final Array<MenuItem> allItems = UIUtils.getAllItems(this);
         allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, MAIN_FONT_13));
@@ -49,6 +51,18 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         final MenuItem openAssetItem = new OpenAssetAction();
 
         items.add(openAssetItem);
+
+        return result;
+    }
+
+    private Menu createSettingsMenu() {
+
+        final Menu result = new Menu(Messages.EDITOR_BAR_SETTINGS);
+        final ObservableList<MenuItem> items = result.getItems();
+
+        final MenuItem openGraphics = new OpenSettingsAction();
+
+        items.add(openGraphics);
 
         return result;
     }

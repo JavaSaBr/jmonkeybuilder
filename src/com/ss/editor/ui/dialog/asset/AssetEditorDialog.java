@@ -43,6 +43,8 @@ public class AssetEditorDialog extends EditorDialog {
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
     private static final Insets PREVIEW_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
 
+    private static final Point DIALOG_SIZE = new Point(1200, 700);
+
     private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -216,6 +218,6 @@ public class AssetEditorDialog extends EditorDialog {
 
     @Override
     protected Point getSize() {
-        return new Point(1200, 700);
+        return DIALOG_SIZE;
     }
 }

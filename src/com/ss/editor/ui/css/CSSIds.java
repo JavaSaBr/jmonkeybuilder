@@ -50,4 +50,8 @@ public interface CSSIds {
 
     public static final String FILE_CREATOR_LABEL = "FileCreatorLabel";
     public static final String FILE_CREATOR_TEXT_FIELD = "FileCreatorTextField";
+
+    public static final String GRAPHICS_DIALOG_MESSAGE_LABEL = "GraphicsDialogMessageLabel";
+    public static final String GRAPHICS_DIALOG_LABEL = "GraphicsDialogLabel";
+    public static final String GRAPHICS_DIALOG_FIELD = "GraphicsDialogField";
 }

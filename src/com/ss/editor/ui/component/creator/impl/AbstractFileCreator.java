@@ -54,6 +54,8 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     protected static final Insets FILE_NAME_CONTAINER_OFFSET = new Insets(15, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
     protected static final Insets RESOURCE_TREE_OFFSET = new Insets(3, 0, 0, 0);
 
+    protected static final Point DIALOG_SIZE = new Point(900, 400);
+
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
@@ -291,6 +293,6 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
 
     @Override
     protected Point getSize() {
-        return new Point(900, 400);
+        return DIALOG_SIZE;
     }
 }

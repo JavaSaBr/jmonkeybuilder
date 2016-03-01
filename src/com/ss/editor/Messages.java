@@ -14,6 +14,8 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET;
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET;
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER;
+    public static final String EDITOR_BAR_SETTINGS;
+    public static final String EDITOR_BAR_SETTINGS_GRAPHICS;
 
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
@@ -70,6 +72,15 @@ public class Messages {
     public static final String POST_FILTER_VIEW_FILE_CREATOR_TITLE;
     public static final String POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
 
+    public static final String GRAPHICS_DIALOG_TITLE;
+    public static final String GRAPHICS_DIALOG_FXAA;
+    public static final String GRAPHICS_DIALOG_SCREEN_SIZE;
+    public static final String GRAPHICS_DIALOG_ANISOTROPY;
+    public static final String GRAPHICS_DIALOG_BUTTON_OK;
+    public static final String GRAPHICS_DIALOG_BUTTON_CANCEL;
+    public static final String GRAPHICS_DIALOG_MESSAGE;
+
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -77,6 +88,9 @@ public class Messages {
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponent.asset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponent.asset.openAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponent.asset.openAsset.DirectoryChooser");
+
+        EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
+        EDITOR_BAR_SETTINGS_GRAPHICS = bundle.getString("EditorBarComponent.settings.graphics");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
@@ -132,5 +146,13 @@ public class Messages {
 
         POST_FILTER_VIEW_FILE_CREATOR_TITLE = bundle.getString("PostFilterViewFileCreatorTitle");
         POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("PostFilterViewFileCreatorFileDescription");
+
+        GRAPHICS_DIALOG_TITLE = bundle.getString("GraphicsDialogTitle");
+        GRAPHICS_DIALOG_FXAA = bundle.getString("GraphicsDialogFXAA");
+        GRAPHICS_DIALOG_SCREEN_SIZE = bundle.getString("GraphicsDialogScreenSize");
+        GRAPHICS_DIALOG_ANISOTROPY = bundle.getString("GraphicsDialogAnisotropy");
+        GRAPHICS_DIALOG_BUTTON_OK = bundle.getString("GraphicsDialogButtonOk");
+        GRAPHICS_DIALOG_BUTTON_CANCEL = bundle.getString("GraphicsDialogButtonCancel");
+        GRAPHICS_DIALOG_MESSAGE = bundle.getString("GraphicsDialogMessage");
     }
 }

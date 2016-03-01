@@ -54,10 +54,7 @@ public class JavaFXImageManager {
      * Определение, является ли файл картинкой.
      */
     public static boolean isImage(final Path file) {
-
-        final Path fileName = file.getFileName();
-        final String extension = FileUtils.getExtension(fileName.toString());
-
+        final String extension = FileUtils.getExtension(file);
         return IMAGE_FORMATS.contains(extension);
     }
 
@@ -86,7 +83,7 @@ public class JavaFXImageManager {
      */
     public Image getTexturePreview(final Path file, final int width, final int height) {
 
-        final String extension = FileUtils.getExtension(file.getFileName().toString());
+        final String extension = FileUtils.getExtension(file);
 
         if (FX_FORMATS.contains(extension)) {
             return new Image(file.toUri().toString(), width, height, false, false);
@@ -113,7 +110,7 @@ public class JavaFXImageManager {
 
             final Path tempFile = Files.createTempFile("javaFX", String.valueOf(System.nanoTime()));
 
-            Image javaFXImage = null;
+            Image javaFXImage;
 
             try (final OutputStream out = Files.newOutputStream(tempFile)) {
                 ImageIO.write(bufferedImage, "png", out);

@@ -9,13 +9,13 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.activation.FileTypeMap;
-import javax.activation.MimetypesFileTypeMap;
-
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
+import rlib.util.FileUtils;
+import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.ObjectDictionary;
 
 import static com.ss.editor.util.EditorUtil.toClasspath;
 import static java.lang.String.valueOf;
@@ -31,7 +31,35 @@ public class FileIconManager {
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
-    private static final FileTypeMap FILE_TYPE_MAP = MimetypesFileTypeMap.getDefaultFileTypeMap();
+    private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE = DictionaryFactory.newObjectDictionary();
+
+    static {
+        EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
+        EXTENSION_TO_CONTENT_TYPE.put("jpg", "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put("jpeg", "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put("tiff", "image-tiff");
+        EXTENSION_TO_CONTENT_TYPE.put("gif", "image-gif");
+        EXTENSION_TO_CONTENT_TYPE.put("bmp", "image-bmp");
+        EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
+        EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
+        EXTENSION_TO_CONTENT_TYPE.put("tga", "image-tga");
+        EXTENSION_TO_CONTENT_TYPE.put("psd", "image-psd");
+        EXTENSION_TO_CONTENT_TYPE.put("dds", "image-jpeg");
+
+        EXTENSION_TO_CONTENT_TYPE.put("ogg", "sound");
+        EXTENSION_TO_CONTENT_TYPE.put("wav", "sound");
+        EXTENSION_TO_CONTENT_TYPE.put("mp3", "sound");
+
+        EXTENSION_TO_CONTENT_TYPE.put("txt", "application-text");
+        EXTENSION_TO_CONTENT_TYPE.put("log", "application-text");
+
+        EXTENSION_TO_CONTENT_TYPE.put("zip", "application-x-archive");
+        EXTENSION_TO_CONTENT_TYPE.put("rar", "application-x-archive");
+        EXTENSION_TO_CONTENT_TYPE.put("gz", "application-x-archive");
+        EXTENSION_TO_CONTENT_TYPE.put("jar", "application-x-archive");
+
+        EXTENSION_TO_CONTENT_TYPE.put("java", "application-x-java");
+    }
 
     private static FileIconManager instance;
 
@@ -71,20 +99,20 @@ public class FileIconManager {
             LOGGER.warning(e);
         }
 
-        if (contentType == null && FILE_TYPE_MAP != null) {
-            contentType = FILE_TYPE_MAP.getContentType(path.toFile());
+        if(Files.isDirectory(path)) {
+            contentType = "folder";
+        } else if(contentType == null) {
+            final String extension = FileUtils.getExtension(path);
+            contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
         }
-
-        LOGGER.info("contentType " + contentType + " for " + path);
 
         if (contentType != null) {
             contentType = contentType.replace("/", "-");
         }
 
         if (contentType == null) {
+            LOGGER.warning("not found content type for " + path);
             contentType = "none";
-        } else if ("inode-directory".equals(contentType)) {
-            contentType = "folder";
         }
 
         final Path mimeTypes = Paths.get("/ui/icons/faenza/mimetypes");
