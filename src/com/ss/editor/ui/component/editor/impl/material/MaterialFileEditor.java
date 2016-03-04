@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.impl.material;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
+import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
@@ -37,7 +38,7 @@ import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.serializer.MaterialSerializer.serializeToString;
-import static com.ss.editor.ui.css.CSSIds.MATERIAL_EDITOR_PARAMETER_CONTAINER;
+import static com.ss.editor.ui.css.CSSIds.MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER;
 import static javafx.geometry.Pos.TOP_RIGHT;
 
 /**
@@ -45,14 +46,14 @@ import static javafx.geometry.Pos.TOP_RIGHT;
  *
  * @author Ronn
  */
-public class MaterialEditor extends AbstractFileEditor<StackPane> {
+public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
-        DESCRIPTION.setConstructor(MaterialEditor::new);
+        DESCRIPTION.setConstructor(MaterialFileEditor::new);
         DESCRIPTION.setEditorName(MATERIAL_EDITOR_NAME);
-        DESCRIPTION.addExtension("j3m");
+        DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL);
     }
 
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
@@ -130,7 +131,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
      */
     private boolean ignoreListeners;
 
-    public MaterialEditor() {
+    public MaterialFileEditor() {
         this.editorState = new MaterialEditorState();
         addEditorState(editorState);
     }
@@ -201,7 +202,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         final Accordion accordion = new Accordion();
 
         final VBox parameterContainer = new VBox();
-        parameterContainer.setId(MATERIAL_EDITOR_PARAMETER_CONTAINER);
+        parameterContainer.setId(MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER);
 
         changeHandler = this::handleChanges;
 
@@ -345,11 +346,11 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
         final Label materialDefinitionLabel = new Label(Messages.MATERIAL_EDITOR_MATERIAL_TYPE_LABEL + ":");
-        materialDefinitionLabel.setId(CSSIds.MATERIAL_EDITOR_TOOLBAR_LABEL);
+        materialDefinitionLabel.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_LABEL);
 
         materialDefinitionBox = new ComboBox<>();
-        materialDefinitionBox.setId(CSSIds.MATERIAL_EDITOR_TOOLBAR_BOX);
-        materialDefinitionBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChangeType(newValue));
+        materialDefinitionBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
+        materialDefinitionBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeType(newValue));
 
         FXUtils.addToPane(createSaveAction(), container);
         FXUtils.addToPane(cubeButton, container);
@@ -380,7 +381,7 @@ public class MaterialEditor extends AbstractFileEditor<StackPane> {
     /**
      * Обработка смены типа материала.
      */
-    private void processChangeType(final String newType) {
+    private void changeType(final String newType) {
 
         if (isIgnoreListeners()) {
             return;

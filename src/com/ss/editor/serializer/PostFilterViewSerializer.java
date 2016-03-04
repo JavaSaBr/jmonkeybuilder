@@ -3,7 +3,7 @@ package com.ss.editor.serializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import com.ss.editor.model.file.PostFilterViewFile;
+import com.ss.editor.file.PostFilterViewFile;
 
 import java.nio.file.Path;
 

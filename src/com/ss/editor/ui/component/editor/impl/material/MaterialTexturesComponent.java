@@ -15,7 +15,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
-import static com.ss.editor.Messages.MATERIAL_TEXTURES_COMPONENT_TITLE;
+import static com.ss.editor.Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE;
 
 /**
  * Реализация компонента конфигурирования текстур материала.
@@ -39,7 +39,7 @@ public class MaterialTexturesComponent extends TitledPane {
     public MaterialTexturesComponent(final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
-        setText(MATERIAL_TEXTURES_COMPONENT_TITLE);
+        setText(MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
         setContent(container);
     }
 

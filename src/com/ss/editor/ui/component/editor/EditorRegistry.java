@@ -1,7 +1,8 @@
 package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.ui.component.editor.impl.TextFileEditor;
-import com.ss.editor.ui.component.editor.impl.material.MaterialEditor;
+import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
+import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 
 import java.nio.file.Files;
@@ -49,7 +50,8 @@ public class EditorRegistry {
     private void loadDescriptions() {
         addDescription(TextFileEditor.DESCRIPTION);
         addDescription(PostFilterEditor.DESCRIPTION);
-        addDescription(MaterialEditor.DESCRIPTION);
+        addDescription(MaterialFileEditor.DESCRIPTION);
+        addDescription(ModelFileEditor.DESCRIPTION);
     }
 
     /**

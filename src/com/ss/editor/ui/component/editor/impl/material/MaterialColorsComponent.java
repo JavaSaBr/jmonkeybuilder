@@ -38,7 +38,7 @@ public class MaterialColorsComponent extends TitledPane {
     public MaterialColorsComponent(final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
-        setText(Messages.MATERIAL_COLORS_COMPONENT_TITLE);
+        setText(Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
         setContent(container);
     }
 

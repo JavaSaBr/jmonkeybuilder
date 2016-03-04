@@ -36,10 +36,10 @@ public class Messages {
 
     public static final String MATERIAL_EDITOR_MATERIAL_TYPE_LABEL;
 
-    public static final String MATERIAL_TEXTURES_COMPONENT_TITLE;
-    public static final String MATERIAL_COLORS_COMPONENT_TITLE;
-    public static final String MATERIAL_OTHER_COMPONENT_TITLE;
-    public static final String MATERIAL_RENDER_PARAMS_COMPONENT_TITLE;
+    public static final String MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE;
+    public static final String MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE;
+    public static final String MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE;
+    public static final String MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE;
 
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
     public static final String TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
@@ -83,6 +83,13 @@ public class Messages {
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
+    public static final String MODEL_FILE_EDITOR_NAME;
+    public static final String MODEL_FILE_EDITOR_NO_SKY;
+    public static final String MODEL_FILE_EDITOR_FAST_SKY;
+    public static final String MODEL_FILE_EDITOR_NODE_TREE;
+    public static final String MODEL_FILE_EDITOR_PROPERTIES;
+    public static final String MODEL_FILE_EDITOR_NODE_MESH;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -111,10 +118,10 @@ public class Messages {
         ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
         ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
 
-        MATERIAL_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialTexturesComponentTitle");
-        MATERIAL_COLORS_COMPONENT_TITLE = bundle.getString("MaterialColorsComponentTitle");
-        MATERIAL_OTHER_COMPONENT_TITLE = bundle.getString("MaterialOtherComponentTitle");
-        MATERIAL_RENDER_PARAMS_COMPONENT_TITLE = bundle.getString("MaterialRenderParamsComponentTitle");
+        MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialFileEditorTexturesComponentTitle");
+        MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorColorsComponentTitle");
+        MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE = bundle.getString("MaterialFileEditorOtherComponentTitle");
+        MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorRenderParamsComponentTitle");
 
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT = bundle.getString("Texture2DMaterialParamControlRepeat");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP = bundle.getString("Texture2DMaterialParamControlFlip");
@@ -133,11 +140,11 @@ public class Messages {
         MATERIAL_RENDER_STATE_DEPTH_TEST = bundle.getString("MaterialRenderStateDepthTest");
         MATERIAL_RENDER_STATE_WIREFRAME = bundle.getString("MaterialRenderStateWireframe");
 
-        MATERIAL_EDITOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialEditorMaterialTypeLabel");
+        MATERIAL_EDITOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileEditorMaterialTypeLabel");
 
         TEXT_FILE_EDITOR_NAME = bundle.getString("TextFileEditorName");
         POST_FILTER_EDITOR_NAME = bundle.getString("PostFilterEditorName");
-        MATERIAL_EDITOR_NAME = bundle.getString("MaterialEditorName");
+        MATERIAL_EDITOR_NAME = bundle.getString("MaterialFileEditorName");
 
         FILE_CREATOR_BUTTON_OK = bundle.getString("FileCreatorButtonOk");
         FILE_CREATOR_BUTTON_CANCEL = bundle.getString("FileCreatorButtonCancel");
@@ -159,5 +166,12 @@ public class Messages {
         GRAPHICS_DIALOG_MESSAGE = bundle.getString("GraphicsDialogMessage");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
+
+        MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
+        MODEL_FILE_EDITOR_NO_SKY = bundle.getString("ModelFileEditorNoSky");
+        MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
+        MODEL_FILE_EDITOR_NODE_TREE = bundle.getString("ModelFileEditorNodeTree");
+        MODEL_FILE_EDITOR_PROPERTIES = bundle.getString("ModelFileEditorProperties");
+        MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
     }
 }

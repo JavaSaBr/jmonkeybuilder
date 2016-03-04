@@ -35,9 +35,9 @@ public interface CSSIds {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     public static final String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "AssetEditorDialogPreviewContainer";
 
-    public static final String MATERIAL_EDITOR_TOOLBAR_LABEL = "MaterialEditorToolbarLabel";
-    public static final String MATERIAL_EDITOR_TOOLBAR_BOX = "MaterialEditorToolbarBox";
-    public static final String MATERIAL_EDITOR_PARAMETER_CONTAINER = "MaterialEditorParameterContainer";
+    public static final String MATERIAL_FILE_EDITOR_TOOLBAR_LABEL = "MaterialFileEditorToolbarLabel";
+    public static final String MATERIAL_FILE_EDITOR_TOOLBAR_BOX = "MaterialFileEditorToolbarBox";
+    public static final String MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER = "MaterialFileEditorParameterContainer";
 
     public static final String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
     public static final String MATERIAL_PARAM_CONTROL_BUTTON = "MaterialParamControlButton";
@@ -54,4 +54,11 @@ public interface CSSIds {
     public static final String GRAPHICS_DIALOG_MESSAGE_LABEL = "GraphicsDialogMessageLabel";
     public static final String GRAPHICS_DIALOG_LABEL = "GraphicsDialogLabel";
     public static final String GRAPHICS_DIALOG_FIELD = "GraphicsDialogField";
+
+    public static final String MODEL_FILE_EDITOR_PARAMETER_CONTAINER = "ModelFileEditorParameterContainer";
+
+    public static final String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
+    public static final String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
+    public static final String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
+
 }

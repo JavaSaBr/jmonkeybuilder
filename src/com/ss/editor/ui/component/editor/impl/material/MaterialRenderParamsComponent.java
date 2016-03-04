@@ -20,7 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
-import static com.ss.editor.Messages.MATERIAL_RENDER_PARAMS_COMPONENT_TITLE;
+import static com.ss.editor.Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE;
 import static java.lang.Float.parseFloat;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.geometry.Pos.CENTER_LEFT;
@@ -107,7 +107,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
     public MaterialRenderParamsComponent(final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
-        setText(MATERIAL_RENDER_PARAMS_COMPONENT_TITLE);
+        setText(MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
         createContent();
         setContent(container);
     }

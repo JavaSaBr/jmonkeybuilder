@@ -161,6 +161,6 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      * Обновление текста всплывающей подсказки.
      */
     private void updateTooltip(final String text) {
-        this.tooltip.setText(text);
+        tooltip.setText(text);
     }
 }

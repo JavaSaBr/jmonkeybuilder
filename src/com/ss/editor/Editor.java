@@ -229,7 +229,7 @@ public class Editor extends SimpleApplication {
         final AudioRenderer audioRenderer = getAudioRenderer();
         audioRenderer.setEnvironment(new Environment(Environment.Garage));
 
-        viewPort.setBackgroundColor(ColorRGBA.Gray);
+        viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 1000);
 
         final Node guiNode = getGuiNode();

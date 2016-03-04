@@ -13,6 +13,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.PasteFileAction;
 import com.ss.editor.ui.component.asset.tree.resource.FileElement;
+import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
@@ -58,6 +59,13 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private static final ArrayComparator<ResourceElement> COMPARATOR = ResourceElement::compareTo;
     private static final ArrayComparator<ResourceElement> NAME_COMPARATOR = (first, second) -> {
 
+        final int firstLevel = getLevel(first);
+        final int secondLevel = getLevel(second);
+
+        if(firstLevel != secondLevel) {
+            return firstLevel - secondLevel;
+        }
+
         final Path firstFile = first.getFile();
         final String firstName = firstFile.getFileName().toString();
 
@@ -72,8 +80,24 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final ResourceElement firstElement = first.getValue();
         final ResourceElement secondElement = second.getValue();
 
+        final int firstLevel = getLevel(firstElement);
+        final int secondLevel = getLevel(secondElement);
+
+        if(firstLevel != secondLevel) {
+            return firstLevel - secondLevel;
+        }
+
         return NAME_COMPARATOR.compare(firstElement, secondElement);
     };
+
+    private static int getLevel(final ResourceElement element) {
+
+        if(element instanceof FolderElement) {
+            return 1;
+        }
+
+        return 2;
+    }
 
     private static final Consumer<ResourceElement> DEFAULT_FUNCTION = element -> {
         final OpenFileAction action = new OpenFileAction(element);

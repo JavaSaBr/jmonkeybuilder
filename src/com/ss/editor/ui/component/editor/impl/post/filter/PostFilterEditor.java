@@ -5,7 +5,7 @@ import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.model.file.PostFilterViewFile;
+import com.ss.editor.file.PostFilterViewFile;
 import com.ss.editor.serializer.PostFilterViewSerializer;
 import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorState;
 import com.ss.editor.ui.Icons;

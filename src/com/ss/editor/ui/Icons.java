@@ -16,6 +16,9 @@ public interface Icons {
     public static final Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
     public static final Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");
     public static final Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
+    public static final Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/node.png");
+    public static final Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/geometry.png");
+    public static final Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/mesh.png");
 
     public static final Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png");
     public static final Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png");

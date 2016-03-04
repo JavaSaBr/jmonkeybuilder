@@ -10,7 +10,11 @@ import com.jme3.math.FastMath;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.Editor;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorState;
+
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 
 /**
  * Базовая реализация.
@@ -19,6 +23,9 @@ import com.ss.editor.state.editor.EditorState;
  */
 public abstract class AbstractEditorState extends AbstractAppState implements EditorState {
 
+    protected static final Logger LOGGER = LoggerManager.getLogger(EditorState.class);
+
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**

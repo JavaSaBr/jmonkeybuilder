@@ -1,6 +1,7 @@
 package com.ss.editor.ui.util;
 
 import com.jme3.math.ColorRGBA;
+import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 
 import java.lang.reflect.Constructor;
@@ -163,16 +164,22 @@ public class UIUtils {
         }
     }
 
-    public static TreeItem<Object> findItemForValue(TreeView<Object> treeView, Object object) {
+    public static <T> TreeItem<T> findItem(TreeView<T> treeView, long objectId) {
 
-        final TreeItem<Object> root = treeView.getRoot();
-        final ObservableList<TreeItem<Object>> children = root.getChildren();
+        final TreeItem<T> root = treeView.getRoot();
+        final T value = root.getValue();
+
+        if (value instanceof UObject && ((UObject) value).getObjectId() == objectId) {
+            return root;
+        }
+
+        final ObservableList<TreeItem<T>> children = root.getChildren();
 
         if (!children.isEmpty()) {
 
-            for (TreeItem<Object> treeItem : children) {
+            for (TreeItem<T> treeItem : children) {
 
-                final TreeItem<Object> result = findItemForValue(treeItem, object);
+                final TreeItem<T> result = findItem(treeItem, objectId);
 
                 if (result != null) {
                     return result;
@@ -180,14 +187,41 @@ public class UIUtils {
             }
         }
 
-        if (root.getValue() == object) {
+        return null;
+    }
+
+    public static <T> TreeItem<T> findItem(TreeItem<T> root, long objectId) {
+
+        final T value = root.getValue();
+
+        if (value instanceof UObject && ((UObject) value).getObjectId() == objectId) {
             return root;
+        }
+
+        final ObservableList<TreeItem<T>> children = root.getChildren();
+
+        if (!children.isEmpty()) {
+
+            for (TreeItem<T> treeItem : children) {
+
+                final TreeItem<T> result = findItem(treeItem, objectId);
+
+                if (result != null) {
+                    return result;
+                }
+            }
         }
 
         return null;
     }
 
-    public static <T> TreeItem<T> findItemForValue(TreeItem<T> root, Object object) {
+    public static <T> TreeItem<T> findItemForValue(TreeView<T> treeView, Object object) {
+
+        final TreeItem<T> root = treeView.getRoot();
+
+        if (root.getValue() == object) {
+            return root;
+        }
 
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
@@ -203,8 +237,27 @@ public class UIUtils {
             }
         }
 
+        return null;
+    }
+
+    public static <T> TreeItem<T> findItemForValue(TreeItem<T> root, Object object) {
+
         if (Objects.equals(root.getValue(), object)) {
             return root;
+        }
+
+        final ObservableList<TreeItem<T>> children = root.getChildren();
+
+        if (!children.isEmpty()) {
+
+            for (TreeItem<T> treeItem : children) {
+
+                final TreeItem<T> result = findItemForValue(treeItem, object);
+
+                if (result != null) {
+                    return result;
+                }
+            }
         }
 
         return null;

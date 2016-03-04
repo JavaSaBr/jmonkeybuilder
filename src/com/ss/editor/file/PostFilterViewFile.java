@@ -1,4 +1,4 @@
-package com.ss.editor.model.file;
+package com.ss.editor.file;
 
 import java.util.ArrayList;
 import java.util.List;

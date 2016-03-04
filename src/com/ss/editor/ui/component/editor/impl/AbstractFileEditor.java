@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -106,6 +107,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         FXUtils.bindFixedWidth(root, container.widthProperty());
+
+        new StackPane(container);
     }
 
     /**
@@ -149,7 +152,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     public Pane getPage() {
-        return (Pane) root.getParent();
+        return (Pane) root.getParent().getParent();
     }
 
     @Override

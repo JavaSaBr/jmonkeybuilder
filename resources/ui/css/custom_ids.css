@@ -146,13 +146,13 @@
     -fx-max-width: -fx-min-width;
 }
 
-#MaterialEditorToolbarLabel {
+#MaterialFileEditorToolbarLabel {
     -fx-min-height: 28;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
 
-#MaterialEditorToolbarBox {
+#MaterialFileEditorToolbarBox {
     -fx-min-height: 28;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
@@ -161,7 +161,7 @@
     -fx-max-width: -fx-min-width;
 }
 
-#MaterialEditorParameterContainer {
+#MaterialFileEditorParameterContainer {
     -fx-background-color: -fx-color-panel-200;
     -fx-alignment: top-left;
     -fx-min-width: 300;
@@ -281,4 +281,33 @@
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+}
+
+#ModelFileEditorParameterContainer {
+    -fx-background-color: -fx-color-panel-200;
+    -fx-alignment: top-left;
+    -fx-min-width: 300;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ModelNodeTreeCell {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-background: transparent;
+}
+
+#ModelNodeTreeCellDragged {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-background: -fx-color-A400;
+}
+
+#ModelNodeTreeCellDropAvailable {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-background: -fx-color-A200;
 }

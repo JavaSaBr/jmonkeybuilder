@@ -18,7 +18,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
-import static com.ss.editor.Messages.MATERIAL_OTHER_COMPONENT_TITLE;
+import static com.ss.editor.Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE;
 
 /**
  * Реализация компонента конфигурирования других параметров материала.
@@ -42,7 +42,7 @@ public class MaterialOtherParamsComponent extends TitledPane {
     public MaterialOtherParamsComponent(final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
-        setText(MATERIAL_OTHER_COMPONENT_TITLE);
+        setText(MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
         setContent(container);
     }
 

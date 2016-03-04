@@ -59,6 +59,10 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put("jar", "application-x-archive");
 
         EXTENSION_TO_CONTENT_TYPE.put("java", "application-x-java");
+
+        EXTENSION_TO_CONTENT_TYPE.put("j3o", "jme3");
+        EXTENSION_TO_CONTENT_TYPE.put("j3m", "jme3");
+        EXTENSION_TO_CONTENT_TYPE.put("j3md", "jme3");
     }
 
     private static FileIconManager instance;
@@ -121,6 +125,7 @@ public class FileIconManager {
         String url = toClasspath(iconPath);
 
         if (!EditorUtil.checkExists(url)) {
+            LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
             url = toClasspath(iconPath);
         }
