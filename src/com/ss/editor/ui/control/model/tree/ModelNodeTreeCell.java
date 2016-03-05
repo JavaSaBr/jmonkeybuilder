@@ -52,7 +52,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
             final Object element = object.getElement();
 
-            if(element instanceof Mesh) {
+            if (element instanceof Mesh) {
                 return Messages.MODEL_FILE_EDITOR_NODE_MESH;
             }
 
@@ -65,13 +65,13 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
             final ModelNode<?> item = getItem();
 
-            if(item == null) {
+            if (item == null) {
                 return item;
             }
 
             final Object element = item.getElement();
 
-            if(element == null) {
+            if (element == null) {
                 return item;
             }
 
@@ -135,7 +135,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         final ImageView imageView = getImageView();
 
-        if(item == null) {
+        if (item == null) {
             setText(StringUtils.EMPTY);
             imageView.setImage(null);
             return;
@@ -144,10 +144,10 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         final Object element = item.getElement();
         final Image icon = item.getIcon();
 
-        if(element instanceof Spatial) {
+        if (element instanceof Spatial) {
             setText(((Spatial) element).getName());
             setEditable(true);
-        } else if(element instanceof Mesh) {
+        } else if (element instanceof Mesh) {
             setText(Messages.MODEL_FILE_EDITOR_NODE_MESH);
             setEditable(false);
         }
@@ -212,14 +212,14 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, item);
 
-        if(treeView.getRoot() == treeItem) {
+        if (treeView.getRoot() == treeItem) {
             return;
         }
 
-        TransferMode transferMode = item.canMove()? TransferMode.MOVE : null;
-        transferMode = item.canCopy()? TransferMode.COPY : transferMode;
+        TransferMode transferMode = item.canMove() ? TransferMode.MOVE : null;
+        transferMode = item.canCopy() ? TransferMode.COPY : transferMode;
 
-        if(transferMode == null) {
+        if (transferMode == null) {
             return;
         }
 
@@ -234,8 +234,8 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         mouseEvent.consume();
     }
 
-    /**m
-     * Обработка принятия.
+    /**
+     * m Обработка принятия.
      */
     private void dragDropped(final DragEvent dragEvent) {
 
@@ -248,15 +248,15 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
-        final ModelNode<?> dragItem = dragTreeItem ==null? null : dragTreeItem.getValue();
+        final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
 
-        if(dragItem == null) {
+        if (dragItem == null) {
             return;
         }
 
         final ModelNode<?> item = getItem();
 
-        if(item == null || !item.canAccept(dragItem)) {
+        if (item == null || !item.canAccept(dragItem)) {
             return;
         }
 
@@ -265,13 +265,13 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, item);
 
-        if(newParentItem == null) {
+        if (newParentItem == null) {
             return;
         }
 
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
 
-        if(isCopy) {
+        if (isCopy) {
 
             final ModelNode<?> copy = item.copy();
 
@@ -314,22 +314,22 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
-        final ModelNode<?> dragItem = dragTreeItem ==null? null : dragTreeItem.getValue();
+        final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
 
-        if(dragItem == null) {
+        if (dragItem == null) {
             return;
         }
 
         final ModelNode<?> item = getItem();
 
-        if(item == null || !item.canAccept(dragItem)) {
+        if (item == null || !item.canAccept(dragItem)) {
             return;
         }
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);
 
-        dragEvent.acceptTransferModes(isCopy? TransferMode.COPY : TransferMode.MOVE);
+        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();
 
         setId(CSSIds.MODEL_NODE_TREE_CELL_DROP_AVAILABLE);

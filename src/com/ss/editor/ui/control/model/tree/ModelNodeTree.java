@@ -97,19 +97,19 @@ public class ModelNodeTree extends TitledPane {
 
         final Consumer<Object> selectionHandler = getSelectionHandler();
 
-        if(treeItem == null) {
+        if (treeItem == null) {
             selectionHandler.accept(null);
             return;
         }
 
         final ModelNode<?> value = treeItem.getValue();
-        final Object element = value == null? null : value.getElement();
+        final Object element = value == null ? null : value.getElement();
 
         Object toSelect = null;
 
-        if(element instanceof Spatial) {
+        if (element instanceof Spatial) {
             toSelect = element;
-        } else if(element instanceof Mesh) {
+        } else if (element instanceof Mesh) {
 
             final TreeItem<ModelNode<?>> parent = treeItem.getParent();
             final ModelNode<?> parentElement = parent.getValue();
@@ -152,7 +152,7 @@ public class ModelNodeTree extends TitledPane {
 
         final ModelNode<?> element = treeItem.getValue();
 
-        if(!element.hasChildren()) {
+        if (!element.hasChildren()) {
             return;
         }
 
@@ -172,7 +172,7 @@ public class ModelNodeTree extends TitledPane {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
 
-        if(treeItem == null) {
+        if (treeItem == null) {
             return;
         }
 
@@ -181,7 +181,7 @@ public class ModelNodeTree extends TitledPane {
 
         final ModelNode<?> element = treeItem.getValue();
 
-        if(!element.hasChildren()) {
+        if (!element.hasChildren()) {
             return;
         }
 
@@ -203,7 +203,7 @@ public class ModelNodeTree extends TitledPane {
 
         modelNode.fillContextMenu(this, items);
 
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             return null;
         }
 
@@ -220,7 +220,7 @@ public class ModelNodeTree extends TitledPane {
         final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, newParent);
         final TreeItem<ModelNode<?>> nodeItem = findItemForValue(treeView, modelNode);
 
-        if(prevParentItem == null || newParentItem == null || nodeItem == null) {
+        if (prevParentItem == null || newParentItem == null || nodeItem == null) {
             return;
         }
 
@@ -254,7 +254,7 @@ public class ModelNodeTree extends TitledPane {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
 
-        if(treeItem == null) {
+        if (treeItem == null) {
             return;
         }
 
@@ -274,7 +274,7 @@ public class ModelNodeTree extends TitledPane {
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
 
-        if(treeItem == null) {
+        if (treeItem == null) {
             return;
         }
 
@@ -291,14 +291,14 @@ public class ModelNodeTree extends TitledPane {
 
         final ModelNode<Object> modelNode = ModelNodeFactory.createFor(object);
 
-        if(modelNode == null) {
+        if (modelNode == null) {
             selectionModel.select(null);
             return;
         }
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
 
-        if(treeItem == null) {
+        if (treeItem == null) {
             selectionModel.select(null);
             return;
         }

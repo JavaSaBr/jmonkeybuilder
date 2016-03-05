@@ -61,7 +61,7 @@ public class QueueBucketModelPropertyControl extends ModelPropertyControl<Render
      */
     private void updateShadowMode() {
 
-        if(isIgnoreListener()) {
+        if (isIgnoreListener()) {
             return;
         }
 

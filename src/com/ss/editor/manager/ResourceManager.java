@@ -20,6 +20,7 @@ import rlib.classpath.ClassPathScannerFactory;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
+import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
@@ -108,19 +109,20 @@ public class ResourceManager {
     private void processEvent(final DeletedFileEvent event) {
 
         final Path file = event.getFile();
-        final String filename = file.getFileName().toString();
+        final String extension = FileUtils.getExtension(file);
 
-        if (filename.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            return;
+        }
 
-            final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = EditorUtil.getAssetFile(file);
 
-            final Array<String> materialDefinitions = getMaterialDefinitions();
-            materialDefinitions.writeLock();
-            try {
-                materialDefinitions.fastRemove(toClasspath(assetFile));
-            } finally {
-                materialDefinitions.writeUnlock();
-            }
+        final Array<String> materialDefinitions = getMaterialDefinitions();
+        materialDefinitions.writeLock();
+        try {
+            materialDefinitions.fastRemove(toClasspath(assetFile));
+        } finally {
+            materialDefinitions.writeUnlock();
         }
     }
 
@@ -130,25 +132,26 @@ public class ResourceManager {
     private void processEvent(final CreatedFileEvent event) {
 
         final Path file = event.getFile();
-        final String filename = file.getFileName().toString();
+        final String extension = FileUtils.getExtension(file);
 
-        if (filename.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            return;
+        }
 
-            final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = EditorUtil.getAssetFile(file);
 
-            final Array<String> materialDefinitions = getMaterialDefinitions();
-            materialDefinitions.writeLock();
-            try {
+        final Array<String> materialDefinitions = getMaterialDefinitions();
+        materialDefinitions.writeLock();
+        try {
 
-                final String resource = toClasspath(assetFile);
+            final String resource = toClasspath(assetFile);
 
-                if (!materialDefinitions.contains(resource)) {
-                    materialDefinitions.add(resource);
-                }
-
-            } finally {
-                materialDefinitions.writeUnlock();
+            if (!materialDefinitions.contains(resource)) {
+                materialDefinitions.add(resource);
             }
+
+        } finally {
+            materialDefinitions.writeUnlock();
         }
     }
 
@@ -237,9 +240,9 @@ public class ResourceManager {
                     return;
                 }
 
-                final String filename = file.getFileName().toString();
+                final String extension = FileUtils.getExtension(file);
 
-                if (filename.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+                if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
                     final Path assetFile = EditorUtil.getAssetFile(file);
                     materialDefinitions.add(toClasspath(assetFile));
                 }

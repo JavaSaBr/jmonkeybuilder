@@ -89,11 +89,11 @@ public class ModelPropertyControl<T> extends VBox {
         setAlignment(isSingleRow() ? Pos.CENTER_LEFT : Pos.CENTER);
 
         final HBox container = new HBox();
-        container.setAlignment(isSingleRow()? Pos.CENTER_LEFT : Pos.CENTER);
+        container.setAlignment(isSingleRow() ? Pos.CENTER_LEFT : Pos.CENTER);
 
         paramNameLabel = new Label(getParamName() + ":");
 
-        if(isSingleRow()) {
+        if (isSingleRow()) {
             paramNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         } else {
             paramNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME);
@@ -101,7 +101,7 @@ public class ModelPropertyControl<T> extends VBox {
         }
 
         FXUtils.addClassTo(paramNameLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addToPane(paramNameLabel, isSingleRow()? container : this);
+        FXUtils.addToPane(paramNameLabel, isSingleRow() ? container : this);
 
         createComponents(container);
 

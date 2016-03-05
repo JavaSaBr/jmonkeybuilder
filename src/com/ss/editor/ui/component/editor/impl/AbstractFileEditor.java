@@ -5,6 +5,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 
@@ -26,7 +27,6 @@ import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.ui.css.CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
-import static com.ss.editor.ui.css.CSSIds.FILE_EDITOR_TOOLBAR;
 
 /**
  * Базовая реализация редактора.
@@ -86,7 +86,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         if (needToolbar()) {
 
             toolbar = new HBox();
-            toolbar.setId(FILE_EDITOR_TOOLBAR);
+            toolbar.setId(CSSIds.FILE_EDITOR_TOOLBAR);
 
             createToolbar(toolbar);
 

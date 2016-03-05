@@ -276,7 +276,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
         Spatial spatial = null;
 
-        if(object instanceof Spatial) {
+        if (object instanceof Spatial) {
             spatial = (Spatial) object;
         }
 
@@ -291,7 +291,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
         Spatial spatial = null;
 
-        if(object instanceof Spatial) {
+        if (object instanceof Spatial) {
             spatial = (Spatial) object;
         }
 
@@ -363,7 +363,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
      */
     private void changeSelectionVisible(final Boolean newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
@@ -376,7 +376,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
      */
     private void changeGridVisible(final Boolean newValue) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
@@ -389,13 +389,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
      */
     private void changeFastSky(final String newSky) {
 
-        if(isIgnoreListeners()) {
+        if (isIgnoreListeners()) {
             return;
         }
 
         final ModelEditorState editorState = getEditorState();
 
-        if(NO_FAST_SKY.equals(newSky)) {
+        if (NO_FAST_SKY.equals(newSky)) {
             editorState.changeFastSky(null);
             return;
         }

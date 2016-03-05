@@ -106,7 +106,10 @@ public class PostFilterEditorState extends AbstractEditorState {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> addFilterImpl(material));
     }
 
-    private void addFilterImpl(Material material) {
+    /**
+     * Процесс добавление нового материала.
+     */
+    private void addFilterImpl(final Material material) {
 
         final GenericFilter genericFilter = new GenericFilter(material, false, true);
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
@@ -139,7 +142,10 @@ public class PostFilterEditorState extends AbstractEditorState {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> removeFilterImpl(material));
     }
 
-    private void removeFilterImpl(Material material) {
+    /**
+     * Процесс удаления материала.
+     */
+    private void removeFilterImpl(final Material material) {
 
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
 

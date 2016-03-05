@@ -164,7 +164,7 @@ public class ModelEditorState extends AbstractEditorState {
      */
     private void processClick(final boolean isPressed) {
 
-        if(!isPressed) {
+        if (!isPressed) {
             return;
         }
 
@@ -186,14 +186,14 @@ public class ModelEditorState extends AbstractEditorState {
 
         final ModelFileEditor editor = getEditor();
 
-        if(results.size() < 1) {
+        if (results.size() < 1) {
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifySelected(null));
             return;
         }
 
         final CollisionResult collision = results.getClosestCollision();
 
-        if(collision == null) {
+        if (collision == null) {
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifySelected(null));
             return;
         }
@@ -347,7 +347,7 @@ public class ModelEditorState extends AbstractEditorState {
 
         final InputManager inputManager = EDITOR.getInputManager();
 
-        if(!inputManager.hasMapping(mappingName)) {
+        if (!inputManager.hasMapping(mappingName)) {
             inputManager.addMapping(mappingName, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         }
 
@@ -377,7 +377,7 @@ public class ModelEditorState extends AbstractEditorState {
         final Spatial selected = getSelected();
         final Spatial selectionShape = getSelectionShape();
 
-        if(selected != null && selectionShape != null) {
+        if (selected != null && selectionShape != null) {
             selectionShape.setLocalTranslation(selected.getWorldTranslation());
             selectionShape.setLocalRotation(selected.getWorldRotation());
             selectionShape.setLocalScale(selected.getWorldScale());
@@ -444,11 +444,11 @@ public class ModelEditorState extends AbstractEditorState {
         final Node stateNode = getStateNode();
         final Spatial currentFastSky = getCurrentFastSky();
 
-        if(currentFastSky != null) {
+        if (currentFastSky != null) {
             stateNode.detachChild(currentFastSky);
         }
 
-        if(fastSky == null) {
+        if (fastSky == null) {
             return;
         }
 
@@ -508,24 +508,24 @@ public class ModelEditorState extends AbstractEditorState {
      */
     private void updateSelectionImpl(final Spatial spatial) {
 
-        if(getSelected() == spatial) {
+        if (getSelected() == spatial) {
             return;
         }
 
         final Node toolNode = getToolNode();
         final Spatial selectionShape = getSelectionShape();
 
-        if(spatial == null && selectionShape != null) {
+        if (spatial == null && selectionShape != null) {
             toolNode.detachChild(selectionShape);
             setSelectionShape(null);
             setSelected(null);
             return;
-        } else if(spatial == null) {
+        } else if (spatial == null) {
             setSelected(null);
             return;
         }
 
-        if(selectionShape != null) {
+        if (selectionShape != null) {
             toolNode.detachChild(selectionShape);
         }
 
@@ -539,13 +539,13 @@ public class ModelEditorState extends AbstractEditorState {
             shape = buildBoxSelection(spatial);
         }
 
-        if(shape == null) {
+        if (shape == null) {
             setSelectionShape(null);
             setSelected(null);
             return;
         }
 
-        if(isShowSelection()) {
+        if (isShowSelection()) {
             toolNode.attachChild(shape);
         }
 
@@ -575,7 +575,7 @@ public class ModelEditorState extends AbstractEditorState {
 
             return geometry;
 
-        } else if(bound instanceof BoundingSphere) {
+        } else if (bound instanceof BoundingSphere) {
 
             final BoundingSphere boundingSphere = (BoundingSphere) bound;
 
@@ -653,16 +653,16 @@ public class ModelEditorState extends AbstractEditorState {
      */
     private void updateShowSelectionImpl(boolean showSelection) {
 
-        if(isShowSelection() == showSelection) {
+        if (isShowSelection() == showSelection) {
             return;
         }
 
         final Spatial selectionShape = getSelectionShape();
         final Node toolNode = getToolNode();
 
-        if(showSelection && selectionShape != null) {
+        if (showSelection && selectionShape != null) {
             toolNode.attachChild(selectionShape);
-        } else if(!showSelection && selectionShape != null) {
+        } else if (!showSelection && selectionShape != null) {
             toolNode.detachChild(selectionShape);
         }
 
@@ -681,14 +681,14 @@ public class ModelEditorState extends AbstractEditorState {
      */
     private void updateShowGridImpl(final boolean showGrid) {
 
-        if(isShowGrid() == showGrid) {
+        if (isShowGrid() == showGrid) {
             return;
         }
 
         final Node toolNode = getToolNode();
         final Geometry grid = getGrid();
 
-        if(showGrid) {
+        if (showGrid) {
             toolNode.attachChild(grid);
         } else {
             toolNode.detachChild(grid);

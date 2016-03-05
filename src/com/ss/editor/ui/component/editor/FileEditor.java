@@ -53,7 +53,6 @@ public interface FileEditor {
      * Сохранить изменения.
      */
     public default void doSave() {
-
     }
 
     /**
@@ -67,6 +66,5 @@ public interface FileEditor {
      * Уведомление редактора о том что его закрыли.
      */
     public default void notifyClosed() {
-
     }
 }

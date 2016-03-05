@@ -62,7 +62,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final int firstLevel = getLevel(first);
         final int secondLevel = getLevel(second);
 
-        if(firstLevel != secondLevel) {
+        if (firstLevel != secondLevel) {
             return firstLevel - secondLevel;
         }
 
@@ -83,7 +83,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final int firstLevel = getLevel(firstElement);
         final int secondLevel = getLevel(secondElement);
 
-        if(firstLevel != secondLevel) {
+        if (firstLevel != secondLevel) {
             return firstLevel - secondLevel;
         }
 
@@ -92,7 +92,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     private static int getLevel(final ResourceElement element) {
 
-        if(element instanceof FolderElement) {
+        if (element instanceof FolderElement) {
             return 1;
         }
 

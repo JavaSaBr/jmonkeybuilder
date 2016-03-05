@@ -108,7 +108,7 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Vector3f>
      */
     private void updateVector() {
 
-        if(isIgnoreListener()) {
+        if (isIgnoreListener()) {
             return;
         }
 

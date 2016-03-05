@@ -4,6 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
 import com.ss.editor.ui.component.bar.action.OpenSettingsAction;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 
@@ -13,9 +14,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_MENU_ITEM;
 
 /**
  * Реализация меню бара для редактора.
@@ -39,8 +37,8 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         menus.add(createSettingsMenu());
 
         final Array<MenuItem> allItems = UIUtils.getAllItems(this);
-        allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, MAIN_FONT_13));
-        allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, TRANSPARENT_MENU_ITEM));
+        allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, CSSClasses.MAIN_FONT_13));
+        allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, CSSClasses.TRANSPARENT_MENU_ITEM));
     }
 
     private Menu createAssetMenu() {

@@ -268,7 +268,7 @@ public class Editor extends SimpleApplication {
         InitializeManager.register(FileIconManager.class);
         InitializeManager.initialize();
 
-        if(Config.ENABLE_PBR) {
+        if (Config.ENABLE_PBR) {
             environmentCamera = new EnvironmentCamera(64, new Vector3f(0, 0, 0));
             stateManager.attach(environmentCamera);
         }
@@ -362,7 +362,7 @@ public class Editor extends SimpleApplication {
 
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
 
-        if(environmentCamera == null) {
+        if (environmentCamera == null) {
             return;
         }
 
@@ -383,7 +383,7 @@ public class Editor extends SimpleApplication {
 
         final LightProbe lightProbe = getLightProbe();
 
-        if(lightProbe == null) {
+        if (lightProbe == null) {
             progressAdapter.done(null);
             return;
         }

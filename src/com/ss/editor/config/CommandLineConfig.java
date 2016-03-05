@@ -8,6 +8,5 @@ package com.ss.editor.config;
 public class CommandLineConfig {
 
     public static void args(String[] args) {
-
     }
 }

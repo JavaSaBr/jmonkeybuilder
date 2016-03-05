@@ -32,6 +32,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
+import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.ObjectDictionary;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 
@@ -43,7 +45,6 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     public static final String COMPONENT_ID = "EditorAreaComponent";
-
     public static final String KEY_EDITOR = "editor";
 
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
@@ -54,8 +55,15 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
+    /**
+     * Таблица открытых редакторов.
+     */
+    private final ObjectDictionary<Path, Tab> openedEditors;
+
     public EditorAreaComponent() {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
+
+        this.openedEditors = DictionaryFactory.newConcurrentObjectDictionary();
 
         final ObservableList<Tab> tabs = getTabs();
         tabs.addListener(this::processChangeTabs);
@@ -68,6 +76,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE, event -> processCreateFile((RequestedCreateFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestedConvertFileEvent.EVENT_TYPE, event -> processConvertFile((RequestedConvertFileEvent) event));
+    }
+
+    /**
+     * @return таблица открытых редакторов.
+     */
+    private ObjectDictionary<Path, Tab> getOpenedEditors() {
+        return openedEditors;
     }
 
     /**
@@ -123,6 +138,11 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             final ObservableMap<Object, Object> properties = tab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            final Path editFile = fileEditor.getEditFile();
+
+            final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
+            openedEditors.remove(editFile);
+
             fileEditor.notifyClosed();
         });
     }
@@ -163,6 +183,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void processOpenFile(final RequestedOpenFileEvent event) {
 
         final Path file = event.getFile();
+
+        final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
+        final Tab tab = openedEditors.get(file);
+
+        if (tab != null) {
+            final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
+            selectionModel.select(tab);
+            return;
+        }
+
         final EditorDescription description = event.getDescription();
         final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
 
@@ -198,6 +228,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
         selectionModel.select(tab);
+
+        final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
+        openedEditors.put(editFile, tab);
     }
 
     @Override

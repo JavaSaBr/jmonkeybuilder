@@ -17,11 +17,12 @@ public class ModelNodeFactory {
 
     public static <T, V extends ModelNode<T>> V createFor(T element) {
 
-        if(element instanceof Mesh) {
+        if (element instanceof Mesh) {
             return (V) new MeshModelNode((Mesh) element, ID_GENERATOR.incrementAndGet());
-        } else if(element instanceof Geometry) {
+        } else if (element instanceof Geometry) {
             return (V) new GeometryModelNode((Geometry) element, ID_GENERATOR.incrementAndGet());
-        } if(element instanceof Node) {
+        }
+        if (element instanceof Node) {
             return (V) new NodeModelNode((Node) element, ID_GENERATOR.incrementAndGet());
         }
 

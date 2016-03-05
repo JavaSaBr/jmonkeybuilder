@@ -132,7 +132,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
      */
     private void updateVector() {
 
-        if(isIgnoreListener()) {
+        if (isIgnoreListener()) {
             return;
         }
 

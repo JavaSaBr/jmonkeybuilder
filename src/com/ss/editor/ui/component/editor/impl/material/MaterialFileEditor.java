@@ -6,6 +6,7 @@ import com.jme3.material.MaterialDef;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState.ModelType;
 import com.ss.editor.ui.Icons;
@@ -22,6 +23,7 @@ import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -37,9 +39,6 @@ import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
-import static com.ss.editor.serializer.MaterialSerializer.serializeToString;
-import static com.ss.editor.ui.css.CSSIds.MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER;
-import static javafx.geometry.Pos.TOP_RIGHT;
 
 /**
  * Реализация редактора для редактирования материалов.
@@ -158,11 +157,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         final Material currentMaterial = getCurrentMaterial();
 
         final String original = getOriginal();
-        final String content = serializeToString(currentMaterial);
+        final String content = MaterialSerializer.serializeToString(currentMaterial);
 
         final boolean dirty = !StringUtils.equals(original, content);
 
-        EXECUTOR_MANAGER.addFXTask(() -> setDirty(dirty));
+        setDirty(dirty);
     }
 
     @Override
@@ -170,7 +169,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         super.doSave();
 
         final Material currentMaterial = getCurrentMaterial();
-        final String content = serializeToString(currentMaterial);
+        final String content = MaterialSerializer.serializeToString(currentMaterial);
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
             out.print(content);
@@ -180,6 +179,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
         setOriginal(content);
         setDirty(false);
+
         notifyFileChanged();
     }
 
@@ -197,12 +197,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
     @Override
     protected void createContent(final StackPane root) {
-        root.setAlignment(TOP_RIGHT);
+        root.setAlignment(Pos.TOP_RIGHT);
 
         final Accordion accordion = new Accordion();
 
         final VBox parameterContainer = new VBox();
-        parameterContainer.setId(MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER);
+        parameterContainer.setId(CSSIds.MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER);
 
         changeHandler = this::handleChanges;
 
@@ -258,17 +258,18 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         super.openFile(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = EditorUtil.toClasspath(assetFile);
+
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
 
-        final Material material = assetManager.loadMaterial(assetFile.toString());
+        final Material material = assetManager.loadMaterial(assetPath);
 
         final MaterialEditorState editorState = getEditorState();
         editorState.changeMode(ModelType.BOX);
 
-        final String original = new String(FileUtils.getContent(file));
+        setOriginal(new String(FileUtils.getContent(file)));
 
-        setOriginal(original);
         reload(material);
     }
 
@@ -399,12 +400,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         final Material newMaterial = new Material(assetManager, newType);
         newMaterial.getAdditionalRenderState();
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            reload(newMaterial);
+        reload(newMaterial);
 
-            final Runnable changeHandler = getChangeHandler();
-            changeHandler.run();
-        });
+        final Runnable changeHandler = getChangeHandler();
+        changeHandler.run();
     }
 
     /**

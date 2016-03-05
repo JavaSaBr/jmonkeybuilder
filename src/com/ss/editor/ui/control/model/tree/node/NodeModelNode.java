@@ -59,7 +59,7 @@ public class NodeModelNode extends ModelNode<Node> {
     @Override
     public boolean canAccept(final ModelNode<?> node) {
 
-        if(node == this) {
+        if (node == this) {
             return false;
         }
 

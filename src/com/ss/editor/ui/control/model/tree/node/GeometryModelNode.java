@@ -44,7 +44,7 @@ public class GeometryModelNode extends ModelNode<Geometry> {
         final Geometry element = getElement();
         final Mesh mesh = element.getMesh();
 
-        if(mesh == null) {
+        if (mesh == null) {
             return result;
         }
 
@@ -70,7 +70,7 @@ public class GeometryModelNode extends ModelNode<Geometry> {
 
         final Geometry geometry = getElement();
 
-        if(geometry.getMesh() != null) {
+        if (geometry.getMesh() != null) {
             return false;
         }
 

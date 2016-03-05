@@ -71,11 +71,11 @@ public abstract class ModelNode<T> implements UObject {
 
         Node parent = null;
 
-        if(element instanceof Spatial) {
+        if (element instanceof Spatial) {
             parent = ((Spatial) element).getParent();
         }
 
-        if(parent != null && parent.getUserData(ModelEditorState.class.getName()) != Boolean.TRUE) {
+        if (parent != null && parent.getUserData(ModelEditorState.class.getName()) != Boolean.TRUE) {
             items.add(new RemoveNodeAction(nodeTree, this));
         }
     }

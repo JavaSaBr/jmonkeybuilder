@@ -61,7 +61,7 @@ public class ShadowModeModelPropertyControl extends ModelPropertyControl<RenderQ
      */
     private void updateShadowMode() {
 
-        if(isIgnoreListener()) {
+        if (isIgnoreListener()) {
             return;
         }
 

@@ -28,17 +28,17 @@ public class PropertyBuilder {
     /**
      * Построесть список свойств для указанного объекта.
      *
-     * @param object объект для которого строятся свойства.
-     * @param container контейнер контролов.
+     * @param object        объект для которого строятся свойства.
+     * @param container     контейнер контролов.
      * @param changeHandler обработчик внесения изменений.
      */
     public static void buildFor(final Object object, final VBox container, final Runnable changeHandler) {
 
-        if(object instanceof Mesh) {
+        if (object instanceof Mesh) {
             //TODO
         }
 
-        if(object instanceof Geometry) {
+        if (object instanceof Geometry) {
 
             final Geometry geometry = (Geometry) object;
             final Material material = geometry.getMaterial();
@@ -54,11 +54,11 @@ public class PropertyBuilder {
             VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
         }
 
-        if(object instanceof Node) {
+        if (object instanceof Node) {
             //TODO
         }
 
-        if(object instanceof Spatial) {
+        if (object instanceof Spatial) {
 
             final Spatial spatial = (Spatial) object;
 

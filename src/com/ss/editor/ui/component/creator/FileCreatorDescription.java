@@ -22,14 +22,14 @@ public class FileCreatorDescription {
     /**
      * @param constructor конструктор создателя файлов.
      */
-    public void setConstructor(Callable<FileCreator> constructor) {
+    public void setConstructor(final Callable<FileCreator> constructor) {
         this.constructor = constructor;
     }
 
     /**
      * @param fileDescription описание создаваемого файла.
      */
-    public void setFileDescription(String fileDescription) {
+    public void setFileDescription(final String fileDescription) {
         this.fileDescription = fileDescription;
     }
 

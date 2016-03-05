@@ -138,7 +138,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> 
 
         final Material element = getElement();
 
-        if(element == null) {
+        if (element == null) {
             return;
         }
 

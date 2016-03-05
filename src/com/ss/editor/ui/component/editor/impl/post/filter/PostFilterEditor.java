@@ -11,6 +11,8 @@ import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -28,6 +30,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -49,13 +52,6 @@ import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
 import static com.ss.editor.Messages.POST_FILTER_EDITOR_MATERIAL_LABEL;
 import static com.ss.editor.Messages.POST_FILTER_EDITOR_NAME;
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
-import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_LIST_VIEW;
-import static com.ss.editor.ui.css.CSSIds.POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON;
-import static com.ss.editor.ui.css.CSSIds.POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER;
-import static javafx.geometry.Pos.CENTER_LEFT;
-import static javafx.geometry.Pos.TOP_RIGHT;
 
 /**
  * Реализация редактора пост филтров.
@@ -207,22 +203,23 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     private void processChangedFile(final FileChangedEvent event) {
 
         final Path file = event.getFile();
-        final String fileName = file.getFileName().toString();
+        final String extension = FileUtils.getExtension(file);
 
-        if (!fileName.endsWith(FileExtensions.JME_MATERIAL)) {
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL)) {
             return;
         }
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = EditorUtil.toClasspath(assetFile);
 
         final PostFilterViewFile currentFile = getCurrentFile();
         final List<String> materials = currentFile.getMaterials();
 
-        if (!materials.contains(assetFile.toString())) {
+        if (!materials.contains(assetPath)) {
             return;
         }
 
-        final MaterialKey materialKey = new MaterialKey(assetFile.toString());
+        final MaterialKey materialKey = new MaterialKey(assetPath);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
@@ -242,7 +239,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         final String newContent = PostFilterViewSerializer.serializeToString(currentFile);
         final String originalContent = getOriginalContent();
 
-        EXECUTOR_MANAGER.addFXTask(() -> setDirty(!StringUtils.equals(originalContent, newContent)));
+        setDirty(!StringUtils.equals(originalContent, newContent));
     }
 
     @Override
@@ -282,14 +279,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
     @Override
     protected void createContent(final StackPane root) {
-        root.setAlignment(TOP_RIGHT);
+        root.setAlignment(Pos.TOP_RIGHT);
 
         final VBox materialListContainer = new VBox();
-        materialListContainer.setId(POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER);
+        materialListContainer.setId(CSSIds.POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER);
 
         final Label titleLabel = new Label();
         titleLabel.setText(POST_FILTER_EDITOR_MATERIAL_LABEL + ":");
-        titleLabel.setAlignment(CENTER_LEFT);
+        titleLabel.setAlignment(Pos.CENTER_LEFT);
 
         materialsView = new ListView<>();
         materialsView.setCellFactory(param -> new MaterialListCell(this));
@@ -298,15 +295,16 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         materialsView.setMinHeight(24);
 
         addMaterial = new Button();
-        addMaterial.setId(POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON);
+        addMaterial.setId(CSSIds.POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON);
         addMaterial.setGraphic(new ImageView(Icons.ADD_24));
         addMaterial.setOnAction(event -> processAdd());
 
         final HBox titleContainer = new HBox(addMaterial, titleLabel);
 
-        FXUtils.addClassTo(addMaterial, TOOLBAR_BUTTON);
-        FXUtils.addClassTo(materialsView, TRANSPARENT_LIST_VIEW);
-        FXUtils.addClassTo(titleLabel, MAIN_FONT_13);
+        FXUtils.addClassTo(addMaterial, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(materialsView, CSSClasses.TRANSPARENT_LIST_VIEW);
+        FXUtils.addClassTo(titleLabel, CSSClasses.MAIN_FONT_13);
+
         FXUtils.bindFixedHeight(materialsView, materialListContainer.heightProperty().subtract(addMaterial.heightProperty()).subtract(26));
         FXUtils.bindFixedHeight(titleLabel, addMaterial.heightProperty());
 
@@ -364,7 +362,8 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
      */
     private void addRelativeMaterial(final Path relativize) {
 
-        final MaterialKey materialKey = new MaterialKey(relativize.toString());
+        final String assetPath = EditorUtil.toClasspath(relativize);
+        final MaterialKey materialKey = new MaterialKey(assetPath);
 
         if (editorState.hasFilter(materialKey)) {
             return;
@@ -377,11 +376,9 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         editorState.addFilter(material);
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            final ListView<Material> materialsView = getMaterialsView();
-            final ObservableList<Material> items = materialsView.getItems();
-            items.add(material);
-        });
+        final ListView<Material> materialsView = getMaterialsView();
+        final ObservableList<Material> items = materialsView.getItems();
+        items.add(material);
 
         if (!isIgnoreListeners()) {
 
@@ -420,11 +417,9 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         editorState.removeFilter(material);
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            final ListView<Material> materialsView = getMaterialsView();
-            final ObservableList<Material> items = materialsView.getItems();
-            items.remove(material);
-        });
+        final ListView<Material> materialsView = getMaterialsView();
+        final ObservableList<Material> items = materialsView.getItems();
+        items.remove(material);
 
         if (!isIgnoreListeners()) {
 

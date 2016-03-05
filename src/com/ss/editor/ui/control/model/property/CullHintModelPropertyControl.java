@@ -61,7 +61,7 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial.C
      */
     private void updateCullHint() {
 
-        if(isIgnoreListener()) {
+        if (isIgnoreListener()) {
             return;
         }
 

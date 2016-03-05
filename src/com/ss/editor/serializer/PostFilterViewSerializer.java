@@ -38,9 +38,8 @@ public class PostFilterViewSerializer {
         final String stringContent = new String(content);
 
         final Gson gson = GSON_LOCAL.get();
-        final PostFilterViewFile result = gson.fromJson(stringContent, PostFilterViewFile.class);
 
-        return result;
+        return gson.fromJson(stringContent, PostFilterViewFile.class);
     }
 
     /**

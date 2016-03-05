@@ -4,6 +4,7 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.material.BooleanMaterialParamControl;
 import com.ss.editor.ui.control.material.FloatMaterialParamControl;
 import com.ss.editor.ui.control.material.IntegerMaterialParamControl;
@@ -17,8 +18,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-
-import static com.ss.editor.Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE;
 
 /**
  * Реализация компонента конфигурирования других параметров материала.
@@ -42,7 +41,7 @@ public class MaterialOtherParamsComponent extends TitledPane {
     public MaterialOtherParamsComponent(final Runnable changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
-        setText(MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
+        setText(Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
         setContent(container);
     }
 

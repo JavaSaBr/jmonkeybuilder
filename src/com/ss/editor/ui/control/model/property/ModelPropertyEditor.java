@@ -61,7 +61,7 @@ public class ModelPropertyEditor extends TitledPane {
      */
     public void buildFor(final Object object) {
 
-        if(getCurrentObject() == object) {
+        if (getCurrentObject() == object) {
             return;
         }
 
@@ -69,7 +69,7 @@ public class ModelPropertyEditor extends TitledPane {
         final ObservableList<Node> children = container.getChildren();
         children.clear();
 
-        if(object != null) {
+        if (object != null) {
             PropertyBuilder.buildFor(object, container, getChangeHandler());
         }
 
