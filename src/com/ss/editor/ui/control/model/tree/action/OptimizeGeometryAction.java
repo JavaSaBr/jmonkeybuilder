@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.jme3.scene.Node;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
@@ -19,7 +20,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction {
 
     @Override
     protected String getName() {
-        return "Optimize geometry";
+        return Messages.MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
     }
 
     @Override

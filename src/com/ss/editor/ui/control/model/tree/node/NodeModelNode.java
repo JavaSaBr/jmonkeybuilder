@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.node;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
@@ -30,7 +31,7 @@ public class NodeModelNode extends ModelNode<Node> {
     @Override
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
 
-        final Menu toolActions = new Menu("Tools");
+        final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
         toolActions.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
 
         items.add(toolActions);

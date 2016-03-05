@@ -49,7 +49,7 @@
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
-    -fx-padding: 0;
+    -fx-padding: -5;
     -fx-effect: null;
 }
 
@@ -57,7 +57,7 @@
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
-    -fx-padding: 0;
+    -fx-padding: -5;
     -fx-effect: null;
 }
 
@@ -113,8 +113,6 @@
     -fx-border-color: transparent;
     -fx-border-width: 0;
 }
-
-
 
 /* Transparent TreeCell */
 
@@ -229,5 +227,9 @@
 }
 
 .material-param-control {
+    -fx-alignment: center-left;
+}
+
+.model-param-control {
     -fx-alignment: center-left;
 }

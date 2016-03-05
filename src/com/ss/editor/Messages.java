@@ -90,6 +90,22 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_PROPERTIES;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
 
+    public static final String MODEL_NODE_TREE_ACTION_MIKKTSPACE_TANGENT_GENERATOR;
+    public static final String MODEL_NODE_TREE_ACTION_REMOVE;
+    public static final String MODEL_NODE_TREE_ACTION_RENAME;
+    public static final String MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
+    public static final String MODEL_NODE_TREE_ACTION_TOOLS;
+
+    public static final String MODEL_PROPERTY_CULL_HINT;
+    public static final String MODEL_PROPERTY_SHADOW_MODE;
+    public static final String MODEL_PROPERTY_QUEUE_BUCKET;
+    public static final String MODEL_PROPERTY_LOCATION;
+    public static final String MODEL_PROPERTY_SCALE;
+    public static final String MODEL_PROPERTY_ROTATION;
+    public static final String MODEL_PROPERTY_MATERIAL;
+
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -173,5 +189,21 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_TREE = bundle.getString("ModelFileEditorNodeTree");
         MODEL_FILE_EDITOR_PROPERTIES = bundle.getString("ModelFileEditorProperties");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
+
+        MODEL_NODE_TREE_ACTION_MIKKTSPACE_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionMikktspaceTangentGenerator");
+        MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
+        MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
+        MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY = bundle.getString("ModelNodeTreeActionOptimizeGeometry");
+        MODEL_NODE_TREE_ACTION_TOOLS = bundle.getString("ModelNodeTreeActionTools");
+
+        MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
+        MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
+        MODEL_PROPERTY_QUEUE_BUCKET = bundle.getString("ModelPropertyQueueBucket");
+        MODEL_PROPERTY_LOCATION = bundle.getString("ModelPropertyLocation");
+        MODEL_PROPERTY_SCALE = bundle.getString("ModelPropertyScale");
+        MODEL_PROPERTY_ROTATION = bundle.getString("ModelPropertyRotation");
+        MODEL_PROPERTY_MATERIAL = bundle.getString("ModelPropertyMaterial");
+
+        MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
     }
 }

@@ -311,3 +311,67 @@
     -fx-max-height: -fx-min-height;
     -fx-background: -fx-color-A200;
 }
+
+#ModelParamControlSplitLine {
+    -fx-stroke: -fx-color-500;
+    -fx-stroke-width: 2;
+}
+
+#ModelParamControlParamName {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+#ModelParamControlParamNameSingleRow {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 140;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-right;
+}
+
+#ModelParamControlNumberLabel {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#ModelParamControlNumberField {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 50;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ModelParamControlComboBox {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#ModelParamControlMaterialLabel {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 225;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+}
+
+#ModelParamControlMaterialButton {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}

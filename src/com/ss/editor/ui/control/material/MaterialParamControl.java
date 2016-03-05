@@ -48,9 +48,12 @@ public class MaterialParamControl extends HBox {
         this.parameterName = parameterName;
 
         setIgnoreListeners(true);
-        createComponents();
-        reload();
-        setIgnoreListeners(false);
+        try {
+            createComponents();
+            reload();
+        } finally {
+            setIgnoreListeners(false);
+        }
 
         FXUtils.addClassTo(this, MATERIAL_PARAM_CONTROL);
     }

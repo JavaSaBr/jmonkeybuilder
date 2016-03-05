@@ -268,9 +268,11 @@ public class Editor extends SimpleApplication {
         InitializeManager.register(FileIconManager.class);
         InitializeManager.initialize();
 
-        environmentCamera = new EnvironmentCamera(64, new Vector3f(0, 0, 0));
+        if(Config.ENABLE_PBR) {
+            environmentCamera = new EnvironmentCamera(64, new Vector3f(0, 0, 0));
+            stateManager.attach(environmentCamera);
+        }
 
-        stateManager.attach(environmentCamera);
         fxContainer = JmeFxContainer.install(this, guiNode, true, cursorDisplayProvider);
         scene = EditorFXSceneBuilder.build(fxContainer);
 
@@ -337,6 +339,7 @@ public class Editor extends SimpleApplication {
             System.exit(1);
         } catch (final IllegalStateException e) {
             LOGGER.warning(e);
+            System.exit(0);
         } finally {
             syncUnlock(stamp);
         }
@@ -359,6 +362,10 @@ public class Editor extends SimpleApplication {
 
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
 
+        if(environmentCamera == null) {
+            return;
+        }
+
         if (environmentCamera.getApplication() == null) {
             final EditorThreadExecutor gameThreadExecutor = EditorThreadExecutor.getInstance();
             gameThreadExecutor.addToExecute(this::createProbe);
@@ -373,7 +380,15 @@ public class Editor extends SimpleApplication {
      * Обновить пробу окружения.
      */
     public void updateProbe(final JobProgressAdapter<LightProbe> progressAdapter) {
-        LightProbeFactory.updateProbe(getLightProbe(), getEnvironmentCamera(), rootNode, progressAdapter);
+
+        final LightProbe lightProbe = getLightProbe();
+
+        if(lightProbe == null) {
+            progressAdapter.done(null);
+            return;
+        }
+
+        LightProbeFactory.updateProbe(lightProbe, getEnvironmentCamera(), rootNode, progressAdapter);
     }
 
     /**

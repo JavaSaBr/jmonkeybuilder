@@ -28,4 +28,5 @@ public interface CSSClasses {
     public static final String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
 
     public static final String MATERIAL_PARAM_CONTROL = "material-param-control";
+    public static final String MODEL_PARAM_CONTROL = "model-param-control";
 }

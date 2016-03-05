@@ -61,4 +61,14 @@ public interface CSSIds {
     public static final String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
     public static final String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
 
+    public static final String MODEL_PARAM_CONTROL_SPLIT_LINE = "ModelParamControlSplitLine";
+    public static final String MODEL_PARAM_CONTROL_PARAM_NAME = "ModelParamControlParamName";
+    public static final String MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "ModelParamControlParamNameSingleRow";
+    public static final String MODEL_PARAM_CONTROL_NUMBER_LABEL = "ModelParamControlNumberLabel";
+    public static final String MODEL_PARAM_CONTROL_NUMBER_FIELD = "ModelParamControlNumberField";
+    public static final String MODEL_PARAM_CONTROL_COMBO_BOX = "ModelParamControlComboBox";
+
+    public static final String MODEL_PARAM_CONTROL_MATERIAL_LABEL = "ModelParamControlMaterialLabel";
+    public static final String MODEL_PARAM_CONTROL_MATERIAL_BUTTON = "ModelParamControlMaterialButton";
+
 }

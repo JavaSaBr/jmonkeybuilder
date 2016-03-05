@@ -5,6 +5,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import java.util.Set;
@@ -30,8 +31,6 @@ import javafx.util.StringConverter;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_TREE_CELL;
 import static com.ss.editor.ui.util.UIUtils.findItem;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
@@ -108,8 +107,8 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         setOnDragDropped(this::dragDropped);
         setOnDragExited(this::dragExited);
 
-        FXUtils.addClassTo(this, TRANSPARENT_TREE_CELL);
-        FXUtils.addClassTo(this, MAIN_FONT_13);
+        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
+        FXUtils.addClassTo(this, CSSClasses.MAIN_FONT_13);
 
         setConverter(stringConverter);
         setGraphic(imageView);

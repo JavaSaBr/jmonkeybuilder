@@ -29,11 +29,17 @@ public abstract class Config {
      */
     public static final boolean DEV_DEBUG;
 
+    /**
+     * Активация PBR.
+     */
+    public static final boolean ENABLE_PBR;
+
     static {
 
         final VarTable vars = new DocumentConfig(EditorUtil.getInputStream(CONFIG_RESOURCE_PATH)).parse();
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
+        ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", false);
 
         PROJECT_PATH = Util.getRootFolderFromClass(Editor.class).toString();
     }

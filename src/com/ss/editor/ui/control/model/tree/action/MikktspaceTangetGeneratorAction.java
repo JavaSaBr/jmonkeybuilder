@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.jme3.scene.Geometry;
+import com.ss.editor.Messages;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
@@ -18,7 +19,7 @@ public class MikktspaceTangetGeneratorAction extends AbstractNodeAction {
 
     @Override
     protected String getName() {
-        return "Generate tangets using Mikktspace";
+        return Messages.MODEL_NODE_TREE_ACTION_MIKKTSPACE_TANGENT_GENERATOR;
     }
 
     @Override

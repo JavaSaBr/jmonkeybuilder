@@ -35,14 +35,27 @@ public class ModelNodeTree extends TitledPane {
     private final Consumer<Object> selectionHandler;
 
     /**
+     * Слушатель изменений в структуре модели.
+     */
+    private final ModelTreeChangeListener changeListener;
+
+    /**
      * Дерево со структурой модели.
      */
     private TreeView<ModelNode<?>> treeView;
 
-    public ModelNodeTree(final Consumer<Object> selectionHandler) {
+    public ModelNodeTree(final Consumer<Object> selectionHandler, final ModelTreeChangeListener changeListener) {
         this.selectionHandler = selectionHandler;
+        this.changeListener = changeListener;
         setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
         createContent();
+    }
+
+    /**
+     * @return слушатель изменений в структуре модели.
+     */
+    private ModelTreeChangeListener getChangeListener() {
+        return changeListener;
     }
 
     /**
@@ -50,10 +63,7 @@ public class ModelNodeTree extends TitledPane {
      */
     private void createContent() {
 
-        setStyle("-fx-background-color: green;");
-
         final VBox container = new VBox();
-        container.setStyle("-fx-background-color: blue;");
 
         treeView = new TreeView<>();
         treeView.setCellFactory(param -> new ModelNodeTreeCell(this));
@@ -208,20 +218,25 @@ public class ModelNodeTree extends TitledPane {
 
         prevParentItem.getChildren().remove(nodeItem);
         newParentItem.getChildren().add(0, nodeItem);
+
+        final ModelTreeChangeListener changeListener = getChangeListener();
+        changeListener.notifyMoved(prevParent.getElement(), newParent.getElement(), modelNode.getElement());
     }
 
     /**
      * Уведомление и обработка изменения узла модели.
      */
     public void notifyChanged(final ModelNode<?> modelNode) {
-
+        final ModelTreeChangeListener changeListener = getChangeListener();
+        changeListener.notifyChanged(modelNode.getElement());
     }
 
     /**
      * Уведомление и обработка добавления нового узла.
      */
     public void notifyAdded(final ModelNode<?> parent, final ModelNode<?> modelNode) {
-
+        final ModelTreeChangeListener changeListener = getChangeListener();
+        changeListener.notifyAdded(parent.getElement(), modelNode.getElement());
     }
 
     /**
@@ -238,6 +253,9 @@ public class ModelNodeTree extends TitledPane {
         final TreeItem<ModelNode<?>> parent = treeItem.getParent();
         final ObservableList<TreeItem<ModelNode<?>>> children = parent.getChildren();
         children.remove(treeItem);
+
+        final ModelTreeChangeListener changeListener = getChangeListener();
+        changeListener.notifyRemoved(modelNode.getElement());
     }
 
     /**

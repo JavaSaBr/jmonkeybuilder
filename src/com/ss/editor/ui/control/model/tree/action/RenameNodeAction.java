@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
@@ -16,7 +17,7 @@ public class RenameNodeAction extends AbstractNodeAction {
 
     @Override
     protected String getName() {
-        return "Rename";
+        return Messages.MODEL_NODE_TREE_ACTION_RENAME;
     }
 
     @Override

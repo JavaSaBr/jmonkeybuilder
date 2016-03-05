@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.node;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.MikktspaceTangetGeneratorAction;
@@ -55,7 +56,7 @@ public class GeometryModelNode extends ModelNode<Geometry> {
     @Override
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
 
-        final Menu toolActions = new Menu("Tools");
+        final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
         toolActions.getItems().addAll(new MikktspaceTangetGeneratorAction(nodeTree, this));
 
         items.add(toolActions);

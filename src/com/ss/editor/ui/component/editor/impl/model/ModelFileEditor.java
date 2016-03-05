@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editor.impl.model;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
+import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
@@ -10,11 +11,16 @@ import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.ModelTreeChangeListener;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -62,9 +68,24 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
+     * Слушатель изменений в структуре модели.
+     */
+    private ModelTreeChangeListener changeTreeListener;
+
+    /**
+     * Обработчик изменений свойств.
+     */
+    private Runnable changeHandler;
+
+    /**
      * 3D часть редактора.
      */
     private final ModelEditorState editorState;
+
+    /**
+     * Текущая модель.
+     */
+    private Spatial currentModel;
 
     /**
      * Обработчик выделения.
@@ -137,6 +158,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         return modelNodeTree;
     }
 
+    /**
+     * @return редактор свойств модели.
+     */
+    private ModelPropertyEditor getModelPropertyEditor() {
+        return modelPropertyEditor;
+    }
+
     @Override
     public void openFile(final Path file) {
         super.openFile(file);
@@ -152,6 +180,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final ModelEditorState editorState = getEditorState();
         editorState.openModel(model);
 
+        setCurrentModel(model);
         setIgnoreListeners(true);
         try {
 
@@ -180,14 +209,42 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         this.ignoreListeners = ignoreListeners;
     }
 
+    /**
+     * @param currentModel текущая модель.
+     */
+    private void setCurrentModel(Spatial currentModel) {
+        this.currentModel = currentModel;
+    }
+
+    /**
+     * @return текущая модель.
+     */
+    private Spatial getCurrentModel() {
+        return currentModel;
+    }
+
     @Override
     public void doSave() {
 
+        final Path editFile = getEditFile();
+        final Spatial currentModel = getCurrentModel();
+
+        final BinaryExporter exporter = BinaryExporter.getInstance();
+
+        try (final OutputStream out = Files.newOutputStream(editFile)) {
+            exporter.save(currentModel, out);
+        } catch (final IOException e) {
+            LOGGER.warning(this, e);
+        }
+
+        setDirty(false);
     }
 
     @Override
     protected void createContent(final StackPane root) {
         this.selectionHandler = this::processSelect;
+        this.changeTreeListener = createTreeChangeListener();
+        this.changeHandler = () -> setDirty(true);
 
         root.setAlignment(TOP_RIGHT);
 
@@ -196,8 +253,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final VBox parameterContainer = new VBox();
         parameterContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_CONTAINER);
 
-        modelNodeTree = new ModelNodeTree(selectionHandler);
-        modelPropertyEditor = new ModelPropertyEditor();
+        modelNodeTree = new ModelNodeTree(selectionHandler, changeTreeListener);
+        modelPropertyEditor = new ModelPropertyEditor(changeHandler);
 
         final ObservableList<TitledPane> panes = accordion.getPanes();
         panes.add(modelNodeTree);
@@ -224,6 +281,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
         final ModelEditorState editorState = getEditorState();
         editorState.updateSelection(spatial);
+
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.buildFor(object);
     }
 
     @Override
@@ -336,5 +396,33 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     private void changeLight(final Boolean newValue) {
         final ModelEditorState editorState = getEditorState();
         editorState.updateLightEnabled(newValue);
+    }
+
+    /**
+     * @return создание слушателя изменений в дереве.
+     */
+    private ModelTreeChangeListener createTreeChangeListener() {
+        return new ModelTreeChangeListener() {
+
+            @Override
+            public void notifyMoved(final Object prevParent, final Object newParent, final Object node) {
+                setDirty(true);
+            }
+
+            @Override
+            public void notifyChanged(final Object node) {
+                setDirty(true);
+            }
+
+            @Override
+            public void notifyAdded(final Object parent, final Object node) {
+                setDirty(true);
+            }
+
+            @Override
+            public void notifyRemoved(final Object node) {
+                setDirty(true);
+            }
+        };
     }
 }
