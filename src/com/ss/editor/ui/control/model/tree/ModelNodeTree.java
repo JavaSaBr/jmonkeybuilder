@@ -67,7 +67,9 @@ public class ModelNodeTree extends TitledPane {
 
         treeView = new TreeView<>();
         treeView.setCellFactory(param -> new ModelNodeTreeCell(this));
+        treeView.setShowRoot(true);
         treeView.setEditable(true);
+        treeView.setFocusTraversable(true);
 
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
@@ -93,6 +95,13 @@ public class ModelNodeTree extends TitledPane {
      */
     private void processSelect(final TreeItem<ModelNode<?>> treeItem) {
 
+        final Consumer<Object> selectionHandler = getSelectionHandler();
+
+        if(treeItem == null) {
+            selectionHandler.accept(null);
+            return;
+        }
+
         final ModelNode<?> value = treeItem.getValue();
         final Object element = value == null? null : value.getElement();
 
@@ -108,7 +117,6 @@ public class ModelNodeTree extends TitledPane {
             toSelect = parentElement.getElement();
         }
 
-        final Consumer<Object> selectionHandler = getSelectionHandler();
         selectionHandler.accept(toSelect);
     }
 
@@ -271,5 +279,30 @@ public class ModelNodeTree extends TitledPane {
         }
 
         treeView.edit(treeItem);
+    }
+
+    /**
+     * Выделение указанного объекта в дереве.
+     */
+    public void select(final Object object) {
+
+        final TreeView<ModelNode<?>> treeView = getTreeView();
+        final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
+
+        final ModelNode<Object> modelNode = ModelNodeFactory.createFor(object);
+
+        if(modelNode == null) {
+            selectionModel.select(null);
+            return;
+        }
+
+        final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
+
+        if(treeItem == null) {
+            selectionModel.select(null);
+            return;
+        }
+
+        selectionModel.select(treeItem);
     }
 }

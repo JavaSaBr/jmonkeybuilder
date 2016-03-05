@@ -49,7 +49,7 @@
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
-    -fx-padding: -5;
+    -fx-padding: 0;
     -fx-effect: null;
 }
 
@@ -57,7 +57,7 @@
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-border-color: transparent;
-    -fx-padding: -5;
+    -fx-padding: 0;
     -fx-effect: null;
 }
 

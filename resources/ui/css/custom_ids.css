@@ -295,7 +295,6 @@
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background: transparent;
 }
 
 #ModelNodeTreeCellDragged {

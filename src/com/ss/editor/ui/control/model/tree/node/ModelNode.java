@@ -134,4 +134,20 @@ public abstract class ModelNode<T> implements UObject {
                 ", element=" + element +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ModelNode<?> modelNode = (ModelNode<?>) o;
+
+        return !(element != null ? !element.equals(modelNode.element) : modelNode.element != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return element != null ? element.hashCode() : 0;
+    }
 }

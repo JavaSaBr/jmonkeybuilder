@@ -69,7 +69,9 @@ public class ModelPropertyEditor extends TitledPane {
         final ObservableList<Node> children = container.getChildren();
         children.clear();
 
-        PropertyBuilder.buildFor(object, container, getChangeHandler());
+        if(object != null) {
+            PropertyBuilder.buildFor(object, container, getChangeHandler());
+        }
 
         setCurrentObject(object);
     }

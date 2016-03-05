@@ -128,7 +128,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     private boolean ignoreListeners;
 
     public ModelFileEditor() {
-        this.editorState = new ModelEditorState();
+        this.editorState = new ModelEditorState(this);
         addEditorState(editorState);
     }
 
@@ -170,7 +170,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         super.openFile(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
-        final ModelKey modelKey = new ModelKey(assetFile.toString());
+        final ModelKey modelKey = new ModelKey(EditorUtil.toClasspath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
@@ -212,7 +212,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     /**
      * @param currentModel текущая модель.
      */
-    private void setCurrentModel(Spatial currentModel) {
+    private void setCurrentModel(final Spatial currentModel) {
         this.currentModel = currentModel;
     }
 
@@ -238,6 +238,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         }
 
         setDirty(false);
+        notifyFileChanged();
     }
 
     @Override
@@ -271,7 +272,22 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     /**
      * Обработка выделения узла в дереве.
      */
-    private void processSelect(final Object object) {
+    public void notifySelected(final Object object) {
+
+        Spatial spatial = null;
+
+        if(object instanceof Spatial) {
+            spatial = (Spatial) object;
+        }
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.select(object);
+    }
+
+    /**
+     * Обработка выделения узла в дереве.
+     */
+    public void processSelect(final Object object) {
 
         Spatial spatial = null;
 
