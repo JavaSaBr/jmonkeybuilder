@@ -10,6 +10,7 @@ import java.awt.*;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -124,10 +125,10 @@ public class GraphicsDialog extends EditorDialog {
         createFXAAControl(root);
     }
 
-    private void createFXAAControl(VBox root) {
+    private void createFXAAControl(final VBox root) {
 
         final HBox fxaaContainer = new HBox();
-        fxaaContainer.setAlignment(CENTER_LEFT);
+        fxaaContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label fxaaLabel = new Label(Messages.GRAPHICS_DIALOG_FXAA + ":");
         fxaaLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
@@ -149,7 +150,7 @@ public class GraphicsDialog extends EditorDialog {
     private void createAnisotropyControl(final VBox root) {
 
         final HBox anisotropyContainer = new HBox();
-        anisotropyContainer.setAlignment(CENTER_LEFT);
+        anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label anisotropyLabel = new Label(Messages.GRAPHICS_DIALOG_ANISOTROPY + ":");
         anisotropyLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
@@ -176,7 +177,7 @@ public class GraphicsDialog extends EditorDialog {
     private void createScreenSizeControl(final VBox root) {
 
         final HBox screenSizeContainer = new HBox();
-        screenSizeContainer.setAlignment(CENTER_LEFT);
+        screenSizeContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label screenSizeLabel = new Label(Messages.GRAPHICS_DIALOG_SCREEN_SIZE + ":");
         screenSizeLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
@@ -298,14 +299,14 @@ public class GraphicsDialog extends EditorDialog {
         super.createActions(root);
 
         final HBox container = new HBox();
-        container.setId(ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
+        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         final Button okButton = new Button(Messages.GRAPHICS_DIALOG_BUTTON_OK);
-        okButton.setId(EDITOR_DIALOG_BUTTON_OK);
+        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
 
         final Button cancelButton = new Button(Messages.GRAPHICS_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(EDITOR_DIALOG_BUTTON_CANCEL);
+        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addToPane(okButton, container);

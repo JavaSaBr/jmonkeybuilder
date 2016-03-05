@@ -1,14 +1,12 @@
 package com.ss.editor.ui.control.material;
 
 import com.jme3.material.Material;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.css.CSSClasses.MATERIAL_PARAM_CONTROL;
-import static com.ss.editor.ui.css.CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME;
 
 /**
  * Базовая реализация контрола для изменения параметра материала.
@@ -55,7 +53,7 @@ public class MaterialParamControl extends HBox {
             setIgnoreListeners(false);
         }
 
-        FXUtils.addClassTo(this, MATERIAL_PARAM_CONTROL);
+        FXUtils.addClassTo(this, CSSClasses.MATERIAL_PARAM_CONTROL);
     }
 
     /**
@@ -85,9 +83,9 @@ public class MaterialParamControl extends HBox {
     protected void createComponents() {
 
         paramNameLabel = new Label(getParameterName() + ":");
-        paramNameLabel.setId(MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        paramNameLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
 
-        FXUtils.addClassTo(paramNameLabel, MAIN_FONT_13);
+        FXUtils.addClassTo(paramNameLabel, CSSClasses.MAIN_FONT_13);
         FXUtils.addToPane(paramNameLabel, this);
     }
 

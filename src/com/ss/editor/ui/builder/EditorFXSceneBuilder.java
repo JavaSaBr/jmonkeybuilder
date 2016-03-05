@@ -6,6 +6,7 @@ import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import com.ss.editor.ui.css.CSSFont;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
@@ -17,7 +18,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import rlib.ui.util.FXUtils;
 
-import static com.ss.editor.ui.css.CSSIds.MAIN_SPLIT_PANEL;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static rlib.ui.util.FXUtils.bindFixedSize;
@@ -89,7 +89,7 @@ public class EditorFXSceneBuilder {
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 
         final SplitPane splitContainer = new SplitPane(assetComponent, editorAreaComponent);
-        splitContainer.setId(MAIN_SPLIT_PANEL);
+        splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
         EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> splitContainer.setDividerPosition(0, 0.1)), 500);
 

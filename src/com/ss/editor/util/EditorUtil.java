@@ -1,5 +1,6 @@
 package com.ss.editor.util;
 
+import com.jme3.material.Material;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -17,6 +18,8 @@ import java.util.List;
 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import rlib.util.StringUtils;
+import rlib.util.array.Array;
 
 /**
  * Набор полезных утилит для разработки.
@@ -81,6 +84,31 @@ public abstract class EditorUtil {
         }
 
         return null;
+    }
+
+    public static void addGeometryWithMaterial(final Spatial spatial, final Array<Geometry> container, final String assetPath) {
+
+        if(spatial instanceof Geometry) {
+
+            final Geometry geometry = (Geometry) spatial;
+            final Material material = geometry.getMaterial();
+            final String assetName = material == null? null : material.getAssetName();
+
+            if(StringUtils.equals(assetName, assetPath)) {
+                container.add(geometry);
+            }
+
+            return;
+
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            addGeometryWithMaterial(children, container, assetPath);
+        }
     }
 
     /**

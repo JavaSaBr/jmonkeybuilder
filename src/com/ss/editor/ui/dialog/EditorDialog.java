@@ -1,8 +1,10 @@
 package com.ss.editor.ui.dialog;
 
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.css.CSSIds;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -15,12 +17,7 @@ import rlib.ui.window.popup.dialog.AbstractPopupDialog;
 
 import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BACKGROUND;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_HEADER;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_HEADER_BUTTON_CLOSE;
 import static javafx.geometry.Pos.BOTTOM_LEFT;
-import static javafx.geometry.Pos.CENTER_LEFT;
-import static javafx.scene.Cursor.HAND;
 import static javafx.scene.text.TextAlignment.LEFT;
 
 /**
@@ -36,7 +33,7 @@ public class EditorDialog extends AbstractPopupDialog {
     @Override
     protected void createControls(final VBox root) {
         super.createControls(root);
-        root.setId(EDITOR_DIALOG_BACKGROUND);
+        root.setId(CSSIds.EDITOR_DIALOG_BACKGROUND);
         createHeader(root);
         createContent(root);
         createActions(root);
@@ -48,10 +45,10 @@ public class EditorDialog extends AbstractPopupDialog {
     protected void createHeader(final VBox root) {
 
         final StackPane header = new StackPane();
-        header.setId(EDITOR_DIALOG_HEADER);
+        header.setId(CSSIds.EDITOR_DIALOG_HEADER);
 
         final HBox titleContainer = new HBox();
-        titleContainer.setAlignment(CENTER_LEFT);
+        titleContainer.setAlignment(Pos.CENTER_LEFT);
         titleContainer.setPickOnBounds(false);
 
         final Label titleLabel = new Label(getTitleText());
@@ -59,10 +56,9 @@ public class EditorDialog extends AbstractPopupDialog {
         titleLabel.setAlignment(BOTTOM_LEFT);
 
         final Button closeButton = new Button();
-        closeButton.setId(EDITOR_DIALOG_HEADER_BUTTON_CLOSE);
+        closeButton.setId(CSSIds.EDITOR_DIALOG_HEADER_BUTTON_CLOSE);
         closeButton.setGraphic(new ImageView(Icons.CLOSE_18));
         closeButton.setOnAction(event -> hide());
-        closeButton.setCursor(HAND);
 
         FXUtils.addClassTo(titleLabel, MAIN_FONT_13);
         FXUtils.addClassTo(closeButton, TOOLBAR_BUTTON);
@@ -83,15 +79,12 @@ public class EditorDialog extends AbstractPopupDialog {
      * Создание основого содержимого диалога.
      */
     protected void createContent(final VBox root) {
-
     }
 
     /**
      * Создание кнопок диалога.
      */
     protected void createActions(final VBox root) {
-
-
     }
 
     /**

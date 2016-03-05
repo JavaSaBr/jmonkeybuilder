@@ -1,7 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.post.filter;
 
 import com.jme3.material.Material;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -9,13 +8,12 @@ import com.ss.editor.ui.css.CSSIds;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
-
-import static javafx.geometry.Pos.CENTER_LEFT;
 
 /**
  * Реализация ячейки для списка материалов.
@@ -23,9 +21,7 @@ import static javafx.geometry.Pos.CENTER_LEFT;
  * @author Ronn
  */
 public class MaterialListCell extends ListCell<Material> {
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
+    
     /**
      * Ссылка на редактор.
      */
@@ -39,7 +35,7 @@ public class MaterialListCell extends ListCell<Material> {
     public MaterialListCell(final PostFilterEditor editor) {
         this.editor = editor;
 
-        setAlignment(CENTER_LEFT);
+        setAlignment(Pos.CENTER_LEFT);
 
         removeButton = new Button();
         removeButton.setId(CSSIds.POST_FILTER_EDITOR_CELL_REMOVE_BUTTON);
@@ -76,7 +72,8 @@ public class MaterialListCell extends ListCell<Material> {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getEditor().remove(item));
+        final PostFilterEditor editor = getEditor();
+        editor.remove(item);
     }
 
     @Override

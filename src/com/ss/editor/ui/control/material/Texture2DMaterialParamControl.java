@@ -7,6 +7,7 @@ import com.jme3.material.Material;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Editor;
+import com.ss.editor.FileExtensions;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.Icons;
@@ -34,7 +35,6 @@ import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
-import static com.ss.editor.ui.css.CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW;
 
 
 /**
@@ -49,10 +49,11 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        TEXTURE_EXTENSIONS.add("png");
-        TEXTURE_EXTENSIONS.add("jpg");
-        TEXTURE_EXTENSIONS.add("tga");
-        TEXTURE_EXTENSIONS.add("dds");
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_PNG);
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_JPG);
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_JPEG);
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_TGA);
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_DDS);
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
@@ -90,7 +91,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         textureTooltip = new Tooltip();
 
         final VBox previewContainer = new VBox();
-        previewContainer.setId(TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW);
+        previewContainer.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW);
 
         texturePreview = new ImageView();
         texturePreview.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
@@ -163,7 +164,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * Процесс изменения свойтсва текстуры.
      */
-    private void processChangeRepeatImpl(Boolean newValue) {
+    private void processChangeRepeatImpl(final Boolean newValue) {
 
         final Material material = getMaterial();
         final MatParamTexture textureParam = material.getTextureParam(getParameterName());
@@ -243,11 +244,12 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Path assetFile = EditorUtil.getAssetFile(path);
+        final String assetPath = EditorUtil.toClasspath(assetFile);
 
         final CheckBox flipButton = getFlipButton();
         final CheckBox repeatButton = getRepeatButton();
 
-        final TextureKey key = new TextureKey(assetFile.toString());
+        final TextureKey key = new TextureKey(assetPath);
         key.setFlipY(flipButton.isSelected());
 
         final Texture texture = assetManager.loadTexture(key);
@@ -262,8 +264,11 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         EXECUTOR_MANAGER.addFXTask(() -> {
             changed();
             setIgnoreListeners(true);
-            reload();
-            setIgnoreListeners(false);
+            try {
+                reload();
+            } finally {
+                setIgnoreListeners(false);
+            }
         });
     }
 
@@ -285,8 +290,11 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         EXECUTOR_MANAGER.addFXTask(() -> {
             changed();
             setIgnoreListeners(true);
-            reload();
-            setIgnoreListeners(false);
+            try {
+                reload();
+            } finally {
+                setIgnoreListeners(false);
+            }
         });
     }
 

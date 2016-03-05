@@ -164,7 +164,10 @@ public class UIUtils {
         }
     }
 
-    public static <T> TreeItem<T> findItem(TreeView<T> treeView, long objectId) {
+    /**
+     * Поиск элемента дерево по уникальному ид.
+     */
+    public static <T> TreeItem<T> findItem(final TreeView<T> treeView, final long objectId) {
 
         final TreeItem<T> root = treeView.getRoot();
         final T value = root.getValue();
@@ -190,7 +193,10 @@ public class UIUtils {
         return null;
     }
 
-    public static <T> TreeItem<T> findItem(TreeItem<T> root, long objectId) {
+    /**
+     * Поиск элемента.
+     */
+    public static <T> TreeItem<T> findItem(final TreeItem<T> root, final long objectId) {
 
         final T value = root.getValue();
 
@@ -215,7 +221,7 @@ public class UIUtils {
         return null;
     }
 
-    public static <T> TreeItem<T> findItemForValue(TreeView<T> treeView, Object object) {
+    public static <T> TreeItem<T> findItemForValue(final TreeView<T> treeView, final Object object) {
 
         final TreeItem<T> root = treeView.getRoot();
 
@@ -240,7 +246,7 @@ public class UIUtils {
         return null;
     }
 
-    public static <T> TreeItem<T> findItemForValue(TreeItem<T> root, Object object) {
+    public static <T> TreeItem<T> findItemForValue(final TreeItem<T> root, final Object object) {
 
         if (Objects.equals(root.getValue(), object)) {
             return root;

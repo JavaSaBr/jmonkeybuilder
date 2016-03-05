@@ -136,7 +136,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Уведомление о внесении изменений.
      */
     private void change() {
-        EXECUTOR_MANAGER.addEditorThreadTask(getChangeHandler());
+        EXECUTOR_MANAGER.addFXTask(getChangeHandler());
     }
 
     /**

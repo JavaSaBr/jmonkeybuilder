@@ -4,6 +4,7 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Spinner;
@@ -11,8 +12,6 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-
-import static com.ss.editor.ui.css.CSSIds.MATERIAL_PARAM_CONTROL_SPINNER;
 
 /**
  * Реализация контрола для установки дробных значения.
@@ -41,18 +40,16 @@ public class FloatMaterialParamControl extends MaterialParamControl {
         final SpinnerValueFactory<Double> valueFactory = new DoubleSpinnerValueFactory(-500, 500, 0, 0.01);
 
         spinner = new Spinner<>();
-        spinner.setId(MATERIAL_PARAM_CONTROL_SPINNER);
+        spinner.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
         spinner.setValueFactory(valueFactory);
         spinner.setEditable(true);
         spinner.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
         FXUtils.addToPane(spinner, this);
+        FXUtils.addClassTo(spinner, CSSClasses.MAIN_FONT_13);
+        FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(90));
 
         HBox.setMargin(spinner, ELEMENT_OFFSET);
-
-        FXUtils.addClassTo(spinner, CSSClasses.MAIN_FONT_13);
-
-        FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(90));
     }
 
     /**
@@ -83,8 +80,11 @@ public class FloatMaterialParamControl extends MaterialParamControl {
         EXECUTOR_MANAGER.addFXTask(() -> {
             changed();
             setIgnoreListeners(true);
-            reload();
-            setIgnoreListeners(false);
+            try {
+                reload();
+            } finally {
+                setIgnoreListeners(false);
+            }
         });
     }
 

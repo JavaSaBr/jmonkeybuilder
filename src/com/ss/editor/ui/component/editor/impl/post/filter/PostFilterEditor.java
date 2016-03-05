@@ -254,6 +254,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
             LOGGER.warning(this, e);
         }
 
+        setOriginalContent(newContent);
         setDirty(false);
         notifyFileChanged();
     }

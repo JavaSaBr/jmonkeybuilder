@@ -125,6 +125,12 @@ public class FileIconManager {
         String url = toClasspath(iconPath);
 
         if (!EditorUtil.checkExists(url)) {
+            contentType = EXTENSION_TO_CONTENT_TYPE.get(FileUtils.getExtension(path));
+            iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
+            url = toClasspath(iconPath);
+        }
+
+        if (!EditorUtil.checkExists(url)) {
             LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
             url = toClasspath(iconPath);

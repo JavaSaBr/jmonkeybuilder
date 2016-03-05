@@ -4,13 +4,12 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-
-import static com.ss.editor.ui.css.CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX;
 
 /**
  * Реализация контрола для установки флага.
@@ -37,15 +36,14 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
         super.createComponents();
 
         checkBox = new CheckBox();
-        checkBox.setId(MATERIAL_PARAM_CONTROL_CHECKBOX);
+        checkBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
         FXUtils.addToPane(checkBox, this);
-
-        HBox.setMargin(checkBox, ELEMENT_OFFSET);
-
         FXUtils.addClassTo(checkBox, CSSClasses.MAIN_FONT_13);
         FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(30));
+
+        HBox.setMargin(checkBox, ELEMENT_OFFSET);
     }
 
     /**
@@ -71,8 +69,11 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
         EXECUTOR_MANAGER.addFXTask(() -> {
             changed();
             setIgnoreListeners(true);
-            reload();
-            setIgnoreListeners(false);
+            try {
+                reload();
+            } finally {
+                setIgnoreListeners(false);
+            }
         });
     }
 

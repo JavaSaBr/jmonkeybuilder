@@ -3,6 +3,8 @@ package com.ss.editor.ui.component.editor.impl.model;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.material.Material;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
@@ -16,6 +18,7 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.ModelTreeChangeListener;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
 
 import java.io.IOException;
@@ -25,6 +28,8 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ComboBox;
@@ -36,6 +41,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -66,6 +72,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         FAST_SKY_LIST.add("graphics/textures/sky/path.hdr");
         FAST_SKY_LIST.add("graphics/textures/sky/studio.hdr");
     }
+
+    /**
+     * Слушатель изменений файлов.
+     */
+    private final EventHandler<Event> fileChangedHandler;
 
     /**
      * Слушатель изменений в структуре модели.
@@ -129,7 +140,52 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
     public ModelFileEditor() {
         this.editorState = new ModelEditorState(this);
+        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
+    }
+
+    /**
+     * Обработка изменений файла.
+     */
+    private void processChangedFile(final FileChangedEvent event) {
+
+        final Path file = event.getFile();
+        final String extension = FileUtils.getExtension(file);
+
+        if(!extension.endsWith(FileExtensions.JME_MATERIAL)) {
+            return;
+        }
+
+        final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = EditorUtil.toClasspath(assetFile);
+
+        final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
+
+        final Spatial currentModel = getCurrentModel();
+
+        EditorUtil.addGeometryWithMaterial(currentModel, geometries, assetPath);
+
+        if(geometries.isEmpty()) {
+            return;
+        }
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
+        final Material material = assetManager.loadMaterial(assetPath);
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+            geometries.forEach(geometry -> {
+                geometry.setMaterial(material);
+            });
+        });
+    }
+
+    /**
+     * @return слушатель изменений файлов.
+     */
+    private EventHandler<Event> getFileChangedHandler() {
+        return fileChangedHandler;
     }
 
     @Override
@@ -193,6 +249,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         } finally {
             setIgnoreListeners(false);
         }
+
+        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    }
+
+    @Override
+    public void notifyClosed() {
+        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     /**

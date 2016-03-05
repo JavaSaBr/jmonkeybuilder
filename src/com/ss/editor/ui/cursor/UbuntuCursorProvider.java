@@ -54,18 +54,10 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
     private final ObjectDictionary<CursorType, JmeCursor> cache = DictionaryFactory.newObjectDictionary();
 
     private final AssetManager assetManager;
-    private final InputManager inputManager;
-    private final Application app;
 
     public UbuntuCursorProvider(final Application app, final AssetManager assetManager, final InputManager inputManager) {
         this.assetManager = assetManager;
-        this.inputManager = inputManager;
-        this.app = app;
         assetManager.registerLocator("", ClasspathLocator.class);
-    }
-
-    public Application getApp() {
-        return app;
     }
 
     public AssetManager getAssetManager() {
@@ -77,10 +69,6 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
      */
     private ObjectDictionary<CursorType, JmeCursor> getCache() {
         return cache;
-    }
-
-    public InputManager getInputManager() {
-        return inputManager;
     }
 
     @Override

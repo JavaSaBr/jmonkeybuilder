@@ -6,6 +6,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
 
 import java.awt.*;
@@ -27,10 +28,6 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER;
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_CANCEL;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_OK;
 
 /**
  * Реализация диалога для выбора объекта из Asset.
@@ -94,7 +91,7 @@ public class AssetEditorDialog extends EditorDialog {
         resourceTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelected(newValue));
 
         final VBox previewContainer = new VBox();
-        previewContainer.setId(ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
+        previewContainer.setId(CSSIds.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         imageView = new ImageView();
         imageView.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
@@ -156,14 +153,14 @@ public class AssetEditorDialog extends EditorDialog {
     protected void createActions(final VBox root) {
 
         final HBox container = new HBox();
-        container.setId(ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
+        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         final Button okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
-        okButton.setId(EDITOR_DIALOG_BUTTON_OK);
+        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processSelect());
 
         final Button cancelButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(EDITOR_DIALOG_BUTTON_CANCEL);
+        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addToPane(okButton, container);

@@ -57,12 +57,12 @@ public class ColorMaterialParamControl extends MaterialParamControl {
 
         FXUtils.addToPane(colorPicker, this);
         FXUtils.addToPane(removeButton, this);
+        FXUtils.addClassTo(colorPicker, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
 
         HBox.setMargin(colorPicker, ELEMENT_OFFSET);
         HBox.setMargin(removeButton, ELEMENT_OFFSET);
 
-        FXUtils.addClassTo(colorPicker, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
     }
 
     /**
@@ -93,8 +93,11 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         EXECUTOR_MANAGER.addFXTask(() -> {
             changed();
             setIgnoreListeners(true);
-            reload();
-            setIgnoreListeners(false);
+            try {
+                reload();
+            } finally {
+                setIgnoreListeners(false);
+            }
         });
     }
 
@@ -116,8 +119,11 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         EXECUTOR_MANAGER.addFXTask(() -> {
             changed();
             setIgnoreListeners(true);
-            reload();
-            setIgnoreListeners(false);
+            try {
+                reload();
+            } finally {
+                setIgnoreListeners(false);
+            }
         });
     }
 

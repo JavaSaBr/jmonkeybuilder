@@ -17,7 +17,7 @@ public abstract class Config {
     public static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.2.0";
+    public static final String VERSION = "v.0.3.0";
 
     /**
      * Путь к папке с программой.
@@ -39,7 +39,7 @@ public abstract class Config {
         final VarTable vars = new DocumentConfig(EditorUtil.getInputStream(CONFIG_RESOURCE_PATH)).parse();
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
-        ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", false);
+        ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
 
         PROJECT_PATH = Util.getRootFolderFromClass(Editor.class).toString();
     }
