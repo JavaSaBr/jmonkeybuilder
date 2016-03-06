@@ -10,8 +10,10 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.CutFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileByExternalEditorAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.PasteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.component.asset.tree.resource.FileElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -150,6 +152,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setCellFactory(CELL_FACTORY);
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
+        setContextMenu(new ContextMenu());
     }
 
     /**
@@ -199,8 +202,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        final ContextMenu contextMenu = new ContextMenu();
+        final ContextMenu contextMenu = getContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
+        items.clear();
 
         final Path file = element.getFile();
 
@@ -209,9 +213,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (element instanceof FileElement) {
 
             items.add(new OpenFileAction(element));
+            items.add(new OpenFileByExternalEditorAction(element));
             items.add(new OpenWithFileAction(element));
-            items.add(new CopyFileAction(element));
-            items.add(new CutFileAction(element));
 
             final Array<FileConverterDescription> descriptions = FILE_CONVERTER_REGISTRY.getDescriptions(file);
 
@@ -225,6 +228,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
 
         if (!currentAsset.equals(file)) {
+            items.add(new CopyFileAction(element));
+            items.add(new CutFileAction(element));
+            items.add(new RenameFileAction(element));
             items.add(new DeleteFileAction(element));
         }
 
@@ -497,8 +503,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
             return;
         }
 
+        final TreeItem<ResourceElement> newItem = new TreeItem<>(ResourceElementFactory.createFor(file));
+
+        fill(newItem);
+
         final ObservableList<TreeItem<ResourceElement>> children = folderItem.getChildren();
-        children.add(new TreeItem<>(ResourceElementFactory.createFor(file)));
+        children.add(newItem);
 
         FXCollections.sort(children, ITEM_COMPARATOR);
     }
@@ -526,6 +536,88 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Уведомление о перемещении файла.
+     *
+     * @param prevFile старая версия файла.
+     * @param newFile  новая версия файла.
+     */
+    public void notifyMoved(final Path prevFile, final Path newFile) {
+
+        final ResourceElement prevElement = ResourceElementFactory.createFor(prevFile);
+        final TreeItem<ResourceElement> prevItem = UIUtils.findItemForValue(getRoot(), prevElement);
+
+        if (prevItem == null) {
+            return;
+        }
+
+        final ResourceElement newParentElement = ResourceElementFactory.createFor(newFile.getParent());
+        final TreeItem<ResourceElement> newParentItem = UIUtils.findItemForValue(getRoot(), newParentElement);
+
+        if (newParentItem == null) {
+            return;
+        }
+
+        final TreeItem<ResourceElement> prevParentItem = prevItem.getParent();
+        final ObservableList<TreeItem<ResourceElement>> prevParentChildren = prevParentItem.getChildren();
+        prevParentChildren.remove(prevItem);
+
+        prevItem.setValue(ResourceElementFactory.createFor(newFile));
+
+        final Array<TreeItem<ResourceElement>> children = ArrayFactory.newArray(TreeItem.class);
+
+        UIUtils.getAllItems(children, prevItem);
+
+        children.fastRemove(prevItem);
+        children.forEach(child -> {
+
+            final ResourceElement resourceElement = child.getValue();
+            final Path file = resourceElement.getFile();
+            final Path relativeFile = file.subpath(prevFile.getNameCount(), file.getNameCount());
+            final Path resultFile = newFile.resolve(relativeFile);
+
+            child.setValue(ResourceElementFactory.createFor(resultFile));
+        });
+
+        final ObservableList<TreeItem<ResourceElement>> newParentChildren = newParentItem.getChildren();
+        newParentChildren.add(prevItem);
+
+        FXCollections.sort(newParentChildren, ITEM_COMPARATOR);
+    }
+
+    /**
+     * Уведомление о переименовании файла.
+     *
+     * @param prevFile старая версия файла.
+     * @param newFile  новая версия файла.
+     */
+    public void notifyRenamed(final Path prevFile, final Path newFile) {
+
+        final ResourceElement prevElement = ResourceElementFactory.createFor(prevFile);
+        final TreeItem<ResourceElement> prevItem = UIUtils.findItemForValue(getRoot(), prevElement);
+
+        if (prevItem == null) {
+            return;
+        }
+
+        prevItem.setValue(ResourceElementFactory.createFor(newFile));
+
+        final Array<TreeItem<ResourceElement>> children = ArrayFactory.newArray(TreeItem.class);
+
+        UIUtils.getAllItems(children, prevItem);
+
+        children.fastRemove(prevItem);
+        children.forEach(child -> {
+
+            final ResourceElement resourceElement = child.getValue();
+            final Path file = resourceElement.getFile();
+            final Path relativeFile = file.subpath(prevFile.getNameCount(), file.getNameCount());
+            final Path resultFile = newFile.resolve(relativeFile);
+
+            child.setValue(ResourceElementFactory.createFor(resultFile));
+        });
+    }
+
+    /**
      * Обработка нажатий на хоткеи.
      */
     private void processKey(final KeyEvent event) {
@@ -549,13 +641,13 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final KeyCode keyCode = event.getCode();
 
-        if (keyCode == KeyCode.C && item instanceof FileElement) {
+        if (keyCode == KeyCode.C) {
 
             final CopyFileAction action = new CopyFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
 
-        } else if (keyCode == KeyCode.X && item instanceof FileElement) {
+        } else if (keyCode == KeyCode.X) {
 
             final CutFileAction action = new CutFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();

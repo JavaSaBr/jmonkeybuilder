@@ -1,9 +1,10 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
-import com.ss.editor.ui.event.impl.DeletedFileEvent;
+import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.util.EditorUtil;
 
 import java.io.File;
@@ -18,8 +19,8 @@ import javafx.scene.input.DataFormat;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.FileUtils;
-
-import static com.ss.editor.Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * Реализация действия по вставке файла.
@@ -39,14 +40,14 @@ public class PasteFileAction extends MenuItem {
 
     public PasteFileAction(final ResourceElement element) {
         this.element = element;
-        setText(ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE);
-        setOnAction(event -> processPaste());
+        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE);
+        setOnAction(event -> processCopy());
     }
 
     /**
      * Процесс вставки файла.
      */
-    private void processPaste() {
+    private void processCopy() {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
 
@@ -63,66 +64,120 @@ public class PasteFileAction extends MenuItem {
         final Path currentFile = element.getFile();
         final boolean isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
 
-        files.forEach(file -> pasteFile(clipboard, currentFile, file.toPath(), isCut));
+        if (isCut) {
+            files.forEach(file -> moveFile(clipboard, currentFile, file.toPath()));
+        } else {
+            files.forEach(file -> copyFile(clipboard, currentFile, file.toPath()));
+        }
     }
 
-    private void pasteFile(Clipboard clipboard, Path currentFile, Path file, boolean isCut) {
-
+    private void copyFile(final Clipboard clipboard, final Path currentFile, final Path file) {
         if (Files.isDirectory(currentFile)) {
+            processCopy(clipboard, currentFile, file);
+        } else {
+            processCopy(clipboard, currentFile.getParent(), file);
+        }
+    }
 
-            final String fileName = FileUtils.getFirstFreeName(currentFile, file);
-            final Path newFile = currentFile.resolve(fileName);
+    private void moveFile(final Clipboard clipboard, final Path currentFile, final Path file) {
+        if (Files.isDirectory(currentFile)) {
+            processMove(clipboard, currentFile, file);
+        } else {
+            processMove(clipboard, currentFile.getParent(), file);
+        }
+    }
 
-            try {
-                Files.copy(file, newFile);
-            } catch (IOException e) {
-                LOGGER.warning(e);
-            }
+    /**
+     * Процесс перемещения файлов.
+     */
+    private void processMove(final Clipboard clipboard, final Path targetFolder, final Path file) {
 
-            final CreatedFileEvent createdFileEvent = new CreatedFileEvent();
-            createdFileEvent.setFile(newFile);
+        final Path newFile = targetFolder.resolve(file.getFileName());
 
-            FX_EVENT_MANAGER.notify(createdFileEvent);
-
-            if (isCut) {
-
-                FileUtils.delete(file);
-
-                final DeletedFileEvent deletedFileEvent = new DeletedFileEvent();
-                deletedFileEvent.setFile(file);
-
-                FX_EVENT_MANAGER.notify(deletedFileEvent);
-            }
-
-            clipboard.clear();
+        try {
+            Files.move(file, newFile);
+        } catch (IOException e) {
+            EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        final Path parent = currentFile.getParent();
-        final String fileName = FileUtils.getFirstFreeName(parent, file);
-        final Path newFile = parent.resolve(fileName);
+        final MovedFileEvent event = new MovedFileEvent();
+        event.setPrevFile(file);
+        event.setNewFile(newFile);
+
+        FX_EVENT_MANAGER.notify(event);
+    }
+
+    /**
+     * Процесс копирования файлов.
+     */
+    private void processCopy(final Clipboard clipboard, final Path targetFolder, final Path file) {
+
+        final Array<Path> toCopy = ArrayFactory.newArray(Path.class);
+        final Array<Path> copied = ArrayFactory.newArray(Path.class);
+
+        if (Files.isDirectory(file)) {
+            toCopy.addAll(FileUtils.getFiles(file, true));
+            toCopy.sort(FileUtils.FILE_PATH_LENGTH_COMPARATOR);
+            toCopy.slowRemove(file);
+        }
+
+        final String freeName = FileUtils.getFirstFreeName(targetFolder, file);
+        final Path newFile = targetFolder.resolve(freeName);
 
         try {
-            Files.copy(file, newFile);
-        } catch (IOException e) {
-            LOGGER.warning(e);
+            processCopy(file, toCopy, copied, newFile);
+        } catch (final IOException e) {
+            EditorUtil.handleException(LOGGER, this, e);
         }
 
-        final CreatedFileEvent createdFileEvent = new CreatedFileEvent();
-        createdFileEvent.setFile(newFile);
+        copied.forEach(path -> {
 
-        FX_EVENT_MANAGER.notify(createdFileEvent);
+            final CreatedFileEvent createdFileEvent = new CreatedFileEvent();
+            createdFileEvent.setFile(path);
 
-        if (isCut) {
-
-            FileUtils.delete(file);
-
-            final DeletedFileEvent deletedFileEvent = new DeletedFileEvent();
-            deletedFileEvent.setFile(file);
-
-            FX_EVENT_MANAGER.notify(deletedFileEvent);
-        }
+            FX_EVENT_MANAGER.notify(createdFileEvent);
+        });
 
         clipboard.clear();
+    }
+
+    /**
+     * Процесс копирования файлов.
+     */
+    private void processCopy(final Path file, final Array<Path> toCopy, final Array<Path> copied, final Path newFile) throws IOException {
+
+        Files.copy(file, newFile);
+
+        copied.add(newFile);
+        toCopy.forEach(path -> {
+
+            final Path relativeFile = file.relativize(path);
+            final Path targetFile = newFile.resolve(relativeFile);
+
+            try {
+                Files.copy(path, targetFile);
+            } catch (final IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            boolean needAddToCopied = true;
+
+            for (final Path copiedFile : copied) {
+
+                if (!Files.isDirectory(copiedFile)) {
+                    continue;
+                }
+
+                if (targetFile.startsWith(copiedFile)) {
+                    needAddToCopied = false;
+                    break;
+                }
+            }
+
+            if (needAddToCopied) {
+                copied.add(targetFile);
+            }
+        });
     }
 }

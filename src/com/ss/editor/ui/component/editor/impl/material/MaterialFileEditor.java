@@ -258,7 +258,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         super.openFile(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
-        final String assetPath = EditorUtil.toClasspath(assetFile);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();

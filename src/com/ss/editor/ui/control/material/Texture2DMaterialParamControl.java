@@ -244,7 +244,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Path assetFile = EditorUtil.getAssetFile(path);
-        final String assetPath = EditorUtil.toClasspath(assetFile);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final CheckBox flipButton = getFlipButton();
         final CheckBox repeatButton = getRepeatButton();

@@ -38,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.locks.StampedLock;
+import java.util.logging.Level;
 
 import javafx.scene.Parent;
 import rlib.concurrent.atomic.AtomicInteger;
@@ -110,10 +111,12 @@ public class Editor extends SimpleApplication {
     protected static void configureLogger() {
 
         // выключаем стандартный логгер
-        // java.util.logging.Logger.getLogger("").setLevel(Level.SEVERE);
+        if (!Config.DEV_DEBUG) {
+            java.util.logging.Logger.getLogger("").setLevel(Level.SEVERE);
+        }
 
         // настраиваем логгер
-        LoggerLevel.DEBUG.setEnabled(false);
+        LoggerLevel.DEBUG.setEnabled(Config.DEV_DEBUG);
         LoggerLevel.INFO.setEnabled(true);
         LoggerLevel.ERROR.setEnabled(true);
         LoggerLevel.WARNING.setEnabled(true);

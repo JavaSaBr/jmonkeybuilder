@@ -4,6 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.PostFilterViewFile;
 import com.ss.editor.serializer.PostFilterViewSerializer;
@@ -50,7 +51,6 @@ import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
-import static com.ss.editor.Messages.POST_FILTER_EDITOR_MATERIAL_LABEL;
 import static com.ss.editor.Messages.POST_FILTER_EDITOR_NAME;
 
 /**
@@ -210,7 +210,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         }
 
         final Path assetFile = EditorUtil.getAssetFile(file);
-        final String assetPath = EditorUtil.toClasspath(assetFile);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final PostFilterViewFile currentFile = getCurrentFile();
         final List<String> materials = currentFile.getMaterials();
@@ -286,7 +286,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         materialListContainer.setId(CSSIds.POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER);
 
         final Label titleLabel = new Label();
-        titleLabel.setText(POST_FILTER_EDITOR_MATERIAL_LABEL + ":");
+        titleLabel.setText(Messages.POST_FILTER_EDITOR_MATERIAL_LABEL + ":");
         titleLabel.setAlignment(Pos.CENTER_LEFT);
 
         materialsView = new ListView<>();
@@ -363,7 +363,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
      */
     private void addRelativeMaterial(final Path relativize) {
 
-        final String assetPath = EditorUtil.toClasspath(relativize);
+        final String assetPath = EditorUtil.toAssetPath(relativize);
         final MaterialKey materialKey = new MaterialKey(assetPath);
 
         if (editorState.hasFilter(materialKey)) {

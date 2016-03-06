@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
@@ -8,8 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import rlib.util.array.Array;
-
-import static com.ss.editor.Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
 
 /**
  * Реализация действия по созданию файла.
@@ -27,7 +26,7 @@ public class NewFileAction extends Menu {
 
     public NewFileAction(final ResourceElement element) {
         this.element = element;
-        setText(ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE);
+        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE);
 
         final ObservableList<MenuItem> items = getItems();
 

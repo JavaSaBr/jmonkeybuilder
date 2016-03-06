@@ -374,3 +374,19 @@
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
+
+#RenameDialogLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 120;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#RenameDialogTextField {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}

@@ -71,4 +71,6 @@ public interface CSSIds {
     public static final String MODEL_PARAM_CONTROL_MATERIAL_LABEL = "ModelParamControlMaterialLabel";
     public static final String MODEL_PARAM_CONTROL_MATERIAL_BUTTON = "ModelParamControlMaterialButton";
 
+    public static final String RENAME_DIALOG_LABEL = "RenameDialogLabel";
+    public static final String RENAME_DIALOG_TEXT_FIELD = "RenameDialogTextField";
 }

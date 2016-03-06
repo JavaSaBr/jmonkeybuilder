@@ -21,7 +21,7 @@ import rlib.util.StringUtils;
  * @author Ronn
  */
 public class MaterialListCell extends ListCell<Material> {
-    
+
     /**
      * Ссылка на редактор.
      */

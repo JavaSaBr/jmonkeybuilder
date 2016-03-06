@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
@@ -9,8 +10,6 @@ import java.nio.file.Path;
 
 import javafx.scene.control.MenuItem;
 import rlib.util.FileUtils;
-
-import static com.ss.editor.Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
 
 /**
  * Реализация действия по удалении файла.
@@ -28,7 +27,7 @@ public class DeleteFileAction extends MenuItem {
 
     public DeleteFileAction(final ResourceElement element) {
         this.element = element;
-        setText(ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
+        setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
         setOnAction(event -> processDelete());
     }
 

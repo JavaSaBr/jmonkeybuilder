@@ -8,6 +8,8 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
+import com.ss.editor.ui.event.impl.MovedFileEvent;
+import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 
 import java.nio.file.Path;
@@ -43,6 +45,32 @@ public class AssetComponent extends VBox implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
         FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
+    }
+
+    /**
+     * Обработка перемещения файла.
+     */
+    private void processEvent(final MovedFileEvent event) {
+
+        final Path newFile = event.getNewFile();
+        final Path prevFile = event.getPrevFile();
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.notifyMoved(prevFile, newFile);
+    }
+
+    /**
+     * Обработка переименования файла.
+     */
+    private void processEvent(final RenamedFileEvent event) {
+
+        final Path newFile = event.getNewFile();
+        final Path prevFile = event.getPrevFile();
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.notifyRenamed(prevFile, newFile);
     }
 
     /**

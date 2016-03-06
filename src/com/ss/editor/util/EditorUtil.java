@@ -8,16 +8,26 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ExecutorManager;
+
+import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javafx.scene.control.Alert;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
@@ -27,6 +37,8 @@ import rlib.util.array.Array;
  * @author Ronn
  */
 public abstract class EditorUtil {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
 
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
@@ -60,7 +72,7 @@ public abstract class EditorUtil {
     }
 
     /**
-     * Поимк геометрии в этом узле.
+     * Поиск геометрии в этом узле.
      */
     public static Geometry findGeometry(final Spatial spatial) {
 
@@ -86,15 +98,22 @@ public abstract class EditorUtil {
         return null;
     }
 
+    /**
+     * Сбор всей геометрии использующих указанный материал.
+     */
     public static void addGeometryWithMaterial(final Spatial spatial, final Array<Geometry> container, final String assetPath) {
 
-        if(spatial instanceof Geometry) {
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
+
+        if (spatial instanceof Geometry) {
 
             final Geometry geometry = (Geometry) spatial;
             final Material material = geometry.getMaterial();
-            final String assetName = material == null? null : material.getAssetName();
+            final String assetName = material == null ? null : material.getAssetName();
 
-            if(StringUtils.equals(assetName, assetPath)) {
+            if (StringUtils.equals(assetName, assetPath)) {
                 container.add(geometry);
             }
 
@@ -261,12 +280,86 @@ public abstract class EditorUtil {
     /**
      * Нормализация пути для обращения к ресурсу в classpath.
      */
-    public static String toClasspath(final Path path) {
+    public static String toAssetPath(final Path path) {
 
         if (File.separatorChar == '/') {
             return path.toString();
         }
 
         return path.toString().replace("\\", "/");
+    }
+
+    /**
+     * Обработка ошибки.
+     */
+    public static void handleException(Logger logger, final Object owner, final Exception e) {
+
+        if (logger == null) {
+            logger = LOGGER;
+        }
+
+        if (owner == null) {
+            logger.warning(e);
+        } else {
+            logger.warning(owner, e);
+        }
+
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addFXTask(() -> {
+
+            final StringWriter writer = new StringWriter();
+            final PrintWriter printWriter = new PrintWriter(writer);
+
+            e.printStackTrace(printWriter);
+
+            final String localizedMessage = e.getLocalizedMessage();
+            final String stackTrace = writer.toString();
+
+            final Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
+            alert.setContentText(stackTrace);
+            alert.setWidth(800);
+            alert.setHeight(400);
+            alert.show();
+            alert.setWidth(800);
+            alert.setHeight(400);
+        });
+    }
+
+    /**
+     * Открытие айла во внешнем редакторе.
+     */
+    public static void openFileInExternalEditor(final Path path) {
+
+        String program = null;
+
+        if (SystemUtils.IS_OS_MAC) {
+            program = "open";
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            program = "cmd /c start";
+        } else if (SystemUtils.IS_OS_LINUX) {
+            program = "xdg-open";
+        }
+
+        if (program == null) {
+            return;
+        }
+
+        final String url;
+        try {
+            url = path.toUri().toURL().toString();
+        } catch (final MalformedURLException e) {
+            handleException(LOGGER, null, e);
+            return;
+        }
+
+        final ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command(program, url);
+
+        try {
+            processBuilder.start();
+        } catch (IOException e) {
+            handleException(LOGGER, null, e);
+        }
     }
 }

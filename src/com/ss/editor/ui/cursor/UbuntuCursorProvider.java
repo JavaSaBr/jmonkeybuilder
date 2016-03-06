@@ -97,7 +97,7 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
 
         if (!cache.containsKey(cursorType)) {
             cursorType = CursorType.DEFAULT;
-            LOGGER.warning("Unkown Cursor! " + cursorType);
+            LOGGER.warning("Unknown Cursor! " + cursorType);
         }
 
         final JmeCursor cursor = cache.get(cursorType);

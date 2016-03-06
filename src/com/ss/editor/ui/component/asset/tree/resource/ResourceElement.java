@@ -55,12 +55,12 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object other) {
 
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == other) return true;
+        if (other == null || !(other instanceof ResourceElement)) return false;
 
-        ResourceElement that = (ResourceElement) o;
+        ResourceElement that = (ResourceElement) other;
 
         return !(file != null ? !file.equals(that.file) : that.file != null);
     }

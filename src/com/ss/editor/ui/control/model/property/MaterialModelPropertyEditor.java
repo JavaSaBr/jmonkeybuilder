@@ -113,7 +113,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> 
     private void addMaterial(final Path file) {
 
         final Path assetFile = EditorUtil.getAssetFile(file);
-        final MaterialKey materialKey = new MaterialKey(EditorUtil.toClasspath(assetFile));
+        final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();

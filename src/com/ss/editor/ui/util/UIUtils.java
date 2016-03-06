@@ -221,6 +221,9 @@ public class UIUtils {
         return null;
     }
 
+    /**
+     * Поиск элемента дерева, содержашего указанное значение.
+     */
     public static <T> TreeItem<T> findItemForValue(final TreeView<T> treeView, final Object object) {
 
         final TreeItem<T> root = treeView.getRoot();
@@ -246,6 +249,9 @@ public class UIUtils {
         return null;
     }
 
+    /**
+     * Поиск элемента дерева, содержашего указанное значение.
+     */
     public static <T> TreeItem<T> findItemForValue(final TreeItem<T> root, final Object object) {
 
         if (Objects.equals(root.getValue(), object)) {
@@ -269,6 +275,9 @@ public class UIUtils {
         return null;
     }
 
+    /**
+     * Получение всех элементов дерева.
+     */
     public static <T> Array<TreeItem<T>> getAllItems(final TreeView<T> treeView) {
 
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);

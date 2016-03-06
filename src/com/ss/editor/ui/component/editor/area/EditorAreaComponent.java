@@ -17,9 +17,12 @@ import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.MovedFileEvent;
+import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
 import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
+import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -76,6 +79,54 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE, event -> processCreateFile((RequestedCreateFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestedConvertFileEvent.EVENT_TYPE, event -> processConvertFile((RequestedConvertFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
+    }
+
+    /**
+     * Процесс обработки переименования файлаю
+     */
+    private void processEvent(final RenamedFileEvent event) {
+
+        final Path prevFile = event.getPrevFile();
+        final Path newFile = event.getNewFile();
+
+        final ObservableList<Tab> tabs = getTabs();
+        tabs.forEach(tab -> {
+
+            final ObservableMap<Object, Object> properties = tab.getProperties();
+            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            fileEditor.notifyRenamed(prevFile, newFile);
+
+            final Path editFile = fileEditor.getEditFile();
+
+            if (!editFile.equals(newFile)) {
+                return;
+            }
+
+            if (fileEditor.isDirty()) {
+                tab.setText("*" + fileEditor.getFileName());
+            } else {
+                tab.setText(fileEditor.getFileName());
+            }
+        });
+    }
+
+    /**
+     * Процесс обработки перемещения файлаю
+     */
+    private void processEvent(final MovedFileEvent event) {
+
+        final Path prevFile = event.getPrevFile();
+        final Path newFile = event.getNewFile();
+
+        final ObservableList<Tab> tabs = getTabs();
+        tabs.forEach(tab -> {
+
+            final ObservableMap<Object, Object> properties = tab.getProperties();
+            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            fileEditor.notifyMoved(prevFile, newFile);
+        });
     }
 
     /**
@@ -200,7 +251,12 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        editor.openFile(file);
+        try {
+            editor.openFile(file);
+        } catch (final Exception e) {
+            EditorUtil.handleException(null, this, e);
+            return;
+        }
 
         addEditor(editor);
     }

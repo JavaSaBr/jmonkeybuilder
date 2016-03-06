@@ -67,4 +67,16 @@ public interface FileEditor {
      */
     public default void notifyClosed() {
     }
+
+    /**
+     * Уведомление о переименовании файла.
+     */
+    public default void notifyRenamed(final Path prevFile, final Path newFile) {
+    }
+
+    /**
+     * Уведомление о перемещении файла.
+     */
+    public default void notifyMoved(final Path prevFile, final Path newFile) {
+    }
 }

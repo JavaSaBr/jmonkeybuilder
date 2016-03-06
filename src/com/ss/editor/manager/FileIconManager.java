@@ -17,7 +17,7 @@ import rlib.util.FileUtils;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
-import static com.ss.editor.util.EditorUtil.toClasspath;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.lang.String.valueOf;
 
 /**
@@ -45,6 +45,7 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put("tga", "image-tga");
         EXTENSION_TO_CONTENT_TYPE.put("psd", "image-psd");
         EXTENSION_TO_CONTENT_TYPE.put("dds", "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put("hdr", "image-jpeg");
 
         EXTENSION_TO_CONTENT_TYPE.put("ogg", "sound");
         EXTENSION_TO_CONTENT_TYPE.put("wav", "sound");
@@ -63,6 +64,8 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put("j3o", "jme3");
         EXTENSION_TO_CONTENT_TYPE.put("j3m", "jme3");
         EXTENSION_TO_CONTENT_TYPE.put("j3md", "jme3");
+
+        EXTENSION_TO_CONTENT_TYPE.put("obj", "application/x-tgif");
     }
 
     private static FileIconManager instance;
@@ -122,18 +125,18 @@ public class FileIconManager {
         final Path mimeTypes = Paths.get("/ui/icons/faenza/mimetypes");
 
         Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
-        String url = toClasspath(iconPath);
+        String url = toAssetPath(iconPath);
 
         if (!EditorUtil.checkExists(url)) {
             contentType = EXTENSION_TO_CONTENT_TYPE.get(FileUtils.getExtension(path));
             iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
-            url = toClasspath(iconPath);
+            url = toAssetPath(iconPath);
         }
 
         if (!EditorUtil.checkExists(url)) {
             LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
             iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
-            url = toClasspath(iconPath);
+            url = toAssetPath(iconPath);
         }
 
         return getImage(url);

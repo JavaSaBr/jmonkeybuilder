@@ -7,6 +7,8 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
+import com.ss.editor.ui.event.impl.MovedFileEvent;
+import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
@@ -26,7 +28,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.util.EditorUtil.toClasspath;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 
 /**
  * Менеджер по работе с ресурсами.
@@ -98,9 +100,69 @@ public class ResourceManager {
             fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
             fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
+            fxEventManager.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
+            fxEventManager.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
         });
 
         reload();
+    }
+
+    /**
+     * Обработка переименования файла.
+     */
+    private void processEvent(final RenamedFileEvent event) {
+
+        final Path prevFile = event.getPrevFile();
+        final String extension = FileUtils.getExtension(prevFile);
+
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            return;
+        }
+
+        final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
+        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
+
+        final Path newFile = event.getNewFile();
+        final Path newAssetFile = EditorUtil.getAssetFile(newFile);
+        final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
+
+        final Array<String> materialDefinitions = getMaterialDefinitions();
+        materialDefinitions.writeLock();
+        try {
+            materialDefinitions.fastRemove(prevAssetFile);
+            materialDefinitions.add(newAssetPath);
+        } finally {
+            materialDefinitions.writeUnlock();
+        }
+    }
+
+    /**
+     * Обработка перемещения файла.
+     */
+    private void processEvent(final MovedFileEvent event) {
+
+        final Path prevFile = event.getPrevFile();
+        final String extension = FileUtils.getExtension(prevFile);
+
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            return;
+        }
+
+        final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
+        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
+
+        final Path newFile = event.getNewFile();
+        final Path newAssetFile = EditorUtil.getAssetFile(newFile);
+        final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
+
+        final Array<String> materialDefinitions = getMaterialDefinitions();
+        materialDefinitions.writeLock();
+        try {
+            materialDefinitions.fastRemove(prevAssetFile);
+            materialDefinitions.add(newAssetPath);
+        } finally {
+            materialDefinitions.writeUnlock();
+        }
     }
 
     /**
@@ -120,7 +182,7 @@ public class ResourceManager {
         final Array<String> materialDefinitions = getMaterialDefinitions();
         materialDefinitions.writeLock();
         try {
-            materialDefinitions.fastRemove(toClasspath(assetFile));
+            materialDefinitions.fastRemove(toAssetPath(assetFile));
         } finally {
             materialDefinitions.writeUnlock();
         }
@@ -144,7 +206,7 @@ public class ResourceManager {
         materialDefinitions.writeLock();
         try {
 
-            final String resource = toClasspath(assetFile);
+            final String resource = toAssetPath(assetFile);
 
             if (!materialDefinitions.contains(resource)) {
                 materialDefinitions.add(resource);
@@ -244,7 +306,7 @@ public class ResourceManager {
 
                 if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
                     final Path assetFile = EditorUtil.getAssetFile(file);
-                    materialDefinitions.add(toClasspath(assetFile));
+                    materialDefinitions.add(toAssetPath(assetFile));
                 }
             };
 

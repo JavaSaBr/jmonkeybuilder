@@ -75,6 +75,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * @param file редактируемый файл.
+     */
+    protected void setEditFile(final Path file) {
+        this.file = file;
+    }
+
+    /**
      * Создание контента.
      */
     protected void createContent() {
@@ -201,6 +208,46 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         event.setFile(getEditFile());
 
         FX_EVENT_MANAGER.notify(event);
+    }
+
+    @Override
+    public void notifyRenamed(final Path prevFile, final Path newFile) {
+
+        final Path editFile = getEditFile();
+
+        if (editFile.equals(prevFile)) {
+            setEditFile(newFile);
+            return;
+        }
+
+        if (!editFile.startsWith(prevFile)) {
+            return;
+        }
+
+        final Path relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
+        final Path resultFile = newFile.resolve(relativeFile);
+
+        setEditFile(resultFile);
+    }
+
+    @Override
+    public void notifyMoved(Path prevFile, Path newFile) {
+
+        final Path editFile = getEditFile();
+
+        if (editFile.equals(prevFile)) {
+            setEditFile(newFile);
+            return;
+        }
+
+        if (!editFile.startsWith(prevFile)) {
+            return;
+        }
+
+        final Path relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
+        final Path resultFile = newFile.resolve(relativeFile);
+
+        setEditFile(resultFile);
     }
 
     @Override

@@ -24,11 +24,6 @@ import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_CANCEL;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_OK;
-import static javafx.geometry.Pos.CENTER_LEFT;
-
 /**
  * Реализация диалога для настроек графики.
  *

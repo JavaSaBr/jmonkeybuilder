@@ -22,6 +22,7 @@ public class ModelNodeFactory {
         } else if (element instanceof Geometry) {
             return (V) new GeometryModelNode((Geometry) element, ID_GENERATOR.incrementAndGet());
         }
+
         if (element instanceof Node) {
             return (V) new NodeModelNode((Node) element, ID_GENERATOR.incrementAndGet());
         }

@@ -152,12 +152,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
 
-        if(!extension.endsWith(FileExtensions.JME_MATERIAL)) {
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL)) {
             return;
         }
 
         final Path assetFile = EditorUtil.getAssetFile(file);
-        final String assetPath = EditorUtil.toClasspath(assetFile);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
@@ -165,7 +165,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
         EditorUtil.addGeometryWithMaterial(currentModel, geometries, assetPath);
 
-        if(geometries.isEmpty()) {
+        if (geometries.isEmpty()) {
             return;
         }
 
@@ -226,7 +226,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         super.openFile(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
-        final ModelKey modelKey = new ModelKey(EditorUtil.toClasspath(assetFile));
+        final ModelKey modelKey = new ModelKey(EditorUtil.toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();

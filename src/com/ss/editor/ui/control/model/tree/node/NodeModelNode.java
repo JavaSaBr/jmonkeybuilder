@@ -36,6 +36,7 @@ public class NodeModelNode extends ModelNode<Node> {
 
         items.add(toolActions);
         items.add(new RenameNodeAction(nodeTree, this));
+
         super.fillContextMenu(nodeTree, items);
     }
 

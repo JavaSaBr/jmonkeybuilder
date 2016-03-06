@@ -25,6 +25,8 @@ public class Messages {
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR;
+    public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE;
 
     public static final String FILE_EDITOR_ACTION_SAVE;
 
@@ -106,6 +108,12 @@ public class Messages {
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
+    public static final String RENAME_DIALOG_TITLE;
+    public static final String RENAME_DIALOG_NEW_NAME_LABEL;
+    public static final String RENAME_DIALOG_BUTTON_OK;
+    public static final String RENAME_DIALOG_BUTTON_CANCEL;
+    ;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -125,6 +133,8 @@ public class Messages {
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuPasteFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuConvertFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileByExternalEditor");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle.getString("AssetComponentResourceTreeContextMenuRenameFile");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
 
@@ -205,5 +215,10 @@ public class Messages {
         MODEL_PROPERTY_MATERIAL = bundle.getString("ModelPropertyMaterial");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
+
+        RENAME_DIALOG_TITLE = bundle.getString("RenameDialogTitle");
+        RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");
+        RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
+        RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
     }
 }
