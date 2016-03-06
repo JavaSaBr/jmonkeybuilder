@@ -1,6 +1,7 @@
 # jMonkeyEngine 3 SpaceShift Editor 0.3.5 #
 
 Generic version: https://yadi.sk/d/BaKdDmDgpxCmE
+
 Debian based version: https://yadi.sk/d/mzYBrjcvpxCmL
 
 ver. 0.1
@@ -30,8 +31,8 @@ ver. 0.3.5
 -Finished implementing the operations of moving/renaming/cut-copy-paste for files in Asset Tree.
 -Added dialog for handling exception.
 
-http://imgur.com/8FKlaXw
-http://imgur.com/onsWNaK
-http://imgur.com/D31aplI
-http://imgur.com/9ApZMZC
-http://imgur.com/0XSkVDQ
+[Image 1](http://imgur.com/8FKlaXw)
+[Image 2](http://imgur.com/onsWNaK)
+[Image 3](http://imgur.com/D31aplI)
+[Image 4](http://imgur.com/9ApZMZC)
+[Image 5](http://imgur.com/0XSkVDQ)
