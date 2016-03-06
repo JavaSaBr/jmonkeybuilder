@@ -1,19 +1,18 @@
 # jMonkeyEngine 3 SpaceShift Editor 0.3.5 #
 
-Generic version: https://yadi.sk/d/BaKdDmDgpxCmE
-
-Debian based version: https://yadi.sk/d/mzYBrjcvpxCmL
+* Generic version: https://yadi.sk/d/BaKdDmDgpxCmE
+* Debian based version: https://yadi.sk/d/mzYBrjcvpxCmL
 
 ## ver. 0.1 ##
-* -Implemented the base actions in AssetTree
-* -Implemented MaterialEditor
-* -Added English localization
+* -Implemented the base actions in AssetTree.
+* -Implemented MaterialEditor.
+* -Added English localization.
 
 ## ver. 0.1.1 ##
 * -Implemented preview of images in resource selector.
-* -Migrated editor to jME 3.1 with PBR
-* -Added support PBR to Material Editor
-* -Finished implementation PostFilterViewer
+* -Migrated editor to jME 3.1 with PBR.
+* -Added support PBR to Material Editor.
+* -Finished implementation PostFilterViewer.
 
 ## ver. 0.2.0 ##
 * -Implemented dialogs for creating new material and post filter view file.
@@ -22,8 +21,8 @@ Debian based version: https://yadi.sk/d/mzYBrjcvpxCmL
 * -Upgraded jME3 libraries to 3.1 alpha 2 with PBR.
 
 ## ver. 0.3.0 ##
-* -Implemented Simple Model Editor
-* -Added action for converting .blend to .j3o
+* -Implemented Simple Model Editor.
+* -Added action for converting .blend to .j3o.
 * -Updated UI.
 
 ## ver. 0.3.5 ##
