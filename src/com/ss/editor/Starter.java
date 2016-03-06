@@ -13,7 +13,12 @@ import javafx.stage.Stage;
 public class Starter extends Application {
 
     public static void main(String[] args) throws IOException {
-        Editor.start(args);
+        try {
+            Editor.start(args);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     @Override

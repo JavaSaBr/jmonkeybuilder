@@ -123,15 +123,16 @@ public class Editor extends SimpleApplication {
 
         final Path logFolder = Paths.get(Config.PROJECT_PATH, "log");
 
-        if (!Files.exists(logFolder)) {
-            try {
-                Files.createDirectories(logFolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (Files.exists(logFolder)) {
+            return;
         }
 
-        LoggerManager.addListener(new FolderFileListener(logFolder));
+        try {
+            Files.createDirectories(logFolder);
+            LoggerManager.addListener(new FolderFileListener(logFolder));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
