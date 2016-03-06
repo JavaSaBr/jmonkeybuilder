@@ -2,5 +2,5 @@
 <list>
     <set name="Graphics.enablePBR" value="true"/>
 
-    <set name="Dev.debug" value="true"/>
+    <set name="Dev.debug" value="false"/>
 </list>

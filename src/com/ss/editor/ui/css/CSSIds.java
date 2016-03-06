@@ -65,7 +65,8 @@ public interface CSSIds {
     public static final String MODEL_PARAM_CONTROL_PARAM_NAME = "ModelParamControlParamName";
     public static final String MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "ModelParamControlParamNameSingleRow";
     public static final String MODEL_PARAM_CONTROL_NUMBER_LABEL = "ModelParamControlNumberLabel";
-    public static final String MODEL_PARAM_CONTROL_NUMBER_FIELD = "ModelParamControlNumberField";
+    public static final String MODEL_PARAM_CONTROL_VECTOR3F_FIELD = "ModelParamControlVector3fField";
+    public static final String MODEL_PARAM_CONTROL_VECTOR4F_FIELD = "ModelParamControlVector4fField";
     public static final String MODEL_PARAM_CONTROL_COMBO_BOX = "ModelParamControlComboBox";
 
     public static final String MODEL_PARAM_CONTROL_MATERIAL_LABEL = "ModelParamControlMaterialLabel";

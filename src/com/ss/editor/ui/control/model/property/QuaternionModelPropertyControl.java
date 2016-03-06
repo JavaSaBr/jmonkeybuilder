@@ -5,6 +5,7 @@ import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
@@ -47,28 +48,32 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new TextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        xField.setOnScroll(this::processScroll);
         xField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         yFiled = new TextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        yFiled.setOnScroll(this::processScroll);
         yFiled.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         zField = new TextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        zField.setOnScroll(this::processScroll);
         zField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         final Label wLabel = new Label("w:");
         wLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         wField = new TextField();
-        wField.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        wField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        wField.setOnScroll(this::processScroll);
         wField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         FXUtils.addToPane(xLabel, container);
@@ -79,6 +84,32 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         FXUtils.addToPane(zField, container);
         FXUtils.addToPane(wLabel, container);
         FXUtils.addToPane(wField, container);
+    }
+
+    /**
+     * Процесс скролирования значения.
+     */
+    private void processScroll(final ScrollEvent event) {
+
+        if(!event.isControlDown()) {
+            return;
+        }
+
+        final TextField source = (TextField) event.getSource();
+        final String text = source.getText();
+
+        float value = 0;
+
+        try {
+            value = Float.parseFloat(text);
+        } catch (final NumberFormatException e) {
+            return;
+        }
+
+        long longValue = (long) (value * 1000);
+        longValue += event.getDeltaY();
+
+        source.setText(String.valueOf(longValue / 1000F));
     }
 
     /**

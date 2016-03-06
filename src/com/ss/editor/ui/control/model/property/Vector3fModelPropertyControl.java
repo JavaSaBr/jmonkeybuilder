@@ -5,6 +5,7 @@ import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
@@ -42,21 +43,24 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Vector3f>
         xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new TextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        xField.setOnScroll(this::processScroll);
         xField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         yFiled = new TextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yFiled.setOnScroll(this::processScroll);
         yFiled.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         zField = new TextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_FIELD);
+        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        zField.setOnScroll(this::processScroll);
         zField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         FXUtils.addToPane(xLabel, container);
@@ -65,6 +69,32 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Vector3f>
         FXUtils.addToPane(yFiled, container);
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
+    }
+
+    /**
+     * Процесс скролирования значения.
+     */
+    private void processScroll(final ScrollEvent event) {
+
+        if(!event.isControlDown()) {
+            return;
+        }
+
+        final TextField source = (TextField) event.getSource();
+        final String text = source.getText();
+
+        float value = 0;
+
+        try {
+            value = Float.parseFloat(text);
+        } catch (final NumberFormatException e) {
+            return;
+        }
+
+        long longValue = (long) (value * 1000);
+        longValue += (event.getDeltaY() * 10);
+
+        source.setText(String.valueOf(longValue / 1000F));
     }
 
     /**

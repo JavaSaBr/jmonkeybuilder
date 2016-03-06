@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
@@ -43,6 +44,7 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
         spinner.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
         spinner.setValueFactory(valueFactory);
         spinner.setEditable(true);
+        spinner.setOnScroll(this::processScroll);
         spinner.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
         FXUtils.addToPane(spinner, this);
@@ -50,6 +52,24 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
         FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(90));
 
         HBox.setMargin(spinner, ELEMENT_OFFSET);
+    }
+
+    /**
+     * Процесс скролирования значения.
+     */
+    private void processScroll(final ScrollEvent event) {
+
+        if(!event.isControlDown()) {
+            return;
+        }
+
+        final double deltaY = event.getDeltaY();
+
+        if(deltaY > 0) {
+            spinner.increment();
+        } else {
+            spinner.decrement();
+        }
     }
 
     /**
