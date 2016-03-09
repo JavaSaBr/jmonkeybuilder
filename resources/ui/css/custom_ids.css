@@ -399,3 +399,22 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
+
+#ImageChannelPreview {
+    -fx-background-color: -fx-color-panel-200;
+    -fx-effect: -fx-material-shadow-panel;
+}
+
+#ImageChannelPreviewImageContainer {
+    -fx-alignment: center;
+    -fx-min-width: 122;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 122;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-border-color: -fx-color-panel-50;
+    -fx-border-width: 1;
+    -fx-fit-to-height: 122;
+    -fx-fit-to-width: 122;
+}

@@ -34,10 +34,10 @@ public class GraphicsDialog extends EditorDialog {
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
     private static final Insets MESSAGE_OFFSET = new Insets(5, 0, 5, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 15, 0);
-    private static final Insets FIELD_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    private static final Insets LAST_FIELD_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 29, 0);
+    private static final Insets FIELD_OFFSET = new Insets(5, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
 
-    private static final Point DIALOG_SIZE = new Point(500, 250);
+    private static final Point DIALOG_SIZE = new Point(500, 310);
 
     private static final Array<ScreenSize> SCREEN_SIZES = ArrayFactory.newArray(ScreenSize.class);
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
@@ -65,6 +65,11 @@ public class GraphicsDialog extends EditorDialog {
      * Комбобокс с выбором анизатропного фильтра.
      */
     private ComboBox<Integer> anisotropyComboBox;
+
+    /**
+     * Включение/выключение полноэкранного режима.
+     */
+    private CheckBox fullscreenCheckBox;
 
     /**
      * Включение/выключение FXAA.
@@ -116,8 +121,31 @@ public class GraphicsDialog extends EditorDialog {
         VBox.setMargin(messageLabel, MESSAGE_OFFSET);
 
         createScreenSizeControl(root);
+        createFullscreenControl(root);
         createAnisotropyControl(root);
         createFXAAControl(root);
+    }
+
+    private void createFullscreenControl(final VBox root) {
+
+        final HBox fullscreenContainer = new HBox();
+        fullscreenContainer.setAlignment(Pos.CENTER_LEFT);
+
+        final Label fullscreenLabel = new Label(Messages.GRAPHICS_DIALOG_FULLSCREEN + ":");
+        fullscreenLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
+
+        fullscreenCheckBox = new CheckBox();
+        fullscreenCheckBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        fullscreenCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(fullscreenLabel, fullscreenContainer);
+        FXUtils.addToPane(fullscreenCheckBox, fullscreenContainer);
+        FXUtils.addToPane(fullscreenContainer, root);
+
+        FXUtils.addClassTo(fullscreenLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(fullscreenCheckBox, CSSClasses.MAIN_FONT_13);
+
+        VBox.setMargin(fullscreenContainer, LAST_FIELD_OFFSET);
     }
 
     private void createFXAAControl(final VBox root) {
@@ -204,6 +232,13 @@ public class GraphicsDialog extends EditorDialog {
     }
 
     /**
+     * @return включение/выключение полноэкранного режима.
+     */
+    private CheckBox getFullscreenCheckBox() {
+        return fullscreenCheckBox;
+    }
+
+    /**
      * @return комбобокс с выбором анизатропного фильтра.
      */
     private ComboBox<Integer> getAnisotropyComboBox() {
@@ -241,12 +276,16 @@ public class GraphicsDialog extends EditorDialog {
         final ScreenSize currentScreenSize = editorConfig.getScreenSize();
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentFXAA = editorConfig.isFXAA();
+        final boolean currentFullscreen = editorConfig.isFullscreen();
 
         final ComboBox<ScreenSize> screenSizeComboBox = getScreenSizeComboBox();
         final ScreenSize screenSize = screenSizeComboBox.getSelectionModel().getSelectedItem();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
+
+        final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
+        final boolean fullscreen = fullscreenCheckBox.isSelected();
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
@@ -260,6 +299,10 @@ public class GraphicsDialog extends EditorDialog {
         }
 
         if (anisotropy != currentAnisotropy) {
+            needRestart++;
+        }
+
+        if(currentFullscreen != fullscreen) {
             needRestart++;
         }
 
@@ -323,6 +366,7 @@ public class GraphicsDialog extends EditorDialog {
         final ScreenSize currentScreenSize = editorConfig.getScreenSize();
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentFXAA = editorConfig.isFXAA();
+        final boolean currentFullscreen = editorConfig.isFullscreen();
 
         final ComboBox<ScreenSize> screenSizeComboBox = getScreenSizeComboBox();
         final ScreenSize screenSize = screenSizeComboBox.getSelectionModel().getSelectedItem();
@@ -332,6 +376,9 @@ public class GraphicsDialog extends EditorDialog {
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
+
+        final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
+        final boolean fullscreen = fullscreenCheckBox.isSelected();
 
         if (currentScreenSize != screenSize) {
             needRestart++;
@@ -345,9 +392,14 @@ public class GraphicsDialog extends EditorDialog {
             needRestart++;
         }
 
+        if(currentFullscreen != fullscreen) {
+            needRestart++;
+        }
+
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
         editorConfig.setScreenSize(screenSize);
+        editorConfig.setFullscreen(fullscreen);
         editorConfig.save();
 
         if (needRestart > 0) {

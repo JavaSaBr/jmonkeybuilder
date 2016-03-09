@@ -34,6 +34,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_GRAPHIC_SCREEN_SIZE = GRAPHICS_ALIAS + "." + "screenSize";
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
+    public static final String PREF_GRAPHIC_FULLSCREEN = GRAPHICS_ALIAS + "." + "fullscreen";
 
     public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
 
@@ -66,6 +67,11 @@ public final class EditorConfig implements AssetEventListener {
      * Включено ли FXAA.
      */
     private volatile boolean fxaa;
+
+    /**
+     * Включен ли полноэкранный режим.
+     */
+    private volatile boolean fullscreen;
 
     /**
      * Текущий выбранный Asset.
@@ -144,6 +150,20 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @param fullscreen включен ли полноэкранный режим.
+     */
+    public void setFullscreen(final boolean fullscreen) {
+        this.fullscreen = fullscreen;
+    }
+
+    /**
+     * @return включен ли полноэкранный режим.
+     */
+    public boolean isFullscreen() {
+        return fullscreen;
+    }
+
+    /**
      * @return настройки движка.
      */
     public AppSettings getSettings() {
@@ -155,7 +175,7 @@ public final class EditorConfig implements AssetEventListener {
         final AppSettings settings = new AppSettings(true);
         settings.setRenderer("CUSTOM" + EditorContext.class.getName());
         settings.setTitle(Config.TITLE + " " + Config.VERSION);
-        settings.setFullscreen(false);
+        settings.setFullscreen(isFullscreen() && screenSize.isFullscreenSupported());
         settings.setResolution(screenSize.getWidth(), screenSize.getHeight());
         settings.setFrequency(displayMode.getRefreshRate());
         settings.setFrameRate(60);
@@ -174,6 +194,7 @@ public final class EditorConfig implements AssetEventListener {
         this.screenSize = ScreenSize.sizeOf(prefs.get(PREF_GRAPHIC_SCREEN_SIZE, "1244x700"));
         this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
         this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
+        this.fullscreen = prefs.getBoolean(PREF_GRAPHIC_FULLSCREEN, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -196,6 +217,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.put(PREF_GRAPHIC_SCREEN_SIZE, getScreenSize().toString());
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
         prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
+        prefs.putBoolean(PREF_GRAPHIC_FULLSCREEN, isFullscreen());
 
         if (currentAsset != null) {
             prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());

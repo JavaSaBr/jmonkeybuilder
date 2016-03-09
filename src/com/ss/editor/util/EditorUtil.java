@@ -20,6 +20,7 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -331,17 +332,19 @@ public abstract class EditorUtil {
      */
     public static void openFileInExternalEditor(final Path path) {
 
-        String program = null;
+        final List<String> commands = new ArrayList<>();
 
         if (SystemUtils.IS_OS_MAC) {
-            program = "open";
+            commands.add("open");
         } else if (SystemUtils.IS_OS_WINDOWS) {
-            program = "cmd /c start";
+            commands.add("cmd");
+            commands.add("/c");
+            commands.add("start");
         } else if (SystemUtils.IS_OS_LINUX) {
-            program = "xdg-open";
+            commands.add("xdg-open");
         }
 
-        if (program == null) {
+        if (commands.isEmpty()) {
             return;
         }
 
@@ -353,8 +356,10 @@ public abstract class EditorUtil {
             return;
         }
 
+        commands.add(url);
+
         final ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command(program, url);
+        processBuilder.command(commands);
 
         try {
             processBuilder.start();

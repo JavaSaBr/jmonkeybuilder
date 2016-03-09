@@ -77,6 +77,7 @@ public class Messages {
 
     public static final String GRAPHICS_DIALOG_TITLE;
     public static final String GRAPHICS_DIALOG_FXAA;
+    public static final String GRAPHICS_DIALOG_FULLSCREEN;
     public static final String GRAPHICS_DIALOG_SCREEN_SIZE;
     public static final String GRAPHICS_DIALOG_ANISOTROPY;
     public static final String GRAPHICS_DIALOG_BUTTON_OK;
@@ -185,6 +186,7 @@ public class Messages {
 
         GRAPHICS_DIALOG_TITLE = bundle.getString("GraphicsDialogTitle");
         GRAPHICS_DIALOG_FXAA = bundle.getString("GraphicsDialogFXAA");
+        GRAPHICS_DIALOG_FULLSCREEN = bundle.getString("GraphicsDialogFullscreen");
         GRAPHICS_DIALOG_SCREEN_SIZE = bundle.getString("GraphicsDialogScreenSize");
         GRAPHICS_DIALOG_ANISOTROPY = bundle.getString("GraphicsDialogAnisotropy");
         GRAPHICS_DIALOG_BUTTON_OK = bundle.getString("GraphicsDialogButtonOk");

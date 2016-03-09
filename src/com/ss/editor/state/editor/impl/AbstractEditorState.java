@@ -119,7 +119,7 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
         chaser.setMaxDistance(1000);
         chaser.setSmoothMotion(true);
         chaser.setRotationSensitivity(10);
-        chaser.setZoomSensitivity(5);
+        chaser.setZoomSensitivity(1);
 
         return chaser;
     }

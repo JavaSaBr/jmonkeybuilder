@@ -22,17 +22,6 @@ public class ScreenSize {
     public static final int SCREEN_SIZE_MIN_WIDTH = 1244;
 
     /**
-     * Сортировщик размеров экрана.
-     */
-    private static final ArrayComparator<ScreenSize> COMPARATOR = (first, second) -> {
-
-        final int firstTotal = first.getHeight() * first.getWidth();
-        final int secondTotal = second.getHeight() * second.getWidth();
-
-        return -(firstTotal - secondTotal);
-    };
-
-    /**
      * Таблица доступных расширений экрана.
      */
     private static final ObjectDictionary<String, ScreenSize> SCREEN_SIZE_TABLE = DictionaryFactory.newObjectDictionary();
@@ -41,27 +30,6 @@ public class ScreenSize {
      * Список доступных разрешений.
      */
     private static ScreenSize[] values;
-
-    /**
-     * Строковый вид.
-     */
-    private final String size;
-
-    /**
-     * Ширина экрана.
-     */
-    private final int width;
-
-    /**
-     * Высота кэрана.
-     */
-    private final int height;
-
-    private ScreenSize(final int width, final int height) {
-        this.width = width;
-        this.height = height;
-        this.size = width + "x" + height;
-    }
 
     /**
      * Инициализация списка доступных разрешений экрана.
@@ -83,25 +51,27 @@ public class ScreenSize {
 
             if (mode.getWidth() < SCREEN_SIZE_MIN_WIDTH || mode.getHeight() < SCREEN_SIZE_MIN_HEIGHT) {
                 continue;
-            } else if (mode.getWidth() > SCREEN_SIZE_MAX_WIDTH) {
+            }
+
+            if (mode.getWidth() > SCREEN_SIZE_MAX_WIDTH) {
                 continue;
             }
 
-            container.add(new ScreenSize(mode.getWidth(), mode.getHeight()));
+            container.add(new ScreenSize(mode.getWidth(), mode.getHeight(), device.isFullScreenSupported()));
         }
 
-        container.add(new ScreenSize(SCREEN_SIZE_MIN_WIDTH, SCREEN_SIZE_MIN_HEIGHT));
+        container.add(new ScreenSize(SCREEN_SIZE_MIN_WIDTH, SCREEN_SIZE_MIN_HEIGHT, false));
 
         if (maxWidth >= 1600 && maxHeight >= 900) {
-            container.add(new ScreenSize(1600, 900));
+            container.add(new ScreenSize(1600, 900, false));
         }
 
         if (maxWidth >= 1850 && maxHeight >= 1000) {
-            container.add(new ScreenSize(1850, 1000));
+            container.add(new ScreenSize(1850, 1000, false));
         }
 
         if (maxWidth >= 1366 && maxHeight >= 768) {
-            container.add(new ScreenSize(1366, 768));
+            container.add(new ScreenSize(1366, 768, false));
         }
 
         container.sort(COMPARATOR);
@@ -119,7 +89,7 @@ public class ScreenSize {
      */
     public static ScreenSize sizeOf(final String size) {
         final ScreenSize screenSize = SCREEN_SIZE_TABLE.get(size);
-        return screenSize == null ? new ScreenSize(SCREEN_SIZE_MIN_WIDTH, SCREEN_SIZE_MIN_HEIGHT) : screenSize;
+        return screenSize == null ? new ScreenSize(SCREEN_SIZE_MIN_WIDTH, SCREEN_SIZE_MIN_HEIGHT, false) : screenSize;
     }
 
     /**
@@ -127,6 +97,44 @@ public class ScreenSize {
      */
     public static ScreenSize[] values() {
         return values;
+    }
+
+    /**
+     * Строковый вид.
+     */
+    private final String size;
+
+    /**
+     * Ширина экрана.
+     */
+    private final int width;
+
+    /**
+     * Высота кэрана.
+     */
+    private final int height;
+
+    /**
+     * Сортировщик размеров экрана.
+     */
+    private static final ArrayComparator<ScreenSize> COMPARATOR = (first, second) -> {
+
+        final int firstTotal = first.getHeight() * first.getWidth();
+        final int secondTotal = second.getHeight() * second.getWidth();
+
+        return -(firstTotal - secondTotal);
+    };
+
+    /**
+     * Поддерживается ли полный экран.
+     */
+    private final boolean fullscreenSupported;
+
+    private ScreenSize(final int width, final int height, final boolean fullscreenSupported) {
+        this.width = width;
+        this.height = height;
+        this.size = width + "x" + height;
+        this.fullscreenSupported = fullscreenSupported;
     }
 
     @Override
@@ -172,6 +180,13 @@ public class ScreenSize {
         result = prime * result + height;
         result = prime * result + width;
         return result;
+    }
+
+    /**
+     * @return поддерживается ли полноэкранный режим.
+     */
+    public boolean isFullscreenSupported() {
+        return fullscreenSupported;
     }
 
     @Override

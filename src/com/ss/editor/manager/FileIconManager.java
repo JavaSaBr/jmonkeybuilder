@@ -66,6 +66,9 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put("j3md", "jme3");
 
         EXTENSION_TO_CONTENT_TYPE.put("obj", "application/x-tgif");
+        EXTENSION_TO_CONTENT_TYPE.put("blend", "application-x-blender");
+        EXTENSION_TO_CONTENT_TYPE.put("j3odata", "gnome-mime-text");
+        EXTENSION_TO_CONTENT_TYPE.put("pfv", "gnome-mime-text");
     }
 
     private static FileIconManager instance;

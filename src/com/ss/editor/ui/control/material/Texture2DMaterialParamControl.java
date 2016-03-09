@@ -15,6 +15,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
@@ -63,7 +64,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * Подсказка для описания текущей текстуры.
      */
-    private Tooltip textureTooltip;
+    private ImageChannelPreview textureTooltip;
 
     /**
      * Превью текстуры.
@@ -88,7 +89,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     protected void createComponents() {
         super.createComponents();
 
-        textureTooltip = new Tooltip();
+        textureTooltip = new ImageChannelPreview();
 
         final VBox previewContainer = new VBox();
         previewContainer.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW);
@@ -145,7 +146,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * @return подсказка для описания текущей текстуры.
      */
-    public Tooltip getTextureTooltip() {
+    public ImageChannelPreview getTextureTooltip() {
         return textureTooltip;
     }
 
@@ -323,7 +324,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     protected void reload() {
         super.reload();
 
-        final Tooltip textureTooltip = getTextureTooltip();
+        final ImageChannelPreview textureTooltip = getTextureTooltip();
         final Material material = getMaterial();
         final MatParamTexture param = (MatParamTexture) material.getParam(getParameterName());
 
@@ -356,6 +357,6 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final ImageView preview = getTexturePreview();
         preview.setImage(IMAGE_MANAGER.getTexturePreview(realFile, 28, 28));
 
-        textureTooltip.setText(textureKey.getName());
+        textureTooltip.showImage(realFile);
     }
 }

@@ -7,12 +7,16 @@ import com.sun.jimi.core.JimiReader;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
 
 import javax.imageio.ImageIO;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -69,8 +73,22 @@ public class JavaFXImageManager {
         return instance;
     }
 
+    /**
+     * Папка для размещения кеша картинок.
+     */
+    private final Path cacheFolder;
+
     public JavaFXImageManager() {
         InitializeManager.valid(getClass());
+        final String userHome = System.getProperty("user.home");
+        this.cacheFolder = Paths.get(userHome).resolve(".jme3-spaceshift-editor");
+    }
+
+    /**
+     * @return папка для размещения кеша картинок.
+     */
+    private Path getCacheFolder() {
+        return cacheFolder;
     }
 
     /**
@@ -83,10 +101,49 @@ public class JavaFXImageManager {
      */
     public Image getTexturePreview(final Path file, final int width, final int height) {
 
+        final Path cacheFolder = getCacheFolder();
+        final Path imageFolder = cacheFolder.resolve(String.valueOf(width)).resolve(String.valueOf(height));
+        final Path cacheFile = imageFolder.resolve(file.subpath(1, file.getNameCount()));
+
+        if(Files.exists(cacheFile)) {
+
+            try {
+
+                final FileTime lastModCacheFile = Files.getLastModifiedTime(cacheFile);
+                final FileTime lastModFile = Files.getLastModifiedTime(file);
+
+                if(lastModCacheFile.compareTo(lastModFile) >= 0) {
+                    return new Image(cacheFile.toUri().toString(), width, height, false, false);
+                }
+
+            } catch (final IOException e) {
+                LOGGER.warning(e);
+            }
+        }
+
+        final Path parent = cacheFile.getParent();
+
+        try {
+            Files.createDirectories(parent);
+        } catch (final IOException e) {
+            LOGGER.warning(e);
+        }
+
         final String extension = FileUtils.getExtension(file);
 
         if (FX_FORMATS.contains(extension)) {
-            return new Image(file.toUri().toString(), width, height, false, false);
+
+            final Image image = new Image(file.toUri().toString(), width, height, false, false);
+            final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+                ImageIO.write(bufferedImage, "png", out);
+            } catch (final IOException e) {
+                LOGGER.warning(e);
+            }
+
+            return image;
+
         } else if (!JIMI_FORMATS.contains(extension)) {
             return Icons.IMAGE_512;
         }
@@ -108,16 +165,12 @@ public class JavaFXImageManager {
             g2d.drawImage(newImage, 0, 0, null);
             g2d.dispose();
 
-            final Path tempFile = Files.createTempFile("javaFX", String.valueOf(System.nanoTime()));
-
             Image javaFXImage;
 
-            try (final OutputStream out = Files.newOutputStream(tempFile)) {
+            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
                 ImageIO.write(bufferedImage, "png", out);
-                javaFXImage = new Image(tempFile.toUri().toString());
+                javaFXImage = new Image(cacheFile.toUri().toString());
             }
-
-            Files.delete(tempFile);
 
             return javaFXImage;
 

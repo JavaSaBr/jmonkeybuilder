@@ -280,7 +280,7 @@ public class Editor extends SimpleApplication {
         fxContainer = JmeFxContainer.install(this, guiNode, true, cursorDisplayProvider);
         scene = EditorFXSceneBuilder.build(fxContainer);
 
-        UIUtils.overrideTooltipBehavior(300, 2000, 500);
+        UIUtils.overrideTooltipBehavior(1000, 3000, 500);
 
         createProbe();
     }

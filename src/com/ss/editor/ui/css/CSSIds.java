@@ -74,4 +74,7 @@ public interface CSSIds {
 
     public static final String RENAME_DIALOG_LABEL = "RenameDialogLabel";
     public static final String RENAME_DIALOG_TEXT_FIELD = "RenameDialogTextField";
+
+    public static final String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
+    public static final String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
 }
