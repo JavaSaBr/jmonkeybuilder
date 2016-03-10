@@ -30,6 +30,14 @@
 * -Finished implementing the operations of moving/renaming/cut-copy-paste for files in Asset Tree.
 * -Added dialog for handling exception.
 
+
+## ver. 0.3.7 ##
+* -Implemented the fullscreen mode.
+* -Implemented the preview of channels of image.
+* -Implemented the cache of preview of image.
+* -Changed the sensitivity of zoom.
+
+
 * [Image 1](http://imgur.com/8FKlaXw)
 * [Image 2](http://imgur.com/onsWNaK)
 * [Image 3](http://imgur.com/D31aplI)
