@@ -1,7 +1,7 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.3.5 #
+# jMonkeyEngine 3 SpaceShift Editor 0.3.7 #
 
-* Generic version: https://yadi.sk/d/BaKdDmDgpxCmE
-* Debian based version: https://yadi.sk/d/mzYBrjcvpxCmL
+* Generic version: https://yadi.sk/d/GTK04rZ_q3SXz
+* Debian based version: https://yadi.sk/d/olg6aXOrq3SZa
 
 ## ver. 0.1 ##
 * -Implemented the base actions in AssetTree.
