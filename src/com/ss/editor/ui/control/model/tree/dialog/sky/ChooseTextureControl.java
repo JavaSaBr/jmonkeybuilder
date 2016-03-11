@@ -42,6 +42,7 @@ public class ChooseTextureControl extends HBox {
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_JPEG);
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_TGA);
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_DDS);
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_HDR);
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();

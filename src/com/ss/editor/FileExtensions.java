@@ -21,6 +21,7 @@ public interface FileExtensions {
     public static final String IMAGE_BMP = "bmp";
     public static final String IMAGE_TIFF = "tiff";
     public static final String IMAGE_DDS = "dds";
+    public static final String IMAGE_HDR = "hdr";
 
     public static final String BLENDER = "blend";
 }

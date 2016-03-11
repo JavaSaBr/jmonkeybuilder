@@ -105,6 +105,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
+    public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -150,6 +151,7 @@ public class Messages {
 
     public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
     public static final String EMPTY_MODEL_CREATOR_TITLE;
+
 
     static {
 
@@ -250,6 +252,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX = bundle.getString("ModelNodeTreeActionCreatePrimitiveBox");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE = bundle.getString("ModelNodeTreeActionCreatePrimitiveSphere");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
+        MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

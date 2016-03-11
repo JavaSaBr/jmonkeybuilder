@@ -256,8 +256,12 @@ public class ModelNodeTree extends TitledPane {
             return;
         }
 
+        final TreeItem<ModelNode<?>> newItem = new TreeItem<>(modelNode);
+
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
-        children.add(0, new TreeItem<>(modelNode));
+        children.add(0, newItem);
+
+        fill(newItem);
     }
 
     /**

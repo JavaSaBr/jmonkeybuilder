@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
 import com.ss.editor.ui.control.model.tree.action.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSphereAction;
+import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 
@@ -47,6 +48,7 @@ public class NodeModelNode extends ModelNode<Node> {
 
         items.add(toolActions);
         items.add(createActions);
+        items.add(new LoadModelAction(nodeTree, this));
         items.add(new RenameNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
