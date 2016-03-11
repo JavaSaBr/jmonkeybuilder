@@ -1,5 +1,6 @@
 package com.ss.editor.util;
 
+import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -132,6 +133,32 @@ public abstract class EditorUtil {
 
         for (final Spatial children : node.getChildren()) {
             addGeometryWithMaterial(children, container, assetPath);
+        }
+    }
+
+    /**
+     * Сбор всех объектов использующих указанный asset path.
+     */
+    public static void addSpatialWithAssetPath(final Spatial spatial, final Array<Spatial> container, final String assetPath) {
+
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
+
+        final AssetKey key = spatial.getKey();
+
+        if (key != null && StringUtils.equals(key.getName(), assetPath)) {
+            container.add(spatial);
+        }
+
+        if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            addSpatialWithAssetPath(children, container, assetPath);
         }
     }
 

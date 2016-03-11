@@ -241,7 +241,7 @@ public class Editor extends SimpleApplication {
 
         ExecutorManager.getInstance();
 
-        final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, this.assetManager, inputManager);
+        final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, assetManager, inputManager);
 
         for (final CursorType type : CursorType.values()) {
             cursorDisplayProvider.setup(type);
@@ -250,7 +250,7 @@ public class Editor extends SimpleApplication {
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
 
-        postProcessor = new FilterPostProcessor(this.assetManager);
+        postProcessor = new FilterPostProcessor(assetManager);
         postProcessor.initialize(renderManager, viewPort);
 
         if (editorConfig.isFXAA()) {
@@ -264,6 +264,8 @@ public class Editor extends SimpleApplication {
 
             postProcessor.addFilter(filter);
         }
+
+        // postProcessor.addFilter(new ToneMapFilter());
 
         viewPort.addProcessor(postProcessor);
 

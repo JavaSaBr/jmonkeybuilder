@@ -7,6 +7,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.MikktspaceTangetGeneratorAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
+import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
@@ -57,7 +58,7 @@ public class GeometryModelNode extends ModelNode<Geometry> {
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
 
         final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
-        toolActions.getItems().addAll(new MikktspaceTangetGeneratorAction(nodeTree, this));
+        toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this), new MikktspaceTangetGeneratorAction(nodeTree, this));
 
         items.add(toolActions);
         items.add(new RenameNodeAction(nodeTree, this));

@@ -152,9 +152,15 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
 
-        if (!extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            return;
+        if (extension.endsWith(FileExtensions.JME_MATERIAL)) {
+            updateMaterial(file);
         }
+    }
+
+    /**
+     * Процесс обновления материала.
+     */
+    private void updateMaterial(final Path file) {
 
         final Path assetFile = EditorUtil.getAssetFile(file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
