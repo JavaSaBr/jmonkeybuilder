@@ -76,7 +76,7 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Vector3f>
      */
     private void processScroll(final ScrollEvent event) {
 
-        if(!event.isControlDown()) {
+        if (!event.isControlDown()) {
             return;
         }
 

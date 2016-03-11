@@ -77,4 +77,12 @@ public interface CSSIds {
 
     public static final String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
     public static final String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
+
+    public static final String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "ChooseTextureControlTextureLabel";
+    public static final String CHOOSE_TEXTURE_CONTROL_PREVIEW = "ChooseTextureControlPreview";
+
+    public static final String CREATE_SKY_DIALOG_LABEL = "CreateSkyDialogLabel";
+    public static final String CREATE_SKY_DIALOG_COMBO_BOX = "CreateSkyDialogComboBox";
+    public static final String CREATE_SKY_DIALOG_SPINNER = "CreateSkyDialogSpinner";
+    public static final String CREATE_SKY_DIALOG_BUTTON = "CreateSkyDialogButton";
 }

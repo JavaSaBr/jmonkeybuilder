@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.creator.impl;
 
 import com.ss.editor.FileExtensions;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.util.EditorUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,7 +49,8 @@ public class PostFilterViewFileCreator extends AbstractFileCreator {
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fileToCreate))) {
             out.print(materialContent);
         } catch (final IOException e) {
-            LOGGER.warning(this, e);
+            EditorUtil.handleException(LOGGER, this, e);
+            return;
         }
 
         notifyFileCreated(fileToCreate, true);

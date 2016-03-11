@@ -5,6 +5,11 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.CreateBoxAction;
+import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
+import com.ss.editor.ui.control.model.tree.action.CreateQuadAction;
+import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
+import com.ss.editor.ui.control.model.tree.action.CreateSphereAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 
@@ -34,7 +39,14 @@ public class NodeModelNode extends ModelNode<Node> {
         final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
         toolActions.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
 
+        final Menu createPrimitiveActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
+        createPrimitiveActions.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
+
+        final Menu createActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
+        createActions.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), createPrimitiveActions);
+
         items.add(toolActions);
+        items.add(createActions);
         items.add(new RenameNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);

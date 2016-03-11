@@ -1,6 +1,7 @@
 package com.ss.editor.manager;
 
 import com.ss.editor.FileExtensions;
+import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiReader;
@@ -11,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
 
 import javax.imageio.ImageIO;
@@ -33,6 +33,8 @@ import rlib.util.array.ArrayFactory;
 public class JavaFXImageManager {
 
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFXImageManager.class);
+
+    private static final String PREVIEW_CACHE_FOLDER = "preview-cache";
 
     private static final Array<String> FX_FORMATS = ArrayFactory.newArray(String.class);
     private static final Array<String> JIMI_FORMATS = ArrayFactory.newArray(String.class);
@@ -80,8 +82,8 @@ public class JavaFXImageManager {
 
     public JavaFXImageManager() {
         InitializeManager.valid(getClass());
-        final String userHome = System.getProperty("user.home");
-        this.cacheFolder = Paths.get(userHome).resolve(".jme3-spaceshift-editor");
+        final Path appFolder = Config.getAppFolderInUserHome();
+        this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
     }
 
     /**
@@ -105,14 +107,14 @@ public class JavaFXImageManager {
         final Path imageFolder = cacheFolder.resolve(String.valueOf(width)).resolve(String.valueOf(height));
         final Path cacheFile = imageFolder.resolve(file.subpath(1, file.getNameCount()));
 
-        if(Files.exists(cacheFile)) {
+        if (Files.exists(cacheFile)) {
 
             try {
 
                 final FileTime lastModCacheFile = Files.getLastModifiedTime(cacheFile);
                 final FileTime lastModFile = Files.getLastModifiedTime(file);
 
-                if(lastModCacheFile.compareTo(lastModFile) >= 0) {
+                if (lastModCacheFile.compareTo(lastModFile) >= 0) {
                     return new Image(cacheFile.toUri().toString(), width, height, false, false);
                 }
 

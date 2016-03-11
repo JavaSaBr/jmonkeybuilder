@@ -6,6 +6,8 @@ import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -14,6 +16,8 @@ import rlib.ui.util.FXUtils;
  * @author Ronn
  */
 public class MaterialParamControl extends HBox {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(MaterialParamControl.class);
 
     /**
      * Обработчик внесения изменений.

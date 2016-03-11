@@ -28,7 +28,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -253,7 +252,14 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final TextureKey key = new TextureKey(assetPath);
         key.setFlipY(flipButton.isSelected());
 
-        final Texture texture = assetManager.loadTexture(key);
+        final Texture texture;
+
+        try {
+            texture = assetManager.loadTexture(key);
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            return;
+        }
 
         if (repeatButton.isSelected()) {
             texture.setWrap(Texture.WrapMode.Repeat);
@@ -339,7 +345,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
             final CheckBox repeatButton = getRepeatButton();
             repeatButton.setSelected(false);
 
-            textureTooltip.setText(StringUtils.EMPTY);
+            textureTooltip.showImage(null);
             return;
         }
 

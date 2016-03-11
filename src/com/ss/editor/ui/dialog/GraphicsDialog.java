@@ -302,7 +302,7 @@ public class GraphicsDialog extends EditorDialog {
             needRestart++;
         }
 
-        if(currentFullscreen != fullscreen) {
+        if (currentFullscreen != fullscreen) {
             needRestart++;
         }
 
@@ -392,7 +392,7 @@ public class GraphicsDialog extends EditorDialog {
             needRestart++;
         }
 
-        if(currentFullscreen != fullscreen) {
+        if (currentFullscreen != fullscreen) {
             needRestart++;
         }
 

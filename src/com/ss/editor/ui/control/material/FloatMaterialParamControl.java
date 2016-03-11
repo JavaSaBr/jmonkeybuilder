@@ -59,13 +59,13 @@ public class FloatMaterialParamControl extends MaterialParamControl {
      */
     private void processScroll(final ScrollEvent event) {
 
-        if(!event.isControlDown()) {
+        if (!event.isControlDown()) {
             return;
         }
 
         final double deltaY = event.getDeltaY();
 
-        if(deltaY > 0) {
+        if (deltaY > 0) {
             spinner.increment(10);
         } else {
             spinner.decrement(10);

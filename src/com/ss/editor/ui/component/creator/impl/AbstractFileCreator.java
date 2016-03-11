@@ -183,7 +183,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
 
         final Path selectedFile = getSelectedFile();
         final Path directory = Files.isDirectory(selectedFile) ? selectedFile : selectedFile.getParent();
-        final Path toCreate = directory.resolve(filename + "." + fileExtension);
+        final Path toCreate = StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) : directory.resolve(filename + "." + fileExtension);
 
         return toCreate;
     }
@@ -249,7 +249,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         final HBox fileNameContainer = new HBox();
         fileNameContainer.setAlignment(Pos.CENTER_LEFT);
 
-        final Label fileNameLabel = new Label(Messages.FILE_CREATOR_FILE_NAME_LABEL + ":");
+        final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
         fileNameLabel.setId(CSSIds.FILE_CREATOR_LABEL);
 
         fileNameField = new TextField();
@@ -265,6 +265,13 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         FXUtils.addClassTo(fileNameField, CSSClasses.MAIN_FONT_13);
 
         VBox.setMargin(fileNameContainer, FILE_NAME_CONTAINER_OFFSET);
+    }
+
+    /**
+     * @return текст "название файла"
+     */
+    protected String getFileNameLabelText() {
+        return Messages.FILE_CREATOR_FILE_NAME_LABEL;
     }
 
     /**

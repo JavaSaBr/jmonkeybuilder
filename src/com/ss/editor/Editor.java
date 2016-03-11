@@ -2,8 +2,10 @@ package com.ss.editor;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Environment;
+import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
@@ -36,7 +38,6 @@ import com.sun.javafx.cursor.CursorType;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Level;
 
@@ -121,18 +122,17 @@ public class Editor extends SimpleApplication {
         LoggerLevel.ERROR.setEnabled(true);
         LoggerLevel.WARNING.setEnabled(true);
 
-        final Path logFolder = Paths.get(Config.PROJECT_PATH, "log");
+        final Path logFolder = Config.getFolderForLog();
 
-        if (Files.exists(logFolder)) {
-            return;
+        if (!Files.exists(logFolder)) {
+            try {
+                Files.createDirectories(logFolder);
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
         }
 
-        try {
-            Files.createDirectories(logFolder);
-            LoggerManager.addListener(new FolderFileListener(logFolder));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        LoggerManager.addListener(new FolderFileListener(logFolder));
     }
 
     /**
@@ -338,12 +338,9 @@ public class Editor extends SimpleApplication {
 
             super.update();
 
-        } catch (final ArrayIndexOutOfBoundsException | NullPointerException e) {
+        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | IllegalStateException e) {
             LOGGER.warning(e);
             System.exit(1);
-        } catch (final IllegalStateException e) {
-            LOGGER.warning(e);
-            System.exit(0);
         } finally {
             syncUnlock(stamp);
         }
@@ -377,6 +374,8 @@ public class Editor extends SimpleApplication {
         }
 
         lightProbe = LightProbeFactory.makeProbe(getEnvironmentCamera(), rootNode, EMPTY_JOB_ADAPTER);
+        ((BoundingSphere) lightProbe.getBounds()).setRadius(100);
+
         rootNode.addLight(lightProbe);
     }
 

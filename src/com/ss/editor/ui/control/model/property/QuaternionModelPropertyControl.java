@@ -91,7 +91,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
      */
     private void processScroll(final ScrollEvent event) {
 
-        if(!event.isControlDown()) {
+        if (!event.isControlDown()) {
             return;
         }
 

@@ -7,6 +7,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.util.EditorUtil;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -117,7 +118,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fileToCreate))) {
             out.print(materialContent);
         } catch (final IOException e) {
-            LOGGER.warning(this, e);
+            EditorUtil.handleException(LOGGER, this, e);
+            return;
         }
 
         notifyFileCreated(fileToCreate, true);

@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import com.ss.editor.Editor;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
@@ -11,6 +13,9 @@ import javafx.scene.control.MenuItem;
  * @author Ronn
  */
 public abstract class AbstractNodeAction extends MenuItem {
+
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * Компонент структуры модели.

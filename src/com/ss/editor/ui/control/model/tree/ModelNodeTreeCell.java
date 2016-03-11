@@ -111,7 +111,6 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         FXUtils.addClassTo(this, CSSClasses.MAIN_FONT_13);
 
         setConverter(stringConverter);
-        setGraphic(imageView);
     }
 
     @Override
@@ -137,7 +136,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         if (item == null) {
             setText(StringUtils.EMPTY);
-            imageView.setImage(null);
+            setGraphic(null);
             return;
         }
 
@@ -153,6 +152,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         }
 
         imageView.setImage(icon);
+        setGraphic(imageView);
     }
 
     /**

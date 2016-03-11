@@ -24,9 +24,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import javafx.scene.layout.VBox;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.StringUtils;
@@ -294,6 +298,13 @@ public abstract class EditorUtil {
      * Обработка ошибки.
      */
     public static void handleException(Logger logger, final Object owner, final Exception e) {
+        handleException(logger, owner, e, null);
+    }
+
+    /**
+     * Обработка ошибки.
+     */
+    public static void handleException(Logger logger, final Object owner, final Exception e, final Runnable callback) {
 
         if (logger == null) {
             logger = LOGGER;
@@ -316,15 +327,44 @@ public abstract class EditorUtil {
             final String localizedMessage = e.getLocalizedMessage();
             final String stackTrace = writer.toString();
 
-            final Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
-            alert.setContentText(stackTrace);
-            alert.setWidth(800);
-            alert.setHeight(400);
+            final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
-            alert.setWidth(800);
-            alert.setHeight(400);
+            alert.setWidth(500);
+            alert.setHeight(220);
+
+            if (callback != null) {
+                alert.setOnHidden(event -> {
+                    callback.run();
+                });
+            }
         });
+    }
+
+    private static Alert createErrorAlert(final Exception e, final String localizedMessage, final String stackTrace) {
+
+        final TextArea textArea = new TextArea(stackTrace);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        VBox.setMargin(textArea, new Insets(2, 5, 2, 5));
+
+        final Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText(StringUtils.isEmpty(localizedMessage) ? e.getClass().getSimpleName() : localizedMessage);
+
+        final DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setExpandableContent(new VBox(textArea));
+        dialogPane.expandedProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue == Boolean.TRUE) {
+                alert.setWidth(800);
+                alert.setHeight(400);
+            } else {
+                alert.setWidth(500);
+                alert.setHeight(220);
+            }
+        });
+
+        return alert;
     }
 
     /**

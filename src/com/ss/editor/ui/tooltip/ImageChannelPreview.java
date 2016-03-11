@@ -171,6 +171,22 @@ public class ImageChannelPreview extends CustomTooltip {
      */
     public void showImage(final Path file) {
 
+        if (file == null) {
+
+            final ImageView redView = getRedView();
+            redView.setImage(null);
+
+            final ImageView greenView = getGreenView();
+            greenView.setImage(null);
+
+            final ImageView blueView = getBlueView();
+            blueView.setImage(null);
+
+            final ImageView alphaView = getAlphaView();
+            alphaView.setImage(null);
+            return;
+        }
+
         final Image image = IMAGE_MANAGER.getTexturePreview(file, 120, 120);
         final PixelReader pixelReader = image.getPixelReader();
 

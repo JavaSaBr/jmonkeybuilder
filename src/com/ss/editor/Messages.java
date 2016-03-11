@@ -98,6 +98,13 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
     public static final String MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
     public static final String MODEL_NODE_TREE_ACTION_TOOLS;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_NODE;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_SKY;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -113,7 +120,33 @@ public class Messages {
     public static final String RENAME_DIALOG_NEW_NAME_LABEL;
     public static final String RENAME_DIALOG_BUTTON_OK;
     public static final String RENAME_DIALOG_BUTTON_CANCEL;
-    ;
+
+    public static final String FOLDER_CREATOR_DESCRIPTION;
+    public static final String FOLDER_CREATOR_TITLE;
+    public static final String FOLDER_CREATOR_FILE_NAME_LABEL;
+
+    public static final String EMPTY_FILE_CREATOR_DESCRIPTION;
+    public static final String EMPTY_FILE_CREATOR_TITLE;
+
+    public static final String IMAGE_VIEWER_EDITOR_NAME;
+
+    public static final String CREATE_SKY_DIALOG_TITLE;
+    public static final String CREATE_SKY_DIALOG_SKY_TYPE_SINGLE;
+    public static final String CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE;
+    public static final String CREATE_SKY_DIALOG_SKY_TYPE_LABEL;
+    public static final String CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL;
+    public static final String CREATE_SKY_DIALOG_TEXTURE_LABEL;
+    public static final String CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL;
+    public static final String CREATE_SKY_DIALOG_FLIP_Y_LABEL;
+    public static final String CREATE_SKY_DIALOG_NORTH_LABEL;
+    public static final String CREATE_SKY_DIALOG_SOUTH_LABEL;
+    public static final String CREATE_SKY_DIALOG_EAST_LABEL;
+    public static final String CREATE_SKY_DIALOG_WEST_LABEL;
+    public static final String CREATE_SKY_DIALOG_TOP_LABEL;
+    public static final String CREATE_SKY_DIALOG_BOTTOM_LABEL;
+
+    public static final String NODE_DIALOG_BUTTON_OK;
+    public static final String NODE_DIALOG_BUTTON_CANCEL;
 
     static {
 
@@ -207,6 +240,13 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
         MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY = bundle.getString("ModelNodeTreeActionOptimizeGeometry");
         MODEL_NODE_TREE_ACTION_TOOLS = bundle.getString("ModelNodeTreeActionTools");
+        MODEL_NODE_TREE_ACTION_CREATE = bundle.getString("ModelNodeTreeActionCreate");
+        MODEL_NODE_TREE_ACTION_CREATE_NODE = bundle.getString("ModelNodeTreeActionCreateNode");
+        MODEL_NODE_TREE_ACTION_CREATE_SKY = bundle.getString("ModelNodeTreeActionCreateSky");
+        MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE = bundle.getString("ModelNodeTreeActionCreatePrimitive");
+        MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX = bundle.getString("ModelNodeTreeActionCreatePrimitiveBox");
+        MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE = bundle.getString("ModelNodeTreeActionCreatePrimitiveSphere");
+        MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -222,5 +262,32 @@ public class Messages {
         RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");
         RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
         RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
+
+        FOLDER_CREATOR_DESCRIPTION = bundle.getString("FolderCreatorDescription");
+        FOLDER_CREATOR_TITLE = bundle.getString("FolderCreatorTitle");
+        FOLDER_CREATOR_FILE_NAME_LABEL = bundle.getString("FolderCreatorFileNameLabel");
+
+        EMPTY_FILE_CREATOR_DESCRIPTION = bundle.getString("EmptyFileCreatorDescription");
+        EMPTY_FILE_CREATOR_TITLE = bundle.getString("EmptyFileCreatorTitle");
+
+        IMAGE_VIEWER_EDITOR_NAME = bundle.getString("ImageViewerEditorName");
+
+        CREATE_SKY_DIALOG_TITLE = bundle.getString("CreateSkyDialogTitle");
+        CREATE_SKY_DIALOG_SKY_TYPE_SINGLE = bundle.getString("CreateSkyDialogSkyTypeSingle");
+        CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE = bundle.getString("CreateSkyDialogSkyTypeMultiple");
+        CREATE_SKY_DIALOG_SKY_TYPE_LABEL = bundle.getString("CreateSkyDialogSkyTypeLabel");
+        CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL = bundle.getString("CreateSkyDialogNormalScaleLabel");
+        CREATE_SKY_DIALOG_TEXTURE_LABEL = bundle.getString("CreateSkyDialogTextureLabel");
+        CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL = bundle.getString("CreateSkyDialogTextureTypeLabel");
+        CREATE_SKY_DIALOG_FLIP_Y_LABEL = bundle.getString("CreateSkyDialogFlipYLabel");
+        CREATE_SKY_DIALOG_NORTH_LABEL = bundle.getString("CreateSkyDialogNorthLabel");
+        CREATE_SKY_DIALOG_SOUTH_LABEL = bundle.getString("CreateSkyDialogSouthLabel");
+        CREATE_SKY_DIALOG_EAST_LABEL = bundle.getString("CreateSkyDialogEastLabel");
+        CREATE_SKY_DIALOG_WEST_LABEL = bundle.getString("CreateSkyDialogWestLabel");
+        CREATE_SKY_DIALOG_TOP_LABEL = bundle.getString("CreateSkyDialogTopLabel");
+        CREATE_SKY_DIALOG_BOTTOM_LABEL = bundle.getString("CreateSkyDialogBottomLabel");
+
+        NODE_DIALOG_BUTTON_OK = bundle.getString("NodeDialogButtonOk");
+        NODE_DIALOG_BUTTON_CANCEL = bundle.getString("NodeDialogButtonCancel");
     }
 }

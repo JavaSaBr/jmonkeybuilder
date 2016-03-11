@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor;
 
+import com.ss.editor.ui.component.editor.impl.ImageViewerEditor;
 import com.ss.editor.ui.component.editor.impl.TextFileEditor;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
@@ -52,6 +53,7 @@ public class EditorRegistry {
         addDescription(PostFilterEditor.DESCRIPTION);
         addDescription(MaterialFileEditor.DESCRIPTION);
         addDescription(ModelFileEditor.DESCRIPTION);
+        addDescription(ImageViewerEditor.DESCRIPTION);
     }
 
     /**

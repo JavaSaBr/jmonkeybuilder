@@ -243,8 +243,19 @@ public class ModelNodeTree extends TitledPane {
      * Уведомление и обработка добавления нового узла.
      */
     public void notifyAdded(final ModelNode<?> parent, final ModelNode<?> modelNode) {
+
         final ModelTreeChangeListener changeListener = getChangeListener();
         changeListener.notifyAdded(parent.getElement(), modelNode.getElement());
+
+        final TreeView<ModelNode<?>> treeView = getTreeView();
+        final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
+
+        if (parentItem == null) {
+            return;
+        }
+
+        final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
+        children.add(0, new TreeItem<>(modelNode));
     }
 
     /**

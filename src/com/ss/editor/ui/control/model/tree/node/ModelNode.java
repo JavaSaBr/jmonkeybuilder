@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.node;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
 import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -18,6 +19,8 @@ import rlib.util.array.Array;
  * @author Ronn
  */
 public abstract class ModelNode<T> implements UObject {
+
+    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * Уникальный ид объекта.

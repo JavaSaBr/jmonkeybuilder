@@ -117,7 +117,7 @@
                         name="jME3-SpaceShift-Editor"
                         mainClass="com.ss.editor.Starter"
                         toolkit="fx"
-                        version="0.3.7"
+                        version="0.4.0"
                 />
 
         <mkdir dir="build/classes/META-INF"/>
@@ -130,7 +130,7 @@
             <manifest>
                 <attribute name="Implementation-Vendor" value="spaceshift.ru"/>
                 <attribute name="Implementation-Title" value="jME3 SpaceShift Editor"/>
-                <attribute name="Implementation-Version" value="0.3.7"/>
+                <attribute name="Implementation-Version" value="0.4.0"/>
             </manifest>
         </fx:jar>
 
@@ -145,6 +145,15 @@
                 outdir="${basedir}/deploy"
                 outfile="jME3 SpaceShift Editor" nativeBundles="all"
                 updatemode="background" verbose="true">
+
+            <fx:platform >
+                <fx:jvmarg value="-Xms1024m"/>
+                <fx:jvmarg value="-Xmx2048m"/>
+                <fx:jvmarg value="-XX:CompileThreshold=1000"/>
+                <fx:jvmarg value="-XX:+AggressiveOpts"/>
+                <fx:jvmarg value="-XX:+UseParallelGC"/>
+                <fx:jvmarg value="-XX:+UseTLAB"/>
+            </fx:platform>
 
             <preferences shortcut="true" menu="true" install="false"/>
 
