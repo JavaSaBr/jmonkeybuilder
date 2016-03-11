@@ -5,6 +5,7 @@ import com.sun.javafx.application.PlatformImpl;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import rlib.concurrent.util.ConcurrentUtils;
+import rlib.concurrent.util.ThreadUtils;
 import rlib.util.array.Array;
 
 /**
@@ -118,7 +119,15 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
             }
 
             // обновление состояния задач
-            PlatformImpl.runAndWait(fxTask);
+            while (true) {
+                try {
+                    PlatformImpl.runAndWait(fxTask);
+                    break;
+                } catch (final IllegalStateException e) {
+                    LOGGER.warning(this, e);
+                    ThreadUtils.sleep(1000);
+                }
+            }
 
             if (executed.isEmpty()) {
                 continue;
