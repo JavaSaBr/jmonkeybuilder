@@ -29,6 +29,8 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
  */
 public class ModelNodeTree extends TitledPane {
 
+    public static final String USER_DATA_IS_SKY = ModelNodeTree.class.getName() + ".isSky";
+
     /**
      * Обработчик выделения элемента в дереве.
      */

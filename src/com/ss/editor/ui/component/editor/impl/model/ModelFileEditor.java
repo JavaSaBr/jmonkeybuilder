@@ -236,6 +236,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final ModelEditorState editorState = getEditorState();
         editorState.openModel(model);
 
+        applyCustomSky(model);
+
         setCurrentModel(model);
         setIgnoreListeners(true);
         try {
@@ -251,6 +253,27 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         }
 
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    }
+
+    /**
+     * Проверка и обработка наличия кастомного фона.
+     */
+    private void applyCustomSky(final Spatial model) {
+
+        final ModelEditorState editorState = getEditorState();
+        final Array<Geometry> container = ArrayFactory.newArray(Geometry.class);
+
+        EditorUtil.addGeometry(model, container);
+
+        if (container.isEmpty()) {
+            return;
+        }
+
+        container.forEach(geometry -> {
+            if (geometry.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE) {
+                editorState.addCustomSky(geometry);
+            }
+        });
     }
 
     @Override
@@ -496,11 +519,39 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
             @Override
             public void notifyAdded(final Object parent, final Object node) {
                 setDirty(true);
+
+                if (!(node instanceof Spatial)) {
+                    return;
+                }
+
+                final ModelEditorState editorState = getEditorState();
+
+                final Spatial spatial = (Spatial) node;
+                final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+
+                if (isSky) {
+                    editorState.addCustomSky(spatial);
+                    editorState.updateLightProbe();
+                }
             }
 
             @Override
             public void notifyRemoved(final Object node) {
                 setDirty(true);
+
+                if (!(node instanceof Spatial)) {
+                    return;
+                }
+
+                final ModelEditorState editorState = getEditorState();
+
+                final Spatial spatial = (Spatial) node;
+                final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+
+                if (isSky) {
+                    editorState.removeCustomSky(spatial);
+                    editorState.updateLightProbe();
+                }
             }
         };
     }

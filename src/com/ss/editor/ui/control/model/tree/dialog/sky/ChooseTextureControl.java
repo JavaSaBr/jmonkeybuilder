@@ -14,6 +14,7 @@ import com.ss.editor.util.EditorUtil;
 import java.nio.file.Path;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -72,6 +73,7 @@ public class ChooseTextureControl extends HBox {
     private Runnable changeHandler;
 
     public ChooseTextureControl() {
+        setAlignment(Pos.CENTER_LEFT);
         createComponents();
     }
 

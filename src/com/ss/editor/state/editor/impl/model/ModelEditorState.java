@@ -33,6 +33,8 @@ import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 
 import rlib.geom.util.AngleUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * Реализация 3D части редактора модели.
@@ -63,6 +65,11 @@ public class ModelEditorState extends AbstractEditorState {
     private final ActionListener actionListener = (name, isPressed, tpf) -> processClick(isPressed);
 
     /**
+     * Набор кастомных фонов.
+     */
+    private final Array<Spatial> customSky;
+
+    /**
      * Редактор в который встроен этот стейт.
      */
     private final ModelFileEditor editor;
@@ -76,6 +83,11 @@ public class ModelEditorState extends AbstractEditorState {
      * Узел для размещения вспомогательных графических элементов.
      */
     private final Node toolNode;
+
+    /**
+     * Узел для размещения кастомного фона.
+     */
+    private final Node customSkyNode;
 
     /**
      * Сетка сцены.
@@ -137,9 +149,12 @@ public class ModelEditorState extends AbstractEditorState {
         this.modelNode = new Node("ModelNode");
         this.modelNode.setUserData(ModelEditorState.class.getName(), true);
         this.toolNode = new Node("ToolNode");
+        this.customSkyNode = new Node("Custom Sky");
+        this.customSky = ArrayFactory.newArray(Spatial.class);
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(getCameraNode());
+        stateNode.attachChild(getCustomSkyNode());
 
         setLightEnabled(true);
         createToolElements();
@@ -150,6 +165,20 @@ public class ModelEditorState extends AbstractEditorState {
 
         setShowSelection(true);
         setShowGrid(true);
+    }
+
+    /**
+     * @return узел для размещения кастомного фона.
+     */
+    private Node getCustomSkyNode() {
+        return customSkyNode;
+    }
+
+    /**
+     * @return Набор кастомных фонов.
+     */
+    private Array<Spatial> getCustomSky() {
+        return customSky;
     }
 
     /**
@@ -265,9 +294,13 @@ public class ModelEditorState extends AbstractEditorState {
      * Активая узла с моделями.
      */
     private void notifyProbeComplete() {
+
         final Node stateNode = getStateNode();
         stateNode.attachChild(getModelNode());
         stateNode.attachChild(getToolNode());
+
+        final Node customSkyNode = getCustomSkyNode();
+        customSkyNode.detachAllChildren();
     }
 
     /**
@@ -371,6 +404,12 @@ public class ModelEditorState extends AbstractEditorState {
         super.update(tpf);
 
         if (frame == 2) {
+
+            final Node customSkyNode = getCustomSkyNode();
+
+            final Array<Spatial> customSky = getCustomSky();
+            customSky.forEach(spatial -> customSkyNode.attachChild(spatial.clone(false)));
+
             EDITOR.updateProbe(probeHandler);
         }
 
@@ -439,7 +478,7 @@ public class ModelEditorState extends AbstractEditorState {
     /**
      * Процесс смены окружения редактора.
      */
-    private void changeFastSkyImpl(Spatial fastSky) {
+    private void changeFastSkyImpl(final Spatial fastSky) {
 
         final Node stateNode = getStateNode();
         final Spatial currentFastSky = getCurrentFastSky();
@@ -448,11 +487,10 @@ public class ModelEditorState extends AbstractEditorState {
             stateNode.detachChild(currentFastSky);
         }
 
-        if (fastSky == null) {
-            return;
+        if (fastSky != null) {
+            stateNode.attachChild(fastSky);
         }
 
-        stateNode.attachChild(fastSky);
         stateNode.detachChild(getModelNode());
         stateNode.detachChild(getToolNode());
 
@@ -695,5 +733,49 @@ public class ModelEditorState extends AbstractEditorState {
         }
 
         setShowGrid(showGrid);
+    }
+
+    /**
+     * Добавление кастомного фона.
+     */
+    public void addCustomSky(final Spatial sky) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addCustomSkyImpl(sky));
+    }
+
+    /**
+     * Процесс добавление кастомного фона.
+     */
+    private void addCustomSkyImpl(Spatial sky) {
+        final Array<Spatial> customSky = getCustomSky();
+        customSky.add(sky);
+    }
+
+    /**
+     * Удаление кастомного фона.
+     */
+    public void removeCustomSky(final Spatial sky) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeCustomSkyImpl(sky));
+    }
+
+    /**
+     * Процесс удаления кастомного фона.
+     */
+    private void removeCustomSkyImpl(Spatial sky) {
+        final Array<Spatial> customSky = getCustomSky();
+        customSky.slowRemove(sky);
+    }
+
+    /**
+     * Обновить цвето-пробу.
+     */
+    public void updateLightProbe() {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+            final Node stateNode = getStateNode();
+            stateNode.detachChild(getModelNode());
+            stateNode.detachChild(getToolNode());
+
+            frame = 0;
+        });
     }
 }

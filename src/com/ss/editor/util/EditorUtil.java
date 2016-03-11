@@ -136,6 +136,25 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Сбор всей геометрии.
+     */
+    public static void addGeometry(final Spatial spatial, final Array<Geometry> container) {
+
+        if (spatial instanceof Geometry) {
+            container.add((Geometry) spatial);
+            return;
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            addGeometry(children, container);
+        }
+    }
+
+    /**
      * Получение угла между 2мя точками.
      *
      * @param center точка угла.

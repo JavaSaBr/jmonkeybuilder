@@ -148,6 +148,9 @@ public class Messages {
     public static final String NODE_DIALOG_BUTTON_OK;
     public static final String NODE_DIALOG_BUTTON_CANCEL;
 
+    public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
+    public static final String EMPTY_MODEL_CREATOR_TITLE;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -289,5 +292,8 @@ public class Messages {
 
         NODE_DIALOG_BUTTON_OK = bundle.getString("NodeDialogButtonOk");
         NODE_DIALOG_BUTTON_CANCEL = bundle.getString("NodeDialogButtonCancel");
+
+        EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
+        EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
     }
 }

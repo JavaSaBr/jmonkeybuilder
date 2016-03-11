@@ -159,6 +159,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     public CreateSkyDialog(final ModelNode<?> parentNode, final ModelNodeTree nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
+        validate();
     }
 
     /**
@@ -201,6 +202,8 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         selectionModel.select(SkyType.SINGLE_TEXTURE);
 
         VBox.setMargin(container, SETTINGS_OFFSET);
+
+        validate();
     }
 
     private void createMultipleTextureSettings() {
@@ -488,6 +491,11 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         final SkyType selectedItem = selectionModel.getSelectedItem();
 
         final Button okButton = getOkButton();
+
+        if (okButton == null) {
+            return;
+        }
+
         okButton.setDisable(true);
 
         if (selectedItem == SkyType.SINGLE_TEXTURE) {
@@ -619,6 +627,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
             EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
                 final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
+                sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
 
                 final ModelNode<Spatial> newNode = ModelNodeFactory.createFor(sky);
                 final ModelNode<?> parentNode = getParentNode();
@@ -667,6 +676,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
             EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
                 final Spatial sky = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture, topTexture, bottomTexture, scale);
+                sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
 
                 final ModelNode<Spatial> newNode = ModelNodeFactory.createFor(sky);
                 final ModelNode<?> parentNode = getParentNode();

@@ -41,8 +41,7 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put("gif", "image-gif");
         EXTENSION_TO_CONTENT_TYPE.put("bmp", "image-bmp");
         EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
-        EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
-        EXTENSION_TO_CONTENT_TYPE.put("tga", "image-tga");
+        EXTENSION_TO_CONTENT_TYPE.put("tga", "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put("psd", "image-psd");
         EXTENSION_TO_CONTENT_TYPE.put("dds", "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put("hdr", "image-jpeg");
