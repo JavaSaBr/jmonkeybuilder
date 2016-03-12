@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.3.7 #
+# jMonkeyEngine 3 SpaceShift Editor 0.4.0 #
 
 * Generic version: https://yadi.sk/d/lMk_FF8Wq6h26
 * Debian based version: https://yadi.sk/d/Y-8fjT9Uq6h2D
