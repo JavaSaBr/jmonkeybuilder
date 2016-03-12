@@ -1,7 +1,8 @@
 # jMonkeyEngine 3 SpaceShift Editor 0.3.7 #
 
-* Generic version: https://yadi.sk/d/GTK04rZ_q3SXz
-* Debian based version: https://yadi.sk/d/olg6aXOrq3SZa
+* Generic version: https://yadi.sk/d/lMk_FF8Wq6h26
+* Debian based version: https://yadi.sk/d/Y-8fjT9Uq6h2D
+* Windows x64 version: https://yadi.sk/d/sHTIn5MQq6gzx
 
 ## ver. 0.1 ##
 * -Implemented the base actions in AssetTree.
@@ -37,6 +38,14 @@
 * -Implemented the cache of preview of image.
 * -Changed the sensitivity of zoom.
 
+## ver. 0.4.0 ##
+* -Added the action for creating a folder.
+* -Added the action for creating an empty file.
+* -Implemented image viewer.
+* -Added actions for creating node, box, sphere and quad in ModelEditor.
+* -Added action for creating SkyBox.
+* -Added action for loading other model to model in Model Editor.
+* -Fixed severals bugs.
 
 * [Image 1](http://imgur.com/8FKlaXw)
 * [Image 2](http://imgur.com/onsWNaK)
