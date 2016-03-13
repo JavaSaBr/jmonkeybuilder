@@ -89,31 +89,31 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
             String styleClass = matcher.group("KEYWORD") != null ? "keyword" : null;
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("VALUETYPE") != null ? "value-type" : null;
             }
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("PAREN") != null ? "paren" : null;
             }
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("BRACE") != null ? "brace" : null;
             }
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("BRACKET") != null ? "bracket" : null;
             }
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("SEMICOLON") != null ? "semicolon" : null;
             }
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("STRING") != null ? "string" : null;
             }
 
-            if(styleClass == null ) {
+            if (styleClass == null) {
                 styleClass = matcher.group("COMMENT") != null ? "comment" : null;
             }
 
