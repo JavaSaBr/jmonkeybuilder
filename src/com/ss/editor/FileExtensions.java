@@ -23,5 +23,8 @@ public interface FileExtensions {
     public static final String IMAGE_DDS = "dds";
     public static final String IMAGE_HDR = "hdr";
 
+    public static final String GLSL_VERTEX = "vert";
+    public static final String GLSL_FRAGMENT = "frag";
+
     public static final String BLENDER = "blend";
 }

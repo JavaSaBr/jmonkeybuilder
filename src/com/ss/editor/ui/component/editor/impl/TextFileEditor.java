@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.impl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import java.io.IOException;
@@ -55,6 +56,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         textArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
 
         FXUtils.addToPane(textArea, root);
+        FXUtils.addClassTo(textArea, CSSClasses.MAIN_FONT_13);
         FXUtils.bindFixedSize(textArea, root.widthProperty(), root.heightProperty());
     }
 
