@@ -153,6 +153,8 @@ public class Messages {
     public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
+    public static final String GLSL_FILE_EDITOR_NAME;
+
     static {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -299,5 +301,7 @@ public class Messages {
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
+
+        GLSL_FILE_EDITOR_NAME = bundle.getString("GLSLFileEditorName");
     }
 }

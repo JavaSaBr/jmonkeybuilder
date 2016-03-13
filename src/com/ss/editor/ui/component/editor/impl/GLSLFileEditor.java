@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import com.ss.editor.FileExtensions;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -37,7 +38,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
     static {
         DESCRIPTION.setConstructor(GLSLFileEditor::new);
-        DESCRIPTION.setEditorName("GLSL Editor");
+        DESCRIPTION.setEditorName(Messages.GLSL_FILE_EDITOR_NAME);
         DESCRIPTION.addExtension(FileExtensions.GLSL_FRAGMENT);
         DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
     }

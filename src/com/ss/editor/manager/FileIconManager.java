@@ -1,5 +1,6 @@
 package com.ss.editor.manager;
 
+import com.ss.editor.FileExtensions;
 import com.ss.editor.util.EditorUtil;
 
 import java.io.IOException;
@@ -34,17 +35,16 @@ public class FileIconManager {
     private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE = DictionaryFactory.newObjectDictionary();
 
     static {
-        EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
-        EXTENSION_TO_CONTENT_TYPE.put("jpg", "image-jpeg");
-        EXTENSION_TO_CONTENT_TYPE.put("jpeg", "image-jpeg");
-        EXTENSION_TO_CONTENT_TYPE.put("tiff", "image-tiff");
-        EXTENSION_TO_CONTENT_TYPE.put("gif", "image-gif");
-        EXTENSION_TO_CONTENT_TYPE.put("bmp", "image-bmp");
-        EXTENSION_TO_CONTENT_TYPE.put("png", "image-png");
-        EXTENSION_TO_CONTENT_TYPE.put("tga", "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_JPEG, "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_JPG, "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_TIFF, "image-tiff");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_GIF, "image-gif");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_BMP, "image-bmp");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_PNG, "image-png");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_TGA, "image-jpeg");
         EXTENSION_TO_CONTENT_TYPE.put("psd", "image-psd");
-        EXTENSION_TO_CONTENT_TYPE.put("dds", "image-jpeg");
-        EXTENSION_TO_CONTENT_TYPE.put("hdr", "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_DDS, "image-jpeg");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.IMAGE_HDR, "image-jpeg");
 
         EXTENSION_TO_CONTENT_TYPE.put("ogg", "sound");
         EXTENSION_TO_CONTENT_TYPE.put("wav", "sound");
@@ -60,14 +60,20 @@ public class FileIconManager {
 
         EXTENSION_TO_CONTENT_TYPE.put("java", "application-x-java");
 
-        EXTENSION_TO_CONTENT_TYPE.put("j3o", "jme3");
-        EXTENSION_TO_CONTENT_TYPE.put("j3m", "jme3");
-        EXTENSION_TO_CONTENT_TYPE.put("j3md", "jme3");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_OBJECT, "jme3");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "gnome-mime-text");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "gnome-mime-text");
 
         EXTENSION_TO_CONTENT_TYPE.put("obj", "application/x-tgif");
         EXTENSION_TO_CONTENT_TYPE.put("blend", "application-x-blender");
         EXTENSION_TO_CONTENT_TYPE.put("j3odata", "gnome-mime-text");
         EXTENSION_TO_CONTENT_TYPE.put("pfv", "gnome-mime-text");
+        EXTENSION_TO_CONTENT_TYPE.put("xml", "application-xml");
+        EXTENSION_TO_CONTENT_TYPE.put("exe", "application-x-ms-dos-executable");
+        EXTENSION_TO_CONTENT_TYPE.put("sh", "application-x-shellscript");
+
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_FRAGMENT, "gnome-mime-text-x-csharp");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_VERTEX, "gnome-mime-text-x-csharp");
     }
 
     private static FileIconManager instance;
@@ -100,19 +106,19 @@ public class FileIconManager {
      */
     public Image getIcon(final Path path, int size) {
 
-        String contentType = null;
+        final String extension = FileUtils.getExtension(path);
+        String contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
 
-        try {
-            contentType = Files.probeContentType(path);
-        } catch (IOException e) {
-            LOGGER.warning(e);
+        if(contentType == null) {
+            try {
+                contentType = Files.probeContentType(path);
+            } catch (IOException e) {
+                LOGGER.warning(e);
+            }
         }
 
         if (Files.isDirectory(path)) {
             contentType = "folder";
-        } else if (contentType == null) {
-            final String extension = FileUtils.getExtension(path);
-            contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
         }
 
         if (contentType != null) {
