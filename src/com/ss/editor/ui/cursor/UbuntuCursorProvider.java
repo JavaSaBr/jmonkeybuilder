@@ -102,7 +102,7 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
 
         final JmeCursor cursor = cache.get(cursorType);
 
-        if (cursor == null) {
+        if (true || cursor == null) {
             return;
         }
 
