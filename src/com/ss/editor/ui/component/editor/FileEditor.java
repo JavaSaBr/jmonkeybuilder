@@ -79,4 +79,9 @@ public interface FileEditor {
      */
     public default void notifyMoved(final Path prevFile, final Path newFile) {
     }
+
+    /**
+     * @return описание редактора.
+     */
+    public EditorDescription getDescription();
 }

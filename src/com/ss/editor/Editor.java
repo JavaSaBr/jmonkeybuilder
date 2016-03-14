@@ -29,6 +29,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.cursor.UbuntuCursorProvider;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -193,6 +194,10 @@ public class Editor extends SimpleApplication {
     @Override
     public void destroy() {
         super.destroy();
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        workspaceManager.save();
+
         System.exit(0);
     }
 
@@ -272,6 +277,7 @@ public class Editor extends SimpleApplication {
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
         InitializeManager.register(FileIconManager.class);
+        InitializeManager.register(WorkspaceManager.class);
         InitializeManager.initialize();
 
         if (Config.ENABLE_PBR) {
@@ -342,6 +348,8 @@ public class Editor extends SimpleApplication {
 
         } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | IllegalStateException e) {
             LOGGER.warning(e);
+            final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+            workspaceManager.save();
             System.exit(1);
         } finally {
             syncUnlock(stamp);

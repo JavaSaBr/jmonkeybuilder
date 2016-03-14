@@ -39,6 +39,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     static {
         DESCRIPTION.setConstructor(GLSLFileEditor::new);
         DESCRIPTION.setEditorName(Messages.GLSL_FILE_EDITOR_NAME);
+        DESCRIPTION.setEditorId(GLSLFileEditor.class.getName());
         DESCRIPTION.addExtension(FileExtensions.GLSL_FRAGMENT);
         DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
     }
@@ -199,6 +200,9 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
         final CodeArea codeArea = getCodeArea();
         codeArea.replaceText(0, 0, getOriginalContent());
+
+        setOriginalContent(codeArea.getText());
+        updateDirty(getOriginalContent());
     }
 
     /**
@@ -231,5 +235,10 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         setOriginalContent(newContent);
         updateDirty(newContent);
         notifyFileChanged();
+    }
+
+    @Override
+    public EditorDescription getDescription() {
+        return DESCRIPTION;
     }
 }

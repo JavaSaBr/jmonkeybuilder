@@ -14,6 +14,7 @@ import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 
 import java.nio.file.Path;
 
+import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
@@ -40,7 +41,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
     public AssetComponent() {
         setId(CSSIds.ASSET_COMPONENT);
-        createContent();
+        createComponents();
         FX_EVENT_MANAGER.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefresh());
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processChangeAsset());
         FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
@@ -123,7 +124,10 @@ public class AssetComponent extends VBox implements ScreenComponent {
         resourceTree.refresh();
     }
 
-    private void createContent() {
+    /**
+     * Создание компонентов.
+     */
+    private void createComponents() {
 
         this.barComponent = new AssetBarComponent();
         this.resourceTree = new ResourceTree(false);
@@ -131,6 +135,8 @@ public class AssetComponent extends VBox implements ScreenComponent {
         FXUtils.addToPane(barComponent, this);
         FXUtils.addToPane(resourceTree, this);
         FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
+
+        VBox.setMargin(resourceTree, new Insets(0, 3, 0, 0));
     }
 
     /**

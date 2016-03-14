@@ -2,8 +2,10 @@ package com.ss.editor.ui.component.bar;
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.ScreenComponent;
+import com.ss.editor.ui.component.bar.action.CloseEditorAction;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
 import com.ss.editor.ui.component.bar.action.OpenSettingsAction;
+import com.ss.editor.ui.component.bar.action.ReopenAssetMenu;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
@@ -23,6 +25,11 @@ import rlib.util.array.Array;
 public class EditorBarComponent extends MenuBar implements ScreenComponent {
 
     public static final String COMPONENT_ID = "EditorBarComponent";
+
+    /**
+     * Меню с переоткрытием ассетов.
+     */
+    private ReopenAssetMenu reopenAssetMenu;
 
     public EditorBarComponent() {
         super();
@@ -47,8 +54,12 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         final ObservableList<MenuItem> items = result.getItems();
 
         final MenuItem openAssetItem = new OpenAssetAction();
+        final MenuItem reopenAssetItem = new ReopenAssetMenu();
+        final MenuItem closeEditorAction = new CloseEditorAction();
 
         items.add(openAssetItem);
+        items.add(reopenAssetItem);
+        items.add(closeEditorAction);
 
         return result;
     }
@@ -63,6 +74,13 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         items.add(openGraphics);
 
         return result;
+    }
+
+    /**
+     * @return меню с переоткрытием ассетов.
+     */
+    public ReopenAssetMenu getReopenAssetMenu() {
+        return reopenAssetMenu;
     }
 
     @Override

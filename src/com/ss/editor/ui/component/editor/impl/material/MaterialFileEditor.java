@@ -14,7 +14,9 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.MaterialUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
@@ -52,6 +56,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     static {
         DESCRIPTION.setConstructor(MaterialFileEditor::new);
         DESCRIPTION.setEditorName(MATERIAL_EDITOR_NAME);
+        DESCRIPTION.setEditorId(MaterialFileEditor.class.getName());
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL);
     }
 
@@ -59,6 +64,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
     private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
     private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
+
+    /**
+     * Слушатель изменений файлов.
+     */
+    private final EventHandler<Event> fileChangedHandler;
 
     /**
      * 3D часть редактора.
@@ -132,7 +142,35 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
     public MaterialFileEditor() {
         this.editorState = new MaterialEditorState();
+        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
+    }
+
+    /**
+     * Обработка изменения других файлов.
+     */
+    private void processChangedFile(final FileChangedEvent event) {
+
+        final Path file = event.getFile();
+
+        if (!MaterialUtils.isShaderFile(file)) {
+            return;
+        }
+
+        final Material currentMaterial = getCurrentMaterial();
+
+        if (!MaterialUtils.containsShader(currentMaterial, file)) {
+            return;
+        }
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
+        final Material newMaterial = assetManager.loadMaterial(currentMaterial.getAssetName());
+
+        MaterialUtils.updateTo(newMaterial, currentMaterial);
+
+        reload(newMaterial);
     }
 
     /**
@@ -253,6 +291,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         return materialRenderParamsComponent;
     }
 
+    /**
+     * @return слушатель изменений файлов.
+     */
+    private EventHandler<Event> getFileChangedHandler() {
+        return fileChangedHandler;
+    }
+
     @Override
     public void openFile(final Path file) {
         super.openFile(file);
@@ -271,6 +316,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         setOriginal(new String(FileUtils.getContent(file)));
 
         reload(material);
+
+        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     /**
@@ -312,6 +359,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         } finally {
             setIgnoreListeners(false);
         }
+    }
+
+    @Override
+    public void notifyClosed() {
+        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     /**
@@ -397,8 +449,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     private void processChangeTypeImpl(final String newType) {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
         final Material newMaterial = new Material(assetManager, newType);
-        newMaterial.getAdditionalRenderState();
+
+        MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());
 
         reload(newMaterial);
 
@@ -507,5 +562,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
      */
     private String getOriginal() {
         return original;
+    }
+
+    @Override
+    public EditorDescription getDescription() {
+        return DESCRIPTION;
     }
 }

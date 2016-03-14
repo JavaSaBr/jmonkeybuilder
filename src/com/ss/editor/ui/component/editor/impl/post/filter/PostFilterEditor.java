@@ -72,6 +72,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         DESCRIPTION.setEditorName(POST_FILTER_EDITOR_NAME);
         DESCRIPTION.setConstructor(PostFilterEditor::new);
+        DESCRIPTION.setEditorId(PostFilterEditor.class.getName());
         DESCRIPTION.addExtension(POST_FILTER_VIEW);
 
         MATERIAL_EXTENSION.add(FileExtensions.JME_MATERIAL);
@@ -459,5 +460,10 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         dragEvent.acceptTransferModes(TransferMode.COPY);
         dragEvent.consume();
+    }
+
+    @Override
+    public EditorDescription getDescription() {
+        return DESCRIPTION;
     }
 }

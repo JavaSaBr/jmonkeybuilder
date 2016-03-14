@@ -14,6 +14,8 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET;
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET;
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER;
+    public static final String EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER;
+    public static final String EDITOR_BAR_ASSET_CLOSE_EDITOR;
     public static final String EDITOR_BAR_SETTINGS;
     public static final String EDITOR_BAR_SETTINGS_GRAPHICS;
 
@@ -162,6 +164,8 @@ public class Messages {
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponent.asset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponent.asset.openAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponent.asset.openAsset.DirectoryChooser");
+        EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponent.asset.reopen");
+        EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponent.asset.close");
 
         EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
         EDITOR_BAR_SETTINGS_GRAPHICS = bundle.getString("EditorBarComponent.settings.graphics");

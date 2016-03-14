@@ -64,7 +64,7 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "gnome-mime-text");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "gnome-mime-text");
 
-        EXTENSION_TO_CONTENT_TYPE.put("obj", "application/x-tgif");
+        EXTENSION_TO_CONTENT_TYPE.put("obj", "application-x-tgif");
         EXTENSION_TO_CONTENT_TYPE.put("blend", "application-x-blender");
         EXTENSION_TO_CONTENT_TYPE.put("j3odata", "gnome-mime-text");
         EXTENSION_TO_CONTENT_TYPE.put("pfv", "gnome-mime-text");
@@ -109,7 +109,7 @@ public class FileIconManager {
         final String extension = FileUtils.getExtension(path);
         String contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
 
-        if(contentType == null) {
+        if (contentType == null) {
             try {
                 contentType = Files.probeContentType(path);
             } catch (IOException e) {

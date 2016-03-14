@@ -59,6 +59,7 @@ public class OpenAssetAction extends MenuItem {
             return;
         }
 
+        config.addOpenedAsset(newAsset);
         config.setCurrentAsset(newAsset);
         config.save();
 

@@ -30,6 +30,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     static {
         DESCRIPTION.setConstructor(TextFileEditor::new);
         DESCRIPTION.setEditorName(Messages.TEXT_FILE_EDITOR_NAME);
+        DESCRIPTION.setEditorId(TextFileEditor.class.getName());
         DESCRIPTION.addExtension(EditorRegistry.ALL_FORMATS);
     }
 
@@ -131,5 +132,10 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         setOriginalContent(newContent);
         updateDirty(newContent);
         notifyFileChanged();
+    }
+
+    @Override
+    public EditorDescription getDescription() {
+        return DESCRIPTION;
     }
 }

@@ -40,6 +40,7 @@ public class MaterialColorsComponent extends TitledPane {
         this.container = new VBox();
         setText(Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
         setContent(container);
+        setAnimated(false);
     }
 
     /**

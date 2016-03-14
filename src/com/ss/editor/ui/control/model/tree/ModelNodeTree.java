@@ -51,6 +51,7 @@ public class ModelNodeTree extends TitledPane {
         this.changeListener = changeListener;
         setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
         createContent();
+        setAnimated(false);
     }
 
     /**

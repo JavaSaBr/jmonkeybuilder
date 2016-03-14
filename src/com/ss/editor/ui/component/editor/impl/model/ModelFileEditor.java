@@ -20,6 +20,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.NodeUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -61,6 +62,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     static {
         DESCRIPTION.setEditorName(Messages.MODEL_FILE_EDITOR_NAME);
         DESCRIPTION.setConstructor(ModelFileEditor::new);
+        DESCRIPTION.setEditorId(ModelFileEditor.class.getName());
         DESCRIPTION.addExtension(FileExtensions.JME_OBJECT);
     }
 
@@ -169,7 +171,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
         final Spatial currentModel = getCurrentModel();
 
-        EditorUtil.addGeometryWithMaterial(currentModel, geometries, assetPath);
+        NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
 
         if (geometries.isEmpty()) {
             return;
@@ -269,7 +271,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final ModelEditorState editorState = getEditorState();
         final Array<Geometry> container = ArrayFactory.newArray(Geometry.class);
 
-        EditorUtil.addGeometry(model, container);
+        NodeUtils.addGeometry(model, container);
 
         if (container.isEmpty()) {
             return;
@@ -285,6 +287,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     @Override
     public void notifyClosed() {
         FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    }
+
+    @Override
+    public EditorDescription getDescription() {
+        return DESCRIPTION;
     }
 
     /**

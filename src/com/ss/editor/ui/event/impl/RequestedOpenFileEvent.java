@@ -18,9 +18,11 @@ public class RequestedOpenFileEvent extends SceneEvent {
 
     public static final String FILE = "file";
     public static final String EDITOR = "editor";
+    public static final String NEED_SHOW = "need_show";
 
     public RequestedOpenFileEvent() {
         super(EVENT_TYPE);
+        setNeedShow(true);
     }
 
     /**
@@ -49,5 +51,19 @@ public class RequestedOpenFileEvent extends SceneEvent {
      */
     public void setFile(final Path file) {
         set(FILE, file);
+    }
+
+    /**
+     * @return нужно ли переходить в этот редактор.
+     */
+    public boolean isNeedShow() {
+        return get(NEED_SHOW);
+    }
+
+    /**
+     * @param needShow нужно ли переходить в этот редактор.
+     */
+    public void setNeedShow(final boolean needShow) {
+        set(NEED_SHOW, needShow);
     }
 }

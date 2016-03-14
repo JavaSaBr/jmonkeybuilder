@@ -34,6 +34,7 @@ public class ModelPropertyEditor extends TitledPane {
         this.changeHandler = changeHandler;
         setText(Messages.MODEL_FILE_EDITOR_PROPERTIES);
         createComponents();
+        setAnimated(false);
     }
 
     /**

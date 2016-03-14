@@ -43,6 +43,7 @@ public class MaterialOtherParamsComponent extends TitledPane {
         this.container = new VBox();
         setText(Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
         setContent(container);
+        setAnimated(false);
     }
 
     /**

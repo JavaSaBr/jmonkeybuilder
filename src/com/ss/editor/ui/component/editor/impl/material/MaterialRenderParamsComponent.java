@@ -109,6 +109,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
         setText(Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
         createContent();
         setContent(container);
+        setAnimated(false);
     }
 
     /**

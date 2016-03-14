@@ -37,8 +37,14 @@ public class EditorRegistry {
      */
     private final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions;
 
+    /**
+     * Таблица описаний редакторов.
+     */
+    private final ObjectDictionary<String, EditorDescription> editorIdToDescription;
+
     public EditorRegistry() {
         this.editorDescriptions = DictionaryFactory.newObjectDictionary();
+        this.editorIdToDescription = DictionaryFactory.newObjectDictionary();
         loadDescriptions();
     }
 
@@ -66,6 +72,13 @@ public class EditorRegistry {
     }
 
     /**
+     * @return таблица описаний редакторов.
+     */
+    private ObjectDictionary<String, EditorDescription> getEditorIdToDescription() {
+        return editorIdToDescription;
+    }
+
+    /**
      * Добавление нового описания редактора.
      */
     private void addDescription(final EditorDescription description) {
@@ -84,6 +97,17 @@ public class EditorRegistry {
 
             descriptions.add(description);
         });
+
+        final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
+        editorIdToDescription.put(description.getEditorId(), description);
+    }
+
+    /**
+     * Получение описания редактора по ид редактора.
+     */
+    public EditorDescription getDescription(final String editorId) {
+        final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
+        return editorIdToDescription.get(editorId);
     }
 
     /**

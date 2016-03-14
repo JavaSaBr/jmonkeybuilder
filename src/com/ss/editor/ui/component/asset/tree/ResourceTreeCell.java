@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset.tree;
 
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -59,9 +60,6 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         FXUtils.addClassTo(this, MAIN_FONT_13);
 
         this.tooltip = new Tooltip();
-
-        //FIXME надо сделать как-то подругому :)
-        // Tooltip.install(this, tooltip);
 
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
@@ -153,8 +151,18 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         final Path fileName = file.getFileName();
 
         setText(fileName.toString());
-        updateTooltip(file.toString());
         setGraphic(new ImageView(ICON_MANAGER.getIcon(file, DEFAULT_FILE_ICON_SIZE)));
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+
+        if (file.equals(currentAsset)) {
+            Tooltip.install(this, tooltip);
+            updateTooltip(file.toString());
+        } else {
+            Tooltip.uninstall(this, tooltip);
+            updateTooltip(StringUtils.EMPTY);
+        }
     }
 
     /**

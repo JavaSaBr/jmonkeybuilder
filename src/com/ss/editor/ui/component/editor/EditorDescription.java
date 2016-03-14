@@ -27,8 +27,27 @@ public class EditorDescription {
      */
     private String editorName;
 
+    /**
+     * Уникальный ид редактора.
+     */
+    private String editorId;
+
     public EditorDescription() {
         this.extensions = ArrayFactory.newArray(String.class);
+    }
+
+    /**
+     * @return уникальный ид редактора.
+     */
+    public String getEditorId() {
+        return editorId;
+    }
+
+    /**
+     * @param editorId уникальный ид редактора.
+     */
+    public void setEditorId(String editorId) {
+        this.editorId = editorId;
     }
 
     /**
@@ -76,8 +95,10 @@ public class EditorDescription {
     @Override
     public String toString() {
         return "EditorDescription{" +
-                "editorName='" + editorName + '\'' +
-                ", extensions=" + extensions +
+                "extensions=" + extensions +
+                ", constructor=" + constructor +
+                ", editorName='" + editorName + '\'' +
+                ", editorId='" + editorId + '\'' +
                 '}';
     }
 }

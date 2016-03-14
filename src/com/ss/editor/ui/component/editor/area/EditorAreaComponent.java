@@ -7,6 +7,8 @@ import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
+import com.ss.editor.manager.WorkspaceManager;
+import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.creator.FileCreator;
@@ -17,6 +19,7 @@ import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
@@ -24,8 +27,10 @@ import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.util.EditorUtil;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -52,6 +57,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
     private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
+    private static final WorkspaceManager WORKSPACE_MANAGER = WorkspaceManager.getInstance();
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
@@ -62,6 +68,11 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Таблица открытых редакторов.
      */
     private final ObjectDictionary<Path, Tab> openedEditors;
+
+    /**
+     * Игнорировать изменения набора открытых файлов.
+     */
+    private boolean ignoreOpenedFiles;
 
     public EditorAreaComponent() {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
@@ -81,6 +92,38 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(RequestedConvertFileEvent.EVENT_TYPE, event -> processConvertFile((RequestedConvertFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
+        FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processEvent((ChangedCurrentAssetFolderEvent) event));
+    }
+
+    /**
+     * Обработка смены папки  ассет.
+     */
+    private void processEvent(final ChangedCurrentAssetFolderEvent event) {
+        setIgnoreOpenedFiles(true);
+        try {
+
+            final ObservableList<Tab> tabs = getTabs();
+            tabs.clear();
+
+            loadOpenedFiles();
+
+        } finally {
+            setIgnoreOpenedFiles(false);
+        }
+    }
+
+    /**
+     * @param ignoreOpenedFiles игнорировать изменения набора открытых файлов.
+     */
+    private void setIgnoreOpenedFiles(final boolean ignoreOpenedFiles) {
+        this.ignoreOpenedFiles = ignoreOpenedFiles;
+    }
+
+    /**
+     * @return игнорировать изменения набора открытых файлов.
+     */
+    private boolean isIgnoreOpenedFiles() {
+        return ignoreOpenedFiles;
     }
 
     /**
@@ -195,6 +238,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             openedEditors.remove(editFile);
 
             fileEditor.notifyClosed();
+
+            if (isIgnoreOpenedFiles()) {
+                return;
+            }
+
+            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+            workspace.removeOpenedFile(editFile);
         });
     }
 
@@ -258,13 +308,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        addEditor(editor);
+        addEditor(editor, event.isNeedShow());
     }
 
     /**
      * Добавление нового открытого редактора в область.
      */
-    public void addEditor(final FileEditor editor) {
+    public void addEditor(final FileEditor editor, final boolean needShow) {
 
         final Path editFile = editor.getEditFile();
 
@@ -282,15 +332,63 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final ObservableList<Tab> tabs = getTabs();
         tabs.add(tab);
 
-        final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
-        selectionModel.select(tab);
+        if (needShow) {
+            final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
+            selectionModel.select(tab);
+        }
 
         final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
         openedEditors.put(editFile, tab);
+
+        if (isIgnoreOpenedFiles()) {
+            return;
+        }
+
+        final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+        workspace.addOpenedFile(editFile, editor);
     }
 
     @Override
     public String getComponentId() {
         return COMPONENT_ID;
+    }
+
+    @Override
+    public void notifyFinishBuild() {
+        setIgnoreOpenedFiles(true);
+        try {
+            loadOpenedFiles();
+        } finally {
+            setIgnoreOpenedFiles(false);
+        }
+    }
+
+    private void loadOpenedFiles() {
+
+        final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+        final Path assetFolder = workspace.getAssetFolder();
+
+        final Map<String, String> openedFiles = workspace.getOpenedFiles();
+        openedFiles.forEach((assetPath, editorId) -> {
+
+            final EditorDescription description = EDITOR_REGISTRY.getDescription(editorId);
+
+            if (description == null) {
+                return;
+            }
+
+            final Path file = assetFolder.resolve(assetPath);
+
+            if (!Files.exists(file)) {
+                return;
+            }
+
+            final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
+            event.setFile(file);
+            event.setDescription(description);
+            event.setNeedShow(false);
+
+            processOpenFile(event);
+        });
     }
 }

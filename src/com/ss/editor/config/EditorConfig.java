@@ -6,13 +6,17 @@ import com.jme3.asset.TextureKey;
 import com.jme3.system.AppSettings;
 import com.ss.editor.Editor;
 import com.ss.editor.EditorContext;
+import com.ss.editor.util.EditorUtil;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -37,6 +41,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_GRAPHIC_FULLSCREEN = GRAPHICS_ALIAS + "." + "fullscreen";
 
     public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
+    public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
     private static EditorConfig instance;
 
@@ -52,6 +57,11 @@ public final class EditorConfig implements AssetEventListener {
 
         return instance;
     }
+
+    /**
+     * Список последних открываемых asset.
+     */
+    private final List<String> lastOpenedAssets;
 
     /**
      * Используемое разрешение экрана.
@@ -77,6 +87,33 @@ public final class EditorConfig implements AssetEventListener {
      * Текущий выбранный Asset.
      */
     private volatile Path currentAsset;
+
+    public EditorConfig() {
+        this.lastOpenedAssets = new ArrayList<>();
+    }
+
+    /**
+     * @return список последних открываемых asset.
+     */
+    public List<String> getLastOpenedAssets() {
+        return lastOpenedAssets;
+    }
+
+    /**
+     * Запоминание открытияуказанного Asset.
+     */
+    public void addOpenedAsset(final Path currentAsset) {
+
+        final String filePath = currentAsset.toString();
+
+        final List<String> lastOpenedAssets = getLastOpenedAssets();
+        lastOpenedAssets.remove(filePath);
+        lastOpenedAssets.add(0, filePath);
+
+        if (lastOpenedAssets.size() > 10) {
+            lastOpenedAssets.remove(lastOpenedAssets.size() - 1);
+        }
+    }
 
     @Override
     public void assetDependencyNotFound(final AssetKey parentKey, final AssetKey dependentAssetKey) {
@@ -145,7 +182,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param currentAsset текущий выбранный Asset.
      */
-    public void setCurrentAsset(Path currentAsset) {
+    public void setCurrentAsset(final Path currentAsset) {
         this.currentAsset = currentAsset;
     }
 
@@ -205,6 +242,12 @@ public final class EditorConfig implements AssetEventListener {
                 LOGGER.error(e);
             }
         }
+
+        final List<String> deserializeLastOpened = EditorUtil.deserialize(prefs.getByteArray(PREF_LAST_OPENED_ASSETS, null));
+
+        if (deserializeLastOpened != null) {
+            getLastOpenedAssets().addAll(deserializeLastOpened);
+        }
     }
 
     /**
@@ -228,6 +271,10 @@ public final class EditorConfig implements AssetEventListener {
         if (currentAsset != null && !Files.exists(currentAsset)) {
             currentAsset = null;
         }
+
+        final List<String> lastOpenedAssets = getLastOpenedAssets();
+
+        prefs.putByteArray(PREF_LAST_OPENED_ASSETS, EditorUtil.serialize((Serializable) lastOpenedAssets));
 
         try {
             prefs.flush();
