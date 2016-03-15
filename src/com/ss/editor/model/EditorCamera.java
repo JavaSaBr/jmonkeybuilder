@@ -177,13 +177,13 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         }
 
         if (name.equals(CHASECAM_MOVELEFT) && !lockRotation) {
-            rotateCamera(-value);
+            rotateCamera(-value * 3);
         } else if (name.equals(CHASECAM_MOVERIGHT) && !lockRotation) {
-            rotateCamera(value);
+            rotateCamera(value * 3);
         } else if (name.equals(CHASECAM_UP) && !lockRotation) {
-            verticalRotateCamera(value);
+            verticalRotateCamera(value * 3);
         } else if (name.equals(CHASECAM_DOWN) && !lockRotation) {
-            verticalRotateCamera(-value);
+            verticalRotateCamera(-value * 3);
         } else if (name.equals(CHASECAM_ZOOMIN)) {
 
             zoomCamera(-value);
