@@ -11,6 +11,7 @@ import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -193,6 +194,28 @@ public class MaterialEditorState extends AbstractEditorState {
         }
 
         setCurrentModelType(modelType);
+    }
+
+    /**
+     * Смена типа Bucket.
+     */
+    public void changeBucketType(final RenderQueue.Bucket bucket) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeBucketTypeImpl(bucket));
+    }
+
+    /**
+     * Процесс смены типа Bucket.
+     */
+    private void changeBucketTypeImpl(final RenderQueue.Bucket bucket) {
+
+        final Geometry testQuad = getTestQuad();
+        testQuad.setQueueBucket(bucket);
+
+        final Geometry testSphere = getTestSphere();
+        testSphere.setQueueBucket(bucket);
+
+        final Geometry testBox = getTestBox();
+        testBox.setQueueBucket(bucket);
     }
 
     @Override

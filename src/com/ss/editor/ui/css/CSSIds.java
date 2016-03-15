@@ -37,6 +37,7 @@ public interface CSSIds {
 
     public static final String MATERIAL_FILE_EDITOR_TOOLBAR_LABEL = "MaterialFileEditorToolbarLabel";
     public static final String MATERIAL_FILE_EDITOR_TOOLBAR_BOX = "MaterialFileEditorToolbarBox";
+    public static final String MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX = "MaterialFileEditorToolbarSmallBox";
     public static final String MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER = "MaterialFileEditorParameterContainer";
 
     public static final String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
