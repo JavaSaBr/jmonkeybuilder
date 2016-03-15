@@ -10,9 +10,6 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
@@ -58,11 +55,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
             notifyProbeComplete();
         }
     };
-
-    /**
-     * Слушатель кликов мышкой по области редактора.
-     */
-    private final ActionListener actionListener = (name, isPressed, tpf) -> processClick(isPressed);
 
     /**
      * Набор кастомных фонов.
@@ -176,11 +168,13 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
         return customSky;
     }
 
-    /**
-     * @return слушатель кликов мышкой по области редактора.
-     */
-    private ActionListener getActionListener() {
-        return actionListener;
+    @Override
+    protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
+        super.onActionImpl(name, isPressed, tpf);
+
+        if(MOUSE_RIGHT_CLICK.equals(name)) {
+            processClick(isPressed);
+        }
     }
 
     /**
@@ -367,16 +361,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
         super.initialize(stateManager, application);
 
         frame = 0;
-
-        final String mappingName = getClass().getName() + "_click";
-
-        final InputManager inputManager = EDITOR.getInputManager();
-
-        if (!inputManager.hasMapping(mappingName)) {
-            inputManager.addMapping(mappingName, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        }
-
-        inputManager.addListener(getActionListener(), mappingName);
     }
 
     @Override
@@ -386,9 +370,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
         final Node stateNode = getStateNode();
         stateNode.detachChild(getModelNode());
         stateNode.detachChild(getToolNode());
-
-        final InputManager inputManager = EDITOR.getInputManager();
-        inputManager.removeListener(getActionListener());
     }
 
     @Override

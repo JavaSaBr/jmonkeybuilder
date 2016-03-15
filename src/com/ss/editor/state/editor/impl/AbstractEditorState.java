@@ -381,7 +381,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
             inputManager.addMapping(KEY_S, new KeyTrigger(KeyInput.KEY_S));
         }
 
-        inputManager.addListener(actionListener, MOUSE_LEFT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
+        inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
         inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S);
     }
 

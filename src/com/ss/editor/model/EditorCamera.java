@@ -213,11 +213,11 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         this.inputManager = inputManager;
 
         if(!inputManager.hasMapping(CHASECAM_DOWN)) {
-            inputManager.addMapping(CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+            inputManager.addMapping(CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
         }
 
         if(!inputManager.hasMapping(CHASECAM_UP)) {
-            inputManager.addMapping(CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+            inputManager.addMapping(CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         }
 
         if(!inputManager.hasMapping(CHASECAM_ZOOMIN)) {
