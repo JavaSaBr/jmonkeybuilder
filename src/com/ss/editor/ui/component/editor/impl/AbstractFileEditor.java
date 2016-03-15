@@ -15,6 +15,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -102,6 +104,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root = createRoot();
+        root.setOnKeyPressed(this::processKeyPressed);
+        root.setOnKeyReleased(this::processKeyReleased);
 
         createContent(root);
 
@@ -116,6 +120,25 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         FXUtils.bindFixedWidth(root, container.widthProperty());
 
         new StackPane(container);
+    }
+
+    /**
+     * Обработка ввода с клавиатуры.
+     */
+    protected void processKeyReleased(final KeyEvent event) {
+
+        final KeyCode code = event.getCode();
+
+        if(code == KeyCode.S && event.isControlDown() && isDirty()) {
+            doSave();
+        }
+    }
+
+    /**
+     * Обработка ввода с клавиатуры.
+     */
+    protected void processKeyPressed(final KeyEvent event) {
+
     }
 
     /**

@@ -21,6 +21,7 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
@@ -103,6 +104,12 @@ public class AssetEditorDialog extends EditorDialog {
         FXUtils.addToPane(container, root);
 
         HBox.setMargin(previewContainer, PREVIEW_OFFSET);
+
+        root.setOnKeyReleased(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
+                processSelect();
+            }
+        });
     }
 
     @Override

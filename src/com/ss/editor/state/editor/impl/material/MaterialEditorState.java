@@ -20,6 +20,7 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
+import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
 import rlib.geom.util.AngleUtils;
 
@@ -28,7 +29,7 @@ import rlib.geom.util.AngleUtils;
  *
  * @author Ronn
  */
-public class MaterialEditorState extends AbstractEditorState {
+public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor> {
 
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
@@ -84,7 +85,8 @@ public class MaterialEditorState extends AbstractEditorState {
      */
     private int frame;
 
-    public MaterialEditorState() {
+    public MaterialEditorState(final MaterialFileEditor fileEditor) {
+        super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
         this.testQuad = new Geometry("Quad", new Quad(4, 4));

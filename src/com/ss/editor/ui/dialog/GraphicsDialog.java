@@ -330,6 +330,9 @@ public class GraphicsDialog extends EditorDialog {
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         fxaaFilterCheckBox.setSelected(editorConfig.isFXAA());
+
+        final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
+        fullscreenCheckBox.setSelected(editorConfig.isFullscreen());
     }
 
     @Override

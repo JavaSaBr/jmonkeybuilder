@@ -41,7 +41,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class ModelEditorState extends AbstractEditorState {
+public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
@@ -68,11 +68,6 @@ public class ModelEditorState extends AbstractEditorState {
      * Набор кастомных фонов.
      */
     private final Array<Spatial> customSky;
-
-    /**
-     * Редактор в который встроен этот стейт.
-     */
-    private final ModelFileEditor editor;
 
     /**
      * Узел для размещения модели.
@@ -144,8 +139,8 @@ public class ModelEditorState extends AbstractEditorState {
      */
     private int frame;
 
-    public ModelEditorState(final ModelFileEditor editor) {
-        this.editor = editor;
+    public ModelEditorState(final ModelFileEditor fileEditor) {
+        super(fileEditor);
         this.modelNode = new Node("ModelNode");
         this.modelNode.setUserData(ModelEditorState.class.getName(), true);
         this.toolNode = new Node("ToolNode");
@@ -213,7 +208,7 @@ public class ModelEditorState extends AbstractEditorState {
         final Node modelNode = getModelNode();
         modelNode.collideWith(ray, results);
 
-        final ModelFileEditor editor = getEditor();
+        final ModelFileEditor editor = getFileEditor();
 
         if (results.size() < 1) {
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifySelected(null));
@@ -228,13 +223,6 @@ public class ModelEditorState extends AbstractEditorState {
         }
 
         EXECUTOR_MANAGER.addFXTask(() -> editor.notifySelected(collision.getGeometry()));
-    }
-
-    /**
-     * @return редактор в который встроен этот стейт.
-     */
-    private ModelFileEditor getEditor() {
-        return editor;
     }
 
     /**

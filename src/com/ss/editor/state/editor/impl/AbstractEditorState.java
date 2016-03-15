@@ -20,6 +20,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.Editor;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorState;
+import com.ss.editor.ui.component.editor.FileEditor;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -29,7 +30,7 @@ import rlib.logging.LoggerManager;
  *
  * @author Ronn
  */
-public abstract class AbstractEditorState extends AbstractAppState implements EditorState {
+public abstract class AbstractEditorState<T extends FileEditor> extends AbstractAppState implements EditorState {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorState.class);
 
@@ -48,12 +49,18 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
     protected static final String KEY_SHIFT = "SSEditor.editorState.keyShift";
+    protected static final String KEY_S = "SSEditor.editorState.S";
 
     /**
      * Слушатели сцены.
      */
     private final ActionListener actionListener;
     private final AnalogListener analogListener;
+
+    /**
+     * Редактор использующий этот стейт.
+     */
+    private final T fileEditor;
 
     /**
      * Опциональная камера для сцены.
@@ -85,7 +92,23 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
      */
     private boolean shiftDown;
 
-    public AbstractEditorState() {
+    /**
+     * Нажата ли сейчас левая кнопка мыши.
+     */
+    private boolean buttonLeftDown;
+
+    /**
+     * Нажата ли сейчас правая кнопка мыши.
+     */
+    private boolean buttonRightDown;
+
+    /**
+     * Нажат ли сейчас колесик.
+     */
+    private boolean buttonMiddleDown;
+
+    public AbstractEditorState(final T fileEditor) {
+        this.fileEditor = fileEditor;
         this.stateNode = new Node(getClass().getSimpleName());
         this.chaseCamera = needChaseCamera() ? createChaseCamera() : null;
         this.lightForChaseCamera = needLightForChaseCamera() ? createLightForChaseCamera() : null;
@@ -112,6 +135,13 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     }
 
     /**
+     * @return редактор использующий этот стейт.
+     */
+    protected T getFileEditor() {
+        return fileEditor;
+    }
+
+    /**
      * Обработка перемещения мышки над 3D областью
      */
     protected void onAnalogImpl(final String name, final float value, final float tpf) {
@@ -128,6 +158,19 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
             setControlDown(isPressed);
         } else if (KEY_SHIFT.equals(name)) {
             setShiftDown(isPressed);
+        } else if (MOUSE_LEFT_CLICK.equals(name)) {
+            setButtonLeftDown(isPressed);
+        } else if (MOUSE_MIDDLE_CLICK.equals(name)) {
+            setButtonMiddleDown(isPressed);
+        } else if (MOUSE_RIGHT_CLICK.equals(name)) {
+            setButtonRightDown(isPressed);
+        } else if(KEY_S.equals(name)) {
+
+            final FileEditor fileEditor = getFileEditor();
+
+            if(isControlDown() && fileEditor.isDirty()) {
+                EXECUTOR_MANAGER.addFXTask(fileEditor::doSave);
+            }
         }
     }
 
@@ -141,7 +184,7 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     /**
      * @param altDown нажат ли сейчас alt.
      */
-    protected void setAltDown(boolean altDown) {
+    protected void setAltDown(final boolean altDown) {
         this.altDown = altDown;
     }
 
@@ -155,7 +198,7 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     /**
      * @param controlDown нажат ли сейчас control.
      */
-    protected void setControlDown(boolean controlDown) {
+    protected void setControlDown(final boolean controlDown) {
         this.controlDown = controlDown;
     }
 
@@ -169,8 +212,50 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
     /**
      * @param shiftDown нажат ли сейчас Shift.
      */
-    protected void setShiftDown(boolean shiftDown) {
+    protected void setShiftDown(final boolean shiftDown) {
         this.shiftDown = shiftDown;
+    }
+
+    /**
+     * @param buttonLeftDown нажата ли сейчас левая кнопка мыши.
+     */
+    protected void setButtonLeftDown(final boolean buttonLeftDown) {
+        this.buttonLeftDown = buttonLeftDown;
+    }
+
+    /**
+     * @param buttonMiddleDown нажат ли сейчас колесик.
+     */
+    protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
+        this.buttonMiddleDown = buttonMiddleDown;
+    }
+
+    /**
+     * @param buttonRightDown нажата ли сейчас правая кнопка мыши.
+     */
+    protected void setButtonRightDown(final boolean buttonRightDown) {
+        this.buttonRightDown = buttonRightDown;
+    }
+
+    /**
+     * @return нажата ли сейчас левая кнопка мыши.
+     */
+    protected boolean isButtonLeftDown() {
+        return buttonLeftDown;
+    }
+
+    /**
+     * @return нажат ли сейчас колесик.
+     */
+    protected boolean isButtonMiddleDown() {
+        return buttonMiddleDown;
+    }
+
+    /**
+     * @return нажата ли сейчас правая кнопка мыши.
+     */
+    protected boolean isButtonRightDown() {
+        return buttonRightDown;
     }
 
     /**
@@ -253,8 +338,12 @@ public abstract class AbstractEditorState extends AbstractAppState implements Ed
             inputManager.addMapping(KEY_ALT, new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU));
         }
 
+        if (!inputManager.hasMapping(KEY_S)) {
+            inputManager.addMapping(KEY_S, new KeyTrigger(KeyInput.KEY_S));
+        }
+
         inputManager.addListener(actionListener, MOUSE_LEFT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
-        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT);
+        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S);
     }
 
     @Override

@@ -114,7 +114,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     private boolean ignoreListeners;
 
     public PostFilterEditor() {
-        this.editorState = new PostFilterEditorState();
+        this.editorState = new PostFilterEditorState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
     }

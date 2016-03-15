@@ -150,7 +150,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     private boolean ignoreListeners;
 
     public MaterialFileEditor() {
-        this.editorState = new MaterialEditorState();
+        this.editorState = new MaterialEditorState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
     }
