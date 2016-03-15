@@ -3,7 +3,6 @@ package com.ss.editor.state.editor.impl;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
@@ -15,10 +14,12 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.Editor;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.editor.FileEditor;
 
@@ -65,12 +66,12 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     /**
      * Опциональная камера для сцены.
      */
-    private final ChaseCamera chaseCamera;
+    private final EditorCamera editorCamera;
 
     /**
      * Источник света для chase камеры.
      */
-    private final DirectionalLight lightForChaseCamera;
+    private final DirectionalLight lightForCamera;
 
     /**
      * Рутовый узел.
@@ -110,28 +111,15 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     public AbstractEditorState(final T fileEditor) {
         this.fileEditor = fileEditor;
         this.stateNode = new Node(getClass().getSimpleName());
-        this.chaseCamera = needChaseCamera() ? createChaseCamera() : null;
-        this.lightForChaseCamera = needLightForChaseCamera() ? createLightForChaseCamera() : null;
+        this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
+        this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
 
-        if (lightForChaseCamera != null) {
-            stateNode.addLight(lightForChaseCamera);
+        if (lightForCamera != null) {
+            stateNode.addLight(lightForCamera);
         }
 
-        this.analogListener = new AnalogListener() {
-
-            @Override
-            public void onAnalog(final String name, final float value, final float tpf) {
-                onAnalogImpl(name, value, tpf);
-            }
-        };
-
-        this.actionListener = new ActionListener() {
-
-            @Override
-            public void onAction(final String name, final boolean isPressed, final float tpf) {
-                onActionImpl(name, isPressed, tpf);
-            }
-        };
+        this.analogListener = this::onAnalogImpl;
+        this.actionListener = this::onActionImpl;
     }
 
     /**
@@ -146,12 +134,57 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      */
     protected void onAnalogImpl(final String name, final float value, final float tpf) {
 
+        if(!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) {
+            return;
+        }
+
+        if(MOUSE_X_AXIS.equals(name)) {
+            moveXCamera(value * 30);
+        } else if(MOUSE_X_AXIS_NEGATIVE.equals(name)) {
+            moveXCamera(-value * 30);
+        }
+
+        if(MOUSE_Y_AXIS.equals(name)) {
+            moveYCamera(-value * 30);
+        } else if(MOUSE_Y_AXIS_NEGATIVE.equals(name)) {
+            moveYCamera(value * 30);
+        }
+    }
+
+    protected void moveXCamera(final float value) {
+
+        final Camera camera = EDITOR.getCamera();
+        final Node nodeForCamera = getNodeForCamera();
+
+        final Vector3f left = camera.getLeft();
+        left.multLocal(value);
+        left.addLocal(nodeForCamera.getLocalTranslation());
+
+        nodeForCamera.setLocalTranslation(left);
+        final EditorCamera editorCamera = getEditorCamera();
+    }
+
+    protected void moveYCamera(final float value) {
+
+        final Camera camera = EDITOR.getCamera();
+        final Node nodeForCamera = getNodeForCamera();
+
+        final Vector3f up = camera.getUp();
+        up.multLocal(value);
+        up.addLocal(nodeForCamera.getLocalTranslation());
+
+        nodeForCamera.setLocalTranslation(up);
+    }
+
+    protected boolean needMovableCamera() {
+        return true;
     }
 
     /**
      * Обработка нажатий кнопок над областью редактора.
      */
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
+
         if (KEY_ALT.equals(name)) {
             setAltDown(isPressed);
         } else if (KEY_CTRL.equals(name)) {
@@ -171,6 +204,12 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
             if(isControlDown() && fileEditor.isDirty()) {
                 EXECUTOR_MANAGER.addFXTask(fileEditor::doSave);
             }
+        }
+
+        final EditorCamera editorCamera = getEditorCamera();
+
+        if(editorCamera != null && needMovableCamera()) {
+            editorCamera.setLockRotation(isShiftDown() && isButtonMiddleDown());
         }
     }
 
@@ -268,8 +307,8 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     /**
      * @return опциональная камера для сцены.
      */
-    protected ChaseCamera getChaseCamera() {
-        return chaseCamera;
+    protected EditorCamera getEditorCamera() {
+        return editorCamera;
     }
 
     @Override
@@ -279,16 +318,16 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         final Node rootNode = EDITOR.getRootNode();
         rootNode.attachChild(getStateNode());
 
-        final ChaseCamera chaseCamera = getChaseCamera();
-
-        if (chaseCamera != null) {
-            chaseCamera.setEnabled(true);
-        }
-
+        final EditorCamera editorCamera = getEditorCamera();
         final InputManager inputManager = EDITOR.getInputManager();
 
         registerActionListener(inputManager);
         registerAnalogListener(inputManager);
+
+        if (editorCamera != null) {
+            editorCamera.setEnabled(true);
+            editorCamera.registerInput(inputManager);
+        }
     }
 
     private void registerAnalogListener(final InputManager inputManager) {
@@ -309,7 +348,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
             inputManager.addMapping(MOUSE_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         }
 
-        inputManager.addListener(actionListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS, MOUSE_Y_AXIS_NEGATIVE);
+        inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS, MOUSE_Y_AXIS_NEGATIVE);
     }
 
     private void registerActionListener(final InputManager inputManager) {
@@ -353,50 +392,50 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         final Node rootNode = EDITOR.getRootNode();
         rootNode.detachChild(getStateNode());
 
-        final ChaseCamera chaseCamera = getChaseCamera();
-
-        if (chaseCamera != null) {
-            chaseCamera.setEnabled(false);
-        }
-
+        final EditorCamera editorCamera = getEditorCamera();
         final InputManager inputManager = EDITOR.getInputManager();
         inputManager.removeListener(actionListener);
         inputManager.removeListener(analogListener);
+
+        if (editorCamera != null) {
+            editorCamera.setEnabled(false);
+            editorCamera.unregisterInput(inputManager);
+        }
     }
 
     /**
      * Нужна ли камера для этой части.
      */
-    protected boolean needChaseCamera() {
+    protected boolean needEditorCamera() {
         return false;
     }
 
     /**
-     * Нужен ли источник света для chase камеры.
+     * Нужен ли источник света для камеры.
      */
-    protected boolean needLightForChaseCamera() {
+    protected boolean needLightForCamera() {
         return false;
     }
 
-    protected ChaseCamera createChaseCamera() {
+    protected EditorCamera createEditorCamera() {
 
         final Camera camera = EDITOR.getCamera();
 
-        final ChaseCamera chaser = new ChaseCamera(camera, getNodeForChaseCamera(), EDITOR.getInputManager());
-        chaser.setDragToRotate(true);
-        chaser.setMinVerticalRotation(-FastMath.HALF_PI);
-        chaser.setMaxDistance(1000);
-        chaser.setSmoothMotion(true);
-        chaser.setRotationSensitivity(10);
-        chaser.setZoomSensitivity(1);
+        final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
+        editorCamera.setMinVerticalRotation(-FastMath.HALF_PI);
+        editorCamera.setMaxDistance(1000);
+        editorCamera.setSmoothMotion(false);
+        editorCamera.setRotationSensitivity(1);
+        editorCamera.setZoomSensitivity(1);
+        editorCamera.setDownRotateOnCloseViewOnly(false);
 
-        return chaser;
+        return editorCamera;
     }
 
     /**
-     * @return источник света для chase камеры.
+     * @return источник света для камеры.
      */
-    protected DirectionalLight createLightForChaseCamera() {
+    protected DirectionalLight createLightForCamera() {
 
         final DirectionalLight directionalLight = new DirectionalLight();
         directionalLight.setColor(ColorRGBA.White);
@@ -407,34 +446,34 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     /**
      * @return узел на который должна смотреть камера.
      */
-    protected Node getNodeForChaseCamera() {
+    protected Node getNodeForCamera() {
         return stateNode;
     }
 
     /**
-     * @return источник света для chase камеры.
+     * @return источник света для камеры.
      */
-    protected DirectionalLight getLightForChaseCamera() {
-        return lightForChaseCamera;
+    protected DirectionalLight getLightForCamera() {
+        return lightForCamera;
     }
 
     @Override
     public void update(float tpf) {
         super.update(tpf);
 
-        final ChaseCamera chaseCamera = getChaseCamera();
-        final DirectionalLight lightForChaseCamera = getLightForChaseCamera();
+        final EditorCamera editorCamera = getEditorCamera();
+        final DirectionalLight lightForCamera = getLightForCamera();
 
-        if (chaseCamera != null && lightForChaseCamera != null && needUpdateChaseCameraLight()) {
+        if (editorCamera != null && lightForCamera != null && needUpdateCameraLight()) {
             final Camera camera = EDITOR.getCamera();
-            lightForChaseCamera.setDirection(camera.getDirection());
+            lightForCamera.setDirection(camera.getDirection());
         }
     }
 
     /**
      * @return нужно ли обновлять направление света.
      */
-    protected boolean needUpdateChaseCameraLight() {
+    protected boolean needUpdateCameraLight() {
         return false;
     }
 }

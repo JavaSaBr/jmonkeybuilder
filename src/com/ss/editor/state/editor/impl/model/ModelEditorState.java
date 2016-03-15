@@ -9,7 +9,6 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.environment.generation.JobProgressAdapter;
-import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
@@ -29,6 +28,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
+import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 
@@ -154,9 +154,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
         setLightEnabled(true);
         createToolElements();
 
-        final ChaseCamera chaseCamera = getChaseCamera();
-        chaseCamera.setDefaultHorizontalRotation(H_ROTATION);
-        chaseCamera.setDefaultVerticalRotation(V_ROTATION);
+        final EditorCamera editorCamera = getEditorCamera();
+        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
+        editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
         setShowSelection(true);
         setShowGrid(true);
@@ -266,8 +266,12 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
     }
 
     @Override
-    protected Node getNodeForChaseCamera() {
-        this.cameraNode = new Node("CameraNode");
+    protected Node getNodeForCamera() {
+
+        if(cameraNode == null) {
+            cameraNode = new Node("CameraNode");
+        }
+
         return cameraNode;
     }
 
@@ -414,17 +418,17 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
     }
 
     @Override
-    protected boolean needChaseCamera() {
+    protected boolean needEditorCamera() {
         return true;
     }
 
     @Override
-    protected boolean needUpdateChaseCameraLight() {
+    protected boolean needUpdateCameraLight() {
         return true;
     }
 
     @Override
-    protected boolean needLightForChaseCamera() {
+    protected boolean needLightForCamera() {
         return true;
     }
 
@@ -444,7 +448,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> {
             return;
         }
 
-        final DirectionalLight light = getLightForChaseCamera();
+        final DirectionalLight light = getLightForCamera();
         final Node stateNode = getStateNode();
 
         if (enabled) {

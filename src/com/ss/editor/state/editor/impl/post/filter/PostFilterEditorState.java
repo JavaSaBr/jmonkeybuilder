@@ -42,7 +42,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
     }
 
     @Override
-    protected boolean needChaseCamera() {
+    protected boolean needEditorCamera() {
         return true;
     }
 

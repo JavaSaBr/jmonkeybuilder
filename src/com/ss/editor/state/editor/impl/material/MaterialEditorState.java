@@ -4,7 +4,6 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
-import com.jme3.input.ChaseCamera;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
@@ -19,6 +18,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.util.SkyFactory;
+import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
@@ -99,12 +99,12 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
         final Node stateNode = getStateNode();
         stateNode.attachChild(sky);
 
-        final DirectionalLight light = getLightForChaseCamera();
+        final DirectionalLight light = getLightForCamera();
         light.setDirection(LIGHT_DIRECTION);
 
-        final ChaseCamera chaseCamera = getChaseCamera();
-        chaseCamera.setDefaultHorizontalRotation(H_ROTATION);
-        chaseCamera.setDefaultVerticalRotation(V_ROTATION);
+        final EditorCamera editorCamera = getEditorCamera();
+        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
+        editorCamera.setDefaultVerticalRotation(V_ROTATION);
     }
 
     /**
@@ -245,18 +245,27 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     @Override
-    protected Node getNodeForChaseCamera() {
-        this.modelNode = new Node("ModelNode");
+    protected Node getNodeForCamera() {
+
+        if(modelNode == null) {
+            modelNode = new Node("ModelNode");
+        }
+
         return modelNode;
     }
 
     @Override
-    protected boolean needChaseCamera() {
+    protected boolean needMovableCamera() {
+        return false;
+    }
+
+    @Override
+    protected boolean needEditorCamera() {
         return true;
     }
 
     @Override
-    protected boolean needLightForChaseCamera() {
+    protected boolean needLightForCamera() {
         return true;
     }
 
@@ -304,7 +313,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
             return;
         }
 
-        final DirectionalLight light = getLightForChaseCamera();
+        final DirectionalLight light = getLightForCamera();
         final Node stateNode = getStateNode();
 
         if (enabled) {
@@ -339,7 +348,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     @Override
-    protected boolean needUpdateChaseCameraLight() {
+    protected boolean needUpdateCameraLight() {
         return false;
     }
 
