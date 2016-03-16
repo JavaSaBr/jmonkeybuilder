@@ -394,8 +394,14 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
             spatial = (Spatial) object;
         }
 
+        final Array<Spatial> spatials = ArrayFactory.newArray(Spatial.class);
+
+        if(spatial != null) {
+            spatials.add(spatial);
+        }
+
         final ModelEditorState editorState = getEditorState();
-        editorState.updateSelection(spatial);
+        editorState.updateSelection(spatials);
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(object);
