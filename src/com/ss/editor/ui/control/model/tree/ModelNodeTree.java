@@ -50,7 +50,7 @@ public class ModelNodeTree extends TitledPane {
         this.selectionHandler = selectionHandler;
         this.changeListener = changeListener;
         setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
-        createContent();
+        createComponents();
         setAnimated(false);
     }
 
@@ -64,7 +64,7 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Создание создаержания компонента.
      */
-    private void createContent() {
+    private void createComponents() {
 
         final VBox container = new VBox();
 

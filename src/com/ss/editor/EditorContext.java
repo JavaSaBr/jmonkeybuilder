@@ -1,9 +1,8 @@
 package com.ss.editor;
 
 import com.jme3.system.AppSettings;
+import com.jme3.system.NativeLibraryLoader;
 import com.jme3.system.lwjgl.LwjglDisplay;
-
-import org.lwjgl.LWJGLException;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -29,13 +28,8 @@ public final class EditorContext extends LwjglDisplay {
             return;
         }
 
-        try {
-            thread = new EditorThread(this);
-            thread.setPriority(Thread.MAX_PRIORITY);
-        } catch (final LWJGLException e) {
-            LOGGER.warning(e);
-        }
-
+        thread = new EditorThread(this);
+        thread.setPriority(Thread.MAX_PRIORITY);
         thread.setName("LWJGL Renderer Thread");
         thread.start();
 
@@ -55,5 +49,20 @@ public final class EditorContext extends LwjglDisplay {
     protected void initContextFirstTime() {
         settings.setRenderer(AppSettings.LWJGL_OPENGL3);
         super.initContextFirstTime();
+    }
+
+    @Override
+    protected void loadNatives() {
+        super.loadNatives();
+
+        if ("LWJGL".equals(settings.getAudioRenderer())) {
+            NativeLibraryLoader.loadNativeLibrary("openal-lwjgl3", true);
+        }
+
+        NativeLibraryLoader.loadNativeLibrary("lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("glfw-lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("jemalloc-lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("jinput", true);
+        NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
     }
 }

@@ -9,6 +9,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.control.transform.SceneEditorControl.TransformType;
 import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -56,6 +57,8 @@ import static javafx.geometry.Pos.TOP_RIGHT;
 public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
     public static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
+
+    public static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -134,6 +137,21 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
      * Кнопка включения отображения сетки.
      */
     private ToggleButton gridButton;
+
+    /**
+     * Тогл активаци трансформации перемещения.
+     */
+    private ToggleButton moveToolButton;
+
+    /**
+     * Тогл активации трансформации вращения.
+     */
+    private ToggleButton rotationToolButton;
+
+    /**
+     * Тогл активации трансформации маштабирования.
+     */
+    private ToggleButton scaleToolButton;
 
     /**
      * Игнорировать ли слушателей.
@@ -394,8 +412,14 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
             spatial = (Spatial) object;
         }
 
+        final Array<Spatial> spatials = ArrayFactory.newArray(Spatial.class);
+
+        if (spatial != null) {
+            spatials.add(spatial);
+        }
+
         final ModelEditorState editorState = getEditorState();
-        editorState.updateSelection(spatial);
+        editorState.updateSelection(spatials);
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(object);
@@ -408,7 +432,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
     @Override
     protected void createToolbar(final HBox container) {
-
         FXUtils.addToPane(createSaveAction(), container);
 
         lightButton = new ToggleButton();
@@ -436,12 +459,31 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
 
         FAST_SKY_LIST.forEach(skyItems::add);
 
+        moveToolButton = new ToggleButton();
+        moveToolButton.setGraphic(new ImageView(Icons.MOVE_24));
+        moveToolButton.setSelected(true);
+        moveToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(moveToolButton, newValue));
+
+        rotationToolButton = new ToggleButton();
+        rotationToolButton.setGraphic(new ImageView(Icons.ROTATION_24));
+        rotationToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(rotationToolButton, newValue));
+
+        scaleToolButton = new ToggleButton();
+        scaleToolButton.setGraphic(new ImageView(Icons.SCALE_24));
+        scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(scaleToolButton, newValue));
+
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(selectionButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(selectionButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(moveToolButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(moveToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(rotationToolButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(rotationToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(scaleToolButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(fastSkyLabel, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(fastSkyComboBox, CSSClasses.MAIN_FONT_13);
 
@@ -450,11 +492,77 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         FXUtils.addToPane(gridButton, container);
         FXUtils.addToPane(fastSkyLabel, container);
         FXUtils.addToPane(fastSkyComboBox, container);
+        FXUtils.addToPane(moveToolButton, container);
+        FXUtils.addToPane(rotationToolButton, container);
+        FXUtils.addToPane(scaleToolButton, container);
 
         HBox.setMargin(lightButton, new Insets(0, 0, 0, 4));
-        HBox.setMargin(selectionButton, new Insets(0, 0, 0, 2));
-        HBox.setMargin(gridButton, new Insets(0, 0, 0, 2));
+        HBox.setMargin(selectionButton, SMALL_OFFSET);
+        HBox.setMargin(gridButton, SMALL_OFFSET);
         HBox.setMargin(fastSkyLabel, new Insets(0, 0, 0, 8));
+        HBox.setMargin(moveToolButton, new Insets(0, 0, 0, 8));
+        HBox.setMargin(rotationToolButton, SMALL_OFFSET);
+        HBox.setMargin(scaleToolButton, SMALL_OFFSET);
+    }
+
+    /**
+     * @return тогл активации трансформации маштабирования.
+     */
+    private ToggleButton getScaleToolButton() {
+        return scaleToolButton;
+    }
+
+    /**
+     * @return тогл активаци трансформации перемещения.
+     */
+    private ToggleButton getMoveToolButton() {
+        return moveToolButton;
+    }
+
+    /**
+     * @return тогл активации трансформации вращения.
+     */
+    private ToggleButton getRotationToolButton() {
+        return rotationToolButton;
+    }
+
+    /**
+     * Обновление режима трансформации.
+     */
+    private void updateTransformTool(final ToggleButton toggleButton, final Boolean newValue) {
+
+        if (newValue != Boolean.TRUE) {
+            return;
+        }
+
+        final ToggleButton scaleToolButton = getScaleToolButton();
+        final ToggleButton moveToolButton = getMoveToolButton();
+        final ToggleButton rotationToolButton = getRotationToolButton();
+
+        final ModelEditorState editorState = getEditorState();
+
+        if (toggleButton == moveToolButton) {
+            moveToolButton.setDisable(true);
+            rotationToolButton.setSelected(false);
+            rotationToolButton.setDisable(false);
+            scaleToolButton.setSelected(false);
+            scaleToolButton.setDisable(false);
+            editorState.setTransformType(TransformType.MOVE_TOOL);
+        } else if (toggleButton == rotationToolButton) {
+            rotationToolButton.setDisable(true);
+            moveToolButton.setSelected(false);
+            moveToolButton.setDisable(false);
+            scaleToolButton.setSelected(false);
+            scaleToolButton.setDisable(false);
+            editorState.setTransformType(TransformType.ROTATE_TOOL);
+        } else if (toggleButton == scaleToolButton) {
+            scaleToolButton.setDisable(true);
+            rotationToolButton.setSelected(false);
+            rotationToolButton.setDisable(false);
+            moveToolButton.setSelected(false);
+            moveToolButton.setDisable(false);
+            editorState.setTransformType(TransformType.SCALE_TOOL);
+        }
     }
 
     /**
@@ -567,5 +675,15 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
                 }
             }
         };
+    }
+
+    public void notifyTransformed(final Spatial spatial) {
+        EXECUTOR_MANAGER.addFXTask(() -> notifyTransformedImpl(spatial));
+    }
+
+    private void notifyTransformedImpl(final Spatial spatial) {
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.buildFor(null);
+        modelPropertyEditor.buildFor(spatial);
     }
 }

@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
@@ -76,6 +77,15 @@ public class RenameDialog extends EditorDialog {
         FXUtils.addClassTo(nameField, CSSClasses.MAIN_FONT_13);
 
         VBox.setMargin(nameContainer, new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0));
+
+        root.setOnKeyReleased(event -> {
+
+            final Button okButton = getOkButton();
+
+            if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
+                processOk();
+            }
+        });
     }
 
     @Override

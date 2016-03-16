@@ -39,6 +39,7 @@ public class Messages {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
 
     public static final String MATERIAL_EDITOR_MATERIAL_TYPE_LABEL;
+    public static final String MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL;
 
     public static final String MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE;
     public static final String MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE;
@@ -156,6 +157,7 @@ public class Messages {
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
     public static final String GLSL_FILE_EDITOR_NAME;
+    ;
 
     static {
 
@@ -184,7 +186,6 @@ public class Messages {
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
 
         POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
-
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
         ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
         ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
@@ -212,6 +213,7 @@ public class Messages {
         MATERIAL_RENDER_STATE_WIREFRAME = bundle.getString("MaterialRenderStateWireframe");
 
         MATERIAL_EDITOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileEditorMaterialTypeLabel");
+        MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL = bundle.getString("MaterialFileEditorBucketTypeLabel");
 
         TEXT_FILE_EDITOR_NAME = bundle.getString("TextFileEditorName");
         POST_FILTER_EDITOR_NAME = bundle.getString("PostFilterEditorName");

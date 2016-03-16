@@ -29,6 +29,9 @@ public interface Icons {
     public static final Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png");
     public static final Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png");
     public static final Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/light.png");
+    public static final Image ROTATION_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/rotation.png");
+    public static final Image MOVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/move.png");
+    public static final Image SCALE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/scale.png");
     public static final Image CUBE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/cube.png");
     public static final Image SPHERE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/sphere.png");
     public static final Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png");

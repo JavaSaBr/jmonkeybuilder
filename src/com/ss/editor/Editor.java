@@ -9,7 +9,6 @@ import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
-import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -42,7 +41,6 @@ import java.nio.file.Path;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Level;
 
-import javafx.scene.Parent;
 import rlib.concurrent.atomic.AtomicInteger;
 import rlib.logging.Logger;
 import rlib.logging.LoggerLevel;
@@ -316,17 +314,6 @@ public class Editor extends SimpleApplication {
 
     @Override
     public void update() {
-
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
-        final InputManager inputManager = getInputManager();
-        final EditorFXScene scene = getScene();
-        final Parent root = scene.getRoot();
-
-        if (inputManager.isCursorVisible() && root.isMouseTransparent()) {
-            executorManager.addFXTask(() -> root.setMouseTransparent(false));
-        } else if (!inputManager.isCursorVisible() && !root.isMouseTransparent()) {
-            executorManager.addFXTask(() -> root.setMouseTransparent(true));
-        }
 
         final JmeFxContainer fxContainer = getFxContainer();
 

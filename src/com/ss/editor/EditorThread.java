@@ -2,8 +2,6 @@ package com.ss.editor;
 
 import com.ss.editor.util.LocalObjects;
 
-import org.lwjgl.LWJGLException;
-
 /**
  * Модель потока редактора.
  *
@@ -17,13 +15,13 @@ public class EditorThread extends Thread {
         this.localObects = new LocalObjects();
     }
 
-    public EditorThread(final Runnable target) throws LWJGLException {
+    public EditorThread(final Runnable target) {
         super(target);
 
         this.localObects = new LocalObjects();
     }
 
-    public EditorThread(final ThreadGroup group, final Runnable target, final String name) throws LWJGLException {
+    public EditorThread(final ThreadGroup group, final Runnable target, final String name) {
         super(group, target, name);
 
         this.localObects = new LocalObjects();

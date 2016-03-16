@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.logging.Logger;
@@ -232,6 +233,12 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         FXUtils.bindFixedWidth(settingsContainer, root.widthProperty().divide(2));
 
         HBox.setMargin(resourceTree, RESOURCE_TREE_OFFSET);
+
+        root.setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                processCreate();
+            }
+        });
     }
 
     /**

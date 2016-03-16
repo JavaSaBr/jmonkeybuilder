@@ -4,13 +4,13 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
-import com.jme3.input.ChaseCamera;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -18,7 +18,9 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.util.SkyFactory;
+import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
+import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
 import rlib.geom.util.AngleUtils;
 
@@ -27,7 +29,7 @@ import rlib.geom.util.AngleUtils;
  *
  * @author Ronn
  */
-public class MaterialEditorState extends AbstractEditorState {
+public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor> {
 
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
@@ -83,7 +85,8 @@ public class MaterialEditorState extends AbstractEditorState {
      */
     private int frame;
 
-    public MaterialEditorState() {
+    public MaterialEditorState(final MaterialFileEditor fileEditor) {
+        super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
         this.testQuad = new Geometry("Quad", new Quad(4, 4));
@@ -96,12 +99,12 @@ public class MaterialEditorState extends AbstractEditorState {
         final Node stateNode = getStateNode();
         stateNode.attachChild(sky);
 
-        final DirectionalLight light = getLightForChaseCamera();
+        final DirectionalLight light = getLightForCamera();
         light.setDirection(LIGHT_DIRECTION);
 
-        final ChaseCamera chaseCamera = getChaseCamera();
-        chaseCamera.setDefaultHorizontalRotation(H_ROTATION);
-        chaseCamera.setDefaultVerticalRotation(V_ROTATION);
+        final EditorCamera editorCamera = getEditorCamera();
+        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
+        editorCamera.setDefaultVerticalRotation(V_ROTATION);
     }
 
     /**
@@ -195,6 +198,28 @@ public class MaterialEditorState extends AbstractEditorState {
         setCurrentModelType(modelType);
     }
 
+    /**
+     * Смена типа Bucket.
+     */
+    public void changeBucketType(final RenderQueue.Bucket bucket) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeBucketTypeImpl(bucket));
+    }
+
+    /**
+     * Процесс смены типа Bucket.
+     */
+    private void changeBucketTypeImpl(final RenderQueue.Bucket bucket) {
+
+        final Geometry testQuad = getTestQuad();
+        testQuad.setQueueBucket(bucket);
+
+        final Geometry testSphere = getTestSphere();
+        testSphere.setQueueBucket(bucket);
+
+        final Geometry testBox = getTestBox();
+        testBox.setQueueBucket(bucket);
+    }
+
     @Override
     public void initialize(final AppStateManager stateManager, final Application application) {
         super.initialize(stateManager, application);
@@ -220,18 +245,27 @@ public class MaterialEditorState extends AbstractEditorState {
     }
 
     @Override
-    protected Node getNodeForChaseCamera() {
-        this.modelNode = new Node("ModelNode");
+    protected Node getNodeForCamera() {
+
+        if (modelNode == null) {
+            modelNode = new Node("ModelNode");
+        }
+
         return modelNode;
     }
 
     @Override
-    protected boolean needChaseCamera() {
+    protected boolean needMovableCamera() {
+        return false;
+    }
+
+    @Override
+    protected boolean needEditorCamera() {
         return true;
     }
 
     @Override
-    protected boolean needLightForChaseCamera() {
+    protected boolean needLightForCamera() {
         return true;
     }
 
@@ -279,7 +313,7 @@ public class MaterialEditorState extends AbstractEditorState {
             return;
         }
 
-        final DirectionalLight light = getLightForChaseCamera();
+        final DirectionalLight light = getLightForCamera();
         final Node stateNode = getStateNode();
 
         if (enabled) {
@@ -314,7 +348,7 @@ public class MaterialEditorState extends AbstractEditorState {
     }
 
     @Override
-    protected boolean needUpdateChaseCameraLight() {
+    protected boolean needUpdateCameraLight() {
         return false;
     }
 

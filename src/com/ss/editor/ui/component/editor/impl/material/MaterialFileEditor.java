@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.impl.material;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
+import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
@@ -23,6 +24,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -61,6 +63,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     }
 
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
+
+    private static final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();
 
     private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
     private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
@@ -121,6 +125,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     private ToggleButton lightButton;
 
     /**
+     * Выпадающий список с выбором RenderQueue.Bucket.
+     */
+    private ComboBox<RenderQueue.Bucket> bucketComboBox;
+
+    /**
      * Список доступных типов материалов.
      */
     private ComboBox<String> materialDefinitionBox;
@@ -141,7 +150,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     private boolean ignoreListeners;
 
     public MaterialFileEditor() {
-        this.editorState = new MaterialEditorState();
+        this.editorState = new MaterialEditorState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
     }
@@ -378,6 +387,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         return true;
     }
 
+    /**
+     * @return выпадающий список с выбором RenderQueue.Bucket.
+     */
+    private ComboBox<RenderQueue.Bucket> getBucketComboBox() {
+        return bucketComboBox;
+    }
+
     @Override
     protected void createToolbar(final HBox container) {
 
@@ -405,6 +421,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         materialDefinitionBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
         materialDefinitionBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeType(newValue));
 
+        final Label bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
+        bucketLabel.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_LABEL);
+
+        bucketComboBox = new ComboBox<>(FXCollections.observableArrayList(BUCKETS));
+        bucketComboBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX);
+        bucketComboBox.getSelectionModel().select(RenderQueue.Bucket.Inherit);
+        bucketComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
+
         FXUtils.addToPane(createSaveAction(), container);
         FXUtils.addToPane(cubeButton, container);
         FXUtils.addToPane(sphereButton, container);
@@ -412,6 +436,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         FXUtils.addToPane(lightButton, container);
         FXUtils.addToPane(materialDefinitionLabel, container);
         FXUtils.addToPane(materialDefinitionBox, container);
+        FXUtils.addToPane(bucketLabel, container);
+        FXUtils.addToPane(bucketComboBox, container);
 
         FXUtils.addClassTo(cubeButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(cubeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
@@ -423,12 +449,24 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(materialDefinitionBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(bucketLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(bucketComboBox, CSSClasses.MAIN_FONT_13);
 
         HBox.setMargin(cubeButton, SMALL_OFFSET);
         HBox.setMargin(sphereButton, SMALL_OFFSET);
         HBox.setMargin(planeButton, SMALL_OFFSET);
         HBox.setMargin(lightButton, BIG_OFFSET);
         HBox.setMargin(materialDefinitionLabel, BIG_OFFSET);
+        HBox.setMargin(bucketLabel, BIG_OFFSET);
+    }
+
+    /**
+     * Обработка смны Bucket типа.
+     */
+    private void changeBucketType(final RenderQueue.Bucket newValue) {
+
+        final MaterialEditorState editorState = getEditorState();
+        editorState.changeBucketType(newValue);
     }
 
     /**
