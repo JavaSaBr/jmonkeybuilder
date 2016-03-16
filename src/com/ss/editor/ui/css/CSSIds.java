@@ -86,4 +86,7 @@ public interface CSSIds {
     public static final String CREATE_SKY_DIALOG_COMBO_BOX = "CreateSkyDialogComboBox";
     public static final String CREATE_SKY_DIALOG_SPINNER = "CreateSkyDialogSpinner";
     public static final String CREATE_SKY_DIALOG_BUTTON = "CreateSkyDialogButton";
+
+    public static final String GENERATE_TANGENTS_DIALOG_LABEL = "GenerateTangentsDialogLabel";
+    public static final String GENERATE_TANGENTS_DIALOG_COMBO_BOX = "GenerateTangentsDialogComboBox";
 }

@@ -1,10 +1,10 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
-import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.dialog.model.GenerateTangentsDialog;
+import com.ss.editor.ui.scene.EditorFXScene;
 
 /**
  * Реализация действия по генерации тангетов используя старый алгоритм.
@@ -25,12 +25,9 @@ public class TangentGeneratorAction extends AbstractNodeAction {
     @Override
     protected void process() {
 
-        final ModelNode<?> node = getNode();
-        final Geometry element = (Geometry) node.getElement();
+        final EditorFXScene scene = EDITOR.getScene();
 
-        TangentGenerator.useStandardGenerator(element, false);
-
-        final ModelNodeTree nodeTree = getNodeTree();
-        nodeTree.notifyChanged(node);
+        final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());
+        dialog.show(scene.getWindow());
     }
 }

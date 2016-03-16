@@ -96,7 +96,6 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_PROPERTIES;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
 
-    public static final String MODEL_NODE_TREE_ACTION_MIKKTSPACE_TANGENT_GENERATOR;
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
     public static final String MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
@@ -157,7 +156,12 @@ public class Messages {
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
     public static final String GLSL_FILE_EDITOR_NAME;
-    ;
+
+    public static final String GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED;
+    public static final String GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL;
+    public static final String GENERATE_TANGENTS_DIALOG_TITLE;
+    public static final String GENERATE_TANGENTS_DIALOG_BUTTON_OK;
+    public static final String GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL;
 
     static {
 
@@ -248,7 +252,6 @@ public class Messages {
         MODEL_FILE_EDITOR_PROPERTIES = bundle.getString("ModelFileEditorProperties");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
 
-        MODEL_NODE_TREE_ACTION_MIKKTSPACE_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionMikktspaceTangentGenerator");
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
         MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY = bundle.getString("ModelNodeTreeActionOptimizeGeometry");
@@ -309,5 +312,11 @@ public class Messages {
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
 
         GLSL_FILE_EDITOR_NAME = bundle.getString("GLSLFileEditorName");
+
+        GENERATE_TANGENTS_DIALOG_TITLE = bundle.getString("GenerateTangentsDialogTitle");
+        GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL = bundle.getString("GenerateTangentsDialogAlgorithmLabel");
+        GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED = bundle.getString("GenerateTangentsDialogSplitMirrored");
+        GENERATE_TANGENTS_DIALOG_BUTTON_OK = bundle.getString("GenerateTangentsDialogButtonOk");
+        GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL = bundle.getString("GenerateTangentsDialogButtonCancel");
     }
 }

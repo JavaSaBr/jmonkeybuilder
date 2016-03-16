@@ -203,8 +203,8 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         stateNode.attachChild(getCameraNode());
         stateNode.attachChild(getCustomSkyNode());
 
-        createToolElements();
         createCollisionPlane();
+        createToolElements();
         createManipulators();
 
         final EditorCamera editorCamera = getEditorCamera();
