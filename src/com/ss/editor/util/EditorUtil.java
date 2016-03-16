@@ -387,4 +387,8 @@ public abstract class EditorUtil {
 
         return null;
     }
+
+    public static float clipNumber(float value, float mod) {
+        return (int) (value * mod) / mod;
+    }
 }

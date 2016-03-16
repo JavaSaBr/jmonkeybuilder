@@ -78,6 +78,24 @@ public class ModelPropertyEditor extends TitledPane {
     }
 
     /**
+     * Синхронизация свойств.
+     */
+    public void syncFor(final Object object) {
+
+        if (getCurrentObject() != object) {
+            return;
+        }
+
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> {
+            if (node instanceof ModelPropertyControl<?>) {
+                ((ModelPropertyControl) node).sync();
+            }
+        });
+    }
+
+    /**
      * @param currentObject текущий редактируемый объект.
      */
     private void setCurrentObject(Object currentObject) {

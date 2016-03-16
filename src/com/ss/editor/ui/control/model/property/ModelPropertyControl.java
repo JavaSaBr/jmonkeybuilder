@@ -42,6 +42,11 @@ public class ModelPropertyControl<T> extends VBox {
     private Consumer<T> applyHandler;
 
     /**
+     * Обработчик синхронизации данных.
+     */
+    private Consumer<T> syncHandler;
+
+    /**
      * Надпись с названием параметра.
      */
     private Label paramNameLabel;
@@ -76,10 +81,34 @@ public class ModelPropertyControl<T> extends VBox {
     }
 
     /**
+     * @param syncHandler обработчик синхронизации данных.
+     */
+    public void setSyncHandler(final Consumer<T> syncHandler) {
+        this.syncHandler = syncHandler;
+    }
+
+    /**
      * Инициализация данных.
      */
     protected void reload() {
+    }
 
+    /**
+     * Синхронизирование данных.
+     */
+    public void sync() {
+        setIgnoreListener(true);
+        try {
+
+            if (syncHandler != null) {
+                syncHandler.accept(getElement());
+            }
+
+            reload();
+
+        } finally {
+            setIgnoreListener(false);
+        }
     }
 
     /**

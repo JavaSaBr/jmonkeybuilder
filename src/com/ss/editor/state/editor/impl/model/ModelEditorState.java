@@ -428,6 +428,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
     @Override
     public Node getCollisionPlane() {
+
+        if (collisionPlane == null) {
+            throw new RuntimeException("collisionPlane is null");
+        }
+
         return collisionPlane;
     }
 
@@ -703,7 +708,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Camera camera = EDITOR.getCamera();
 
         final Vector3f location = transform.getTranslation();
-        final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.1f);
+        final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.4f);
 
         final Node transformToolNode = getTransformToolNode();
         transformToolNode.setLocalTranslation(camera.getLocation().add(resultPosition));

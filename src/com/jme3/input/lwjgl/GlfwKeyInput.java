@@ -78,6 +78,10 @@ public class GlfwKeyInput implements KeyInput {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
 
+                if (key < 0 || key > GLFW_KEY_LAST) {
+                    return;
+                }
+
                 int jmeKey = GlfwKeyMap.toJmeKeyCode(key);
                 final KeyInputEvent evt = new KeyInputEvent(jmeKey, '\0', GLFW_PRESS == action, GLFW_REPEAT == action);
 

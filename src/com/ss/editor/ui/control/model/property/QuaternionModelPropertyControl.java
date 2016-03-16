@@ -8,6 +8,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.array.ArrayFactory;
+
+import static java.lang.Float.parseFloat;
+import static rlib.geom.util.AngleUtils.degreeToRadians;
+import static rlib.geom.util.AngleUtils.radiansToDegree;
 
 /**
  * Реализация контрола по редактированию вектора.
@@ -31,11 +36,6 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
      */
     private TextField zField;
 
-    /**
-     * Поле W.
-     */
-    private TextField wField;
-
     public QuaternionModelPropertyControl(final Runnable changeHandler, final Quaternion element, final String paramName) {
         super(changeHandler, element, paramName);
     }
@@ -48,7 +48,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new TextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
@@ -56,7 +56,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         yFiled = new TextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         yFiled.setOnScroll(this::processScroll);
         yFiled.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
@@ -64,17 +64,9 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
         zField = new TextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
+        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
         zField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
-
-        final Label wLabel = new Label("w:");
-        wLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
-
-        wField = new TextField();
-        wField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR4F_FIELD);
-        wField.setOnScroll(this::processScroll);
-        wField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
@@ -82,8 +74,6 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         FXUtils.addToPane(yFiled, container);
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
-        FXUtils.addToPane(wLabel, container);
-        FXUtils.addToPane(wField, container);
     }
 
     /**
@@ -101,13 +91,13 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         float value = 0;
 
         try {
-            value = Float.parseFloat(text);
+            value = parseFloat(text);
         } catch (final NumberFormatException e) {
             return;
         }
 
         long longValue = (long) (value * 1000);
-        longValue += event.getDeltaY();
+        longValue += event.getDeltaY() * 50;
 
         source.setText(String.valueOf(longValue / 1000F));
     }
@@ -133,29 +123,22 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         return zField;
     }
 
-    /**
-     * @return поле W.
-     */
-    private TextField getWField() {
-        return wField;
-    }
-
     @Override
     protected void reload() {
 
+        final float[] angles = new float[3];
+
         final Quaternion element = getElement();
+        element.toAngles(angles);
 
         final TextField xField = getXField();
-        xField.setText(String.valueOf(element.getX()));
+        xField.setText(String.valueOf(radiansToDegree(angles[0])));
 
         final TextField yFiled = getYFiled();
-        yFiled.setText(String.valueOf(element.getY()));
+        yFiled.setText(String.valueOf(radiansToDegree(angles[1])));
 
         final TextField zField = getZField();
-        zField.setText(String.valueOf(element.getZ()));
-
-        final TextField wField = getWField();
-        wField.setText(String.valueOf(element.getW()));
+        zField.setText(String.valueOf(radiansToDegree(angles[2])));
     }
 
     /**
@@ -172,7 +155,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         float x = 0;
 
         try {
-            x = Float.parseFloat(xField.getText());
+            x = degreeToRadians(parseFloat(xField.getText()));
         } catch (final NumberFormatException e) {
             return;
         }
@@ -182,7 +165,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         float y = 0;
 
         try {
-            y = Float.parseFloat(yFiled.getText());
+            y = degreeToRadians(parseFloat(yFiled.getText()));
         } catch (final NumberFormatException e) {
             return;
         }
@@ -192,23 +175,13 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
         float z = 0;
 
         try {
-            z = Float.parseFloat(zField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        final TextField wField = getWField();
-
-        float w = 0;
-
-        try {
-            w = Float.parseFloat(wField.getText());
+            z = degreeToRadians(parseFloat(zField.getText()));
         } catch (final NumberFormatException e) {
             return;
         }
 
         final Quaternion element = getElement();
-        element.set(x, y, z, w);
+        element.fromAngles(ArrayFactory.toFloatArray(x, y, z));
 
         changed();
     }

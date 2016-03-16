@@ -1,6 +1,10 @@
 package com.ss.editor;
 
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import rlib.util.ReflectionUtils;
 
 /**
  * Набор констант с локализованными сообщениями.
@@ -163,7 +167,22 @@ public class Messages {
     public static final String GENERATE_TANGENTS_DIALOG_BUTTON_OK;
     public static final String GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL;
 
+    public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME;
+    public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
+    public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
+    public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
+
     static {
+
+        final Locale locale = Locale.getDefault();
+        final ClassLoader classLoader = com.sun.javafx.scene.control.skin.resources.ControlResources.class.getClassLoader();
+
+        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", locale, classLoader, ResourceControl.getInstance());
+        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", ResourceControl.getInstance());
+
+        final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
+        final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
+        original.putAll(override);
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
 
@@ -318,5 +337,10 @@ public class Messages {
         GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED = bundle.getString("GenerateTangentsDialogSplitMirrored");
         GENERATE_TANGENTS_DIALOG_BUTTON_OK = bundle.getString("GenerateTangentsDialogButtonOk");
         GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL = bundle.getString("GenerateTangentsDialogButtonCancel");
+
+        BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME = bundle.getString("BoundingVolumeModelPropertyControlName");
+        BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");
+        BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS = bundle.getString("BoundingVolumeModelPropertyControlSphereRadius");
+        BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
     }
 }

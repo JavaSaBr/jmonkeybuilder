@@ -7,7 +7,9 @@ import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.material.ColorMaterialParamControl;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -15,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.StringUtils;
 
 /**
  * Реализация компонента конфигурирования цветов материала.
@@ -68,7 +71,10 @@ public class MaterialColorsComponent extends TitledPane {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
-        final Collection<MatParam> materialParams = materialDef.getMaterialParams();
+        final List<MatParam> materialParams = new ArrayList<>(materialDef.getMaterialParams());
+
+        Collections.sort(materialParams, (first, second) -> StringUtils.compareIgnoreCase(first.getName(), second.getName()));
+
         materialParams.forEach(matParam -> buildFor(matParam, material));
     }
 

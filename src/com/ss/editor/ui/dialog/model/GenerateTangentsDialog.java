@@ -178,7 +178,7 @@ public class GenerateTangentsDialog extends EditorDialog {
         final ComboBox<AlgorithmType> algorithmTypeComboBox = getAlgorithmTypeComboBox();
         final AlgorithmType algorithmType = algorithmTypeComboBox.getSelectionModel().getSelectedItem();
 
-        if(algorithmType == AlgorithmType.STANDARD) {
+        if (algorithmType == AlgorithmType.STANDARD) {
 
             final CheckBox splitMirroredCheckBox = getSplitMirroredCheckBox();
             TangentGenerator.useStandardGenerator(element, splitMirroredCheckBox.isSelected());

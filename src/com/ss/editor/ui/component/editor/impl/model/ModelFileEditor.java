@@ -684,8 +684,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     private void notifyTransformedImpl(final Spatial spatial) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.buildFor(null);
-        modelPropertyEditor.buildFor(spatial);
+        modelPropertyEditor.syncFor(spatial);
 
         changeHandler.run();
     }

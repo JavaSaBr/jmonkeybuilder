@@ -10,14 +10,18 @@ import com.ss.editor.ui.control.material.FloatMaterialParamControl;
 import com.ss.editor.ui.control.material.IntegerMaterialParamControl;
 import com.ss.editor.ui.control.material.MaterialParamControl;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.StringUtils;
 
 /**
  * Реализация компонента конфигурирования других параметров материала.
@@ -26,7 +30,7 @@ import rlib.ui.util.FXUtils;
  */
 public class MaterialOtherParamsComponent extends TitledPane {
 
-    public static final Insets CONTROL_OFFSET = new Insets(3, 0, 0, 0);
+    public static final Insets CONTROL_OFFSET = new Insets(3, 0, 0, 4);
 
     /**
      * Обрбаотчик внесения изменений.
@@ -42,8 +46,10 @@ public class MaterialOtherParamsComponent extends TitledPane {
         this.changeHandler = changeHandler;
         this.container = new VBox();
         setText(Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
-        setContent(container);
+        setContent(new ScrollPane(container));
         setAnimated(false);
+
+        FXUtils.bindFixedWidth(container, widthProperty().subtract(10));
     }
 
     /**
@@ -71,7 +77,10 @@ public class MaterialOtherParamsComponent extends TitledPane {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
-        final Collection<MatParam> materialParams = materialDef.getMaterialParams();
+        final List<MatParam> materialParams = new ArrayList<>(materialDef.getMaterialParams());
+
+        Collections.sort(materialParams, (first, second) -> StringUtils.compareIgnoreCase(first.getName(), second.getName()));
+
         materialParams.forEach(matParam -> buildFor(matParam, material));
     }
 
