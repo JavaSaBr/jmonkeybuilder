@@ -13,14 +13,14 @@ import com.jme3.scene.Spatial;
 public interface SceneEditorControl {
 
     public enum TransformType {
-        MoveTool,
-        RotateTool,
-        ScaleTool,
-        None
+        MOVE_TOOL,
+        ROTATE_TOOL,
+        SCALE_TOOL,
+        NONE
     }
 
     public enum PickedAxis {
-        X, Y, Z, XY, XZ, YZ, View, scaleAll, None
+        X, Y, Z, NONE
     }
 
     /**

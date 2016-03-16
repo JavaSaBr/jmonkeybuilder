@@ -235,7 +235,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         HBox.setMargin(resourceTree, RESOURCE_TREE_OFFSET);
 
         root.setOnKeyReleased(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 processCreate();
             }
         });

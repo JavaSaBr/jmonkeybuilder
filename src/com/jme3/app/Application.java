@@ -36,7 +36,11 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioContext;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.audio.Listener;
-import com.jme3.input.*;
+import com.jme3.input.InputManager;
+import com.jme3.input.JoyInput;
+import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
+import com.jme3.input.TouchInput;
 import com.jme3.math.Vector3f;
 import com.jme3.profile.AppProfiler;
 import com.jme3.profile.AppStep;
@@ -44,8 +48,15 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.ViewPort;
-import com.jme3.system.*;
+import com.jme3.system.AppSettings;
+import com.jme3.system.JmeCanvasContext;
+import com.jme3.system.JmeContext;
 import com.jme3.system.JmeContext.Type;
+import com.jme3.system.JmeSystem;
+import com.jme3.system.NanoTimer;
+import com.jme3.system.SystemListener;
+import com.jme3.system.Timer;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Callable;
@@ -55,14 +66,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The <code>Application</code> class represents an instance of a
- * real-time 3D rendering jME application.
+ * The <code>Application</code> class represents an instance of a real-time 3D rendering jME
+ * application.
  *
- * An <code>Application</code> provides all the tools that are commonly used in jME3
- * applications.
+ * An <code>Application</code> provides all the tools that are commonly used in jME3 applications.
  *
- * jME3 applications *SHOULD NOT EXTEND* this class but extend {@link com.jme3.app.SimpleApplication} instead.
- *
+ * jME3 applications *SHOULD NOT EXTEND* this class but extend {@link
+ * com.jme3.app.SimpleApplication} instead.
  */
 public class Application implements SystemListener {
 
@@ -100,7 +110,7 @@ public class Application implements SystemListener {
     /**
      * Create a new instance of <code>Application</code>.
      */
-    public Application(){
+    public Application() {
         initStateManager();
     }
 
@@ -116,13 +126,11 @@ public class Application implements SystemListener {
     /**
      * Change the application's behavior when unfocused.
      *
-     * By default, the application will 
-     * {@link LostFocusBehavior#ThrottleOnLostFocus throttle the update loop}
-     * so as to not take 100% CPU usage when it is not in focus, e.g.
-     * alt-tabbed, minimized, or obstructed by another window.
+     * By default, the application will {@link LostFocusBehavior#ThrottleOnLostFocus throttle the
+     * update loop} so as to not take 100% CPU usage when it is not in focus, e.g. alt-tabbed,
+     * minimized, or obstructed by another window.
      *
      * @param lostFocusBehavior The new lost focus behavior to use.
-     *
      * @see LostFocusBehavior
      */
     public void setLostFocusBehavior(LostFocusBehavior lostFocusBehavior) {
@@ -133,7 +141,6 @@ public class Application implements SystemListener {
      * Returns true if pause on lost focus is enabled, false otherwise.
      *
      * @return true if pause on lost focus is enabled
-     *
      * @see #getLostFocusBehavior()
      */
     public boolean isPauseOnLostFocus() {
@@ -141,19 +148,13 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Enable or disable pause on lost focus.
-     * <p>
-     * By default, pause on lost focus is enabled.
-     * If enabled, the application will stop updating
-     * when it loses focus or becomes inactive (e.g. alt-tab).
-     * For online or real-time applications, this might not be preferable,
-     * so this feature should be set to disabled. For other applications,
-     * it is best to keep it on so that CPU usage is not used when
-     * not necessary.
+     * Enable or disable pause on lost focus. <p> By default, pause on lost focus is enabled. If
+     * enabled, the application will stop updating when it loses focus or becomes inactive (e.g.
+     * alt-tab). For online or real-time applications, this might not be preferable, so this feature
+     * should be set to disabled. For other applications, it is best to keep it on so that CPU usage
+     * is not used when not necessary.
      *
-     * @param pauseOnLostFocus True to enable pause on lost focus, false
-     * otherwise.
-     *
+     * @param pauseOnLostFocus True to enable pause on lost focus, false otherwise.
      * @see #setLostFocusBehavior(com.jme3.app.LostFocusBehavior)
      */
     public void setPauseOnLostFocus(boolean pauseOnLostFocus) {
@@ -165,7 +166,7 @@ public class Application implements SystemListener {
     }
 
     @Deprecated
-    public void setAssetManager(AssetManager assetManager){
+    public void setAssetManager(AssetManager assetManager) {
         if (this.assetManager != null)
             throw new IllegalStateException("Can only set asset manager"
                     + " before initialization.");
@@ -173,12 +174,12 @@ public class Application implements SystemListener {
         this.assetManager = assetManager;
     }
 
-    private void initAssetManager(){
+    private void initAssetManager() {
         URL assetCfgUrl = null;
 
-        if (settings != null){
+        if (settings != null) {
             String assetCfg = settings.getString("AssetConfigURL");
-            if (assetCfg != null){
+            if (assetCfg != null) {
                 try {
                     assetCfgUrl = new URL(assetCfg);
                 } catch (MalformedURLException ex) {
@@ -195,43 +196,40 @@ public class Application implements SystemListener {
         if (assetCfgUrl == null) {
             assetCfgUrl = JmeSystem.getPlatformAssetConfigURL();
         }
-        if (assetManager == null){
+        if (assetManager == null) {
             assetManager = JmeSystem.newAssetManager(assetCfgUrl);
         }
     }
 
     /**
-     * Set the display settings to define the display created.
-     * <p>
-     * Examples of display parameters include display pixel width and height,
-     * color bit depth, z-buffer bits, anti-aliasing samples, and update frequency.
-     * If this method is called while the application is already running, then
-     * {@link #restart() } must be called to apply the settings to the display.
+     * Set the display settings to define the display created. <p> Examples of display parameters
+     * include display pixel width and height, color bit depth, z-buffer bits, anti-aliasing
+     * samples, and update frequency. If this method is called while the application is already
+     * running, then {@link #restart() } must be called to apply the settings to the display.
      *
      * @param settings The settings to set.
      */
-    public void setSettings(AppSettings settings){
+    public void setSettings(AppSettings settings) {
         this.settings = settings;
-        if (context != null && settings.useInput() != inputEnabled){
+        if (context != null && settings.useInput() != inputEnabled) {
             // may need to create or destroy input based
             // on settings change
             inputEnabled = !inputEnabled;
-            if (inputEnabled){
+            if (inputEnabled) {
                 initInput();
-            }else{
+            } else {
                 destroyInput();
             }
-        }else{
+        } else {
             inputEnabled = settings.useInput();
         }
     }
 
     /**
-     * Sets the Timer implementation that will be used for calculating
-     * frame times.  By default, Application will use the Timer as returned
-     * by the current JmeContext implementation.
+     * Sets the Timer implementation that will be used for calculating frame times.  By default,
+     * Application will use the Timer as returned by the current JmeContext implementation.
      */
-    public void setTimer(Timer timer){
+    public void setTimer(Timer timer) {
         this.timer = timer;
 
         if (timer != null) {
@@ -243,11 +241,11 @@ public class Application implements SystemListener {
         }
     }
 
-    public Timer getTimer(){
+    public Timer getTimer() {
         return timer;
     }
 
-    private void initDisplay(){
+    private void initDisplay() {
         // aquire important objects
         // from the context
         settings = context.getSettings();
@@ -260,8 +258,8 @@ public class Application implements SystemListener {
         renderer = context.getRenderer();
     }
 
-    private void initAudio(){
-        if (settings.getAudioRenderer() != null && context.getType() != Type.Headless){
+    private void initAudio() {
+        if (settings.getAudioRenderer() != null && context.getType() != Type.Headless) {
             audioRenderer = JmeSystem.newAudioRenderer(settings);
             audioRenderer.initialize();
             AudioContext.setAudioRenderer(audioRenderer);
@@ -272,14 +270,13 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Creates the camera to use for rendering. Default values are perspective
-     * projection with 45° field of view, with near and far values 1 and 1000
-     * units respectively.
+     * Creates the camera to use for rendering. Default values are perspective projection with 45°
+     * field of view, with near and far values 1 and 1000 units respectively.
      */
-    private void initCamera(){
+    private void initCamera() {
         cam = new Camera(settings.getWidth(), settings.getHeight());
 
-        cam.setFrustumPerspective(45f, (float)cam.getWidth() / cam.getHeight(), 1f, 1000f);
+        cam.setFrustumPerspective(45f, (float) cam.getWidth() / cam.getHeight(), 1f, 1000f);
         cam.setLocation(new Vector3f(0f, 0f, 10f));
         cam.lookAt(new Vector3f(0f, 0f, 0f), Vector3f.UNIT_Y);
 
@@ -301,11 +298,10 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Initializes mouse and keyboard input. Also
-     * initializes joystick input if joysticks are enabled in the
-     * AppSettings.
+     * Initializes mouse and keyboard input. Also initializes joystick input if joysticks are
+     * enabled in the AppSettings.
      */
-    private void initInput(){
+    private void initInput() {
         mouseInput = context.getMouseInput();
         if (mouseInput != null)
             mouseInput.initialize();
@@ -318,7 +314,7 @@ public class Application implements SystemListener {
         if (touchInput != null)
             touchInput.initialize();
 
-        if (!settings.getBoolean("DisableJoysticks")){
+        if (!settings.getBoolean("DisableJoysticks")) {
             joyInput = context.getJoyInput();
             if (joyInput != null)
                 joyInput.initialize();
@@ -327,7 +323,7 @@ public class Application implements SystemListener {
         inputManager = new InputManager(mouseInput, keyInput, joyInput, touchInput);
     }
 
-    private void initStateManager(){
+    private void initStateManager() {
         stateManager = new AppStateManager(this);
 
         // Always register a ResetStatsState to make sure
@@ -338,14 +334,14 @@ public class Application implements SystemListener {
     /**
      * @return The {@link AssetManager asset manager} for this application.
      */
-    public AssetManager getAssetManager(){
+    public AssetManager getAssetManager() {
         return assetManager;
     }
 
     /**
      * @return the {@link InputManager input manager}.
      */
-    public InputManager getInputManager(){
+    public InputManager getInputManager() {
         return inputManager;
     }
 
@@ -366,7 +362,7 @@ public class Application implements SystemListener {
     /**
      * @return The {@link Renderer renderer} for the application
      */
-    public Renderer getRenderer(){
+    public Renderer getRenderer() {
         return renderer;
     }
 
@@ -387,14 +383,14 @@ public class Application implements SystemListener {
     /**
      * @return The {@link JmeContext display context} for the application
      */
-    public JmeContext getContext(){
+    public JmeContext getContext() {
         return context;
     }
 
     /**
      * @return The {@link Camera camera} for the application
      */
-    public Camera getCamera(){
+    public Camera getCamera() {
         return cam;
     }
 
@@ -403,7 +399,7 @@ public class Application implements SystemListener {
      *
      * @see #start(com.jme3.system.JmeContext.Type)
      */
-    public void start(){
+    public void start() {
         start(JmeContext.Type.Display, false);
     }
 
@@ -412,31 +408,29 @@ public class Application implements SystemListener {
      *
      * @see #start(com.jme3.system.JmeContext.Type)
      */
-    public void start(boolean waitFor){
+    public void start(boolean waitFor) {
         start(JmeContext.Type.Display, waitFor);
     }
 
     /**
-     * Starts the application.
-     * Creating a rendering context and executing
-     * the main loop in a separate thread.
+     * Starts the application. Creating a rendering context and executing the main loop in a
+     * separate thread.
      */
     public void start(JmeContext.Type contextType) {
         start(contextType, false);
     }
 
     /**
-     * Starts the application.
-     * Creating a rendering context and executing
-     * the main loop in a separate thread.
+     * Starts the application. Creating a rendering context and executing the main loop in a
+     * separate thread.
      */
-    public void start(JmeContext.Type contextType, boolean waitFor){
-        if (context != null && context.isCreated()){
+    public void start(JmeContext.Type contextType, boolean waitFor) {
+        if (context != null && context.isCreated()) {
             logger.warning("start() called when application already created!");
             return;
         }
 
-        if (settings == null){
+        if (settings == null) {
             settings = new AppSettings(true);
         }
 
@@ -447,9 +441,8 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Sets an AppProfiler hook that will be called back for
-     * specific steps within a single update frame.  Value defaults
-     * to null.
+     * Sets an AppProfiler hook that will be called back for specific steps within a single update
+     * frame.  Value defaults to null.
      */
     public void setAppProfiler(AppProfiler prof) {
         this.prof = prof;
@@ -466,27 +459,22 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Initializes the application's canvas for use.
-     * <p>
-     * After calling this method, cast the {@link #getContext() context} to
-     * {@link JmeCanvasContext},
-     * then acquire the canvas with {@link JmeCanvasContext#getCanvas() }
-     * and attach it to an AWT/Swing Frame.
-     * The rendering thread will start when the canvas becomes visible on
-     * screen, however if you wish to start the context immediately you
-     * may call {@link #startCanvas() } to force the rendering thread
-     * to start.
+     * Initializes the application's canvas for use. <p> After calling this method, cast the {@link
+     * #getContext() context} to {@link JmeCanvasContext}, then acquire the canvas with {@link
+     * JmeCanvasContext#getCanvas() } and attach it to an AWT/Swing Frame. The rendering thread will
+     * start when the canvas becomes visible on screen, however if you wish to start the context
+     * immediately you may call {@link #startCanvas() } to force the rendering thread to start.
      *
      * @see JmeCanvasContext
      * @see Type#Canvas
      */
-    public void createCanvas(){
-        if (context != null && context.isCreated()){
+    public void createCanvas() {
+        if (context != null && context.isCreated()) {
             logger.warning("createCanvas() called when application already created!");
             return;
         }
 
-        if (settings == null){
+        if (settings == null) {
             settings = new AppSettings(true);
         }
 
@@ -496,91 +484,81 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Starts the rendering thread after createCanvas() has been called.
-     * <p>
-     * Same as calling startCanvas(false)
+     * Starts the rendering thread after createCanvas() has been called. <p> Same as calling
+     * startCanvas(false)
      *
      * @see #startCanvas(boolean)
      */
-    public void startCanvas(){
+    public void startCanvas() {
         startCanvas(false);
     }
 
     /**
-     * Starts the rendering thread after createCanvas() has been called.
-     * <p>
-     * Calling this method is optional, the canvas will start automatically
-     * when it becomes visible.
+     * Starts the rendering thread after createCanvas() has been called. <p> Calling this method is
+     * optional, the canvas will start automatically when it becomes visible.
      *
-     * @param waitFor If true, the current thread will block until the
-     * rendering thread is running
+     * @param waitFor If true, the current thread will block until the rendering thread is running
      */
-    public void startCanvas(boolean waitFor){
+    public void startCanvas(boolean waitFor) {
         context.create(waitFor);
     }
 
     /**
      * Internal use only.
      */
-    public void reshape(int w, int h){
-        if(renderManager != null) {
+    public void reshape(int w, int h) {
+        if (renderManager != null) {
             renderManager.notifyReshape(w, h);
         }
     }
 
     /**
-     * Restarts the context, applying any changed settings.
-     * <p>
-     * Changes to the {@link AppSettings} of this Application are not
-     * applied immediately; calling this method forces the context
-     * to restart, applying the new settings.
+     * Restarts the context, applying any changed settings. <p> Changes to the {@link AppSettings}
+     * of this Application are not applied immediately; calling this method forces the context to
+     * restart, applying the new settings.
      */
-    public void restart(){
+    public void restart() {
         context.setSettings(settings);
         context.restart();
     }
 
     /**
-     * Requests the context to close, shutting down the main loop
-     * and making necessary cleanup operations.
+     * Requests the context to close, shutting down the main loop and making necessary cleanup
+     * operations.
      *
      * Same as calling stop(false)
      *
      * @see #stop(boolean)
      */
-    public void stop(){
+    public void stop() {
         stop(false);
     }
 
     /**
-     * Requests the context to close, shutting down the main loop
-     * and making necessary cleanup operations.
-     * After the application has stopped, it cannot be used anymore.
+     * Requests the context to close, shutting down the main loop and making necessary cleanup
+     * operations. After the application has stopped, it cannot be used anymore.
      */
-    public void stop(boolean waitFor){
+    public void stop(boolean waitFor) {
         logger.log(Level.FINE, "Closing application: {0}", getClass().getName());
         context.destroy(waitFor);
     }
 
     /**
-     * Do not call manually.
-     * Callback from ContextListener.
-     * <p>
-     * Initializes the <code>Application</code>, by creating a display and
-     * default camera. If display settings are not specified, a default
-     * 640x480 display is created. Default values are used for the camera;
-     * perspective projection with 45° field of view, with near
-     * and far values 1 and 1000 units respectively.
+     * Do not call manually. Callback from ContextListener. <p> Initializes the
+     * <code>Application</code>, by creating a display and default camera. If display settings are
+     * not specified, a default 640x480 display is created. Default values are used for the camera;
+     * perspective projection with 45° field of view, with near and far values 1 and 1000 units
+     * respectively.
      */
-    public void initialize(){
-        if (assetManager == null){
+    public void initialize() {
+        if (assetManager == null) {
             initAssetManager();
         }
 
         initDisplay();
         initCamera();
 
-        if (inputEnabled){
+        if (inputEnabled) {
             initInput();
         }
         initAudio();
@@ -595,14 +573,14 @@ public class Application implements SystemListener {
     /**
      * Internal use only.
      */
-    public void handleError(String errMsg, Throwable t){
+    public void handleError(String errMsg, Throwable t) {
         // Print error to log.
         logger.log(Level.SEVERE, errMsg, t);
         // Display error message on screen if not in headless mode
         if (context.getType() != JmeContext.Type.Headless) {
             if (t != null) {
                 JmeSystem.showErrorDialog(errMsg + "\n" + t.getClass().getSimpleName() +
-                        (t.getMessage() != null ? ": " +  t.getMessage() : ""));
+                        (t.getMessage() != null ? ": " + t.getMessage() : ""));
             } else {
                 JmeSystem.showErrorDialog(errMsg);
             }
@@ -614,7 +592,7 @@ public class Application implements SystemListener {
     /**
      * Internal use only.
      */
-    public void gainFocus(){
+    public void gainFocus() {
         if (lostFocusBehavior != LostFocusBehavior.Disabled) {
             if (lostFocusBehavior == LostFocusBehavior.PauseOnLostFocus) {
                 paused = false;
@@ -629,8 +607,8 @@ public class Application implements SystemListener {
     /**
      * Internal use only.
      */
-    public void loseFocus(){
-        if (lostFocusBehavior != LostFocusBehavior.Disabled){
+    public void loseFocus() {
+        if (lostFocusBehavior != LostFocusBehavior.Disabled) {
             if (lostFocusBehavior == LostFocusBehavior.PauseOnLostFocus) {
                 paused = true;
             }
@@ -641,17 +619,14 @@ public class Application implements SystemListener {
     /**
      * Internal use only.
      */
-    public void requestClose(boolean esc){
+    public void requestClose(boolean esc) {
         context.destroy(false);
     }
 
     /**
-     * Enqueues a task/callable object to execute in the jME3
-     * rendering thread.
-     * <p>
-     * Callables are executed right at the beginning of the main loop.
-     * They are executed even if the application is currently paused
-     * or out of focus.
+     * Enqueues a task/callable object to execute in the jME3 rendering thread. <p> Callables are
+     * executed right at the beginning of the main loop. They are executed even if the application
+     * is currently paused or out of focus.
      *
      * @param callable The callable to run in the main jME3 thread
      */
@@ -662,16 +637,13 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Enqueues a runnable object to execute in the jME3
-     * rendering thread.
-     * <p>
-     * Runnables are executed right at the beginning of the main loop.
-     * They are executed even if the application is currently paused
-     * or out of focus.
+     * Enqueues a runnable object to execute in the jME3 rendering thread. <p> Runnables are
+     * executed right at the beginning of the main loop. They are executed even if the application
+     * is currently paused or out of focus.
      *
      * @param runnable The runnable to run in the main jME3 thread
      */
-    public void enqueue(Runnable runnable){
+    public void enqueue(Runnable runnable) {
         enqueue(new RunnableWrapper(runnable));
     }
 
@@ -680,7 +652,7 @@ public class Application implements SystemListener {
      */
     protected void runQueuedTasks() {
         AppTask<?> task;
-        while( (task = taskQueue.poll()) != null ) {
+        while ((task = taskQueue.poll()) != null) {
             if (!task.isCancelled()) {
                 task.invoke();
             }
@@ -688,14 +660,13 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Do not call manually.
-     * Callback from ContextListener.
+     * Do not call manually. Callback from ContextListener.
      */
-    public void update(){
+    public void update() {
         // Make sure the audio renderer is available to callables
         AudioContext.setAudioRenderer(audioRenderer);
 
-        if (prof!=null) prof.appStep(AppStep.QueuedTasks);
+        if (prof != null) prof.appStep(AppStep.QueuedTasks);
         runQueuedTasks();
 
         if (speed == 0 || paused)
@@ -703,20 +674,20 @@ public class Application implements SystemListener {
 
         timer.update();
 
-        if (inputEnabled){
-            if (prof!=null) prof.appStep(AppStep.ProcessInput);
+        if (inputEnabled) {
+            if (prof != null) prof.appStep(AppStep.ProcessInput);
             inputManager.update(timer.getTimePerFrame());
         }
 
-        if (audioRenderer != null){
-            if (prof!=null) prof.appStep(AppStep.ProcessAudio);
+        if (audioRenderer != null) {
+            if (prof != null) prof.appStep(AppStep.ProcessAudio);
             audioRenderer.update(timer.getTimePerFrame());
         }
 
         // user code here..
     }
 
-    protected void destroyInput(){
+    protected void destroyInput() {
         if (mouseInput != null)
             mouseInput.destroy();
 
@@ -733,10 +704,9 @@ public class Application implements SystemListener {
     }
 
     /**
-     * Do not call manually.
-     * Callback from ContextListener.
+     * Do not call manually. Callback from ContextListener.
      */
-    public void destroy(){
+    public void destroy() {
         stateManager.cleanup();
 
         destroyInput();
@@ -747,8 +717,7 @@ public class Application implements SystemListener {
     }
 
     /**
-     * @return The GUI viewport. Which is used for the on screen
-     * statistics and FPS.
+     * @return The GUI viewport. Which is used for the on screen statistics and FPS.
      */
     public ViewPort getGuiViewPort() {
         return guiViewPort;
@@ -758,15 +727,15 @@ public class Application implements SystemListener {
         return viewPort;
     }
 
-    private class RunnableWrapper implements Callable{
+    private class RunnableWrapper implements Callable {
         private final Runnable runnable;
 
-        public RunnableWrapper(Runnable runnable){
+        public RunnableWrapper(Runnable runnable) {
             this.runnable = runnable;
         }
 
         @Override
-        public Object call(){
+        public Object call() {
             runnable.run();
             return null;
         }

@@ -172,7 +172,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     public void onAnalog(String name, float value, float tpf) {
 
-        if(!enabled) {
+        if (!enabled) {
             return;
         }
 
@@ -212,31 +212,31 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     public final void registerInput(final InputManager inputManager) {
         this.inputManager = inputManager;
 
-        if(!inputManager.hasMapping(CHASECAM_DOWN)) {
+        if (!inputManager.hasMapping(CHASECAM_DOWN)) {
             inputManager.addMapping(CHASECAM_DOWN, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
         }
 
-        if(!inputManager.hasMapping(CHASECAM_UP)) {
+        if (!inputManager.hasMapping(CHASECAM_UP)) {
             inputManager.addMapping(CHASECAM_UP, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
         }
 
-        if(!inputManager.hasMapping(CHASECAM_ZOOMIN)) {
+        if (!inputManager.hasMapping(CHASECAM_ZOOMIN)) {
             inputManager.addMapping(CHASECAM_ZOOMIN, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
         }
 
-        if(!inputManager.hasMapping(CHASECAM_ZOOMOUT)) {
+        if (!inputManager.hasMapping(CHASECAM_ZOOMOUT)) {
             inputManager.addMapping(CHASECAM_ZOOMOUT, new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
         }
 
-        if(!inputManager.hasMapping(CHASECAM_MOVELEFT)) {
+        if (!inputManager.hasMapping(CHASECAM_MOVELEFT)) {
             inputManager.addMapping(CHASECAM_MOVELEFT, new MouseAxisTrigger(MouseInput.AXIS_X, true));
         }
 
-        if(!inputManager.hasMapping(CHASECAM_MOVERIGHT)) {
+        if (!inputManager.hasMapping(CHASECAM_MOVERIGHT)) {
             inputManager.addMapping(CHASECAM_MOVERIGHT, new MouseAxisTrigger(MouseInput.AXIS_X, false));
         }
 
-        if(!inputManager.hasMapping(CHASECAM_TOGGLEROTATE)) {
+        if (!inputManager.hasMapping(CHASECAM_TOGGLEROTATE)) {
             inputManager.addMapping(CHASECAM_TOGGLEROTATE, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
         }
 
@@ -535,7 +535,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         editorCamera.setMaxDistance(getMaxDistance());
         editorCamera.setMinDistance(getMinDistance());
 
-        if(inputManager != null) {
+        if (inputManager != null) {
             editorCamera.registerInput(inputManager);
         }
 
@@ -790,7 +790,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         this.dragToRotate = dragToRotate;
         this.canRotate = !dragToRotate;
 
-        if(inputManager != null) {
+        if (inputManager != null) {
             inputManager.setCursorVisible(dragToRotate);
         }
     }

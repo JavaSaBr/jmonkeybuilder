@@ -30,6 +30,8 @@ import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.control.transform.MoveToolControl;
+import com.ss.editor.control.transform.RotationToolControl;
+import com.ss.editor.control.transform.ScaleToolControl;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
@@ -65,7 +67,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             notifyProbeComplete();
         }
     };
-
 
     /**
      * Модели выделения выбранных частей.
@@ -107,8 +108,14 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      */
     private Node moveTool, rotateTool, scaleTool;
 
+    /**
+     * Плоскость для вычисления трансформаций.
+     */
     private Node collisionPlane;
 
+    /**
+     * Разница между предыдущей точкой трансформации и новой.
+     */
     private Vector3f deltaVector;
 
     /**
@@ -208,7 +215,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         setShowSelection(true);
         setShowGrid(true);
 
-        setTransformType(TransformType.MoveTool);
+        setTransformType(TransformType.MOVE_TOOL);
     }
 
     /**
@@ -250,11 +257,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
 
-        if(MOUSE_RIGHT_CLICK.equals(name)) {
+        if (MOUSE_RIGHT_CLICK.equals(name)) {
             processClick(isPressed);
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
 
-            if(isPressed) {
+            if (isPressed) {
                 startTransform();
             } else {
                 endTransform();
@@ -333,9 +340,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Material greenMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         greenMaterial.setColor("Color", ColorRGBA.Green);
 
-        final Material whiteMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        whiteMaterial.setColor("Color", ColorRGBA.White);
-
         moveTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_move.j3o");
         moveTool.getChild("move_x").setMaterial(redMaterial);
         moveTool.getChild("collision_move_x").setMaterial(redMaterial);
@@ -346,9 +350,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         moveTool.getChild("move_z").setMaterial(greenMaterial);
         moveTool.getChild("collision_move_z").setMaterial(greenMaterial);
         moveTool.getChild("collision_move_z").setCullHint(Spatial.CullHint.Always);
-//        moveTool.getChild("move_view").setMaterial(mat_white);
-//        moveTool.getChild("collision_move_view").setMaterial(mat_white);
-//        moveTool.getChild("collision_move_view").setCullHint(Spatial.CullHint.Always);
         moveTool.scale(0.1f);
         moveTool.addControl(new MoveToolControl(this));
 
@@ -362,10 +363,8 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         rotateTool.getChild("rot_z").setMaterial(greenMaterial);
         rotateTool.getChild("collision_rot_z").setMaterial(greenMaterial);
         rotateTool.getChild("collision_rot_z").setCullHint(Spatial.CullHint.Always);
-//        rotateTool.getChild("rot_view").setMaterial(mat_white);
-//        rotateTool.getChild("collision_rot_view").setMaterial(mat_white);
-//        rotateTool.getChild("collision_rot_view").setCullHint(Spatial.CullHint.Always);
         rotateTool.scale(0.1f);
+        rotateTool.addControl(new RotationToolControl(this));
 
         scaleTool = (Node) assetManager.loadModel("graphics/models/manipulators/manipulators_scale.j3o");
         scaleTool.getChild("scale_x").setMaterial(redMaterial);
@@ -377,26 +376,30 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         scaleTool.getChild("scale_z").setMaterial(greenMaterial);
         scaleTool.getChild("collision_scale_z").setMaterial(greenMaterial);
         scaleTool.getChild("collision_scale_z").setCullHint(Spatial.CullHint.Always);
-//        scaleTool.getChild("scale_view").setMaterial(mat_white);
-//        scaleTool.getChild("collision_scale_view").setMaterial(mat_white);
-//        scaleTool.getChild("collision_scale_view").setCullHint(Spatial.CullHint.Always);
         scaleTool.scale(0.1f);
+        scaleTool.addControl(new ScaleToolControl(this));
     }
 
+    /**
+     * Создание плоскости для детектирования перемещения.
+     */
     private void createCollisionPlane() {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
-        float size = 20000;
-        Geometry g = new Geometry("plane", new Quad(size, size));
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
-        mat.getAdditionalRenderState().setWireframe(true);
-        g.setMaterial(mat);
-        g.setLocalTranslation(-size / 2, -size / 2, 0);
+        final Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        final RenderState renderState = material.getAdditionalRenderState();
+        renderState.setFaceCullMode(RenderState.FaceCullMode.Off);
+        renderState.setWireframe(true);
+
+        final float size = 20000;
+
+        final Geometry geometry = new Geometry("plane", new Quad(size, size));
+        geometry.setMaterial(material);
+        geometry.setLocalTranslation(-size / 2, -size / 2, 0);
+
         collisionPlane = new Node();
-        collisionPlane.attachChild(g);
-//        root.attachChild(collisionPlane);
+        collisionPlane.attachChild(geometry);
     }
 
     /**
@@ -444,8 +447,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     @Override
-    public void notifyTransformed(Spatial spatial) {
-
+    public void notifyTransformed(final Spatial spatial) {
+        final ModelFileEditor fileEditor = getFileEditor();
+        fileEditor.notifyTransformed(spatial);
     }
 
     /**
@@ -482,7 +486,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     @Override
     protected Node getNodeForCamera() {
 
-        if(cameraNode == null) {
+        if (cameraNode == null) {
             cameraNode = new Node("CameraNode");
         }
 
@@ -632,15 +636,15 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         // Transform Selected Objects!
         if (isActiveTransform() && selectionCenter != null) {
-            if (transformType == TransformType.MoveTool) {
+            if (transformType == TransformType.MOVE_TOOL) {
                 final TransformControl control = getMoveTool().getControl(TransformControl.class);
                 transformToolNode.detachAllChildren();
                 control.processTransform();
-            } else if (transformType == TransformType.RotateTool) {
+            } else if (transformType == TransformType.ROTATE_TOOL) {
                 final TransformControl control = getRotateTool().getControl(TransformControl.class);
                 transformToolNode.detachAllChildren();
                 control.processTransform();
-            } else if (transformType == TransformType.ScaleTool) {
+            } else if (transformType == TransformType.SCALE_TOOL) {
                 final TransformControl control = getScaleTool().getControl(TransformControl.class);
                 transformToolNode.detachAllChildren();
                 control.processTransform();
@@ -649,7 +653,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         final EditorCamera editorCamera = getEditorCamera();
 
-        if(editorCamera != null) {
+        if (editorCamera != null) {
             editorCamera.update(tpf);
         }
 
@@ -670,15 +674,15 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         final TransformType transformType = getTransformType();
 
-        if(transformType == TransformType.MoveTool) {
+        if (transformType == TransformType.MOVE_TOOL) {
             transformToolNode.attachChild(getMoveTool());
-        } else if(transformType == TransformType.RotateTool) {
+        } else if (transformType == TransformType.ROTATE_TOOL) {
             transformToolNode.attachChild(getRotateTool());
-        } else if(transformType == TransformType.ScaleTool) {
+        } else if (transformType == TransformType.SCALE_TOOL) {
             transformToolNode.attachChild(getScaleTool());
         }
 
-        if(selected.isEmpty()) {
+        if (selected.isEmpty()) {
             toolNode.detachChild(transformToolNode);
         } else {
             toolNode.attachChild(transformToolNode);
@@ -815,11 +819,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         final Array<Spatial> selected = getSelected();
 
-        for(final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext();) {
+        for (final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext(); ) {
 
             final Spatial spatial = iterator.next();
 
-            if(spatials.contains(spatial)) {
+            if (spatials.contains(spatial)) {
                 continue;
             }
 
@@ -828,18 +832,28 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         }
 
         for (final Spatial spatial : spatials) {
-            if(!selected.contains(spatial)) {
+            if (!selected.contains(spatial)) {
                 addToSelection(spatial);
             }
         }
+
+        updateToTransform();
+        updateTransformCenter();
+    }
+
+    private void updateToTransform() {
+        setToTransform(getSelected().first());
+    }
+
+    private void updateTransformCenter() {
+        final Spatial toTransform = getToTransform();
+        setTransformCenter(toTransform == null ? null : toTransform.getLocalTransform().clone());
     }
 
     /**
      * Добавление части модели к выделенным.
      */
     private void addToSelection(final Spatial spatial) {
-        setTransformCenter(spatial.getLocalTransform().clone());
-        setToTransform(spatial);
 
         Spatial shape;
 
@@ -877,7 +891,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
         final Spatial shape = selectionShape.remove(spatial);
 
-        if(shape != null) {
+        if (shape != null) {
             shape.removeFromParent();
         }
     }
@@ -1071,31 +1085,10 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     public void endTransform() {
-
-        final PickedAxis pickedAxis = getPickedAxis();
-
-        if (pickedAxis != PickedAxis.None) {
-
-            /*detachSelectedFromTransformParent();
-
-            if (selectionTransformCenter != null) {
-                base.getSelectionManager().calculateSelectionCenter();
-
-                selectionTransformCenter = base.getSelectionManager().getTransformCenter().clone();
-                tranformParentNode.detachAllChildren();
-
-                deltaMoveVector = null;  // clear deltaVector
-                isActive = false;
-
-                // SET HISTORY
-                base.getHistoryManager().setNewSelectionHistory(base.getSelectionManager().getSelectionList());
-                base.getHistoryManager().getHistoryList().get(base.getHistoryManager().getHistoryCurrentNumber()).setDoTransform(true);
-            }*/
-        }
-
-        setPickedAxis(PickedAxis.None);
+        setPickedAxis(PickedAxis.NONE);
         setActiveTransform(false);
         setDeltaVector(null);
+        updateTransformCenter();
     }
 
     /**
@@ -1127,15 +1120,15 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             final CollisionResult collisionResult = collisionResults.getClosestCollision();
             final TransformType transformType = getTransformType();
 
-            if (transformType == TransformType.MoveTool) {
+            if (transformType == TransformType.MOVE_TOOL) {
                 final Node moveTool = getMoveTool();
                 final TransformControl control = moveTool.getControl(TransformControl.class);
                 control.setCollisionPlane(collisionResult);
-            } else if (transformType == TransformType.RotateTool) {
+            } else if (transformType == TransformType.ROTATE_TOOL) {
                 final Node rotateTool = getRotateTool();
                 final TransformControl control = rotateTool.getControl(TransformControl.class);
                 control.setCollisionPlane(collisionResult);
-            } else if (transformType == TransformType.ScaleTool) {
+            } else if (transformType == TransformType.SCALE_TOOL) {
                 final Node scaleTool = getScaleTool();
                 final TransformControl control = scaleTool.getControl(TransformControl.class);
                 control.setCollisionPlane(collisionResult);

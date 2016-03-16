@@ -106,7 +106,7 @@ public class AssetEditorDialog extends EditorDialog {
         HBox.setMargin(previewContainer, PREVIEW_OFFSET);
 
         root.setOnKeyReleased(event -> {
-            if(event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER) {
                 processSelect();
             }
         });

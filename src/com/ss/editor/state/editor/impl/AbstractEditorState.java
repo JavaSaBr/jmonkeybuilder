@@ -134,19 +134,19 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      */
     protected void onAnalogImpl(final String name, final float value, final float tpf) {
 
-        if(!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) {
+        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) {
             return;
         }
 
-        if(MOUSE_X_AXIS.equals(name)) {
+        if (MOUSE_X_AXIS.equals(name)) {
             moveXCamera(value * 30);
-        } else if(MOUSE_X_AXIS_NEGATIVE.equals(name)) {
+        } else if (MOUSE_X_AXIS_NEGATIVE.equals(name)) {
             moveXCamera(-value * 30);
         }
 
-        if(MOUSE_Y_AXIS.equals(name)) {
+        if (MOUSE_Y_AXIS.equals(name)) {
             moveYCamera(-value * 30);
-        } else if(MOUSE_Y_AXIS_NEGATIVE.equals(name)) {
+        } else if (MOUSE_Y_AXIS_NEGATIVE.equals(name)) {
             moveYCamera(value * 30);
         }
     }
@@ -197,18 +197,18 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
             setButtonMiddleDown(isPressed);
         } else if (MOUSE_RIGHT_CLICK.equals(name)) {
             setButtonRightDown(isPressed);
-        } else if(KEY_S.equals(name)) {
+        } else if (KEY_S.equals(name)) {
 
             final FileEditor fileEditor = getFileEditor();
 
-            if(isControlDown() && fileEditor.isDirty()) {
+            if (isControlDown() && fileEditor.isDirty()) {
                 EXECUTOR_MANAGER.addFXTask(fileEditor::doSave);
             }
         }
 
         final EditorCamera editorCamera = getEditorCamera();
 
-        if(editorCamera != null && needMovableCamera()) {
+        if (editorCamera != null && needMovableCamera()) {
             editorCamera.setLockRotation(isShiftDown() && isButtonMiddleDown());
         }
     }

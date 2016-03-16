@@ -1,9 +1,154 @@
 package com.ss.editor.control.transform;
 
+import com.jme3.collision.CollisionResult;
+import com.jme3.input.InputManager;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Transform;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.control.AbstractControl;
+import com.ss.editor.Editor;
+import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
+
 /**
  * Реализация контролера манипулятора вращения.
  *
  * @author Ronn
  */
-public class RotationToolControl {
+public class RotationToolControl extends AbstractControl implements TransformControl {
+
+    public static final String NODE_ROTATION_X = "rot_x";
+    public static final String NODE_ROTATION_Y = "rot_y";
+    public static final String NODE_ROTATION_Z = "rot_z";
+
+    private static final Editor EDITOR = Editor.getInstance();
+
+    /**
+     * Контролер редактора сцены.
+     */
+    private final SceneEditorControl editorControl;
+
+    /**
+     * Поскость для определения перемещения.
+     */
+    private final Node collisionPlane;
+
+    public RotationToolControl(final SceneEditorControl editorControl) {
+        this.editorControl = editorControl;
+        this.collisionPlane = editorControl.getCollisionPlane();
+    }
+
+    /**
+     * @return плоскость для определения перемещения.
+     */
+    private Node getCollisionPlane() {
+        return collisionPlane;
+    }
+
+    /**
+     * @return контролер редактора сцены.
+     */
+    private SceneEditorControl getEditorControl() {
+        return editorControl;
+    }
+
+    @Override
+    public void setCollisionPlane(final CollisionResult colResult) {
+
+        final Camera camera = EDITOR.getCamera();
+        final SceneEditorControl editorControl = getEditorControl();
+        final Transform selectedCenter = editorControl.getTransformCenter();
+
+        // Set PickedAxis
+        final Geometry geometry = colResult.getGeometry();
+        final String geometryName = geometry.getName();
+
+        if (geometryName.contains(NODE_ROTATION_X)) {
+            editorControl.setPickedAxis(PickedAxis.X);
+        } else if (geometryName.contains(NODE_ROTATION_Y)) {
+            editorControl.setPickedAxis(PickedAxis.Y);
+        } else if (geometryName.contains(NODE_ROTATION_Z)) {
+            editorControl.setPickedAxis(PickedAxis.Z);
+        }
+
+        final PickedAxis pickedAxis = editorControl.getPickedAxis();
+
+        // set the collision Plane location and rotation
+        final Node collisionPlane = getCollisionPlane();
+        collisionPlane.setLocalTranslation(selectedCenter.getTranslation());
+
+        final Quaternion rotation = collisionPlane.getLocalRotation();
+        rotation.lookAt(camera.getDirection(), Vector3f.UNIT_Y); //equals to angleZ
+
+        collisionPlane.setLocalRotation(rotation);
+    }
+
+    @Override
+    public void processTransform() {
+
+        final SceneEditorControl editorControl = getEditorControl();
+        final InputManager inputManager = EDITOR.getInputManager();
+        final Camera camera = EDITOR.getCamera();
+
+        final Transform transformCenter = editorControl.getTransformCenter();
+
+        // cursor position and selected position vectors
+        final Vector2f cursorPos = new Vector2f(inputManager.getCursorPosition());
+        final Vector3f vectorScreenSelected = camera.getScreenCoordinates(transformCenter.getTranslation());
+        final Vector2f selectedCoords = new Vector2f(vectorScreenSelected.getX(), vectorScreenSelected.getY());
+
+        //set new deltaVector if it's not set
+        if (editorControl.getDeltaVector() == null) {
+            final Vector2f deltaVecPos = new Vector2f(cursorPos.getX(), cursorPos.getY());
+            final Vector2f vecDelta = selectedCoords.subtract(deltaVecPos);
+            editorControl.setDeltaVector(new Vector3f(vecDelta.getX(), vecDelta.getY(), 0));
+        }
+
+        final Spatial toTransform = editorControl.getToTransform();
+
+        // Picked vector
+        PickedAxis pickedAxis = editorControl.getPickedAxis();
+        Vector3f pickedVec = Vector3f.UNIT_X;
+
+        if (pickedAxis == PickedAxis.Y) {
+            pickedVec = Vector3f.UNIT_Y;
+        } else if (pickedAxis == PickedAxis.Z) {
+            pickedVec = Vector3f.UNIT_Z;
+        }
+
+        final Vector3f deltaVector = editorControl.getDeltaVector();
+
+        // rotate according to angle
+        final Vector2f vec1 = selectedCoords.subtract(cursorPos).normalizeLocal();
+        float angle = vec1.angleBetween(new Vector2f(deltaVector.getX(), deltaVector.getY()));
+        angle = TransformConstraint.constraintValue(FastMath.RAD_TO_DEG * angle, TransformConstraint.getRotateConstraint()) * FastMath.DEG_TO_RAD;
+
+        final Quaternion transformRotation = transformCenter.getRotation();
+        final Vector3f axisToRotate = transformRotation.mult(pickedVec);
+
+        float angleCheck = axisToRotate.angleBetween(camera.getDirection());
+
+        if (angleCheck > FastMath.HALF_PI) angle = -angle;
+
+        final Quaternion newRotation = transformRotation.mult(transformRotation.clone().fromAngleAxis(angle, pickedVec));
+
+        toTransform.setLocalRotation(newRotation);
+
+        editorControl.notifyTransformed(toTransform);
+    }
+
+    @Override
+    protected void controlUpdate(final float tpf) {
+    }
+
+    @Override
+    protected void controlRender(final RenderManager renderManager, final ViewPort viewPort) {
+    }
 }

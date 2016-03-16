@@ -662,7 +662,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
 
-        } else if(keyCode == KeyCode.DELETE && !currentAsset.equals(item.getFile())) {
+        } else if (keyCode == KeyCode.DELETE && !currentAsset.equals(item.getFile())) {
 
             final DeleteFileAction action = new DeleteFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();

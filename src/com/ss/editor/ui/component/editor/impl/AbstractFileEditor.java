@@ -129,7 +129,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final KeyCode code = event.getCode();
 
-        if(code == KeyCode.S && event.isControlDown() && isDirty()) {
+        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
             doSave();
         }
     }

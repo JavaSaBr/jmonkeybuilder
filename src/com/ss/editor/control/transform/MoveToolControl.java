@@ -244,12 +244,12 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     /**
      * Процесс перемещения объектов.
      *
-     * @param distance дистанция перемещения.
-     * @param pickedAxis ось перемещения.
-     * @param toTransform объект для перемещения.
+     * @param distance       дистанция перемещения.
+     * @param pickedAxis     ось перемещения.
+     * @param toTransform    объект для перемещения.
      * @param selectedCenter центр трансформации.
      */
-    private void translateObjects(float distance, PickedAxis pickedAxis, Spatial toTransform, Transform selectedCenter) {
+    private void translateObjects(final float distance, final PickedAxis pickedAxis, final Spatial toTransform, final Transform selectedCenter) {
 
         final Vector3f currentLocation = selectedCenter.getTranslation();
         final Quaternion currentRotation = selectedCenter.getRotation();
@@ -263,13 +263,16 @@ public class MoveToolControl extends AbstractControl implements TransformControl
         }
 
         toTransform.setLocalTranslation(currentLocation);
+
+        final SceneEditorControl editorControl = getEditorControl();
+        editorControl.notifyTransformed(toTransform);
     }
 
     @Override
-    protected void controlUpdate(float tpf) {
+    protected void controlUpdate(final float tpf) {
     }
 
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
+    protected void controlRender(final RenderManager renderManager, final ViewPort viewPort) {
     }
 }

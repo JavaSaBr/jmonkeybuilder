@@ -247,7 +247,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     @Override
     protected Node getNodeForCamera() {
 
-        if(modelNode == null) {
+        if (modelNode == null) {
             modelNode = new Node("ModelNode");
         }
 

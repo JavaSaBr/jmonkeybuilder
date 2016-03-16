@@ -157,7 +157,7 @@ public class Messages {
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
     public static final String GLSL_FILE_EDITOR_NAME;
-;
+    ;
 
     static {
 

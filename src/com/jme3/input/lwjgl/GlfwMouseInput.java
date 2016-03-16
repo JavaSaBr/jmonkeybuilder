@@ -72,9 +72,10 @@ import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 
 /**
- * Captures mouse input using GLFW callbacks. It then temporarily stores these in event queues which are processed in the
- * {@link #update()} method. Due to some of the GLFW button id's there is a conversion method in this class which will
- * convert the GLFW left, middle and right mouse button to JME3 left, middle and right button codes.
+ * Captures mouse input using GLFW callbacks. It then temporarily stores these in event queues which
+ * are processed in the {@link #update()} method. Due to some of the GLFW button id's there is a
+ * conversion method in this class which will convert the GLFW left, middle and right mouse button
+ * to JME3 left, middle and right button codes.
  *
  * @author Daniel Johansson (dannyjo)
  * @since 3.1
@@ -254,9 +255,8 @@ public class GlfwMouseInput implements MouseInput {
     }
 
     /**
-     * Simply converts the GLFW button code to a JME button code. If there is no
-     * match it just returns the GLFW button code. Bear in mind GLFW supports 8
-     * different mouse buttons.
+     * Simply converts the GLFW button code to a JME button code. If there is no match it just
+     * returns the GLFW button code. Bear in mind GLFW supports 8 different mouse buttons.
      *
      * @param glfwButton the raw GLFW button index.
      * @return the mapped {@link MouseInput} button id.

@@ -82,7 +82,7 @@ public class RenameDialog extends EditorDialog {
 
             final Button okButton = getOkButton();
 
-            if(event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
+            if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
                 processOk();
             }
         });
