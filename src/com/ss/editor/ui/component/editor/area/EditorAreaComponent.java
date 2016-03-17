@@ -25,6 +25,7 @@ import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
 import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
+import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Files;
@@ -245,7 +246,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
 
-            if(workspace != null) {
+            if (workspace != null) {
                 workspace.removeOpenedFile(editFile);
             }
         });
@@ -297,6 +298,14 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
+        final EditorFXScene scene = EDITOR.getScene();
+        scene.incrementLoading();
+
+        EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
+    }
+
+    private void processOpenFileImpl(final RequestedOpenFileEvent event, final Path file) {
+
         final EditorDescription description = event.getDescription();
         final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
 
@@ -311,7 +320,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        addEditor(editor, event.isNeedShow());
+        EXECUTOR_MANAGER.addFXTask(() -> addEditor(editor, event.isNeedShow()));
     }
 
     /**
@@ -343,13 +352,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
         openedEditors.put(editFile, tab);
 
+        final EditorFXScene scene = EDITOR.getScene();
+        scene.decrementLoading();
+
         if (isIgnoreOpenedFiles()) {
             return;
         }
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
 
-        if(workspace != null) {
+        if (workspace != null) {
             workspace.addOpenedFile(editFile, editor);
         }
     }
@@ -373,7 +385,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
 
-        if(workspace == null) {
+        if (workspace == null) {
             return;
         }
 

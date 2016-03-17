@@ -8,6 +8,8 @@ package com.ss.editor.ui.css;
 public interface CSSIds {
 
     public static final String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+    public static final String EDITOR_LOADING_LAYER = "EditorLoadingLayer";
+    public static final String EDITOR_LOADING_PROGRESS = "EditorLoadingProgress";
 
     public static final String MAIN_SPLIT_PANEL = "MainSplitPane";
 

@@ -156,6 +156,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
+        codeArea.setStyle("-fx-stroke: white;");
 
         FXUtils.addToPane(codeArea, root);
         FXUtils.addClassTo(codeArea, CSSClasses.MAIN_FONT_13);

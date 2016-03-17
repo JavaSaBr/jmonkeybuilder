@@ -39,10 +39,6 @@ public class BlendToJ3oFileConverter extends AbstractFileConverter {
         DESCRIPTION.setExtensions(EXTENSIONS);
     }
 
-    public static BlendToJ3oFileConverter newInstance() {
-        return new BlendToJ3oFileConverter();
-    }
-
     private BlendToJ3oFileConverter() {
     }
 

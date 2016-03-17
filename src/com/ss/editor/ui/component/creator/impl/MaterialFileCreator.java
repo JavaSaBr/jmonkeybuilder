@@ -126,7 +126,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
 
         final Button okButton = getOkButton();
 
-        if(okButton.isDisable()) {
+        if (okButton.isDisable()) {
             return;
         }
 
@@ -139,7 +139,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
     @Override
     protected void processEnter(final KeyEvent event) {
 
-        if(event.getCode() == KeyCode.ENTER) {
+        if (event.getCode() == KeyCode.ENTER) {
             return;
         }
 

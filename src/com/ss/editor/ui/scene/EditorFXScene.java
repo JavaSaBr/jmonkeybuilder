@@ -1,6 +1,7 @@
 package com.ss.editor.ui.scene;
 
 import com.ss.editor.ui.component.ScreenComponent;
+import com.ss.editor.ui.css.CSSIds;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -55,16 +56,15 @@ public class EditorFXScene extends Scene {
         this.components = ArrayFactory.newArray(ScreenComponent.class);
         this.container = new StackPane();
         this.loadingLayer = new VBox();
+        this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
-        root.getChildren().add(container);
+        root.getChildren().addAll(container, loadingLayer);
 
         FXUtils.bindFixedWidth(container, widthProperty());
         FXUtils.bindFixedHeight(container, heightProperty());
-        FXUtils.bindFixedWidth(loadingLayer, container.widthProperty());
-        FXUtils.bindFixedHeight(loadingLayer, container.heightProperty());
-
-        FXUtils.addToPane(loadingLayer, container);
+        FXUtils.bindFixedWidth(loadingLayer, widthProperty());
+        FXUtils.bindFixedHeight(loadingLayer, heightProperty());
     }
 
     /**
@@ -114,7 +114,7 @@ public class EditorFXScene extends Scene {
      * Увеличение счетчика загрузок.
      */
     public synchronized void incrementLoading() {
-        if(loadingCount.incrementAndGet() == 1) {
+        if (loadingCount.incrementAndGet() == 1) {
             showLoading();
         }
     }
@@ -123,7 +123,7 @@ public class EditorFXScene extends Scene {
      * Уменьшение счетчика загрузок.
      */
     public synchronized void decrementLoading() {
-        if(loadingCount.decrementAndGet() == 0) {
+        if (loadingCount.decrementAndGet() == 0) {
             hideLoading();
         }
     }
@@ -135,10 +135,15 @@ public class EditorFXScene extends Scene {
 
         final VBox loadingLayer = getLoadingLayer();
         loadingLayer.setVisible(true);
+        loadingLayer.toFront();
 
         progressIndicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
+        progressIndicator.setId(CSSIds.EDITOR_LOADING_PROGRESS);
 
         FXUtils.addToPane(progressIndicator, loadingLayer);
+
+        final StackPane container = getContainer();
+        container.setDisable(true);
     }
 
     /**
@@ -151,6 +156,9 @@ public class EditorFXScene extends Scene {
         loadingLayer.getChildren().clear();
 
         progressIndicator = null;
+
+        final StackPane container = getContainer();
+        container.setDisable(false);
     }
 
     /**

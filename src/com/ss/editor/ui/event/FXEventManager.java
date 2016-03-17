@@ -1,6 +1,13 @@
 package com.ss.editor.ui.event;
 
+import com.jme3.system.lwjgl.LwjglWindow;
+import com.ss.editor.Editor;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
+
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWWindowFocusCallback;
+import org.lwjgl.opengl.GL11;
 
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -18,6 +25,7 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class FXEventManager {
 
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager INSTANCE = new FXEventManager();
 
     public static FXEventManager getInstance() {
@@ -29,8 +37,34 @@ public class FXEventManager {
      */
     private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers;
 
+    /**
+     * Слушатель изменения фокуса окна.
+     */
+    private GLFWWindowFocusCallback windowFocusCallback;
+
     public FXEventManager() {
         this.eventHandlers = DictionaryFactory.newObjectDictionary();
+        EXECUTOR_MANAGER.addEditorThreadTask(this::initListener);
+    }
+
+    private void initListener() {
+
+        final Editor editor = Editor.getInstance();
+        final LwjglWindow context = (LwjglWindow) editor.getContext();
+
+        windowFocusCallback = new GLFWWindowFocusCallback() {
+
+            @Override
+            public void invoke(final long window, final int focused) {
+
+                final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
+                event.setFocused(focused == GL11.GL_TRUE);
+
+                FXEventManager.this.notify(event);
+            }
+        };
+
+        GLFW.glfwSetWindowFocusCallback(context.getWindowHandle(), windowFocusCallback);
     }
 
     /**

@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
+import rlib.util.StringUtils;
 
 /**
  * Реализация слушателя комбобокса для формирования подсказок.
@@ -94,6 +95,8 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
             return;
         }
 
+        final String toCheck = StringUtils.isEmpty(editorText) ? "" : editorText.toLowerCase();
+
         final ObservableList<T> filtered = FXCollections.observableArrayList();
         final ObservableList<T> data = getData();
         data.forEach(value -> {
@@ -101,7 +104,13 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
             final StringConverter<T> converter = comboBox.getConverter();
             final String presentation = converter.toString(value);
 
-            if(presentation == null || !presentation.contains(editorText)) {
+            if (presentation == null) {
+                return;
+            }
+
+            final String lowerCase = presentation.toLowerCase();
+
+            if (!lowerCase.contains(toCheck)) {
                 return;
             }
 

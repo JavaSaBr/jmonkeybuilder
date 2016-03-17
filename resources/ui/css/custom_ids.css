@@ -5,6 +5,20 @@
     -fx-max-height: -fx-min-height;
 }
 
+#EditorLoadingLayer {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-alignment: center;
+}
+
+#EditorLoadingProgress {
+    -fx-min-height: 150;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #MainSplitPane {
     -fx-background-color: transparent;
 }
@@ -53,6 +67,10 @@
 
 #TextEditorTextArea {
     -fx-background-color: -fx-color-panel-200;
+}
+
+#TextEditorTextArea .caret {
+    -fx-stroke: white;
 }
 
 #TextEditorTextArea .content {
