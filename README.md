@@ -1,8 +1,17 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.4.5 #
+# jMonkeyEngine 3 SpaceShift Editor 0.5.0 #
 
-* Generic version: https://yadi.sk/d/7yhdKZccqBpqM
-* Debian based version: https://yadi.sk/d/EzV9PexuqBpqq
-* Windows x64 version: https://yadi.sk/d/H8GPpA0VqBprG
+* Generic version: https://yadi.sk/d/EbE5vA9xqFh2n
+* Debian based version: https://yadi.sk/d/CJvssWRIqFh4p
+* Windows x64 version: https://yadi.sk/d/1WhB1JUbqFgyp
+
+## ver. 0.5.0 ##
+* -Fixed the exception with LwjglWindow on Windows;
+* -Implemented the camera like camera of Blender.
+* -Fixed the text input.
+* -Implemented the hotkey 'delete' to delete files in tree.
+* -Implemented the manipulators in Model Editor.
+* -Updated the action for generating tangents.
+* -Changed rotation property of model to Euler in Model Editor.
 
 ## ver. 0.4.5 ##
 * -Added the text editor for GLSL with highlighting.
