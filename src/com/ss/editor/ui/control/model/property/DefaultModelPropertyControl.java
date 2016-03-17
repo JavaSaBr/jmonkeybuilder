@@ -4,6 +4,7 @@ import com.ss.editor.ui.css.CSSClasses;
 
 import java.util.function.Function;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
@@ -55,6 +56,7 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<T> {
         super.createComponents(container);
 
         propertyValueLabel = new Label();
+        propertyValueLabel.setAlignment(Pos.CENTER);
 
         FXUtils.addClassTo(propertyValueLabel, CSSClasses.MAIN_FONT_13);
         FXUtils.addToPane(propertyValueLabel, container);
