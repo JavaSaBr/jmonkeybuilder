@@ -2,9 +2,13 @@ package com.ss.editor.ui.scene;
 
 import com.ss.editor.ui.component.ScreenComponent;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
@@ -29,16 +33,38 @@ public class EditorFXScene extends Scene {
      */
     private final StackPane container;
 
+    /**
+     * Слой для отображения загрузки.
+     */
+    private final VBox loadingLayer;
+
+    /**
+     * Счетчик загрузок.
+     */
+    private final AtomicInteger loadingCount;
+
+    /**
+     * Анимация загрузки.
+     */
+    private ProgressIndicator progressIndicator;
+
     public EditorFXScene(final Group root) {
         super(root);
 
+        this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArray(ScreenComponent.class);
         this.container = new StackPane();
+        this.loadingLayer = new VBox();
+        this.loadingLayer.setVisible(false);
 
         root.getChildren().add(container);
 
         FXUtils.bindFixedWidth(container, widthProperty());
         FXUtils.bindFixedHeight(container, heightProperty());
+        FXUtils.bindFixedWidth(loadingLayer, container.widthProperty());
+        FXUtils.bindFixedHeight(loadingLayer, container.heightProperty());
+
+        FXUtils.addToPane(loadingLayer, container);
     }
 
     /**
@@ -75,6 +101,56 @@ public class EditorFXScene extends Scene {
      */
     public StackPane getContainer() {
         return container;
+    }
+
+    /**
+     * @return слой для отображения загрузки.
+     */
+    private VBox getLoadingLayer() {
+        return loadingLayer;
+    }
+
+    /**
+     * Увеличение счетчика загрузок.
+     */
+    public synchronized void incrementLoading() {
+        if(loadingCount.incrementAndGet() == 1) {
+            showLoading();
+        }
+    }
+
+    /**
+     * Уменьшение счетчика загрузок.
+     */
+    public synchronized void decrementLoading() {
+        if(loadingCount.decrementAndGet() == 0) {
+            hideLoading();
+        }
+    }
+
+    /**
+     * Отобразить загрузку.
+     */
+    private void showLoading() {
+
+        final VBox loadingLayer = getLoadingLayer();
+        loadingLayer.setVisible(true);
+
+        progressIndicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
+
+        FXUtils.addToPane(progressIndicator, loadingLayer);
+    }
+
+    /**
+     * Скрыть загрузку.
+     */
+    private void hideLoading() {
+
+        final VBox loadingLayer = getLoadingLayer();
+        loadingLayer.setVisible(false);
+        loadingLayer.getChildren().clear();
+
+        progressIndicator = null;
     }
 
     /**

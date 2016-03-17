@@ -9,6 +9,7 @@ import com.ss.editor.ui.css.CSSIds;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
+import org.fxmisc.undo.UndoManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -199,7 +200,10 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         }
 
         final CodeArea codeArea = getCodeArea();
-        codeArea.replaceText(0, 0, getOriginalContent());
+        codeArea.appendText(getOriginalContent());
+
+        final UndoManager undoManager = codeArea.getUndoManager();
+        undoManager.forgetHistory();
 
         setOriginalContent(codeArea.getText());
         updateDirty(getOriginalContent());

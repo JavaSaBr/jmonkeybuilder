@@ -244,7 +244,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             }
 
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-            workspace.removeOpenedFile(editFile);
+
+            if(workspace != null) {
+                workspace.removeOpenedFile(editFile);
+            }
         });
     }
 
@@ -345,7 +348,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-        workspace.addOpenedFile(editFile, editor);
+
+        if(workspace != null) {
+            workspace.addOpenedFile(editFile, editor);
+        }
     }
 
     @Override
@@ -366,6 +372,11 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void loadOpenedFiles() {
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+
+        if(workspace == null) {
+            return;
+        }
+
         final Path assetFolder = workspace.getAssetFolder();
 
         final Map<String, String> openedFiles = workspace.getOpenedFiles();

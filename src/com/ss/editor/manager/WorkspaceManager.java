@@ -54,8 +54,14 @@ public class WorkspaceManager {
      * Получение текущего воркспейса.
      */
     public Workspace getCurrentWorkspace() {
+
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
+
+        if(currentAsset == null) {
+            return null;
+        }
+
         return getWorkspace(currentAsset);
     }
 

@@ -23,6 +23,8 @@ public interface CSSClasses {
 
     public static final String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
 
+    public static final String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
+
     public static final String TOOLBAR_BUTTON = "toolbar-button";
 
     public static final String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";

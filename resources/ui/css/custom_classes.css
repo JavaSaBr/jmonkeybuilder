@@ -217,6 +217,13 @@
 .transparent-menu-item {
 }
 
+.transparent-combo-box,
+.transparent-combo-box:editable,
+.transparent-combo-box:editable > .arrow-button {
+    -fx-background-color: -fx-body-color;
+}
+
+
 .file-editor-toolbar-button {
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;

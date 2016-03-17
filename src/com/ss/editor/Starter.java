@@ -13,6 +13,9 @@ import javafx.stage.Stage;
 public class Starter extends Application {
 
     public static void main(String[] args) throws IOException {
+
+        //ThreadUtils.sleep(15000);
+
         try {
             Editor.start(args);
         } catch (Throwable e) {

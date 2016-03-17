@@ -6,7 +6,9 @@ import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.editor.util.EditorUtil;
 
 import java.io.IOException;
@@ -15,9 +17,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -39,6 +45,11 @@ public class MaterialFileCreator extends AbstractFileCreator {
         DESCRIPTION.setFileDescription(Messages.MATERIAL_FILE_CREATOR_FILE_DESCRIPTION);
         DESCRIPTION.setConstructor(MaterialFileCreator::new);
     }
+
+    /**
+     * Список доступных типов материалов.
+     */
+    private Array<String> definitions;
 
     /**
      * Список с выбором типов материалов.
@@ -78,9 +89,14 @@ public class MaterialFileCreator extends AbstractFileCreator {
         materialTypeComboBox.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
         materialTypeComboBox.prefWidthProperty().bind(root.widthProperty());
 
+        final TextField editor = materialTypeComboBox.getEditor();
+        editor.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
+
+        AutoCompleteComboBoxListener.install(materialTypeComboBox);
+
         final ObservableList<String> items = materialTypeComboBox.getItems();
 
-        final Array<String> definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
+        definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
         definitions.forEach(items::add);
 
         final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
@@ -93,11 +109,41 @@ public class MaterialFileCreator extends AbstractFileCreator {
             selectionModel.select(definitions.first());
         }
 
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFileName());
+
         FXUtils.addToPane(materialTypeLabel, materialTypeContainer);
         FXUtils.addToPane(materialTypeComboBox, materialTypeContainer);
         FXUtils.addToPane(materialTypeContainer, root);
 
+        FXUtils.addClassTo(materialTypeComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
+
         VBox.setMargin(materialTypeContainer, FILE_NAME_CONTAINER_OFFSET);
+    }
+
+    @Override
+    protected void validateFileName() {
+        super.validateFileName();
+
+        final Button okButton = getOkButton();
+
+        if(okButton.isDisable()) {
+            return;
+        }
+
+        final ComboBox<String> materialTypeComboBox = getMaterialTypeComboBox();
+        final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
+
+        okButton.setDisable(!definitions.contains(selectionModel.getSelectedItem()));
+    }
+
+    @Override
+    protected void processEnter(final KeyEvent event) {
+
+        if(event.getCode() == KeyCode.ENTER) {
+            return;
+        }
+
+        super.processEnter(event);
     }
 
     @Override
