@@ -1,8 +1,13 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.5.0 #
+# jMonkeyEngine 3 SpaceShift Editor 0.5.2 #
 
-* Generic version: https://yadi.sk/d/EbE5vA9xqFh2n
-* Debian based version: https://yadi.sk/d/CJvssWRIqFh4p
-* Windows x64 version: https://yadi.sk/d/1WhB1JUbqFgyp
+* Generic version: https://yadi.sk/d/8QKKsU_5qGgcw
+* Debian based version: https://yadi.sk/d/GeTaMRuoqGgmB
+* Windows x64 version: https://yadi.sk/d/4wx12JkeqGgYS
+
+## ver. 0.5.2 ##
+* -Implemented the autocomplete for type of material in material creator.
+* -Fixed the problems with focus in dialogs of editor.
+* -Added the animation of loading for editors.
 
 ## ver. 0.5.0 ##
 * -Fixed the exception with LwjglWindow on Windows;
