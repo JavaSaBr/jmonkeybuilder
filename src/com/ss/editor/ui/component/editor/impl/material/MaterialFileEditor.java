@@ -7,6 +7,9 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.EditorOperationControl;
+import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState.ModelType;
@@ -23,6 +26,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,7 +56,7 @@ import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
  *
  * @author Ronn
  */
-public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
+public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -78,6 +83,16 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
      * 3D часть редактора.
      */
     private final MaterialEditorState editorState;
+
+    /**
+     * Контролер операций редактора.
+     */
+    private final EditorOperationControl operationControl;
+
+    /**
+     * Счетчик внесения изменений.
+     */
+    private final AtomicInteger changeCounter;
 
     /**
      * Компонент для редактирования текстур.
@@ -137,7 +152,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     /**
      * Обработчик внесенич изменений.
      */
-    private Runnable changeHandler;
+    private Consumer<EditorOperation> changeHandler;
 
     /**
      * Оригинальный материал.
@@ -152,7 +167,21 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     public MaterialFileEditor() {
         this.editorState = new MaterialEditorState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
+        this.operationControl = new EditorOperationControl(this);
+        this.changeCounter = new AtomicInteger();
         addEditorState(editorState);
+    }
+
+    @Override
+    public void incrementChange() {
+        final int result = changeCounter.incrementAndGet();
+        setDirty(result != 0);
+    }
+
+    @Override
+    public void decrementChange() {
+        final int result = changeCounter.decrementAndGet();
+        setDirty(result != 0);
     }
 
     /**
@@ -197,18 +226,18 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
+     * @return контролер операций редактора.
+     */
+    private EditorOperationControl getOperationControl() {
+        return operationControl;
+    }
+
+    /**
      * Обработка внесения изменений.
      */
-    private void handleChanges() {
-
-        final Material currentMaterial = getCurrentMaterial();
-
-        final String original = getOriginal();
-        final String content = MaterialSerializer.serializeToString(currentMaterial);
-
-        final boolean dirty = !StringUtils.equals(original, content);
-
-        setDirty(dirty);
+    private void handleChanges(final EditorOperation operation) {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.execute(operation);
     }
 
     @Override
@@ -231,9 +260,9 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * @return обработчик внесенич изменений.
+     * @return обработчик внесения изменений.
      */
-    private Runnable getChangeHandler() {
+    private Consumer<EditorOperation> getChangeHandler() {
         return changeHandler;
     }
 

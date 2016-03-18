@@ -10,7 +10,9 @@ import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFXImageManager;
+import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
@@ -19,6 +21,7 @@ import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -80,7 +83,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox flipButton;
 
-    public Texture2DMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+    public Texture2DMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -158,27 +161,26 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeRepeatImpl(newValue));
-    }
-
-    /**
-     * Процесс изменения свойтсва текстуры.
-     */
-    private void processChangeRepeatImpl(final Boolean newValue) {
-
+        final String parameterName = getParameterName();
         final Material material = getMaterial();
-        final MatParamTexture textureParam = material.getTextureParam(getParameterName());
+        final MatParamTexture textureParam = material.getTextureParam(parameterName);
         final Texture2D texture2D = (Texture2D) textureParam.getValue();
+        final TextureKey key = (TextureKey) texture2D.getKey();
+
+        Texture.WrapMode oldMode;
+        Texture.WrapMode newMode;
 
         if (newValue) {
+            oldMode = Texture.WrapMode.EdgeClamp;
+            newMode = Texture.WrapMode.Repeat;
             texture2D.setWrap(Texture.WrapMode.Repeat);
         } else {
+            oldMode = Texture.WrapMode.Repeat;
+            newMode = Texture.WrapMode.EdgeClamp;
             texture2D.setWrap(Texture.WrapMode.EdgeClamp);
         }
 
-        material.setTexture(getParameterName(), texture2D);
-
-        EXECUTOR_MANAGER.addFXTask(this::changed);
+        execute(new TextureMaterialParamOperation(parameterName, key, newMode, key, oldMode));
     }
 
     /**
@@ -190,30 +192,22 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeFlipImpl(newValue));
-    }
-
-    /**
-     * Процесс изменения свойтсва текстуры.
-     */
-    private void processChangeFlipImpl(final Boolean newValue) {
+        final String parameterName = getParameterName();
 
         final Material material = getMaterial();
-        final MatParamTexture textureParam = material.getTextureParam(getParameterName());
+        final MatParamTexture textureParam = material.getTextureParam(parameterName);
         final Texture2D texture2D = (Texture2D) textureParam.getValue();
-        final TextureKey textureKey = (TextureKey) texture2D.getKey();
-        textureKey.setFlipY(newValue);
+        final TextureKey oldKey = (TextureKey) texture2D.getKey();
+        final TextureKey newKey = (TextureKey) oldKey.clone();
+        newKey.setFlipY(newValue);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        final Texture texture = assetManager.loadTexture(textureKey);
+        Texture.WrapMode mode = Texture.WrapMode.EdgeClamp;
 
         if (texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
-            texture.setWrap(Texture.WrapMode.Repeat);
+            mode = Texture.WrapMode.Repeat;
         }
 
-        material.setTexture(getParameterName(), texture);
-
-        EXECUTOR_MANAGER.addFXTask(this::changed);
+        execute(new TextureMaterialParamOperation(parameterName, newKey, mode, oldKey, mode));
     }
 
     /**
@@ -234,13 +228,18 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      * @param path путь к текстуре.
      */
     private void addTexture(final Path path) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addTextureImpl(path));
-    }
 
-    /**
-     * Процесс изменения текстуры.
-     */
-    private void addTextureImpl(final Path path) {
+        final String parameterName = getParameterName();
+        final Material material = getMaterial();
+        final MatParamTexture textureParam = material.getTextureParam(parameterName);
+        final Texture2D oldTexture = textureParam == null? null : (Texture2D) textureParam.getValue();
+        final TextureKey oldKey = oldTexture == null? null : (TextureKey) oldTexture.getKey();
+
+        Texture.WrapMode oldMode = Texture.WrapMode.EdgeClamp;
+
+        if (oldTexture != null && oldTexture.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
+            oldMode = Texture.WrapMode.Repeat;
+        }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Path assetFile = EditorUtil.getAssetFile(path);
@@ -249,60 +248,41 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final CheckBox flipButton = getFlipButton();
         final CheckBox repeatButton = getRepeatButton();
 
-        final TextureKey key = new TextureKey(assetPath);
-        key.setFlipY(flipButton.isSelected());
+        final TextureKey newKey = new TextureKey(assetPath);
+        newKey.setFlipY(flipButton.isSelected());
 
         final Texture texture;
 
         try {
-            texture = assetManager.loadTexture(key);
+            texture = assetManager.loadTexture(newKey);
         } catch (final Exception e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        if (repeatButton.isSelected()) {
-            texture.setWrap(Texture.WrapMode.Repeat);
-        }
+        Texture.WrapMode newMode = repeatButton.isSelected()? Texture.WrapMode.Repeat : Texture.WrapMode.EdgeClamp;
 
-        final Material material = getMaterial();
-        material.setTexture(getParameterName(), texture);
-
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            changed();
-            setIgnoreListeners(true);
-            try {
-                reload();
-            } finally {
-                setIgnoreListeners(false);
-            }
-        });
+        execute(new TextureMaterialParamOperation(parameterName, newKey, newMode, oldKey, oldMode));
     }
 
     /**
      * Удаление текстуры.
      */
     private void processRemove() {
-        EXECUTOR_MANAGER.addEditorThreadTask(this::removeTextureImpl);
-    }
 
-    /**
-     * процесс удаления текстуры.
-     */
-    private void removeTextureImpl() {
-
+        final String parameterName = getParameterName();
         final Material material = getMaterial();
-        material.clearParam(getParameterName());
+        final MatParamTexture textureParam = material.getTextureParam(parameterName);
+        final Texture2D texture2D = (Texture2D) textureParam.getValue();
+        final TextureKey oldKey = (TextureKey) texture2D.getKey();
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            changed();
-            setIgnoreListeners(true);
-            try {
-                reload();
-            } finally {
-                setIgnoreListeners(false);
-            }
-        });
+        Texture.WrapMode mode = Texture.WrapMode.EdgeClamp;
+
+        if (texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
+            mode = Texture.WrapMode.Repeat;
+        }
+
+        execute(new TextureMaterialParamOperation(parameterName, null, null, oldKey, mode));
     }
 
     /**

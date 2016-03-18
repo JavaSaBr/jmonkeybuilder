@@ -3,8 +3,12 @@ package com.ss.editor.ui.control.material;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.ui.control.material.operation.BooleanMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
@@ -27,7 +31,7 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox checkBox;
 
-    public BooleanMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+    public BooleanMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -55,26 +59,12 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(newValue));
-    }
-
-    /**
-     * Процесс изменения флага.
-     */
-    private void processChangeImpl(final Boolean newValue) {
-
+        final String parameterName = getParameterName();
         final Material material = getMaterial();
-        material.setBoolean(getParameterName(), newValue);
+        final MatParam param = material.getParam(parameterName);
+        final Boolean oldValue = param == null? null : (Boolean) param.getValue();
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            changed();
-            setIgnoreListeners(true);
-            try {
-                reload();
-            } finally {
-                setIgnoreListeners(false);
-            }
-        });
+        execute(new BooleanMaterialParamOperation(parameterName, newValue, oldValue));
     }
 
     @Override

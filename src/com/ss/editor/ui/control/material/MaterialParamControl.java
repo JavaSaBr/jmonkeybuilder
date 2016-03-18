@@ -1,8 +1,11 @@
 package com.ss.editor.ui.control.material;
 
 import com.jme3.material.Material;
+import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -22,7 +25,7 @@ public class MaterialParamControl extends HBox {
     /**
      * Обработчик внесения изменений.
      */
-    private final Runnable changeHandler;
+    private final Consumer<EditorOperation> changeHandler;
 
     /**
      * Текущий материал.
@@ -44,7 +47,7 @@ public class MaterialParamControl extends HBox {
      */
     private boolean ignoreListeners;
 
-    public MaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+    public MaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         this.changeHandler = changeHandler;
         this.material = material;
         this.parameterName = parameterName;
@@ -61,10 +64,10 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
-     * Уведомить о измнении чего-то.
+     * @param operation операция с внесением изменения.
      */
-    protected void changed() {
-        changeHandler.run();
+    protected void execute(final EditorOperation operation) {
+        changeHandler.accept(operation);
     }
 
     /**
@@ -77,7 +80,7 @@ public class MaterialParamControl extends HBox {
     /**
      * @param ignoreListeners флаг игнорирования слушателей.
      */
-    protected void setIgnoreListeners(boolean ignoreListeners) {
+    protected void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
