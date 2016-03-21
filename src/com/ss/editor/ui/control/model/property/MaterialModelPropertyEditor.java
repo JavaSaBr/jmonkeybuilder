@@ -1,11 +1,12 @@
 package com.ss.editor.ui.control.model.property;
 
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
-import com.jme3.material.Material;
+import com.jme3.scene.Geometry;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -15,8 +16,10 @@ import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -33,7 +36,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> {
+public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, MaterialKey> {
 
     public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
@@ -62,8 +65,8 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> 
      */
     private Button editButton;
 
-    public MaterialModelPropertyEditor(final Runnable changeHandler, final Material element, final String paramName) {
-        super(changeHandler, element, paramName);
+    public MaterialModelPropertyEditor(final Consumer<EditorOperation> changeHandler, final MaterialKey element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(changeHandler, element, paramName, modelChangeConsumer);
     }
 
     @Override
@@ -115,13 +118,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> 
         final Path assetFile = EditorUtil.getAssetFile(file);
         final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
-
-        final Material material = assetManager.loadAsset(materialKey);
-
-        setElement(material);
-        changed();
+        changed(materialKey, getPropertyValue());
 
         setIgnoreListener(true);
         try {
@@ -136,14 +133,24 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> 
      */
     private void processEdit() {
 
-        final Material element = getElement();
+        final MaterialKey element = getPropertyValue();
 
         if (element == null) {
             return;
         }
 
-        final Path assetFile = Paths.get(element.getAssetName());
+        final String assetPath = element.getName();
+
+        if (StringUtils.isEmpty(assetPath)) {
+            return;
+        }
+
+        final Path assetFile = Paths.get(assetPath);
         final Path realFile = EditorUtil.getRealFile(assetFile);
+
+        if (!Files.exists(realFile)) {
+            return;
+        }
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
         event.setFile(realFile);
@@ -161,9 +168,9 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Material> 
     @Override
     protected void reload() {
 
-        final Material element = getElement();
+        final MaterialKey element = getPropertyValue();
 
         final Label materialLabel = getMaterialLabel();
-        materialLabel.setText(element == null || StringUtils.isEmpty(element.getAssetName()) ? NO_MATERIAL : element.getAssetName());
+        materialLabel.setText(element == null || StringUtils.isEmpty(element.getName()) ? NO_MATERIAL : element.getName());
     }
 }

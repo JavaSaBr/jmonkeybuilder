@@ -1,7 +1,12 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Spatial;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -16,7 +21,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class ShadowModeModelPropertyControl extends ModelPropertyControl<RenderQueue.ShadowMode> {
+public class ShadowModeModelPropertyControl extends ModelPropertyControl<Spatial, RenderQueue.ShadowMode> {
 
     private static final Array<RenderQueue.ShadowMode> SHADOW_MODES = ArrayFactory.newArray(RenderQueue.ShadowMode.class);
 
@@ -29,8 +34,8 @@ public class ShadowModeModelPropertyControl extends ModelPropertyControl<RenderQ
      */
     private ComboBox<RenderQueue.ShadowMode> shadowModeComboBox;
 
-    public ShadowModeModelPropertyControl(final Runnable changeHandler, final RenderQueue.ShadowMode element, final String paramName) {
-        super(changeHandler, element, paramName);
+    public ShadowModeModelPropertyControl(final Consumer<EditorOperation> changeHandler, final RenderQueue.ShadowMode element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(changeHandler, element, paramName, modelChangeConsumer);
     }
 
     @Override
@@ -67,15 +72,15 @@ public class ShadowModeModelPropertyControl extends ModelPropertyControl<RenderQ
 
         final ComboBox<RenderQueue.ShadowMode> shadowModeComboBox = getShadowModeComboBox();
         final SingleSelectionModel<RenderQueue.ShadowMode> selectionModel = shadowModeComboBox.getSelectionModel();
+        final RenderQueue.ShadowMode newValue = selectionModel.getSelectedItem();
 
-        setElement(selectionModel.getSelectedItem());
-        changed();
+        changed(newValue, getPropertyValue());
     }
 
     @Override
     protected void reload() {
 
-        final RenderQueue.ShadowMode element = getElement();
+        final RenderQueue.ShadowMode element = getPropertyValue();
 
         final ComboBox<RenderQueue.ShadowMode> shadowModeComboBox = getShadowModeComboBox();
         final SingleSelectionModel<RenderQueue.ShadowMode> selectionModel = shadowModeComboBox.getSelectionModel();

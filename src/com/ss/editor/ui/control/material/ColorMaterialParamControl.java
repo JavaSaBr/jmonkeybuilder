@@ -86,7 +86,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParam param = material.getParam(parameterName);
-        final ColorRGBA oldValue = param == null? null : (ColorRGBA) param.getValue();
+        final ColorRGBA oldValue = param == null ? null : (ColorRGBA) param.getValue();
 
         execute(new ColorMaterialParamOperation(parameterName, colorRGBA, oldValue));
     }
@@ -99,7 +99,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParam param = material.getParam(parameterName);
-        final ColorRGBA oldValue = param == null? null : (ColorRGBA) param.getValue();
+        final ColorRGBA oldValue = param == null ? null : (ColorRGBA) param.getValue();
 
         execute(new ColorMaterialParamOperation(parameterName, null, oldValue));
     }

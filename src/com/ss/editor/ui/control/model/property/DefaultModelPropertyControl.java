@@ -1,7 +1,10 @@
 package com.ss.editor.ui.control.model.property;
 
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javafx.geometry.Pos;
@@ -14,7 +17,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author Ronn
  */
-public class DefaultModelPropertyControl<T> extends ModelPropertyControl<T> {
+public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object, T> {
 
     /**
      * Надпись со значением свойства.
@@ -26,8 +29,8 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<T> {
      */
     private Function<T, String> toStringFunction;
 
-    public DefaultModelPropertyControl(final Runnable changeHandler, final T element, final String paramName) {
-        super(changeHandler, element, paramName);
+    public DefaultModelPropertyControl(final Consumer<EditorOperation> changeHandler, final T element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(changeHandler, element, paramName, modelChangeConsumer);
     }
 
     /**
@@ -70,6 +73,6 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<T> {
         final Function<T, String> func = getToStringFunction();
 
         final Label propertyValueLabel = getPropertyValueLabel();
-        propertyValueLabel.setText(func == null ? String.valueOf(getElement()) : func.apply(getElement()));
+        propertyValueLabel.setText(func == null ? String.valueOf(getPropertyValue()) : func.apply(getPropertyValue()));
     }
 }

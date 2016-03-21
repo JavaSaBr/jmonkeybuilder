@@ -1,7 +1,12 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.scene.Spatial;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -16,7 +21,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class QueueBucketModelPropertyControl extends ModelPropertyControl<RenderQueue.Bucket> {
+public class QueueBucketModelPropertyControl extends ModelPropertyControl<Spatial, RenderQueue.Bucket> {
 
     private static final Array<RenderQueue.Bucket> BUCKETS = ArrayFactory.newArray(RenderQueue.Bucket.class);
 
@@ -29,8 +34,8 @@ public class QueueBucketModelPropertyControl extends ModelPropertyControl<Render
      */
     private ComboBox<RenderQueue.Bucket> shadowModeComboBox;
 
-    public QueueBucketModelPropertyControl(final Runnable changeHandler, final RenderQueue.Bucket element, final String paramName) {
-        super(changeHandler, element, paramName);
+    public QueueBucketModelPropertyControl(final Consumer<EditorOperation> changeHandler, final RenderQueue.Bucket element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(changeHandler, element, paramName, modelChangeConsumer);
     }
 
     @Override
@@ -67,15 +72,15 @@ public class QueueBucketModelPropertyControl extends ModelPropertyControl<Render
 
         final ComboBox<RenderQueue.Bucket> bucketComboBox = getShadowModeComboBox();
         final SingleSelectionModel<RenderQueue.Bucket> selectionModel = bucketComboBox.getSelectionModel();
+        final RenderQueue.Bucket newValue = selectionModel.getSelectedItem();
 
-        setElement(selectionModel.getSelectedItem());
-        changed();
+        changed(newValue, getPropertyValue());
     }
 
     @Override
     protected void reload() {
 
-        final RenderQueue.Bucket element = getElement();
+        final RenderQueue.Bucket element = getPropertyValue();
 
         final ComboBox<RenderQueue.Bucket> bucketComboBox = getShadowModeComboBox();
         final SingleSelectionModel<RenderQueue.Bucket> selectionModel = bucketComboBox.getSelectionModel();

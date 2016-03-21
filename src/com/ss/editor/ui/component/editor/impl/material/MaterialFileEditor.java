@@ -152,7 +152,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private ComboBox<String> materialDefinitionBox;
 
     /**
-     * Обработчик внесенич изменений.
+     * Обработчик внесения изменений.
      */
     private Consumer<EditorOperation> changeHandler;
 
@@ -261,13 +261,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         notifyFileChanged();
     }
 
-    /**
-     * @return обработчик внесения изменений.
-     */
-    private Consumer<EditorOperation> getChangeHandler() {
-        return changeHandler;
-    }
-
     @Override
     protected StackPane createRoot() {
         return new StackPane();
@@ -277,17 +270,17 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     protected void processKeyReleased(final KeyEvent event) {
         super.processKeyReleased(event);
 
-        if(!event.isControlDown()) {
+        if (!event.isControlDown()) {
             return;
         }
 
         final KeyCode code = event.getCode();
 
-        if(code == KeyCode.S && isDirty()) {
+        if (code == KeyCode.S && isDirty()) {
             doSave();
-        } else if(code == KeyCode.Z) {
+        } else if (code == KeyCode.Z) {
             undo();
-        } else if(code == KeyCode.Y) {
+        } else if (code == KeyCode.Y) {
             redo();
         }
     }

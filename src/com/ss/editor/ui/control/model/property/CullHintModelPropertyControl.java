@@ -1,7 +1,11 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.jme3.scene.Spatial;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -16,7 +20,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial.CullHint> {
+public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial, Spatial.CullHint> {
 
     private static final Array<Spatial.CullHint> CULL_HINTS = ArrayFactory.newArray(Spatial.CullHint.class);
 
@@ -29,8 +33,8 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial.C
      */
     private ComboBox<Spatial.CullHint> cullHintComboBox;
 
-    public CullHintModelPropertyControl(final Runnable changeHandler, final Spatial.CullHint element, final String paramName) {
-        super(changeHandler, element, paramName);
+    public CullHintModelPropertyControl(final Consumer<EditorOperation> changeHandler, final Spatial.CullHint element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(changeHandler, element, paramName, modelChangeConsumer);
     }
 
     @Override
@@ -67,15 +71,15 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial.C
 
         final ComboBox<Spatial.CullHint> cullHintComboBox = getCullHintComboBox();
         final SingleSelectionModel<Spatial.CullHint> selectionModel = cullHintComboBox.getSelectionModel();
+        final Spatial.CullHint newValue = selectionModel.getSelectedItem();
 
-        setElement(selectionModel.getSelectedItem());
-        changed();
+        changed(newValue, getPropertyValue());
     }
 
     @Override
     protected void reload() {
 
-        final Spatial.CullHint element = getElement();
+        final Spatial.CullHint element = getPropertyValue();
 
         final ComboBox<Spatial.CullHint> cullHintComboBox = getCullHintComboBox();
         final SingleSelectionModel<Spatial.CullHint> selectionModel = cullHintComboBox.getSelectionModel();

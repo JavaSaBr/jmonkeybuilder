@@ -10,6 +10,10 @@ import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.EditorOperationControl;
+import com.ss.editor.model.undo.UndoableEditor;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -27,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
@@ -39,6 +44,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -54,7 +61,7 @@ import static javafx.geometry.Pos.TOP_RIGHT;
  *
  * @author Ronn
  */
-public class ModelFileEditor extends AbstractFileEditor<StackPane> {
+public class ModelFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer {
 
     public static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
@@ -84,19 +91,24 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     private final EventHandler<Event> fileChangedHandler;
 
     /**
-     * Слушатель изменений в структуре модели.
-     */
-    private ModelTreeChangeListener changeTreeListener;
-
-    /**
-     * Обработчик изменений свойств.
-     */
-    private Runnable changeHandler;
-
-    /**
      * 3D часть редактора.
      */
     private final ModelEditorState editorState;
+
+    /**
+     * Контролер операций редактора.
+     */
+    private final EditorOperationControl operationControl;
+
+    /**
+     * Счетчик внесения изменений.
+     */
+    private final AtomicInteger changeCounter;
+
+    /**
+     * Слушатель изменений в структуре модели.
+     */
+    private ModelTreeChangeListener changeTreeListener;
 
     /**
      * Текущая модель.
@@ -107,6 +119,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
      * Обработчик выделения.
      */
     private Consumer<Object> selectionHandler;
+
+    /**
+     * Обработчик внесения изменений.
+     */
+    private Consumer<EditorOperation> changeHandler;
 
     /**
      * Дерево узлов модели.
@@ -161,7 +178,21 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     public ModelFileEditor() {
         this.editorState = new ModelEditorState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
+        this.operationControl = new EditorOperationControl(this);
+        this.changeCounter = new AtomicInteger();
         addEditorState(editorState);
+    }
+
+    @Override
+    public void incrementChange() {
+        final int result = changeCounter.incrementAndGet();
+        setDirty(result != 0);
+    }
+
+    @Override
+    public void decrementChange() {
+        final int result = changeCounter.decrementAndGet();
+        setDirty(result != 0);
     }
 
     /**
@@ -212,6 +243,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
      */
     private EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
+    }
+
+    /**
+     * @return обработчик внесения изменений.
+     */
+    public Consumer<EditorOperation> getChangeHandler() {
+        return changeHandler;
     }
 
     @Override
@@ -303,6 +341,41 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     }
 
     @Override
+    protected void processKeyReleased(KeyEvent event) {
+        super.processKeyReleased(event);
+
+        if (!event.isControlDown()) {
+            return;
+        }
+
+        final KeyCode code = event.getCode();
+
+        if (code == KeyCode.S && isDirty()) {
+            doSave();
+        } else if (code == KeyCode.Z) {
+            undo();
+        } else if (code == KeyCode.Y) {
+            redo();
+        }
+    }
+
+    /**
+     * Повторение отмененной операции.
+     */
+    public void redo() {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.redo();
+    }
+
+    /**
+     * Отмена последней операции.
+     */
+    public void undo() {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.undo();
+    }
+
+    @Override
     public void notifyClosed() {
         FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
@@ -333,11 +406,15 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         this.currentModel = currentModel;
     }
 
-    /**
-     * @return текущая модель.
-     */
-    private Spatial getCurrentModel() {
+    @Override
+    public Spatial getCurrentModel() {
         return currentModel;
+    }
+
+    @Override
+    public void notifyChangeProperty(final Object object, final String propertyName) {
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.syncFor(object);
     }
 
     @Override
@@ -362,7 +439,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
     protected void createContent(final StackPane root) {
         this.selectionHandler = this::processSelect;
         this.changeTreeListener = createTreeChangeListener();
-        this.changeHandler = () -> setDirty(true);
+        this.changeHandler = this::handleChanges;
 
         root.setAlignment(TOP_RIGHT);
 
@@ -372,7 +449,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         parameterContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_CONTAINER);
 
         modelNodeTree = new ModelNodeTree(selectionHandler, changeTreeListener);
-        modelPropertyEditor = new ModelPropertyEditor(changeHandler);
+        modelPropertyEditor = new ModelPropertyEditor(changeHandler, this);
 
         final ObservableList<TitledPane> panes = accordion.getPanes();
         panes.add(modelNodeTree);
@@ -384,6 +461,21 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         accordion.setExpandedPane(modelNodeTree);
 
         FXUtils.bindFixedHeight(accordion, parameterContainer.heightProperty());
+    }
+
+    /**
+     * @return контролер операций редактора.
+     */
+    private EditorOperationControl getOperationControl() {
+        return operationControl;
+    }
+
+    /**
+     * Обработка внесения изменений.
+     */
+    private void handleChanges(final EditorOperation operation) {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.execute(operation);
     }
 
     /**
@@ -400,6 +492,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
     }
+
 
     /**
      * Обработка выделения узла в дереве.
@@ -686,6 +779,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> {
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(spatial);
 
-        changeHandler.run();
+        // changeHandler.run();
+        incrementChange();
     }
 }

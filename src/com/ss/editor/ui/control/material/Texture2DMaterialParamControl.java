@@ -232,8 +232,8 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParamTexture textureParam = material.getTextureParam(parameterName);
-        final Texture2D oldTexture = textureParam == null? null : (Texture2D) textureParam.getValue();
-        final TextureKey oldKey = oldTexture == null? null : (TextureKey) oldTexture.getKey();
+        final Texture2D oldTexture = textureParam == null ? null : (Texture2D) textureParam.getValue();
+        final TextureKey oldKey = oldTexture == null ? null : (TextureKey) oldTexture.getKey();
 
         Texture.WrapMode oldMode = Texture.WrapMode.EdgeClamp;
 
@@ -260,7 +260,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        Texture.WrapMode newMode = repeatButton.isSelected()? Texture.WrapMode.Repeat : Texture.WrapMode.EdgeClamp;
+        Texture.WrapMode newMode = repeatButton.isSelected() ? Texture.WrapMode.Repeat : Texture.WrapMode.EdgeClamp;
 
         execute(new TextureMaterialParamOperation(parameterName, newKey, newMode, oldKey, oldMode));
     }

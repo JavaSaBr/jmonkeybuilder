@@ -64,7 +64,7 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
 
         final Material currentMaterial = editor.getCurrentMaterial();
 
-        if(newTextureKey == null) {
+        if (newTextureKey == null) {
             currentMaterial.clearParam(getParamName());
         } else {
 
@@ -92,7 +92,7 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
 
         final Material currentMaterial = editor.getCurrentMaterial();
 
-        if(oldTextureKey == null) {
+        if (oldTextureKey == null) {
             currentMaterial.clearParam(getParamName());
         } else {
 

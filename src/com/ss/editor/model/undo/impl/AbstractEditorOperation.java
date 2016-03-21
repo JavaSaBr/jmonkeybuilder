@@ -14,7 +14,7 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
-    
+
     public AbstractEditorOperation() {
     }
 

@@ -85,11 +85,11 @@ public class FloatMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        final Float newFValue = newValue == null? null : newValue.floatValue();
+        final Float newFValue = newValue == null ? null : newValue.floatValue();
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParam param = material.getParam(parameterName);
-        final Float oldValue = param == null? null : (Float) param.getValue();
+        final Float oldValue = param == null ? null : (Float) param.getValue();
 
         execute(new FloatMaterialParamOperation(parameterName, newFValue, oldValue));
     }

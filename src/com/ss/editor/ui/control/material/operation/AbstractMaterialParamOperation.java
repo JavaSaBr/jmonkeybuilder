@@ -51,7 +51,7 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
 
             final Material currentMaterial = editor.getCurrentMaterial();
 
-            if(newValue != null) {
+            if (newValue != null) {
                 currentMaterial.setParam(getParamName(), getVarType(), newValue);
             } else {
                 currentMaterial.clearParam(getParamName());
@@ -67,7 +67,7 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
 
             final Material currentMaterial = editor.getCurrentMaterial();
 
-            if(oldValue != null) {
+            if (oldValue != null) {
                 currentMaterial.setParam(getParamName(), getVarType(), oldValue);
             } else {
                 currentMaterial.clearParam(getParamName());

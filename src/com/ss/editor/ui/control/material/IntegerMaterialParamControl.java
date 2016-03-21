@@ -88,7 +88,7 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParam param = material.getParam(parameterName);
-        final Integer oldValue = param == null? null : (Integer) param.getValue();
+        final Integer oldValue = param == null ? null : (Integer) param.getValue();
 
         execute(new IntegerMaterialParamOperation(parameterName, newValue, oldValue));
     }

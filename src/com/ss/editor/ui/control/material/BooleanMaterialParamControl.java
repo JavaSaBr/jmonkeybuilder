@@ -62,7 +62,7 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParam param = material.getParam(parameterName);
-        final Boolean oldValue = param == null? null : (Boolean) param.getValue();
+        final Boolean oldValue = param == null ? null : (Boolean) param.getValue();
 
         execute(new BooleanMaterialParamOperation(parameterName, newValue, oldValue));
     }
