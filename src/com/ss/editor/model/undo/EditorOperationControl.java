@@ -13,6 +13,8 @@ import rlib.util.array.ArrayFactory;
  */
 public class EditorOperationControl {
 
+    public static final int HISTORY_SIZE = 20;
+
     /**
      * Список операций.
      */
@@ -79,6 +81,9 @@ public class EditorOperationControl {
         final Array<EditorOperation> operations = getOperations();
         operations.add(operation);
 
+        if(operations.size() > HISTORY_SIZE) {
+            operations.poll();
+        }
 
         final Array<EditorOperation> toRedo = getToRedo();
         toRedo.clear();
@@ -87,7 +92,19 @@ public class EditorOperationControl {
     /**
      * Отмена последней операции.
      */
-    public synchronized void undo() {
+    public void undo() {
+        if (Platform.isFxApplicationThread()) {
+            undoImpl();
+        } else {
+            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            executorManager.addFXTask(this::undoImpl);
+        }
+    }
+
+    /**
+     * Отмена последней операции.
+     */
+    private synchronized void undoImpl() {
 
         final Array<EditorOperation> operations = getOperations();
         final EditorOperation operation = operations.pop();
@@ -108,6 +125,18 @@ public class EditorOperationControl {
      * Отмена отмены последнего изменения.
      */
     public synchronized void redo() {
+        if (Platform.isFxApplicationThread()) {
+            redoImpl();
+        } else {
+            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            executorManager.addFXTask(this::redoImpl);
+        }
+    }
+
+    /**
+     * Отмена последней операции.
+     */
+    private synchronized void redoImpl() {
 
         final Array<EditorOperation> toRedo = getToRedo();
         final EditorOperation operation = toRedo.pop();
@@ -123,5 +152,14 @@ public class EditorOperationControl {
 
         final Array<EditorOperation> operations = getOperations();
         operations.add(operation);
+    }
+
+    public synchronized void clear() {
+
+        final Array<EditorOperation> operations = getOperations();
+        operations.clear();
+
+        final Array<EditorOperation> toRedo = getToRedo();
+        toRedo.clear();
     }
 }

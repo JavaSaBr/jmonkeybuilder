@@ -48,10 +48,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_LAST;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_REPEAT;
-import static org.lwjgl.glfw.GLFW.GLFW_STICKY_KEYS;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.glfw.GLFW.glfwSetCharCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
 import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
 
 public class GlfwKeyInput implements KeyInput {
@@ -83,10 +81,11 @@ public class GlfwKeyInput implements KeyInput {
                 }
 
                 int jmeKey = GlfwKeyMap.toJmeKeyCode(key);
-                final KeyInputEvent evt = new KeyInputEvent(jmeKey, '\0', GLFW_PRESS == action, GLFW_REPEAT == action);
 
-                evt.setTime(getInputTimeNanos());
-                keyInputEvents.add(evt);
+                final KeyInputEvent event = new KeyInputEvent(jmeKey, '\0', GLFW_PRESS == action, GLFW_REPEAT == action);
+                event.setTime(getInputTimeNanos());
+
+                keyInputEvents.add(event);
             }
         });
 
@@ -108,8 +107,6 @@ public class GlfwKeyInput implements KeyInput {
                 keyInputEvents.add(released);
             }
         });
-
-        glfwSetInputMode(context.getWindowHandle(), GLFW_STICKY_KEYS, 1);
 
         initialized = true;
         logger.fine("Keyboard created.");

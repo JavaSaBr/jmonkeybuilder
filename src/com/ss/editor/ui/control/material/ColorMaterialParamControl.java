@@ -105,7 +105,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
     }
 
     @Override
-    protected void reload() {
+    public void reload() {
         super.reload();
 
         final Material material = getMaterial();

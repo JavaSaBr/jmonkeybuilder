@@ -6,8 +6,12 @@ import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.ui.component.editor.impl.material.operation.RenderStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -41,7 +45,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
     /**
      * Обработчик внесения изменений.
      */
-    private final Runnable changeHandler;
+    private final Consumer<EditorOperation> changeHandler;
 
     /**
      * Контейнер контролов различных параметров.
@@ -103,7 +107,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      */
     private boolean ignoreListeners;
 
-    public MaterialRenderParamsComponent(final Runnable changeHandler) {
+    public MaterialRenderParamsComponent(final Consumer<EditorOperation> changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
         setText(Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
@@ -129,15 +133,8 @@ public class MaterialRenderParamsComponent extends TitledPane {
     /**
      * @return обработчик внесения изменений.
      */
-    private Runnable getChangeHandler() {
+    private Consumer<EditorOperation> getChangeHandler() {
         return changeHandler;
-    }
-
-    /**
-     * Уведомление о внесении изменений.
-     */
-    private void change() {
-        EXECUTOR_MANAGER.addFXTask(getChangeHandler());
     }
 
     /**
@@ -236,19 +233,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeWireframeImpl(newValue));
-    }
-
-    /**
-     * Процесс смены wireframe.
-     */
-    private void processChangeWireframeImpl(final Boolean newValue) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setWireframe(newValue);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isWireframe()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final Boolean value) {
+                renderState.setWireframe(value);
+            }
+        });
     }
 
     /**
@@ -260,19 +255,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeDepthTestImpl(newValue));
-    }
-
-    /**
-     * Процесс смены DepthTest.
-     */
-    private void processChangeDepthTestImpl(final Boolean newValue) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setDepthTest(newValue);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isDepthTest()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final Boolean value) {
+                renderState.setDepthTest(value);
+            }
+        });
     }
 
     /**
@@ -284,19 +277,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeColorWriteImpl(newValue));
-    }
-
-    /**
-     * Процесс смены ColorWrite.
-     */
-    private void processChangeColorWriteImpl(final Boolean newValue) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setColorWrite(newValue);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isColorWrite()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final Boolean value) {
+                renderState.setColorWrite(value);
+            }
+        });
     }
 
     /**
@@ -308,19 +299,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> pointChangeDepthWriteImpl(newValue));
-    }
-
-    /**
-     * Процесс смены DepthWrite.
-     */
-    private void pointChangeDepthWriteImpl(final Boolean newValue) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setDepthWrite(newValue);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isDepthWrite()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final Boolean value) {
+                renderState.setDepthWrite(value);
+            }
+        });
     }
 
     /**
@@ -332,19 +321,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangePointSpriteImpl(newValue));
-    }
-
-    /**
-     * Процесс смены PointSprite.
-     */
-    private void processChangePointSpriteImpl(final Boolean newValue) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setPointSprite(newValue);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isPointSprite()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final Boolean value) {
+                renderState.setPointSprite(value);
+            }
+        });
     }
 
     private void processChangeUnits(final String newUnits) {
@@ -354,22 +341,25 @@ public class MaterialRenderParamsComponent extends TitledPane {
         }
 
         try {
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeUnitsImpl(parseFloat(newUnits)));
+
+            final float polyOffsetUnits = parseFloat(newUnits);
+
+            final Material currentMaterial = getCurrentMaterial();
+            final RenderState renderState = currentMaterial.getAdditionalRenderState();
+
+            final Consumer<EditorOperation> changeHandler = getChangeHandler();
+            changeHandler.accept(new RenderStateOperation<Float>(polyOffsetUnits, renderState.getPolyOffsetUnits()) {
+
+                @Override
+                protected void apply(final RenderState renderState, final Float value) {
+                    renderState.setPolyOffset(renderState.getPolyOffsetFactor(), value);
+                }
+            });
+
         } catch (final NumberFormatException ignored) {
         }
     }
 
-    /**
-     * Процесс смены PolyOffset Units.
-     */
-    private void processChangeUnitsImpl(final float units) {
-
-        final Material currentMaterial = getCurrentMaterial();
-        final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setPolyOffset(renderState.getPolyOffsetFactor(), units);
-
-        change();
-    }
 
     /**
      * Обработка смены PolyOffset Factor.
@@ -381,21 +371,23 @@ public class MaterialRenderParamsComponent extends TitledPane {
         }
 
         try {
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeFactorImpl(parseFloat(newFactor)));
+
+            final float polyOffsetFactor = parseFloat(newFactor);
+
+            final Material currentMaterial = getCurrentMaterial();
+            final RenderState renderState = currentMaterial.getAdditionalRenderState();
+
+            final Consumer<EditorOperation> changeHandler = getChangeHandler();
+            changeHandler.accept(new RenderStateOperation<Float>(polyOffsetFactor, renderState.getPolyOffsetFactor()) {
+
+                @Override
+                protected void apply(final RenderState renderState, final Float value) {
+                    renderState.setPolyOffset(value, renderState.getPolyOffsetUnits());
+                }
+            });
+
         } catch (final NumberFormatException ignored) {
         }
-    }
-
-    /**
-     * Процесс смены PolyOffset Factor.
-     */
-    private void processChangeFactorImpl(final float factor) {
-
-        final Material currentMaterial = getCurrentMaterial();
-        final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setPolyOffset(factor, renderState.getPolyOffsetUnits());
-
-        change();
     }
 
     /**
@@ -407,19 +399,17 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(blendMode));
-    }
-
-    /**
-     * Процесс смены Blend Mode.
-     */
-    private void processChangeImpl(final BlendMode blendMode) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setBlendMode(blendMode);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<BlendMode>(blendMode, renderState.getBlendMode()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final BlendMode value) {
+                renderState.setBlendMode(value);
+            }
+        });
     }
 
     /**
@@ -431,19 +421,18 @@ public class MaterialRenderParamsComponent extends TitledPane {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(faceCullMode));
-    }
-
-    /**
-     * Процесс смены FaceCull Mode.
-     */
-    private void processChangeImpl(final FaceCullMode faceCullMode) {
-
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
-        renderState.setFaceCullMode(faceCullMode);
 
-        change();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<FaceCullMode>(faceCullMode, renderState.getFaceCullMode()) {
+
+            @Override
+            protected void apply(final RenderState renderState, final FaceCullMode value) {
+                renderState.setFaceCullMode(value);
+            }
+        });
+
     }
 
     /**

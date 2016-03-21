@@ -10,6 +10,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
+import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState.ModelType;
@@ -41,12 +42,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
-import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
@@ -56,7 +58,7 @@ import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
  *
  * @author Ronn
  */
-public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor {
+public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, MaterialChangeConsumer {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -269,6 +271,41 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     @Override
     protected StackPane createRoot() {
         return new StackPane();
+    }
+
+    @Override
+    protected void processKeyReleased(final KeyEvent event) {
+        super.processKeyReleased(event);
+
+        if(!event.isControlDown()) {
+            return;
+        }
+
+        final KeyCode code = event.getCode();
+
+        if(code == KeyCode.S && isDirty()) {
+            doSave();
+        } else if(code == KeyCode.Z) {
+            undo();
+        } else if(code == KeyCode.Y) {
+            redo();
+        }
+    }
+
+    /**
+     * Повторение отмененной операции.
+     */
+    public void redo() {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.redo();
+    }
+
+    /**
+     * Отмена последней операции.
+     */
+    public void undo() {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.undo();
     }
 
     @Override
@@ -522,10 +559,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());
 
-        reload(newMaterial);
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.clear();
 
-        final Runnable changeHandler = getChangeHandler();
-        changeHandler.run();
+        incrementChange();
+
+        reload(newMaterial);
     }
 
     /**
@@ -596,11 +635,28 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         }
     }
 
-    /**
-     * @return текущий редактируемый материал.
-     */
-    private Material getCurrentMaterial() {
+    @Override
+    public Material getCurrentMaterial() {
         return currentMaterial;
+    }
+
+    @Override
+    public void notifyChangeParam(final String paramName) {
+
+        final MaterialOtherParamsComponent otherParamsComponent = getMaterialOtherParamsComponent();
+        otherParamsComponent.updateParam(paramName);
+
+        final MaterialColorsComponent colorsComponent = getMaterialColorsComponent();
+        colorsComponent.updateParam(paramName);
+
+        final MaterialTexturesComponent texturesComponent = getMaterialTexturesComponent();
+        texturesComponent.updateParam(paramName);
+    }
+
+    @Override
+    public void notifyChangedRenderState() {
+        final MaterialRenderParamsComponent renderParamsComponent = getMaterialRenderParamsComponent();
+        renderParamsComponent.buildFor(getCurrentMaterial());
     }
 
     /**

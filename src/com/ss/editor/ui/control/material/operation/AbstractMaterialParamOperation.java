@@ -76,4 +76,13 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeParam(getParamName()));
         });
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+                "paramName='" + paramName + '\'' +
+                ", newValue=" + newValue +
+                ", oldValue=" + oldValue +
+                "} " + super.toString();
+    }
 }

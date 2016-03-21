@@ -348,6 +348,18 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     @Override
+    protected void undo() {
+        final MaterialFileEditor fileEditor = getFileEditor();
+        fileEditor.undo();
+    }
+
+    @Override
+    protected void redo() {
+        final MaterialFileEditor fileEditor = getFileEditor();
+        fileEditor.redo();
+    }
+
+    @Override
     protected boolean needUpdateCameraLight() {
         return false;
     }

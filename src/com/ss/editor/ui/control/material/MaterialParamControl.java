@@ -73,14 +73,14 @@ public class MaterialParamControl extends HBox {
     /**
      * @return флаг игнорирования слушателей.
      */
-    protected boolean isIgnoreListeners() {
+    public boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     /**
      * @param ignoreListeners флаг игнорирования слушателей.
      */
-    protected void setIgnoreListeners(final boolean ignoreListeners) {
+    public void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
@@ -106,7 +106,7 @@ public class MaterialParamControl extends HBox {
     /**
      * Инициализация контрола.
      */
-    protected void reload() {
+    public void reload() {
     }
 
     /**

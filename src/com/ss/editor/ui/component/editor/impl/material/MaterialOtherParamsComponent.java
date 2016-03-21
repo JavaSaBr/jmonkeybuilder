@@ -112,4 +112,32 @@ public class MaterialOtherParamsComponent extends TitledPane {
 
         VBox.setMargin(control, CONTROL_OFFSET);
     }
+
+    /**
+     * @param paramName название обновленного параметра.
+     */
+    public void updateParam(final String paramName) {
+
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> {
+
+            if(!(node instanceof MaterialParamControl)) {
+                return;
+            }
+
+            final MaterialParamControl control = (MaterialParamControl) node;
+
+            if(!StringUtils.equals(control.getParameterName(), paramName)) {
+                return;
+            }
+
+            control.setIgnoreListeners(true);
+            try {
+                control.reload();
+            } finally {
+                control.setIgnoreListeners(false);
+            }
+        });
+    }
 }

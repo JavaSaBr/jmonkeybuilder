@@ -11,7 +11,7 @@ import com.ss.editor.model.undo.impl.AbstractEditorOperation;
  *
  * @author Ronn
  */
-public abstract class AbstractRenderStateOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
+public abstract class RenderStateOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -25,7 +25,7 @@ public abstract class AbstractRenderStateOperation<T> extends AbstractEditorOper
      */
     private final T oldValue;
 
-    public AbstractRenderStateOperation(final T newValue, final T oldValue) {
+    public RenderStateOperation(final T newValue, final T oldValue) {
         this.newValue = newValue;
         this.oldValue = oldValue;
     }
