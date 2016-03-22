@@ -1,12 +1,17 @@
 package com.ss.editor.ui.control.model.tree;
 
 import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.util.GeomUtils;
 
 import java.util.Set;
 
@@ -76,10 +81,13 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
             }
 
             final Spatial spatial = (Spatial) element;
-            spatial.setName(string);
 
             final ModelNodeTree nodeTree = getNodeTree();
-            nodeTree.notifyChanged(item);
+            final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+
+            final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), spatial);
+
+            modelChangeConsumer.execute(new RenameNodeOperation(spatial.getName(), string, index));
 
             return item;
         }
@@ -235,7 +243,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * m Обработка принятия.
+     * Обработка принятия.
      */
     private void dragDropped(final DragEvent dragEvent) {
 
@@ -269,10 +277,12 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
             return;
         }
 
+        final Object element = dragItem.getElement();
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
 
         if (isCopy) {
 
+            //TODO переделать на операцию
             final ModelNode<?> copy = item.copy();
 
             final ModelNode<?> newParent = newParentItem.getValue();
@@ -281,21 +291,31 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
             final ModelNodeTree nodeTree = getNodeTree();
             nodeTree.notifyAdded(newParent, copy);
 
-        } else {
-
-            final TreeItem<ModelNode<?>> parent = dragTreeItem.getParent();
-            final ModelNode<?> prevParent = parent.getValue();
-            prevParent.remove(dragItem);
-
-            final ModelNode<?> newParent = newParentItem.getValue();
-            newParent.add(dragItem);
+        } else if (element instanceof Spatial) {
 
             final ModelNodeTree nodeTree = getNodeTree();
-            nodeTree.notifyMoved(prevParent, newParent, dragItem);
+            final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
 
-            EXECUTOR_MANAGER.addFXTask(() -> selectionModel.select(dragTreeItem));
+            final TreeItem<ModelNode<?>> parent = dragTreeItem.getParent();
+
+            final ModelNode<?> prevParent = parent.getValue();
+            final ModelNode<?> newParent = newParentItem.getValue();
+
+            if (newParent == prevParent) {
+                return;
+            }
+
+            final Spatial spatial = (Spatial) element;
+            final Node prevParentNode = (Node) prevParent.getElement();
+            final Node newParentNode = (Node) newParent.getElement();
+            final Spatial currentModel = modelChangeConsumer.getCurrentModel();
+
+            final int prevParentIndex = GeomUtils.getIndex(currentModel, prevParentNode);
+            final int newParentIndex = GeomUtils.getIndex(currentModel, newParentNode);
+            final int childIndex = prevParentNode.getChildIndex(spatial);
+
+            modelChangeConsumer.execute(new MoveChildOperation(spatial, prevParentIndex, newParentIndex, childIndex));
         }
-
 
         dragEvent.consume();
     }

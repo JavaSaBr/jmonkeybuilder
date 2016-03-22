@@ -1,10 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-
-import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -18,11 +15,6 @@ import javafx.scene.layout.VBox;
  * @author Ronn
  */
 public class ModelPropertyEditor extends TitledPane {
-
-    /**
-     * Обработчик внесения изменений.
-     */
-    private final Consumer<EditorOperation> changeHandler;
 
     /**
      * Потребитель изменений модели.
@@ -39,8 +31,7 @@ public class ModelPropertyEditor extends TitledPane {
      */
     private Object currentObject;
 
-    public ModelPropertyEditor(final Consumer<EditorOperation> changeHandler, final ModelChangeConsumer modelChangeConsumer) {
-        this.changeHandler = changeHandler;
+    public ModelPropertyEditor(final ModelChangeConsumer modelChangeConsumer) {
         this.modelChangeConsumer = modelChangeConsumer;
         setText(Messages.MODEL_FILE_EDITOR_PROPERTIES);
         createComponents();
@@ -52,13 +43,6 @@ public class ModelPropertyEditor extends TitledPane {
      */
     private VBox getContainer() {
         return container;
-    }
-
-    /**
-     * @return обработчик внесения изменений.
-     */
-    private Consumer<EditorOperation> getChangeHandler() {
-        return changeHandler;
     }
 
     /**
@@ -91,7 +75,7 @@ public class ModelPropertyEditor extends TitledPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilder.buildFor(object, container, getChangeHandler(), getModelChangeConsumer());
+            PropertyBuilder.buildFor(object, container, getModelChangeConsumer());
         }
 
         setCurrentObject(object);

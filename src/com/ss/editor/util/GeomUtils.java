@@ -30,9 +30,20 @@ public class GeomUtils {
 
     public static int getIndex(final Spatial model, final Object object) {
 
-        if (Objects.equals(model, object)) {
-            return 0;
-        } else if (!(model instanceof Node)) {
+        Spatial parent = model;
+        int parentIndex = 0;
+
+        while (parent != null) {
+
+            if (Objects.equals(parent, object)) {
+                return parentIndex;
+            }
+
+            parent = parent.getParent();
+            parentIndex--;
+        }
+
+        if (!(model instanceof Node)) {
             return -1;
         }
 
@@ -74,6 +85,23 @@ public class GeomUtils {
     }
 
     public static Object getObjectByIndex(final Spatial model, final int index) {
+
+        Spatial parent = model;
+        int parentIndex = 0;
+
+        while (parent != null) {
+
+            if (parentIndex == index) {
+                return parent;
+            }
+
+            parent = parent.getParent();
+            parentIndex--;
+        }
+
+        if (!(model instanceof Node)) {
+            return -1;
+        }
 
         if (index == 0) {
             return model;
@@ -120,5 +148,21 @@ public class GeomUtils {
         }
 
         return null;
+    }
+
+    public static boolean canAttach(final Node node, final Spatial spatial) {
+
+        Spatial parent = node;
+
+        while (parent != null) {
+
+            if (parent == spatial) {
+                return false;
+            }
+
+            parent = parent.getParent();
+        }
+
+        return true;
     }
 }

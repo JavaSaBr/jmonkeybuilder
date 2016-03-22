@@ -13,6 +13,7 @@ import com.ss.editor.ui.control.model.tree.action.CreateSphereAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
+import com.ss.editor.util.GeomUtils;
 
 import java.util.List;
 
@@ -79,8 +80,7 @@ public class NodeModelNode extends ModelNode<Node> {
         }
 
         final Object element = node.getElement();
-
-        return element instanceof Spatial;
+        return element instanceof Spatial && GeomUtils.canAttach(getElement(), (Spatial) element);
     }
 
     @Override

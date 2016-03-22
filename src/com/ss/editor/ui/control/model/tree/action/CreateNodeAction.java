@@ -2,9 +2,11 @@ package com.ss.editor.ui.control.model.tree.action;
 
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
+import com.ss.editor.util.GeomUtils;
 
 /**
  * Действие по созданию нового узла.
@@ -24,18 +26,17 @@ public class CreateNodeAction extends AbstractNodeAction {
 
     @Override
     protected void process() {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Node node = new Node("New Node");
+        final ModelNodeTree nodeTree = getNodeTree();
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
 
-            final ModelNode<Node> newNode = ModelNodeFactory.createFor(node);
-            final ModelNode<?> modelNode = getNode();
-            modelNode.add(newNode);
+        final Node node = new Node("New Node");
 
-            EXECUTOR_MANAGER.addFXTask(() -> {
-                final ModelNodeTree nodeTree = getNodeTree();
-                nodeTree.notifyAdded(modelNode, newNode);
-            });
-        });
+        final ModelNode<?> modelNode = getNode();
+        final Node element = (Node) modelNode.getElement();
+
+        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
+
+        modelChangeConsumer.execute(new AddChildOperation(node, index));
     }
 }

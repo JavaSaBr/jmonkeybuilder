@@ -5,7 +5,6 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
@@ -19,7 +18,6 @@ import com.ss.editor.util.EditorUtil;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -65,8 +63,8 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
      */
     private Button editButton;
 
-    public MaterialModelPropertyEditor(final Consumer<EditorOperation> changeHandler, final MaterialKey element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
-        super(changeHandler, element, paramName, modelChangeConsumer);
+    public MaterialModelPropertyEditor(final MaterialKey element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(element, paramName, modelChangeConsumer);
     }
 
     @Override

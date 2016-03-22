@@ -333,7 +333,7 @@ public class Editor extends SimpleApplication {
 
             super.update();
 
-        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | IllegalStateException e) {
+        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | IllegalStateException | StackOverflowError e) {
             LOGGER.warning(e);
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.save();

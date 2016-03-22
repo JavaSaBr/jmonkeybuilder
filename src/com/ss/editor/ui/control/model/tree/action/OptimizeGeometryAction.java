@@ -2,8 +2,11 @@ package com.ss.editor.ui.control.model.tree.action;
 
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.OptimizeGeometryOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.util.GeomUtils;
 
 import jme3tools.optimize.GeometryBatchFactory;
 
@@ -26,13 +29,17 @@ public class OptimizeGeometryAction extends AbstractNodeAction {
     @Override
     protected void process() {
 
-        final ModelNode<?> node = getNode();
-        final Node element = (Node) node.getElement();
-
-        GeometryBatchFactory.optimize(element);
-
         final ModelNodeTree nodeTree = getNodeTree();
-        nodeTree.refresh(node);
-        nodeTree.notifyChanged(node);
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+
+        final ModelNode<?> node = getNode();
+        final Node oldElement = (Node) node.getElement();
+        final Node newElement = (Node) oldElement.deepClone();
+
+        GeometryBatchFactory.optimize(newElement);
+
+        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), oldElement.getParent());
+
+        modelChangeConsumer.execute(new OptimizeGeometryOperation(newElement, oldElement, index));
     }
 }

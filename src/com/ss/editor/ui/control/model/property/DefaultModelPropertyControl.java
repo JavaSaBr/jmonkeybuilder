@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.model.property;
 
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javafx.geometry.Pos;
@@ -29,8 +27,8 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
      */
     private Function<T, String> toStringFunction;
 
-    public DefaultModelPropertyControl(final Consumer<EditorOperation> changeHandler, final T element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
-        super(changeHandler, element, paramName, modelChangeConsumer);
+    public DefaultModelPropertyControl(final T element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(element, paramName, modelChangeConsumer);
     }
 
     /**

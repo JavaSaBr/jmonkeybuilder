@@ -2,11 +2,8 @@ package com.ss.editor.ui.control.model.property;
 
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Spatial;
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
-
-import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -34,8 +31,8 @@ public class ShadowModeModelPropertyControl extends ModelPropertyControl<Spatial
      */
     private ComboBox<RenderQueue.ShadowMode> shadowModeComboBox;
 
-    public ShadowModeModelPropertyControl(final Consumer<EditorOperation> changeHandler, final RenderQueue.ShadowMode element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
-        super(changeHandler, element, paramName, modelChangeConsumer);
+    public ShadowModeModelPropertyControl(final RenderQueue.ShadowMode element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(element, paramName, modelChangeConsumer);
     }
 
     @Override

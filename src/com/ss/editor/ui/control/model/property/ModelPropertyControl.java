@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.property;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -10,7 +9,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.GeomUtils;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javafx.geometry.Pos;
@@ -27,11 +25,6 @@ import rlib.ui.util.FXUtils;
 public class ModelPropertyControl<D, T> extends VBox {
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    /**
-     * Обработчик внесения изменений.
-     */
-    private final Consumer<EditorOperation> changeHandler;
 
     /**
      * Название параметра.
@@ -73,8 +66,7 @@ public class ModelPropertyControl<D, T> extends VBox {
      */
     private boolean ignoreListener;
 
-    public ModelPropertyControl(final Consumer<EditorOperation> changeHandler, final T propertyValue, final String propertyName, final ModelChangeConsumer modelChangeConsumer) {
-        this.changeHandler = changeHandler;
+    public ModelPropertyControl(final T propertyValue, final String propertyName, final ModelChangeConsumer modelChangeConsumer) {
         this.propertyValue = propertyValue;
         this.propertyName = propertyName;
         this.modelChangeConsumer = modelChangeConsumer;
@@ -218,7 +210,7 @@ public class ModelPropertyControl<D, T> extends VBox {
         final ModelPropertyOperation<D, T> operation = new ModelPropertyOperation<>(index, getPropertyName(), newValue, oldValue);
         operation.setApplyHandler(applyHandler);
 
-        changeHandler.accept(operation);
+        modelChangeConsumer.execute(operation);
     }
 
     /**

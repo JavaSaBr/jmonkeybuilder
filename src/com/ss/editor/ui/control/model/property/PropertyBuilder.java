@@ -16,12 +16,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javafx.geometry.Insets;
@@ -90,11 +88,10 @@ public class PropertyBuilder {
     /**
      * Построесть список свойств для указанного объекта.
      *
-     * @param object        объект для которого строятся свойства.
-     * @param container     контейнер контролов.
-     * @param changeHandler обработчик внесения изменений.
+     * @param object    объект для которого строятся свойства.
+     * @param container контейнер контролов.
      */
-    public static void buildFor(final Object object, final VBox container, final Consumer<EditorOperation> changeHandler, final ModelChangeConsumer modelChangeConsumer) {
+    public static void buildFor(final Object object, final VBox container, final ModelChangeConsumer modelChangeConsumer) {
 
         if (object instanceof Mesh) {
             //TODO
@@ -107,12 +104,12 @@ public class PropertyBuilder {
             final MaterialKey materialKey = (MaterialKey) material.getKey();
             final BoundingVolume modelBound = geometry.getModelBound();
 
-            final ModelPropertyControl<Geometry, MaterialKey> materialControl = new MaterialModelPropertyEditor(changeHandler, materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+            final ModelPropertyControl<Geometry, MaterialKey> materialControl = new MaterialModelPropertyEditor(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
             materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
             materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
             materialControl.setEditObject(geometry);
 
-            final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl = new DefaultModelPropertyControl<>(changeHandler, modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+            final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl = new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
             boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
             boundingVolumeControl.reload();
             boundingVolumeControl.setEditObject(geometry);
@@ -142,32 +139,32 @@ public class PropertyBuilder {
 
             final Quaternion rotation = spatial.getLocalRotation().clone();
 
-            final ModelPropertyControl<Spatial, Spatial.CullHint> cullHintControl = new CullHintModelPropertyControl(changeHandler, cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer);
+            final ModelPropertyControl<Spatial, Spatial.CullHint> cullHintControl = new CullHintModelPropertyControl(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer);
             cullHintControl.setApplyHandler(Spatial::setCullHint);
             cullHintControl.setSyncHandler(Spatial::getCullHint);
             cullHintControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Spatial, RenderQueue.ShadowMode> shadowModeControl = new ShadowModeModelPropertyControl(changeHandler, shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer);
+            final ModelPropertyControl<Spatial, RenderQueue.ShadowMode> shadowModeControl = new ShadowModeModelPropertyControl(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer);
             shadowModeControl.setApplyHandler(Spatial::setShadowMode);
             shadowModeControl.setSyncHandler(Spatial::getShadowMode);
             shadowModeControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Spatial, RenderQueue.Bucket> queueBucketControl = new QueueBucketModelPropertyControl(changeHandler, queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer);
+            final ModelPropertyControl<Spatial, RenderQueue.Bucket> queueBucketControl = new QueueBucketModelPropertyControl(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer);
             queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
             queueBucketControl.setSyncHandler(Spatial::getQueueBucket);
             queueBucketControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Spatial, Vector3f> locationControl = new Vector3fModelPropertyControl(changeHandler, location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+            final ModelPropertyControl<Spatial, Vector3f> locationControl = new Vector3fModelPropertyControl(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
             locationControl.setApplyHandler(Spatial::setLocalTranslation);
             locationControl.setSyncHandler(Spatial::getLocalTranslation);
             locationControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Spatial, Vector3f> scaleControl = new Vector3fModelPropertyControl(changeHandler, scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
+            final ModelPropertyControl<Spatial, Vector3f> scaleControl = new Vector3fModelPropertyControl(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
             scaleControl.setApplyHandler(Spatial::setLocalScale);
             scaleControl.setSyncHandler(Spatial::getLocalScale);
             scaleControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Spatial, Quaternion> rotationControl = new QuaternionModelPropertyControl(changeHandler, rotation, Messages.MODEL_PROPERTY_ROTATION, modelChangeConsumer);
+            final ModelPropertyControl<Spatial, Quaternion> rotationControl = new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, modelChangeConsumer);
             rotationControl.setApplyHandler(Spatial::setLocalRotation);
             rotationControl.setSyncHandler(Spatial::getLocalRotation);
             rotationControl.setEditObject(spatial);

@@ -5,6 +5,7 @@ import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
@@ -20,7 +21,6 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.ModelTreeChangeListener;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -78,7 +78,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
     private static final Array<String> FAST_SKY_LIST = ArrayFactory.newArray(String.class);
 
-
     static {
         FAST_SKY_LIST.add(NO_FAST_SKY);
         FAST_SKY_LIST.add("graphics/textures/sky/path.hdr");
@@ -106,11 +105,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private final AtomicInteger changeCounter;
 
     /**
-     * Слушатель изменений в структуре модели.
-     */
-    private ModelTreeChangeListener changeTreeListener;
-
-    /**
      * Текущая модель.
      */
     private Spatial currentModel;
@@ -119,11 +113,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Обработчик выделения.
      */
     private Consumer<Object> selectionHandler;
-
-    /**
-     * Обработчик внесения изменений.
-     */
-    private Consumer<EditorOperation> changeHandler;
 
     /**
      * Дерево узлов модели.
@@ -231,11 +220,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         final Material material = assetManager.loadMaterial(assetPath);
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-            geometries.forEach(geometry -> {
-                geometry.setMaterial(material);
-            });
-        });
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> geometries.forEach(geometry -> geometry.setMaterial(material)));
     }
 
     /**
@@ -243,13 +228,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     private EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
-    }
-
-    /**
-     * @return обработчик внесения изменений.
-     */
-    public Consumer<EditorOperation> getChangeHandler() {
-        return changeHandler;
     }
 
     @Override
@@ -413,8 +391,67 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
     @Override
     public void notifyChangeProperty(final Object object, final String propertyName) {
+
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(object);
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyChanged(object);
+    }
+
+    @Override
+    public void notifyAddedChild(final Node parent, final Spatial added) {
+
+        final ModelEditorState editorState = getEditorState();
+        final boolean isSky = added.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+
+        if (isSky) {
+            editorState.addCustomSky(added);
+            editorState.updateLightProbe();
+        }
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyAdded(parent, added);
+    }
+
+    @Override
+    public void notifyRemovedChild(final Node parent, final Spatial removed) {
+
+        final ModelEditorState editorState = getEditorState();
+        final boolean isSky = removed.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+
+        if (isSky) {
+            editorState.removeCustomSky(removed);
+            editorState.updateLightProbe();
+        }
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyRemoved(removed);
+    }
+
+    @Override
+    public void notifyReplaced(final Node parent, final Spatial oldChild, final Spatial newChild) {
+
+        final Spatial currentModel = getCurrentModel();
+
+        if (currentModel == oldChild) {
+            setCurrentModel(newChild);
+        }
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyReplace(parent, oldChild, newChild);
+    }
+
+    @Override
+    public void notifyMoved(final Node prevParent, final Node newParent, final Spatial node, int index) {
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyMoved(prevParent, newParent, node, index);
+    }
+
+    @Override
+    public void execute(final EditorOperation operation) {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.execute(operation);
     }
 
     @Override
@@ -438,8 +475,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     protected void createContent(final StackPane root) {
         this.selectionHandler = this::processSelect;
-        this.changeTreeListener = createTreeChangeListener();
-        this.changeHandler = this::handleChanges;
 
         root.setAlignment(TOP_RIGHT);
 
@@ -448,8 +483,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final VBox parameterContainer = new VBox();
         parameterContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_CONTAINER);
 
-        modelNodeTree = new ModelNodeTree(selectionHandler, changeTreeListener);
-        modelPropertyEditor = new ModelPropertyEditor(changeHandler, this);
+        modelNodeTree = new ModelNodeTree(selectionHandler, this);
+        modelPropertyEditor = new ModelPropertyEditor(this);
 
         final ObservableList<TitledPane> panes = accordion.getPanes();
         panes.add(modelNodeTree);
@@ -471,14 +506,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Обработка внесения изменений.
-     */
-    private void handleChanges(final EditorOperation operation) {
-        final EditorOperationControl operationControl = getOperationControl();
-        operationControl.execute(operation);
-    }
-
-    /**
      * Обработка выделения узла в дереве.
      */
     public void notifySelected(final Object object) {
@@ -492,7 +519,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
     }
-
 
     /**
      * Обработка выделения узла в дереве.
@@ -715,71 +741,27 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * @return создание слушателя изменений в дереве.
+     * Уведомление о выполнении трансформации над частью модели.
      */
-    private ModelTreeChangeListener createTreeChangeListener() {
-        return new ModelTreeChangeListener() {
-
-            @Override
-            public void notifyMoved(final Object prevParent, final Object newParent, final Object node) {
-                setDirty(true);
-            }
-
-            @Override
-            public void notifyChanged(final Object node) {
-                setDirty(true);
-            }
-
-            @Override
-            public void notifyAdded(final Object parent, final Object node) {
-                setDirty(true);
-
-                if (!(node instanceof Spatial)) {
-                    return;
-                }
-
-                final ModelEditorState editorState = getEditorState();
-
-                final Spatial spatial = (Spatial) node;
-                final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
-
-                if (isSky) {
-                    editorState.addCustomSky(spatial);
-                    editorState.updateLightProbe();
-                }
-            }
-
-            @Override
-            public void notifyRemoved(final Object node) {
-                setDirty(true);
-
-                if (!(node instanceof Spatial)) {
-                    return;
-                }
-
-                final ModelEditorState editorState = getEditorState();
-
-                final Spatial spatial = (Spatial) node;
-                final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
-
-                if (isSky) {
-                    editorState.removeCustomSky(spatial);
-                    editorState.updateLightProbe();
-                }
-            }
-        };
-    }
-
     public void notifyTransformed(final Spatial spatial) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyTransformedImpl(spatial));
     }
 
+    /**
+     * Процесс обработки уведомления о выполнении трансформации.
+     */
     private void notifyTransformedImpl(final Spatial spatial) {
-
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(spatial);
+    }
 
-        // changeHandler.run();
-        incrementChange();
+    @Override
+    public String toString() {
+        return "ModelFileEditor{" +
+                "operationControl=" + operationControl +
+                ", changeCounter=" + changeCounter +
+                ", currentModel=" + currentModel +
+                ", ignoreListeners=" + ignoreListeners +
+                "} " + super.toString();
     }
 }

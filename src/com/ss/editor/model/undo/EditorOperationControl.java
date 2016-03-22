@@ -61,12 +61,8 @@ public class EditorOperationControl {
      * Выполнение новой операции.
      */
     public synchronized void execute(final EditorOperation operation) {
-        if (Platform.isFxApplicationThread()) {
-            executeImpl(operation);
-        } else {
-            final ExecutorManager executorManager = ExecutorManager.getInstance();
-            executorManager.addFXTask(() -> executeImpl(operation));
-        }
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addFXTask(() -> executeImpl(operation));
     }
 
     /**

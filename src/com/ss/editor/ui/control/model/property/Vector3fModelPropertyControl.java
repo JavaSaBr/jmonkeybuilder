@@ -2,11 +2,8 @@ package com.ss.editor.ui.control.model.property;
 
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
-import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
-
-import java.util.function.Consumer;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -36,8 +33,8 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Spatial, 
      */
     private TextField zField;
 
-    public Vector3fModelPropertyControl(final Consumer<EditorOperation> changeHandler, final Vector3f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
-        super(changeHandler, element, paramName, modelChangeConsumer);
+    public Vector3fModelPropertyControl(final Vector3f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(element, paramName, modelChangeConsumer);
     }
 
     @Override
