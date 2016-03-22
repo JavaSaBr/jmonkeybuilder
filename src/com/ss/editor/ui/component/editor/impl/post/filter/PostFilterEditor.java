@@ -172,7 +172,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         }
 
         setCurrentFile(currentFile);
-
         setIgnoreListeners(true);
         try {
 

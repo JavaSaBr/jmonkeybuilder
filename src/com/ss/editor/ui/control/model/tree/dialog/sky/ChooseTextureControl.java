@@ -206,6 +206,7 @@ public class ChooseTextureControl extends HBox {
         final Path textureFile = getTextureFile();
 
         if (textureFile == null) {
+            //FIXME добавить локализацию
             textureLabel.setText("No texture");
             preview.setImage(null);
             textureTooltip.showImage(null);

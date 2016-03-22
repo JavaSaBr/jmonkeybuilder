@@ -37,6 +37,8 @@ import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
+import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.util.GeomUtils;
 
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
@@ -122,6 +124,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Центр трансформации.
      */
     private Transform transformCenter;
+
+    /**
+     * Изначальная трансформация
+     */
+    private Transform originalTransform;
 
     /**
      * Объект на трансформацию.
@@ -327,6 +334,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         toolNode.attachChild(grid);
     }
 
+    /**
+     * Создание манипуляторов.
+     */
     private void createManipulators() {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -567,7 +577,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     /**
      * @return текущая отображаемая модель.
      */
-    private Spatial getCurrentModel() {
+    public Spatial getCurrentModel() {
         return currentModel;
     }
 
@@ -694,6 +704,18 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         }
 
         frame++;
+    }
+
+    @Override
+    protected void undo() {
+        final ModelFileEditor fileEditor = getFileEditor();
+        fileEditor.undo();
+    }
+
+    @Override
+    protected void redo() {
+        final ModelFileEditor fileEditor = getFileEditor();
+        fileEditor.redo();
     }
 
     /**
@@ -843,16 +865,40 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         }
 
         updateToTransform();
-        updateTransformCenter();
     }
 
+    /**
+     * Обновление трансформации для модификации.
+     */
     private void updateToTransform() {
         setToTransform(getSelected().first());
     }
 
+    /**
+     * @return оригинальная трансформация перед манипуляциями.
+     */
+    private Transform getOriginalTransform() {
+        return originalTransform;
+    }
+
+    /**
+     * @param originalTransform оригинальная трансформация перед манипуляциями.
+     */
+    private void setOriginalTransform(final Transform originalTransform) {
+        this.originalTransform = originalTransform;
+    }
+
+    /**
+     * Обновленине трансформации для манипуляции.
+     */
     private void updateTransformCenter() {
+
         final Spatial toTransform = getToTransform();
-        setTransformCenter(toTransform == null ? null : toTransform.getLocalTransform().clone());
+        final Transform transform = toTransform == null ? null : toTransform.getLocalTransform().clone();
+        final Transform originalTransform = transform == null ? null : transform.clone();
+
+        setTransformCenter(transform);
+        setOriginalTransform(originalTransform);
     }
 
     /**
@@ -900,7 +946,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             shape.removeFromParent();
         }
     }
-
 
     /**
      * Построение выделения для модели.
@@ -1089,7 +1134,28 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         });
     }
 
-    public void endTransform() {
+    /**
+     * Завершение трансформации модели.
+     */
+    private void endTransform() {
+
+        if (!isActiveTransform()) {
+            return;
+        }
+
+        final Spatial toTransform = getToTransform();
+
+        final Transform oldValue = getOriginalTransform().clone();
+        final Transform newValue = toTransform.getLocalTransform().clone();
+
+        final int index = GeomUtils.getIndex(getCurrentModel(), toTransform);
+
+        final ModelPropertyOperation<Spatial, Transform> operation = new ModelPropertyOperation<>(index, "transform", newValue, oldValue);
+        operation.setApplyHandler(Spatial::setLocalTransform);
+
+        final ModelFileEditor fileEditor = getFileEditor();
+        fileEditor.execute(operation);
+
         setPickedAxis(PickedAxis.NONE);
         setActiveTransform(false);
         setDeltaVector(null);
@@ -1101,7 +1167,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      */
     public boolean startTransform() {
 
-        boolean result = false;
+        if (getCollisionPlane() == null) {
+            return false;
+        }
+
+        updateTransformCenter();
 
         final Camera camera = EDITOR.getCamera();
         final InputManager inputManager = EDITOR.getInputManager();
@@ -1120,30 +1190,30 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Node transformToolNode = getTransformToolNode();
         transformToolNode.collideWith(ray, collisionResults);
 
-        if (collisionResults.size() > 0) {
-
-            final CollisionResult collisionResult = collisionResults.getClosestCollision();
-            final TransformType transformType = getTransformType();
-
-            if (transformType == TransformType.MOVE_TOOL) {
-                final Node moveTool = getMoveTool();
-                final TransformControl control = moveTool.getControl(TransformControl.class);
-                control.setCollisionPlane(collisionResult);
-            } else if (transformType == TransformType.ROTATE_TOOL) {
-                final Node rotateTool = getRotateTool();
-                final TransformControl control = rotateTool.getControl(TransformControl.class);
-                control.setCollisionPlane(collisionResult);
-            } else if (transformType == TransformType.SCALE_TOOL) {
-                final Node scaleTool = getScaleTool();
-                final TransformControl control = scaleTool.getControl(TransformControl.class);
-                control.setCollisionPlane(collisionResult);
-            }
-
-            setActiveTransform(true);
-            result = true;
+        if (collisionResults.size() < 1) {
+            return false;
         }
 
-        return result;
+        final CollisionResult collisionResult = collisionResults.getClosestCollision();
+        final TransformType transformType = getTransformType();
+
+        if (transformType == TransformType.MOVE_TOOL) {
+            final Node moveTool = getMoveTool();
+            final TransformControl control = moveTool.getControl(TransformControl.class);
+            control.setCollisionPlane(collisionResult);
+        } else if (transformType == TransformType.ROTATE_TOOL) {
+            final Node rotateTool = getRotateTool();
+            final TransformControl control = rotateTool.getControl(TransformControl.class);
+            control.setCollisionPlane(collisionResult);
+        } else if (transformType == TransformType.SCALE_TOOL) {
+            final Node scaleTool = getScaleTool();
+            final TransformControl control = scaleTool.getControl(TransformControl.class);
+            control.setCollisionPlane(collisionResult);
+        }
+
+        setActiveTransform(true);
+
+        return true;
     }
 
     /**
@@ -1158,5 +1228,16 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      */
     private void setTransformCenter(final Transform transformCenter) {
         this.transformCenter = transformCenter;
+    }
+
+    @Override
+    public String toString() {
+        return "ModelEditorState{" +
+                "modelNode=" + modelNode +
+                ", showGrid=" + showGrid +
+                ", showSelection=" + showSelection +
+                ", lightEnabled=" + lightEnabled +
+                ", activeTransform=" + activeTransform +
+                "} " + super.toString();
     }
 }

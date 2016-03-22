@@ -1,15 +1,18 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.GeomUtils;
 
 import java.nio.file.Path;
 
@@ -53,24 +56,21 @@ public class LoadModelAction extends AbstractNodeAction {
      */
     protected void processOpen(final Path file) {
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
-
+        final ModelNodeTree nodeTree = getNodeTree();
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
 
+        final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+
         final Spatial loadedModel = assetManager.loadModel(assetPath);
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        final ModelNode<?> modelNode = getNode();
+        final Node element = (Node) modelNode.getElement();
 
-            final ModelNode<Spatial> newNode = ModelNodeFactory.createFor(loadedModel);
-            final ModelNode<?> modelNode = getNode();
-            modelNode.add(newNode);
+        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
 
-            EXECUTOR_MANAGER.addFXTask(() -> {
-                final ModelNodeTree nodeTree = getNodeTree();
-                nodeTree.notifyAdded(modelNode, newNode);
-            });
-        });
+        modelChangeConsumer.execute(new AddChildOperation(loadedModel, index));
     }
 }

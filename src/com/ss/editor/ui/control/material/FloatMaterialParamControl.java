@@ -3,8 +3,12 @@ package com.ss.editor.ui.control.material;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.ui.control.material.operation.FloatMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Spinner;
@@ -30,7 +34,7 @@ public class FloatMaterialParamControl extends MaterialParamControl {
      */
     private Spinner<Double> spinner;
 
-    public FloatMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+    public FloatMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -81,35 +85,17 @@ public class FloatMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(newValue));
-    }
-
-    /**
-     * Процесс изменения дробных значения.
-     */
-    private void processChangeImpl(final Double newValue) {
-
+        final Float newFValue = newValue == null ? null : newValue.floatValue();
+        final String parameterName = getParameterName();
         final Material material = getMaterial();
+        final MatParam param = material.getParam(parameterName);
+        final Float oldValue = param == null ? null : (Float) param.getValue();
 
-        if (newValue == null) {
-            material.clearParam(getParameterName());
-        } else {
-            material.setFloat(getParameterName(), newValue.floatValue());
-        }
-
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            changed();
-            setIgnoreListeners(true);
-            try {
-                reload();
-            } finally {
-                setIgnoreListeners(false);
-            }
-        });
+        execute(new FloatMaterialParamOperation(parameterName, newFValue, oldValue));
     }
 
     @Override
-    protected void reload() {
+    public void reload() {
         super.reload();
 
         final Material material = getMaterial();

@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -16,9 +17,9 @@ import javafx.scene.layout.VBox;
 public class ModelPropertyEditor extends TitledPane {
 
     /**
-     * Обработчик внесения изменений.
+     * Потребитель изменений модели.
      */
-    private final Runnable changeHandler;
+    private final ModelChangeConsumer modelChangeConsumer;
 
     /**
      * Контейнер контролов свойст объекта.
@@ -30,8 +31,8 @@ public class ModelPropertyEditor extends TitledPane {
      */
     private Object currentObject;
 
-    public ModelPropertyEditor(final Runnable changeHandler) {
-        this.changeHandler = changeHandler;
+    public ModelPropertyEditor(final ModelChangeConsumer modelChangeConsumer) {
+        this.modelChangeConsumer = modelChangeConsumer;
         setText(Messages.MODEL_FILE_EDITOR_PROPERTIES);
         createComponents();
         setAnimated(false);
@@ -45,12 +46,15 @@ public class ModelPropertyEditor extends TitledPane {
     }
 
     /**
-     * @return обработчик внесения изменений.
+     * @return потребитель изменений модели.
      */
-    private Runnable getChangeHandler() {
-        return changeHandler;
+    private ModelChangeConsumer getModelChangeConsumer() {
+        return modelChangeConsumer;
     }
 
+    /**
+     * Построение компонентов.
+     */
     private void createComponents() {
         container = new VBox();
         container.setAlignment(Pos.TOP_CENTER);
@@ -71,7 +75,7 @@ public class ModelPropertyEditor extends TitledPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilder.buildFor(object, container, getChangeHandler());
+            PropertyBuilder.buildFor(object, container, getModelChangeConsumer());
         }
 
         setCurrentObject(object);
@@ -89,7 +93,7 @@ public class ModelPropertyEditor extends TitledPane {
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> {
-            if (node instanceof ModelPropertyControl<?>) {
+            if (node instanceof ModelPropertyControl<?, ?>) {
                 ((ModelPropertyControl) node).sync();
             }
         });

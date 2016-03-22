@@ -228,7 +228,7 @@ public class UIUtils {
 
         final TreeItem<T> root = treeView.getRoot();
 
-        if (root.getValue() == object) {
+        if (root.getValue().equals(object)) {
             return root;
         }
 

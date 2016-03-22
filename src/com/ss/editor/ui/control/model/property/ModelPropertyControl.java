@@ -1,10 +1,15 @@
 package com.ss.editor.ui.control.model.property;
 
+import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.util.GeomUtils;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -17,52 +22,56 @@ import rlib.ui.util.FXUtils;
  *
  * @author Ronn
  */
-public class ModelPropertyControl<T> extends VBox {
+public class ModelPropertyControl<D, T> extends VBox {
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * Обработчик внесения изменений.
-     */
-    private final Runnable changeHandler;
-
-    /**
      * Название параметра.
      */
-    private final String paramName;
+    private final String propertyName;
 
     /**
-     * Редактируемый элемент.
+     * Потребитель изменений модели.
      */
-    private T element;
+    private final ModelChangeConsumer modelChangeConsumer;
+
+    /**
+     * Редактируемый объект.
+     */
+    private D editObject;
+
+    /**
+     * Значение свойства объекта.
+     */
+    private T propertyValue;
 
     /**
      * Обработчик приминения изменений.
      */
-    private Consumer<T> applyHandler;
+    private BiConsumer<D, T> applyHandler;
 
     /**
      * Обработчик синхронизации данных.
      */
-    private Consumer<T> syncHandler;
+    private Function<D, T> syncHandler;
 
     /**
      * Надпись с названием параметра.
      */
-    private Label paramNameLabel;
+    private Label propertyNameLabel;
 
     /**
      * Игнорировать ли слушатели.
      */
     private boolean ignoreListener;
 
-    public ModelPropertyControl(final Runnable changeHandler, final T element, final String paramName) {
-        this.changeHandler = changeHandler;
-        this.element = element;
-        this.paramName = paramName;
+    public ModelPropertyControl(final T propertyValue, final String propertyName, final ModelChangeConsumer modelChangeConsumer) {
+        this.propertyValue = propertyValue;
+        this.propertyName = propertyName;
+        this.modelChangeConsumer = modelChangeConsumer;
 
         createComponents();
-
         setIgnoreListener(true);
         try {
             reload();
@@ -74,17 +83,38 @@ public class ModelPropertyControl<T> extends VBox {
     }
 
     /**
+     * @param editObject редактируемый объект.
+     */
+    public void setEditObject(final D editObject) {
+        this.editObject = editObject;
+    }
+
+    /**
      * @param applyHandler обработчик приминения изменений.
      */
-    public void setApplyHandler(final Consumer<T> applyHandler) {
+    public void setApplyHandler(final BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
+    }
+
+    /**
+     * @return обработчик синхронизации данных.
+     */
+    protected Function<D, T> getSyncHandler() {
+        return syncHandler;
     }
 
     /**
      * @param syncHandler обработчик синхронизации данных.
      */
-    public void setSyncHandler(final Consumer<T> syncHandler) {
+    public void setSyncHandler(final Function<D, T> syncHandler) {
         this.syncHandler = syncHandler;
+    }
+
+    /**
+     * @return редактируемый объект.
+     */
+    protected D getEditObject() {
+        return editObject;
     }
 
     /**
@@ -100,8 +130,10 @@ public class ModelPropertyControl<T> extends VBox {
         setIgnoreListener(true);
         try {
 
+            final Function<D, T> syncHandler = getSyncHandler();
+
             if (syncHandler != null) {
-                syncHandler.accept(getElement());
+                setPropertyValue(syncHandler.apply(getEditObject()));
             }
 
             reload();
@@ -120,17 +152,17 @@ public class ModelPropertyControl<T> extends VBox {
         final HBox container = new HBox();
         container.setAlignment(isSingleRow() ? Pos.CENTER_LEFT : Pos.CENTER);
 
-        paramNameLabel = new Label(getParamName() + ":");
+        propertyNameLabel = new Label(getPropertyName() + ":");
 
         if (isSingleRow()) {
-            paramNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+            propertyNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         } else {
-            paramNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME);
-            paramNameLabel.prefWidthProperty().bind(widthProperty());
+            propertyNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME);
+            propertyNameLabel.prefWidthProperty().bind(widthProperty());
         }
 
-        FXUtils.addClassTo(paramNameLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addToPane(paramNameLabel, isSingleRow() ? container : this);
+        FXUtils.addClassTo(propertyNameLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addToPane(propertyNameLabel, isSingleRow() ? container : this);
 
         createComponents(container);
 
@@ -148,36 +180,51 @@ public class ModelPropertyControl<T> extends VBox {
      * Создание компонентов для внесения изменений.
      */
     protected void createComponents(final HBox container) {
-
     }
 
     /**
      * @return название параметра.
      */
-    private String getParamName() {
-        return paramName;
+    private String getPropertyName() {
+        return propertyName;
+    }
+
+    /**
+     * @return потребитель изменений модели.
+     */
+    protected ModelChangeConsumer getModelChangeConsumer() {
+        return modelChangeConsumer;
     }
 
     /**
      * Уведомить о измнении чего-то.
      */
-    protected void changed() {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> applyHandler.accept(element));
-        changeHandler.run();
+    protected void changed(final T newValue, final T oldValue) {
+
+        final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
+        final Spatial currentModel = modelChangeConsumer.getCurrentModel();
+
+        final D editObject = getEditObject();
+        final int index = GeomUtils.getIndex(currentModel, editObject);
+
+        final ModelPropertyOperation<D, T> operation = new ModelPropertyOperation<>(index, getPropertyName(), newValue, oldValue);
+        operation.setApplyHandler(applyHandler);
+
+        modelChangeConsumer.execute(operation);
     }
 
     /**
      * @return редактируемый элемент.
      */
-    public T getElement() {
-        return element;
+    public T getPropertyValue() {
+        return propertyValue;
     }
 
     /**
-     * @param element редактируемый элемент.
+     * @param propertyValue редактируемый элемент.
      */
-    protected void setElement(T element) {
-        this.element = element;
+    protected void setPropertyValue(T propertyValue) {
+        this.propertyValue = propertyValue;
     }
 
     /**

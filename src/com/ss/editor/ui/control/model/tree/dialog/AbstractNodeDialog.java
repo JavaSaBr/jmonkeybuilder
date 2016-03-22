@@ -26,7 +26,6 @@ public abstract class AbstractNodeDialog extends EditorDialog {
     private Button okButton;
 
     public AbstractNodeDialog() {
-
     }
 
     /**
@@ -60,6 +59,5 @@ public abstract class AbstractNodeDialog extends EditorDialog {
     }
 
     protected void processOk() {
-
     }
 }

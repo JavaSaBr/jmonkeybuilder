@@ -3,8 +3,9 @@ package com.ss.editor.ui.control.model.tree;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.css.CSSClasses;
 
 import java.util.function.Consumer;
@@ -20,6 +21,7 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 /**
@@ -31,34 +33,36 @@ public class ModelNodeTree extends TitledPane {
 
     public static final String USER_DATA_IS_SKY = ModelNodeTree.class.getName() + ".isSky";
 
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
      * Обработчик выделения элемента в дереве.
      */
     private final Consumer<Object> selectionHandler;
 
     /**
-     * Слушатель изменений в структуре модели.
+     * Потребитель изменений модели.
      */
-    private final ModelTreeChangeListener changeListener;
+    private final ModelChangeConsumer modelChangeConsumer;
 
     /**
      * Дерево со структурой модели.
      */
     private TreeView<ModelNode<?>> treeView;
 
-    public ModelNodeTree(final Consumer<Object> selectionHandler, final ModelTreeChangeListener changeListener) {
+    public ModelNodeTree(final Consumer<Object> selectionHandler, final ModelChangeConsumer modelChangeConsumer) {
         this.selectionHandler = selectionHandler;
-        this.changeListener = changeListener;
+        this.modelChangeConsumer = modelChangeConsumer;
         setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
         createComponents();
         setAnimated(false);
     }
 
     /**
-     * @return слушатель изменений в структуре модели.
+     * @return потребитель изменений модели.
      */
-    private ModelTreeChangeListener getChangeListener() {
-        return changeListener;
+    public ModelChangeConsumer getModelChangeConsumer() {
+        return modelChangeConsumer;
     }
 
     /**
@@ -139,7 +143,7 @@ public class ModelNodeTree extends TitledPane {
             treeView.setRoot(null);
         }
 
-        final ModelNode<?> rootElement = ModelNodeFactory.createFor(model);
+        final ModelNode<?> rootElement = createFor(model);
         final TreeItem<ModelNode<?>> newRoot = new TreeItem<>(rootElement);
         newRoot.setExpanded(true);
 
@@ -216,39 +220,110 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Уведомление и обработка перемещения нода.
      */
-    public void notifyMoved(final ModelNode<?> prevParent, final ModelNode<?> newParent, final ModelNode<?> modelNode) {
+    public void notifyMoved(final Object prevParent, final Object newParent, final Object node, final int index) {
+        notifyMoved(createFor(prevParent), createFor(newParent), createFor(node), index);
+    }
+
+    /**
+     * Уведомление и обработка перемещения нода.
+     */
+    public void notifyMoved(final ModelNode<?> prevParent, final ModelNode<?> newParent, final ModelNode<?> node, final int index) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> prevParentItem = findItemForValue(treeView, prevParent);
         final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, newParent);
-        final TreeItem<ModelNode<?>> nodeItem = findItemForValue(treeView, modelNode);
+        final TreeItem<ModelNode<?>> nodeItem = findItemForValue(treeView, node);
 
         if (prevParentItem == null || newParentItem == null || nodeItem == null) {
             return;
         }
 
         prevParentItem.getChildren().remove(nodeItem);
-        newParentItem.getChildren().add(0, nodeItem);
+        newParentItem.getChildren().add(index, nodeItem);
 
-        final ModelTreeChangeListener changeListener = getChangeListener();
-        changeListener.notifyMoved(prevParent.getElement(), newParent.getElement(), modelNode.getElement());
+        EXECUTOR_MANAGER.addFXTask(() -> select(node.getElement()));
+    }
+
+    /**
+     * Уведомление и обработка изменения узла модели.
+     */
+    public void notifyChanged(final Object object) {
+        notifyChanged(createFor(object));
     }
 
     /**
      * Уведомление и обработка изменения узла модели.
      */
     public void notifyChanged(final ModelNode<?> modelNode) {
-        final ModelTreeChangeListener changeListener = getChangeListener();
-        changeListener.notifyChanged(modelNode.getElement());
+
+        final TreeView<ModelNode<?>> treeView = getTreeView();
+        final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
+
+        if (treeItem == null) {
+            return;
+        }
+
+        treeItem.setValue(null);
+        treeItem.setValue(modelNode);
     }
 
     /**
      * Уведомление и обработка добавления нового узла.
      */
-    public void notifyAdded(final ModelNode<?> parent, final ModelNode<?> modelNode) {
+    public void notifyReplace(final Object parent, final Object oldChild, final Object newChild) {
+        notifyReplace(createFor(parent), createFor(oldChild), createFor(newChild));
+    }
 
-        final ModelTreeChangeListener changeListener = getChangeListener();
-        changeListener.notifyAdded(parent.getElement(), modelNode.getElement());
+    /**
+     * Уведомление и обработка добавления нового узла.
+     */
+    public void notifyReplace(final ModelNode<?> parent, final ModelNode<?> oldChild, final ModelNode<?> newChild) {
+
+        final TreeView<ModelNode<?>> treeView = getTreeView();
+        final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
+
+        if (parentItem == null) {
+
+            final TreeItem<ModelNode<?>> childItem = new TreeItem<>(newChild);
+            childItem.setExpanded(true);
+
+            fill(childItem);
+
+            treeView.setRoot(childItem);
+            return;
+        }
+
+        int index = 0;
+        boolean needExpand = false;
+
+        final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
+        final TreeItem<ModelNode<?>> oldChildItem = findItemForValue(treeView, oldChild);
+
+        if (oldChildItem != null) {
+            index = children.indexOf(oldChildItem);
+            needExpand = oldChildItem.isExpanded();
+            children.remove(oldChildItem);
+        }
+
+        final TreeItem<ModelNode<?>> childItem = new TreeItem<>(newChild);
+        childItem.setExpanded(needExpand);
+
+        fill(childItem);
+
+        children.add(index, childItem);
+    }
+
+    /**
+     * Уведомление и обработка добавления нового узла.
+     */
+    public void notifyAdded(final Object parent, final Object child) {
+        notifyAdded(createFor(parent), createFor(child));
+    }
+
+    /**
+     * Уведомление и обработка добавления нового узла.
+     */
+    public void notifyAdded(final ModelNode<?> parent, final ModelNode<?> child) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
@@ -257,12 +332,21 @@ public class ModelNodeTree extends TitledPane {
             return;
         }
 
-        final TreeItem<ModelNode<?>> newItem = new TreeItem<>(modelNode);
+        final TreeItem<ModelNode<?>> childItem = new TreeItem<>(child);
 
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
-        children.add(0, newItem);
+        children.add(0, childItem);
 
-        fill(newItem);
+        parentItem.setExpanded(true);
+
+        fill(childItem);
+    }
+
+    /**
+     * Уведомление и обработка удаленя нода.
+     */
+    public void notifyRemoved(final Object child) {
+        notifyRemoved(createFor(child));
     }
 
     /**
@@ -276,12 +360,13 @@ public class ModelNodeTree extends TitledPane {
             return;
         }
 
-        final TreeItem<ModelNode<?>> parent = treeItem.getParent();
-        final ObservableList<TreeItem<ModelNode<?>>> children = parent.getChildren();
+        final TreeItem<ModelNode<?>> parentItem = treeItem.getParent();
+        final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
         children.remove(treeItem);
 
-        final ModelTreeChangeListener changeListener = getChangeListener();
-        changeListener.notifyRemoved(modelNode.getElement());
+        if (parentItem.isExpanded() && children.isEmpty()) {
+            parentItem.setExpanded(false);
+        }
     }
 
     /**
@@ -307,7 +392,7 @@ public class ModelNodeTree extends TitledPane {
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
 
-        final ModelNode<Object> modelNode = ModelNodeFactory.createFor(object);
+        final ModelNode<Object> modelNode = createFor(object);
 
         if (modelNode == null) {
             selectionModel.select(null);

@@ -1,9 +1,12 @@
 package com.ss.editor.ui.control.model.property;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.asset.MaterialKey;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
@@ -11,9 +14,12 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Editor;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javafx.geometry.Insets;
@@ -30,6 +36,8 @@ import static com.ss.editor.util.EditorUtil.clipNumber;
  * @author Ronn
  */
 public class PropertyBuilder {
+
+    private static final Editor EDITOR = Editor.getInstance();
 
     public static final Insets SPLIT_LINE_OFFSET = new Insets(14, 0, 14, 0);
 
@@ -52,14 +60,38 @@ public class PropertyBuilder {
         return StringUtils.EMPTY;
     };
 
+    public static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        if (materialKey == null) {
+
+            final Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+            material.setColor("Color", ColorRGBA.Gray);
+
+            geometry.setMaterial(material);
+
+        } else {
+
+            assetManager.clearCache();
+
+            final Material material = assetManager.loadAsset(materialKey);
+            geometry.setMaterial(material);
+        }
+    };
+
+    public static final Function<Geometry, MaterialKey> MATERIAL_SYNC_HANDLER = geometry -> {
+        final Material material = geometry.getMaterial();
+        return (MaterialKey) material.getKey();
+    };
+
     /**
      * Построесть список свойств для указанного объекта.
      *
-     * @param object        объект для которого строятся свойства.
-     * @param container     контейнер контролов.
-     * @param changeHandler обработчик внесения изменений.
+     * @param object    объект для которого строятся свойства.
+     * @param container контейнер контролов.
      */
-    public static void buildFor(final Object object, final VBox container, final Runnable changeHandler) {
+    public static void buildFor(final Object object, final VBox container, final ModelChangeConsumer modelChangeConsumer) {
 
         if (object instanceof Mesh) {
             //TODO
@@ -69,14 +101,18 @@ public class PropertyBuilder {
 
             final Geometry geometry = (Geometry) object;
             final Material material = geometry.getMaterial();
+            final MaterialKey materialKey = (MaterialKey) material.getKey();
             final BoundingVolume modelBound = geometry.getModelBound();
 
-            final ModelPropertyControl<Material> materialControl = new MaterialModelPropertyEditor(changeHandler, material, Messages.MODEL_PROPERTY_MATERIAL);
-            materialControl.setApplyHandler(geometry::setMaterial);
+            final ModelPropertyControl<Geometry, MaterialKey> materialControl = new MaterialModelPropertyEditor(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+            materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
+            materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
+            materialControl.setEditObject(geometry);
 
-            final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl = new DefaultModelPropertyControl<BoundingVolume>(changeHandler, modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME);
+            final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl = new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
             boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
             boundingVolumeControl.reload();
+            boundingVolumeControl.setEditObject(geometry);
 
             final Line splitLine = createSplitLine(container);
 
@@ -103,26 +139,35 @@ public class PropertyBuilder {
 
             final Quaternion rotation = spatial.getLocalRotation().clone();
 
-            final ModelPropertyControl<Spatial.CullHint> cullHintControl = new CullHintModelPropertyControl(changeHandler, cullHint, Messages.MODEL_PROPERTY_CULL_HINT);
-            cullHintControl.setApplyHandler(spatial::setCullHint);
+            final ModelPropertyControl<Spatial, Spatial.CullHint> cullHintControl = new CullHintModelPropertyControl(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer);
+            cullHintControl.setApplyHandler(Spatial::setCullHint);
+            cullHintControl.setSyncHandler(Spatial::getCullHint);
+            cullHintControl.setEditObject(spatial);
 
-            final ModelPropertyControl<RenderQueue.ShadowMode> shadowModeControl = new ShadowModeModelPropertyControl(changeHandler, shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE);
-            shadowModeControl.setApplyHandler(spatial::setShadowMode);
+            final ModelPropertyControl<Spatial, RenderQueue.ShadowMode> shadowModeControl = new ShadowModeModelPropertyControl(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer);
+            shadowModeControl.setApplyHandler(Spatial::setShadowMode);
+            shadowModeControl.setSyncHandler(Spatial::getShadowMode);
+            shadowModeControl.setEditObject(spatial);
 
-            final ModelPropertyControl<RenderQueue.Bucket> queueBucketControl = new QueueBucketModelPropertyControl(changeHandler, queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET);
-            queueBucketControl.setApplyHandler(spatial::setQueueBucket);
+            final ModelPropertyControl<Spatial, RenderQueue.Bucket> queueBucketControl = new QueueBucketModelPropertyControl(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer);
+            queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
+            queueBucketControl.setSyncHandler(Spatial::getQueueBucket);
+            queueBucketControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Vector3f> locationControl = new Vector3fModelPropertyControl(changeHandler, location, Messages.MODEL_PROPERTY_LOCATION);
-            locationControl.setApplyHandler(spatial::setLocalTranslation);
-            locationControl.setSyncHandler(loc -> loc.set(spatial.getLocalTranslation()));
+            final ModelPropertyControl<Spatial, Vector3f> locationControl = new Vector3fModelPropertyControl(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+            locationControl.setApplyHandler(Spatial::setLocalTranslation);
+            locationControl.setSyncHandler(Spatial::getLocalTranslation);
+            locationControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Vector3f> scaleControl = new Vector3fModelPropertyControl(changeHandler, scale, Messages.MODEL_PROPERTY_SCALE);
-            scaleControl.setApplyHandler(spatial::setLocalScale);
-            scaleControl.setSyncHandler(sc -> sc.set(spatial.getLocalScale()));
+            final ModelPropertyControl<Spatial, Vector3f> scaleControl = new Vector3fModelPropertyControl(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
+            scaleControl.setApplyHandler(Spatial::setLocalScale);
+            scaleControl.setSyncHandler(Spatial::getLocalScale);
+            scaleControl.setEditObject(spatial);
 
-            final ModelPropertyControl<Quaternion> rotationControl = new QuaternionModelPropertyControl(changeHandler, rotation, Messages.MODEL_PROPERTY_ROTATION);
-            rotationControl.setApplyHandler(spatial::setLocalRotation);
-            rotationControl.setSyncHandler(quaternion -> quaternion.set(spatial.getLocalRotation()));
+            final ModelPropertyControl<Spatial, Quaternion> rotationControl = new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, modelChangeConsumer);
+            rotationControl.setApplyHandler(Spatial::setLocalRotation);
+            rotationControl.setSyncHandler(Spatial::getLocalRotation);
+            rotationControl.setEditObject(spatial);
 
             final Line splitLine = createSplitLine(container);
 

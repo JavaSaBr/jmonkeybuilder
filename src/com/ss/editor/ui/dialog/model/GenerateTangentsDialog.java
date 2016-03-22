@@ -1,13 +1,17 @@
 package com.ss.editor.ui.dialog.model;
 
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.model.tool.TangentGenerator;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
+import com.ss.editor.util.GeomUtils;
 
 import java.awt.*;
 
@@ -172,23 +176,27 @@ public class GenerateTangentsDialog extends EditorDialog {
      */
     private void processOk() {
 
+        final ModelNodeTree nodeTree = getNodeTree();
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+
         final ModelNode<?> node = getNode();
-        final Geometry element = (Geometry) node.getElement();
+        final Geometry geometry = (Geometry) node.getElement();
+        final Mesh newMesh = geometry.getMesh();
+        final Mesh oldMesh = newMesh.deepClone();
 
         final ComboBox<AlgorithmType> algorithmTypeComboBox = getAlgorithmTypeComboBox();
         final AlgorithmType algorithmType = algorithmTypeComboBox.getSelectionModel().getSelectedItem();
 
         if (algorithmType == AlgorithmType.STANDARD) {
-
             final CheckBox splitMirroredCheckBox = getSplitMirroredCheckBox();
-            TangentGenerator.useStandardGenerator(element, splitMirroredCheckBox.isSelected());
-
+            TangentGenerator.useStandardGenerator(geometry, splitMirroredCheckBox.isSelected());
         } else {
-            TangentGenerator.useMikktspaceGenerator(element);
+            TangentGenerator.useMikktspaceGenerator(geometry);
         }
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        nodeTree.notifyChanged(node);
+        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), geometry);
+
+        modelChangeConsumer.execute(new ChangeMeshOperation(newMesh, oldMesh, index));
 
         hide();
     }

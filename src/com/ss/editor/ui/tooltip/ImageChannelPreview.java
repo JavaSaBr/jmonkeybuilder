@@ -13,7 +13,6 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -206,13 +205,17 @@ public class ImageChannelPreview extends CustomTooltip {
         for (int y = 0, height = (int) image.getHeight(); y < height; y++) {
             for (int x = 0, width = (int) image.getWidth(); x < width; x++) {
 
-                //TODO нужно заоптимизить
-                final Color color = pixelReader.getColor(x, y);
+                final int argb = pixelReader.getArgb(x, y);
 
-                redWriter.setColor(x, y, new Color(color.getRed(), color.getRed(), color.getRed(), 1));
-                greenWriter.setColor(x, y, new Color(color.getGreen(), color.getGreen(), color.getGreen(), 1));
-                blueWriter.setColor(x, y, new Color(color.getBlue(), color.getBlue(), color.getBlue(), 1));
-                alphaWriter.setColor(x, y, new Color(color.getOpacity(), color.getOpacity(), color.getOpacity(), 1));
+                final int alpha = argb >>> 24;
+                final int red = (argb >> 16) & 0xff;
+                final int green = (argb >>  8) & 0xff;
+                final int blue = (argb      ) & 0xff;
+
+                redWriter.setArgb(x, y, ((255 << 24) | (red << 16) | (red <<  8) | red));
+                greenWriter.setArgb(x, y, ((255 << 24) | (green << 16) | (green << 8) | green));
+                blueWriter.setArgb(x, y, ((255 << 24) | (blue << 16) | (blue << 8) | blue));
+                alphaWriter.setArgb(x, y, ((255 << 24) | (alpha << 16) | (alpha << 8) | alpha));
             }
         }
 

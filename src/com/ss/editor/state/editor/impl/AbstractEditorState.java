@@ -51,6 +51,8 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
     protected static final String KEY_SHIFT = "SSEditor.editorState.keyShift";
     protected static final String KEY_S = "SSEditor.editorState.S";
+    protected static final String KEY_Z = "SSEditor.editorState.Z";
+    protected static final String KEY_Y = "SSEditor.editorState.Y";
 
     /**
      * Слушатели сцены.
@@ -204,6 +206,11 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
             if (isControlDown() && fileEditor.isDirty()) {
                 EXECUTOR_MANAGER.addFXTask(fileEditor::doSave);
             }
+
+        } else if (!isPressed && KEY_Z.equals(name) && isControlDown()) {
+            undo();
+        } else if (!isPressed && KEY_Y.equals(name) && isControlDown()) {
+            redo();
         }
 
         final EditorCamera editorCamera = getEditorCamera();
@@ -211,6 +218,19 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         if (editorCamera != null && needMovableCamera()) {
             editorCamera.setLockRotation(isShiftDown() && isButtonMiddleDown());
         }
+    }
+
+    /**
+     * Повторонение отмененной операции.
+     */
+    protected void redo() {
+    }
+
+
+    /**
+     * отмена последней операции.
+     */
+    protected void undo() {
     }
 
     /**
@@ -381,8 +401,16 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
             inputManager.addMapping(KEY_S, new KeyTrigger(KeyInput.KEY_S));
         }
 
+        if (!inputManager.hasMapping(KEY_Z)) {
+            inputManager.addMapping(KEY_Z, new KeyTrigger(KeyInput.KEY_Z));
+        }
+
+        if (!inputManager.hasMapping(KEY_Y)) {
+            inputManager.addMapping(KEY_Y, new KeyTrigger(KeyInput.KEY_Y));
+        }
+
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
-        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S);
+        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S, KEY_Z, KEY_Y);
     }
 
     @Override

@@ -5,11 +5,14 @@ import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -31,14 +34,14 @@ public class MaterialTexturesComponent extends TitledPane {
     /**
      * Обработчик внесения изменений.
      */
-    private final Runnable changeHandler;
+    private final Consumer<EditorOperation> changeHandler;
 
     /**
      * Контейнер контролов для изменения текстур.
      */
     private final VBox container;
 
-    public MaterialTexturesComponent(final Runnable changeHandler) {
+    public MaterialTexturesComponent(final Consumer<EditorOperation> changeHandler) {
         this.changeHandler = changeHandler;
         this.container = new VBox();
         setText(Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
@@ -56,7 +59,7 @@ public class MaterialTexturesComponent extends TitledPane {
     /**
      * @return обработчик внесения изменений.
      */
-    private Runnable getChangeHandler() {
+    private Consumer<EditorOperation> getChangeHandler() {
         return changeHandler;
     }
 
@@ -83,7 +86,7 @@ public class MaterialTexturesComponent extends TitledPane {
      */
     private void buildFor(final MatParam matParam, final Material material) {
 
-        final Runnable changeHandler = getChangeHandler();
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
         final VarType varType = matParam.getVarType();
 
         if (varType == VarType.Texture2D) {
@@ -94,5 +97,33 @@ public class MaterialTexturesComponent extends TitledPane {
 
             VBox.setMargin(control, CONTROL_OFFSET);
         }
+    }
+
+    /**
+     * @param paramName название обновленного параметра.
+     */
+    public void updateParam(final String paramName) {
+
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> {
+
+            if (!(node instanceof MaterialParamControl)) {
+                return;
+            }
+
+            final MaterialParamControl control = (MaterialParamControl) node;
+
+            if (!StringUtils.equals(control.getParameterName(), paramName)) {
+                return;
+            }
+
+            control.setIgnoreListeners(true);
+            try {
+                control.reload();
+            } finally {
+                control.setIgnoreListeners(false);
+            }
+        });
     }
 }

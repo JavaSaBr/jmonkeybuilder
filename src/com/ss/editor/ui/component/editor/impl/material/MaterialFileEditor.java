@@ -7,6 +7,10 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.EditorOperationControl;
+import com.ss.editor.model.undo.UndoableEditor;
+import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState.ModelType;
@@ -23,6 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,12 +42,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
-import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
@@ -51,7 +57,7 @@ import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
  *
  * @author Ronn
  */
-public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
+public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, MaterialChangeConsumer {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -78,6 +84,16 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
      * 3D часть редактора.
      */
     private final MaterialEditorState editorState;
+
+    /**
+     * Контролер операций редактора.
+     */
+    private final EditorOperationControl operationControl;
+
+    /**
+     * Счетчик внесения изменений.
+     */
+    private final AtomicInteger changeCounter;
 
     /**
      * Компонент для редактирования текстур.
@@ -135,14 +151,9 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     private ComboBox<String> materialDefinitionBox;
 
     /**
-     * Обработчик внесенич изменений.
+     * Обработчик внесения изменений.
      */
-    private Runnable changeHandler;
-
-    /**
-     * Оригинальный материал.
-     */
-    private String original;
+    private Consumer<EditorOperation> changeHandler;
 
     /**
      * Игнорировать ли слушателей.
@@ -152,7 +163,21 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     public MaterialFileEditor() {
         this.editorState = new MaterialEditorState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
+        this.operationControl = new EditorOperationControl(this);
+        this.changeCounter = new AtomicInteger();
         addEditorState(editorState);
+    }
+
+    @Override
+    public void incrementChange() {
+        final int result = changeCounter.incrementAndGet();
+        setDirty(result != 0);
+    }
+
+    @Override
+    public void decrementChange() {
+        final int result = changeCounter.decrementAndGet();
+        setDirty(result != 0);
     }
 
     /**
@@ -197,18 +222,18 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
+     * @return контролер операций редактора.
+     */
+    private EditorOperationControl getOperationControl() {
+        return operationControl;
+    }
+
+    /**
      * Обработка внесения изменений.
      */
-    private void handleChanges() {
-
-        final Material currentMaterial = getCurrentMaterial();
-
-        final String original = getOriginal();
-        final String content = MaterialSerializer.serializeToString(currentMaterial);
-
-        final boolean dirty = !StringUtils.equals(original, content);
-
-        setDirty(dirty);
+    private void handleChanges(final EditorOperation operation) {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.execute(operation);
     }
 
     @Override
@@ -224,22 +249,48 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
             LOGGER.warning(this, e);
         }
 
-        setOriginal(content);
         setDirty(false);
-
         notifyFileChanged();
-    }
-
-    /**
-     * @return обработчик внесенич изменений.
-     */
-    private Runnable getChangeHandler() {
-        return changeHandler;
     }
 
     @Override
     protected StackPane createRoot() {
         return new StackPane();
+    }
+
+    @Override
+    protected void processKeyReleased(final KeyEvent event) {
+        super.processKeyReleased(event);
+
+        if (!event.isControlDown()) {
+            return;
+        }
+
+        final KeyCode code = event.getCode();
+
+        if (code == KeyCode.S && isDirty()) {
+            doSave();
+        } else if (code == KeyCode.Z) {
+            undo();
+        } else if (code == KeyCode.Y) {
+            redo();
+        }
+    }
+
+    /**
+     * Повторение отмененной операции.
+     */
+    public void redo() {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.redo();
+    }
+
+    /**
+     * Отмена последней операции.
+     */
+    public void undo() {
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.undo();
     }
 
     @Override
@@ -321,8 +372,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
         final MaterialEditorState editorState = getEditorState();
         editorState.changeMode(ModelType.BOX);
-
-        setOriginal(new String(FileUtils.getContent(file)));
 
         reload(material);
 
@@ -493,10 +542,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());
 
-        reload(newMaterial);
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.clear();
 
-        final Runnable changeHandler = getChangeHandler();
-        changeHandler.run();
+        incrementChange();
+
+        reload(newMaterial);
     }
 
     /**
@@ -567,11 +618,28 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
         }
     }
 
-    /**
-     * @return текущий редактируемый материал.
-     */
-    private Material getCurrentMaterial() {
+    @Override
+    public Material getCurrentMaterial() {
         return currentMaterial;
+    }
+
+    @Override
+    public void notifyChangeParam(final String paramName) {
+
+        final MaterialOtherParamsComponent otherParamsComponent = getMaterialOtherParamsComponent();
+        otherParamsComponent.updateParam(paramName);
+
+        final MaterialColorsComponent colorsComponent = getMaterialColorsComponent();
+        colorsComponent.updateParam(paramName);
+
+        final MaterialTexturesComponent texturesComponent = getMaterialTexturesComponent();
+        texturesComponent.updateParam(paramName);
+    }
+
+    @Override
+    public void notifyChangedRenderState() {
+        final MaterialRenderParamsComponent renderParamsComponent = getMaterialRenderParamsComponent();
+        renderParamsComponent.buildFor(getCurrentMaterial());
     }
 
     /**
@@ -586,20 +654,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> {
      */
     private MaterialEditorState getEditorState() {
         return editorState;
-    }
-
-    /**
-     * @param original оригинальный материал.
-     */
-    private void setOriginal(String original) {
-        this.original = original;
-    }
-
-    /**
-     * @return оригинальный материал.
-     */
-    private String getOriginal() {
-        return original;
     }
 
     @Override

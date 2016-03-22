@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.jme3.math.Quaternion;
+import com.jme3.scene.Spatial;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
@@ -19,7 +21,7 @@ import static rlib.geom.util.AngleUtils.radiansToDegree;
  *
  * @author Ronn
  */
-public class QuaternionModelPropertyControl extends ModelPropertyControl<Quaternion> {
+public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial, Quaternion> {
 
     /**
      * Поле X.
@@ -36,8 +38,8 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
      */
     private TextField zField;
 
-    public QuaternionModelPropertyControl(final Runnable changeHandler, final Quaternion element, final String paramName) {
-        super(changeHandler, element, paramName);
+    public QuaternionModelPropertyControl(final Quaternion element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+        super(element, paramName, modelChangeConsumer);
     }
 
     @Override
@@ -128,7 +130,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
 
         final float[] angles = new float[3];
 
-        final Quaternion element = getElement();
+        final Quaternion element = getPropertyValue();
         element.toAngles(angles);
 
         final TextField xField = getXField();
@@ -180,9 +182,10 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Quatern
             return;
         }
 
-        final Quaternion element = getElement();
-        element.fromAngles(ArrayFactory.toFloatArray(x, y, z));
+        final Quaternion oldValue = getPropertyValue();
+        final Quaternion newValue = new Quaternion();
+        newValue.fromAngles(ArrayFactory.toFloatArray(x, y, z));
 
-        changed();
+        changed(newValue, oldValue.clone());
     }
 }

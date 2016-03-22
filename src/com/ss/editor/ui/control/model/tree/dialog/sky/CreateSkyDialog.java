@@ -3,19 +3,22 @@ package com.ss.editor.ui.control.model.tree.dialog.sky;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.GeomUtils;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -588,6 +591,9 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
 
+        final ModelNodeTree nodeTree = getNodeTree();
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+
         final Spinner<Double> normalScaleXSpinner = getNormalScaleXSpinner();
         final Spinner<Double> normalScaleYSpinner = getNormalScaleYSpinner();
         final Spinner<Double> normalScaleZSpinner = getNormalScaleZSpinner();
@@ -629,14 +635,12 @@ public class CreateSkyDialog extends AbstractNodeDialog {
                 final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
                 sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
 
-                final ModelNode<Spatial> newNode = ModelNodeFactory.createFor(sky);
                 final ModelNode<?> parentNode = getParentNode();
-                parentNode.add(newNode);
+                final Node element = (Node) parentNode.getElement();
 
-                EXECUTOR_MANAGER.addFXTask(() -> {
-                    final ModelNodeTree nodeTree = getNodeTree();
-                    nodeTree.notifyAdded(parentNode, newNode);
-                });
+                final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
+
+                modelChangeConsumer.execute(new AddChildOperation(sky, index));
             });
 
         } else if (selectedItem == SkyType.MULTIPLE_TEXTURE) {
@@ -678,14 +682,12 @@ public class CreateSkyDialog extends AbstractNodeDialog {
                 final Spatial sky = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture, topTexture, bottomTexture, scale);
                 sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
 
-                final ModelNode<Spatial> newNode = ModelNodeFactory.createFor(sky);
                 final ModelNode<?> parentNode = getParentNode();
-                parentNode.add(newNode);
+                final Node element = (Node) parentNode.getElement();
 
-                EXECUTOR_MANAGER.addFXTask(() -> {
-                    final ModelNodeTree nodeTree = getNodeTree();
-                    nodeTree.notifyAdded(parentNode, newNode);
-                });
+                final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
+
+                modelChangeConsumer.execute(new AddChildOperation(sky, index));
             });
         }
 

@@ -1,10 +1,12 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.util.GeomUtils;
 
 /**
  * Реализация действия по удалению узла.
@@ -32,10 +34,13 @@ public class RemoveNodeAction extends AbstractNodeAction {
             return;
         }
 
-        final Node parent = ((Spatial) element).getParent();
-        parent.detachChild((Spatial) element);
+        final Spatial spatial = (Spatial) element;
 
         final ModelNodeTree nodeTree = getNodeTree();
-        nodeTree.notifyRemoved(node);
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+
+        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), spatial.getParent());
+
+        modelChangeConsumer.execute(new RemoveChildOperation(spatial, index));
     }
 }

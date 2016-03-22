@@ -4,10 +4,14 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.material.operation.ColorMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
+
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -37,7 +41,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
      */
     private ColorPicker colorPicker;
 
-    public ColorMaterialParamControl(final Runnable changeHandler, final Material material, final String parameterName) {
+    public ColorMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -77,58 +81,31 @@ public class ColorMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> processChangeImpl(newValue));
-    }
-
-    /**
-     * Процесс изменения цвета.
-     */
-    private void processChangeImpl(final Color newValue) {
-
         final ColorRGBA colorRGBA = UIUtils.convertColor(newValue);
 
+        final String parameterName = getParameterName();
         final Material material = getMaterial();
-        material.setColor(getParameterName(), colorRGBA);
+        final MatParam param = material.getParam(parameterName);
+        final ColorRGBA oldValue = param == null ? null : (ColorRGBA) param.getValue();
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            changed();
-            setIgnoreListeners(true);
-            try {
-                reload();
-            } finally {
-                setIgnoreListeners(false);
-            }
-        });
+        execute(new ColorMaterialParamOperation(parameterName, colorRGBA, oldValue));
     }
 
     /**
      * Удаление цвета.
      */
     private void processRemove() {
-        EXECUTOR_MANAGER.addEditorThreadTask(this::removeColorImpl);
-    }
 
-    /**
-     * Процесс удаления увета.
-     */
-    private void removeColorImpl() {
-
+        final String parameterName = getParameterName();
         final Material material = getMaterial();
-        material.clearParam(getParameterName());
+        final MatParam param = material.getParam(parameterName);
+        final ColorRGBA oldValue = param == null ? null : (ColorRGBA) param.getValue();
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            changed();
-            setIgnoreListeners(true);
-            try {
-                reload();
-            } finally {
-                setIgnoreListeners(false);
-            }
-        });
+        execute(new ColorMaterialParamOperation(parameterName, null, oldValue));
     }
 
     @Override
-    protected void reload() {
+    public void reload() {
         super.reload();
 
         final Material material = getMaterial();
