@@ -60,7 +60,7 @@ public class Editor extends SimpleApplication {
     private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<LightProbe>() {
 
         @Override
-        public void done(LightProbe result) {
+        public void done(final LightProbe result) {
         }
     };
 
@@ -105,6 +105,7 @@ public class Editor extends SimpleApplication {
 
         } catch (final Exception e) {
             LOGGER.warning(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -371,7 +372,9 @@ public class Editor extends SimpleApplication {
         }
 
         lightProbe = LightProbeFactory.makeProbe(getEnvironmentCamera(), rootNode, EMPTY_JOB_ADAPTER);
-        ((BoundingSphere) lightProbe.getBounds()).setRadius(100);
+
+        final BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
+        bounds.setRadius(100);
 
         rootNode.addLight(lightProbe);
     }

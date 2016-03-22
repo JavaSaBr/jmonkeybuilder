@@ -4,7 +4,6 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
@@ -47,8 +46,6 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
     private static final DataFormat DATA_FORMAT = new DataFormat("SSEditor.modelNodeTree.modelNode");
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     public final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
 

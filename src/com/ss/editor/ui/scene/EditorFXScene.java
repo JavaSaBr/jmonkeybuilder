@@ -53,7 +53,7 @@ public class EditorFXScene extends Scene {
         super(root);
 
         this.loadingCount = new AtomicInteger();
-        this.components = ArrayFactory.newArray(ScreenComponent.class);
+        this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
         this.loadingLayer = new VBox();
         this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);

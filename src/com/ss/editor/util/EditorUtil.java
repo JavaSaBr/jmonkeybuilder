@@ -150,7 +150,7 @@ public abstract class EditorUtil {
      * @param store  контейнер результата.
      * @param length дистанция сдвига.
      */
-    public static final void movePoint(final Vector3f first, final Vector3f second, final Vector3f store, final int length) {
+    public static void movePoint(final Vector3f first, final Vector3f second, final Vector3f store, final int length) {
         store.x = first.x + (second.x - first.x) * length;
         store.y = first.y + (second.y - first.y) * length;
         store.z = first.z + (second.z - first.z) * length;
@@ -388,6 +388,9 @@ public abstract class EditorUtil {
         return null;
     }
 
+    /**
+     * Обрезка кол-ва цыфр после запятой у указанного числа.
+     */
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
     }

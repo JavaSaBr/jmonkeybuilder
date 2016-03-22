@@ -74,7 +74,7 @@ public class EditorFXSceneBuilder {
         build(scene, container);
         bindFixedSize(container, scene.widthProperty(), scene.heightProperty());
 
-        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> EXECUTOR_MANAGER.addFXTask(scene::notifyFinishBuild)), 500);
+        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(scene::notifyFinishBuild), 500);
 
         fxContainer.setScene(scene, root);
 

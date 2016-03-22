@@ -35,7 +35,6 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
         this.index = index;
     }
 
-
     @Override
     protected void redoImpl(final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {

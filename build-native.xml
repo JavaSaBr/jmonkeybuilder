@@ -117,7 +117,7 @@
                         name="jME3-SpaceShift-Editor"
                         mainClass="com.ss.editor.Starter"
                         toolkit="fx"
-                        version="0.5.5"
+                        version="0.6.0"
                 />
 
         <mkdir dir="build/classes/META-INF"/>
@@ -130,7 +130,7 @@
             <manifest>
                 <attribute name="Implementation-Vendor" value="spaceshift.ru"/>
                 <attribute name="Implementation-Title" value="jME3 SpaceShift Editor"/>
-                <attribute name="Implementation-Version" value="0.5.5"/>
+                <attribute name="Implementation-Version" value="0.6.0"/>
             </manifest>
         </fx:jar>
 

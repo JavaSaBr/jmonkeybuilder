@@ -138,7 +138,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * Обработка ввода с клавиатуры.
      */
     protected void processKeyPressed(final KeyEvent event) {
-
     }
 
     /**

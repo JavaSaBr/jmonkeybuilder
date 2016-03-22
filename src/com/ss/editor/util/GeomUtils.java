@@ -16,18 +16,30 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class GeomUtils {
 
+    /**
+     * Получение вектора вверх для указанного рзаворота.
+     */
     public static Vector3f getUp(final Quaternion rotation, final Vector3f store) {
         return rotation.getRotationColumn(1, store);
     }
 
+    /**
+     * Получение вектора влево для указанного разворота.
+     */
     public static Vector3f getLeft(final Quaternion rotation, final Vector3f store) {
         return rotation.getRotationColumn(0, store);
     }
 
+    /**
+     * Получение вектора направления для указанного разворота.
+     */
     public static Vector3f getDirection(final Quaternion rotation, final Vector3f store) {
         return rotation.getRotationColumn(2, store);
     }
 
+    /**
+     * Получение индекса в структуре модели указанной ее части.
+     */
     public static int getIndex(final Spatial model, final Object object) {
 
         Spatial parent = model;
@@ -84,6 +96,9 @@ public class GeomUtils {
         return false;
     }
 
+    /**
+     * Получение части модели по ее индексу в структуре модели.
+     */
     public static Object getObjectByIndex(final Spatial model, final int index) {
 
         Spatial parent = model;
@@ -100,12 +115,6 @@ public class GeomUtils {
         }
 
         if (!(model instanceof Node)) {
-            return -1;
-        }
-
-        if (index == 0) {
-            return model;
-        } else if (!(model instanceof Node)) {
             return null;
         }
 
@@ -150,6 +159,9 @@ public class GeomUtils {
         return null;
     }
 
+    /**
+     * Проверка возможности переноса части одной модели в указанный узел.
+     */
     public static boolean canAttach(final Node node, final Spatial spatial) {
 
         Spatial parent = node;

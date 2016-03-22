@@ -310,7 +310,6 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         okButton.setDisable(false);
     }
 
-
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

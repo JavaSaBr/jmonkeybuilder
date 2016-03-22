@@ -150,6 +150,9 @@ public class EditorOperationControl {
         operations.add(operation);
     }
 
+    /**
+     * Очистка истории.
+     */
     public synchronized void clear() {
 
         final Array<EditorOperation> operations = getOperations();

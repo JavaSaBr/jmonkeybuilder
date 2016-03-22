@@ -48,7 +48,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
 import rlib.util.array.Array;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
@@ -157,11 +156,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private Consumer<EditorOperation> changeHandler;
 
     /**
-     * Оригинальный материал.
-     */
-    private String original;
-
-    /**
      * Игнорировать ли слушателей.
      */
     private boolean ignoreListeners;
@@ -255,9 +249,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
             LOGGER.warning(this, e);
         }
 
-        setOriginal(content);
         setDirty(false);
-
         notifyFileChanged();
     }
 
@@ -380,8 +372,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         final MaterialEditorState editorState = getEditorState();
         editorState.changeMode(ModelType.BOX);
-
-        setOriginal(new String(FileUtils.getContent(file)));
 
         reload(material);
 
@@ -664,20 +654,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     private MaterialEditorState getEditorState() {
         return editorState;
-    }
-
-    /**
-     * @param original оригинальный материал.
-     */
-    private void setOriginal(String original) {
-        this.original = original;
-    }
-
-    /**
-     * @return оригинальный материал.
-     */
-    private String getOriginal() {
-        return original;
     }
 
     @Override
