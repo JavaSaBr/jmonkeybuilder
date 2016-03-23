@@ -2,7 +2,7 @@
 
 * Download: https://www.dropbox.com/sh/o7202c22pfyrhpv/AAC8eN57tkydThLRMxmnYXP9a?dl=0
 
-  [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be)
+## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
 
 ## ver. 0.6.0 ##
 * -Implemented undo-redo(ctrl+z/ctrl+y) in Material Editor and Model Editor.
