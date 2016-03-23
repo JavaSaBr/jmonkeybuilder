@@ -2,6 +2,8 @@
 
 * Download: https://www.dropbox.com/sh/o7202c22pfyrhpv/AAC8eN57tkydThLRMxmnYXP9a?dl=0
 
+https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be
+
 ## ver. 0.6.0 ##
 * -Implemented undo-redo(ctrl+z/ctrl+y) in Material Editor and Model Editor.
 
@@ -73,9 +75,3 @@
 * -Implemented the base actions in AssetTree.
 * -Implemented MaterialEditor.
 * -Added English localization.
-
-* [Image 1](http://imgur.com/8FKlaXw)
-* [Image 2](http://imgur.com/onsWNaK)
-* [Image 3](http://imgur.com/D31aplI)
-* [Image 4](http://imgur.com/9ApZMZC)
-* [Image 5](http://imgur.com/0XSkVDQ)
