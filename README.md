@@ -1,8 +1,9 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.5.2 #
+# jMonkeyEngine 3 SpaceShift Editor 0.6.0 #
 
-* Generic version: https://yadi.sk/d/8QKKsU_5qGgcw
-* Debian based version: https://yadi.sk/d/GeTaMRuoqGgmB
-* Windows x64 version: https://yadi.sk/d/4wx12JkeqGgYS
+* Download: https://www.dropbox.com/sh/o7202c22pfyrhpv/AAC8eN57tkydThLRMxmnYXP9a?dl=0
+
+## ver. 0.6.0 ##
+* -Implemented undo-redo(ctrl+z/ctrl+y) in Material Editor and Model Editor.
 
 ## ver. 0.5.2 ##
 * -Implemented the autocomplete for type of material in material creator.
