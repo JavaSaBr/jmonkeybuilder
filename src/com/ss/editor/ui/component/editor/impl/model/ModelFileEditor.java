@@ -432,10 +432,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyReplaced(final Node parent, final Spatial oldChild, final Spatial newChild) {
 
+        final ModelEditorState editorState = getEditorState();
         final Spatial currentModel = getCurrentModel();
 
         if (currentModel == oldChild) {
             setCurrentModel(newChild);
+            editorState.openModel(newChild);
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();

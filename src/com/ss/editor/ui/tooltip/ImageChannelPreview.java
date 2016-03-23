@@ -209,10 +209,10 @@ public class ImageChannelPreview extends CustomTooltip {
 
                 final int alpha = argb >>> 24;
                 final int red = (argb >> 16) & 0xff;
-                final int green = (argb >>  8) & 0xff;
-                final int blue = (argb      ) & 0xff;
+                final int green = (argb >> 8) & 0xff;
+                final int blue = (argb) & 0xff;
 
-                redWriter.setArgb(x, y, ((255 << 24) | (red << 16) | (red <<  8) | red));
+                redWriter.setArgb(x, y, ((255 << 24) | (red << 16) | (red << 8) | red));
                 greenWriter.setArgb(x, y, ((255 << 24) | (green << 16) | (green << 8) | green));
                 blueWriter.setArgb(x, y, ((255 << 24) | (blue << 16) | (blue << 8) | blue));
                 alphaWriter.setArgb(x, y, ((255 << 24) | (alpha << 16) | (alpha << 8) | alpha));

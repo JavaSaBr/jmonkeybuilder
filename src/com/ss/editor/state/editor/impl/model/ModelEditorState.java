@@ -562,6 +562,13 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     private void openModelImpl(final Spatial model) {
 
         final Node modelNode = getModelNode();
+
+        final Spatial currentModel = getCurrentModel();
+
+        if (currentModel != null) {
+            modelNode.detachChild(currentModel);
+        }
+
         modelNode.attachChild(model);
 
         setCurrentModel(model);

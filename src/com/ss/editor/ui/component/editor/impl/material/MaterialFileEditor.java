@@ -205,6 +205,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         MaterialUtils.updateTo(newMaterial, currentMaterial);
 
         reload(newMaterial);
+
+        notifyFileChanged();
     }
 
     /**

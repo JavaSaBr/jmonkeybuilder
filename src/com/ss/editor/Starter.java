@@ -29,7 +29,7 @@ public class Starter extends Application {
         final String userHome = System.getProperty("user.home");
         final String fileName = "jme3-spaceshift-editor-error.log";
 
-        try(final PrintStream out = new PrintStream(Files.newOutputStream(Paths.get(userHome, fileName)))) {
+        try (final PrintStream out = new PrintStream(Files.newOutputStream(Paths.get(userHome, fileName)))) {
             throwable.printStackTrace(out);
         } catch (IOException e) {
             e.printStackTrace();

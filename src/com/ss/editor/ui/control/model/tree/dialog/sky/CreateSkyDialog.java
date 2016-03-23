@@ -17,6 +17,7 @@ import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 
@@ -52,6 +53,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     private static final Insets SETTINGS_OFFSET = new Insets(0, 0, 10, 0);
 
     private static final Point DIALOG_SIZE = new Point(580, 390);
+    public static final Editor EDITOR = Editor.getInstance();
 
     private static enum SkyType {
         SINGLE_TEXTURE(Messages.CREATE_SKY_DIALOG_SKY_TYPE_SINGLE),
@@ -588,8 +590,21 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     @Override
     protected void processOk() {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final EditorFXScene scene = EDITOR.getScene();
+        scene.incrementLoading();
+
+        EXECUTOR_MANAGER.addBackgroundTask(this::createSkyInBackground);
+
+        hide();
+    }
+
+    /**
+     * Процесс создания фона сцены в фоновом режиме.
+     */
+    private void createSkyInBackground() {
+
+        final EditorFXScene scene = EDITOR.getScene();
+        final AssetManager assetManager = EDITOR.getAssetManager();
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
@@ -608,90 +623,103 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         final SkyType selectedItem = selectionModel.getSelectedItem();
 
         if (selectedItem == SkyType.SINGLE_TEXTURE) {
-
-            final CheckBox flipYCheckBox = getFlipYCheckBox();
-            final boolean flipY = flipYCheckBox.isSelected();
-
-            final ComboBox<SkyFactory.EnvMapType> envMapTypeComboBox = getEnvMapTypeComboBox();
-            final SkyFactory.EnvMapType envMapType = envMapTypeComboBox.getSelectionModel().getSelectedItem();
-
-            final ChooseTextureControl singleTextureControl = getSingleTextureControl();
-            final Path textureFile = singleTextureControl.getTextureFile();
-            final Path assetFile = EditorUtil.getAssetFile(textureFile);
-
-            final String assetPath = EditorUtil.toAssetPath(assetFile);
-
-            final TextureKey textureKey = new TextureKey(assetPath, flipY);
-            textureKey.setGenerateMips(true);
-
-            final Texture texture = assetManager.loadAsset(textureKey);
-
-            if (envMapType == SkyFactory.EnvMapType.CubeMap) {
-                textureKey.setTextureTypeHint(Texture.Type.CubeMap);
-            }
-
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-                final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
-                sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
-
-                final ModelNode<?> parentNode = getParentNode();
-                final Node element = (Node) parentNode.getElement();
-
-                final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-                modelChangeConsumer.execute(new AddChildOperation(sky, index));
-            });
-
+            createSingleTexture(assetManager, modelChangeConsumer, scale);
         } else if (selectedItem == SkyType.MULTIPLE_TEXTURE) {
-
-            final ChooseTextureControl northTextureControl = getNorthTextureControl();
-            final Path northTextureFile = northTextureControl.getTextureFile();
-
-            final ChooseTextureControl southTextureControl = getSouthTextureControl();
-            final Path southTextureFile = southTextureControl.getTextureFile();
-
-            final ChooseTextureControl eastTextureControl = getEastTextureControl();
-            final Path eastTextureFile = eastTextureControl.getTextureFile();
-
-            final ChooseTextureControl westTextureControl = getWestTextureControl();
-            final Path westTextureFile = westTextureControl.getTextureFile();
-
-            final ChooseTextureControl topTextureControl = getTopTextureControl();
-            final Path topTextureFile = topTextureControl.getTextureFile();
-
-            final ChooseTextureControl bottomTextureControl = getBottomTextureControl();
-            final Path bottomTextureFile = bottomTextureControl.getTextureFile();
-
-            final Path northTextureAssetFile = EditorUtil.getAssetFile(bottomTextureFile);
-            final Path southTextureAssetFile = EditorUtil.getAssetFile(southTextureFile);
-            final Path eastTextureAssetFile = EditorUtil.getAssetFile(eastTextureFile);
-            final Path westTextureAssetFile = EditorUtil.getAssetFile(westTextureFile);
-            final Path topTextureAssetFile = EditorUtil.getAssetFile(topTextureFile);
-            final Path bottomTextureAssetFile = EditorUtil.getAssetFile(bottomTextureFile);
-
-            final Texture northTexture = assetManager.loadTexture(EditorUtil.toAssetPath(northTextureAssetFile));
-            final Texture southTexture = assetManager.loadTexture(EditorUtil.toAssetPath(southTextureAssetFile));
-            final Texture eastTexture = assetManager.loadTexture(EditorUtil.toAssetPath(eastTextureAssetFile));
-            final Texture westTexture = assetManager.loadTexture(EditorUtil.toAssetPath(westTextureAssetFile));
-            final Texture topTexture = assetManager.loadTexture(EditorUtil.toAssetPath(topTextureAssetFile));
-            final Texture bottomTexture = assetManager.loadTexture(EditorUtil.toAssetPath(bottomTextureAssetFile));
-
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-                final Spatial sky = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture, topTexture, bottomTexture, scale);
-                sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
-
-                final ModelNode<?> parentNode = getParentNode();
-                final Node element = (Node) parentNode.getElement();
-
-                final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-                modelChangeConsumer.execute(new AddChildOperation(sky, index));
-            });
+            createMultipleTexture(assetManager, modelChangeConsumer, scale);
         }
 
-        hide();
+        EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+    }
+
+    /**
+     * Создание варианта с кубической картой.
+     */
+    private void createMultipleTexture(final AssetManager assetManager, final ModelChangeConsumer modelChangeConsumer, final Vector3f scale) {
+
+        final ChooseTextureControl northTextureControl = getNorthTextureControl();
+        final Path northTextureFile = northTextureControl.getTextureFile();
+
+        final ChooseTextureControl southTextureControl = getSouthTextureControl();
+        final Path southTextureFile = southTextureControl.getTextureFile();
+
+        final ChooseTextureControl eastTextureControl = getEastTextureControl();
+        final Path eastTextureFile = eastTextureControl.getTextureFile();
+
+        final ChooseTextureControl westTextureControl = getWestTextureControl();
+        final Path westTextureFile = westTextureControl.getTextureFile();
+
+        final ChooseTextureControl topTextureControl = getTopTextureControl();
+        final Path topTextureFile = topTextureControl.getTextureFile();
+
+        final ChooseTextureControl bottomTextureControl = getBottomTextureControl();
+        final Path bottomTextureFile = bottomTextureControl.getTextureFile();
+
+        final Path northTextureAssetFile = EditorUtil.getAssetFile(bottomTextureFile);
+        final Path southTextureAssetFile = EditorUtil.getAssetFile(southTextureFile);
+        final Path eastTextureAssetFile = EditorUtil.getAssetFile(eastTextureFile);
+        final Path westTextureAssetFile = EditorUtil.getAssetFile(westTextureFile);
+        final Path topTextureAssetFile = EditorUtil.getAssetFile(topTextureFile);
+        final Path bottomTextureAssetFile = EditorUtil.getAssetFile(bottomTextureFile);
+
+        final Texture northTexture = assetManager.loadTexture(EditorUtil.toAssetPath(northTextureAssetFile));
+        final Texture southTexture = assetManager.loadTexture(EditorUtil.toAssetPath(southTextureAssetFile));
+        final Texture eastTexture = assetManager.loadTexture(EditorUtil.toAssetPath(eastTextureAssetFile));
+        final Texture westTexture = assetManager.loadTexture(EditorUtil.toAssetPath(westTextureAssetFile));
+        final Texture topTexture = assetManager.loadTexture(EditorUtil.toAssetPath(topTextureAssetFile));
+        final Texture bottomTexture = assetManager.loadTexture(EditorUtil.toAssetPath(bottomTextureAssetFile));
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+            final Spatial sky = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture, topTexture, bottomTexture, scale);
+            sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
+
+            final ModelNode<?> parentNode = getParentNode();
+            final Node element = (Node) parentNode.getElement();
+
+            final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
+
+            modelChangeConsumer.execute(new AddChildOperation(sky, index));
+        });
+    }
+
+    /**
+     * Создание варианта с одной текстуры.
+     */
+    private void createSingleTexture(AssetManager assetManager, ModelChangeConsumer modelChangeConsumer, Vector3f scale) {
+
+        final CheckBox flipYCheckBox = getFlipYCheckBox();
+        final boolean flipY = flipYCheckBox.isSelected();
+
+        final ComboBox<SkyFactory.EnvMapType> envMapTypeComboBox = getEnvMapTypeComboBox();
+        final SkyFactory.EnvMapType envMapType = envMapTypeComboBox.getSelectionModel().getSelectedItem();
+
+        final ChooseTextureControl singleTextureControl = getSingleTextureControl();
+        final Path textureFile = singleTextureControl.getTextureFile();
+        final Path assetFile = EditorUtil.getAssetFile(textureFile);
+
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+
+        final TextureKey textureKey = new TextureKey(assetPath, flipY);
+        textureKey.setGenerateMips(true);
+
+        final Texture texture = assetManager.loadAsset(textureKey);
+
+        if (envMapType == SkyFactory.EnvMapType.CubeMap) {
+            textureKey.setTextureTypeHint(Texture.Type.CubeMap);
+        }
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+            final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
+            sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
+
+            final ModelNode<?> parentNode = getParentNode();
+            final Node element = (Node) parentNode.getElement();
+
+            final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
+
+            modelChangeConsumer.execute(new AddChildOperation(sky, index));
+        });
     }
 
     /**
