@@ -1,8 +1,11 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.6.1 #
+# jMonkeyEngine 3 SpaceShift Editor 0.6.2 #
 
 * Download: https://www.dropbox.com/sh/o7202c22pfyrhpv/AAC8eN57tkydThLRMxmnYXP9a?dl=0
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+
+## ver. 0.6.2 ##
+* -Fixed the problems with mouse events. 
 
 ## ver. 0.6.1 ##
 * -Fixed the missing of tangents in models in Material Editor.
