@@ -308,6 +308,7 @@
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
 }
 
 #ModelFileEditorParameterContainer {

@@ -277,6 +277,7 @@ public final class EditorConfig implements AssetEventListener {
         settings.setResolution(screenSize.getWidth(), screenSize.getHeight());
         settings.setFrequency(displayMode.getRefreshRate());
         settings.setFrameRate(60);
+        settings.setGammaCorrection(isGammaCorrection());
         //settings.setResizable(true);
         // settings.putBoolean("GraphicsDebug", true);
 

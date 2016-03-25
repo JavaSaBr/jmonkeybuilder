@@ -98,7 +98,6 @@ public class Editor extends SimpleApplication {
 
             final EditorConfig config = EditorConfig.getInstance();
             final AppSettings settings = config.getSettings();
-            settings.setGammaCorrection(false);
 
             EDITOR.setSettings(settings);
             EDITOR.setShowSettings(false);
