@@ -16,6 +16,8 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs" />
+          <root url="file://$MODULE_DIR$/../JME3-JFX/src/main/java" />
+          <root url="file://$MODULE_DIR$/../JME3-JFX/src/test/java" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
@@ -29,6 +31,7 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs/jME" />
+          <root url="jar://$USER_HOME$/Загрузки/lwjgl/src.zip!/" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs/jME" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs/jME" recursive="false" type="SOURCES" />
