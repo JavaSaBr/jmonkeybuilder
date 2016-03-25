@@ -3,6 +3,7 @@ package com.ss.editor.config;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
+import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import com.ss.editor.Editor;
 import com.ss.editor.EditorContext;
@@ -39,6 +40,9 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
     public static final String PREF_GRAPHIC_FULLSCREEN = GRAPHICS_ALIAS + "." + "fullscreen";
+    public static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
+    public static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
+    public static final String PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT = GRAPHICS_ALIAS + "." + "toneMapFilterWhitePoint";
 
     public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
     public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
@@ -69,6 +73,11 @@ public final class EditorConfig implements AssetEventListener {
     private volatile ScreenSize screenSize;
 
     /**
+     * Точка белого на фильтре экспозиции.
+     */
+    private volatile Vector3f toneMapFilterWhitePoint;
+
+    /**
      * Уровень анизатропной фильтрации.
      */
     private volatile int anisotropy;
@@ -82,6 +91,16 @@ public final class EditorConfig implements AssetEventListener {
      * Включен ли полноэкранный режим.
      */
     private volatile boolean fullscreen;
+
+    /**
+     * Включен ли режим гамма коррекции.
+     */
+    private volatile boolean gammaCorrection;
+
+    /**
+     * Включен ли фильтр экспозиции.
+     */
+    private volatile boolean toneMapFilter;
 
     /**
      * Текущий выбранный Asset.
@@ -201,6 +220,48 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return включен ли режим гамма коррекции.
+     */
+    public boolean isGammaCorrection() {
+        return gammaCorrection;
+    }
+
+    /**
+     * @param gammaCorrection включен ли режим гамма коррекции.
+     */
+    public void setGammaCorrection(final boolean gammaCorrection) {
+        this.gammaCorrection = gammaCorrection;
+    }
+
+    /**
+     * @return включен ли фильтр экспозиции.
+     */
+    public boolean isToneMapFilter() {
+        return toneMapFilter;
+    }
+
+    /**
+     * @param toneMapFilter включен ли фильтр экспозиции.
+     */
+    public void setToneMapFilter(final boolean toneMapFilter) {
+        this.toneMapFilter = toneMapFilter;
+    }
+
+    /**
+     * @return точка белого на фильтре экспозиции.
+     */
+    public Vector3f getToneMapFilterWhitePoint() {
+        return toneMapFilterWhitePoint;
+    }
+
+    /**
+     * @param toneMapFilterWhitePoint точка белого на фильтре экспозиции.
+     */
+    public void setToneMapFilterWhitePoint(final Vector3f toneMapFilterWhitePoint) {
+        this.toneMapFilterWhitePoint = toneMapFilterWhitePoint;
+    }
+
+    /**
      * @return настройки движка.
      */
     public AppSettings getSettings() {
@@ -233,6 +294,8 @@ public final class EditorConfig implements AssetEventListener {
         this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
         this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
         this.fullscreen = prefs.getBoolean(PREF_GRAPHIC_FULLSCREEN, false);
+        this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, false);
+        this.toneMapFilter = prefs.getBoolean(PREF_GRAPHIC_TONEMAP_FILTER, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -240,6 +303,23 @@ public final class EditorConfig implements AssetEventListener {
             try {
                 this.currentAsset = Paths.get(new URI(currentAssetURI));
             } catch (URISyntaxException e) {
+                LOGGER.error(e);
+            }
+        }
+
+        this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
+
+        final String whitePoint = prefs.get(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, null);
+        final String[] coords = whitePoint == null? null : whitePoint.split(",", 3);
+
+        if (coords != null && coords.length > 2) {
+            try {
+
+                toneMapFilterWhitePoint.setX(Float.parseFloat(coords[0]));
+                toneMapFilterWhitePoint.setY(Float.parseFloat(coords[1]));
+                toneMapFilterWhitePoint.setZ(Float.parseFloat(coords[2]));
+
+            } catch (NumberFormatException e) {
                 LOGGER.error(e);
             }
         }
@@ -262,6 +342,12 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
         prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
         prefs.putBoolean(PREF_GRAPHIC_FULLSCREEN, isFullscreen());
+        prefs.putBoolean(PREF_GRAPHIC_GAMA_CORRECTION, isGammaCorrection());
+        prefs.putBoolean(PREF_GRAPHIC_TONEMAP_FILTER, isToneMapFilter());
+
+        final Vector3f whitePoint = getToneMapFilterWhitePoint();
+
+        prefs.put(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, whitePoint.getX() + "," + whitePoint.getY() + "," + whitePoint.getZ());
 
         if (currentAsset != null) {
             prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());

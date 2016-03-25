@@ -9,11 +9,13 @@ import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
+import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
@@ -96,6 +98,7 @@ public class Editor extends SimpleApplication {
 
             final EditorConfig config = EditorConfig.getInstance();
             final AppSettings settings = config.getSettings();
+            settings.setGammaCorrection(false);
 
             EDITOR.setSettings(settings);
             EDITOR.setShowSettings(false);
@@ -164,6 +167,16 @@ public class Editor extends SimpleApplication {
      * Процессор пост эффетков.
      */
     private FilterPostProcessor postProcessor;
+
+    /**
+     * FXAA фильтр.
+     */
+    private FXAAFilter fxaaFilter;
+
+    /**
+     * Фильтр коррекции экспозиции.
+     */
+    private ToneMapFilter toneMapFilter;
 
     private Editor() {
         this.lock = new StampedLock();
@@ -257,19 +270,19 @@ public class Editor extends SimpleApplication {
         postProcessor = new FilterPostProcessor(assetManager);
         postProcessor.initialize(renderManager, viewPort);
 
-        if (editorConfig.isFXAA()) {
+        fxaaFilter = new FXAAFilter();
+        fxaaFilter.setEnabled(editorConfig.isFXAA());
+        fxaaFilter.setSubPixelShift(1.0f / 4.0f);
+        fxaaFilter.setVxOffset(0.0f);
+        fxaaFilter.setSpanMax(8.0f);
+        fxaaFilter.setReduceMul(1.0f / 8.0f);
 
-            final FXAAFilter filter = new FXAAFilter();
-            filter.setEnabled(true);
-            filter.setSubPixelShift(1.0f / 4.0f);
-            filter.setVxOffset(0.0f);
-            filter.setSpanMax(8.0f);
-            filter.setReduceMul(1.0f / 8.0f);
+        toneMapFilter = new ToneMapFilter();
+        toneMapFilter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
+        toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
 
-            postProcessor.addFilter(filter);
-        }
-
-        // postProcessor.addFilter(new ToneMapFilter());
+        postProcessor.addFilter(fxaaFilter);
+        postProcessor.addFilter(toneMapFilter);
 
         viewPort.addProcessor(postProcessor);
 
@@ -284,7 +297,7 @@ public class Editor extends SimpleApplication {
             stateManager.attach(environmentCamera);
         }
 
-        fxContainer = JmeFxContainer.install(this, guiNode, true, cursorDisplayProvider);
+        fxContainer = JmeFxContainer.install(this, guiNode, cursorDisplayProvider);
         scene = EditorFXSceneBuilder.build(fxContainer);
 
         UIUtils.overrideTooltipBehavior(1000, 3000, 500);
@@ -316,7 +329,13 @@ public class Editor extends SimpleApplication {
     @Override
     public void update() {
 
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        final InputManager inputManager = getInputManager();
         final JmeFxContainer fxContainer = getFxContainer();
+
+        if(fxContainer.isVisibleCursor() != inputManager.isCursorVisible()) {
+            fxContainer.setVisibleCursor(inputManager.isCursorVisible());
+        }
 
         final long stamp = syncLock();
         try {
@@ -406,5 +425,19 @@ public class Editor extends SimpleApplication {
      */
     public EnvironmentCamera getEnvironmentCamera() {
         return environmentCamera;
+    }
+
+    /**
+     * @return фильтр коррекции экспозиции.
+     */
+    public ToneMapFilter getToneMapFilter() {
+        return toneMapFilter;
+    }
+
+    /**
+     * @return FXAA фильтр.
+     */
+    public FXAAFilter getFXAAFilter() {
+        return fxaaFilter;
     }
 }

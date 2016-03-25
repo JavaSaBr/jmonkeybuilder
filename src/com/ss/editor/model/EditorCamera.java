@@ -18,6 +18,8 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.jme3x.jfx.JmeFxContainer;
+import com.ss.editor.Editor;
 
 import java.io.IOException;
 
@@ -45,6 +47,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             CHASECAM_ZOOMIN,
             CHASECAM_ZOOMOUT
     };
+
+    protected static final Editor EDITOR = Editor.getInstance();
 
     protected InputManager inputManager;
 
@@ -154,6 +158,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
             if (hideCursorOnRotate) {
                 inputManager.setCursorVisible(false);
+                final JmeFxContainer jmeFxContainer = EDITOR.getFxContainer();
+                jmeFxContainer.setVisibleCursor(inputManager.isCursorVisible());
             }
 
         } else {
@@ -162,6 +168,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
             if (hideCursorOnRotate) {
                 inputManager.setCursorVisible(true);
+                final JmeFxContainer jmeFxContainer = EDITOR.getFxContainer();
+                jmeFxContainer.setVisibleCursor(inputManager.isCursorVisible());
             }
         }
     }

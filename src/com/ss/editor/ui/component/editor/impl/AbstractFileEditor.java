@@ -275,7 +275,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Override
     public String toString() {
         return "AbstractFileEditor{" +
-                "dirtyProperty=" + dirtyProperty +
+                "dirtyProperty=" + dirtyProperty.get() +
                 ", file=" + file +
                 '}';
     }

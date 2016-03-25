@@ -103,6 +103,10 @@ public class JavaFXImageManager {
      */
     public Image getTexturePreview(final Path file, final int width, final int height) {
 
+        if(!Files.exists(file)) {
+            return Icons.IMAGE_512;
+        }
+
         final Path cacheFolder = getCacheFolder();
         final Path imageFolder = cacheFolder.resolve(String.valueOf(width)).resolve(String.valueOf(height));
         final Path cacheFile = imageFolder.resolve(file.subpath(1, file.getNameCount()));

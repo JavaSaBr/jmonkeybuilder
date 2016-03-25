@@ -19,6 +19,7 @@ import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.model.EditorCamera;
+import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
@@ -92,6 +93,10 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
         this.testQuad = new Geometry("Quad", new Quad(4, 4));
         this.testQuad.setLocalTranslation(QUAD_OFFSET);
         this.lightEnabled = true;
+
+        TangentGenerator.useStandardGenerator(testBox, false);
+        TangentGenerator.useStandardGenerator(testSphere, false);
+        TangentGenerator.useStandardGenerator(testQuad, false);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr", SkyFactory.EnvMapType.EquirectMap);

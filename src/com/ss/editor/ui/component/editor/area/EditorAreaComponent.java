@@ -317,6 +317,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             editor.openFile(file);
         } catch (final Exception e) {
             EditorUtil.handleException(null, this, e);
+            EXECUTOR_MANAGER.addFXTask(() -> {
+                final EditorFXScene scene = EDITOR.getScene();
+                scene.decrementLoading();
+            });
             return;
         }
 

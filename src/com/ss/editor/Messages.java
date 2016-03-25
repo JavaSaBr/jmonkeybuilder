@@ -85,6 +85,9 @@ public class Messages {
     public static final String GRAPHICS_DIALOG_TITLE;
     public static final String GRAPHICS_DIALOG_FXAA;
     public static final String GRAPHICS_DIALOG_FULLSCREEN;
+    public static final String GRAPHICS_DIALOG_GAMMA_CORRECTION;
+    public static final String GRAPHICS_DIALOG_TONEMAP_FILTER;
+    public static final String GRAPHICS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
     public static final String GRAPHICS_DIALOG_SCREEN_SIZE;
     public static final String GRAPHICS_DIALOG_ANISOTROPY;
     public static final String GRAPHICS_DIALOG_BUTTON_OK;
@@ -172,6 +175,7 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
 
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -256,6 +260,9 @@ public class Messages {
         GRAPHICS_DIALOG_TITLE = bundle.getString("GraphicsDialogTitle");
         GRAPHICS_DIALOG_FXAA = bundle.getString("GraphicsDialogFXAA");
         GRAPHICS_DIALOG_FULLSCREEN = bundle.getString("GraphicsDialogFullscreen");
+        GRAPHICS_DIALOG_GAMMA_CORRECTION = bundle.getString("GraphicsDialogGammaCorrection");
+        GRAPHICS_DIALOG_TONEMAP_FILTER = bundle.getString("GraphicsDialogToneMapFilter");
+        GRAPHICS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("GraphicsDialogToneMapFilterWhitePoint");
         GRAPHICS_DIALOG_SCREEN_SIZE = bundle.getString("GraphicsDialogScreenSize");
         GRAPHICS_DIALOG_ANISOTROPY = bundle.getString("GraphicsDialogAnisotropy");
         GRAPHICS_DIALOG_BUTTON_OK = bundle.getString("GraphicsDialogButtonOk");

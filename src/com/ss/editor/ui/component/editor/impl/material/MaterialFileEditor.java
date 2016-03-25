@@ -438,13 +438,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         return true;
     }
 
-    /**
-     * @return выпадающий список с выбором RenderQueue.Bucket.
-     */
-    private ComboBox<RenderQueue.Bucket> getBucketComboBox() {
-        return bucketComboBox;
-    }
-
     @Override
     protected void createToolbar(final HBox container) {
 

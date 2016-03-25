@@ -57,6 +57,7 @@ public interface CSSIds {
     public static final String GRAPHICS_DIALOG_MESSAGE_LABEL = "GraphicsDialogMessageLabel";
     public static final String GRAPHICS_DIALOG_LABEL = "GraphicsDialogLabel";
     public static final String GRAPHICS_DIALOG_FIELD = "GraphicsDialogField";
+    public static final String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
     public static final String MODEL_FILE_EDITOR_PARAMETER_CONTAINER = "ModelFileEditorParameterContainer";
 
