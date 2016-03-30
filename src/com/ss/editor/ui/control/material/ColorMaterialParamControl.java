@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.material;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.material.operation.ColorMaterialParamOperation;
@@ -33,8 +32,6 @@ import static java.lang.Math.min;
 public class ColorMaterialParamControl extends MaterialParamControl {
 
     public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * Контрол для выбора цвета.
@@ -66,7 +63,6 @@ public class ColorMaterialParamControl extends MaterialParamControl {
 
         HBox.setMargin(colorPicker, ELEMENT_OFFSET);
         HBox.setMargin(removeButton, ELEMENT_OFFSET);
-
     }
 
     /**

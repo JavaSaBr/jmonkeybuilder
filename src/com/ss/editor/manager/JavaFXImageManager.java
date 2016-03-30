@@ -103,7 +103,7 @@ public class JavaFXImageManager {
      */
     public Image getTexturePreview(final Path file, final int width, final int height) {
 
-        if(!Files.exists(file)) {
+        if (!Files.exists(file)) {
             return Icons.IMAGE_512;
         }
 

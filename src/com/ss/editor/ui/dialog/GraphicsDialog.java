@@ -637,7 +637,7 @@ public class GraphicsDialog extends EditorDialog {
             needRestart++;
         } else if (currentFullscreen != fullscreen) {
             needRestart++;
-        } else if(currentGammaCorrection != gammaCorrection) {
+        } else if (currentGammaCorrection != gammaCorrection) {
             needRestart++;
         }
 

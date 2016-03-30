@@ -51,15 +51,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         @Override
         public String toString(final ModelNode<?> object) {
-
-            final Object element = object.getElement();
-
-            if (element instanceof Mesh) {
-                return Messages.MODEL_FILE_EDITOR_NODE_MESH;
-            }
-
-            final Spatial spatial = (Spatial) element;
-            return spatial.getName();
+            return object.getName();
         }
 
         @Override
@@ -120,6 +112,11 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
     @Override
     public void startEdit() {
+
+        if (!isEditable()) {
+            return;
+        }
+
         super.startEdit();
 
         final TextField textField = (TextField) getGraphic();
@@ -150,11 +147,11 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         if (element instanceof Spatial) {
             setText(((Spatial) element).getName());
-            setEditable(true);
         } else if (element instanceof Mesh) {
             setText(Messages.MODEL_FILE_EDITOR_NODE_MESH);
-            setEditable(false);
         }
+
+        setEditable(element instanceof Spatial);
 
         imageView.setImage(icon);
         setGraphic(imageView);

@@ -143,6 +143,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         this.temp = new Vector3f(0, 0, 0);
     }
 
+    @Override
     public void onAction(final String name, final boolean keyPressed, final float tpf) {
 
         if (!enabled || !dragToRotate) {
@@ -173,6 +174,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         this.lockRotation = lockRotation;
     }
 
+    @Override
     public void onAnalog(String name, float value, float tpf) {
 
         if (!enabled) {

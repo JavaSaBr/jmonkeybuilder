@@ -37,6 +37,11 @@ public class GeometryModelNode extends ModelNode<Geometry> {
     }
 
     @Override
+    public String getName() {
+        return getElement().getName();
+    }
+
+    @Override
     public Array<ModelNode<?>> getChildren() {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);

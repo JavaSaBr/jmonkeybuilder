@@ -122,6 +122,8 @@ public class ModelNodeTree extends TitledPane {
             final ModelNode<?> parentElement = parent.getValue();
 
             toSelect = parentElement.getElement();
+        } else {
+            toSelect = element;
         }
 
         selectionHandler.accept(toSelect);
@@ -367,6 +369,22 @@ public class ModelNodeTree extends TitledPane {
         if (parentItem.isExpanded() && children.isEmpty()) {
             parentItem.setExpanded(false);
         }
+    }
+
+    /**
+     * Поиск родительского элемента для указанного элемента.
+     */
+    public ModelNode<?> findParent(final ModelNode<?> modelNode) {
+
+        final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
+
+        if (treeItem == null) {
+            return null;
+        }
+
+        final TreeItem<ModelNode<?>> parent = treeItem.getParent();
+
+        return parent == null ? null : parent.getValue();
     }
 
     /**

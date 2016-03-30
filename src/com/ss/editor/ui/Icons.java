@@ -20,6 +20,10 @@ public interface Icons {
     public static final Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/geometry.png");
     public static final Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/mesh.png");
     public static final Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/edit.png");
+    public static final Image AMBIENT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/ambient.png");
+    public static final Image LAMP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/lamp.png");
+    public static final Image POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
+    public static final Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
 
     public static final Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png");
     public static final Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png");

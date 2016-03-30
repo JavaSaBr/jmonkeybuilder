@@ -12,6 +12,7 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
@@ -29,6 +30,7 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
 import com.jme3.scene.shape.Quad;
+import com.ss.editor.control.light.EditorLightControl;
 import com.ss.editor.control.transform.MoveToolControl;
 import com.ss.editor.control.transform.RotationToolControl;
 import com.ss.editor.control.transform.ScaleToolControl;
@@ -39,6 +41,7 @@ import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.GeomUtils;
+import com.ss.editor.util.NodeUtils;
 
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
@@ -54,8 +57,13 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class ModelEditorState extends AbstractEditorState<ModelFileEditor> implements SceneEditorControl {
 
+    public static final String USER_DATA_IS_LIGHT = ModelEditorState.class.getName() + ".isLight";
+
+    private static final Vector3f AMBIENT_LIGHT_LOCATION = new Vector3f(0, -20, 0);
+
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
+
 
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
@@ -70,10 +78,32 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         }
     };
 
+
+    /**
+     * Таблица моделец источников света.
+     */
+    protected static final ObjectDictionary<Light.Type, Spatial> LIGHT_MODEL_TABLE;
+
+    static {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        LIGHT_MODEL_TABLE = DictionaryFactory.newObjectDictionary();
+        LIGHT_MODEL_TABLE.put(Light.Type.Point, assetManager.loadModel("graphics/models/light/point.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Directional, assetManager.loadModel("graphics/models/light/sun.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Spot, assetManager.loadModel("graphics/models/light/spot_lamp.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Probe, assetManager.loadModel("graphics/models/light/point.j3o"));
+    }
+
     /**
      * Модели выделения выбранных частей.
      */
     protected final ObjectDictionary<Spatial, Spatial> selectionShape;
+
+    /**
+     * Набор контролов по отображению источников света.
+     */
+    protected final Array<EditorLightControl> editorLightControls;
 
     /**
      * Набор кастомных фонов.
@@ -89,6 +119,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Узел для размещения модели.
      */
     private final Node modelNode;
+
+    /**
+     * Узел для размещения представления источников света.
+     */
+    private final Node lightNode;
 
     /**
      * Узел для размещения вспомогательных графических элементов.
@@ -202,9 +237,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         this.toolNode = new Node("ToolNode");
         this.transformToolNode = new Node("TransformToolNode");
         this.customSkyNode = new Node("Custom Sky");
+        this.lightNode = new Node("Lights");
         this.customSky = ArrayFactory.newArray(Spatial.class);
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();
+        this.editorLightControls = ArrayFactory.newArray(EditorLightControl.class);
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(getCameraNode());
@@ -226,7 +263,21 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @param activeTransform eсть ли активная трансформация.
+     * @return узел для размещения представления источников света.
+     */
+    protected Node getLightNode() {
+        return lightNode;
+    }
+
+    /**
+     * @return набор контролов по отображению источников света..
+     */
+    protected Array<EditorLightControl> getEditorLightControls() {
+        return editorLightControls;
+    }
+
+    /**
+     * @param activeTransform есть ли активная трансформация.
      */
     private void setActiveTransform(final boolean activeTransform) {
         this.activeTransform = activeTransform;
@@ -523,6 +574,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Node stateNode = getStateNode();
         stateNode.attachChild(getModelNode());
         stateNode.attachChild(getToolNode());
+        stateNode.attachChild(getLightNode());
 
         final Node customSkyNode = getCustomSkyNode();
         customSkyNode.detachAllChildren();
@@ -562,7 +614,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     private void openModelImpl(final Spatial model) {
 
         final Node modelNode = getModelNode();
-
         final Spatial currentModel = getCurrentModel();
 
         if (currentModel != null) {
@@ -616,6 +667,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Node stateNode = getStateNode();
         stateNode.detachChild(getModelNode());
         stateNode.detachChild(getToolNode());
+        stateNode.detachChild(getLightNode());
     }
 
     /**
@@ -734,14 +786,21 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             return;
         }
 
-        final Camera camera = EDITOR.getCamera();
 
         final Vector3f location = transform.getTranslation();
-        final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.4f);
+        final Vector3f positionOnCamera = getPositionOnCamera(location);
 
         final Node transformToolNode = getTransformToolNode();
-        transformToolNode.setLocalTranslation(camera.getLocation().add(resultPosition));
+        transformToolNode.setLocalTranslation(positionOnCamera);
         transformToolNode.setLocalRotation(transform.getRotation());
+    }
+
+    private Vector3f getPositionOnCamera(final Vector3f location) {
+
+        final Camera camera = EDITOR.getCamera();
+
+        final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.4f);
+        return camera.getLocation().add(resultPosition);
     }
 
     @Override
@@ -812,6 +871,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         stateNode.detachChild(getModelNode());
         stateNode.detachChild(getToolNode());
+        stateNode.detachChild(getLightNode());
 
         setCurrentFastSky(fastSky);
 
@@ -1107,9 +1167,45 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     /**
      * Процесс добавление кастомного фона.
      */
-    private void addCustomSkyImpl(Spatial sky) {
+    private void addCustomSkyImpl(final Spatial sky) {
         final Array<Spatial> customSky = getCustomSky();
         customSky.add(sky);
+    }
+
+    /**
+     * Добавление источника света.
+     */
+    public void addLight(final Light light) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addLightImpl(light));
+    }
+
+    /**
+     * Процесс добавление источника света.
+     */
+    private void addLightImpl(final Light light) {
+
+        final Spatial original = LIGHT_MODEL_TABLE.get(light.getType());
+
+        if (original == null) {
+            return;
+        }
+
+        final Spatial newModel = original.clone();
+        newModel.setUserData(USER_DATA_IS_LIGHT, Boolean.TRUE);
+        newModel.setLocalScale(0.02F);
+
+        final Geometry geometry = NodeUtils.findGeometry(newModel);
+        final Material material = geometry.getMaterial();
+        material.setColor("Color", light.getColor());
+
+        final EditorLightControl editorLightControl = new EditorLightControl(light);
+        newModel.addControl(editorLightControl);
+
+        final Array<EditorLightControl> lights = getEditorLightControls();
+        lights.add(editorLightControl);
+
+        final Node lightNode = getLightNode();
+        lightNode.attachChild(newModel);
     }
 
     /**
@@ -1122,9 +1218,42 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     /**
      * Процесс удаления кастомного фона.
      */
-    private void removeCustomSkyImpl(Spatial sky) {
+    private void removeCustomSkyImpl(final Spatial sky) {
         final Array<Spatial> customSky = getCustomSky();
         customSky.slowRemove(sky);
+    }
+
+    /**
+     * Удаление источника света.
+     */
+    public void removeLight(final Light light) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeLightImpl(light));
+    }
+
+    /**
+     * Процесс удаления источника света.
+     */
+    private void removeLightImpl(final Light light) {
+
+        EditorLightControl control = null;
+
+        final Array<EditorLightControl> lights = getEditorLightControls();
+
+        for (final EditorLightControl lightControl : lights) {
+            if (lightControl.getLight() == light) {
+                control = lightControl;
+                break;
+            }
+        }
+
+        if (control == null) {
+            return;
+        }
+
+        final Spatial spatial = control.getSpatial();
+        spatial.removeFromParent();
+
+        lights.fastRemove(control);
     }
 
     /**
@@ -1136,6 +1265,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             final Node stateNode = getStateNode();
             stateNode.detachChild(getModelNode());
             stateNode.detachChild(getToolNode());
+            stateNode.detachChild(getLightNode());
 
             frame = 0;
         });

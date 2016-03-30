@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node;
 
 import com.jme3.scene.Mesh;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 
 import javafx.scene.image.Image;
@@ -19,6 +20,11 @@ public class MeshModelNode extends ModelNode<Mesh> {
     @Override
     public Image getIcon() {
         return Icons.MESH_16;
+    }
+
+    @Override
+    public String getName() {
+        return Messages.MODEL_FILE_EDITOR_NODE_MESH;
     }
 
     @Override

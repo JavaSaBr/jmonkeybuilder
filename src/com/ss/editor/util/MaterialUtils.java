@@ -5,6 +5,9 @@ import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState;
 import com.jme3.material.TechniqueDef;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.shader.Shader;
 import com.ss.editor.FileExtensions;
 
@@ -13,8 +16,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import rlib.util.FileUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * Набор утильных методов для работы с материалами.
@@ -129,5 +135,41 @@ public class MaterialUtils {
 
         final RenderState additionalRenderState = toMigrate.getAdditionalRenderState();
         additionalRenderState.set(material.getAdditionalRenderState());
+    }
+
+    public static void cleanUpMaterialParams(final Spatial spatial) {
+
+        final AtomicInteger counter = new AtomicInteger();
+
+        final Array<Material> materials = ArrayFactory.newArray(Material.class);
+
+        addMaterialsTo(materials, spatial);
+
+        materials.forEach(material -> cleanUp(material, counter));
+    }
+
+    private static void cleanUp(final Material material, final AtomicInteger counter) {
+        final Collection<MatParam> params = new ArrayList<>(material.getParams());
+        params.forEach(matParam -> {
+            if (matParam.getValue() == null) {
+                material.clearParam(matParam.getName());
+            }
+        });
+    }
+
+    private static void addMaterialsTo(final Array<Material> materials, final Spatial spatial) {
+
+        if (spatial instanceof Geometry) {
+
+            final Material material = ((Geometry) spatial).getMaterial();
+
+            if (material != null) {
+                materials.add(material);
+            }
+
+        } else if (spatial instanceof Node) {
+            final List<Spatial> children = ((Node) spatial).getChildren();
+            children.forEach(child -> addMaterialsTo(materials, child));
+        }
     }
 }

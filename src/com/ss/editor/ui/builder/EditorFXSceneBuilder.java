@@ -91,16 +91,20 @@ public class EditorFXSceneBuilder {
         final SplitPane splitContainer = new SplitPane(assetComponent, editorAreaComponent);
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
-        EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(() -> splitContainer.setDividerPosition(0, 0.1)), 500);
-
         FXUtils.addToPane(splitContainer, container);
         FXUtils.addToPane(barComponent, container);
 
         FXUtils.bindFixedHeight(splitContainer, container.heightProperty().subtract(barComponent.heightProperty()).add(2));
         FXUtils.bindFixedWidth(splitContainer, container.widthProperty());
+        FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 
-        barComponent.heightProperty().addListener((observable, oldValue, newValue) -> {
-            StackPane.setMargin(splitContainer, new Insets(newValue.doubleValue() - 2, 0, 0, 0));
-        });
+        barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
+
+        final Runnable resizeHandler = () -> {
+            splitContainer.setDividerPosition(0, 0.01);
+        };
+
+        scene.widthProperty().addListener((observableValue, oldValue, newValue) -> resizeHandler.run());
+        scene.heightProperty().addListener((observableValue, oldValue, newValue) -> resizeHandler.run());
     }
 }

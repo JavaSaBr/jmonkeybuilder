@@ -1,5 +1,6 @@
 package com.ss.editor.model.undo.editor;
 
+import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.EditorOperation;
@@ -27,9 +28,19 @@ public interface ModelChangeConsumer {
     public void notifyAddedChild(final Node parent, final Spatial added);
 
     /**
+     * Уведомление об добавлении нового источника света.
+     */
+    public void notifyAddedLight(final Node parent, final Light added);
+
+    /**
      * Уведомление об удалении дочернего элемента.
      */
     public void notifyRemovedChild(final Node parent, final Spatial removed);
+
+    /**
+     * Уведомление об удалении старого источника света.
+     */
+    public void notifyRemovedLight(final Node parent, final Light removed);
 
     /**
      * Уведомление о замене одной части модели на другую.

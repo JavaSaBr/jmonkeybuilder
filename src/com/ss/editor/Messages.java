@@ -102,6 +102,11 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_TREE;
     public static final String MODEL_FILE_EDITOR_PROPERTIES;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
+    public static final String MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT;
+    public static final String MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT;
+    public static final String MODEL_FILE_EDITOR_NODE_POINT_LIGHT;
+    public static final String MODEL_FILE_EDITOR_NODE_SPOT_LIGHT;
+    public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -116,6 +121,11 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
     public static final String MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
+    public static final String MODEL_NODE_TREE_ACTION_LIGHT;
+    public static final String MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT;
+    public static final String MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT;
+    public static final String MODEL_NODE_TREE_ACTION_POINT_LIGHT;
+    public static final String MODEL_NODE_TREE_ACTION_SPOT_LIGHT;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -124,6 +134,11 @@ public class Messages {
     public static final String MODEL_PROPERTY_SCALE;
     public static final String MODEL_PROPERTY_ROTATION;
     public static final String MODEL_PROPERTY_MATERIAL;
+    public static final String MODEL_PROPERTY_DIRECTION;
+    public static final String MODEL_PROPERTY_RADIUS;
+    public static final String MODEL_PROPERTY_COLOR;
+    public static final String MODEL_PROPERTY_INNER_ANGLE;
+    public static final String MODEL_PROPERTY_OUTER_ANGLE;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
@@ -174,7 +189,6 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
-
 
     static {
 
@@ -277,6 +291,11 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_TREE = bundle.getString("ModelFileEditorNodeTree");
         MODEL_FILE_EDITOR_PROPERTIES = bundle.getString("ModelFileEditorProperties");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
+        MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT = bundle.getString("ModelFileEditorNodeAmbientLight");
+        MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT = bundle.getString("ModelFileEditorNodeDirectionLight");
+        MODEL_FILE_EDITOR_NODE_POINT_LIGHT = bundle.getString("ModelFileEditorNodePointLight");
+        MODEL_FILE_EDITOR_NODE_SPOT_LIGHT = bundle.getString("ModelFileEditorNodeSpotLight");
+        MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
@@ -291,6 +310,11 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
+        MODEL_NODE_TREE_ACTION_LIGHT = bundle.getString("ModelNodeTreeActionLight");
+        MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT = bundle.getString("ModelNodeTreeActionAmbientLight");
+        MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT = bundle.getString("ModelNodeTreeActionDirectionLight");
+        MODEL_NODE_TREE_ACTION_POINT_LIGHT = bundle.getString("ModelNodeTreeActionPointLight");
+        MODEL_NODE_TREE_ACTION_SPOT_LIGHT = bundle.getString("ModelNodeTreeActionSpotLight");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -299,6 +323,11 @@ public class Messages {
         MODEL_PROPERTY_SCALE = bundle.getString("ModelPropertyScale");
         MODEL_PROPERTY_ROTATION = bundle.getString("ModelPropertyRotation");
         MODEL_PROPERTY_MATERIAL = bundle.getString("ModelPropertyMaterial");
+        MODEL_PROPERTY_DIRECTION = bundle.getString("ModelPropertyDirection");
+        MODEL_PROPERTY_RADIUS = bundle.getString("ModelPropertyRadius");
+        MODEL_PROPERTY_COLOR = bundle.getString("ModelPropertyColor");
+        MODEL_PROPERTY_INNER_ANGLE = bundle.getString("ModelPropertyInnerAngle");
+        MODEL_PROPERTY_OUTER_ANGLE = bundle.getString("ModelPropertyOuterAngle");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 

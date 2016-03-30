@@ -185,7 +185,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * @return название параметра.
      */
-    private String getPropertyName() {
+    protected String getPropertyName() {
         return propertyName;
     }
 
@@ -208,7 +208,7 @@ public class ModelPropertyControl<D, T> extends VBox {
         final int index = GeomUtils.getIndex(currentModel, editObject);
 
         final ModelPropertyOperation<D, T> operation = new ModelPropertyOperation<>(index, getPropertyName(), newValue, oldValue);
-        operation.setApplyHandler(applyHandler);
+        operation.setApplyHandler(getApplyHandler());
 
         modelChangeConsumer.execute(operation);
     }
@@ -218,6 +218,13 @@ public class ModelPropertyControl<D, T> extends VBox {
      */
     public T getPropertyValue() {
         return propertyValue;
+    }
+
+    /**
+     * @return обработчик приминения изменений.
+     */
+    protected BiConsumer<D, T> getApplyHandler() {
+        return applyHandler;
     }
 
     /**

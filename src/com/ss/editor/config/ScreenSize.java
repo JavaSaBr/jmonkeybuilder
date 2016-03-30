@@ -17,7 +17,6 @@ import static java.lang.Math.max;
  */
 public class ScreenSize {
 
-    public static final int SCREEN_SIZE_MAX_WIDTH = 1920;
     public static final int SCREEN_SIZE_MIN_HEIGHT = 700;
     public static final int SCREEN_SIZE_MIN_WIDTH = 1244;
 
@@ -50,10 +49,6 @@ public class ScreenSize {
             maxHeight = max(mode.getHeight(), maxHeight);
 
             if (mode.getWidth() < SCREEN_SIZE_MIN_WIDTH || mode.getHeight() < SCREEN_SIZE_MIN_HEIGHT) {
-                continue;
-            }
-
-            if (mode.getWidth() > SCREEN_SIZE_MAX_WIDTH) {
                 continue;
             }
 

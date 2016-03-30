@@ -1,10 +1,15 @@
 package com.ss.editor.ui.control.model.tree.node;
 
+import com.jme3.light.LightList;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.AddAmbientLightAction;
+import com.ss.editor.ui.control.model.tree.action.AddDirectionLightAction;
+import com.ss.editor.ui.control.model.tree.action.AddPointLightAction;
+import com.ss.editor.ui.control.model.tree.action.AddSpotLightAction;
 import com.ss.editor.ui.control.model.tree.action.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
 import com.ss.editor.ui.control.model.tree.action.CreateQuadAction;
@@ -44,8 +49,11 @@ public class NodeModelNode extends ModelNode<Node> {
         final Menu createPrimitiveActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
         createPrimitiveActions.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
 
+        final Menu addLightActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT);
+        addLightActions.getItems().addAll(new AddSpotLightAction(nodeTree, this), new AddPointLightAction(nodeTree, this), new AddAmbientLightAction(nodeTree, this), new AddDirectionLightAction(nodeTree, this));
+
         final Menu createActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
-        createActions.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), createPrimitiveActions);
+        createActions.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), createPrimitiveActions, addLightActions);
 
         items.add(toolActions);
         items.add(createActions);
@@ -53,6 +61,11 @@ public class NodeModelNode extends ModelNode<Node> {
         items.add(new RenameNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
+    }
+
+    @Override
+    public String getName() {
+        return getElement().getName();
     }
 
     @Override
@@ -68,6 +81,9 @@ public class NodeModelNode extends ModelNode<Node> {
         final Node element = getElement();
         final List<Spatial> children = element.getChildren();
         children.forEach(spatial -> result.add(ModelNodeFactory.createFor(spatial)));
+
+        final LightList lightList = element.getLocalLightList();
+        lightList.forEach(light -> result.add(ModelNodeFactory.createFor(light)));
 
         return result;
     }

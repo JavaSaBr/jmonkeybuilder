@@ -45,6 +45,13 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * @return название узла.
+     */
+    public String getName() {
+        return "null";
+    }
+
+    /**
      * @return есть ли дочерние элементы.
      */
     public boolean hasChildren() {

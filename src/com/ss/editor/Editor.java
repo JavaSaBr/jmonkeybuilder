@@ -115,7 +115,7 @@ public class Editor extends SimpleApplication {
 
         // выключаем стандартный логгер
         if (!Config.DEV_DEBUG) {
-            java.util.logging.Logger.getLogger("").setLevel(Level.SEVERE);
+            java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
         }
 
         // настраиваем логгер
@@ -296,6 +296,8 @@ public class Editor extends SimpleApplication {
             stateManager.attach(environmentCamera);
         }
 
+        JmeFxContainer.setDebug(Config.DEV_DEBUG_JFX);
+
         fxContainer = JmeFxContainer.install(this, guiNode, cursorDisplayProvider);
         scene = EditorFXSceneBuilder.build(fxContainer);
 
@@ -332,7 +334,7 @@ public class Editor extends SimpleApplication {
         final InputManager inputManager = getInputManager();
         final JmeFxContainer fxContainer = getFxContainer();
 
-        if(fxContainer.isVisibleCursor() != inputManager.isCursorVisible()) {
+        if (fxContainer.isVisibleCursor() != inputManager.isCursorVisible()) {
             fxContainer.setVisibleCursor(inputManager.isCursorVisible());
         }
 
@@ -392,7 +394,7 @@ public class Editor extends SimpleApplication {
         lightProbe = LightProbeFactory.makeProbe(getEnvironmentCamera(), rootNode, EMPTY_JOB_ADAPTER);
 
         final BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
-        bounds.setRadius(100);
+        bounds.setRadius(1000);
 
         rootNode.addLight(lightProbe);
     }

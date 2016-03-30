@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.impl.model;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -25,6 +26,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 
 import java.io.IOException;
@@ -275,10 +277,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         final Spatial model = assetManager.loadAsset(modelKey);
 
+        MaterialUtils.cleanUpMaterialParams(model);
+
         final ModelEditorState editorState = getEditorState();
         editorState.openModel(model);
 
-        applyCustomSky(model);
+        handleObjects(model);
 
         setCurrentModel(model);
         setIgnoreListeners(true);
@@ -298,24 +302,30 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Проверка и обработка наличия кастомного фона.
+     * Проверка и обработка наличия объектов требующий специальной обработки.
      */
-    private void applyCustomSky(final Spatial model) {
+    private void handleObjects(final Spatial model) {
 
         final ModelEditorState editorState = getEditorState();
-        final Array<Geometry> container = ArrayFactory.newArray(Geometry.class);
+        final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
-        NodeUtils.addGeometry(model, container);
+        NodeUtils.addGeometry(model, geometries);
 
-        if (container.isEmpty()) {
-            return;
+        if (!geometries.isEmpty()) {
+            geometries.forEach(geometry -> {
+                if (geometry.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE) {
+                    editorState.addCustomSky(geometry);
+                }
+            });
         }
 
-        container.forEach(geometry -> {
-            if (geometry.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE) {
-                editorState.addCustomSky(geometry);
-            }
-        });
+        final Array<Light> lights = ArrayFactory.newArray(Light.class);
+
+        NodeUtils.addLight(model, lights);
+
+        if (!lights.isEmpty()) {
+            lights.forEach(editorState::addLight);
+        }
     }
 
     @Override
@@ -415,6 +425,16 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
+    public void notifyAddedLight(final Node parent, final Light added) {
+
+        final ModelEditorState editorState = getEditorState();
+        editorState.addLight(added);
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyAdded(parent, added);
+    }
+
+    @Override
     public void notifyRemovedChild(final Node parent, final Spatial removed) {
 
         final ModelEditorState editorState = getEditorState();
@@ -424,6 +444,16 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
             editorState.removeCustomSky(removed);
             editorState.updateLightProbe();
         }
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyRemoved(removed);
+    }
+
+    @Override
+    public void notifyRemovedLight(final Node parent, final Light removed) {
+
+        final ModelEditorState editorState = getEditorState();
+        editorState.removeLight(removed);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(removed);

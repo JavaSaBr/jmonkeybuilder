@@ -20,7 +20,7 @@ public abstract class Config {
     public static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.6.3";
+    public static final String VERSION = "v.0.6.5";
 
     public static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
@@ -35,6 +35,11 @@ public abstract class Config {
     public static final boolean DEV_DEBUG;
 
     /**
+     * Отображать ли дебаг от JFX.
+     */
+    public static final boolean DEV_DEBUG_JFX;
+
+    /**
      * Активация PBR.
      */
     public static final boolean ENABLE_PBR;
@@ -44,6 +49,7 @@ public abstract class Config {
         final VarTable vars = new DocumentConfig(EditorUtil.getInputStream(CONFIG_RESOURCE_PATH)).parse();
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
+        DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
 
         PROJECT_PATH = Util.getRootFolderFromClass(Editor.class).toString();

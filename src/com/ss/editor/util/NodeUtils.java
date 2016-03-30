@@ -1,6 +1,8 @@
 package com.ss.editor.util;
 
 import com.jme3.asset.AssetKey;
+import com.jme3.light.Light;
+import com.jme3.light.LightList;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -117,6 +119,25 @@ public class NodeUtils {
 
         for (final Spatial children : node.getChildren()) {
             addGeometry(children, container);
+        }
+    }
+
+    /**
+     * Сбор всех источников света.
+     */
+    public static void addLight(final Spatial spatial, final Array<Light> container) {
+
+        final LightList lightList = spatial.getLocalLightList();
+        lightList.forEach(container::add);
+
+        if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            addLight(children, container);
         }
     }
 }

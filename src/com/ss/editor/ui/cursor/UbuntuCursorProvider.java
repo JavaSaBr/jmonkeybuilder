@@ -102,8 +102,7 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
 
         final JmeCursor cursor = cache.get(cursorType);
 
-        //FIXME разобраться
-        if (true || cursor == null) {
+        if (cursor == null) {
             return;
         }
 

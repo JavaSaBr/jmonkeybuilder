@@ -17,7 +17,7 @@ import static rlib.geom.util.AngleUtils.degreeToRadians;
 import static rlib.geom.util.AngleUtils.radiansToDegree;
 
 /**
- * Реализация контрола по редактированию вектора.
+ * Реализация контрола по редактированию разворота.
  *
  * @author Ronn
  */

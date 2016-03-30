@@ -278,7 +278,7 @@ public final class EditorConfig implements AssetEventListener {
         settings.setFrequency(displayMode.getRefreshRate());
         settings.setFrameRate(60);
         settings.setGammaCorrection(isGammaCorrection());
-        //settings.setResizable(true);
+        settings.setResizable(true);
         // settings.putBoolean("GraphicsDebug", true);
 
         return settings;
@@ -311,7 +311,7 @@ public final class EditorConfig implements AssetEventListener {
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
 
         final String whitePoint = prefs.get(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, null);
-        final String[] coords = whitePoint == null? null : whitePoint.split(",", 3);
+        final String[] coords = whitePoint == null ? null : whitePoint.split(",", 3);
 
         if (coords != null && coords.length > 2) {
             try {

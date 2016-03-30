@@ -5,8 +5,13 @@ import com.jme3.asset.MaterialKey;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.bounding.BoundingVolume;
+import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
+import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
@@ -85,6 +90,42 @@ public class PropertyBuilder {
         return (MaterialKey) material.getKey();
     };
 
+    public static final BiConsumer<SpotLight, Float> SPOT_LIGHT_INNER_ANGLE_APPLY_HANDLER = (spotLight, value) -> {
+
+        if (value < 0f || value >= FastMath.HALF_PI) {
+            return;
+        }
+
+        spotLight.setSpotInnerAngle(value);
+    };
+
+    public static final BiConsumer<SpotLight, Float> SPOT_LIGHT_OUTER_ANGLE_APPLY_HANDLER = (spotLight, value) -> {
+
+        if (value < 0f || value >= FastMath.HALF_PI) {
+            return;
+        }
+
+        spotLight.setSpotOuterAngle(value);
+    };
+
+    public static final BiConsumer<SpotLight, Float> SPOT_LIGHT_RANGE_APPLY_HANDLER = (spotLight, value) -> {
+
+        if (value < 0f) {
+            return;
+        }
+
+        spotLight.setSpotRange(value);
+    };
+
+    public static final BiConsumer<PointLight, Float> POINT_LIGHT_RADIUS_APPLY_HANDLER = (pointLight, value) -> {
+
+        if (value < 0f) {
+            return;
+        }
+
+        pointLight.setRadius(value);
+    };
+
     /**
      * Построесть список свойств для указанного объекта.
      *
@@ -92,6 +133,108 @@ public class PropertyBuilder {
      * @param container контейнер контролов.
      */
     public static void buildFor(final Object object, final VBox container, final ModelChangeConsumer modelChangeConsumer) {
+
+        if (object instanceof DirectionalLight) {
+
+            final DirectionalLight light = (DirectionalLight) object;
+            final Vector3f direction = light.getDirection().clone();
+
+            final ModelPropertyControl<DirectionalLight, Vector3f> directionControl = new DirectionLightPropertyControl<>(direction, Messages.MODEL_PROPERTY_DIRECTION, modelChangeConsumer);
+            directionControl.setApplyHandler(DirectionalLight::setDirection);
+            directionControl.setSyncHandler(DirectionalLight::getDirection);
+            directionControl.setEditObject(light);
+
+            final Line splitLine = createSplitLine(container);
+
+            FXUtils.addToPane(directionControl, container);
+            FXUtils.addToPane(splitLine, container);
+
+            VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+
+        } else if (object instanceof SpotLight) {
+
+            final SpotLight light = (SpotLight) object;
+            final Vector3f direction = light.getDirection().clone();
+            final Vector3f position = light.getPosition().clone();
+            final float innerAngle = light.getSpotInnerAngle();
+            final float outerAngle = light.getSpotOuterAngle();
+            final float range = light.getSpotRange();
+
+            final ModelPropertyControl<SpotLight, Vector3f> directionControl = new DirectionLightPropertyControl<>(direction, Messages.MODEL_PROPERTY_DIRECTION, modelChangeConsumer);
+            directionControl.setApplyHandler(SpotLight::setDirection);
+            directionControl.setSyncHandler(SpotLight::getDirection);
+            directionControl.setEditObject(light);
+
+            final ModelPropertyControl<SpotLight, Vector3f> positionControl = new PositionLightPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+            positionControl.setApplyHandler(SpotLight::setPosition);
+            positionControl.setSyncHandler(SpotLight::getPosition);
+            positionControl.setEditObject(light);
+
+            final FloatLightPropertyControl<SpotLight> rangeControl = new FloatLightPropertyControl<>(range, Messages.MODEL_PROPERTY_RADIUS, modelChangeConsumer);
+            rangeControl.setApplyHandler(SPOT_LIGHT_RANGE_APPLY_HANDLER);
+            rangeControl.setSyncHandler(SpotLight::getSpotRange);
+            rangeControl.setScrollIncrement(10F);
+            rangeControl.setEditObject(light);
+
+            final ModelPropertyControl<SpotLight, Float> innerAngleControl = new FloatLightPropertyControl<>(innerAngle, Messages.MODEL_PROPERTY_INNER_ANGLE, modelChangeConsumer);
+            innerAngleControl.setApplyHandler(SPOT_LIGHT_INNER_ANGLE_APPLY_HANDLER);
+            innerAngleControl.setSyncHandler(SpotLight::getSpotInnerAngle);
+            innerAngleControl.setEditObject(light);
+
+            final ModelPropertyControl<SpotLight, Float> outerAngleControl = new FloatLightPropertyControl<>(outerAngle, Messages.MODEL_PROPERTY_OUTER_ANGLE, modelChangeConsumer);
+            outerAngleControl.setApplyHandler(SPOT_LIGHT_OUTER_ANGLE_APPLY_HANDLER);
+            outerAngleControl.setSyncHandler(SpotLight::getSpotOuterAngle);
+            outerAngleControl.setEditObject(light);
+
+            final Line splitLine = createSplitLine(container);
+
+            FXUtils.addToPane(directionControl, container);
+            FXUtils.addToPane(positionControl, container);
+            FXUtils.addToPane(splitLine, container);
+            FXUtils.addToPane(rangeControl, container);
+            FXUtils.addToPane(innerAngleControl, container);
+            FXUtils.addToPane(outerAngleControl, container);
+
+            VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+
+        } else if (object instanceof PointLight) {
+
+            final PointLight light = (PointLight) object;
+            final Vector3f position = light.getPosition().clone();
+            final float radius = light.getRadius();
+
+            final ModelPropertyControl<PointLight, Vector3f> positionControl = new PositionLightPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+            positionControl.setApplyHandler(PointLight::setPosition);
+            positionControl.setSyncHandler(PointLight::getPosition);
+            positionControl.setEditObject(light);
+
+            final FloatLightPropertyControl<PointLight> radiusControl = new FloatLightPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, modelChangeConsumer);
+            radiusControl.setApplyHandler(POINT_LIGHT_RADIUS_APPLY_HANDLER);
+            radiusControl.setSyncHandler(PointLight::getRadius);
+            radiusControl.setEditObject(light);
+            radiusControl.setScrollIncrement(10F);
+
+            final Line splitLine = createSplitLine(container);
+
+            FXUtils.addToPane(positionControl, container);
+            FXUtils.addToPane(splitLine, container);
+            FXUtils.addToPane(radiusControl, container);
+
+            VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        }
+
+        if (object instanceof Light) {
+
+            final Light light = (Light) object;
+            final ColorRGBA color = light.getColor();
+
+            final ModelPropertyControl<Light, ColorRGBA> radiusControl = new ColorLightPropertyControl<>(color, Messages.MODEL_PROPERTY_COLOR, modelChangeConsumer);
+            radiusControl.setApplyHandler(Light::setColor);
+            radiusControl.setSyncHandler(Light::getColor);
+            radiusControl.setEditObject(light);
+
+            FXUtils.addToPane(radiusControl, container);
+        }
 
         if (object instanceof Mesh) {
             //TODO
