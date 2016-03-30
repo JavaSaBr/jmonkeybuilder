@@ -1,8 +1,15 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.6.2 #
+# jMonkeyEngine 3 SpaceShift Editor 0.6.5 #
 
-* Download: https://www.dropbox.com/sh/o7202c22pfyrhpv/AAC8eN57tkydThLRMxmnYXP9a?dl=0
+* Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+
+## ver. 0.6.5 ##
+* -Fixed the problems with sticking cursor while rotating camera of editor.
+* -Fixed the crash when loading model with bad material. 
+* -Fixed the using custom cursors on LWJGL3.
+* -Added beta support of resizing window.
+* -Added the functionality for works with a light in Model Editor. 
 
 ## ver. 0.6.2 ##
 * -Fixed the problems with mouse events. 
