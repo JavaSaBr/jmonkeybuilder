@@ -11,6 +11,7 @@ import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
+import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
@@ -236,6 +237,8 @@ public class Editor extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
+        renderManager.setSinglePassLightBatchSize(5);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OperatingSystem system = new OperatingSystem();
@@ -292,7 +295,7 @@ public class Editor extends SimpleApplication {
         InitializeManager.initialize();
 
         if (Config.ENABLE_PBR) {
-            environmentCamera = new EnvironmentCamera(64, new Vector3f(0, 0, 0));
+            environmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
             stateManager.attach(environmentCamera);
         }
 
@@ -394,7 +397,7 @@ public class Editor extends SimpleApplication {
         lightProbe = LightProbeFactory.makeProbe(getEnvironmentCamera(), rootNode, EMPTY_JOB_ADAPTER);
 
         final BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
-        bounds.setRadius(1000);
+        bounds.setRadius(100);
 
         rootNode.addLight(lightProbe);
     }

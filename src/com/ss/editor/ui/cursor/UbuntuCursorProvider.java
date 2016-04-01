@@ -3,6 +3,7 @@ package com.ss.editor.ui.cursor;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.plugins.ClasspathLocator;
+import com.jme3.cursors.plugins.CursorKey;
 import com.jme3.cursors.plugins.JmeCursor;
 import com.jme3.input.InputManager;
 import com.jme3x.jfx.cursor.CursorDisplayProvider;
@@ -82,8 +83,11 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
             return;
         }
 
+        final CursorKey cursorKey = new CursorKey(path);
+        cursorKey.setFlipY(false);
+
         final AssetManager assetManager = getAssetManager();
-        final JmeCursor cursor = (JmeCursor) assetManager.loadAsset(path);
+        final JmeCursor cursor = assetManager.loadAsset(cursorKey);
 
         cache.put(cursorType, cursor);
     }
