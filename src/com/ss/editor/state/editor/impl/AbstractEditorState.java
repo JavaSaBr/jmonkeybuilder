@@ -494,7 +494,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
 
         if (editorCamera != null && lightForCamera != null && needUpdateCameraLight()) {
             final Camera camera = EDITOR.getCamera();
-            lightForCamera.setDirection(camera.getDirection());
+            lightForCamera.setDirection(camera.getDirection().normalize());
         }
     }
 
