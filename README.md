@@ -5,9 +5,9 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
 
 ## ver. 0.6.6 ##
--Changed the size of batch of light pass to 5.
--Updated the JME to 3.1.alpha4.
--Applyed the last fix for PBR.
+* -Changed the size of batch of light pass to 5.
+* -Updated the JME to 3.1.alpha4.
+* -Applyed the last fix for PBR.
 
 ## ver. 0.6.5 ##
 * -Fixed the problems with sticking cursor while rotating camera of editor.
