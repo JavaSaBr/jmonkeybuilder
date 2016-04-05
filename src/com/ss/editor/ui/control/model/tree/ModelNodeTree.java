@@ -202,6 +202,21 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
+     * Обновить узел.
+     */
+    public void update(final ModelNode<?> modelNode) {
+
+        final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
+
+        if (treeItem == null) {
+            return;
+        }
+
+        treeItem.setValue(null);
+        treeItem.setValue(modelNode);
+    }
+
+    /**
      * Получение контекстного меню для этого элемента.
      */
     public ContextMenu getContextMenu(final ModelNode<?> modelNode) {

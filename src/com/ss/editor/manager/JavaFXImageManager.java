@@ -2,6 +2,7 @@ package com.ss.editor.manager;
 
 import com.ss.editor.FileExtensions;
 import com.ss.editor.config.Config;
+import com.ss.editor.file.reader.TGAReader;
 import com.ss.editor.ui.Icons;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiReader;
@@ -22,6 +23,7 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
+import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -107,9 +109,12 @@ public class JavaFXImageManager {
             return Icons.IMAGE_512;
         }
 
+        final String absolutePath = file.toAbsolutePath().toString();
+        final String fileHash = StringUtils.passwordToHash(absolutePath) + ".png";
+
         final Path cacheFolder = getCacheFolder();
         final Path imageFolder = cacheFolder.resolve(String.valueOf(width)).resolve(String.valueOf(height));
-        final Path cacheFile = imageFolder.resolve(file.subpath(1, file.getNameCount()));
+        final Path cacheFile = imageFolder.resolve(fileHash);
 
         if (Files.exists(cacheFile)) {
 
@@ -150,6 +155,42 @@ public class JavaFXImageManager {
 
             return image;
 
+        } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
+
+            try {
+
+                final byte[] content = FileUtils.getContent(file);
+
+                if (content == null) {
+                    return Icons.IMAGE_512;
+                }
+
+                final java.awt.Image awtImage = TGAReader.getImage(content);
+
+                if (awtImage == null) {
+                    return Icons.IMAGE_512;
+                }
+
+                final java.awt.Image newImage = awtImage.getScaledInstance(width, height, java.awt.Image.SCALE_FAST);
+                final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+                final Graphics2D g2d = bufferedImage.createGraphics();
+                g2d.drawImage(newImage, 0, 0, null);
+                g2d.dispose();
+
+                Image javaFXImage;
+
+                try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+                    ImageIO.write(bufferedImage, "png", out);
+                    javaFXImage = new Image(cacheFile.toUri().toString());
+                }
+
+                return javaFXImage;
+
+            } catch (final IOException e) {
+                LOGGER.warning("can't read " + file);
+            }
+
         } else if (!JIMI_FORMATS.contains(extension)) {
             return Icons.IMAGE_512;
         }
@@ -157,7 +198,6 @@ public class JavaFXImageManager {
         try {
 
             final JimiReader reader = Jimi.createJimiReader(file.toString());
-
             final java.awt.Image awtImage = reader.getImage();
 
             if (awtImage == null) {

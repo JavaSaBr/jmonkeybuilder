@@ -8,7 +8,6 @@ import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
@@ -60,7 +59,6 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
     /**

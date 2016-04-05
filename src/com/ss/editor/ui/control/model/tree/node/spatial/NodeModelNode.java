@@ -1,6 +1,5 @@
-package com.ss.editor.ui.control.model.tree.node;
+package com.ss.editor.ui.control.model.tree.node.spatial;
 
-import com.jme3.light.LightList;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
@@ -17,7 +16,8 @@ import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSphereAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
-import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
+import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.util.GeomUtils;
 
 import java.util.List;
@@ -34,7 +34,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class NodeModelNode extends ModelNode<Node> {
+public class NodeModelNode extends SpatialModelNode<Node> {
 
     public NodeModelNode(final Node element, final long objectId) {
         super(element, objectId);
@@ -58,14 +58,8 @@ public class NodeModelNode extends ModelNode<Node> {
         items.add(toolActions);
         items.add(createActions);
         items.add(new LoadModelAction(nodeTree, this));
-        items.add(new RenameNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
-    }
-
-    @Override
-    public String getName() {
-        return getElement().getName();
     }
 
     @Override
@@ -82,8 +76,7 @@ public class NodeModelNode extends ModelNode<Node> {
         final List<Spatial> children = element.getChildren();
         children.forEach(spatial -> result.add(ModelNodeFactory.createFor(spatial)));
 
-        final LightList lightList = element.getLocalLightList();
-        lightList.forEach(light -> result.add(ModelNodeFactory.createFor(light)));
+        result.addAll(super.getChildren());
 
         return result;
     }
@@ -101,16 +94,26 @@ public class NodeModelNode extends ModelNode<Node> {
 
     @Override
     public void add(final ModelNode<?> child) {
-        final Spatial element = (Spatial) child.getElement();
+        super.add(child);
+
         final Node node = getElement();
-        node.attachChildAt(element, 0);
+
+        if (child instanceof SpatialModelNode) {
+            final Spatial element = (Spatial) child.getElement();
+            node.attachChildAt(element, 0);
+        }
     }
 
     @Override
     public void remove(final ModelNode<?> child) {
-        final Spatial element = (Spatial) child.getElement();
+        super.remove(child);
+
         final Node node = getElement();
-        node.detachChild(element);
+
+        if (child instanceof SpatialModelNode) {
+            final Spatial element = (Spatial) child.getElement();
+            node.detachChild(element);
+        }
     }
 
     @Override

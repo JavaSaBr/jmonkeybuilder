@@ -238,9 +238,7 @@ public class PropertyBuilder {
 
         if (object instanceof Mesh) {
             //TODO
-        }
-
-        if (object instanceof Geometry) {
+        } else if (object instanceof Geometry) {
 
             final Geometry geometry = (Geometry) object;
             final Material material = geometry.getMaterial();
@@ -264,9 +262,7 @@ public class PropertyBuilder {
             FXUtils.addToPane(splitLine, container);
 
             VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
-        }
-
-        if (object instanceof Node) {
+        } else if (object instanceof Node) {
             //TODO
         }
 

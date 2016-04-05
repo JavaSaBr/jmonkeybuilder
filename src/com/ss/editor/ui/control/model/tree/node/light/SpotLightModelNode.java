@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
  */
 public class SpotLightModelNode extends LightModelNode<SpotLight> {
 
-    public SpotLightModelNode(SpotLight element, long objectId) {
+    public SpotLightModelNode(final SpotLight element, final long objectId) {
         super(element, objectId);
     }
 

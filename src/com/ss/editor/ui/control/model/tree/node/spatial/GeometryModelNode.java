@@ -1,12 +1,14 @@
-package com.ss.editor.ui.control.model.tree.node;
+package com.ss.editor.ui.control.model.tree.node.spatial;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
+import com.ss.editor.ui.control.model.tree.node.MeshModelNode;
+import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
@@ -20,7 +22,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class GeometryModelNode extends ModelNode<Geometry> {
+public class GeometryModelNode extends SpatialModelNode<Geometry> {
 
     public GeometryModelNode(final Geometry element, final long objectId) {
         super(element, objectId);
@@ -32,28 +34,18 @@ public class GeometryModelNode extends ModelNode<Geometry> {
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return getElement().getName();
-    }
-
-    @Override
     public Array<ModelNode<?>> getChildren() {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
 
-        final Geometry element = getElement();
-        final Mesh mesh = element.getMesh();
+        final Geometry geometry = getElement();
+        final Mesh mesh = geometry.getMesh();
 
-        if (mesh == null) {
-            return result;
+        if (mesh != null) {
+            result.add(ModelNodeFactory.createFor(mesh));
         }
 
-        result.add(ModelNodeFactory.createFor(mesh));
+        result.addAll(super.getChildren());
 
         return result;
     }
@@ -65,7 +57,6 @@ public class GeometryModelNode extends ModelNode<Geometry> {
         toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this));
 
         items.add(toolActions);
-        items.add(new RenameNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
     }
@@ -85,16 +76,24 @@ public class GeometryModelNode extends ModelNode<Geometry> {
 
     @Override
     public void add(final ModelNode<?> child) {
+        super.add(child);
 
         final Geometry geometry = getElement();
-        final Mesh element = (Mesh) child.getElement();
 
-        geometry.setMesh(element);
+        if (child instanceof MeshModelNode) {
+            final Mesh element = (Mesh) child.getElement();
+            geometry.setMesh(element);
+        }
     }
 
     @Override
     public void remove(final ModelNode<?> child) {
+        super.remove(child);
+
         final Geometry geometry = getElement();
-        geometry.setMesh(null);
+
+        if (child instanceof MeshModelNode && child.getElement() == geometry.getMesh()) {
+            geometry.setMesh(null);
+        }
     }
 }

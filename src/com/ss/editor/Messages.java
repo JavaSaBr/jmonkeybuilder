@@ -107,6 +107,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_POINT_LIGHT;
     public static final String MODEL_FILE_EDITOR_NODE_SPOT_LIGHT;
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
+    public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -126,6 +127,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_POINT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_SPOT_LIGHT;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -296,6 +298,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_POINT_LIGHT = bundle.getString("ModelFileEditorNodePointLight");
         MODEL_FILE_EDITOR_NODE_SPOT_LIGHT = bundle.getString("ModelFileEditorNodeSpotLight");
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
+        MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
@@ -315,6 +318,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT = bundle.getString("ModelNodeTreeActionDirectionLight");
         MODEL_NODE_TREE_ACTION_POINT_LIGHT = bundle.getString("ModelNodeTreeActionPointLight");
         MODEL_NODE_TREE_ACTION_SPOT_LIGHT = bundle.getString("ModelNodeTreeActionSpotLight");
+        MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

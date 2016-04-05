@@ -1,12 +1,9 @@
 package com.ss.editor.ui.control.model.tree;
 
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
-import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -22,7 +19,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -63,20 +59,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
                 return item;
             }
 
-            final Object element = item.getElement();
-
-            if (element == null) {
-                return item;
-            }
-
-            final Spatial spatial = (Spatial) element;
-
-            final ModelNodeTree nodeTree = getNodeTree();
-            final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-
-            final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), spatial);
-
-            modelChangeConsumer.execute(new RenameNodeOperation(spatial.getName(), string, index));
+            item.changeName(getNodeTree(), string);
 
             return item;
         }
@@ -142,18 +125,10 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
             return;
         }
 
-        final Object element = item.getElement();
-        final Image icon = item.getIcon();
+        imageView.setImage(item.getIcon());
 
-        if (element instanceof Spatial) {
-            setText(((Spatial) element).getName());
-        } else if (element instanceof Mesh) {
-            setText(Messages.MODEL_FILE_EDITOR_NODE_MESH);
-        }
-
-        setEditable(element instanceof Spatial);
-
-        imageView.setImage(icon);
+        setText(item.getName());
+        setEditable(item.canEditName());
         setGraphic(imageView);
     }
 

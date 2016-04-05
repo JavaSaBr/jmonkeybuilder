@@ -34,7 +34,14 @@ public class OptimizeGeometryAction extends AbstractNodeAction {
 
         final ModelNode<?> node = getNode();
         final Node oldElement = (Node) node.getElement();
-        final Node newElement = (Node) oldElement.deepClone();
+
+        //FIXME потом надо убрать, как с клонированием разберусь
+        final Node parent = oldElement.getParent();
+        oldElement.removeFromParent();
+
+        final Node newElement = (Node) oldElement.clone();
+
+        parent.attachChild(oldElement);
 
         GeometryBatchFactory.optimize(newElement);
 

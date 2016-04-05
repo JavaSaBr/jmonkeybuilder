@@ -94,9 +94,9 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
         this.testQuad.setLocalTranslation(QUAD_OFFSET);
         this.lightEnabled = true;
 
-        TangentGenerator.useStandardGenerator(testBox, false);
-        TangentGenerator.useStandardGenerator(testSphere, false);
-        TangentGenerator.useStandardGenerator(testQuad, false);
+        TangentGenerator.useMikktspaceGenerator(testBox);
+        TangentGenerator.useMikktspaceGenerator(testSphere);
+        TangentGenerator.useMikktspaceGenerator(testQuad);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr", SkyFactory.EnvMapType.EquirectMap);

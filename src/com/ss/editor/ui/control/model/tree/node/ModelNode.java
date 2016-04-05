@@ -1,17 +1,14 @@
 package com.ss.editor.ui.control.model.tree.node;
 
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
-import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * Базовая реализация узла модели в дереве.
@@ -19,6 +16,8 @@ import rlib.util.array.Array;
  * @author Ronn
  */
 public abstract class ModelNode<T> implements UObject {
+
+    private static final Array<ModelNode<?>> EMPTY_ARRAY = ArrayFactory.newArray(ModelNode.class);
 
     protected static final Editor EDITOR = Editor.getInstance();
 
@@ -62,7 +61,7 @@ public abstract class ModelNode<T> implements UObject {
      * @return список дочерних элементов.
      */
     public Array<ModelNode<?>> getChildren() {
-        return null;
+        return EMPTY_ARRAY;
     }
 
     /**
@@ -77,17 +76,6 @@ public abstract class ModelNode<T> implements UObject {
      */
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
 
-        final T element = getElement();
-
-        Node parent = null;
-
-        if (element instanceof Spatial) {
-            parent = ((Spatial) element).getParent();
-        }
-
-        if (parent != null && parent.getUserData(ModelEditorState.class.getName()) != Boolean.TRUE) {
-            items.add(new RemoveNodeAction(nodeTree, this));
-        }
     }
 
     /**
@@ -101,6 +89,13 @@ public abstract class ModelNode<T> implements UObject {
      * Добавление дочернего элемента.
      */
     public void add(final ModelNode<?> child) {
+
+    }
+
+    /**
+     * Обработка изменения имени узла.
+     */
+    public void changeName(final ModelNodeTree nodeTree, final String newName) {
 
     }
 
@@ -122,6 +117,13 @@ public abstract class ModelNode<T> implements UObject {
      * @return можно ли копировать элемент.
      */
     public boolean canCopy() {
+        return false;
+    }
+
+    /**
+     * @return можно ли редактировать имя.
+     */
+    public boolean canEditName() {
         return false;
     }
 

@@ -24,6 +24,11 @@ public interface Icons {
     public static final Image LAMP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/lamp.png");
     public static final Image POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
     public static final Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
+    public static final Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/play.png");
+    public static final Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/stop.png");
+    public static final Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/animation.png");
+    public static final Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim_channel.png");
+    public static final Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
 
     public static final Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png");
     public static final Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png");
