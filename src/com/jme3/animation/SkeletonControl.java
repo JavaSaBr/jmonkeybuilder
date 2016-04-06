@@ -164,7 +164,12 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
             }
         }
 
-        switchToHardware();
+        try {
+            switchToHardware();
+        } catch (final Exception e) {
+            Logger.getLogger(SkeletonControl.class.getName()).log(Level.WARNING, "Could not enable HW skinning due to shader compile error:", e);
+            return false;
+        }
 
         try {
             rm.preloadScene(spatial);
