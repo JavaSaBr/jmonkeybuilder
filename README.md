@@ -4,6 +4,11 @@
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
 
+## ver. 0.6.7 ##
+* -Fixed the preview of TGA textures.
+* -Changed the cache of preview of texture.
+* -Added the player of animation in the ModelEditor.
+
 ## ver. 0.6.6 ##
 * -Changed the size of batch of light pass to 5.
 * -Updated the JME to 3.1.alpha4.
