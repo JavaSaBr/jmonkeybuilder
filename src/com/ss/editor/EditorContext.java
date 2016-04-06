@@ -24,6 +24,16 @@ public final class EditorContext extends LwjglDisplay {
     @Override
     public void create(final boolean waitFor) {
 
+        if ("LWJGL".equals(settings.getAudioRenderer())) {
+            NativeLibraryLoader.loadNativeLibrary("openal-lwjgl3", true);
+        }
+
+        NativeLibraryLoader.loadNativeLibrary("lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("glfw-lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("jemalloc-lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("jinput", true);
+        NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
+
         if (created.get()) {
             return;
         }
@@ -49,20 +59,5 @@ public final class EditorContext extends LwjglDisplay {
     protected void initContextFirstTime() {
         settings.setRenderer(AppSettings.LWJGL_OPENGL3);
         super.initContextFirstTime();
-    }
-
-    @Override
-    protected void loadNatives() {
-        super.loadNatives();
-
-        if ("LWJGL".equals(settings.getAudioRenderer())) {
-            NativeLibraryLoader.loadNativeLibrary("openal-lwjgl3", true);
-        }
-
-        NativeLibraryLoader.loadNativeLibrary("lwjgl3", true);
-        NativeLibraryLoader.loadNativeLibrary("glfw-lwjgl3", true);
-        NativeLibraryLoader.loadNativeLibrary("jemalloc-lwjgl3", true);
-        NativeLibraryLoader.loadNativeLibrary("jinput", true);
-        NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
     }
 }
