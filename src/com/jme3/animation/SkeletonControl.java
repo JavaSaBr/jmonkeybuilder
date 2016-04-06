@@ -53,6 +53,8 @@ import com.jme3.scene.control.Control;
 import com.jme3.shader.VarType;
 import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
+import com.jme3.util.clone.Cloner;
+import com.jme3.util.clone.JmeCloneable;
 
 import java.io.IOException;
 import java.nio.Buffer;
@@ -69,7 +71,7 @@ import java.util.logging.Logger;
  *
  * @author Rémy Bouquet Based on AnimControl by Kirill Vainer
  */
-public class SkeletonControl extends AbstractControl implements Cloneable {
+public class SkeletonControl extends AbstractControl implements Cloneable, JmeCloneable {
 
     /**
      * The skeleton of the model.
@@ -162,12 +164,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable {
             }
         }
 
-        try {
-            switchToHardware();
-        } catch (final Exception e) {
-            Logger.getLogger(SkeletonControl.class.getName()).log(Level.WARNING, "Could not enable HW skinning due to error:", e);
-            return false;
-        }
+        switchToHardware();
 
         try {
             rm.preloadScene(spatial);
@@ -211,6 +208,9 @@ public class SkeletonControl extends AbstractControl implements Cloneable {
      * @param skeleton the skeleton
      */
     public SkeletonControl(Skeleton skeleton) {
+        if (skeleton == null) {
+            throw new IllegalArgumentException("skeleton cannot be null");
+        }
         this.skeleton = skeleton;
     }
 
@@ -393,6 +393,45 @@ public class SkeletonControl extends AbstractControl implements Cloneable {
         }
 
         return clone;
+    }
+
+    @Override
+    public Object jmeClone() {
+        return super.jmeClone();
+    }
+
+    @Override
+    public void cloneFields(Cloner cloner, Object original) {
+        super.cloneFields(cloner, original);
+
+        this.skeleton = cloner.clone(skeleton);
+
+        // If the targets were cloned then this will clone them.  If the targets
+        // were shared then this will share them.
+        this.targets = cloner.clone(targets);
+
+        // Not automatic set cloning yet
+        Set<Material> newMaterials = new HashSet<Material>();
+        for (Material m : this.materials) {
+            Material mClone = cloner.clone(m);
+            newMaterials.add(mClone);
+            if (mClone != m) {
+                // Material was really cloned so clear the bone matrices in case
+                // this is hardware skinned.  This allows a local version to be
+                // used and will be reset on the material.  Really this just avoids
+                // the 'safety' check in controlRenderHardware().  Right now material
+                // doesn't clone itself with the cloner (and doesn't clone its parameters)
+                // else this would be unnecessary.
+                MatParam boneMatrices = mClone.getParam("BoneMatrices");
+
+                // ...because for some strange reason you can't clear a non-existant 
+                // parameter.
+                if (boneMatrices != null) {
+                    mClone.clearParam("BoneMatrices");
+                }
+            }
+        }
+        this.materials = newMaterials;
     }
 
     /**

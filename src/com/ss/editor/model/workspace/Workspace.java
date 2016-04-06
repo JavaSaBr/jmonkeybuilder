@@ -1,6 +1,7 @@
 package com.ss.editor.model.workspace;
 
 import com.ss.editor.manager.WorkspaceManager;
+import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.EditorUtil;
@@ -44,9 +45,94 @@ public class Workspace implements Serializable {
      */
     private Map<String, String> openedFiles;
 
+    /**
+     * Таблица состояний редакторов в воркспейсе.
+     */
+    private Map<String, EditorState> editorStateMap;
+
+    /**
+     * Текущий редактируемый файл.
+     */
+    private String currentEditFile;
+
     public Workspace() {
         this.changes = new AtomicInteger();
         this.openedFiles = new HashMap<>();
+    }
+
+    /**
+     * @return текущий редактируемый файл.
+     */
+    public String getCurrentEditFile() {
+        return currentEditFile;
+    }
+
+    /**
+     * Обновление текущего редактируемого файла.
+     *
+     * @param file текущий редактируемый файл.
+     */
+    public synchronized void updateCurrentEditFile(final Path file) {
+
+        if (file == null) {
+            this.currentEditFile = null;
+            return;
+        }
+
+        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+
+        this.currentEditFile = assetPath;
+    }
+
+    /**
+     * @return таблица состояний редакторов в воркспейсе.
+     */
+    private Map<String, EditorState> getEditorStateMap() {
+        return editorStateMap;
+    }
+
+    /**
+     * Получение состояния редактора для указанного файла.
+     *
+     * @param file редактируемый файл.
+     * @return состояние редактора.
+     */
+    public synchronized EditorState getEditorState(final Path file) {
+
+        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+
+        final Map<String, EditorState> editorStateMap = getEditorStateMap();
+        return editorStateMap.get(assetPath);
+    }
+
+    /**
+     * Обновление состояния редактора.
+     */
+    public synchronized void updateEditorState(final Path file, final EditorState editorState) {
+
+        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+
+        final Map<String, EditorState> editorStateMap = getEditorStateMap();
+        editorStateMap.put(assetPath, editorState);
+
+        incrementChanges();
+    }
+
+    /**
+     * Удаление состояния редактора.
+     */
+    public synchronized void removeEditorState(final Path file, final EditorState editorState) {
+
+        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+
+        final Map<String, EditorState> editorStateMap = getEditorStateMap();
+        editorStateMap.remove(assetPath);
+
+        incrementChanges();
     }
 
     /**
@@ -71,7 +157,7 @@ public class Workspace implements Serializable {
      */
     public synchronized void addOpenedFile(final Path file, final FileEditor fileEditor) {
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final EditorDescription description = fileEditor.getDescription();
@@ -87,7 +173,7 @@ public class Workspace implements Serializable {
      */
     public synchronized void removeOpenedFile(final Path file) {
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final Map<String, String> openedFiles = getOpenedFiles();

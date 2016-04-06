@@ -89,7 +89,12 @@ public class WorkspaceManager {
             return workspace;
         }
 
-        final Workspace workspace = EditorUtil.deserialize(FileUtils.getContent(workspaceFile));
+        Workspace workspace = EditorUtil.deserialize(FileUtils.getContent(workspaceFile));
+
+        if (workspace == null) {
+            workspace = new Workspace();
+        }
+
         workspace.setAssetFolder(assetFolder);
 
         workspaces.put(assetFolder, workspace);

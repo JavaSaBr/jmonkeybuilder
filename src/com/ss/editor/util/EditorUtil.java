@@ -162,6 +162,17 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Получение пути к указанному ресурсу относительно указанного Asset.
+     *
+     * @param assetFolder указанная папка Asset.
+     * @param file        интересуемый файл.
+     * @return относительный путь к файлу.
+     */
+    public static Path getAssetFile(final Path assetFolder, final Path file) {
+        return assetFolder.relativize(file);
+    }
+
+    /**
      * Получение пути к указанному ресурсу относительно текущего Asset.
      *
      * @param file интересуемый файл.

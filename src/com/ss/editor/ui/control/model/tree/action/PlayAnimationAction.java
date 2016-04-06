@@ -40,6 +40,10 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
         final Animation element = modelNode.getElement();
         final AnimControl control = modelNode.getControl();
 
+        if (control.getNumChannels() > 0) {
+            return;
+        }
+
         modelNode.setChannel(control.getNumChannels());
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
@@ -69,7 +73,7 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
         modelNode.setChannel(-1);
 
         EXECUTOR_MANAGER.addFXTask(() -> getNodeTree().update(modelNode));
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> control.removeListener(this));
+        EXECUTOR_MANAGER.addEditorThreadTask(control::clearChannels);
     }
 
     @Override

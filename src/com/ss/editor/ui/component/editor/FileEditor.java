@@ -84,4 +84,18 @@ public interface FileEditor {
      * @return описание редактора.
      */
     public EditorDescription getDescription();
+
+    /**
+     * Уведомление о том, что этот редактор отобразили.
+     */
+    public default void notifyShowed() {
+
+    }
+
+    /**
+     * Уведомление об скрытии редактора.
+     */
+    public default void notifyHided() {
+
+    }
 }

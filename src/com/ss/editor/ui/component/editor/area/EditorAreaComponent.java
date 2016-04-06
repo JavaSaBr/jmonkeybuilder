@@ -40,6 +40,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
@@ -85,6 +86,27 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            Path newCurrentFile = null;
+
+            if (newValue != null) {
+
+                final ObservableMap<Object, Object> properties = newValue.getProperties();
+                final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+                fileEditor.notifyShowed();
+
+                newCurrentFile = fileEditor.getEditFile();
+            }
+
+            if (oldValue != null) {
+                final ObservableMap<Object, Object> properties = oldValue.getProperties();
+                final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+                fileEditor.notifyHided();
+            }
+
+            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+            workspace.updateCurrentEditFile(newCurrentFile);
+
             EXECUTOR_MANAGER.addEditorThreadTask(() -> processShowEditor(oldValue, newValue));
         });
 
@@ -394,6 +416,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
 
         final Path assetFolder = workspace.getAssetFolder();
+        final String editFile = workspace.getCurrentEditFile();
 
         final Map<String, String> openedFiles = workspace.getOpenedFiles();
         openedFiles.forEach((assetPath, editorId) -> {
@@ -413,7 +436,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
             event.setFile(file);
             event.setDescription(description);
-            event.setNeedShow(false);
+            event.setNeedShow(StringUtils.equals(assetPath, editFile));
 
             processOpenFile(event);
         });
