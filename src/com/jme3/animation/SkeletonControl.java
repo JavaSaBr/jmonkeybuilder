@@ -31,10 +31,7 @@
  */
 package com.jme3.animation;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
+import com.jme3.export.*;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.math.FastMath;
@@ -42,11 +39,7 @@ import com.jme3.math.Matrix4f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.*;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
@@ -55,19 +48,20 @@ import com.jme3.util.SafeArrayList;
 import com.jme3.util.TempVars;
 import com.jme3.util.clone.Cloner;
 import com.jme3.util.clone.JmeCloneable;
-
 import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The Skeleton control deforms a model according to a skeleton, It handles the computation of the
- * deformation matrices and performs the transformations on the mesh
+ * The Skeleton control deforms a model according to a skeleton, It handles the
+ * computation of the deformation matrices and performs the transformations on
+ * the mesh
  *
  * @author Rémy Bouquet Based on AnimControl by Kirill Vainer
  */
@@ -82,8 +76,8 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
      */
     private SafeArrayList<Mesh> targets = new SafeArrayList<Mesh>(Mesh.class);
     /**
-     * Used to track when a mesh was updated. Meshes are only updated if they are visible in at
-     * least one camera.
+     * Used to track when a mesh was updated. Meshes are only updated if they
+     * are visible in at least one camera.
      */
     private boolean wasMeshUpdated = false;
 
@@ -98,14 +92,14 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     private transient boolean hwSkinningEnabled = false;
 
     /**
-     * Hardware skinning was tested on this GPU, results are stored in {@link #hwSkinningSupported}
-     * variable.
+     * Hardware skinning was tested on this GPU, results
+     * are stored in {@link #hwSkinningSupported} variable.
      */
     private transient boolean hwSkinningTested = false;
 
     /**
-     * If hardware skinning was {@link #hwSkinningTested tested}, then this variable will be set to
-     * true if supported, and false if otherwise.
+     * If hardware skinning was {@link #hwSkinningTested tested}, then
+     * this variable will be set to true if supported, and false if otherwise.
      */
     private transient boolean hwSkinningSupported = false;
 
@@ -181,8 +175,9 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * Specifies if hardware skinning is preferred. If it is preferred and supported by GPU, it
-     * shall be enabled, if its not preferred, or not supported by GPU, then it shall be disabled.
+     * Specifies if hardware skinning is preferred. If it is preferred and
+     * supported by GPU, it shall be enabled, if its not preferred, or not
+     * supported by GPU, then it shall be disabled.
      *
      * @see #isHardwareSkinningUsed()
      */
@@ -191,8 +186,9 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * @return True if hardware skinning is preferable to software skinning. Set to false by
-     * default.
+     * @return True if hardware skinning is preferable to software skinning.
+     * Set to false by default.
+     *
      * @see #setHardwareSkinningPreferred(boolean)
      */
     public boolean isHardwareSkinningPreferred() {
@@ -207,8 +203,8 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * Creates a skeleton control. The list of targets will be acquired automatically when the
-     * control is attached to a node.
+     * Creates a skeleton control. The list of targets will be acquired
+     * automatically when the control is attached to a node.
      *
      * @param skeleton the skeleton
      */
@@ -406,7 +402,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     @Override
-    public void cloneFields(Cloner cloner, Object original) {
+    public void cloneFields( Cloner cloner, Object original ) {
         super.cloneFields(cloner, original);
 
         this.skeleton = cloner.clone(skeleton);
@@ -417,10 +413,10 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
 
         // Not automatic set cloning yet
         Set<Material> newMaterials = new HashSet<Material>();
-        for (Material m : this.materials) {
+        for( Material m : this.materials ) {
             Material mClone = cloner.clone(m);
             newMaterials.add(mClone);
-            if (mClone != m) {
+            if( mClone != m ) {
                 // Material was really cloned so clear the bone matrices in case
                 // this is hardware skinned.  This allows a local version to be
                 // used and will be reset on the material.  Really this just avoids
@@ -431,7 +427,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
 
                 // ...because for some strange reason you can't clear a non-existant 
                 // parameter.
-                if (boneMatrices != null) {
+                if( boneMatrices != null ) {
                     mClone.clearParam("BoneMatrices");
                 }
             }
@@ -440,6 +436,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
+     *
      * @param boneName the name of the bone
      * @return the node attached to this bone
      */
@@ -458,6 +455,8 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
 
     /**
      * returns the skeleton of this control
+     *
+     * @return
      */
     public Skeleton getSkeleton() {
         return skeleton;
@@ -465,6 +464,8 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
 
     /**
      * returns a copy of array of the targets meshes of this control
+     *
+     * @return
      */
     public Mesh[] getTargets() {
         return targets.toArray(new Mesh[targets.size()]);
@@ -473,7 +474,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     /**
      * Update the mesh according to the given transformation matrices
      *
-     * @param mesh           then mesh
+     * @param mesh then mesh
      * @param offsetMatrices the transformation matrices to apply
      */
     private void softwareSkinUpdate(Mesh mesh, Matrix4f[] offsetMatrices) {
@@ -493,7 +494,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     /**
      * Method to apply skinning transforms to a mesh's buffers
      *
-     * @param mesh           the mesh
+     * @param mesh the mesh
      * @param offsetMatrices the offset matices to apply
      */
     private void applySkinning(Mesh mesh, Matrix4f[] offsetMatrices) {
@@ -596,15 +597,16 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * Specific method for skinning with tangents to avoid cluttering the classic skinning
-     * calculation with null checks that would slow down the process even if tangents don't have to
-     * be computed. Also the iteration has additional indexes since tangent has 4 components instead
-     * of 3 for pos and norm
+     * Specific method for skinning with tangents to avoid cluttering the
+     * classic skinning calculation with null checks that would slow down the
+     * process even if tangents don't have to be computed. Also the iteration
+     * has additional indexes since tangent has 4 components instead of 3 for
+     * pos and norm
      *
      * @param maxWeightsPerVert maximum number of weights per vertex
-     * @param mesh              the mesh
-     * @param offsetMatrices    the offsetMaytrices to apply
-     * @param tb                the tangent vertexBuffer
+     * @param mesh the mesh
+     * @param offsetMatrices the offsetMaytrices to apply
+     * @param tb the tangent vertexBuffer
      */
     private void applySkinningTangents(Mesh mesh, Matrix4f[] offsetMatrices, VertexBuffer tb) {
         int maxWeightsPerVert = mesh.getMaxNumWeights();

@@ -55,7 +55,7 @@ public class MaterialUtils {
      */
     public static boolean containsShader(final MaterialDef materialDef, final String assetPath) {
 
-        final List<TechniqueDef> defaultTechniques = materialDef.getDefaultTechniques();
+        final List<TechniqueDef> defaultTechniques = materialDef.getTechniqueDefs("Default");
 
         for (final TechniqueDef technique : defaultTechniques) {
 
