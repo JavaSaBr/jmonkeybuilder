@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.6.7 #
+# jMonkeyEngine 3 SpaceShift Editor 0.6.9 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
