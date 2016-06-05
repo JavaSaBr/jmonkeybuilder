@@ -62,10 +62,7 @@ public class QueueBucketModelPropertyControl extends ModelPropertyControl<Spatia
      * Обновление выбранного QueueBucket.
      */
     private void updateShadowMode() {
-
-        if (isIgnoreListener()) {
-            return;
-        }
+        if (isIgnoreListener()) return;
 
         final ComboBox<RenderQueue.Bucket> bucketComboBox = getShadowModeComboBox();
         final SingleSelectionModel<RenderQueue.Bucket> selectionModel = bucketComboBox.getSelectionModel();

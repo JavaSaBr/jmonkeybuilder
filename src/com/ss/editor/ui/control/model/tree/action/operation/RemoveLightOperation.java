@@ -35,10 +35,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(parent instanceof Node)) {
-                return;
-            }
+            if (!(parent instanceof Node)) return;
 
             final Node node = (Node) parent;
             node.removeLight(light);
@@ -53,10 +50,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(parent instanceof Node)) {
-                return;
-            }
+            if (!(parent instanceof Node)) return;
 
             final Node node = (Node) parent;
             node.addLight(light);

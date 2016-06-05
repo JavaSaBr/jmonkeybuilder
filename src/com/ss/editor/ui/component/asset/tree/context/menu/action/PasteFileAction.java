@@ -22,6 +22,8 @@ import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Реализация действия по вставке файла.
  *
@@ -50,16 +52,10 @@ public class PasteFileAction extends MenuItem {
     private void processCopy() {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
+        if (clipboard == null) return;
 
-        if (clipboard == null) {
-            return;
-        }
-
-        final List<File> files = (List<File>) clipboard.getContent(DataFormat.FILES);
-
-        if (files == null || files.isEmpty()) {
-            return;
-        }
+        final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
+        if (files == null || files.isEmpty()) return;
 
         final Path currentFile = element.getFile();
         final boolean isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
@@ -164,10 +160,7 @@ public class PasteFileAction extends MenuItem {
             boolean needAddToCopied = true;
 
             for (final Path copiedFile : copied) {
-
-                if (!Files.isDirectory(copiedFile)) {
-                    continue;
-                }
+                if (!Files.isDirectory(copiedFile)) continue;
 
                 if (targetFile.startsWith(copiedFile)) {
                     needAddToCopied = false;
@@ -175,9 +168,7 @@ public class PasteFileAction extends MenuItem {
                 }
             }
 
-            if (needAddToCopied) {
-                copied.add(targetFile);
-            }
+            if (needAddToCopied) copied.add(targetFile);
         });
     }
 }

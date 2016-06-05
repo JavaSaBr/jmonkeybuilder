@@ -39,10 +39,7 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(object instanceof Spatial)) {
-                return;
-            }
+            if (!(object instanceof Spatial)) return;
 
             final Spatial spatial = (Spatial) object;
             spatial.setName(newName);
@@ -57,10 +54,7 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(object instanceof Spatial)) {
-                return;
-            }
+            if (!(object instanceof Spatial)) return;
 
             final Spatial spatial = (Spatial) object;
             spatial.setName(oldName);

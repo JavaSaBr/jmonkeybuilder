@@ -104,10 +104,7 @@ public class JavaFXImageManager {
      * @return загруженное изображение.
      */
     public Image getTexturePreview(final Path file, final int width, final int height) {
-
-        if (!Files.exists(file)) {
-            return Icons.IMAGE_512;
-        }
+        if (!Files.exists(file)) return Icons.IMAGE_512;
 
         final String absolutePath = file.toAbsolutePath().toString();
         final String fileHash = StringUtils.passwordToHash(absolutePath) + ".png";
@@ -160,16 +157,10 @@ public class JavaFXImageManager {
             try {
 
                 final byte[] content = FileUtils.getContent(file);
-
-                if (content == null) {
-                    return Icons.IMAGE_512;
-                }
+                if (content == null) return Icons.IMAGE_512;
 
                 final java.awt.Image awtImage = TGAReader.getImage(content);
-
-                if (awtImage == null) {
-                    return Icons.IMAGE_512;
-                }
+                if (awtImage == null) return Icons.IMAGE_512;
 
                 final java.awt.Image newImage = awtImage.getScaledInstance(width, height, java.awt.Image.SCALE_FAST);
                 final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

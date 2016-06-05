@@ -91,38 +91,22 @@ public class PropertyBuilder {
     };
 
     public static final BiConsumer<SpotLight, Float> SPOT_LIGHT_INNER_ANGLE_APPLY_HANDLER = (spotLight, value) -> {
-
-        if (value < 0f || value >= FastMath.HALF_PI) {
-            return;
-        }
-
+        if (value < 0f || value >= FastMath.HALF_PI) return;
         spotLight.setSpotInnerAngle(value);
     };
 
     public static final BiConsumer<SpotLight, Float> SPOT_LIGHT_OUTER_ANGLE_APPLY_HANDLER = (spotLight, value) -> {
-
-        if (value < 0f || value >= FastMath.HALF_PI) {
-            return;
-        }
-
+        if (value < 0f || value >= FastMath.HALF_PI) return;
         spotLight.setSpotOuterAngle(value);
     };
 
     public static final BiConsumer<SpotLight, Float> SPOT_LIGHT_RANGE_APPLY_HANDLER = (spotLight, value) -> {
-
-        if (value < 0f) {
-            return;
-        }
-
+        if (value < 0f) return;
         spotLight.setSpotRange(value);
     };
 
     public static final BiConsumer<PointLight, Float> POINT_LIGHT_RADIUS_APPLY_HANDLER = (pointLight, value) -> {
-
-        if (value < 0f) {
-            return;
-        }
-
+        if (value < 0f) return;
         pointLight.setRadius(value);
     };
 

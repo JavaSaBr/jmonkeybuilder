@@ -31,8 +31,6 @@ public class NewFileAction extends Menu {
         final ObservableList<MenuItem> items = getItems();
 
         final Array<FileCreatorDescription> descriptions = CREATOR_REGISTRY.getDescriptions();
-        descriptions.forEach(description -> {
-            items.add(new NewFileByCreatorAction(element, description));
-        });
+        descriptions.forEach(description -> items.add(new NewFileByCreatorAction(element, description)));
     }
 }

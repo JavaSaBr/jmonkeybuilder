@@ -30,9 +30,7 @@ public class RemoveNodeAction extends AbstractNodeAction {
         final ModelNode<?> node = getNode();
         final Object element = node.getElement();
 
-        if (!(element instanceof Spatial)) {
-            return;
-        }
+        if (!(element instanceof Spatial)) return;
 
         final Spatial spatial = (Spatial) element;
 

@@ -5,7 +5,6 @@ import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.component.editor.impl.material.operation.RenderStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -40,8 +39,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
 
     private static final Insets ELEMENT_OFFSET = new Insets(3, 0, 0, 0);
 
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
     /**
      * Обработчик внесения изменений.
      */
@@ -71,11 +68,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Установка units для смещения.
      */
     private TextField polyOffsetUnitsField;
-
-    /**
-     * Активация Point Sprite режима.
-     */
-    private CheckBox pointSpriteCheckBox;
 
     /**
      * Активация записи в буффер глубины.
@@ -167,9 +159,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
         polyOffsetUnitsField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
         polyOffsetUnitsField.textProperty().addListener((observable, oldValue, newValue) -> processChangeUnits(newValue));
 
-        pointSpriteCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_POINT_SPRITE);
-        pointSpriteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangePointSprite(newValue));
-
         depthWriteCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_DEPTH_WRITE);
         depthWriteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> pointChangeDepthWrite(newValue));
 
@@ -194,7 +183,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
         FXUtils.addToPane(faceCullModeContainer, container);
         FXUtils.addToPane(blendModeContainer, container);
         FXUtils.addToPane(polyOffsetContainer, container);
-        FXUtils.addToPane(pointSpriteCheckBox, container);
         FXUtils.addToPane(depthWriteCheckBox, container);
         FXUtils.addToPane(colorWriteCheckBox, container);
         FXUtils.addToPane(depthTestCheckBox, container);
@@ -203,7 +191,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
         VBox.setMargin(faceCullModeContainer, ELEMENT_OFFSET);
         VBox.setMargin(blendModeContainer, ELEMENT_OFFSET);
         VBox.setMargin(polyOffsetContainer, ELEMENT_OFFSET);
-        VBox.setMargin(pointSpriteCheckBox, ELEMENT_OFFSET);
         VBox.setMargin(depthWriteCheckBox, ELEMENT_OFFSET);
         VBox.setMargin(colorWriteCheckBox, ELEMENT_OFFSET);
         VBox.setMargin(depthTestCheckBox, ELEMENT_OFFSET);
@@ -217,7 +204,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
         FXUtils.addClassTo(polyOffsetUnitsLabel, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(polyOffsetFactorField, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(polyOffsetUnitsField, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(pointSpriteCheckBox, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(depthWriteCheckBox, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(colorWriteCheckBox, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(depthTestCheckBox, CSSClasses.MAIN_FONT_13);
@@ -228,10 +214,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены Wireframe.
      */
     private void processChangeWireframe(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -250,10 +233,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены DepthTest.
      */
     private void processChangeDepthTest(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -272,10 +252,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены ColorWrite.
      */
     private void processChangeColorWrite(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -294,10 +271,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены DepthWrite.
      */
     private void pointChangeDepthWrite(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -312,33 +286,8 @@ public class MaterialRenderParamsComponent extends TitledPane {
         });
     }
 
-    /**
-     * Обработка смены PointSprite.
-     */
-    private void processChangePointSprite(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
-
-        final Material currentMaterial = getCurrentMaterial();
-        final RenderState renderState = currentMaterial.getAdditionalRenderState();
-
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isPointSprite()) {
-
-            @Override
-            protected void apply(final RenderState renderState, final Boolean value) {
-                renderState.setPointSprite(value);
-            }
-        });
-    }
-
     private void processChangeUnits(final String newUnits) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         try {
 
@@ -365,10 +314,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены PolyOffset Factor.
      */
     private void processChangeFactor(final String newFactor) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         try {
 
@@ -394,10 +340,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены Blend Mode.
      */
     private void processChange(final BlendMode blendMode) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -416,10 +359,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработка смены FaceCull Mode.
      */
     private void processChange(final FaceCullMode faceCullMode) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -461,13 +401,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
      */
     private CheckBox getDepthWriteCheckBox() {
         return depthWriteCheckBox;
-    }
-
-    /**
-     * @return активация Point Sprite режима.
-     */
-    private CheckBox getPointSpriteCheckBox() {
-        return pointSpriteCheckBox;
     }
 
     /**
@@ -539,9 +472,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
 
             final CheckBox wireframeCheckBox = getWireframeCheckBox();
             wireframeCheckBox.setSelected(renderState.isWireframe());
-
-            final CheckBox pointSpriteCheckBox = getPointSpriteCheckBox();
-            pointSpriteCheckBox.setSelected(renderState.isPointSprite());
 
         } finally {
             setIgnoreListeners(false);

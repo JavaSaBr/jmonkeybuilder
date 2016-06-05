@@ -8,6 +8,4 @@ import java.io.Serializable;
  * @author Ronn
  */
 public interface EditorState extends Serializable {
-
-
 }

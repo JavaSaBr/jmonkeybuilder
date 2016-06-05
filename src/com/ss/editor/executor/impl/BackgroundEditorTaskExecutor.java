@@ -1,7 +1,5 @@
 package com.ss.editor.executor.impl;
 
-import com.ss.editor.util.LocalObjects;
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import rlib.concurrent.util.ConcurrentUtils;
@@ -63,7 +61,6 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
         final Array<Runnable> executed = getExecuted();
         final Array<Runnable> waitTasks = getWaitTasks();
 
-        final LocalObjects local = getLocalObects();
         final AtomicBoolean wait = getWait();
 
         while (true) {
@@ -92,16 +89,12 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 }
             }
 
-            if (execute.isEmpty()) {
-                continue;
-            }
+            if (execute.isEmpty()) continue;
 
             // обновление состояния задач
             doUpdate(execute, executed);
 
-            if (executed.isEmpty()) {
-                continue;
-            }
+            if (executed.isEmpty()) continue;
 
             lock();
             try {

@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
@@ -90,11 +88,11 @@ public class FileIconManager {
     /**
      * Кеш для хранения загруженных иконок.
      */
-    private final Map<String, Image> imageCache;
+    private final ObjectDictionary<String, Image> imageCache;
 
     public FileIconManager() {
         InitializeManager.valid(getClass());
-        this.imageCache = new HashMap<>();
+        this.imageCache = DictionaryFactory.newObjectDictionary();
     }
 
     /**
@@ -117,13 +115,8 @@ public class FileIconManager {
             }
         }
 
-        if (Files.isDirectory(path)) {
-            contentType = "folder";
-        }
-
-        if (contentType != null) {
-            contentType = contentType.replace("/", "-");
-        }
+        if (Files.isDirectory(path)) contentType = "folder";
+        if (contentType != null) contentType = contentType.replace("/", "-");
 
         if (contentType == null) {
             LOGGER.warning("not found content type for " + path);
@@ -154,14 +147,6 @@ public class FileIconManager {
      * Получение картинки по адрессу.
      */
     public Image getImage(final String url) {
-
-        Image image = imageCache.get(url);
-
-        if (image == null) {
-            image = new Image(url);
-            imageCache.put(url, image);
-        }
-
-        return image;
+        return imageCache.get(url, url, Image::new);
     }
 }

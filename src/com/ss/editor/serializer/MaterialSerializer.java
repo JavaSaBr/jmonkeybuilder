@@ -50,25 +50,10 @@ public class MaterialSerializer {
             builder.append("      FaceCull ").append(faceCullMode.name()).append('\n');
         }
 
-        if (renderState.isWireframe()) {
-            builder.append("      Wireframe On\n");
-        }
-
-        if (!renderState.isDepthTest()) {
-            builder.append("      DepthTest Off\n");
-        }
-
-        if (!renderState.isDepthWrite()) {
-            builder.append("      DepthWrite Off\n");
-        }
-
-        if (!renderState.isColorWrite()) {
-            builder.append("      ColorWrite Off\n");
-        }
-
-        if (renderState.isPointSprite()) {
-            builder.append("      PointSprite On\n");
-        }
+        if (renderState.isWireframe()) builder.append("      Wireframe On\n");
+        if (!renderState.isDepthTest()) builder.append("      DepthTest Off\n");
+        if (!renderState.isDepthWrite()) builder.append("      DepthWrite Off\n");
+        if (!renderState.isColorWrite()) builder.append("      ColorWrite Off\n");
 
         final float polyOffsetFactor = renderState.getPolyOffsetFactor();
         final float polyOffsetUnits = renderState.getPolyOffsetUnits();
@@ -112,10 +97,7 @@ public class MaterialSerializer {
                 final TextureKey textureKey = (TextureKey) texture2D.getKey();
 
                 final StringBuilder builder = new StringBuilder();
-
-                if (textureKey.isFlipY()) {
-                    builder.append("Flip ");
-                }
+                if (textureKey.isFlipY()) builder.append("Flip ");
 
                 if (texture2D.getWrap(Texture.WrapAxis.T) == Texture.WrapMode.Repeat) {
                     builder.append("Repeat ");

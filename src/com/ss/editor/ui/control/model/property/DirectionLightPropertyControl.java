@@ -82,10 +82,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
      * Процесс скролирования значения.
      */
     private void processScroll(final ScrollEvent event) {
-
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();

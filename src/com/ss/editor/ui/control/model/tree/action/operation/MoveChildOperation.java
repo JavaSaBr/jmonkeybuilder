@@ -47,10 +47,7 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
             final Spatial currentModel = editor.getCurrentModel();
             final Object oldParent = GeomUtils.getObjectByIndex(currentModel, oldParentIndex);
             final Object newParent = GeomUtils.getObjectByIndex(currentModel, newParentIndex);
-
-            if (!(oldParent instanceof Node && newParent instanceof Node)) {
-                return;
-            }
+            if (!(oldParent instanceof Node && newParent instanceof Node)) return;
 
             final Node node = (Node) newParent;
             node.attachChildAt(moved, 0);
@@ -69,10 +66,7 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
             final Spatial currentModel = editor.getCurrentModel();
             final Object oldParent = GeomUtils.getObjectByIndex(currentModel, oldParentIndex);
             final Object newParent = GeomUtils.getObjectByIndex(currentModel, newParentIndex);
-
-            if (!(oldParent instanceof Node && newParent instanceof Node)) {
-                return;
-            }
+            if (!(oldParent instanceof Node && newParent instanceof Node)) return;
 
             final Node node = (Node) oldParent;
             node.attachChildAt(moved, childIndex);

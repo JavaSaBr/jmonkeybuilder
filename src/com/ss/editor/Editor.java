@@ -50,6 +50,7 @@ import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
 import rlib.logging.impl.FolderFileListener;
 import rlib.manager.InitializeManager;
+import rlib.util.ArrayUtils;
 
 /**
  * Стартовый класс редактора.
@@ -61,8 +62,6 @@ public class Editor extends SimpleApplication {
     private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
 
     private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<LightProbe>() {
-
-        @Override
         public void done(final LightProbe result) {
         }
     };
@@ -262,9 +261,7 @@ public class Editor extends SimpleApplication {
 
         final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, assetManager, inputManager);
 
-        for (final CursorType type : CursorType.values()) {
-            cursorDisplayProvider.setup(type);
-        }
+        ArrayUtils.forEach(CursorType.values(), cursorDisplayProvider::setup);
 
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
@@ -347,13 +344,8 @@ public class Editor extends SimpleApplication {
             final EditorThreadExecutor editorThreadExecutor = EditorThreadExecutor.getInstance();
             editorThreadExecutor.execute();
 
-            if (paused) {
-                return;
-            }
-
-            if (fxContainer.isNeedWriteToJME()) {
-                fxContainer.writeToJME();
-            }
+            if (paused) return;
+            if (fxContainer.isNeedWriteToJME()) fxContainer.writeToJME();
 
             super.update();
 
@@ -383,10 +375,7 @@ public class Editor extends SimpleApplication {
     private void createProbe() {
 
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
-
-        if (environmentCamera == null) {
-            return;
-        }
+        if (environmentCamera == null) return;
 
         if (environmentCamera.getApplication() == null) {
             final EditorThreadExecutor gameThreadExecutor = EditorThreadExecutor.getInstance();

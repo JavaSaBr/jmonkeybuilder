@@ -77,9 +77,7 @@ public class EditorOperationControl {
         final Array<EditorOperation> operations = getOperations();
         operations.add(operation);
 
-        if (operations.size() > HISTORY_SIZE) {
-            operations.poll();
-        }
+        if (operations.size() > HISTORY_SIZE) operations.poll();
 
         final Array<EditorOperation> toRedo = getToRedo();
         toRedo.clear();
@@ -104,10 +102,7 @@ public class EditorOperationControl {
 
         final Array<EditorOperation> operations = getOperations();
         final EditorOperation operation = operations.pop();
-
-        if (operation == null) {
-            return;
-        }
+        if (operation == null) return;
 
         final UndoableEditor editor = getEditor();
         operation.undo(editor);
@@ -136,10 +131,7 @@ public class EditorOperationControl {
 
         final Array<EditorOperation> toRedo = getToRedo();
         final EditorOperation operation = toRedo.pop();
-
-        if (operation == null) {
-            return;
-        }
+        if (operation == null) return;
 
         operation.redo(editor);
 

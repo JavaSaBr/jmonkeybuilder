@@ -35,11 +35,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
 
     @Override
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
-
-        if (getChannel() < 0) {
-            items.add(new PlayAnimationAction(nodeTree, this));
-        }
-
+        if (getChannel() < 0) items.add(new PlayAnimationAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
 

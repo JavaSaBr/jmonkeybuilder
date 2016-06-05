@@ -46,14 +46,12 @@ public class BlendToJ3oFileConverter extends AbstractFileConverter {
     protected void convertImpl(final Path source, final Path destination, final boolean overwrite) {
 
         final Path assetFile = EditorUtil.getAssetFile(source);
-
         final ModelKey modelKey = new ModelKey(assetFile.toString());
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearAssetEventListeners();
 
         final Spatial model = assetManager.loadAsset(modelKey);
-
         final BinaryExporter exporter = BinaryExporter.getInstance();
 
         try (final OutputStream out = Files.newOutputStream(destination)) {

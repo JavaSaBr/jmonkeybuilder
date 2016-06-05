@@ -39,6 +39,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Реализациядиалогапо созданию нового фона.
  *
@@ -726,13 +728,9 @@ public class CreateSkyDialog extends AbstractNodeDialog {
      * Процесс скролирования значения.
      */
     private void processScroll(final ScrollEvent event) {
+        if (!event.isControlDown()) return;
 
-        final Spinner<Double> source = (Spinner<Double>) event.getSource();
-
-        if (!event.isControlDown()) {
-            return;
-        }
-
+        final Spinner<Double> source = unsafeCast(event.getSource());
         final double deltaY = event.getDeltaY();
 
         if (deltaY > 0) {

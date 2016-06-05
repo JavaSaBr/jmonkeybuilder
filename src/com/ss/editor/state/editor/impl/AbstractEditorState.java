@@ -135,10 +135,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      * Обработка перемещения мышки над 3D областью
      */
     protected void onAnalogImpl(final String name, final float value, final float tpf) {
-
-        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) {
-            return;
-        }
+        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
 
         if (MOUSE_X_AXIS.equals(name)) {
             moveXCamera(value * 30);

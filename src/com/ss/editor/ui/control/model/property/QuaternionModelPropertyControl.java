@@ -82,10 +82,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
      * Процесс скролирования значения.
      */
     private void processScroll(final ScrollEvent event) {
-
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();
@@ -147,10 +144,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
      * Обновление вектора.
      */
     private void updateVector() {
-
-        if (isIgnoreListener()) {
-            return;
-        }
+        if (isIgnoreListener()) return;
 
         final TextField xField = getXField();
 

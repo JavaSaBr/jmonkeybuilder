@@ -211,10 +211,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final FileConverterDescription description = event.getDescription();
 
         final FileConverter converter = FILE_CONVERTER_REGISTRY.newCreator(description, file);
-
-        if (converter == null) {
-            return;
-        }
+        if (converter == null) return;
 
         converter.convert(file);
     }
@@ -228,10 +225,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final FileCreatorDescription description = event.getDescription();
 
         final FileCreator fileCreator = CREATOR_REGISTRY.newCreator(description, file);
-
-        if (fileCreator == null) {
-            return;
-        }
+        if (fileCreator == null) return;
 
         fileCreator.start(file);
     }
@@ -240,16 +234,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Обработка закрытия редакторов.
      */
     private void processChangeTabs(final ListChangeListener.Change<? extends Tab> change) {
-
-        if (!change.next()) {
-            return;
-        }
+        if (!change.next()) return;
 
         final List<? extends Tab> removed = change.getRemoved();
-
-        if (removed == null || removed.isEmpty()) {
-            return;
-        }
+        if (removed == null || removed.isEmpty()) return;
 
         removed.forEach(tab -> {
 
@@ -262,15 +250,11 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             fileEditor.notifyClosed();
 
-            if (isIgnoreOpenedFiles()) {
-                return;
-            }
+            if (isIgnoreOpenedFiles()) return;
 
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
 
-            if (workspace != null) {
-                workspace.removeOpenedFile(editFile);
-            }
+            if (workspace != null) workspace.removeOpenedFile(editFile);
         });
     }
 
@@ -293,9 +277,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             states.forEach(stateManager::detach);
         }
 
-        if (newTab == null) {
-            return;
-        }
+        if (newTab == null) return;
 
         final ObservableMap<Object, Object> properties = newTab.getProperties();
         final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
@@ -330,10 +312,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final EditorDescription description = event.getDescription();
         final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
-
-        if (editor == null) {
-            return;
-        }
+        if (editor == null) return;
 
         try {
             editor.openFile(file);
@@ -410,10 +389,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void loadOpenedFiles() {
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-
-        if (workspace == null) {
-            return;
-        }
+        if (workspace == null) return;
 
         final Path assetFolder = workspace.getAssetFolder();
         final String editFile = workspace.getCurrentEditFile();

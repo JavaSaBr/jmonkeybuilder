@@ -46,7 +46,6 @@ public class GenerateTangentsDialog extends EditorDialog {
     public enum AlgorithmType {
         STANDARD,
         MIKKTSPACE;
-
         public static final AlgorithmType[] VALUES = values();
     }
 

@@ -42,11 +42,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
 
         @Override
         public void done(final LightProbe result) {
-
-            if (!isInitialized()) {
-                return;
-            }
-
+            if (!isInitialized()) return;
             attachModelNode();
         }
     };
@@ -230,10 +226,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
         super.initialize(stateManager, application);
 
         final ModelType currentModelType = getCurrentModelType();
-
-        if (currentModelType != null) {
-            changeModeImpl(currentModelType);
-        }
+        if (currentModelType != null) changeModeImpl(currentModelType);
 
         frame = 0;
     }
@@ -251,11 +244,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
 
     @Override
     protected Node getNodeForCamera() {
-
-        if (modelNode == null) {
-            modelNode = new Node("ModelNode");
-        }
-
+        if (modelNode == null) modelNode = new Node("ModelNode");
         return modelNode;
     }
 
@@ -313,10 +302,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
      * Процесс обновление света от камеры.
      */
     private void updateLightEnabledImpl(boolean enabled) {
-
-        if (enabled == isLightEnabled()) {
-            return;
-        }
+        if (enabled == isLightEnabled()) return;
 
         final DirectionalLight light = getLightForCamera();
         final Node stateNode = getStateNode();
@@ -334,9 +320,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     public void update(float tpf) {
         super.update(tpf);
 
-        if (frame == 2) {
-            EDITOR.updateProbe(probeHandler);
-        }
+        if (frame == 2) EDITOR.updateProbe(probeHandler);
 
         final Geometry testQuad = getTestQuad();
 

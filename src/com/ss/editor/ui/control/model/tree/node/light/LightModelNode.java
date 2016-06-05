@@ -33,9 +33,7 @@ public class LightModelNode<T extends Light> extends ModelNode<T> {
 
     @Override
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
-
         items.add(new RemoveLightAction(nodeTree, this));
-
         super.fillContextMenu(nodeTree, items);
     }
 }

@@ -12,7 +12,6 @@ import com.ss.editor.util.EditorUtil;
 import java.awt.*;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,6 +22,8 @@ import java.util.prefs.Preferences;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
+
+import static rlib.util.Util.safeExecute;
 
 /**
  * Набор настроек, изменяемых пользователем.
@@ -129,9 +130,7 @@ public final class EditorConfig implements AssetEventListener {
         lastOpenedAssets.remove(filePath);
         lastOpenedAssets.add(0, filePath);
 
-        if (lastOpenedAssets.size() > 10) {
-            lastOpenedAssets.remove(lastOpenedAssets.size() - 1);
-        }
+        if (lastOpenedAssets.size() > 10) lastOpenedAssets.remove(lastOpenedAssets.size() - 1);
     }
 
     @Override
@@ -301,11 +300,7 @@ public final class EditorConfig implements AssetEventListener {
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
         if (currentAssetURI != null) {
-            try {
-                this.currentAsset = Paths.get(new URI(currentAssetURI));
-            } catch (URISyntaxException e) {
-                LOGGER.error(e);
-            }
+            this.currentAsset = safeExecute(() -> Paths.get(new URI(currentAssetURI)));
         }
 
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
@@ -315,11 +310,9 @@ public final class EditorConfig implements AssetEventListener {
 
         if (coords != null && coords.length > 2) {
             try {
-
                 toneMapFilterWhitePoint.setX(Float.parseFloat(coords[0]));
                 toneMapFilterWhitePoint.setY(Float.parseFloat(coords[1]));
                 toneMapFilterWhitePoint.setZ(Float.parseFloat(coords[2]));
-
             } catch (NumberFormatException e) {
                 LOGGER.error(e);
             }
@@ -338,7 +331,6 @@ public final class EditorConfig implements AssetEventListener {
     public void save() {
 
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
-
         prefs.put(PREF_GRAPHIC_SCREEN_SIZE, getScreenSize().toString());
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
         prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
@@ -356,9 +348,7 @@ public final class EditorConfig implements AssetEventListener {
             prefs.remove(PREF_CURRENT_ASSET);
         }
 
-        if (currentAsset != null && !Files.exists(currentAsset)) {
-            currentAsset = null;
-        }
+        if (currentAsset != null && !Files.exists(currentAsset)) currentAsset = null;
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
 

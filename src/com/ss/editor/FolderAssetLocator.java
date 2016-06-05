@@ -28,16 +28,12 @@ public class FolderAssetLocator implements AssetLocator {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        if (currentAsset == null) {
-            return null;
-        }
+        if (currentAsset == null) return null;
 
         final String name = key.getName();
         final Path resolve = currentAsset.resolve(name);
 
-        if (!Files.exists(resolve)) {
-            return null;
-        }
+        if (!Files.exists(resolve)) return null;
 
         try {
             return new StreamAssetInfo(manager, key, Files.newInputStream(resolve));

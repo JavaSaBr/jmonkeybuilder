@@ -41,9 +41,7 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
         final Geometry geometry = getElement();
         final Mesh mesh = geometry.getMesh();
 
-        if (mesh != null) {
-            result.add(ModelNodeFactory.createFor(mesh));
-        }
+        if (mesh != null) result.add(ModelNodeFactory.createFor(mesh));
 
         result.addAll(super.getChildren());
 
@@ -65,10 +63,7 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
     public boolean canAccept(final ModelNode<?> node) {
 
         final Geometry geometry = getElement();
-
-        if (geometry.getMesh() != null) {
-            return false;
-        }
+        if (geometry.getMesh() != null) return false;
 
         final Object element = node.getElement();
         return element instanceof Mesh;

@@ -125,10 +125,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
         super.validateFileName();
 
         final Button okButton = getOkButton();
-
-        if (okButton.isDisable()) {
-            return;
-        }
+        if (okButton.isDisable()) return;
 
         final ComboBox<String> materialTypeComboBox = getMaterialTypeComboBox();
         final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
@@ -138,11 +135,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
 
     @Override
     protected void processEnter(final KeyEvent event) {
-
-        if (event.getCode() == KeyCode.ENTER) {
-            return;
-        }
-
+        if (event.getCode() == KeyCode.ENTER) return;
         super.processEnter(event);
     }
 

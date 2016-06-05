@@ -35,7 +35,6 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
     @Override
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
-
         items.add(new RenameNodeAction(nodeTree, this));
 
         Node parent = getElement().getParent();

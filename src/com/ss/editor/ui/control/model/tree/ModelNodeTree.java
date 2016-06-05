@@ -160,10 +160,7 @@ public class ModelNodeTree extends TitledPane {
     private void fill(final TreeItem<ModelNode<?>> treeItem) {
 
         final ModelNode<?> element = treeItem.getValue();
-
-        if (!element.hasChildren()) {
-            return;
-        }
+        if (!element.hasChildren()) return;
 
         final ObservableList<TreeItem<ModelNode<?>>> items = treeItem.getChildren();
 
@@ -180,19 +177,13 @@ public class ModelNodeTree extends TitledPane {
     public void refresh(final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
-
-        if (treeItem == null) {
-            return;
-        }
+        if (treeItem == null) return;
 
         final ObservableList<TreeItem<ModelNode<?>>> items = treeItem.getChildren();
         items.clear();
 
         final ModelNode<?> element = treeItem.getValue();
-
-        if (!element.hasChildren()) {
-            return;
-        }
+        if (!element.hasChildren()) return;
 
         final Array<ModelNode<?>> children = element.getChildren();
         children.forEach(child -> items.add(new TreeItem<>(child)));
@@ -207,10 +198,7 @@ public class ModelNodeTree extends TitledPane {
     public void update(final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
-
-        if (treeItem == null) {
-            return;
-        }
+        if (treeItem == null) return;
 
         treeItem.setValue(null);
         treeItem.setValue(modelNode);
@@ -227,9 +215,7 @@ public class ModelNodeTree extends TitledPane {
 
         modelNode.fillContextMenu(this, items);
 
-        if (items.isEmpty()) {
-            return null;
-        }
+        if (items.isEmpty()) return null;
 
         return contextMenu;
     }
@@ -275,10 +261,7 @@ public class ModelNodeTree extends TitledPane {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
-
-        if (treeItem == null) {
-            return;
-        }
+        if (treeItem == null) return;
 
         treeItem.setValue(null);
         treeItem.setValue(modelNode);
@@ -392,13 +375,9 @@ public class ModelNodeTree extends TitledPane {
     public ModelNode<?> findParent(final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
-
-        if (treeItem == null) {
-            return null;
-        }
+        if (treeItem == null) return null;
 
         final TreeItem<ModelNode<?>> parent = treeItem.getParent();
-
         return parent == null ? null : parent.getValue();
     }
 
@@ -409,10 +388,7 @@ public class ModelNodeTree extends TitledPane {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
-
-        if (treeItem == null) {
-            return;
-        }
+        if (treeItem == null) return;
 
         treeView.edit(treeItem);
     }

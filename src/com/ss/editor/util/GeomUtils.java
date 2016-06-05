@@ -84,7 +84,6 @@ public class GeomUtils {
         }
 
         final Node node = (Node) model;
-
         final List<Spatial> children = node.getChildren();
 
         for (final Spatial child : children) {

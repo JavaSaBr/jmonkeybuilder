@@ -82,21 +82,18 @@ public abstract class ModelNode<T> implements UObject {
      * Удаление дочернего элемента.
      */
     public void remove(final ModelNode<?> child) {
-
     }
 
     /**
      * Добавление дочернего элемента.
      */
     public void add(final ModelNode<?> child) {
-
     }
 
     /**
      * Обработка изменения имени узла.
      */
     public void changeName(final ModelNodeTree nodeTree, final String newName) {
-
     }
 
     /**
@@ -154,7 +151,6 @@ public abstract class ModelNode<T> implements UObject {
         if (o == null || getClass() != o.getClass()) return false;
 
         ModelNode<?> modelNode = (ModelNode<?>) o;
-
         return !(element != null ? !element.equals(modelNode.element) : modelNode.element != null);
     }
 

@@ -34,10 +34,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(parent instanceof Node)) {
-                return;
-            }
+            if (!(parent instanceof Node)) return;
 
             final Node node = (Node) parent;
             node.attachChildAt(newChild, 0);
@@ -52,10 +49,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(parent instanceof Node)) {
-                return;
-            }
+            if (!(parent instanceof Node)) return;
 
             final Node node = (Node) parent;
             node.detachChild(newChild);

@@ -31,8 +31,6 @@ public class OpenWithFileAction extends Menu {
         final ObservableList<MenuItem> items = getItems();
 
         final Array<EditorDescription> descriptions = EDITOR_REGISTRY.getAvailableEditorsFor(element.getFile());
-        descriptions.forEach(description -> {
-            items.add(new OpenFileByEditorAction(element, description));
-        });
+        descriptions.forEach(description -> items.add(new OpenFileByEditorAction(element, description)));
     }
 }

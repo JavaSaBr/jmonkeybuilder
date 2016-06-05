@@ -87,14 +87,7 @@ public class EditorRegistry {
 
         final Array<String> extensions = description.getExtensions();
         extensions.forEach(extension -> {
-
-            Array<EditorDescription> descriptions = editorDescriptions.get(extension);
-
-            if (descriptions == null) {
-                descriptions = ArrayFactory.newArray(EditorDescription.class);
-                editorDescriptions.put(extension, descriptions);
-            }
-
+            final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> ArrayFactory.newArray(EditorDescription.class));
             descriptions.add(description);
         });
 
@@ -117,10 +110,7 @@ public class EditorRegistry {
      * @return редактор для этого файла или null.
      */
     public FileEditor createEditorFor(final Path file) {
-
-        if (Files.isDirectory(file)) {
-            return null;
-        }
+        if (Files.isDirectory(file)) return null;
 
         final String extension = FileUtils.getExtension(file);
 
@@ -138,9 +128,7 @@ public class EditorRegistry {
             description = descriptions == null ? null : descriptions.first();
         }
 
-        if (description == null) {
-            return null;
-        }
+        if (description == null) return null;
 
         final Callable<FileEditor> constructor = description.getConstructor();
 
@@ -182,8 +170,7 @@ public class EditorRegistry {
         final String extension = FileUtils.getExtension(file);
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
-
-        Array<EditorDescription> descriptions = editorDescriptions.get(extension);
+        final Array<EditorDescription> descriptions = editorDescriptions.get(extension);
 
         if (descriptions != null) {
             result.addAll(descriptions);

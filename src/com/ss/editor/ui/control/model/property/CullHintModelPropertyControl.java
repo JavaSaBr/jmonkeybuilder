@@ -61,10 +61,7 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial, 
      * Обновление выбранного CullHint.
      */
     private void updateCullHint() {
-
-        if (isIgnoreListener()) {
-            return;
-        }
+        if (isIgnoreListener()) return;
 
         final ComboBox<Spatial.CullHint> cullHintComboBox = getCullHintComboBox();
         final SingleSelectionModel<Spatial.CullHint> selectionModel = cullHintComboBox.getSelectionModel();

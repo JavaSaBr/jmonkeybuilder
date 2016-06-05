@@ -47,10 +47,8 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
         final AnimControl element = getElement();
         final Collection<String> animationNames = element.getAnimationNames();
         animationNames.forEach(name -> {
-
             final AnimationModelNode modelNode = ModelNodeFactory.createFor(element.getAnim(name));
             modelNode.setControl(getElement());
-
             result.add(modelNode);
         });
 

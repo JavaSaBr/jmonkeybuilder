@@ -79,7 +79,6 @@ public class AssetEditorDialog extends EditorDialog {
         container.setAlignment(Pos.CENTER_LEFT);
 
         final Consumer<ResourceElement> openFunction = element -> {
-
             hide();
 
             final Consumer<Path> consumer = getConsumer();
@@ -152,7 +151,6 @@ public class AssetEditorDialog extends EditorDialog {
         }
 
         final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, (int) imageView.getFitWidth(), (int) imageView.getFitHeight());
-
         imageView.setImage(preview);
     }
 

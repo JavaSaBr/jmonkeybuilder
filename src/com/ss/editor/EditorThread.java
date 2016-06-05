@@ -9,28 +9,27 @@ import com.ss.editor.util.LocalObjects;
  */
 public class EditorThread extends Thread {
 
-    private final LocalObjects localObects;
+    private final LocalObjects localObjects;
 
     public EditorThread() {
-        this.localObects = new LocalObjects();
+        this.localObjects = new LocalObjects();
     }
 
     public EditorThread(final Runnable target) {
         super(target);
-
-        this.localObects = new LocalObjects();
+        this.localObjects = new LocalObjects();
     }
 
     public EditorThread(final ThreadGroup group, final Runnable target, final String name) {
         super(group, target, name);
 
-        this.localObects = new LocalObjects();
+        this.localObjects = new LocalObjects();
     }
 
     /**
      * @return контейнер локальных объектов.
      */
-    public LocalObjects getLocalObects() {
-        return localObects;
+    public LocalObjects getLocal() {
+        return localObjects;
     }
 }

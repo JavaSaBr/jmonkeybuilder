@@ -84,9 +84,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.notifyCreated(file);
 
-        if (event.isNeedSelect()) {
-            resourceTree.expandTo(file, true);
-        }
+        if (event.isNeedSelect()) resourceTree.expandTo(file, true);
     }
 
     /**
@@ -107,10 +105,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-
-        if (currentAsset == null) {
-            return;
-        }
+        if (currentAsset == null) return;
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.fill(currentAsset);
@@ -163,10 +158,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-
-        if (currentAsset == null) {
-            return;
-        }
+        if (currentAsset == null) return;
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.fill(currentAsset);

@@ -18,7 +18,7 @@ public class LocalObjects {
     private static final int LIMIT = SIZE - 1;
 
     public static final LocalObjects get() {
-        return ((EditorThread) Thread.currentThread()).getLocalObects();
+        return ((EditorThread) Thread.currentThread()).getLocal();
     }
 
     /**

@@ -108,13 +108,8 @@ public class MoveToolControl extends AbstractControl implements TransformControl
         //select the less angle for collisionPlane
         float lessAngle = angleX;
 
-        if (lessAngle > angleY) {
-            lessAngle = angleY;
-        }
-
-        if (lessAngle > angleZ) {
-            lessAngle = angleZ;
-        }
+        if (lessAngle > angleY) lessAngle = angleY;
+        if (lessAngle > angleZ) lessAngle = angleZ;
 
         // set the collision Plane location and rotation
         final Node collisionPlane = getCollisionPlane();

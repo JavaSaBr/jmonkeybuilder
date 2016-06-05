@@ -287,10 +287,7 @@ public class GraphicsDialog extends EditorDialog {
      * Процесс скролирования значения.
      */
     private void processScroll(final Spinner<Double> spinner, final ScrollEvent event) {
-
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final double deltaY = event.getDeltaY();
 
@@ -485,10 +482,7 @@ public class GraphicsDialog extends EditorDialog {
      * Валидация изменений.
      */
     private void validate() {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Label messageLabel = getMessageLabel();
 

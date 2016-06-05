@@ -57,23 +57,12 @@ public class ScreenSize {
 
         container.add(new ScreenSize(SCREEN_SIZE_MIN_WIDTH, SCREEN_SIZE_MIN_HEIGHT, false));
 
-        if (maxWidth >= 1600 && maxHeight >= 900) {
-            container.add(new ScreenSize(1600, 900, false));
-        }
-
-        if (maxWidth >= 1850 && maxHeight >= 1000) {
-            container.add(new ScreenSize(1850, 1000, false));
-        }
-
-        if (maxWidth >= 1366 && maxHeight >= 768) {
-            container.add(new ScreenSize(1366, 768, false));
-        }
+        if (maxWidth >= 1600 && maxHeight >= 900) container.add(new ScreenSize(1600, 900, false));
+        if (maxWidth >= 1850 && maxHeight >= 1000) container.add(new ScreenSize(1850, 1000, false));
+        if (maxWidth >= 1366 && maxHeight >= 768) container.add(new ScreenSize(1366, 768, false));
 
         container.sort(COMPARATOR);
-
-        for (final ScreenSize screenSize : container) {
-            SCREEN_SIZE_TABLE.put(screenSize.size, screenSize);
-        }
+        container.forEach(size -> SCREEN_SIZE_TABLE.put(size.size, size));
 
         values = container.toArray(new ScreenSize[container.size()]);
     }

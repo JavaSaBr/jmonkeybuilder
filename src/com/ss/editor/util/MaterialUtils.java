@@ -76,14 +76,9 @@ public class MaterialUtils {
      * @return является ли файл шейдером.
      */
     public static boolean isShaderFile(final Path path) {
-
         final String extension = FileUtils.getExtension(path);
+        return FileExtensions.GLSL_FRAGMENT.equals(extension) || FileExtensions.GLSL_VERTEX.equals(extension);
 
-        if (FileExtensions.GLSL_FRAGMENT.equals(extension) || FileExtensions.GLSL_VERTEX.equals(extension)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

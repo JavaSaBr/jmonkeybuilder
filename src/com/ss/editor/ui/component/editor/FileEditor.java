@@ -89,13 +89,11 @@ public interface FileEditor {
      * Уведомление о том, что этот редактор отобразили.
      */
     public default void notifyShowed() {
-
     }
 
     /**
      * Уведомление об скрытии редактора.
      */
     public default void notifyHided() {
-
     }
 }

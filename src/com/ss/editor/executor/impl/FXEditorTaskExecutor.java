@@ -36,9 +36,6 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         final Runnable[] array = execute.array();
 
         for (int i = 0, length = execute.size(); i < length; ) {
-
-            final long time = System.currentTimeMillis();
-
             try {
 
                 for (int count = 0, limit = EXECUTE_LIMIT; count < limit && i < length; count++, i++) {
@@ -114,9 +111,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 }
             }
 
-            if (execute.isEmpty()) {
-                continue;
-            }
+            if (execute.isEmpty()) continue;
 
             // обновление состояния задач
             while (true) {
@@ -129,9 +124,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 }
             }
 
-            if (executed.isEmpty()) {
-                continue;
-            }
+            if (executed.isEmpty()) continue;
 
             lock();
             try {

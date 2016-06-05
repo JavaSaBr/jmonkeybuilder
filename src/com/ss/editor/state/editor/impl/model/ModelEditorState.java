@@ -69,11 +69,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         @Override
         public void done(final LightProbe result) {
-
-            if (!isInitialized()) {
-                return;
-            }
-
+            if (!isInitialized()) return;
             notifyProbeComplete();
         }
     };
@@ -331,10 +327,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Обработка клика мышкой по области редактора.
      */
     private void processClick(final boolean isPressed) {
-
-        if (!isPressed) {
-            return;
-        }
+        if (!isPressed) return;
 
         final Camera camera = EDITOR.getCamera();
 
@@ -489,11 +482,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
     @Override
     public Node getCollisionPlane() {
-
-        if (collisionPlane == null) {
-            throw new RuntimeException("collisionPlane is null");
-        }
-
+        if (collisionPlane == null) throw new RuntimeException("collisionPlane is null");
         return collisionPlane;
     }
 
@@ -615,10 +604,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         final Node modelNode = getModelNode();
         final Spatial currentModel = getCurrentModel();
-
-        if (currentModel != null) {
-            modelNode.detachChild(currentModel);
-        }
+        if (currentModel != null) modelNode.detachChild(currentModel);
 
         modelNode.attachChild(model);
 
@@ -781,11 +767,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Процесс обновления положения элементов трансформации.
      */
     protected void updateTransformNode(final Transform transform) {
-
-        if (transform == null) {
-            return;
-        }
-
+        if (transform == null) return;
 
         final Vector3f location = transform.getTranslation();
         final Vector3f positionOnCamera = getPositionOnCamera(location);
@@ -829,10 +811,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Процесс обновление света от камеры.
      */
     private void updateLightEnabledImpl(boolean enabled) {
-
-        if (enabled == isLightEnabled()) {
-            return;
-        }
+        if (enabled == isLightEnabled()) return;
 
         final DirectionalLight light = getLightForCamera();
         final Node stateNode = getStateNode();
@@ -916,10 +895,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         for (final ArrayIterator<Spatial> iterator = selected.iterator(); iterator.hasNext(); ) {
 
             final Spatial spatial = iterator.next();
-
-            if (spatials.contains(spatial)) {
-                continue;
-            }
+            if (spatials.contains(spatial)) continue;
 
             removeFromSelection(spatial);
             iterator.fastRemove();
@@ -983,9 +959,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             shape = buildBoxSelection(spatial);
         }
 
-        if (shape == null) {
-            return;
-        }
+        if (shape == null) return;
 
         if (isShowSelection()) {
             final Node toolNode = getToolNode();
@@ -1009,9 +983,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
         final Spatial shape = selectionShape.remove(spatial);
 
-        if (shape != null) {
-            shape.removeFromParent();
-        }
+        if (shape != null) shape.removeFromParent();
     }
 
     /**
@@ -1061,10 +1033,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     private Spatial buildGeometrySelection(final Geometry spatial) {
 
         final Mesh mesh = spatial.getMesh();
-
-        if (mesh == null) {
-            return null;
-        }
+        if (mesh == null) return null;
 
         final Geometry geometry = new Geometry("SelectionShape", mesh);
         geometry.setMaterial(getSelectionMaterial());
@@ -1112,10 +1081,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Процесс обновления видимости выделения.
      */
     private void updateShowSelectionImpl(boolean showSelection) {
-
-        if (isShowSelection() == showSelection) {
-            return;
-        }
+        if (isShowSelection() == showSelection) return;
 
         final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
         final Node toolNode = getToolNode();
@@ -1140,10 +1106,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Процесс обновления отображения сетки.
      */
     private void updateShowGridImpl(final boolean showGrid) {
-
-        if (isShowGrid() == showGrid) {
-            return;
-        }
+        if (isShowGrid() == showGrid) return;
 
         final Node toolNode = getToolNode();
         final Geometry grid = getGrid();
@@ -1185,10 +1148,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     private void addLightImpl(final Light light) {
 
         final Spatial original = LIGHT_MODEL_TABLE.get(light.getType());
-
-        if (original == null) {
-            return;
-        }
+        if (original == null) return;
 
         final Spatial newModel = original.clone();
         newModel.setUserData(USER_DATA_IS_LIGHT, Boolean.TRUE);
@@ -1246,9 +1206,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             }
         }
 
-        if (control == null) {
-            return;
-        }
+        if (control == null) return;
 
         final Spatial spatial = control.getSpatial();
         spatial.removeFromParent();
@@ -1275,10 +1233,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Завершение трансформации модели.
      */
     private void endTransform() {
-
-        if (!isActiveTransform()) {
-            return;
-        }
+        if (!isActiveTransform()) return;
 
         final Spatial toTransform = getToTransform();
 
@@ -1303,10 +1258,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      * Обработка попытки начать трансформацию.
      */
     public boolean startTransform() {
-
-        if (getCollisionPlane() == null) {
-            return false;
-        }
+        if (getCollisionPlane() == null) return false;
 
         updateTransformCenter();
 
@@ -1327,9 +1279,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Node transformToolNode = getTransformToolNode();
         transformToolNode.collideWith(ray, collisionResults);
 
-        if (collisionResults.size() < 1) {
-            return false;
-        }
+        if (collisionResults.size() < 1) return false;
 
         final CollisionResult collisionResult = collisionResults.getClosestCollision();
         final TransformType transformType = getTransformType();
@@ -1349,7 +1299,6 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         }
 
         setActiveTransform(true);
-
         return true;
     }
 

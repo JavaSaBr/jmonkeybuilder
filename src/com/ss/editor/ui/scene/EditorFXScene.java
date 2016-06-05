@@ -16,6 +16,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.ui.util.UIUtils.fillComponents;
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * Реализация сцены редактора для работы JavaFX.
@@ -74,19 +75,8 @@ public class EditorFXScene extends Scene {
      * @return искомый компонент либо <code>null</code>.
      */
     public <T extends ScreenComponent> T findComponent(final String id) {
-
         final Array<ScreenComponent> components = getComponents();
-
-        for (final ScreenComponent component : components.array()) {
-
-            if (component == null) {
-                break;
-            } else if (StringUtils.equals(id, component.getComponentId())) {
-                return (T) component;
-            }
-        }
-
-        return null;
+        return unsafeCast(components.search(id, (toCheck, component) -> StringUtils.equals(toCheck, component.getComponentId())));
     }
 
     /**

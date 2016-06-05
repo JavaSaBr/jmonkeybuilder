@@ -54,10 +54,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         public ModelNode<?> fromString(final String string) {
 
             final ModelNode<?> item = getItem();
-
-            if (item == null) {
-                return item;
-            }
+            if (item == null) return item;
 
             item.changeName(getNodeTree(), string);
 
@@ -145,23 +142,14 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     private void processClick(final MouseEvent event) {
 
         final ModelNode<?> item = getItem();
-
-        if (item == null) {
-            return;
-        }
+        if (item == null) return;
 
         final MouseButton button = event.getButton();
-
-        if (button != MouseButton.SECONDARY) {
-            return;
-        }
+        if (button != MouseButton.SECONDARY) return;
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ContextMenu contextMenu = nodeTree.getContextMenu(item);
-
-        if (contextMenu == null) {
-            return;
-        }
+        if (contextMenu == null) return;
 
         contextMenu.show(this, Side.BOTTOM, 0, 0);
     }
@@ -181,24 +169,15 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     private void startDrag(final MouseEvent mouseEvent) {
 
         final ModelNode<?> item = getItem();
-
-        if (item == null) {
-            return;
-        }
+        if (item == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, item);
-
-        if (treeView.getRoot() == treeItem) {
-            return;
-        }
+        if (treeView.getRoot() == treeItem) return;
 
         TransferMode transferMode = item.canMove() ? TransferMode.MOVE : null;
         transferMode = item.canCopy() ? TransferMode.COPY : transferMode;
-
-        if (transferMode == null) {
-            return;
-        }
+        if (transferMode == null) return;
 
         final Dragboard dragBoard = startDragAndDrop(transferMode);
         final ClipboardContent content = new ClipboardContent();
@@ -218,33 +197,21 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
-
-        if (objectId == null) {
-            return;
-        }
+        if (objectId == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
         final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-
-        if (dragItem == null) {
-            return;
-        }
+        if (dragItem == null) return;
 
         final ModelNode<?> item = getItem();
-
-        if (item == null || !item.canAccept(dragItem)) {
-            return;
-        }
+        if (item == null || !item.canAccept(dragItem)) return;
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);
 
         final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, item);
-
-        if (newParentItem == null) {
-            return;
-        }
+        if (newParentItem == null) return;
 
         final Object element = dragItem.getElement();
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
@@ -304,16 +271,10 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
         final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-
-        if (dragItem == null) {
-            return;
-        }
+        if (dragItem == null) return;
 
         final ModelNode<?> item = getItem();
-
-        if (item == null || !item.canAccept(dragItem)) {
-            return;
-        }
+        if (item == null || !item.canAccept(dragItem)) return;
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);

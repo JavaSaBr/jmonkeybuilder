@@ -77,13 +77,7 @@ public class FXEventManager {
 
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
 
-        Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
-
-        if (handlers == null) {
-            handlers = ArrayFactory.newArray(EventHandler.class);
-            eventHandlers.put(eventType, handlers);
-        }
-
+        final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType, () -> ArrayFactory.newArray(EventHandler.class));
         handlers.add(eventHandler);
     }
 
@@ -98,10 +92,7 @@ public class FXEventManager {
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
 
         Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
-
-        if (handlers == null) {
-            return;
-        }
+        if (handlers == null) return;
 
         handlers.slowRemove(eventHandler);
     }
@@ -137,19 +128,9 @@ public class FXEventManager {
         for (EventType<? extends Event> eventType = event.getEventType(); eventType != null; eventType = (EventType<? extends Event>) eventType.getSuperType()) {
 
             final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
+            if (handlers == null || handlers.isEmpty()) continue;
 
-            if (handlers == null || handlers.isEmpty()) {
-                continue;
-            }
-
-            for (final EventHandler<? super Event> handler : handlers.array()) {
-
-                if (handler == null) {
-                    break;
-                }
-
-                handler.handle(event);
-            }
+            handlers.forEach(event, (toHandle, handler) -> handler.handle(toHandle));
         }
 
         if (event instanceof ConsumeableEvent && !event.isConsumed()) {

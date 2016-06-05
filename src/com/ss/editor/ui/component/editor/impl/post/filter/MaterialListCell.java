@@ -67,10 +67,7 @@ public class MaterialListCell extends ListCell<Material> {
     private void processRemove() {
 
         final Material item = getItem();
-
-        if (item == null) {
-            return;
-        }
+        if (item == null) return;
 
         final PostFilterEditor editor = getEditor();
         editor.remove(item);

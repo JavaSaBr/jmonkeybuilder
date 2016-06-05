@@ -52,6 +52,7 @@ import rlib.util.array.ArrayFactory;
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
 import static com.ss.editor.Messages.POST_FILTER_EDITOR_NAME;
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * Реализация редактора пост филтров.
@@ -205,9 +206,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
 
-        if (!extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            return;
-        }
+        if (!extension.endsWith(FileExtensions.JME_MATERIAL)) return;
 
         final Path assetFile = EditorUtil.getAssetFile(file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
@@ -215,9 +214,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         final PostFilterViewFile currentFile = getCurrentFile();
         final List<String> materials = currentFile.getMaterials();
 
-        if (!materials.contains(assetPath)) {
-            return;
-        }
+        if (!materials.contains(assetPath)) return;
 
         final MaterialKey materialKey = new MaterialKey(assetPath);
 
@@ -336,18 +333,12 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     private void dragDropped(final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+        if (files == null || files.size() != 1) return;
 
         final Path file = files.get(0).toPath();
         final String extension = FileUtils.getExtension(file);
-
-        if (!JME_MATERIAL.equals(extension)) {
-            return;
-        }
+        if (!JME_MATERIAL.equals(extension)) return;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -365,10 +356,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final String assetPath = EditorUtil.toAssetPath(relativize);
         final MaterialKey materialKey = new MaterialKey(assetPath);
-
-        if (editorState.hasFilter(materialKey)) {
-            return;
-        }
+        if (editorState.hasFilter(materialKey)) return;
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
@@ -397,10 +385,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-
-        if (currentAsset == null) {
-            return;
-        }
+        if (currentAsset == null) return;
 
         addRelativeMaterial(currentAsset.relativize(file));
     }
@@ -411,10 +396,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     public void remove(final Material material) {
 
         final MaterialKey materialKey = (MaterialKey) material.getKey();
-
-        if (!editorState.hasFilter(materialKey)) {
-            return;
-        }
+        if (!editorState.hasFilter(materialKey)) return;
 
         editorState.removeFilter(material);
 
@@ -444,18 +426,12 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     private void dragOver(final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+        if (files == null || files.size() != 1) return;
 
         final Path file = files.get(0).toPath();
         final String extension = FileUtils.getExtension(file);
-
-        if (!JME_MATERIAL.equals(extension)) {
-            return;
-        }
+        if (!JME_MATERIAL.equals(extension)) return;
 
         dragEvent.acceptTransferModes(TransferMode.COPY);
         dragEvent.consume();

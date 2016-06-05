@@ -1,6 +1,6 @@
 package com.ss.editor.file.converter;
 
-import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 import rlib.util.array.Array;
 
@@ -19,7 +19,7 @@ public class FileConverterDescription {
     /**
      * Конструктор конвертера.
      */
-    private Callable<FileConverter> constructor;
+    private Supplier<FileConverter> constructor;
 
     /**
      * Список поддерживаемых расширений.
@@ -43,14 +43,14 @@ public class FileConverterDescription {
     /**
      * @return конструктор конвертера.
      */
-    public Callable<FileConverter> getConstructor() {
+    public Supplier<FileConverter> getConstructor() {
         return constructor;
     }
 
     /**
      * @param constructor конструктор конвертера.
      */
-    public void setConstructor(final Callable<FileConverter> constructor) {
+    public void setConstructor(final Supplier<FileConverter> constructor) {
         this.constructor = constructor;
     }
 

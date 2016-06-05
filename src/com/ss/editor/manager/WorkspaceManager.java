@@ -58,9 +58,7 @@ public class WorkspaceManager {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        if (currentAsset == null) {
-            return null;
-        }
+        if (currentAsset == null) return null;
 
         return getWorkspace(currentAsset);
     }
@@ -73,9 +71,7 @@ public class WorkspaceManager {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         final Workspace exists = workspaces.get(assetFolder);
 
-        if (exists != null) {
-            return exists;
-        }
+        if (exists != null) return exists;
 
         final Path workspaceFile = assetFolder.resolve(FOLDER_EDITOR).resolve(FILE_WORKSPACE);
 
@@ -83,7 +79,6 @@ public class WorkspaceManager {
 
             final Workspace workspace = new Workspace();
             workspace.setAssetFolder(assetFolder);
-
             workspaces.put(assetFolder, workspace);
 
             return workspace;
@@ -96,7 +91,6 @@ public class WorkspaceManager {
         }
 
         workspace.setAssetFolder(assetFolder);
-
         workspaces.put(assetFolder, workspace);
 
         return workspace;

@@ -23,10 +23,7 @@ public class FolderElement extends ResourceElement {
     }
 
     public Array<ResourceElement> getChildren(final Array<String> extensionFilter) {
-
-        if (!Files.isDirectory(file)) {
-            return null;
-        }
+        if (!Files.isDirectory(file)) return null;
 
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
 

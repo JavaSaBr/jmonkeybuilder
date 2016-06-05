@@ -87,10 +87,7 @@ public class MaterialColorsComponent extends TitledPane {
     private void buildFor(final MatParam matParam, final Material material) {
 
         final VarType varType = matParam.getVarType();
-
-        if (varType != VarType.Vector4) {
-            return;
-        }
+        if (varType != VarType.Vector4) return;
 
         final ColorMaterialParamControl control = new ColorMaterialParamControl(getChangeHandler(), material, matParam.getName());
 
@@ -107,16 +104,10 @@ public class MaterialColorsComponent extends TitledPane {
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> {
-
-            if (!(node instanceof MaterialParamControl)) {
-                return;
-            }
+            if (!(node instanceof MaterialParamControl)) return;
 
             final MaterialParamControl control = (MaterialParamControl) node;
-
-            if (!StringUtils.equals(control.getParameterName(), paramName)) {
-                return;
-            }
+            if (!StringUtils.equals(control.getParameterName(), paramName)) return;
 
             control.setIgnoreListeners(true);
             try {

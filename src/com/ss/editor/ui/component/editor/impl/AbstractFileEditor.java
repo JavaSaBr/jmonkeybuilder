@@ -242,9 +242,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             return;
         }
 
-        if (!editFile.startsWith(prevFile)) {
-            return;
-        }
+        if (!editFile.startsWith(prevFile)) return;
 
         final Path relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
         final Path resultFile = newFile.resolve(relativeFile);
@@ -262,9 +260,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             return;
         }
 
-        if (!editFile.startsWith(prevFile)) {
-            return;
-        }
+        if (!editFile.startsWith(prevFile)) return;
 
         final Path relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
         final Path resultFile = newFile.resolve(relativeFile);

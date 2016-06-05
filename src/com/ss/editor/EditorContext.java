@@ -34,18 +34,14 @@ public final class EditorContext extends LwjglDisplay {
         NativeLibraryLoader.loadNativeLibrary("jinput", true);
         NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
 
-        if (created.get()) {
-            return;
-        }
+        if (created.get()) return;
 
         thread = new EditorThread(this);
         thread.setPriority(Thread.MAX_PRIORITY);
         thread.setName("LWJGL Renderer Thread");
         thread.start();
 
-        if (waitFor) {
-            waitFor(true);
-        }
+        if (waitFor) waitFor(true);
     }
 
     /**

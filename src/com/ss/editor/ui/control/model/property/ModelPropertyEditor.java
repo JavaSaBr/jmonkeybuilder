@@ -65,10 +65,7 @@ public class ModelPropertyEditor extends TitledPane {
      * Построение контролов для указанного объекта.
      */
     public void buildFor(final Object object) {
-
-        if (getCurrentObject() == object) {
-            return;
-        }
+        if (getCurrentObject() == object) return;
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
@@ -85,10 +82,7 @@ public class ModelPropertyEditor extends TitledPane {
      * Синхронизация свойств.
      */
     public void syncFor(final Object object) {
-
-        if (getCurrentObject() != object) {
-            return;
-        }
+        if (getCurrentObject() != object) return;
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();

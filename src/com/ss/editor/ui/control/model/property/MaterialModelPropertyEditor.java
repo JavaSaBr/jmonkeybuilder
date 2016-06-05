@@ -132,23 +132,14 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
     private void processEdit() {
 
         final MaterialKey element = getPropertyValue();
-
-        if (element == null) {
-            return;
-        }
+        if (element == null) return;
 
         final String assetPath = element.getName();
-
-        if (StringUtils.isEmpty(assetPath)) {
-            return;
-        }
+        if (StringUtils.isEmpty(assetPath)) return;
 
         final Path assetFile = Paths.get(assetPath);
         final Path realFile = EditorUtil.getRealFile(assetFile);
-
-        if (!Files.exists(realFile)) {
-            return;
-        }
+        if (!Files.exists(realFile)) return;
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
         event.setFile(realFile);

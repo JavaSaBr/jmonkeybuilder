@@ -5,6 +5,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Базовая реализация операции с редактором.
  *
@@ -20,7 +22,7 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
     @Override
     public void redo(final UndoableEditor editor) {
-        redoImpl((E) editor);
+        redoImpl(unsafeCast(editor));
     }
 
     /**
@@ -30,7 +32,7 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
     @Override
     public void undo(final UndoableEditor editor) {
-        undoImpl((E) editor);
+        undoImpl(unsafeCast(editor));
     }
 
     /**

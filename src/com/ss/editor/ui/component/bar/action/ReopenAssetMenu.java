@@ -40,10 +40,7 @@ public class ReopenAssetMenu extends Menu {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final List<String> assets = editorConfig.getLastOpenedAssets();
-
-        if (assets.size() < 2) {
-            return;
-        }
+        if (assets.size() < 2) return;
 
         for (int i = 1; i < assets.size(); i++) {
 

@@ -79,16 +79,10 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     private void startDrag(final MouseEvent mouseEvent) {
 
         final ResourceElement item = getItem();
-
-        if (item == null) {
-            return;
-        }
+        if (item == null) return;
 
         final Path file = item.getFile();
-
-        if (!Files.exists(file)) {
-            return;
-        }
+        if (!Files.exists(file)) return;
 
         final Dragboard dragBoard = startDragAndDrop(TransferMode.COPY);
         final ClipboardContent content = new ClipboardContent();
@@ -106,10 +100,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     private void processClick(final MouseEvent event) {
 
         final ResourceElement item = getItem();
-
-        if (item == null) {
-            return;
-        }
+        if (item == null) return;
 
         final ResourceTree treeView = (ResourceTree) getTreeView();
 

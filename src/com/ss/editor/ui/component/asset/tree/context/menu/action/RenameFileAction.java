@@ -58,10 +58,7 @@ public class RenameFileAction extends MenuItem {
      * Проверка введенного имени.
      */
     private Boolean checkName(final String newFileName) {
-
-        if (!FileUtils.isValidName(newFileName)) {
-            return false;
-        }
+        if (!FileUtils.isValidName(newFileName)) return false;
 
         final Path file = element.getFile();
         final String extension = FileUtils.getExtension(file);

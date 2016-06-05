@@ -36,6 +36,8 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.StringUtils;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Набор полезных утилит для разработки.
  *
@@ -47,13 +49,7 @@ public abstract class EditorUtil {
 
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
-    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = new ThreadLocal<SimpleDateFormat>() {
-
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("HH:mm:ss:SSS");
-        }
-    };
+    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
 
     /**
      * Проверка существования ресурса по указанному пути.
@@ -118,7 +114,7 @@ public abstract class EditorUtil {
      *
      * @return имя пользователя системы.
      */
-    public static final String getUserName() {
+    public static String getUserName() {
         return System.getProperty("user.name");
     }
 
@@ -220,29 +216,17 @@ public abstract class EditorUtil {
     public static boolean hasFileInClipboard() {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
+        if (clipboard == null) return false;
 
-        if (clipboard == null) {
-            return false;
-        }
-
-        final List<File> files = (List<File>) clipboard.getContent(DataFormat.FILES);
-
-        if (files == null || files.isEmpty()) {
-            return false;
-        }
-
-        return true;
+        final List<File> files = unsafeCast(clipboard.getContent(DataFormat.FILES));
+        return !(files == null || files.isEmpty());
     }
 
     /**
      * Нормализация пути для обращения к ресурсу в classpath.
      */
     public static String toAssetPath(final Path path) {
-
-        if (File.separatorChar == '/') {
-            return path.toString();
-        }
-
+        if (File.separatorChar == '/') return path.toString();
         return path.toString().replace("\\", "/");
     }
 
@@ -257,10 +241,7 @@ public abstract class EditorUtil {
      * Обработка ошибки.
      */
     public static void handleException(Logger logger, final Object owner, final Exception e, final Runnable callback) {
-
-        if (logger == null) {
-            logger = LOGGER;
-        }
+        if (logger == null) logger = LOGGER;
 
         if (owner == null) {
             logger.warning(e);
@@ -285,9 +266,7 @@ public abstract class EditorUtil {
             alert.setHeight(220);
 
             if (callback != null) {
-                alert.setOnHidden(event -> {
-                    callback.run();
-                });
+                alert.setOnHidden(event -> callback.run());
             }
         });
     }
@@ -391,7 +370,7 @@ public abstract class EditorUtil {
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
         try (final ObjectInputStream in = new ObjectInputStream(bin)) {
-            return (T) in.readObject();
+            return unsafeCast(in.readObject());
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }

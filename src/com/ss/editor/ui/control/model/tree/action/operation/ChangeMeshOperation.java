@@ -41,10 +41,7 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(object instanceof Geometry)) {
-                return;
-            }
+            if (!(object instanceof Geometry)) return;
 
             final Geometry geometry = (Geometry) object;
             geometry.setMesh(newMesh);
@@ -59,10 +56,7 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
 
             final Spatial currentModel = editor.getCurrentModel();
             final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-
-            if (!(object instanceof Geometry)) {
-                return;
-            }
+            if (!(object instanceof Geometry)) return;
 
             final Geometry geometry = (Geometry) object;
             geometry.setMesh(oldMesh);

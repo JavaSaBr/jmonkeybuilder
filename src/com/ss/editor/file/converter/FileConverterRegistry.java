@@ -3,7 +3,7 @@ package com.ss.editor.file.converter;
 import com.ss.editor.file.converter.impl.BlendToJ3oFileConverter;
 
 import java.nio.file.Path;
-import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -77,15 +77,7 @@ public class FileConverterRegistry {
      * @return новый конвертер.
      */
     public FileConverter newCreator(final FileConverterDescription description, final Path file) {
-
-        final Callable<FileConverter> constructor = description.getConstructor();
-
-        try {
-            return constructor.call();
-        } catch (Exception e) {
-            LOGGER.warning(e);
-        }
-
-        return null;
+        final Supplier<FileConverter> constructor = description.getConstructor();
+        return constructor.get();
     }
 }

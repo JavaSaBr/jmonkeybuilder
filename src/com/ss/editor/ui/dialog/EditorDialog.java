@@ -42,21 +42,15 @@ public class EditorDialog extends AbstractPopupDialog {
      * Слушатель изменения фокуса окна.
      */
     private final EventHandler<? super Event> hideEventHandler = event -> {
-
         final WindowChangeFocusEvent focusEvent = (WindowChangeFocusEvent) event;
-
-        if (!focusEvent.isFocused()) {
-            hide();
-        }
+        if (!focusEvent.isFocused()) hide();
     };
 
     /**
      * Слушатель изменения фокуса JavaFX.
      */
     private final ChangeListener<Boolean> hideListener = (observable, oldValue, newValue) -> {
-        if (newValue == Boolean.FALSE) {
-            hide();
-        }
+        if (newValue == Boolean.FALSE) hide();
     };
 
     @Override

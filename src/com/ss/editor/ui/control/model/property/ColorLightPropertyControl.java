@@ -69,10 +69,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
      * Обновление вектора.
      */
     private void updateValue() {
-
-        if (isIgnoreListener()) {
-            return;
-        }
+        if (isIgnoreListener()) return;
 
         final ColorPicker colorPicker = getColorPicker();
         final ColorRGBA newColor = UIUtils.convertColor(colorPicker.getValue());

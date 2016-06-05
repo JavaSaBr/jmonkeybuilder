@@ -80,9 +80,7 @@ public class Workspace implements Serializable {
         }
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
-
-        this.currentEditFile = assetPath;
+        this.currentEditFile = EditorUtil.toAssetPath(assetFile);
     }
 
     /**

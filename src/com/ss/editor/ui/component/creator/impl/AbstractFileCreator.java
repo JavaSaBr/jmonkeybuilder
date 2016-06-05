@@ -153,10 +153,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         final ResourceTree resourceTree = getResourceTree();
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
         final TreeItem<ResourceElement> selectedItem = selectionModel.getSelectedItem();
-
-        if (selectedItem == null) {
-            return getInitFile();
-        }
+        if (selectedItem == null) return getInitFile();
 
         final ResourceElement element = selectedItem.getValue();
         return element.getFile();
@@ -176,10 +173,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
 
         final TextField fileNameField = getFileNameField();
         final String filename = fileNameField.getText();
-
-        if (StringUtils.isEmpty(filename)) {
-            return null;
-        }
+        if (StringUtils.isEmpty(filename)) return null;
 
         final String fileExtension = getFileExtension();
 

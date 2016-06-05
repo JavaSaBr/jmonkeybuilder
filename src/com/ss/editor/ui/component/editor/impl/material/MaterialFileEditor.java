@@ -186,16 +186,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private void processChangedFile(final FileChangedEvent event) {
 
         final Path file = event.getFile();
-
-        if (!MaterialUtils.isShaderFile(file)) {
-            return;
-        }
+        if (!MaterialUtils.isShaderFile(file)) return;
 
         final Material currentMaterial = getCurrentMaterial();
-
-        if (!MaterialUtils.containsShader(currentMaterial, file)) {
-            return;
-        }
+        if (!MaterialUtils.containsShader(currentMaterial, file)) return;
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
@@ -264,9 +258,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     protected void processKeyReleased(final KeyEvent event) {
         super.processKeyReleased(event);
 
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final KeyCode code = event.getCode();
 

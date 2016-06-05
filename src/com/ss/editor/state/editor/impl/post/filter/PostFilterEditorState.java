@@ -121,16 +121,10 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
         try {
 
             final MaterialKey key = (MaterialKey) material.getKey();
-
-            if (filters.containsKey(key)) {
-                return;
-            }
+            if (filters.containsKey(key)) return;
 
             filters.put(key, genericFilter);
-
-            if (isInitialized()) {
-                postProcessor.addFilter(genericFilter);
-            }
+            if (isInitialized()) postProcessor.addFilter(genericFilter);
 
         } finally {
             filters.writeUnlock();
@@ -158,13 +152,8 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
             final MaterialKey key = (MaterialKey) material.getKey();
             final GenericFilter genericFilter = filters.remove(key);
 
-            if (genericFilter == null) {
-                return;
-            }
-
-            if (isInitialized()) {
-                postProcessor.removeFilter(genericFilter);
-            }
+            if (genericFilter == null) return;
+            if (isInitialized()) postProcessor.removeFilter(genericFilter);
 
         } finally {
             filters.writeUnlock();

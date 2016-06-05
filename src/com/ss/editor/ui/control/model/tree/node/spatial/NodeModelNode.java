@@ -83,10 +83,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
 
     @Override
     public boolean canAccept(final ModelNode<?> node) {
-
-        if (node == this) {
-            return false;
-        }
+        if (node == this) return false;
 
         final Object element = node.getElement();
         return element instanceof Spatial && GeomUtils.canAttach(getElement(), (Spatial) element);

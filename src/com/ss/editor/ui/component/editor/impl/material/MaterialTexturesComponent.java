@@ -107,16 +107,10 @@ public class MaterialTexturesComponent extends TitledPane {
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> {
-
-            if (!(node instanceof MaterialParamControl)) {
-                return;
-            }
+            if (!(node instanceof MaterialParamControl)) return;
 
             final MaterialParamControl control = (MaterialParamControl) node;
-
-            if (!StringUtils.equals(control.getParameterName(), paramName)) {
-                return;
-            }
+            if (!StringUtils.equals(control.getParameterName(), paramName)) return;
 
             control.setIgnoreListeners(true);
             try {

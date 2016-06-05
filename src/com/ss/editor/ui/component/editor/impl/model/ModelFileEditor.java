@@ -213,9 +213,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
 
-        if (geometries.isEmpty()) {
-            return;
-        }
+        if (geometries.isEmpty()) return;
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
@@ -332,9 +330,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     protected void processKeyReleased(KeyEvent event) {
         super.processKeyReleased(event);
 
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final KeyCode code = event.getCode();
 
@@ -544,9 +540,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         Spatial spatial = null;
 
-        if (object instanceof Spatial) {
-            spatial = (Spatial) object;
-        }
+        if (object instanceof Spatial) spatial = (Spatial) object;
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
@@ -564,10 +558,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         final Array<Spatial> spatials = ArrayFactory.newArray(Spatial.class);
-
-        if (spatial != null) {
-            spatials.add(spatial);
-        }
+        if (spatial != null) spatials.add(spatial);
 
         final ModelEditorState editorState = getEditorState();
         editorState.updateSelection(spatials);
@@ -681,10 +672,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Обновление режима трансформации.
      */
     private void updateTransformTool(final ToggleButton toggleButton, final Boolean newValue) {
-
-        if (newValue != Boolean.TRUE) {
-            return;
-        }
+        if (newValue != Boolean.TRUE) return;
 
         final ToggleButton scaleToolButton = getScaleToolButton();
         final ToggleButton moveToolButton = getMoveToolButton();
@@ -720,10 +708,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Обработка изменения видимости выделения.
      */
     private void changeSelectionVisible(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final ModelEditorState editorState = getEditorState();
         editorState.updateShowSelection(newValue);
@@ -733,10 +718,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Обработка изменения видимости сетки.
      */
     private void changeGridVisible(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final ModelEditorState editorState = getEditorState();
         editorState.updateShowGrid(newValue);
@@ -746,10 +728,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Обработка смены быстрого окружения.
      */
     private void changeFastSky(final String newSky) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final ModelEditorState editorState = getEditorState();
 

@@ -1,5 +1,6 @@
 package com.ss.editor.executor.impl;
 
+import rlib.util.ArrayUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -37,14 +38,7 @@ public class EditorThreadExecutor {
      * @param task задача на выполнение.
      */
     public void addToExecute(final Runnable task) {
-
-        final Array<Runnable> waitTasks = getWaitTasks();
-        waitTasks.writeLock();
-        try {
-            waitTasks.add(task);
-        } finally {
-            waitTasks.writeUnlock();
-        }
+        ArrayUtils.runInWriteLock(getWaitTasks(), task, Array::add);
     }
 
     /**
@@ -53,31 +47,14 @@ public class EditorThreadExecutor {
     public void execute() {
 
         final Array<Runnable> waitTasks = getWaitTasks();
-
-        if (waitTasks.isEmpty()) {
-            return;
-        }
+        if (waitTasks.isEmpty()) return;
 
         final Array<Runnable> execute = getExecute();
+
+        ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
+
         try {
-
-            waitTasks.writeLock();
-            try {
-                execute.addAll(waitTasks);
-                waitTasks.clear();
-            } finally {
-                waitTasks.writeUnlock();
-            }
-
-            for (final Runnable task : execute.array()) {
-
-                if (task == null) {
-                    break;
-                }
-
-                task.run();
-            }
-
+            execute.forEach(Runnable::run);
         } finally {
             execute.clear();
         }

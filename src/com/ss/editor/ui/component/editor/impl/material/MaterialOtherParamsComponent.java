@@ -104,12 +104,9 @@ public class MaterialOtherParamsComponent extends TitledPane {
             control = new FloatMaterialParamControl(changeHandler, material, matParam.getName());
         }
 
-        if (control == null) {
-            return;
-        }
+        if (control == null) return;
 
         FXUtils.addToPane(control, getContainer());
-
         VBox.setMargin(control, CONTROL_OFFSET);
     }
 
@@ -127,10 +124,7 @@ public class MaterialOtherParamsComponent extends TitledPane {
             }
 
             final MaterialParamControl control = (MaterialParamControl) node;
-
-            if (!StringUtils.equals(control.getParameterName(), paramName)) {
-                return;
-            }
+            if (!StringUtils.equals(control.getParameterName(), paramName)) return;
 
             control.setIgnoreListeners(true);
             try {

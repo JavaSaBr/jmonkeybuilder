@@ -62,10 +62,7 @@ public class ShadowModeModelPropertyControl extends ModelPropertyControl<Spatial
      * Обновление выбранного ShadowMode.
      */
     private void updateShadowMode() {
-
-        if (isIgnoreListener()) {
-            return;
-        }
+        if (isIgnoreListener()) return;
 
         final ComboBox<RenderQueue.ShadowMode> shadowModeComboBox = getShadowModeComboBox();
         final SingleSelectionModel<RenderQueue.ShadowMode> selectionModel = shadowModeComboBox.getSelectionModel();

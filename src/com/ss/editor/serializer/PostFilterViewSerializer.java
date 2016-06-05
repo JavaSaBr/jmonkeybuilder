@@ -16,13 +16,7 @@ import rlib.util.FileUtils;
  */
 public class PostFilterViewSerializer {
 
-    private static final ThreadLocal<Gson> GSON_LOCAL = new ThreadLocal<Gson>() {
-
-        @Override
-        protected Gson initialValue() {
-            return new GsonBuilder().setPrettyPrinting().create();
-        }
-    };
+    private static final ThreadLocal<Gson> GSON_LOCAL = ThreadLocal.withInitial(() -> new GsonBuilder().setPrettyPrinting().create());
 
     /**
      * Прочитать PostFilterViewFile из файла.
@@ -35,11 +29,8 @@ public class PostFilterViewSerializer {
             return new PostFilterViewFile();
         }
 
-        final String stringContent = new String(content);
-
         final Gson gson = GSON_LOCAL.get();
-
-        return gson.fromJson(stringContent, PostFilterViewFile.class);
+        return gson.fromJson(new String(content), PostFilterViewFile.class);
     }
 
     /**

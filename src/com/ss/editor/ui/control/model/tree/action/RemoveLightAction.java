@@ -31,24 +31,16 @@ public class RemoveLightAction extends AbstractNodeAction {
         final ModelNode<?> node = getNode();
         final Object element = node.getElement();
 
-        if (!(element instanceof Light)) {
-            return;
-        }
+        if (!(element instanceof Light)) return;
 
         final Light light = (Light) element;
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelNode<?> parentNode = nodeTree.findParent(node);
-
-        if (parentNode == null) {
-            return;
-        }
+        if (parentNode == null) return;
 
         final Object parent = parentNode.getElement();
-
-        if (!(parent instanceof Node)) {
-            return;
-        }
+        if (!(parent instanceof Node)) return;
 
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
 

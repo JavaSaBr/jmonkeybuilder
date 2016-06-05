@@ -5,6 +5,8 @@ import javafx.event.EventType;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Базавая реализация события сцены javaFX UI.
  *
@@ -36,11 +38,7 @@ public class SceneEvent extends Event {
      * @param value значение параметра.
      */
     public void set(final Object key, final Object value) {
-
-        if (values == null) {
-            values = DictionaryFactory.newObjectDictionary();
-        }
-
+        if (values == null) values = DictionaryFactory.newObjectDictionary();
         values.put(key, value);
     }
 
@@ -51,11 +49,7 @@ public class SceneEvent extends Event {
      * @return значение параметра или null.
      */
     public <T> T get(final Object key) {
-
-        if (values == null) {
-            return null;
-        }
-
-        return (T) values.get(key);
+        if (values == null) return null;
+        return unsafeCast(values.get(key));
     }
 }
