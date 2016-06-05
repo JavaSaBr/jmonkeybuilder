@@ -6,7 +6,7 @@
 
 ## ver. 0.6.9 ##
 * -Updated JME3 libraries.
-* -Bud fixes.
+* -Bug fixes.
 
 ## ver. 0.6.7 ##
 * -Fixed the preview of TGA textures.
