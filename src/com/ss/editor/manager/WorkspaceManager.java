@@ -57,7 +57,6 @@ public class WorkspaceManager {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-
         if (currentAsset == null) return null;
 
         return getWorkspace(currentAsset);

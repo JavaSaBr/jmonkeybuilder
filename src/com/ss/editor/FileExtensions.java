@@ -11,6 +11,8 @@ public interface FileExtensions {
     public static final String JME_MATERIAL_DEFINITION = "j3md";
     public static final String JME_OBJECT = "j3o";
 
+    public static final String JAVA_LIBRARY = "jar";
+
     public static final String POST_FILTER_VIEW = "pfv";
 
     public static final String IMAGE_PNG = "png";

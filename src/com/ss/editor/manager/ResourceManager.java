@@ -1,5 +1,6 @@
 package com.ss.editor.manager;
 
+import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.config.EditorConfig;
@@ -14,6 +15,8 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -30,7 +33,10 @@ import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
+import static rlib.util.Util.safeExecute;
+import static rlib.util.array.ArrayFactory.toGenericArray;
 
 /**
  * Менеджер по работе с ресурсами.
@@ -57,6 +63,11 @@ public class ResourceManager {
     }
 
     /**
+     * Список дополнительных класс лоадеров.
+     */
+    private final Array<URLClassLoader> classLoaders;
+
+    /**
      * Список ресурсов в classpath.
      */
     private final Array<String> resourcesInClasspath;
@@ -74,9 +85,10 @@ public class ResourceManager {
     public ResourceManager() {
         InitializeManager.valid(getClass());
 
+        this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
         this.resourcesInClasspath = ArrayFactory.newArray(String.class);
         this.materialDefinitionsInClasspath = ArrayFactory.newArray(String.class);
-        this.materialDefinitions = ArrayFactory.newConcurrentAtomicArray(String.class);
+        this.materialDefinitions = ArrayFactory.newArray(String.class);
 
         final ClassPathScanner scanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
         scanner.scanning(path -> {
@@ -112,11 +124,10 @@ public class ResourceManager {
     /**
      * Обработка переименования файла.
      */
-    private void processEvent(final RenamedFileEvent event) {
+    private synchronized void processEvent(final RenamedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final String extension = FileUtils.getExtension(prevFile);
-        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) return;
 
         final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
         final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
@@ -125,24 +136,44 @@ public class ResourceManager {
         final Path newAssetFile = EditorUtil.getAssetFile(newFile);
         final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
 
-        final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.writeLock();
-        try {
-            materialDefinitions.fastRemove(prevAssetFile);
-            materialDefinitions.add(newAssetPath);
-        } finally {
-            materialDefinitions.writeUnlock();
+        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            replaceMD(prevAssetPath, newAssetPath);
+        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
+            replaceCL(prevFile, newFile);
         }
+    }
+
+    /**
+     * Процесс замены класс лоадера.
+     */
+    private void replaceCL(Path prevAssetFile, Path newAssetFile) {
+
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
+
+        final URL prevURL = safeExecute(() -> prevAssetFile.toUri().toURL());
+        final URL newURL = safeExecute(() -> newAssetFile.toUri().toURL());
+
+        final Array<URLClassLoader> classLoaders = getClassLoaders();
+        final URLClassLoader oldLoader = classLoaders.search(prevURL, (url, loader) -> contains(loader.getURLs(), url));
+        final URLClassLoader newLoader = new URLClassLoader(toGenericArray(newURL), getClass().getClassLoader());
+
+        if (oldLoader != null) {
+            classLoaders.fastRemove(oldLoader);
+            assetManager.removeClassLoader(oldLoader);
+        }
+
+        classLoaders.add(newLoader);
+        assetManager.addClassLoader(newLoader);
     }
 
     /**
      * Обработка перемещения файла.
      */
-    private void processEvent(final MovedFileEvent event) {
+    private synchronized void processEvent(final MovedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final String extension = FileUtils.getExtension(prevFile);
-        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) return;
 
         final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
         final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
@@ -151,54 +182,82 @@ public class ResourceManager {
         final Path newAssetFile = EditorUtil.getAssetFile(newFile);
         final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
 
-        final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.writeLock();
-        try {
-            materialDefinitions.fastRemove(prevAssetPath);
-            materialDefinitions.add(newAssetPath);
-        } finally {
-            materialDefinitions.writeUnlock();
+        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            replaceMD(prevAssetPath, newAssetPath);
+        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
+            replaceCL(prevFile, newFile);
         }
+    }
+
+    /**
+     * Процесс замены определения материала.
+     */
+    private void replaceMD(String prevAssetPath, String newAssetPath) {
+        final Array<String> materialDefinitions = getMaterialDefinitions();
+        materialDefinitions.fastRemove(prevAssetPath);
+        materialDefinitions.add(newAssetPath);
     }
 
     /**
      * Обработка удаления файла из Asset.
      */
-    private void processEvent(final DeletedFileEvent event) {
+    private synchronized void processEvent(final DeletedFileEvent event) {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
-        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) return;
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = toAssetPath(assetFile);
 
-        final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.writeLock();
-        try {
-            materialDefinitions.fastRemove(toAssetPath(assetFile));
-        } finally {
-            materialDefinitions.writeUnlock();
+        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            final Array<String> materialDefinitions = getMaterialDefinitions();
+            materialDefinitions.fastRemove(assetPath);
+        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
+
+            final Editor editor = Editor.getInstance();
+            final AssetManager assetManager = editor.getAssetManager();
+
+            final URL url = safeExecute(() -> file.toUri().toURL());
+
+            final Array<URLClassLoader> classLoaders = getClassLoaders();
+            final URLClassLoader oldLoader = classLoaders.search(url, (toCheck, loader) -> contains(loader.getURLs(), toCheck));
+
+            if (oldLoader != null) {
+                classLoaders.fastRemove(oldLoader);
+                assetManager.removeClassLoader(oldLoader);
+            }
         }
     }
 
     /**
      * Обработка созадния файла в Asset.
      */
-    private void processEvent(final CreatedFileEvent event) {
+    private synchronized void processEvent(final CreatedFileEvent event) {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
-        if (!extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) return;
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = toAssetPath(assetFile);
 
-        final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.writeLock();
-        try {
-            final String resource = toAssetPath(assetFile);
-            if (!materialDefinitions.contains(resource)) materialDefinitions.add(resource);
-        } finally {
-            materialDefinitions.writeUnlock();
+        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            final Array<String> materialDefinitions = getMaterialDefinitions();
+            if (!materialDefinitions.contains(assetPath)) materialDefinitions.add(assetPath);
+        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
+
+            final Editor editor = Editor.getInstance();
+            final AssetManager assetManager = editor.getAssetManager();
+
+            final URL url = safeExecute(() -> file.toUri().toURL());
+
+            final Array<URLClassLoader> classLoaders = getClassLoaders();
+            final URLClassLoader oldLoader = classLoaders.search(url, (toCheck, loader) -> contains(loader.getURLs(), toCheck));
+
+            if (oldLoader != null) return;
+
+            final URLClassLoader newLoader = new URLClassLoader(toGenericArray(url), getClass().getClassLoader());
+            classLoaders.add(newLoader);
+            assetManager.addClassLoader(newLoader);
         }
     }
 
@@ -237,6 +296,13 @@ public class ResourceManager {
     }
 
     /**
+     * @return список класс лоадеров.
+     */
+    private Array<URLClassLoader> getClassLoaders() {
+        return classLoaders;
+    }
+
+    /**
      * @return список доступных типов материалов.
      */
     public Array<String> getAvailableMaterialDefinitions() {
@@ -258,37 +324,53 @@ public class ResourceManager {
     /**
      * Перезагрузка доступных ресурсов.
      */
-    private void reload() {
+    private synchronized void reload() {
+
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
+
+        final Array<URLClassLoader> classLoaders = getClassLoaders();
+        classLoaders.forEach(assetManager, AssetManager::removeClassLoader);
+        classLoaders.clear();
 
         final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.writeLock();
+        materialDefinitions.clear();
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final Path currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) return;
+
         try {
+            Files.walkFileTree(currentAsset, (SimpleFileVisitor) (file, attrs) -> handleFile(file));
+        } catch (IOException e) {
+            LOGGER.warning(e);
+        }
+    }
 
-            materialDefinitions.clear();
+    private void handleFile(final Path file) {
+        if (Files.isDirectory(file)) return;
 
-            final EditorConfig editorConfig = EditorConfig.getInstance();
-            final Path currentAsset = editorConfig.getCurrentAsset();
-            if (currentAsset == null) return;
+        final String extension = FileUtils.getExtension(file);
 
-            final SimpleFileVisitor fileVisitor = (file, attrs) -> {
-                if (Files.isDirectory(file)) return;
+        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
+            final Path assetFile = EditorUtil.getAssetFile(file);
+            final Array<String> materialDefinitions = getMaterialDefinitions();
+            materialDefinitions.add(toAssetPath(assetFile));
+        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
 
-                final String extension = FileUtils.getExtension(file);
+            final Editor editor = Editor.getInstance();
+            final AssetManager assetManager = editor.getAssetManager();
 
-                if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-                    final Path assetFile = EditorUtil.getAssetFile(file);
-                    materialDefinitions.add(toAssetPath(assetFile));
-                }
-            };
+            final URL url = safeExecute(() -> file.toUri().toURL());
 
-            try {
-                Files.walkFileTree(currentAsset, fileVisitor);
-            } catch (IOException e) {
-                LOGGER.warning(e);
-            }
+            final Array<URLClassLoader> classLoaders = getClassLoaders();
+            final URLClassLoader oldLoader = classLoaders.search(url, (toCheck, loader) -> contains(loader.getURLs(), toCheck));
 
-        } finally {
-            materialDefinitions.writeUnlock();
+            if (oldLoader != null) return;
+
+            final URLClassLoader newLoader = new URLClassLoader(toGenericArray(url), getClass().getClassLoader());
+            classLoaders.add(newLoader);
+            assetManager.addClassLoader(newLoader);
         }
     }
 

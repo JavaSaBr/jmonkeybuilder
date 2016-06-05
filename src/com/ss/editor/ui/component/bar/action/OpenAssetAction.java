@@ -48,16 +48,10 @@ public class OpenAssetAction extends MenuItem {
 
         final EditorFXScene scene = EDITOR.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
-
-        if (folder == null) {
-            return;
-        }
+        if (folder == null) return;
 
         final Path newAsset = folder.toPath();
-
-        if (newAsset.equals(currentAsset)) {
-            return;
-        }
+        if (newAsset.equals(currentAsset)) return;
 
         config.addOpenedAsset(newAsset);
         config.setCurrentAsset(newAsset);
