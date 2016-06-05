@@ -4,6 +4,10 @@
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
 
+## ver. 0.6.9 ##
+* -Updated JME3 libraries.
+* -Bud fixes.
+
 ## ver. 0.6.7 ##
 * -Fixed the preview of TGA textures.
 * -Changed the cache of preview of texture.
