@@ -37,7 +37,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class GraphicsDialog extends EditorDialog {
+public class GraphicSetingsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);

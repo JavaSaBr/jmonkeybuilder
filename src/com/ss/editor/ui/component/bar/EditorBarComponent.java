@@ -4,7 +4,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.CloseEditorAction;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
-import com.ss.editor.ui.component.bar.action.OpenSettingsAction;
+import com.ss.editor.ui.component.bar.action.OpenGraphicSettingsAction;
+import com.ss.editor.ui.component.bar.action.OpenOtherSettingsAction;
 import com.ss.editor.ui.component.bar.action.ReopenAssetMenu;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -69,9 +70,11 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         final Menu result = new Menu(Messages.EDITOR_BAR_SETTINGS);
         final ObservableList<MenuItem> items = result.getItems();
 
-        final MenuItem openGraphics = new OpenSettingsAction();
+        final MenuItem graphicSettings = new OpenGraphicSettingsAction();
+        final MenuItem otherSettings = new OpenOtherSettingsAction();
 
-        items.add(openGraphics);
+        items.add(graphicSettings);
+        items.add(otherSettings);
 
         return result;
     }

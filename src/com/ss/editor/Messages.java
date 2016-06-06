@@ -22,6 +22,7 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET_CLOSE_EDITOR;
     public static final String EDITOR_BAR_SETTINGS;
     public static final String EDITOR_BAR_SETTINGS_GRAPHICS;
+    public static final String EDITOR_BAR_SETTINGS_OTHER;
 
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
@@ -93,6 +94,12 @@ public class Messages {
     public static final String GRAPHICS_DIALOG_BUTTON_OK;
     public static final String GRAPHICS_DIALOG_BUTTON_CANCEL;
     public static final String GRAPHICS_DIALOG_MESSAGE;
+
+    public static final String OTHER_SETTINGS_DIALOG_TITLE;
+    public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
+    public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
+    public static final String OTHER_SETTINGS_DIALOG_BUTTON_OK;
+    public static final String OTHER_SETTINGS_DIALOG_BUTTON_CANCEL;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
@@ -214,6 +221,7 @@ public class Messages {
 
         EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
         EDITOR_BAR_SETTINGS_GRAPHICS = bundle.getString("EditorBarComponent.settings.graphics");
+        EDITOR_BAR_SETTINGS_OTHER = bundle.getString("EditorBarComponent.settings.other");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
@@ -284,6 +292,12 @@ public class Messages {
         GRAPHICS_DIALOG_BUTTON_OK = bundle.getString("GraphicsDialogButtonOk");
         GRAPHICS_DIALOG_BUTTON_CANCEL = bundle.getString("GraphicsDialogButtonCancel");
         GRAPHICS_DIALOG_MESSAGE = bundle.getString("GraphicsDialogMessage");
+
+        OTHER_SETTINGS_DIALOG_TITLE = bundle.getString("OtherSettingsDialogTitle");
+        OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("OtherSettingsDialogClasspathFolderLabel");
+        OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("OtherSettingsDialogClasspathFolderChooserTitle");
+        OTHER_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("OtherSettingsDialogButtonOk");
+        OTHER_SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("OtherSettingsDialogButtonCancel");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
 

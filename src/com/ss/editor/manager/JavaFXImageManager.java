@@ -69,11 +69,7 @@ public class JavaFXImageManager {
     private static JavaFXImageManager instance;
 
     public static JavaFXImageManager getInstance() {
-
-        if (instance == null) {
-            instance = new JavaFXImageManager();
-        }
-
+        if (instance == null) instance = new JavaFXImageManager();
         return instance;
     }
 

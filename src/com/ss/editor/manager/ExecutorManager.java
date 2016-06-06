@@ -29,11 +29,7 @@ public class ExecutorManager {
     private static ExecutorManager instance;
 
     public static ExecutorManager getInstance() {
-
-        if (instance == null) {
-            instance = new ExecutorManager();
-        }
-
+        if (instance == null) instance = new ExecutorManager();
         return instance;
     }
 

@@ -77,11 +77,7 @@ public class FileIconManager {
     private static FileIconManager instance;
 
     public static FileIconManager getInstance() {
-
-        if (instance == null) {
-            instance = new FileIconManager();
-        }
-
+        if (instance == null) instance = new FileIconManager();
         return instance;
     }
 

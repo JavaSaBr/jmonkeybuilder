@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.util.EditorUtil;
 
@@ -126,14 +125,6 @@ public class PasteFileAction extends MenuItem {
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
         }
-
-        copied.forEach(path -> {
-
-            final CreatedFileEvent createdFileEvent = new CreatedFileEvent();
-            createdFileEvent.setFile(path);
-
-            FX_EVENT_MANAGER.notify(createdFileEvent);
-        });
 
         clipboard.clear();
     }

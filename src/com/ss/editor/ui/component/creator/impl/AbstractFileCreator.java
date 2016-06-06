@@ -11,7 +11,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import java.awt.*;
@@ -195,12 +194,6 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
      * Уведомление всех о создании файла.
      */
     protected void notifyFileCreated(final Path createdFile, boolean needSelect) {
-
-        final CreatedFileEvent event = new CreatedFileEvent();
-        event.setFile(createdFile);
-        event.setNeedSelect(needSelect);
-
-        FX_EVENT_MANAGER.notify(event);
     }
 
     @Override

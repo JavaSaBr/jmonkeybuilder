@@ -36,6 +36,7 @@ public final class EditorConfig implements AssetEventListener {
 
     public static final String GRAPHICS_ALIAS = "Graphics";
     public static final String ASSET_ALIAS = "ASSET";
+    public static final String ASSET_OTHER = "Other";
 
     public static final String PREF_GRAPHIC_SCREEN_SIZE = GRAPHICS_ALIAS + "." + "screenSize";
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
@@ -47,6 +48,8 @@ public final class EditorConfig implements AssetEventListener {
 
     public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
     public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
+
+    public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
 
     private static EditorConfig instance;
 
@@ -107,6 +110,11 @@ public final class EditorConfig implements AssetEventListener {
      * Текущий выбранный Asset.
      */
     private volatile Path currentAsset;
+
+    /**
+     * Путь к папке с дополнительным classpath.
+     */
+    private volatile Path additionalClasspath;
 
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
@@ -202,6 +210,20 @@ public final class EditorConfig implements AssetEventListener {
      */
     public void setCurrentAsset(final Path currentAsset) {
         this.currentAsset = currentAsset;
+    }
+
+    /**
+     * @return путь к папке с дополнительным classpath.
+     */
+    public Path getAdditionalClasspath() {
+        return additionalClasspath;
+    }
+
+    /**
+     * @param additionalClasspath путь к папке с дополнительным classpath.
+     */
+    public void setAdditionalClasspath(final Path additionalClasspath) {
+        this.additionalClasspath = additionalClasspath;
     }
 
     /**
@@ -303,6 +325,12 @@ public final class EditorConfig implements AssetEventListener {
             this.currentAsset = safeExecute(() -> Paths.get(new URI(currentAssetURI)));
         }
 
+        final String classpathURI = prefs.get(PREF_ADDITIONAL_CLASSPATH, null);
+
+        if (classpathURI != null) {
+            this.additionalClasspath = safeExecute(() -> Paths.get(new URI(classpathURI)));
+        }
+
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
 
         final String whitePoint = prefs.get(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, null);
@@ -342,13 +370,21 @@ public final class EditorConfig implements AssetEventListener {
 
         prefs.put(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, whitePoint.getX() + "," + whitePoint.getY() + "," + whitePoint.getZ());
 
+        if (currentAsset != null && !Files.exists(currentAsset)) currentAsset = null;
+        if (additionalClasspath != null && !Files.exists(additionalClasspath))
+            additionalClasspath = null;
+
         if (currentAsset != null) {
             prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());
         } else {
             prefs.remove(PREF_CURRENT_ASSET);
         }
 
-        if (currentAsset != null && !Files.exists(currentAsset)) currentAsset = null;
+        if (additionalClasspath != null) {
+            prefs.put(PREF_ADDITIONAL_CLASSPATH, additionalClasspath.toUri().toString());
+        } else {
+            prefs.remove(PREF_ADDITIONAL_CLASSPATH);
+        }
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
 

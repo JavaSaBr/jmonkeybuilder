@@ -27,6 +27,7 @@ import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.config.ScreenSize;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.JavaFXImageManager;
@@ -289,6 +290,7 @@ public class Editor extends SimpleApplication {
         InitializeManager.register(JavaFXImageManager.class);
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
+        InitializeManager.register(ClasspathManager.class);
         InitializeManager.initialize();
 
         if (Config.ENABLE_PBR) {

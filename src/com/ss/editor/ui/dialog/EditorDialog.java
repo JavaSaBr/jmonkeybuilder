@@ -65,16 +65,27 @@ public class EditorDialog extends AbstractPopupDialog {
     @Override
     public void show(final Window owner) {
         super.show(owner);
-        owner.focusedProperty().addListener(hideListener);
-        FX_EVENT_MANAGER.addEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
+        if (isHideOnLostFocus()) {
+            owner.focusedProperty().addListener(hideListener);
+            FX_EVENT_MANAGER.addEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
+        }
     }
 
     @Override
     public void hide() {
         super.hide();
-        final Window window = getOwnerWindow();
-        window.focusedProperty().removeListener(hideListener);
-        FX_EVENT_MANAGER.removeEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
+        if (isHideOnLostFocus()) {
+            final Window window = getOwnerWindow();
+            window.focusedProperty().removeListener(hideListener);
+            FX_EVENT_MANAGER.removeEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
+        }
+    }
+
+    /**
+     * @return скрывать ли диалог при потере фокуса.
+     */
+    protected boolean isHideOnLostFocus() {
+        return true;
     }
 
     /**

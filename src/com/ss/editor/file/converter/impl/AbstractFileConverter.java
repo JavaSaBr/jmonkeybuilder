@@ -4,7 +4,6 @@ import com.ss.editor.Editor;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 
@@ -112,12 +111,6 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     private void notifyFileCreatedImpl(final Path file) {
-
-        final CreatedFileEvent event = new CreatedFileEvent();
-        event.setFile(file);
-
-        FX_EVENT_MANAGER.notify(event);
-
         final EditorFXScene scene = EDITOR.getScene();
         scene.decrementLoading();
     }

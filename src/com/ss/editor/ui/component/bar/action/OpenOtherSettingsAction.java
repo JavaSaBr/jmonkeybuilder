@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.bar.action;
 
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.dialog.GraphicsDialog;
+import com.ss.editor.ui.dialog.OtherSettingsDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import javafx.scene.control.MenuItem;
@@ -12,12 +12,12 @@ import javafx.scene.control.MenuItem;
  *
  * @author Ronn
  */
-public class OpenSettingsAction extends MenuItem {
+public class OpenOtherSettingsAction extends MenuItem {
 
     private static final Editor EDITOR = Editor.getInstance();
 
-    public OpenSettingsAction() {
-        super(Messages.EDITOR_BAR_SETTINGS_GRAPHICS);
+    public OpenOtherSettingsAction() {
+        super(Messages.EDITOR_BAR_SETTINGS_OTHER);
         setOnAction(event -> process());
     }
 
@@ -28,7 +28,7 @@ public class OpenSettingsAction extends MenuItem {
 
         final EditorFXScene scene = EDITOR.getScene();
 
-        final GraphicsDialog dialog = new GraphicsDialog();
+        final OtherSettingsDialog dialog = new OtherSettingsDialog();
         dialog.show(scene.getWindow());
     }
 }

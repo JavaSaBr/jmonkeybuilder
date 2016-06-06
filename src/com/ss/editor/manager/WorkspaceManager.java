@@ -25,11 +25,7 @@ public class WorkspaceManager {
     private static WorkspaceManager instance;
 
     public static WorkspaceManager getInstance() {
-
-        if (instance == null) {
-            instance = new WorkspaceManager();
-        }
-
+        if (instance == null) instance = new WorkspaceManager();
         return instance;
     }
 

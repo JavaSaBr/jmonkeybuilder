@@ -2,6 +2,7 @@ package com.ss.editor.manager;
 
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
+import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
@@ -17,11 +18,17 @@ import com.ss.editor.util.SimpleFileVisitor;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.util.List;
 
 import rlib.classpath.ClassPathScanner;
 import rlib.classpath.ClassPathScannerFactory;
+import rlib.concurrent.util.ThreadUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
@@ -33,6 +40,8 @@ import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
 import static rlib.util.Util.safeExecute;
@@ -43,22 +52,30 @@ import static rlib.util.array.ArrayFactory.toGenericArray;
  *
  * @author Ronn
  */
-public class ResourceManager {
+public class ResourceManager extends EditorThread {
 
     private static final Logger LOGGER = LoggerManager.getLogger(ResourceManager.class);
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
+
+    private static final WatchService WATCH_SERVICE;
+
+    static {
+        try {
+            WATCH_SERVICE = FileSystems.getDefault().newWatchService();
+        } catch (final IOException e) {
+            LOGGER.warning(e);
+            throw new RuntimeException(e);
+        }
+    }
 
     private static ResourceManager instance;
 
     public static ResourceManager getInstance() {
-
-        if (instance == null) {
-            instance = new ResourceManager();
-        }
-
+        if (instance == null) instance = new ResourceManager();
         return instance;
     }
 
@@ -81,6 +98,11 @@ public class ResourceManager {
      * Список доступных типов материалов.
      */
     private final Array<String> materialDefinitions;
+
+    /**
+     * Ключ для слежения за изменением папок.
+     */
+    private volatile WatchKey watchKey;
 
     public ResourceManager() {
         InitializeManager.valid(getClass());
@@ -119,6 +141,7 @@ public class ResourceManager {
         });
 
         reload();
+        start();
     }
 
     /**
@@ -127,12 +150,13 @@ public class ResourceManager {
     private synchronized void processEvent(final RenamedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
+        final Path newFile = event.getNewFile();
+
         final String extension = FileUtils.getExtension(prevFile);
 
         final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
         final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
 
-        final Path newFile = event.getNewFile();
         final Path newAssetFile = EditorUtil.getAssetFile(newFile);
         final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
 
@@ -146,7 +170,7 @@ public class ResourceManager {
     /**
      * Процесс замены класс лоадера.
      */
-    private void replaceCL(Path prevAssetFile, Path newAssetFile) {
+    private void replaceCL(final Path prevAssetFile, final Path newAssetFile) {
 
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
@@ -173,12 +197,13 @@ public class ResourceManager {
     private synchronized void processEvent(final MovedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
+        final Path newFile = event.getNewFile();
+
         final String extension = FileUtils.getExtension(prevFile);
 
         final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
         final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
 
-        final Path newFile = event.getNewFile();
         final Path newAssetFile = EditorUtil.getAssetFile(newFile);
         final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
 
@@ -192,7 +217,7 @@ public class ResourceManager {
     /**
      * Процесс замены определения материала.
      */
-    private void replaceMD(String prevAssetPath, String newAssetPath) {
+    private void replaceMD(final String prevAssetPath, final String newAssetPath) {
         final Array<String> materialDefinitions = getMaterialDefinitions();
         materialDefinitions.fastRemove(prevAssetPath);
         materialDefinitions.add(newAssetPath);
@@ -204,6 +229,7 @@ public class ResourceManager {
     private synchronized void processEvent(final DeletedFileEvent event) {
 
         final Path file = event.getFile();
+
         final String extension = FileUtils.getExtension(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
@@ -235,6 +261,7 @@ public class ResourceManager {
     private synchronized void processEvent(final CreatedFileEvent event) {
 
         final Path file = event.getFile();
+
         final String extension = FileUtils.getExtension(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
@@ -326,6 +353,13 @@ public class ResourceManager {
      */
     private synchronized void reload() {
 
+        final WatchKey currentWatchKey = getWatchKey();
+
+        if (currentWatchKey != null) {
+            currentWatchKey.cancel();
+            setWatchKey(null);
+        }
+
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
 
@@ -345,8 +379,18 @@ public class ResourceManager {
         } catch (IOException e) {
             LOGGER.warning(e);
         }
+
+        try {
+            final WatchKey watchKey = currentAsset.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE);
+            setWatchKey(watchKey);
+        } catch (IOException e) {
+            LOGGER.warning(e);
+        }
     }
 
+    /**
+     * Обработка файла в папаке asset.
+     */
     private void handleFile(final Path file) {
         if (Files.isDirectory(file)) return;
 
@@ -374,6 +418,42 @@ public class ResourceManager {
         }
     }
 
+    @Override
+    public void run() {
+        super.run();
+
+        while (true) {
+            ThreadUtils.sleep(200);
+
+            final WatchKey watchKey = getWatchKey();
+            final List<WatchEvent<?>> watchEvents = watchKey.pollEvents();
+
+            if (watchEvents.isEmpty()) continue;
+
+            for (final WatchEvent<?> watchEvent : watchEvents) {
+
+                final Path file = (Path) watchEvent.context();
+                final Path realFile = EditorUtil.getRealFile(file);
+
+                if (watchEvent.kind() == ENTRY_CREATE) {
+
+                    final CreatedFileEvent event = new CreatedFileEvent();
+                    event.setFile(realFile);
+                    event.setNeedSelect(false);
+
+                    FX_EVENT_MANAGER.notify(event);
+
+                } else if (watchEvent.kind() == ENTRY_DELETE) {
+
+                    final DeletedFileEvent event = new DeletedFileEvent();
+                    event.setFile(realFile);
+
+                    FX_EVENT_MANAGER.notify(event);
+                }
+            }
+        }
+    }
+
     /**
      * Обработка обновления Asset.
      */
@@ -386,5 +466,19 @@ public class ResourceManager {
      */
     private void processChangeAsset() {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
+    }
+
+    /**
+     * @return ключ для слежения за изменением папок.
+     */
+    private WatchKey getWatchKey() {
+        return watchKey;
+    }
+
+    /**
+     * @param watchKey ключ для слежения за изменением папок.
+     */
+    private void setWatchKey(final WatchKey watchKey) {
+        this.watchKey = watchKey;
     }
 }
