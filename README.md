@@ -1,8 +1,12 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.7.0 #
+# jMonkeyEngine 3 SpaceShift Editor 0.7.1 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+
+## ver. 0.7.1 ##
+* -Implemented additional classpath folder in Settings -> Other settings.
+* -Implemented autosynchronize asset folder with filesystem.
 
 ## ver. 0.7.0 ##
 * -Implemented loading classes from every *.jars in opened asset folder.
