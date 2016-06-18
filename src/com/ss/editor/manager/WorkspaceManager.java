@@ -92,6 +92,14 @@ public class WorkspaceManager {
     }
 
     /**
+     * Очистить воркспейсы.
+     */
+    public synchronized void clear() {
+        final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
+        workspaces.forEach(Workspace::save);
+    }
+
+    /**
      * Сохранить воркспейсы.
      */
     public synchronized void save() {

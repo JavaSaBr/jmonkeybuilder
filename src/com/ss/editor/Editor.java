@@ -18,6 +18,7 @@ import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RendererException;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3x.jfx.JmeFxContainer;
@@ -354,6 +355,12 @@ public class Editor extends SimpleApplication {
         } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | IllegalStateException | StackOverflowError e) {
             LOGGER.warning(e);
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+            workspaceManager.save();
+            System.exit(1);
+        } catch (final RendererException e) {
+            LOGGER.warning(e);
+            final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+            workspaceManager.clear();
             workspaceManager.save();
             System.exit(1);
         } finally {

@@ -500,7 +500,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Обработка смны Bucket типа.
      */
     private void changeBucketType(final RenderQueue.Bucket newValue) {
-
         final MaterialEditorState editorState = getEditorState();
         editorState.changeBucketType(newValue);
     }
@@ -509,11 +508,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Обработка смены типа материала.
      */
     private void changeType(final String newType) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
-
+        if (isIgnoreListeners()) return;
         processChangeTypeImpl(newType);
     }
 
@@ -570,10 +565,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Обработка смены режима модели.
      */
     private void changeModelType(final ToggleButton button, final Boolean newValue) {
-
-        if (newValue == Boolean.FALSE) {
-            return;
-        }
+        if (newValue == Boolean.FALSE) return;
 
         final MaterialEditorState editorState = getEditorState();
 
