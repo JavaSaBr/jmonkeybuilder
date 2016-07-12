@@ -1,8 +1,11 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.7.1 #
+# jMonkeyEngine 3 SpaceShift Editor 0.7.2 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+
+## ver. 0.7.2 ##
+* -Updated the editor camera for working with large objects.
 
 ## ver. 0.7.1 ##
 * -Implemented additional classpath folder in Settings -> Other settings.
