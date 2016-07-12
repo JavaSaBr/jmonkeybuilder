@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.material;
 
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.IntegerMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -26,8 +25,6 @@ import rlib.ui.util.FXUtils;
 public class IntegerMaterialParamControl extends MaterialParamControl {
 
     public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * Контрол для установки целочисленного значения.

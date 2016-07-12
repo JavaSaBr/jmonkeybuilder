@@ -271,6 +271,10 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         targetRotation += value * rotationSpeed;
     }
 
+    public float getTargetDistance() {
+        return targetDistance;
+    }
+
     //move the camera toward or away the target
     protected void zoomCamera(float value) {
 
@@ -279,7 +283,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         }
 
         zooming = true;
-        targetDistance += value * zoomSensitivity;
+        targetDistance += value * zoomSensitivity * Math.sqrt(targetDistance);
 
         if (targetDistance > maxDistance) {
             targetDistance = maxDistance;

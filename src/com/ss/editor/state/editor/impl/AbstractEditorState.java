@@ -152,24 +152,25 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
 
     protected void moveXCamera(final float value) {
 
+        final EditorCamera editorCamera = getEditorCamera();
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
         final Vector3f left = camera.getLeft();
-        left.multLocal(value);
+        left.multLocal(value * (float) Math.sqrt(editorCamera.getTargetDistance()));
         left.addLocal(nodeForCamera.getLocalTranslation());
 
         nodeForCamera.setLocalTranslation(left);
-        final EditorCamera editorCamera = getEditorCamera();
     }
 
     protected void moveYCamera(final float value) {
 
+        final EditorCamera editorCamera = getEditorCamera();
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
         final Vector3f up = camera.getUp();
-        up.multLocal(value);
+        up.multLocal(value * (float) Math.sqrt(editorCamera.getTargetDistance()));
         up.addLocal(nodeForCamera.getLocalTranslation());
 
         nodeForCamera.setLocalTranslation(up);
@@ -448,10 +449,10 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
 
         final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
         editorCamera.setMinVerticalRotation(-FastMath.HALF_PI);
-        editorCamera.setMaxDistance(1000);
+        editorCamera.setMaxDistance(10000);
         editorCamera.setSmoothMotion(false);
         editorCamera.setRotationSensitivity(1);
-        editorCamera.setZoomSensitivity(1);
+        editorCamera.setZoomSensitivity(0.5F);
         editorCamera.setDownRotateOnCloseViewOnly(false);
 
         return editorCamera;
