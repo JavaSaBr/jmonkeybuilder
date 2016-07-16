@@ -1,8 +1,13 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.7.2 #
+# jMonkeyEngine 3 SpaceShift Editor 0.7.3 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+
+## ver. 0.7.3 ##
+* -Updated icons.
+* -Updated the vector and the rotation controls for model editor.
+* -Implemented controling of camera using keys num1, num2, num3, num4, num6, num7, num8, num9 like the Blender.
 
 ## ver. 0.7.2 ##
 * -Updated the editor camera for working with large objects.
