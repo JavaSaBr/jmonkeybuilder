@@ -73,6 +73,9 @@
                 <fileset dir="build/libs/jME">
                     <include name="*"/>
                 </fileset>
+                <fileset dir="build/libs/svg">
+                <include name="*"/>
+            </fileset>
             </classpath>
         </javac>
 
@@ -106,10 +109,17 @@
             </fileset>
         </copy>
 
+        <copy todir="dist/libs/svg">
+            <fileset dir="externalLibs/svg">
+                <include name="*"/>
+            </fileset>
+        </copy>
+
         <fx:resources id="appRes">
             <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
             <fx:fileset dir="dist" includes="libs/*"/>
             <fx:fileset dir="dist" includes="libs/jME/*"/>
+            <fx:fileset dir="dist" includes="libs/svg/*"/>
             <fx:fileset dir="package"/>
         </fx:resources>
 
@@ -117,7 +127,7 @@
                         name="jME3-SpaceShift-Editor"
                         mainClass="com.ss.editor.Starter"
                         toolkit="fx"
-                        version="0.7.2"
+                        version="0.7.3"
                 />
 
         <mkdir dir="build/classes/META-INF"/>
@@ -130,7 +140,7 @@
             <manifest>
                 <attribute name="Implementation-Vendor" value="spaceshift.ru"/>
                 <attribute name="Implementation-Title" value="jME3 SpaceShift Editor"/>
-                <attribute name="Implementation-Version" value="0.7.2"/>
+                <attribute name="Implementation-Version" value="0.7.3"/>
             </manifest>
         </fx:jar>
 
