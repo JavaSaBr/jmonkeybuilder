@@ -3,13 +3,14 @@ package com.ss.editor.ui.control.model.property;
 import com.jme3.light.Light;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
@@ -53,7 +54,7 @@ public class PositionLightPropertyControl<T extends Light> extends ModelProperty
         xField = new TextField();
         xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
-        xField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
+        xField.setOnKeyReleased(this::updateVector);
 
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -61,7 +62,7 @@ public class PositionLightPropertyControl<T extends Light> extends ModelProperty
         yFiled = new TextField();
         yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         yFiled.setOnScroll(this::processScroll);
-        yFiled.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
+        yFiled.setOnKeyReleased(this::updateVector);
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -69,7 +70,7 @@ public class PositionLightPropertyControl<T extends Light> extends ModelProperty
         zField = new TextField();
         zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
-        zField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
+        zField.setOnKeyReleased(this::updateVector);
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
@@ -100,6 +101,7 @@ public class PositionLightPropertyControl<T extends Light> extends ModelProperty
         longValue += event.getDeltaY() * 25;
 
         source.setText(String.valueOf(longValue / 1000F));
+        updateVector(null);
     }
 
     /**
@@ -141,11 +143,8 @@ public class PositionLightPropertyControl<T extends Light> extends ModelProperty
     /**
      * Обновление вектора.
      */
-    private void updateVector() {
-
-        if (isIgnoreListener()) {
-            return;
-        }
+    private void updateVector(final KeyEvent event) {
+        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final TextField xField = getXField();
 
@@ -190,8 +189,6 @@ public class PositionLightPropertyControl<T extends Light> extends ModelProperty
     protected void changed(final Vector3f newValue, final Vector3f oldValue) {
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
-        final Spatial currentModel = modelChangeConsumer.getCurrentModel();
-
         final T editObject = getEditObject();
 
         final LightPropertyOperation<T, Vector3f> operation = new LightPropertyOperation<>(editObject, getPropertyName(), newValue, oldValue);

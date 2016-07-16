@@ -119,10 +119,16 @@ public class FileIconManager {
             contentType = "none";
         }
 
-        final Path mimeTypes = Paths.get("/ui/icons/faenza/mimetypes");
+        final Path mimeTypes = Paths.get("/ui/icons/vibrancy/mimetypes");
 
-        Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".png");
+        Path iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".svg");
         String url = toAssetPath(iconPath);
+
+        if (!EditorUtil.checkExists(url)) {
+            contentType = EXTENSION_TO_CONTENT_TYPE.get(FileUtils.getExtension(path));
+            iconPath = mimeTypes.resolve(valueOf(size)).resolve(contentType + ".svg");
+            url = toAssetPath(iconPath);
+        }
 
         if (!EditorUtil.checkExists(url)) {
             contentType = EXTENSION_TO_CONTENT_TYPE.get(FileUtils.getExtension(path));
@@ -132,17 +138,24 @@ public class FileIconManager {
 
         if (!EditorUtil.checkExists(url)) {
             LOGGER.warning("not found image for contentType " + contentType + " and path " + path);
-            iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.png");
+            iconPath = mimeTypes.resolve(valueOf(size)).resolve("none.svg");
             url = toAssetPath(iconPath);
         }
 
-        return getImage(url);
+        return getImage(url, size);
     }
 
     /**
      * Получение картинки по адрессу.
      */
     public Image getImage(final String url) {
-        return imageCache.get(url, url, Image::new);
+        return getImage(url, 16);
+    }
+
+    /**
+     * Получение картинки по адрессу.
+     */
+    public Image getImage(final String url, final int size) {
+        return imageCache.get(url, () -> new Image(url, size, size, false, true));
     }
 }

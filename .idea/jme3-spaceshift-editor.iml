@@ -38,5 +38,18 @@
         <jarDirectory url="file://$MODULE_DIR$/libs/jME" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/svg" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/svg" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/svg" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/svg" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

@@ -40,6 +40,8 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
 import com.sun.javafx.cursor.CursorType;
 
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -305,6 +307,8 @@ public class Editor extends SimpleApplication {
         scene = EditorFXSceneBuilder.build(fxContainer);
 
         UIUtils.overrideTooltipBehavior(1000, 3000, 500);
+
+        SvgImageLoaderFactory.install();
 
         createProbe();
     }

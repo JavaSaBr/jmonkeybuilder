@@ -11,9 +11,9 @@ import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.Trigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
@@ -23,8 +23,14 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.editor.FileEditor;
 
+import rlib.function.BooleanFloatConsumer;
+import rlib.function.FloatFloatConsumer;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
+import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.ObjectDictionary;
+
+import static rlib.util.array.ArrayFactory.toGenericArray;
 
 /**
  * Базовая реализация.
@@ -37,6 +43,9 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
+
+    protected static final ObjectDictionary<String, Trigger> TRIGGERS = DictionaryFactory.newObjectDictionary();
+    protected static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS = DictionaryFactory.newObjectDictionary();
 
     protected static final String MOUSE_RIGHT_CLICK = "SSEditor.editorState.mouseRightClick";
     protected static final String MOUSE_LEFT_CLICK = "SSEditor.editorState.mouseLeftClick";
@@ -53,6 +62,55 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     protected static final String KEY_S = "SSEditor.editorState.S";
     protected static final String KEY_Z = "SSEditor.editorState.Z";
     protected static final String KEY_Y = "SSEditor.editorState.Y";
+
+    protected static final String KEY_NUM_1 = "SSEditor.editorState.num1";
+    protected static final String KEY_NUM_2 = "SSEditor.editorState.num2";
+    protected static final String KEY_NUM_3 = "SSEditor.editorState.num3";
+    protected static final String KEY_NUM_4 = "SSEditor.editorState.num4";
+    protected static final String KEY_NUM_5 = "SSEditor.editorState.num5";
+    protected static final String KEY_NUM_6 = "SSEditor.editorState.num6";
+    protected static final String KEY_NUM_7 = "SSEditor.editorState.num7";
+    protected static final String KEY_NUM_8 = "SSEditor.editorState.num8";
+    protected static final String KEY_NUM_9 = "SSEditor.editorState.num9";
+
+    static {
+        TRIGGERS.put(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        TRIGGERS.put(MOUSE_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        TRIGGERS.put(MOUSE_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        TRIGGERS.put(MOUSE_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+
+        TRIGGERS.put(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        TRIGGERS.put(MOUSE_MIDDLE_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+
+        MULTI_TRIGGERS.put(KEY_CTRL, toGenericArray(new KeyTrigger(KeyInput.KEY_RCONTROL), new KeyTrigger(KeyInput.KEY_LCONTROL)));
+        MULTI_TRIGGERS.put(KEY_SHIFT, toGenericArray(new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_LSHIFT)));
+        MULTI_TRIGGERS.put(KEY_ALT, toGenericArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
+
+        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
+        TRIGGERS.put(KEY_Z, new KeyTrigger(KeyInput.KEY_Z));
+        TRIGGERS.put(KEY_Y, new KeyTrigger(KeyInput.KEY_Y));
+
+        TRIGGERS.put(KEY_NUM_1, new KeyTrigger(KeyInput.KEY_NUMPAD1));
+        TRIGGERS.put(KEY_NUM_2, new KeyTrigger(KeyInput.KEY_NUMPAD2));
+        TRIGGERS.put(KEY_NUM_3, new KeyTrigger(KeyInput.KEY_NUMPAD3));
+        TRIGGERS.put(KEY_NUM_4, new KeyTrigger(KeyInput.KEY_NUMPAD4));
+        TRIGGERS.put(KEY_NUM_5, new KeyTrigger(KeyInput.KEY_NUMPAD5));
+        TRIGGERS.put(KEY_NUM_6, new KeyTrigger(KeyInput.KEY_NUMPAD6));
+        TRIGGERS.put(KEY_NUM_7, new KeyTrigger(KeyInput.KEY_NUMPAD7));
+        TRIGGERS.put(KEY_NUM_8, new KeyTrigger(KeyInput.KEY_NUMPAD8));
+        TRIGGERS.put(KEY_NUM_9, new KeyTrigger(KeyInput.KEY_NUMPAD9));
+    }
+
+    /**
+     * Обработчики акшен событий.
+     */
+    private final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers;
+
+    /**
+     * Обработчики аналоговых событий.
+     */
+    private final ObjectDictionary<String, FloatFloatConsumer> analogHandlers;
 
     /**
      * Слушатели сцены.
@@ -122,6 +180,57 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
 
         this.analogListener = this::onAnalogImpl;
         this.actionListener = this::onActionImpl;
+        this.actionHandlers = DictionaryFactory.newObjectDictionary();
+        this.analogHandlers = DictionaryFactory.newObjectDictionary();
+
+        registerActionHandlers(actionHandlers);
+        registerAnalogHandlers(analogHandlers);
+    }
+
+    /**
+     * Регистрация обработчиков акшен событий.
+     */
+    protected void registerActionHandlers(final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
+        actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
+        actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> setControlDown(isPressed));
+        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> setShiftDown(isPressed));
+        actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> setButtonLeftDown(isPressed));
+        actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> setButtonMiddleDown(isPressed));
+        actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> setButtonRightDown(isPressed));
+        actionHandlers.put(KEY_NUM_1, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.BACK, isPressed));
+        actionHandlers.put(KEY_NUM_3, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.RIGHT, isPressed));
+        actionHandlers.put(KEY_NUM_7, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.TOP, isPressed));
+        actionHandlers.put(KEY_NUM_9, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.BOTTOM, isPressed));
+        actionHandlers.put(KEY_NUM_2, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.BOTTOM, isPressed));
+        actionHandlers.put(KEY_NUM_8, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.TOP, isPressed));
+        actionHandlers.put(KEY_NUM_4, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.LEFT, isPressed));
+        actionHandlers.put(KEY_NUM_6, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.RIGHT, isPressed));
+
+        actionHandlers.put(KEY_Z, (isPressed, tpf) -> {
+            if (!isPressed && isControlDown()) undo();
+        });
+        actionHandlers.put(KEY_Y, (isPressed, tpf) -> {
+            if (!isPressed && isControlDown()) redo();
+        });
+
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> {
+
+            final FileEditor fileEditor = getFileEditor();
+
+            if (isPressed && isControlDown() && fileEditor.isDirty()) {
+                EXECUTOR_MANAGER.addFXTask(fileEditor::doSave);
+            }
+        });
+    }
+
+    /**
+     * Регистрация обработчиков аналоговых событий.
+     */
+    protected void registerAnalogHandlers(final ObjectDictionary<String, FloatFloatConsumer> analogHandlers) {
+        analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXCamera(value * 30F));
+        analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXCamera(-value * 30F));
+        analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYCamera(-value * 30F));
+        analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYCamera(value * 30F));
     }
 
     /**
@@ -135,22 +244,12 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      * Обработка перемещения мышки над 3D областью
      */
     protected void onAnalogImpl(final String name, final float value, final float tpf) {
-        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
-
-        if (MOUSE_X_AXIS.equals(name)) {
-            moveXCamera(value * 30);
-        } else if (MOUSE_X_AXIS_NEGATIVE.equals(name)) {
-            moveXCamera(-value * 30);
-        }
-
-        if (MOUSE_Y_AXIS.equals(name)) {
-            moveYCamera(-value * 30);
-        } else if (MOUSE_Y_AXIS_NEGATIVE.equals(name)) {
-            moveYCamera(value * 30);
-        }
+        final FloatFloatConsumer handler = analogHandlers.get(name);
+        if (handler != null) handler.accept(value, tpf);
     }
 
     protected void moveXCamera(final float value) {
+        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
 
         final EditorCamera editorCamera = getEditorCamera();
         final Camera camera = EDITOR.getCamera();
@@ -164,6 +263,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     protected void moveYCamera(final float value) {
+        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
 
         final EditorCamera editorCamera = getEditorCamera();
         final Camera camera = EDITOR.getCamera();
@@ -185,37 +285,24 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      */
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
 
-        if (KEY_ALT.equals(name)) {
-            setAltDown(isPressed);
-        } else if (KEY_CTRL.equals(name)) {
-            setControlDown(isPressed);
-        } else if (KEY_SHIFT.equals(name)) {
-            setShiftDown(isPressed);
-        } else if (MOUSE_LEFT_CLICK.equals(name)) {
-            setButtonLeftDown(isPressed);
-        } else if (MOUSE_MIDDLE_CLICK.equals(name)) {
-            setButtonMiddleDown(isPressed);
-        } else if (MOUSE_RIGHT_CLICK.equals(name)) {
-            setButtonRightDown(isPressed);
-        } else if (KEY_S.equals(name)) {
-
-            final FileEditor fileEditor = getFileEditor();
-
-            if (isControlDown() && fileEditor.isDirty()) {
-                EXECUTOR_MANAGER.addFXTask(fileEditor::doSave);
-            }
-
-        } else if (!isPressed && KEY_Z.equals(name) && isControlDown()) {
-            undo();
-        } else if (!isPressed && KEY_Y.equals(name) && isControlDown()) {
-            redo();
-        }
+        final BooleanFloatConsumer handler = actionHandlers.get(name);
+        if (handler != null) handler.accept(isPressed, tpf);
 
         final EditorCamera editorCamera = getEditorCamera();
 
         if (editorCamera != null && needMovableCamera()) {
             editorCamera.setLockRotation(isShiftDown() && isButtonMiddleDown());
         }
+    }
+
+    protected void rotateTo(final EditorCamera.Perspective perspective, final boolean isPressed) {
+        final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera != null && isPressed) editorCamera.rotateTo(perspective);
+    }
+
+    protected void rotateTo(final EditorCamera.Direction direction, final boolean isPressed) {
+        final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera != null && isPressed) editorCamera.rotateTo(direction, 10F);
     }
 
     /**
@@ -339,6 +426,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         final EditorCamera editorCamera = getEditorCamera();
         final InputManager inputManager = EDITOR.getInputManager();
 
+        checkAndAddMappings(inputManager);
         registerActionListener(inputManager);
         registerAnalogListener(inputManager);
 
@@ -348,67 +436,32 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         }
     }
 
-    private void registerAnalogListener(final InputManager inputManager) {
+    /**
+     * Проверка и в случае отсутствия, добавление необходимых триггеров.
+     */
+    protected void checkAndAddMappings(final InputManager inputManager) {
+        TRIGGERS.forEach((name, trigger) -> {
+            if (!inputManager.hasMapping(name)) inputManager.addMapping(name, trigger);
+        });
+        MULTI_TRIGGERS.forEach((name, triggers) -> {
+            if (!inputManager.hasMapping(name)) inputManager.addMapping(name, triggers);
+        });
+    }
 
-        if (!inputManager.hasMapping(MOUSE_X_AXIS)) {
-            inputManager.addMapping(MOUSE_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        }
-
-        if (!inputManager.hasMapping(MOUSE_X_AXIS_NEGATIVE)) {
-            inputManager.addMapping(MOUSE_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        }
-
-        if (!inputManager.hasMapping(MOUSE_Y_AXIS)) {
-            inputManager.addMapping(MOUSE_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        }
-
-        if (!inputManager.hasMapping(MOUSE_Y_AXIS_NEGATIVE)) {
-            inputManager.addMapping(MOUSE_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        }
-
+    /**
+     * Регистрация аналогового слушателя.
+     */
+    protected void registerAnalogListener(final InputManager inputManager) {
         inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS, MOUSE_Y_AXIS_NEGATIVE);
     }
 
-    private void registerActionListener(final InputManager inputManager) {
-
-        if (!inputManager.hasMapping(MOUSE_RIGHT_CLICK)) {
-            inputManager.addMapping(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        }
-
-        if (!inputManager.hasMapping(MOUSE_LEFT_CLICK)) {
-            inputManager.addMapping(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        }
-
-        if (!inputManager.hasMapping(MOUSE_MIDDLE_CLICK)) {
-            inputManager.addMapping(MOUSE_MIDDLE_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
-        }
-
-        if (!inputManager.hasMapping(KEY_CTRL)) {
-            inputManager.addMapping(KEY_CTRL, new KeyTrigger(KeyInput.KEY_RCONTROL), new KeyTrigger(KeyInput.KEY_LCONTROL));
-        }
-
-        if (!inputManager.hasMapping(KEY_SHIFT)) {
-            inputManager.addMapping(KEY_SHIFT, new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_LSHIFT));
-        }
-
-        if (!inputManager.hasMapping(KEY_ALT)) {
-            inputManager.addMapping(KEY_ALT, new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU));
-        }
-
-        if (!inputManager.hasMapping(KEY_S)) {
-            inputManager.addMapping(KEY_S, new KeyTrigger(KeyInput.KEY_S));
-        }
-
-        if (!inputManager.hasMapping(KEY_Z)) {
-            inputManager.addMapping(KEY_Z, new KeyTrigger(KeyInput.KEY_Z));
-        }
-
-        if (!inputManager.hasMapping(KEY_Y)) {
-            inputManager.addMapping(KEY_Y, new KeyTrigger(KeyInput.KEY_Y));
-        }
-
+    /**
+     * Регистрация слушателя нажатий.
+     */
+    protected void registerActionListener(final InputManager inputManager) {
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
-        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S, KEY_Z, KEY_Y);
+        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S, KEY_Z, KEY_Y, KEY_NUM_1,
+                KEY_NUM_2, KEY_NUM_3, KEY_NUM_4, KEY_NUM_5, KEY_NUM_6, KEY_NUM_7, KEY_NUM_8, KEY_NUM_9);
     }
 
     @Override
@@ -448,12 +501,10 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         final Camera camera = EDITOR.getCamera();
 
         final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
-        editorCamera.setMinVerticalRotation(-FastMath.HALF_PI);
         editorCamera.setMaxDistance(10000);
         editorCamera.setSmoothMotion(false);
         editorCamera.setRotationSensitivity(1);
         editorCamera.setZoomSensitivity(0.5F);
-        editorCamera.setDownRotateOnCloseViewOnly(false);
 
         return editorCamera;
     }

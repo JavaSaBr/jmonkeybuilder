@@ -7,6 +7,8 @@ import com.ss.editor.ui.css.CSSIds;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
@@ -52,7 +54,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         xField = new TextField();
         xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
-        xField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
+        xField.setOnKeyReleased(this::updateRotation);
 
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -60,7 +62,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         yFiled = new TextField();
         yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         yFiled.setOnScroll(this::processScroll);
-        yFiled.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
+        yFiled.setOnKeyReleased(this::updateRotation);
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -68,7 +70,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         zField = new TextField();
         zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
-        zField.textProperty().addListener((observable, oldValue, newValue) -> updateVector());
+        zField.setOnKeyReleased(this::updateRotation);
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
@@ -99,6 +101,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         longValue += event.getDeltaY() * 50;
 
         source.setText(String.valueOf(longValue / 1000F));
+        updateRotation(null);
     }
 
     /**
@@ -143,8 +146,8 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
     /**
      * Обновление вектора.
      */
-    private void updateVector() {
-        if (isIgnoreListener()) return;
+    private void updateRotation(final KeyEvent event) {
+        if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final TextField xField = getXField();
 
