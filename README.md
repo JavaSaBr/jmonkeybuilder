@@ -1,8 +1,12 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.7.3 #
+# jMonkeyEngine 3 SpaceShift Editor 0.7.4 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+
+## ver. 0.7.4 ##
+* -Updated JME from 3.1 to 3.2.
+* -Updated LWJGL from 3.0.0b to 3.0.0 release.
 
 ## ver. 0.7.3 ##
 * -Updated icons.
