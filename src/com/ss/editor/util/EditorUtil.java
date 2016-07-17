@@ -318,9 +318,7 @@ public abstract class EditorUtil {
             commands.add("xdg-open");
         }
 
-        if (commands.isEmpty()) {
-            return;
-        }
+        if (commands.isEmpty()) return;
 
         final String url;
         try {
@@ -362,17 +360,14 @@ public abstract class EditorUtil {
      * Десериализация объекта из массива байтов.
      */
     public static <T> T deserialize(final byte[] bytes) {
-
-        if (bytes == null) {
-            return null;
-        }
+        if (bytes == null) return null;
 
         final ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 
         try (final ObjectInputStream in = new ObjectInputStream(bin)) {
             return unsafeCast(in.readObject());
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
+        } catch (final ClassNotFoundException | IOException e) {
+            LOGGER.warning(e);
         }
 
         return null;

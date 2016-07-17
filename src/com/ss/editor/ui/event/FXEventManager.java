@@ -7,7 +7,6 @@ import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWWindowFocusCallback;
-import org.lwjgl.opengl.GL11;
 
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -55,10 +54,10 @@ public class FXEventManager {
         windowFocusCallback = new GLFWWindowFocusCallback() {
 
             @Override
-            public void invoke(final long window, final int focused) {
+            public void invoke(final long window, final boolean focused) {
 
                 final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
-                event.setFocused(focused == GL11.GL_TRUE);
+                event.setFocused(focused);
 
                 FXEventManager.this.notify(event);
             }
