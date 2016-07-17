@@ -5,7 +5,7 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=uOm08VobK-A&feature=youtu.be) ##
 
 ## ver. 0.7.5 ##
-* -Fixed autosynchronize subdirs in workspace.
+* -Fixed auto synchronize of sub dirrectories in a workspace.
 
 ## ver. 0.7.4 ##
 * -Updated JME from 3.1 to 3.2.
