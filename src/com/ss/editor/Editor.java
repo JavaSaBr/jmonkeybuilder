@@ -36,6 +36,8 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.cursor.UbuntuCursorProvider;
+import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
 import com.sun.javafx.cursor.CursorType;
@@ -332,6 +334,28 @@ public class Editor extends SimpleApplication {
      */
     public long trySyncLock() {
         return lock.tryWriteLock();
+    }
+
+    @Override
+    public void loseFocus() {
+        super.loseFocus();
+
+        final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
+        event.setFocused(false);
+
+        FXEventManager eventManager = FXEventManager.getInstance();
+        eventManager.notify(event);
+    }
+
+    @Override
+    public void gainFocus() {
+        super.gainFocus();
+
+        final WindowChangeFocusEvent event = new WindowChangeFocusEvent();
+        event.setFocused(true);
+
+        FXEventManager eventManager = FXEventManager.getInstance();
+        eventManager.notify(event);
     }
 
     @Override

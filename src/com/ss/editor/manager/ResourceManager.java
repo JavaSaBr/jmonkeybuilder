@@ -14,6 +14,7 @@ import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
+import com.ss.editor.util.SimpleFolderVisitor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,6 +36,7 @@ import rlib.manager.InitializeManager;
 import rlib.util.ArrayUtils;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
+import rlib.util.Util;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
@@ -100,13 +102,14 @@ public class ResourceManager extends EditorThread {
     private final Array<String> materialDefinitions;
 
     /**
-     * Ключ для слежения за изменением папок.
+     * Ключи для слежения за изменением папок.
      */
-    private volatile WatchKey watchKey;
+    private final Array<WatchKey> watchKeys;
 
     public ResourceManager() {
         InitializeManager.valid(getClass());
 
+        this.watchKeys = ArrayFactory.newArray(WatchKey.class);
         this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
         this.resourcesInClasspath = ArrayFactory.newArray(String.class);
         this.materialDefinitionsInClasspath = ArrayFactory.newArray(String.class);
@@ -353,12 +356,9 @@ public class ResourceManager extends EditorThread {
      */
     private synchronized void reload() {
 
-        final WatchKey currentWatchKey = getWatchKey();
-
-        if (currentWatchKey != null) {
-            currentWatchKey.cancel();
-            setWatchKey(null);
-        }
+        final Array<WatchKey> watchKeys = getWatchKeys();
+        watchKeys.forEach(WatchKey::cancel);
+        watchKeys.clear();
 
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
@@ -381,11 +381,17 @@ public class ResourceManager extends EditorThread {
         }
 
         try {
-            final WatchKey watchKey = currentAsset.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE);
-            setWatchKey(watchKey);
+            watchKeys.add(currentAsset.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE));
+            Files.walkFileTree(currentAsset, (SimpleFolderVisitor) (file, attrs) -> registerFolder(watchKeys, file));
         } catch (IOException e) {
             LOGGER.warning(e);
         }
+    }
+
+    private static void registerFolder(final Array<WatchKey> watchKeys, final Path file) {
+        watchKeys.add(Util.safeExecute(file, first -> {
+            return first.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE);
+        }));
     }
 
     /**
@@ -425,21 +431,36 @@ public class ResourceManager extends EditorThread {
         while (true) {
             ThreadUtils.sleep(200);
 
-            final WatchKey watchKey = getWatchKey();
-            final List<WatchEvent<?>> watchEvents = watchKey.pollEvents();
+            final Array<WatchKey> watchKeys = getWatchKeys();
 
-            if (watchEvents.isEmpty()) continue;
+            List<WatchEvent<?>> watchEvents = null;
+            WatchKey watchKey = null;
+
+            synchronized (this) {
+                for (final WatchKey key : watchKeys) {
+                    watchKey = key;
+                    watchEvents = key.pollEvents();
+                    if (!watchEvents.isEmpty()) break;
+                }
+            }
+
+            if (watchEvents == null || watchEvents.isEmpty()) continue;
 
             for (final WatchEvent<?> watchEvent : watchEvents) {
 
                 final Path file = (Path) watchEvent.context();
-                final Path realFile = EditorUtil.getRealFile(file);
+                final Path folder = (Path) watchKey.watchable();
+                final Path realFile = folder.resolve(file);
 
                 if (watchEvent.kind() == ENTRY_CREATE) {
 
                     final CreatedFileEvent event = new CreatedFileEvent();
                     event.setFile(realFile);
                     event.setNeedSelect(false);
+
+                    if (Files.isDirectory(realFile)) {
+                        registerWatchKey(realFile);
+                    }
 
                     FX_EVENT_MANAGER.notify(event);
 
@@ -448,10 +469,31 @@ public class ResourceManager extends EditorThread {
                     final DeletedFileEvent event = new DeletedFileEvent();
                     event.setFile(realFile);
 
+                    removeWatchKeyFor(realFile);
+
                     FX_EVENT_MANAGER.notify(event);
                 }
             }
         }
+    }
+
+    private synchronized WatchKey findWatchKey(final Path path) {
+        final Array<WatchKey> watchKeys = getWatchKeys();
+        return watchKeys.search(path, (toCheck, watchKey) -> watchKey.watchable().equals(toCheck));
+    }
+
+    private synchronized void removeWatchKeyFor(final Path path) {
+
+        final WatchKey watchKey = findWatchKey(path);
+
+        if (watchKey != null) {
+            getWatchKeys().fastRemove(watchKey);
+            watchKey.cancel();
+        }
+    }
+
+    private synchronized void registerWatchKey(final Path dir) {
+        Util.safeExecute(() -> getWatchKeys().add(dir.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE)));
     }
 
     /**
@@ -469,16 +511,9 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * @return ключ для слежения за изменением папок.
+     * @return ключи для слежения за изменением папок.
      */
-    private WatchKey getWatchKey() {
-        return watchKey;
-    }
-
-    /**
-     * @param watchKey ключ для слежения за изменением папок.
-     */
-    private void setWatchKey(final WatchKey watchKey) {
-        this.watchKey = watchKey;
+    private Array<WatchKey> getWatchKeys() {
+        return watchKeys;
     }
 }
