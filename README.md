@@ -1,8 +1,11 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.7.4 #
+# jMonkeyEngine 3 SpaceShift Editor 0.7.5 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
-## [Video about this editor.](https://www.youtube.com/watch?v=hgmujIUlyH8&feature=youtu.be) ##
+## [Video about this editor.](https://www.youtube.com/watch?v=uOm08VobK-A&feature=youtu.be) ##
+
+## ver. 0.7.5 ##
+* -Fixed autosynchronize subdirs in workspace.
 
 ## ver. 0.7.4 ##
 * -Updated JME from 3.1 to 3.2.
