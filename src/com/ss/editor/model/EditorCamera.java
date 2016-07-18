@@ -65,18 +65,19 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     protected InputManager inputManager;
 
-    protected Camera camera;
+    protected final Camera camera;
 
     protected Spatial target;
 
     protected final Vector3f targetDir;
     protected final Vector3f position;
 
+    protected final Vector3f targetLocation;
+    protected final Vector3f temp;
+
     protected Vector3f initialUpVec;
     protected Vector3f prevPos;
-    protected Vector3f targetLocation;
     protected Vector3f lookAtOffset;
-    protected Vector3f temp;
 
     protected float minDistance = 1.0f;
     protected float maxDistance = 40.0f;
@@ -152,7 +153,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      */
     public EditorCamera(final Camera camera) {
         this.camera = camera;
-        this.initialUpVec = camera.getUp(new Vector3f());
+        this.initialUpVec = Vector3f.UNIT_Y;
         this.targetDir = new Vector3f();
         this.position = new Vector3f();
         this.targetLocation = new Vector3f(0, 0, 0);

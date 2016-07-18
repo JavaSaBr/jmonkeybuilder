@@ -503,9 +503,6 @@ public class GraphicSetingsDialog extends EditorDialog {
         final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
         final boolean fullscreen = fullscreenCheckBox.isSelected();
 
-        final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
-        final boolean fxaa = fxaaFilterCheckBox.isSelected();
-
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
 

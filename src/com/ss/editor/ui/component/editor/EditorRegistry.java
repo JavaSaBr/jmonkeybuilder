@@ -113,17 +113,14 @@ public class EditorRegistry {
         if (Files.isDirectory(file)) return null;
 
         final String extension = FileUtils.getExtension(file);
-
-        EditorDescription description = null;
-
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
 
         Array<EditorDescription> descriptions = editorDescriptions.get(extension);
+        EditorDescription description;
 
         if (descriptions != null) {
             description = descriptions.first();
         } else {
-
             descriptions = editorDescriptions.get(ALL_FORMATS);
             description = descriptions == null ? null : descriptions.first();
         }

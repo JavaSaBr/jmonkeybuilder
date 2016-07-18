@@ -112,7 +112,7 @@ public class ModelNodeTree extends TitledPane {
         final ModelNode<?> value = treeItem.getValue();
         final Object element = value == null ? null : value.getElement();
 
-        Object toSelect = null;
+        Object toSelect;
 
         if (element instanceof Spatial) {
             toSelect = element;

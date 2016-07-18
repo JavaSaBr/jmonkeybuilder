@@ -28,6 +28,8 @@ import rlib.logging.LoggerManager;
  */
 public class Workspace implements Serializable {
 
+    public static final long serialVersionUID = 075L;
+
     private static final Logger LOGGER = LoggerManager.getLogger(Workspace.class);
 
     /**
@@ -43,7 +45,7 @@ public class Workspace implements Serializable {
     /**
      * Таблица открытых файлов.
      */
-    private Map<String, String> openedFiles;
+    private final Map<String, String> openedFiles;
 
     /**
      * Таблица состояний редакторов в воркспейсе.

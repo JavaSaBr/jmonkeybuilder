@@ -89,8 +89,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();
 
-        float value = 0;
-
+        float value;
         try {
             value = parseFloat(text);
         } catch (final NumberFormatException e) {
@@ -151,8 +150,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
 
         final TextField xField = getXField();
 
-        float x = 0;
-
+        float x;
         try {
             x = degreeToRadians(parseFloat(xField.getText()));
         } catch (final NumberFormatException e) {
@@ -161,8 +159,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
 
         final TextField yFiled = getYFiled();
 
-        float y = 0;
-
+        float y;
         try {
             y = degreeToRadians(parseFloat(yFiled.getText()));
         } catch (final NumberFormatException e) {
@@ -171,8 +168,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
 
         final TextField zField = getZField();
 
-        float z = 0;
-
+        float z;
         try {
             z = degreeToRadians(parseFloat(zField.getText()));
         } catch (final NumberFormatException e) {

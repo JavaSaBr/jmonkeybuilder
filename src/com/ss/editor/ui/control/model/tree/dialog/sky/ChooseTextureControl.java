@@ -177,10 +177,7 @@ public class ChooseTextureControl extends HBox {
         reload();
 
         final Runnable changeHandler = getChangeHandler();
-
-        if (changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changeHandler != null) changeHandler.run();
     }
 
     /**

@@ -14,7 +14,6 @@ import java.util.Set;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -54,7 +53,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         public ModelNode<?> fromString(final String string) {
 
             final ModelNode<?> item = getItem();
-            if (item == null) return item;
+            if (item == null) return null;
 
             item.changeName(getNodeTree(), string);
 
@@ -214,7 +213,6 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         if (newParentItem == null) return;
 
         final Object element = dragItem.getElement();
-        final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
 
         if (isCopy) {
 
@@ -236,10 +234,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
             final ModelNode<?> prevParent = parent.getValue();
             final ModelNode<?> newParent = newParentItem.getValue();
-
-            if (newParent == prevParent) {
-                return;
-            }
+            if (newParent == prevParent) return;
 
             final Spatial spatial = (Spatial) element;
             final Node prevParentNode = (Node) prevParent.getElement();

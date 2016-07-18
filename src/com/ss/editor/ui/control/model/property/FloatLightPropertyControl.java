@@ -74,8 +74,7 @@ public class FloatLightPropertyControl<T extends Light> extends ModelPropertyCon
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();
 
-        float value = 0;
-
+        float value;
         try {
             value = parseFloat(text);
         } catch (final NumberFormatException e) {
@@ -112,8 +111,7 @@ public class FloatLightPropertyControl<T extends Light> extends ModelPropertyCon
 
         final TextField valueField = getValueField();
 
-        float value = 0;
-
+        float value;
         try {
             value = parseFloat(valueField.getText());
         } catch (final NumberFormatException e) {

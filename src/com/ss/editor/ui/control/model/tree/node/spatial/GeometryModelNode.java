@@ -80,15 +80,4 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
             geometry.setMesh(element);
         }
     }
-
-    @Override
-    public void remove(final ModelNode<?> child) {
-        super.remove(child);
-
-        final Geometry geometry = getElement();
-
-        if (child instanceof MeshModelNode && child.getElement() == geometry.getMesh()) {
-            geometry.setMesh(null);
-        }
-    }
 }

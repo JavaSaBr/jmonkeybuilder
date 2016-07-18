@@ -265,9 +265,7 @@ public abstract class EditorUtil {
             alert.setWidth(500);
             alert.setHeight(220);
 
-            if (callback != null) {
-                alert.setOnHidden(event -> callback.run());
-            }
+            if (callback != null) alert.setOnHidden(event -> callback.run());
         });
     }
 

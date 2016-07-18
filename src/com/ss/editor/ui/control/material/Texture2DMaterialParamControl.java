@@ -4,7 +4,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.MatParamTexture;
 import com.jme3.material.Material;
-import com.jme3.texture.Texture;
+import com.jme3.texture.Texture.WrapAxis;
+import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
@@ -165,17 +166,17 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Texture2D texture2D = (Texture2D) textureParam.getValue();
         final TextureKey key = (TextureKey) texture2D.getKey();
 
-        Texture.WrapMode oldMode;
-        Texture.WrapMode newMode;
+        WrapMode oldMode;
+        WrapMode newMode;
 
         if (newValue) {
-            oldMode = Texture.WrapMode.EdgeClamp;
-            newMode = Texture.WrapMode.Repeat;
-            texture2D.setWrap(Texture.WrapMode.Repeat);
+            oldMode = WrapMode.EdgeClamp;
+            newMode = WrapMode.Repeat;
+            texture2D.setWrap(WrapMode.Repeat);
         } else {
-            oldMode = Texture.WrapMode.Repeat;
-            newMode = Texture.WrapMode.EdgeClamp;
-            texture2D.setWrap(Texture.WrapMode.EdgeClamp);
+            oldMode = WrapMode.Repeat;
+            newMode = WrapMode.EdgeClamp;
+            texture2D.setWrap(WrapMode.EdgeClamp);
         }
 
         execute(new TextureMaterialParamOperation(parameterName, key, newMode, key, oldMode));
@@ -199,10 +200,10 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final TextureKey newKey = (TextureKey) oldKey.clone();
         newKey.setFlipY(newValue);
 
-        Texture.WrapMode mode = Texture.WrapMode.EdgeClamp;
+        WrapMode mode = WrapMode.EdgeClamp;
 
-        if (texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
-            mode = Texture.WrapMode.Repeat;
+        if (texture2D.getWrap(WrapAxis.S) == WrapMode.Repeat) {
+            mode = WrapMode.Repeat;
         }
 
         execute(new TextureMaterialParamOperation(parameterName, newKey, mode, oldKey, mode));
@@ -233,10 +234,10 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Texture2D oldTexture = textureParam == null ? null : (Texture2D) textureParam.getValue();
         final TextureKey oldKey = oldTexture == null ? null : (TextureKey) oldTexture.getKey();
 
-        Texture.WrapMode oldMode = Texture.WrapMode.EdgeClamp;
+        WrapMode oldMode = WrapMode.EdgeClamp;
 
-        if (oldTexture != null && oldTexture.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
-            oldMode = Texture.WrapMode.Repeat;
+        if (oldTexture != null && oldTexture.getWrap(WrapAxis.S) == WrapMode.Repeat) {
+            oldMode = WrapMode.Repeat;
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -249,17 +250,14 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final TextureKey newKey = new TextureKey(assetPath);
         newKey.setFlipY(flipButton.isSelected());
 
-        final Texture texture;
-
         try {
-            texture = assetManager.loadTexture(newKey);
+            assetManager.loadTexture(newKey);
         } catch (final Exception e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        Texture.WrapMode newMode = repeatButton.isSelected() ? Texture.WrapMode.Repeat : Texture.WrapMode.EdgeClamp;
-
+        final WrapMode newMode = repeatButton.isSelected() ? WrapMode.Repeat : WrapMode.EdgeClamp;
         execute(new TextureMaterialParamOperation(parameterName, newKey, newMode, oldKey, oldMode));
     }
 
@@ -274,10 +272,10 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Texture2D texture2D = (Texture2D) textureParam.getValue();
         final TextureKey oldKey = (TextureKey) texture2D.getKey();
 
-        Texture.WrapMode mode = Texture.WrapMode.EdgeClamp;
+        WrapMode mode = WrapMode.EdgeClamp;
 
-        if (texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat) {
-            mode = Texture.WrapMode.Repeat;
+        if (texture2D.getWrap(WrapAxis.S) == WrapMode.Repeat) {
+            mode = WrapMode.Repeat;
         }
 
         execute(new TextureMaterialParamOperation(parameterName, null, null, oldKey, mode));
@@ -334,7 +332,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         flipButton.setSelected(textureKey.isFlipY());
 
         final CheckBox repeatButton = getRepeatButton();
-        repeatButton.setSelected(texture2D.getWrap(Texture.WrapAxis.S) == Texture.WrapMode.Repeat);
+        repeatButton.setSelected(texture2D.getWrap(WrapAxis.S) == WrapMode.Repeat);
 
         final Path realFile = EditorUtil.getRealFile(textureKey.getName());
 

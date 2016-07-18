@@ -537,11 +537,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Обработка выделения узла в дереве.
      */
     public void notifySelected(final Object object) {
-
-        Spatial spatial = null;
-
-        if (object instanceof Spatial) spatial = (Spatial) object;
-
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
     }

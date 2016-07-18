@@ -29,7 +29,7 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * Элемент модели.
      */
-    private T element;
+    private final T element;
 
     public ModelNode(final T element, final long objectId) {
         this.element = element;

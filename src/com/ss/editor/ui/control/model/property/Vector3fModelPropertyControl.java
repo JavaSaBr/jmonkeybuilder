@@ -84,8 +84,7 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Spatial, 
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();
 
-        float value = 0;
-
+        float value;
         try {
             value = Float.parseFloat(text);
         } catch (final NumberFormatException e) {
@@ -143,8 +142,7 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Spatial, 
 
         final TextField xField = getXField();
 
-        float x = 0;
-
+        float x;
         try {
             x = Float.parseFloat(xField.getText());
         } catch (final NumberFormatException e) {
@@ -153,8 +151,7 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Spatial, 
 
         final TextField yFiled = getYFiled();
 
-        float y = 0;
-
+        float y;
         try {
             y = Float.parseFloat(yFiled.getText());
         } catch (final NumberFormatException e) {
@@ -163,8 +160,7 @@ public class Vector3fModelPropertyControl extends ModelPropertyControl<Spatial, 
 
         final TextField zField = getZField();
 
-        float z = 0;
-
+        float z;
         try {
             z = Float.parseFloat(zField.getText());
         } catch (final NumberFormatException e) {

@@ -87,7 +87,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();
 
-        float value = 0;
+        float value;
 
         try {
             value = parseFloat(text);
@@ -148,8 +148,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
 
         final TextField xField = getXField();
 
-        float x = 0;
-
+        float x;
         try {
             x = parseFloat(xField.getText());
         } catch (final NumberFormatException e) {
@@ -158,8 +157,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
 
         final TextField yFiled = getYFiled();
 
-        float y = 0;
-
+        float y;
         try {
             y = parseFloat(yFiled.getText());
         } catch (final NumberFormatException e) {
@@ -168,8 +166,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
 
         final TextField zField = getZField();
 
-        float z = 0;
-
+        float z;
         try {
             z = parseFloat(zField.getText());
         } catch (final NumberFormatException e) {

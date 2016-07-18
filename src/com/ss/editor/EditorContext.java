@@ -52,8 +52,8 @@ public final class EditorContext extends LwjglDisplay {
     }
 
     @Override
-    protected void initContextFirstTime() {
+    protected void createContext(final AppSettings settings) {
         settings.setRenderer(AppSettings.LWJGL_OPENGL3);
-        super.initContextFirstTime();
+        super.createContext(settings);
     }
 }

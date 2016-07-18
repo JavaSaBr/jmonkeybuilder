@@ -24,7 +24,7 @@ public class TGAReader {
         return btoi(buffer[offset]);
     }
 
-    public static Image decode(final byte[] buffer) throws IOException {
+    public static Image decode(final byte[] buffer) {
 
         int offset = 0;
 

@@ -24,6 +24,8 @@ import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Реализация фабрики узлов модели для дерева.
  *
@@ -36,35 +38,35 @@ public class ModelNodeFactory {
     public static <T, V extends ModelNode<T>> V createFor(T element) {
 
         if (element instanceof Animation) {
-            return (V) new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
         }
 
         if (element instanceof AnimControl) {
-            return (V) new AnimationControlModelNode((AnimControl) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new AnimationControlModelNode((AnimControl) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Control) {
-            return (V) new ControlModelNode<>((Control) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new ControlModelNode<>((Control) element, ID_GENERATOR.incrementAndGet()));
         }
 
         if (element instanceof LightProbe) {
-            return (V) new LightProbeModelNode((LightProbe) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new LightProbeModelNode((LightProbe) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof AmbientLight) {
-            return (V) new AmbientLightModelNode((AmbientLight) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new AmbientLightModelNode((AmbientLight) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof DirectionalLight) {
-            return (V) new DirectionalLightModelNode((DirectionalLight) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new DirectionalLightModelNode((DirectionalLight) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof SpotLight) {
-            return (V) new SpotLightModelNode((SpotLight) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new SpotLightModelNode((SpotLight) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof PointLight) {
-            return (V) new PointLightModelNode((PointLight) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new PointLightModelNode((PointLight) element, ID_GENERATOR.incrementAndGet()));
         }
 
         if (element instanceof Mesh) {
-            return (V) new MeshModelNode((Mesh) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new MeshModelNode((Mesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Geometry) {
-            return (V) new GeometryModelNode((Geometry) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new GeometryModelNode((Geometry) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Node) {
-            return (V) new NodeModelNode((Node) element, ID_GENERATOR.incrementAndGet());
+            return unsafeCast(new NodeModelNode((Node) element, ID_GENERATOR.incrementAndGet()));
         }
 
-        return null;
+        throw new IllegalArgumentException("unknown " + element);
     }
 }

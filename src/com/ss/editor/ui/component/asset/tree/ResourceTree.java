@@ -609,10 +609,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Очистка дерева от пустых узлов.
      */
-    public boolean cleanup(final TreeItem<ResourceElement> treeItem) {
+    public void cleanup(final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
-        if (element instanceof FileElement) return false;
+        if (element instanceof FileElement) return;
 
         final ObservableList<TreeItem<ResourceElement>> children = treeItem.getChildren();
 
@@ -624,10 +624,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             final TreeItem<ResourceElement> parent = treeItem.getParent();
             final ObservableList<TreeItem<ResourceElement>> parentChildren = parent.getChildren();
             parentChildren.remove(treeItem);
-            return true;
         }
-
-        return false;
     }
 
     /**

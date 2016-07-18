@@ -57,7 +57,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     private static final Point DIALOG_SIZE = new Point(580, 390);
     public static final Editor EDITOR = Editor.getInstance();
 
-    private static enum SkyType {
+    private enum SkyType {
         SINGLE_TEXTURE(Messages.CREATE_SKY_DIALOG_SKY_TYPE_SINGLE),
         MULTIPLE_TEXTURE(Messages.CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE);
 
@@ -81,12 +81,12 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     /**
      * Родительский узел.
      */
-    private ModelNode<?> parentNode;
+    private final ModelNode<?> parentNode;
 
     /**
      * Дерево структуры модели.
      */
-    private ModelNodeTree nodeTree;
+    private final ModelNodeTree nodeTree;
 
     /**
      * Список типов фонов.
@@ -656,7 +656,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         final ChooseTextureControl bottomTextureControl = getBottomTextureControl();
         final Path bottomTextureFile = bottomTextureControl.getTextureFile();
 
-        final Path northTextureAssetFile = EditorUtil.getAssetFile(bottomTextureFile);
+        final Path northTextureAssetFile = EditorUtil.getAssetFile(northTextureFile);
         final Path southTextureAssetFile = EditorUtil.getAssetFile(southTextureFile);
         final Path eastTextureAssetFile = EditorUtil.getAssetFile(eastTextureFile);
         final Path westTextureAssetFile = EditorUtil.getAssetFile(westTextureFile);

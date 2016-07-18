@@ -5,12 +5,12 @@ package com.ss.editor.control.transform;
  */
 public class TransformConstraint {
 
-    private static float moveConstraint, rotateConstraint, scaleConstraint;
+    private static final float MOVE_CONSTRAINT, ROTATE_CONSTRAINT, SCALE_CONSTRAINT;
 
-    {
-        moveConstraint = 10;
-        rotateConstraint = 10;
-        scaleConstraint = 10;
+    static {
+        MOVE_CONSTRAINT = 10;
+        ROTATE_CONSTRAINT = 10;
+        SCALE_CONSTRAINT = 10;
     }
 
     public static float constraintValue(float value, float constraintValue) {
@@ -45,14 +45,14 @@ public class TransformConstraint {
     }
 
     public static float getMoveConstraint() {
-        return moveConstraint;
+        return MOVE_CONSTRAINT;
     }
 
     public static float getRotateConstraint() {
-        return rotateConstraint;
+        return ROTATE_CONSTRAINT;
     }
 
     public static float getScaleConstraint() {
-        return scaleConstraint;
+        return SCALE_CONSTRAINT;
     }
 }

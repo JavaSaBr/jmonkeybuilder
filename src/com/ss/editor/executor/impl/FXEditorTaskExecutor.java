@@ -25,7 +25,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     public FXEditorTaskExecutor() {
         setName(FXEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);
-        start();
+        PlatformImpl.startup(this::start);
     }
 
     /**
@@ -58,7 +58,6 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         try {
 
             final Array<Runnable> waitTasks = getWaitTasks();
-            waitTasks.slowRemove(task);
             waitTasks.add(task);
 
             final AtomicBoolean wait = getWait();

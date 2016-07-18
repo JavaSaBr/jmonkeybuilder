@@ -16,7 +16,7 @@ import rlib.util.StringUtils;
 public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
     public static <T> void install(ComboBox<T> comboBox) {
-        new AutoCompleteComboBoxListener<T>(comboBox);
+        new AutoCompleteComboBoxListener<>(comboBox);
     }
 
     /**
@@ -27,7 +27,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
     /**
      * Изначальный список значений.
      */
-    private ObservableList<T> data;
+    private final ObservableList<T> data;
 
     /**
      * Позиция курсора.

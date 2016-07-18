@@ -100,9 +100,7 @@ public class EditorFXSceneBuilder {
 
         barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
 
-        final Runnable resizeHandler = () -> {
-            splitContainer.setDividerPosition(0, 0.01);
-        };
+        final Runnable resizeHandler = () -> splitContainer.setDividerPosition(0, 0.01);
 
         scene.widthProperty().addListener((observableValue, oldValue, newValue) -> resizeHandler.run());
         scene.heightProperty().addListener((observableValue, oldValue, newValue) -> resizeHandler.run());

@@ -78,7 +78,7 @@ public class Editor extends SimpleApplication {
         return EDITOR;
     }
 
-    public static void start(String[] args) throws IOException {
+    public static void start(String[] args) {
 
         // фикс рендера шрифтов в FX
         System.setProperty("prism.lcdtext", "false");
@@ -361,7 +361,6 @@ public class Editor extends SimpleApplication {
     @Override
     public void update() {
 
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
         final InputManager inputManager = getInputManager();
         final JmeFxContainer fxContainer = getFxContainer();
 
