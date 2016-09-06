@@ -267,7 +267,7 @@ public class Editor extends SimpleApplication {
 
         final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, assetManager, inputManager);
 
-        ArrayUtils.forEach(CursorType.values(), cursorDisplayProvider::setup);
+        ArrayUtils.forEach(CursorType.values(), cursorDisplayProvider::setupCursor);
 
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);

@@ -72,7 +72,7 @@ public class UbuntuCursorProvider implements CursorDisplayProvider {
     }
 
     @Override
-    public void setup(final CursorType cursorType) {
+    public void setupCursor(final CursorType cursorType) {
 
         final ObjectDictionary<CursorType, JmeCursor> cache = getCache();
         final String path = CURSOR_TEXTURE_MAPPING.get(cursorType);

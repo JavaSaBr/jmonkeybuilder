@@ -327,10 +327,7 @@ public class ModelNodeTree extends TitledPane {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
-
-        if (parentItem == null) {
-            return;
-        }
+        if (parentItem == null) return;
 
         final TreeItem<ModelNode<?>> childItem = new TreeItem<>(child);
 
@@ -355,10 +352,7 @@ public class ModelNodeTree extends TitledPane {
     public void notifyRemoved(final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
-
-        if (treeItem == null) {
-            return;
-        }
+        if (treeItem == null) return;
 
         final TreeItem<ModelNode<?>> parentItem = treeItem.getParent();
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
@@ -401,13 +395,12 @@ public class ModelNodeTree extends TitledPane {
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
 
-        final ModelNode<Object> modelNode = createFor(object);
-
-        if (modelNode == null) {
+        if (object == null) {
             selectionModel.select(null);
             return;
         }
 
+        final ModelNode<Object> modelNode = createFor(object);
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
 
         if (treeItem == null) {

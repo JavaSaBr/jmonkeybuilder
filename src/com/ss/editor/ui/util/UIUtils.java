@@ -4,6 +4,9 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -224,25 +227,18 @@ public class UIUtils {
     /**
      * Поиск элемента дерева, содержашего указанное значение.
      */
-    public static <T> TreeItem<T> findItemForValue(final TreeView<T> treeView, final Object object) {
+    @Nullable
+    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @NotNull final Object object) {
 
         final TreeItem<T> root = treeView.getRoot();
-
-        if (root.getValue().equals(object)) {
-            return root;
-        }
+        if (root.getValue().equals(object)) return root;
 
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
         if (!children.isEmpty()) {
-
-            for (TreeItem<T> treeItem : children) {
-
+            for (final TreeItem<T> treeItem : children) {
                 final TreeItem<T> result = findItemForValue(treeItem, object);
-
-                if (result != null) {
-                    return result;
-                }
+                if (result != null) return result;
             }
         }
 

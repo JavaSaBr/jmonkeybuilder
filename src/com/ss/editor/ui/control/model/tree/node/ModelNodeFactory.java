@@ -22,6 +22,8 @@ import com.ss.editor.ui.control.model.tree.node.light.SpotLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.atomic.AtomicLong;
 
 import static rlib.util.ClassUtils.unsafeCast;
@@ -35,7 +37,8 @@ public class ModelNodeFactory {
 
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
-    public static <T, V extends ModelNode<T>> V createFor(T element) {
+    @NotNull
+    public static <T, V extends ModelNode<T>> V createFor(@NotNull final T element) {
 
         if (element instanceof Animation) {
             return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
