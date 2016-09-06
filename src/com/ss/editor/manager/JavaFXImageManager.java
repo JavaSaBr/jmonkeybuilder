@@ -24,6 +24,7 @@ import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
+import rlib.util.Util;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -152,9 +153,7 @@ public class JavaFXImageManager {
 
             try {
 
-                final byte[] content = FileUtils.getContent(file);
-                if (content == null) return Icons.IMAGE_512;
-
+                final byte[] content = Util.safeGet(file, Files::readAllBytes);
                 final java.awt.Image awtImage = TGAReader.getImage(content);
                 if (awtImage == null) return Icons.IMAGE_512;
 

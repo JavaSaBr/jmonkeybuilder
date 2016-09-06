@@ -28,7 +28,7 @@ public class BlendToJ3oFileConverter extends AbstractFileConverter {
 
     static {
         EXTENSIONS.add(FileExtensions.BLENDER);
-        EXTENSIONS.trimToSize();
+        EXTENSIONS.asUnsafe().trimToSize();
     }
 
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();

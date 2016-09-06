@@ -60,11 +60,11 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
 
         final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters = getFilters();
-        filters.readLock();
+        final long stamp = filters.readLock();
         try {
             filters.forEach(postProcessor::addFilter);
         } finally {
-            filters.readUnlock();
+            filters.readUnlock(stamp);
         }
     }
 
@@ -75,11 +75,11 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
 
         final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters = getFilters();
-        filters.readLock();
+        final long stamp = filters.readLock();
         try {
             filters.forEach(postProcessor::removeFilter);
         } finally {
-            filters.readUnlock();
+            filters.readUnlock(stamp);
         }
     }
 
@@ -91,11 +91,11 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
      */
     public boolean hasFilter(final MaterialKey materialKey) {
         final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters = getFilters();
-        filters.readLock();
+        final long stamp = filters.readLock();
         try {
             return filters.containsKey(materialKey);
         } finally {
-            filters.readUnlock();
+            filters.readUnlock(stamp);
         }
     }
 
@@ -117,7 +117,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
 
         final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters = getFilters();
-        filters.writeLock();
+        final long stamp = filters.writeLock();
         try {
 
             final MaterialKey key = (MaterialKey) material.getKey();
@@ -127,7 +127,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
             if (isInitialized()) postProcessor.addFilter(genericFilter);
 
         } finally {
-            filters.writeUnlock();
+            filters.writeUnlock(stamp);
         }
     }
 
@@ -146,7 +146,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
 
         final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters = getFilters();
-        filters.writeLock();
+        final long stamp = filters.writeLock();
         try {
 
             final MaterialKey key = (MaterialKey) material.getKey();
@@ -156,7 +156,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
             if (isInitialized()) postProcessor.removeFilter(genericFilter);
 
         } finally {
-            filters.writeUnlock();
+            filters.writeUnlock(stamp);
         }
     }
 }

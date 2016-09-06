@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import rlib.manager.InitializeManager;
-import rlib.util.FileUtils;
+import rlib.util.Util;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
@@ -79,7 +79,7 @@ public class WorkspaceManager {
             return workspace;
         }
 
-        Workspace workspace = EditorUtil.deserialize(FileUtils.getContent(workspaceFile));
+        Workspace workspace = EditorUtil.deserialize(Util.safeGet(workspaceFile, Files::readAllBytes));
 
         if (workspace == null) {
             workspace = new Workspace();

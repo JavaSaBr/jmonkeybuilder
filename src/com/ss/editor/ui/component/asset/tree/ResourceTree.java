@@ -42,6 +42,7 @@ import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
+import rlib.util.array.ConcurrentArray;
 
 import static com.ss.editor.ui.component.asset.tree.ResourceTreeCell.CELL_FACTORY;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
@@ -102,12 +103,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Развернутые элементы.
      */
-    private final Array<ResourceElement> expandedElements;
+    private final ConcurrentArray<ResourceElement> expandedElements;
 
     /**
      * Выбранные элементы.
      */
-    private final Array<ResourceElement> selectedElements;
+    private final ConcurrentArray<ResourceElement> selectedElements;
 
     /**
      * Функция окрытия файла.
@@ -136,8 +137,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     public ResourceTree(final Consumer<ResourceElement> openFunction, final boolean readOnly) {
         this.openFunction = openFunction;
         this.readOnly = readOnly;
-        this.expandedElements = ArrayFactory.newConcurrentAtomicArray(ResourceElement.class);
-        this.selectedElements = ArrayFactory.newConcurrentAtomicArray(ResourceElement.class);
+        this.expandedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
+        this.selectedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
 
@@ -246,14 +247,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return развернутые элементы.
      */
-    public Array<ResourceElement> getExpandedElements() {
+    public ConcurrentArray<ResourceElement> getExpandedElements() {
         return expandedElements;
     }
 
     /**
      * @return выбранные элементы.
      */
-    public Array<ResourceElement> getSelectedElements() {
+    public ConcurrentArray<ResourceElement> getSelectedElements() {
         return selectedElements;
     }
 
@@ -284,8 +285,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private void updateExpandedElements() {
 
-        final Array<ResourceElement> expandedElements = getExpandedElements();
-        expandedElements.writeLock();
+        final ConcurrentArray<ResourceElement> expandedElements = getExpandedElements();
+        final long stamp = expandedElements.writeLock();
         try {
 
             expandedElements.clear();
@@ -297,7 +298,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             });
 
         } finally {
-            expandedElements.writeUnlock();
+            expandedElements.writeUnlock(stamp);
         }
     }
 
@@ -306,8 +307,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private void updateSelectedElements() {
 
-        final Array<ResourceElement> selectedElements = getSelectedElements();
-        selectedElements.writeLock();
+        final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
+        final long stamp = selectedElements.writeLock();
         try {
 
             selectedElements.clear();
@@ -317,7 +318,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             selectedItems.forEach(item -> selectedElements.add(item.getValue()));
 
         } finally {
-            selectedElements.writeUnlock();
+            selectedElements.writeUnlock(stamp);
         }
     }
 
@@ -361,8 +362,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         fill(newRoot);
 
-        final Array<ResourceElement> expandedElements = getExpandedElements();
-        expandedElements.writeLock();
+        final ConcurrentArray<ResourceElement> expandedElements = getExpandedElements();
+        final long stamp = expandedElements.writeLock();
         try {
 
             expandedElements.sort(COMPARATOR);
@@ -377,7 +378,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             expandedElements.clear();
 
         } finally {
-            expandedElements.writeUnlock();
+            expandedElements.writeUnlock(stamp);
         }
 
         EXECUTOR_MANAGER.addFXTask(() -> {
@@ -395,8 +396,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void restoreSelection() {
         EXECUTOR_MANAGER.addFXTask(() -> {
 
-            final Array<ResourceElement> selectedElements = getSelectedElements();
-            selectedElements.writeLock();
+            final ConcurrentArray<ResourceElement> selectedElements = getSelectedElements();
+            final long stamp = selectedElements.writeLock();
             try {
 
                 final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
@@ -410,7 +411,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
                 selectedElements.clear();
 
             } finally {
-                selectedElements.writeUnlock();
+                selectedElements.writeUnlock(stamp);
             }
         });
     }

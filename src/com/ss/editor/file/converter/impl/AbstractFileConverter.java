@@ -54,8 +54,6 @@ public abstract class AbstractFileConverter implements FileConverter {
         }
 
         final Array<String> extensions = getAvailableExtensions();
-        extensions.trimToSize();
-
         if (!extensions.isEmpty() && !containsExtensions(extensions.array(), source)) {
             throw new IllegalArgumentException("incorrect extension of file " + source);
         }

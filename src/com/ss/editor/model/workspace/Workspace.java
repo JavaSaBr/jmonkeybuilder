@@ -28,7 +28,7 @@ import rlib.logging.LoggerManager;
  */
 public class Workspace implements Serializable {
 
-    public static final long serialVersionUID = 075L;
+    public static final long serialVersionUID = 61;
 
     private static final Logger LOGGER = LoggerManager.getLogger(Workspace.class);
 

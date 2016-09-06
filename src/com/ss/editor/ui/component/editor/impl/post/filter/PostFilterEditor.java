@@ -46,6 +46,7 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
+import rlib.util.Util;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -163,22 +164,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         super.openFile(file);
 
         final PostFilterViewFile currentFile = PostFilterViewSerializer.deserialize(file);
+        final byte[] content = Util.safeGet(file, Files::readAllBytes);
 
-        final byte[] content = FileUtils.getContent(file);
-
-        if (content == null) {
-            setOriginalContent(StringUtils.EMPTY);
-        } else {
-            setOriginalContent(new String(content));
-        }
-
+        setOriginalContent(new String(content));
         setCurrentFile(currentFile);
         setIgnoreListeners(true);
         try {
-
             final List<String> materials = currentFile.getMaterials();
             materials.forEach(assetName -> addRelativeMaterial(Paths.get(assetName)));
-
         } finally {
             setIgnoreListeners(false);
         }

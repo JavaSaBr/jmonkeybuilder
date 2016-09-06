@@ -5,9 +5,10 @@ import com.google.gson.GsonBuilder;
 
 import com.ss.editor.file.PostFilterViewFile;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import rlib.util.FileUtils;
+import rlib.util.Util;
 
 /**
  * Сериализатор PostFilterViewFile.
@@ -23,11 +24,8 @@ public class PostFilterViewSerializer {
      */
     public static PostFilterViewFile deserialize(final Path file) {
 
-        final byte[] content = FileUtils.getContent(file);
-
-        if (content == null || content.length < 1) {
-            return new PostFilterViewFile();
-        }
+        final byte[] content = Util.safeGet(file, Files::readAllBytes);
+        if (content.length < 1) return new PostFilterViewFile();
 
         final Gson gson = GSON_LOCAL.get();
         return gson.fromJson(new String(content), PostFilterViewFile.class);

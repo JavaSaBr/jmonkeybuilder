@@ -15,8 +15,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
-import rlib.util.StringUtils;
+import rlib.util.Util;
 
 /**
  * Реализация редактора текстовых файлов.
@@ -90,13 +89,9 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     public void openFile(final Path file) {
         super.openFile(file);
 
-        final byte[] content = FileUtils.getContent(file);
+        final byte[] content = Util.safeGet(file, Files::readAllBytes);
 
-        if (content == null) {
-            setOriginalContent(StringUtils.EMPTY);
-        } else {
-            setOriginalContent(new String(content));
-        }
+        setOriginalContent(new String(content));
 
         final TextArea textArea = getTextArea();
         textArea.setText(getOriginalContent());

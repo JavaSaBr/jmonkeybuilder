@@ -10,49 +10,49 @@ import rlib.concurrent.lock.LockFactory;
 import rlib.concurrent.util.ConcurrentUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
-import rlib.util.Synchronized;
+import rlib.util.Lockable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Базовая реализация исполнителя задач.
+ * The base implementation of the {@link EditorThreadExecutor}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor, Synchronized {
+public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor, Lockable {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorTaskExecutor.class);
 
     /**
-     * Список задач на исполнение во время ближайшей фазы.
+     * The array of task to execute for each iteration.
      */
-    private final Array<Runnable> execute;
+    protected final Array<Runnable> execute;
 
     /**
-     * Список выполненных задач.
+     * The array of executed task of the iteration.
      */
-    private final Array<Runnable> executed;
+    protected final Array<Runnable> executed;
 
     /**
-     * Список ожидающих задач на исполнении.
+     * The array of task to execute.
      */
-    private final Array<Runnable> waitTasks;
+    protected final Array<Runnable> waitTasks;
 
     /**
-     * Находится ли исполнитель в ожидании.
+     * Is this executor waiting new tasks.
      */
-    private final AtomicBoolean wait;
+    protected final AtomicBoolean wait;
 
     /**
-     * Блокировщик.
+     * The synchronizer.
      */
-    private final Lock lock;
+    protected final Lock lock;
 
     public AbstractEditorTaskExecutor() {
         this.execute = createExecuteArray();
         this.executed = createExecuteArray();
         this.waitTasks = createExecuteArray();
-        this.lock = LockFactory.newPrimitiveAtomicLock();
+        this.lock = LockFactory.newAtomicLock();
         this.wait = new AtomicBoolean(false);
     }
 
@@ -65,16 +65,12 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
         lock();
         try {
 
-            final Array<Runnable> waitTasks = getWaitTasks();
             waitTasks.add(task);
+            if (!wait.get()) return;
 
-            final AtomicBoolean wait = getWait();
-
-            if (wait.get()) {
-                synchronized (wait) {
-                    if (wait.compareAndSet(true, false)) {
-                        ConcurrentUtils.notifyAllInSynchronize(wait);
-                    }
+            synchronized (wait) {
+                if (wait.compareAndSet(true, false)) {
+                    ConcurrentUtils.notifyAllInSynchronize(wait);
                 }
             }
 
@@ -84,31 +80,49 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     }
 
     /**
-     * @return список задач на исполнение во время ближайшей фазы.
+     * Execute the array of tasks.
      */
-    public Array<Runnable> getExecute() {
-        return execute;
-    }
+    protected abstract void doExecute(final Array<Runnable> execute, final Array<Runnable> executed);
 
-    /**
-     * @return список выполненных задач.
-     */
-    public Array<Runnable> getExecuted() {
-        return executed;
-    }
+    @Override
+    public void run() {
+        while (true) {
 
-    /**
-     * @return находится ли исполнитель в ожидании.
-     */
-    public AtomicBoolean getWait() {
-        return wait;
-    }
+            executed.clear();
+            execute.clear();
 
-    /**
-     * @return список ожидающих задач на исполнении.
-     */
-    public Array<Runnable> getWaitTasks() {
-        return waitTasks;
+            lock();
+            try {
+
+                if (waitTasks.isEmpty()) {
+                    wait.getAndSet(true);
+                } else {
+                    execute.addAll(waitTasks);
+                }
+
+            } finally {
+                unlock();
+            }
+
+            if (wait.get()) {
+                synchronized (wait) {
+                    if (wait.get()) {
+                        ConcurrentUtils.waitInSynchronize(wait);
+                    }
+                }
+            }
+
+            if (execute.isEmpty()) continue;
+            doExecute(execute, executed);
+            if (executed.isEmpty()) continue;
+
+            lock();
+            try {
+                waitTasks.removeAll(executed);
+            } finally {
+                unlock();
+            }
+        }
     }
 
     @Override

@@ -79,7 +79,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     public EditorAreaComponent() {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
 
-        this.openedEditors = DictionaryFactory.newConcurrentObjectDictionary();
+        this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
         final ObservableList<Tab> tabs = getTabs();
         tabs.addListener(this::processChangeTabs);

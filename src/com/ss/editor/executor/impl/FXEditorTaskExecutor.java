@@ -2,14 +2,12 @@ package com.ss.editor.executor.impl;
 
 import com.sun.javafx.application.PlatformImpl;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import rlib.concurrent.util.ConcurrentUtils;
 import rlib.concurrent.util.ThreadUtils;
 import rlib.util.array.Array;
 
 /**
- * Реализация исполнителья задач по обновлению FX UI.
+ * The implementation of the {@link EditorThreadExecutor} for executing task in the FX UI Thread.
  *
  * @author Ronn
  */
@@ -18,9 +16,9 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     private static final int EXECUTE_LIMIT = 300;
 
     /**
-     * Задча по выполнению подзадач в потоке JavaFX.
+     * The task for executing editor tasks in the FX UI Thread.
      */
-    private final Runnable fxTask = () -> doExecute(getExecute(), getExecuted());
+    private final Runnable fxTask = () -> doExecute(execute, executed);
 
     public FXEditorTaskExecutor() {
         setName(FXEditorTaskExecutor.class.getSimpleName());
@@ -28,9 +26,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         PlatformImpl.startup(this::start);
     }
 
-    /**
-     * Процесс обновления состояния задач.
-     */
+    @Override
     protected void doExecute(final Array<Runnable> execute, final Array<Runnable> executed) {
 
         final Runnable[] array = execute.array();
@@ -52,38 +48,9 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         }
     }
 
-    @Override
-    public void execute(final Runnable task) {
-        lock();
-        try {
-
-            final Array<Runnable> waitTasks = getWaitTasks();
-            waitTasks.add(task);
-
-            final AtomicBoolean wait = getWait();
-
-            if (wait.get()) {
-                synchronized (wait) {
-                    if (wait.compareAndSet(true, false)) {
-                        ConcurrentUtils.notifyAllInSynchronize(wait);
-                    }
-                }
-            }
-
-        } finally {
-            unlock();
-        }
-    }
 
     @Override
     public void run() {
-
-        final Array<Runnable> execute = getExecute();
-        final Array<Runnable> executed = getExecuted();
-        final Array<Runnable> waitTasks = getWaitTasks();
-
-        final AtomicBoolean wait = getWait();
-
         while (true) {
 
             executed.clear();
@@ -111,18 +78,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
             }
 
             if (execute.isEmpty()) continue;
-
-            // обновление состояния задач
-            while (true) {
-                try {
-                    PlatformImpl.runAndWait(fxTask);
-                    break;
-                } catch (final IllegalStateException e) {
-                    LOGGER.warning(this, e);
-                    ThreadUtils.sleep(1000);
-                }
-            }
-
+            executeInFXUIThread();
             if (executed.isEmpty()) continue;
 
             lock();
@@ -130,6 +86,18 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 waitTasks.removeAll(executed);
             } finally {
                 unlock();
+            }
+        }
+    }
+
+    private void executeInFXUIThread() {
+        while (true) {
+            try {
+                PlatformImpl.runAndWait(fxTask);
+                break;
+            } catch (final IllegalStateException e) {
+                LOGGER.warning(this, e);
+                ThreadUtils.sleep(1000);
             }
         }
     }

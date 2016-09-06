@@ -76,7 +76,7 @@ public class EditorFXScene extends Scene {
      */
     public <T extends ScreenComponent> T findComponent(final String id) {
         final Array<ScreenComponent> components = getComponents();
-        return unsafeCast(components.search(id, (toCheck, component) -> StringUtils.equals(toCheck, component.getComponentId())));
+        return unsafeCast(components.search(id, (component, toCheck) -> StringUtils.equals(toCheck, component.getComponentId())));
     }
 
     /**

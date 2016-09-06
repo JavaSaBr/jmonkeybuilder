@@ -18,7 +18,6 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class FXEventManager {
 
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager INSTANCE = new FXEventManager();
 
     public static FXEventManager getInstance() {
@@ -41,9 +40,7 @@ public class FXEventManager {
      * @param eventHandler обработчик событий.
      */
     public void addEventHandler(final EventType<? extends Event> eventType, final EventHandler<? super Event> eventHandler) {
-
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
-
         final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType, () -> ArrayFactory.newArray(EventHandler.class));
         handlers.add(eventHandler);
     }
@@ -97,7 +94,7 @@ public class FXEventManager {
             final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
             if (handlers == null || handlers.isEmpty()) continue;
 
-            handlers.forEach(event, (toHandle, handler) -> handler.handle(toHandle));
+            handlers.forEach(event, EventHandler::handle);
         }
 
         if (event instanceof ConsumeableEvent && !event.isConsumed()) {

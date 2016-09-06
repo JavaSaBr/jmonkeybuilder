@@ -3,6 +3,7 @@ package com.ss.editor.executor.impl;
 import rlib.util.ArrayUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+import rlib.util.array.ConcurrentArray;
 
 /**
  * Реализация исполнителя задач в основном потооке.
@@ -20,7 +21,7 @@ public class EditorThreadExecutor {
     /**
      * Ожидающие исполнения задачи.
      */
-    private final Array<Runnable> waitTasks;
+    private final ConcurrentArray<Runnable> waitTasks;
 
     /**
      * Задачи которые должны сейчас выполнится.
@@ -28,7 +29,7 @@ public class EditorThreadExecutor {
     private final Array<Runnable> execute;
 
     public EditorThreadExecutor() {
-        this.waitTasks = ArrayFactory.newConcurrentAtomicArray(Runnable.class);
+        this.waitTasks = ArrayFactory.newConcurrentAtomicARSWLockArray(Runnable.class);
         this.execute = ArrayFactory.newArray(Runnable.class);
     }
 
@@ -38,18 +39,14 @@ public class EditorThreadExecutor {
      * @param task задача на выполнение.
      */
     public void addToExecute(final Runnable task) {
-        ArrayUtils.runInWriteLock(getWaitTasks(), task, Array::add);
+        ArrayUtils.runInWriteLock(waitTasks, task, Array::add);
     }
 
     /**
      * Выполнить ожидающие задачи.
      */
     public void execute() {
-
-        final Array<Runnable> waitTasks = getWaitTasks();
         if (waitTasks.isEmpty()) return;
-
-        final Array<Runnable> execute = getExecute();
 
         ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
 
@@ -58,19 +55,5 @@ public class EditorThreadExecutor {
         } finally {
             execute.clear();
         }
-    }
-
-    /**
-     * @return задачи которые должны сейчас выполнится.
-     */
-    private Array<Runnable> getExecute() {
-        return execute;
-    }
-
-    /**
-     * @return ожидающие исполнения задачи.
-     */
-    private Array<Runnable> getWaitTasks() {
-        return waitTasks;
     }
 }

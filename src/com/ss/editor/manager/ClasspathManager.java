@@ -13,10 +13,10 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
+import rlib.util.Util;
 import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
-import static rlib.util.Util.safeExecute;
+import static rlib.util.array.ArrayFactory.toArray;
 
 /**
  * Менеджер по управлению classpath.
@@ -31,7 +31,7 @@ public class ClasspathManager {
     private static final AssetManager ASSET_MANAGER = EDITOR.getAssetManager();
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
-    private static final String[] EXTENSIONS = ArrayFactory.toGenericArray(FileExtensions.JAVA_LIBRARY);
+    private static final String[] EXTENSIONS = toArray(FileExtensions.JAVA_LIBRARY);
 
     private static ClasspathManager instance;
 
@@ -66,8 +66,7 @@ public class ClasspathManager {
         if (path == null) return;
 
         final Array<Path> jars = FileUtils.getFiles(path, false, EXTENSIONS);
-        final URL[] urls = jars.stream().map(jar -> safeExecute(() -> jar.toUri().toURL())).toArray(URL[]::new);
-
+        final URL[] urls = jars.stream().map(jar -> Util.safeGet(jar, FileUtils::toUrl)).toArray(URL[]::new);
         final URLClassLoader newCL = new URLClassLoader(urls, getClass().getClassLoader());
 
         ASSET_MANAGER.addClassLoader(newCL);

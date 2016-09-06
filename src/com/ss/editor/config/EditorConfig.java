@@ -27,7 +27,7 @@ import javax.imageio.ImageIO;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
-import static rlib.util.Util.safeExecute;
+import static rlib.util.Util.safeGet;
 
 /**
  * Набор настроек, изменяемых пользователем.
@@ -341,13 +341,13 @@ public final class EditorConfig implements AssetEventListener {
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
         if (currentAssetURI != null) {
-            this.currentAsset = safeExecute(() -> Paths.get(new URI(currentAssetURI)));
+            this.currentAsset = safeGet(currentAssetURI, uri -> Paths.get(new URI(uri)));
         }
 
         final String classpathURI = prefs.get(PREF_ADDITIONAL_CLASSPATH, null);
 
         if (classpathURI != null) {
-            this.additionalClasspath = safeExecute(() -> Paths.get(new URI(classpathURI)));
+            this.additionalClasspath = safeGet(classpathURI, uri -> Paths.get(new URI(uri)));
         }
 
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);

@@ -33,7 +33,6 @@ import rlib.concurrent.util.ThreadUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
-import rlib.util.ArrayUtils;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 import rlib.util.Util;
@@ -46,8 +45,8 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
-import static rlib.util.Util.safeExecute;
-import static rlib.util.array.ArrayFactory.toGenericArray;
+import static rlib.util.Util.safeGet;
+import static rlib.util.array.ArrayFactory.toArray;
 
 /**
  * Менеджер по работе с ресурсами.
@@ -178,12 +177,12 @@ public class ResourceManager extends EditorThread {
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
 
-        final URL prevURL = safeExecute(() -> prevAssetFile.toUri().toURL());
-        final URL newURL = safeExecute(() -> newAssetFile.toUri().toURL());
+        final URL prevURL = safeGet(prevAssetFile, file -> file.toUri().toURL());
+        final URL newURL = safeGet(newAssetFile, file -> file.toUri().toURL());
 
         final Array<URLClassLoader> classLoaders = getClassLoaders();
-        final URLClassLoader oldLoader = classLoaders.search(prevURL, (url, loader) -> contains(loader.getURLs(), url));
-        final URLClassLoader newLoader = new URLClassLoader(toGenericArray(newURL), getClass().getClassLoader());
+        final URLClassLoader oldLoader = classLoaders.search(prevURL, (loader, url) -> contains(loader.getURLs(), url));
+        final URLClassLoader newLoader = new URLClassLoader(toArray(newURL), getClass().getClassLoader());
 
         if (oldLoader != null) {
             classLoaders.fastRemove(oldLoader);
@@ -246,10 +245,10 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = safeExecute(() -> file.toUri().toURL());
+            final URL url = safeGet(file, toUri -> toUri.toUri().toURL());
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
-            final URLClassLoader oldLoader = classLoaders.search(url, (toCheck, loader) -> contains(loader.getURLs(), toCheck));
+            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
 
             if (oldLoader != null) {
                 classLoaders.fastRemove(oldLoader);
@@ -278,14 +277,14 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = safeExecute(() -> file.toUri().toURL());
+            final URL url = safeGet(file, FileUtils::toUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
-            final URLClassLoader oldLoader = classLoaders.search(url, (toCheck, loader) -> contains(loader.getURLs(), toCheck));
+            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
 
             if (oldLoader != null) return;
 
-            final URLClassLoader newLoader = new URLClassLoader(toGenericArray(url), getClass().getClassLoader());
+            final URLClassLoader newLoader = new URLClassLoader(toArray(url), getClass().getClassLoader());
             classLoaders.add(newLoader);
             assetManager.addClassLoader(newLoader);
         }
@@ -335,15 +334,15 @@ public class ResourceManager extends EditorThread {
     /**
      * @return список доступных типов материалов.
      */
-    public Array<String> getAvailableMaterialDefinitions() {
+    public synchronized Array<String> getAvailableMaterialDefinitions() {
 
         final Array<String> result = ArrayFactory.newArray(String.class);
         final Array<String> materialDefinitions = getMaterialDefinitions();
 
-        ArrayUtils.runInReadLock(materialDefinitions, result, (source, destination) -> move(source, destination, false));
+        move(materialDefinitions, result, false);
 
         final Array<String> materialDefinitionsInClasspath = getMaterialDefinitionsInClasspath();
-        materialDefinitionsInClasspath.forEach(result, (container, resource) -> {
+        materialDefinitionsInClasspath.forEach(result, (resource, container) -> {
             if (!container.contains(resource)) container.add(resource);
         });
 
@@ -364,7 +363,7 @@ public class ResourceManager extends EditorThread {
         final AssetManager assetManager = editor.getAssetManager();
 
         final Array<URLClassLoader> classLoaders = getClassLoaders();
-        classLoaders.forEach(assetManager, AssetManager::removeClassLoader);
+        classLoaders.forEach(assetManager, (loader, manager) -> manager.removeClassLoader(loader));
         classLoaders.clear();
 
         final Array<String> materialDefinitions = getMaterialDefinitions();
@@ -389,7 +388,7 @@ public class ResourceManager extends EditorThread {
     }
 
     private static void registerFolder(final Array<WatchKey> watchKeys, final Path file) {
-        watchKeys.add(Util.safeExecute(file, first -> {
+        watchKeys.add(Util.safeGet(file, first -> {
             return first.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE);
         }));
     }
@@ -411,14 +410,14 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = safeExecute(() -> file.toUri().toURL());
+            final URL url = safeGet(file, FileUtils::toUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
-            final URLClassLoader oldLoader = classLoaders.search(url, (toCheck, loader) -> contains(loader.getURLs(), toCheck));
+            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
 
             if (oldLoader != null) return;
 
-            final URLClassLoader newLoader = new URLClassLoader(toGenericArray(url), getClass().getClassLoader());
+            final URLClassLoader newLoader = new URLClassLoader(toArray(url), getClass().getClassLoader());
             classLoaders.add(newLoader);
             assetManager.addClassLoader(newLoader);
         }
@@ -427,7 +426,6 @@ public class ResourceManager extends EditorThread {
     @Override
     public void run() {
         super.run();
-
         while (true) {
             ThreadUtils.sleep(200);
 
@@ -479,7 +477,7 @@ public class ResourceManager extends EditorThread {
 
     private synchronized WatchKey findWatchKey(final Path path) {
         final Array<WatchKey> watchKeys = getWatchKeys();
-        return watchKeys.search(path, (toCheck, watchKey) -> watchKey.watchable().equals(toCheck));
+        return watchKeys.search(path, (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
     }
 
     private synchronized void removeWatchKeyFor(final Path path) {

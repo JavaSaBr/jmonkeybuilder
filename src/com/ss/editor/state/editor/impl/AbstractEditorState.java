@@ -30,10 +30,10 @@ import rlib.logging.LoggerManager;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
-import static rlib.util.array.ArrayFactory.toGenericArray;
+import static org.apache.commons.lang3.ArrayUtils.toArray;
 
 /**
- * Базовая реализация.
+ * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
  *
  * @author Ronn
  */
@@ -83,9 +83,9 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         TRIGGERS.put(MOUSE_MIDDLE_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
 
-        MULTI_TRIGGERS.put(KEY_CTRL, toGenericArray(new KeyTrigger(KeyInput.KEY_RCONTROL), new KeyTrigger(KeyInput.KEY_LCONTROL)));
-        MULTI_TRIGGERS.put(KEY_SHIFT, toGenericArray(new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_LSHIFT)));
-        MULTI_TRIGGERS.put(KEY_ALT, toGenericArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
+        MULTI_TRIGGERS.put(KEY_CTRL, toArray(new KeyTrigger(KeyInput.KEY_RCONTROL), new KeyTrigger(KeyInput.KEY_LCONTROL)));
+        MULTI_TRIGGERS.put(KEY_SHIFT, toArray(new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_LSHIFT)));
+        MULTI_TRIGGERS.put(KEY_ALT, toArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
 
         TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
         TRIGGERS.put(KEY_Z, new KeyTrigger(KeyInput.KEY_Z));
@@ -440,12 +440,16 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      * Проверка и в случае отсутствия, добавление необходимых триггеров.
      */
     protected void checkAndAddMappings(final InputManager inputManager) {
-        TRIGGERS.forEach((name, trigger) -> {
-            if (!inputManager.hasMapping(name)) inputManager.addMapping(name, trigger);
-        });
-        MULTI_TRIGGERS.forEach((name, triggers) -> {
-            if (!inputManager.hasMapping(name)) inputManager.addMapping(name, triggers);
-        });
+        TRIGGERS.forEach(inputManager, AbstractEditorState::addMapping);
+        MULTI_TRIGGERS.forEach(inputManager, AbstractEditorState::addMapping);
+    }
+
+    private static void addMapping(final InputManager inputManager, final String name, final Trigger[] triggers) {
+        if (!inputManager.hasMapping(name)) inputManager.addMapping(name, triggers);
+    }
+
+    private static void addMapping(final InputManager inputManager, final String name, final Trigger trigger) {
+        if (!inputManager.hasMapping(name)) inputManager.addMapping(name, trigger);
     }
 
     /**
@@ -513,10 +517,8 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      * @return источник света для камеры.
      */
     protected DirectionalLight createLightForCamera() {
-
         final DirectionalLight directionalLight = new DirectionalLight();
         directionalLight.setColor(ColorRGBA.White);
-
         return directionalLight;
     }
 
