@@ -198,7 +198,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
-
         if (!extension.endsWith(FileExtensions.JME_MATERIAL)) return;
 
         final Path assetFile = EditorUtil.getAssetFile(file);
@@ -206,11 +205,9 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final PostFilterViewFile currentFile = getCurrentFile();
         final List<String> materials = currentFile.getMaterials();
-
         if (!materials.contains(assetPath)) return;
 
         final MaterialKey materialKey = new MaterialKey(assetPath);
-
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
 

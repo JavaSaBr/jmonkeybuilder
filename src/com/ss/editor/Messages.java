@@ -7,9 +7,9 @@ import java.util.ResourceBundle;
 import rlib.util.ReflectionUtils;
 
 /**
- * Набор констант с локализованными сообщениями.
+ * The class with all messages of this application.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class Messages {
 

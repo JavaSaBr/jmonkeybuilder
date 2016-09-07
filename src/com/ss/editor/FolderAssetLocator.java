@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static java.nio.file.Files.newInputStream;
+
 /**
- * Реализация загрузчика контента из папки ассета.
+ * The implementation of {@link AssetLocator} for loading the data from asset folder.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FolderAssetLocator implements AssetLocator {
 
@@ -27,16 +29,14 @@ public class FolderAssetLocator implements AssetLocator {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
-
         if (currentAsset == null) return null;
 
         final String name = key.getName();
         final Path resolve = currentAsset.resolve(name);
-
         if (!Files.exists(resolve)) return null;
 
         try {
-            return new StreamAssetInfo(manager, key, Files.newInputStream(resolve));
+            return new StreamAssetInfo(manager, key, newInputStream(resolve));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

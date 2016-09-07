@@ -44,7 +44,6 @@ import com.sun.javafx.cursor.CursorType;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.locks.StampedLock;
@@ -57,16 +56,22 @@ import rlib.logging.LoggerManager;
 import rlib.logging.impl.FolderFileListener;
 import rlib.manager.InitializeManager;
 import rlib.util.ArrayUtils;
+import rlib.util.Util;
+
+import static java.nio.file.Files.createDirectories;
 
 /**
- * Стартовый класс редактора.
+ * The implementation of the {@link com.jme3.app.Application} of this Editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class Editor extends SimpleApplication {
 
     private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
 
+    /**
+     * The empty job adapter for handling creating {@link LightProbe}.
+     */
     private static final JobProgressAdapter<LightProbe> EMPTY_JOB_ADAPTER = new JobProgressAdapter<LightProbe>() {
         public void done(final LightProbe result) {
         }
@@ -78,18 +83,17 @@ public class Editor extends SimpleApplication {
         return EDITOR;
     }
 
-    public static void start(String[] args) {
+    public static void start(final String[] args) {
 
-        // фикс рендера шрифтов в FX
+        // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
 
-        // настройки для JavaFX
-        System.setProperty("prism.vsync", "true");
+        // some settings for the render of JavaFX
+        System.setProperty("prism.vsync", "false");
         System.setProperty("javafx.animation.fullspeed", "false");
         System.setProperty("prism.cacheshapes", "true");
 
-        // инициализация конфига
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
         }
@@ -97,7 +101,6 @@ public class Editor extends SimpleApplication {
         CommandLineConfig.args(args);
 
         configureLogger();
-
         try {
 
             ScreenSize.init();
@@ -119,12 +122,12 @@ public class Editor extends SimpleApplication {
 
     protected static void configureLogger() {
 
-        // выключаем стандартный логгер
+        // disable the standard logger
         if (!Config.DEV_DEBUG) {
             java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
         }
 
-        // настраиваем логгер
+        // configure our logger
         LoggerLevel.DEBUG.setEnabled(Config.DEV_DEBUG);
         LoggerLevel.INFO.setEnabled(true);
         LoggerLevel.ERROR.setEnabled(true);
@@ -133,53 +136,49 @@ public class Editor extends SimpleApplication {
         final Path logFolder = Config.getFolderForLog();
 
         if (!Files.exists(logFolder)) {
-            try {
-                Files.createDirectories(logFolder);
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
+            Util.safeExecute(() -> createDirectories(logFolder));
         }
 
         LoggerManager.addListener(new FolderFileListener(logFolder));
     }
 
     /**
-     * Синхронизатор.
+     * The main synchronizer of this application.
      */
     private final StampedLock lock;
 
     /**
-     * Камера окружения.
+     * The environment camera.
      */
     private EnvironmentCamera environmentCamera;
 
     /**
-     * Свет окружения сцены.
+     * The light probe.
      */
     private LightProbe lightProbe;
 
     /**
-     * Контейнер UI JavaFX.
+     * The container of JavaFX stage.
      */
     private JmeFxContainer fxContainer;
 
     /**
-     * Текущая сцена интерфейса редактора.
+     * The JavaFX scene.
      */
     private EditorFXScene scene;
 
     /**
-     * Процессор пост эффетков.
+     * The processor of post effects.
      */
     private FilterPostProcessor postProcessor;
 
     /**
-     * FXAA фильтр.
+     * The FXAA filter.
      */
     private FXAAFilter fxaaFilter;
 
     /**
-     * Фильтр коррекции экспозиции.
+     * The filter of color correction.
      */
     private ToneMapFilter toneMapFilter;
 
@@ -188,21 +187,21 @@ public class Editor extends SimpleApplication {
     }
 
     /**
-     * @return текущая сцена интерфейса редактора.
+     * @return the JavaFX scene.
      */
     public EditorFXScene getScene() {
         return scene;
     }
 
     /**
-     * Блокировка рендера для каких-то асинхронных действий.
+     * Lock the render thread for other actions.
      */
     public final long asyncLock() {
         return lock.readLock();
     }
 
     /**
-     * Разблокировка рендера.
+     * Unlock the render thread.
      */
     public final void asyncUnlock(final long stamp) {
         lock.unlockRead(stamp);
@@ -224,7 +223,7 @@ public class Editor extends SimpleApplication {
     }
 
     /**
-     * @return контейнер UI JavaFX.
+     * @return the container of JavaFX stage.
      */
     public JmeFxContainer getFxContainer() {
         return fxContainer;
@@ -316,21 +315,21 @@ public class Editor extends SimpleApplication {
     }
 
     /**
-     * Блокировать синхронизированную область.
+     * Lock the render thread for doing actions with game scene.
      */
     public final long syncLock() {
         return lock.writeLock();
     }
 
     /**
-     * Разблокировать синхронизированную область.
+     * Unlock the render thread.
      */
     public final void syncUnlock(final long stamp) {
         lock.unlockWrite(stamp);
     }
 
     /**
-     * Попытка произвести синхронизирующую блокировку.
+     * Try to lock render thread for doing actions with game scene.
      */
     public long trySyncLock() {
         return lock.tryWriteLock();
@@ -399,14 +398,14 @@ public class Editor extends SimpleApplication {
     }
 
     /**
-     * @return процессор пост эффетков.
+     * @return the processor of post effects.
      */
     public FilterPostProcessor getPostProcessor() {
         return postProcessor;
     }
 
     /**
-     * Процесс создание пробы окружения.
+     * Create the light probe for the PBR render.
      */
     private void createProbe() {
 
@@ -428,7 +427,7 @@ public class Editor extends SimpleApplication {
     }
 
     /**
-     * Обновить пробу окружения.
+     * Update the light probe.
      */
     public void updateProbe(final JobProgressAdapter<LightProbe> progressAdapter) {
 
@@ -443,28 +442,28 @@ public class Editor extends SimpleApplication {
     }
 
     /**
-     * @return свет окружения сцены.
+     * @return the light probe.
      */
     public LightProbe getLightProbe() {
         return lightProbe;
     }
 
     /**
-     * @return камера окружения сцены.
+     * @return the environment camera.
      */
     public EnvironmentCamera getEnvironmentCamera() {
         return environmentCamera;
     }
 
     /**
-     * @return фильтр коррекции экспозиции.
+     * @return the filter of color correction.
      */
     public ToneMapFilter getToneMapFilter() {
         return toneMapFilter;
     }
 
     /**
-     * @return FXAA фильтр.
+     * @return The FXAA filter.
      */
     public FXAAFilter getFXAAFilter() {
         return fxaaFilter;

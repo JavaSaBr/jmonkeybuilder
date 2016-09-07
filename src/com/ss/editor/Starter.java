@@ -2,16 +2,17 @@ package com.ss.editor;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import static java.nio.file.Files.newOutputStream;
+
 /**
- * Реализация запускатора приложения.
+ * The started of this application.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class Starter extends Application {
 
@@ -29,9 +30,9 @@ public class Starter extends Application {
         final String userHome = System.getProperty("user.home");
         final String fileName = "jme3-spaceshift-editor-error.log";
 
-        try (final PrintStream out = new PrintStream(Files.newOutputStream(Paths.get(userHome, fileName)))) {
+        try (final PrintStream out = new PrintStream(newOutputStream(Paths.get(userHome, fileName)))) {
             throwable.printStackTrace(out);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

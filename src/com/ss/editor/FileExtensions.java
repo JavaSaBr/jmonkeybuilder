@@ -1,32 +1,33 @@
 package com.ss.editor;
 
 /**
- * Перечень всех интересуемых расширений.
+ * The list of all file extension.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface FileExtensions {
 
-    public static final String JME_MATERIAL = "j3m";
-    public static final String JME_MATERIAL_DEFINITION = "j3md";
-    public static final String JME_OBJECT = "j3o";
+    String JME_MATERIAL = "j3m";
+    String JME_MATERIAL_DEFINITION = "j3md";
+    String JME_OBJECT = "j3o";
 
-    public static final String JAVA_LIBRARY = "jar";
+    String JAVA_LIBRARY = "jar";
 
-    public static final String POST_FILTER_VIEW = "pfv";
+    String POST_FILTER_VIEW = "pfv";
+    String PARTICLE_EMITTER_VIEW = "pev";
 
-    public static final String IMAGE_PNG = "png";
-    public static final String IMAGE_JPG = "jpg";
-    public static final String IMAGE_JPEG = "jpeg";
-    public static final String IMAGE_GIF = "gif";
-    public static final String IMAGE_TGA = "tga";
-    public static final String IMAGE_BMP = "bmp";
-    public static final String IMAGE_TIFF = "tiff";
-    public static final String IMAGE_DDS = "dds";
-    public static final String IMAGE_HDR = "hdr";
+    String IMAGE_PNG = "png";
+    String IMAGE_JPG = "jpg";
+    String IMAGE_JPEG = "jpeg";
+    String IMAGE_GIF = "gif";
+    String IMAGE_TGA = "tga";
+    String IMAGE_BMP = "bmp";
+    String IMAGE_TIFF = "tiff";
+    String IMAGE_DDS = "dds";
+    String IMAGE_HDR = "hdr";
 
-    public static final String GLSL_VERTEX = "vert";
-    public static final String GLSL_FRAGMENT = "frag";
+    String GLSL_VERTEX = "vert";
+    String GLSL_FRAGMENT = "frag";
 
-    public static final String BLENDER = "blend";
+    String BLENDER = "blend";
 }

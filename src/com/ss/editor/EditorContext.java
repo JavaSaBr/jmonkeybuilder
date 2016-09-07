@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import com.jme3.system.AppSettings;
+import com.jme3.system.JmeContext;
 import com.jme3.system.NativeLibraryLoader;
 import com.jme3.system.lwjgl.LwjglDisplay;
 
@@ -8,16 +9,16 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
 /**
- * Модель контекста игры.
+ * The implementation of the {@link JmeContext} for this application based on {@link LwjglDisplay}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public final class EditorContext extends LwjglDisplay {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorContext.class);
 
     /**
-     * Игровой поток рендера экрана.
+     * The main thread of this application.
      */
     private EditorThread thread;
 
@@ -42,13 +43,6 @@ public final class EditorContext extends LwjglDisplay {
         thread.start();
 
         if (waitFor) waitFor(true);
-    }
-
-    /**
-     * @return игровой поток рендера экрана.
-     */
-    public EditorThread getThread() {
-        return thread;
     }
 
     @Override

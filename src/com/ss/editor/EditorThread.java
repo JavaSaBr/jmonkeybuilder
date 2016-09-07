@@ -3,12 +3,15 @@ package com.ss.editor;
 import com.ss.editor.util.LocalObjects;
 
 /**
- * Модель потока редактора.
+ * The implementation of the {@link Thread} for this application.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EditorThread extends Thread {
 
+    /**
+     * The container of thread local objects.
+     */
     private final LocalObjects localObjects;
 
     public EditorThread() {
@@ -22,12 +25,13 @@ public class EditorThread extends Thread {
 
     public EditorThread(final ThreadGroup group, final Runnable target, final String name) {
         super(group, target, name);
-
         this.localObjects = new LocalObjects();
     }
 
     /**
-     * @return контейнер локальных объектов.
+     * Get the container of thread local objects.
+     *
+     * @return the container of thread local objects.
      */
     public LocalObjects getLocal() {
         return localObjects;
