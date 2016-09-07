@@ -59,9 +59,9 @@ import rlib.util.array.ArrayFactory;
 import static javafx.geometry.Pos.TOP_RIGHT;
 
 /**
- * Реализация редактора моделей.
+ * The implementation of the {@link AbstractFileEditor} for working with {@link Spatial}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ModelFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer {
 
