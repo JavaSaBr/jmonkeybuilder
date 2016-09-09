@@ -60,12 +60,12 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
     }
 
     @Override
-    public boolean canAccept(final ModelNode<?> node) {
+    public boolean canAccept(final ModelNode<?> child) {
 
         final Geometry geometry = getElement();
         if (geometry.getMesh() != null) return false;
 
-        final Object element = node.getElement();
+        final Object element = child.getElement();
         return element instanceof Mesh;
     }
 

@@ -8,6 +8,7 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -28,6 +29,9 @@ import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -390,13 +394,14 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         this.currentModel = currentModel;
     }
 
+    @NotNull
     @Override
     public Spatial getCurrentModel() {
         return currentModel;
     }
 
     @Override
-    public void notifyChangeProperty(final Object object, final String propertyName) {
+    public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(object);
@@ -406,7 +411,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyAddedChild(final Node parent, final Spatial added) {
+    public void notifyAddedChild(@NotNull final Node parent, @NotNull final Spatial added) {
 
         final ModelEditorState editorState = getEditorState();
         final boolean isSky = added.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
@@ -421,7 +426,19 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyAddedLight(final Node parent, final Light added) {
+    public void notifyAddedControl(@NotNull final Spatial spatial, @NotNull final Control control) {
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyAdded(spatial, control);
+    }
+
+    @Override
+    public void notifyRemovedControl(@NotNull final Spatial spatial, @NotNull final Control control) {
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyRemoved(control);
+    }
+
+    @Override
+    public void notifyAddedLight(@NotNull final Node parent, @NotNull final Light added) {
 
         final ModelEditorState editorState = getEditorState();
         editorState.addLight(added);
@@ -431,7 +448,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyRemovedChild(final Node parent, final Spatial removed) {
+    public void notifyRemovedChild(@NotNull final Node parent, @NotNull final Spatial removed) {
 
         final ModelEditorState editorState = getEditorState();
         final boolean isSky = removed.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
@@ -446,7 +463,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyRemovedLight(final Node parent, final Light removed) {
+    public void notifyRemovedLight(@NotNull final Node parent, @NotNull final Light removed) {
 
         final ModelEditorState editorState = getEditorState();
         editorState.removeLight(removed);
@@ -456,7 +473,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyReplaced(final Node parent, final Spatial oldChild, final Spatial newChild) {
+    public void notifyReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
 
         final ModelEditorState editorState = getEditorState();
         final Spatial currentModel = getCurrentModel();
@@ -471,13 +488,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyMoved(final Node prevParent, final Node newParent, final Spatial node, int index) {
+    public void notifyMoved(@NotNull final Node prevParent, @NotNull final Node newParent, @NotNull final Spatial child, int index) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyMoved(prevParent, newParent, node, index);
+        modelNodeTree.notifyMoved(prevParent, newParent, child, index);
     }
 
     @Override
-    public void execute(final EditorOperation operation) {
+    public void execute(@NotNull final EditorOperation operation) {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.execute(operation);
     }
@@ -544,7 +561,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     /**
      * Обработка выделения узла в дереве.
      */
-    public void processSelect(final Object object) {
+    public void processSelect(@Nullable final Object object) {
 
         Spatial spatial = null;
 

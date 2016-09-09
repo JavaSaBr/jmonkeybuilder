@@ -57,4 +57,9 @@ public abstract class AbstractNodeAction extends MenuItem {
     protected ModelNode<?> getNode() {
         return node;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractNodeAction{name = " + getNode() + "} " + super.toString();
+    }
 }

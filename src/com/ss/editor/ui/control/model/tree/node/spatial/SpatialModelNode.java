@@ -5,9 +5,11 @@ import com.jme3.light.LightList;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.CreateTEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
@@ -17,7 +19,10 @@ import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.LightModelNode;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.collections.ObservableList;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -44,6 +49,18 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         }
 
         super.fillContextMenu(nodeTree, items);
+    }
+
+    @NotNull
+    protected Menu createCreationMenu(final ModelNodeTree nodeTree) {
+
+        final Menu createControlMenu = new Menu("Control");
+        createControlMenu.getItems().addAll(new CreateTEmitterAction(nodeTree, this));
+
+        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
+        createMenu.getItems().addAll(createControlMenu);
+
+        return createMenu;
     }
 
     @Override

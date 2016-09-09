@@ -20,6 +20,8 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -43,23 +45,32 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     @Override
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
 
-        final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
-        toolActions.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
+        final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
+        toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
 
-        final Menu createPrimitiveActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
-        createPrimitiveActions.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
+        final Menu createMenu = createCreationMenu(nodeTree);
 
-        final Menu addLightActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT);
-        addLightActions.getItems().addAll(new AddSpotLightAction(nodeTree, this), new AddPointLightAction(nodeTree, this), new AddAmbientLightAction(nodeTree, this), new AddDirectionLightAction(nodeTree, this));
-
-        final Menu createActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
-        createActions.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), createPrimitiveActions, addLightActions);
-
-        items.add(toolActions);
-        items.add(createActions);
+        items.add(toolMenu);
+        items.add(createMenu);
         items.add(new LoadModelAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
+    }
+
+    @NotNull
+    @Override
+    protected Menu createCreationMenu(final ModelNodeTree nodeTree) {
+
+        final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
+        createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
+
+        final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT);
+        addLightMenu.getItems().addAll(new AddSpotLightAction(nodeTree, this), new AddPointLightAction(nodeTree, this), new AddAmbientLightAction(nodeTree, this), new AddDirectionLightAction(nodeTree, this));
+
+        final Menu menu = super.createCreationMenu(nodeTree);
+        menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), createPrimitiveMenu, addLightMenu);
+
+        return menu;
     }
 
     @Override
@@ -82,10 +93,10 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     }
 
     @Override
-    public boolean canAccept(final ModelNode<?> node) {
-        if (node == this) return false;
+    public boolean canAccept(final ModelNode<?> child) {
+        if (child == this) return false;
 
-        final Object element = node.getElement();
+        final Object element = child.getElement();
         return element instanceof Spatial && GeomUtils.canAttach(getElement(), (Spatial) element);
     }
 

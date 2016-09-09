@@ -3,57 +3,71 @@ package com.ss.editor.model.undo.editor;
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.ss.editor.model.undo.EditorOperation;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * Интерфейс для взаимодействия операциям с асбтрактным редактором материала.
+ * The interface for notifying with model editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface ModelChangeConsumer {
 
     /**
-     * @return текущая модель в редакторе.
+     * @return the current model of the editor.
      */
-    public Spatial getCurrentModel();
+    @NotNull
+    Spatial getCurrentModel();
 
     /**
-     * Уведомление об изменении свойства модели.
+     * Notify about changed property.
      */
-    public void notifyChangeProperty(final Object object, final String propertyName);
+    void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);
 
     /**
-     * Уведомление об добавлении нового дочернего элемента.
+     * Notify about added child.
      */
-    public void notifyAddedChild(final Node parent, final Spatial added);
+    void notifyAddedChild(@NotNull Node parent, @NotNull Spatial added);
 
     /**
-     * Уведомление об добавлении нового источника света.
+     * Notify about adding the new control to the spatial.
      */
-    public void notifyAddedLight(final Node parent, final Light added);
+    void notifyAddedControl(@NotNull Spatial spatial, @NotNull Control control);
 
     /**
-     * Уведомление об удалении дочернего элемента.
+     * Notify about removing the old control from the spatial.
      */
-    public void notifyRemovedChild(final Node parent, final Spatial removed);
+    void notifyRemovedControl(@NotNull Spatial spatial, @NotNull Control control);
 
     /**
-     * Уведомление об удалении старого источника света.
+     * Notify about added light.
      */
-    public void notifyRemovedLight(final Node parent, final Light removed);
+    void notifyAddedLight(@NotNull Node parent, @NotNull Light added);
 
     /**
-     * Уведомление о замене одной части модели на другую.
+     * Notify about removed child.
      */
-    public void notifyReplaced(final Node parent, final Spatial oldChild, final Spatial newChild);
+    void notifyRemovedChild(@NotNull Node parent, @NotNull Spatial removed);
 
     /**
-     * Уведомление и обработка перемещения нода.
+     * Notify about removed light.
      */
-    public void notifyMoved(final Node prevParent, final Node newParent, final Spatial node, int index);
+    void notifyRemovedLight(@NotNull Node parent, @NotNull Light removed);
 
     /**
-     * Выполнение операции.
+     * Notify about replaced child.
      */
-    public void execute(final EditorOperation operation);
+    void notifyReplaced(@NotNull Node parent, @NotNull Spatial oldChild, @NotNull Spatial newChild);
+
+    /**
+     * Notify about moved child.
+     */
+    void notifyMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index);
+
+    /**
+     * Execute the operation.
+     */
+    void execute(@NotNull EditorOperation operation);
 }

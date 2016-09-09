@@ -29,9 +29,9 @@ import java.util.concurrent.atomic.AtomicLong;
 import static rlib.util.ClassUtils.unsafeCast;
 
 /**
- * Реализация фабрики узлов модели для дерева.
+ * The factory for creating the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
  *
- * @author Ronn
+ * @author JavaSabr
  */
 public class ModelNodeFactory {
 

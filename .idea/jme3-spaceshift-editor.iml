@@ -33,6 +33,7 @@
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs/jME" />
           <root url="jar://$USER_HOME$/Загрузки/lwjgl/src.zip!/" />
+          <root url="file://$MODULE_DIR$/../jmonkeyengine/jme3-core/src/main/java" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs/jME" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs/jME" recursive="false" type="SOURCES" />

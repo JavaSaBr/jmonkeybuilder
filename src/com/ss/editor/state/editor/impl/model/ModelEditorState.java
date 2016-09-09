@@ -310,16 +310,11 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     @Override
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
-
         if (MOUSE_RIGHT_CLICK.equals(name)) {
             processClick(isPressed);
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
-
-            if (isPressed) {
-                startTransform();
-            } else {
-                endTransform();
-            }
+            if (isPressed) startTransform();
+            else endTransform();
         }
     }
 
@@ -1021,7 +1016,12 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             return geometry;
         }
 
-        return null;
+        final Geometry geometry = WireBox.makeGeometry(new BoundingBox(Vector3f.ZERO, 1, 1, 1));
+        geometry.setName("SelectionShape");
+        geometry.setMaterial(getSelectionMaterial());
+        geometry.setLocalTranslation(spatial.getWorldTranslation());
+
+        return geometry;
     }
 
     /**

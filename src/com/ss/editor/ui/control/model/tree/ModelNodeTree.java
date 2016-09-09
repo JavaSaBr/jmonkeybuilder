@@ -8,6 +8,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
@@ -100,7 +103,7 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Процесс выбора элемента.
      */
-    private void processSelect(final TreeItem<ModelNode<?>> treeItem) {
+    private void processSelect(@Nullable final TreeItem<ModelNode<?>> treeItem) {
 
         final Consumer<Object> selectionHandler = getSelectionHandler();
 
@@ -316,14 +319,14 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Уведомление и обработка добавления нового узла.
      */
-    public void notifyAdded(final Object parent, final Object child) {
+    public void notifyAdded(@NotNull final Object parent, @NotNull final Object child) {
         notifyAdded(createFor(parent), createFor(child));
     }
 
     /**
      * Уведомление и обработка добавления нового узла.
      */
-    public void notifyAdded(final ModelNode<?> parent, final ModelNode<?> child) {
+    public void notifyAdded(@NotNull final ModelNode<?> parent, @NotNull final ModelNode<?> child) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);

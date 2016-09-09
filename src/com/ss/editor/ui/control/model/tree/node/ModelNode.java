@@ -4,6 +4,8 @@ import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -11,9 +13,9 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Базовая реализация узла модели в дереве.
+ * The base implementation of a node in the {@link ModelNodeTree}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public abstract class ModelNode<T> implements UObject {
 
@@ -22,110 +24,109 @@ public abstract class ModelNode<T> implements UObject {
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Уникальный ид объекта.
+     * The uniq id of this node.
      */
     private final long objectId;
 
     /**
-     * Элемент модели.
+     * The element of the {@link com.jme3.scene.Spatial}.
      */
     private final T element;
 
-    public ModelNode(final T element, final long objectId) {
+    public ModelNode(@NotNull final T element, final long objectId) {
         this.element = element;
         this.objectId = objectId;
     }
 
     /**
-     * @return элемент модели.
+     * @return the element of the {@link com.jme3.scene.Spatial}.
      */
     public T getElement() {
         return element;
     }
 
     /**
-     * @return название узла.
+     * @return the name of this node.
      */
     public String getName() {
         return "null";
     }
 
     /**
-     * @return есть ли дочерние элементы.
+     * @return true of this node has any children.
      */
     public boolean hasChildren() {
         return false;
     }
 
     /**
-     * @return список дочерних элементов.
+     * @return the array of children of this node.
      */
     public Array<ModelNode<?>> getChildren() {
         return EMPTY_ARRAY;
     }
 
     /**
-     * @return мокнка этого элемента.
+     * @return the icon of this node.
      */
     public Image getIcon() {
         return null;
     }
 
     /**
-     * Наполнение контекстного меню возможными действиями.
+     * Fill the items actions for this node.
      */
     public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
-
     }
 
     /**
-     * Удаление дочернего элемента.
+     * Remove the child from this node.
      */
     public void remove(final ModelNode<?> child) {
     }
 
     /**
-     * Добавление дочернего элемента.
+     * Add the new child to this node.
      */
     public void add(final ModelNode<?> child) {
     }
 
     /**
-     * Обработка изменения имени узла.
+     * Handle changing the name of this node.
      */
     public void changeName(final ModelNodeTree nodeTree, final String newName) {
     }
 
     /**
-     * Может ли добавить к себе новый элемент.
+     * @return true of this node can have the child.
      */
-    public boolean canAccept(final ModelNode<?> node) {
+    public boolean canAccept(final ModelNode<?> child) {
         return false;
     }
 
     /**
-     * @return можно ли перемещать элемент в вструктуре.
+     * @return true if this node supports moving.
      */
     public boolean canMove() {
         return true;
     }
 
     /**
-     * @return можно ли копировать элемент.
+     * @return true if this node supports copying.
      */
     public boolean canCopy() {
         return false;
     }
 
     /**
-     * @return можно ли редактировать имя.
+     * @return true if this node supports name editing.
      */
     public boolean canEditName() {
         return false;
     }
 
     /**
-     * @return копия этого узла.
+     * @return the new copy of this node.
      */
     public ModelNode<?> copy() {
         return null;
@@ -151,11 +152,11 @@ public abstract class ModelNode<T> implements UObject {
         if (o == null || getClass() != o.getClass()) return false;
 
         ModelNode<?> modelNode = (ModelNode<?>) o;
-        return !(element != null ? !element.equals(modelNode.element) : modelNode.element != null);
+        return element.equals(modelNode.element);
     }
 
     @Override
     public int hashCode() {
-        return element != null ? element.hashCode() : 0;
+        return element.hashCode();
     }
 }
