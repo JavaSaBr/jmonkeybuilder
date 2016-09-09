@@ -50,6 +50,8 @@ import rlib.util.array.ArrayIterator;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
+import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+
 /**
  * Реализация 3D части редактора модели.
  *
@@ -354,7 +356,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
             return;
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifySelected(collision.getGeometry()));
+        EXECUTOR_MANAGER.addFXTask(() -> editor.notifySelected(findToSelect(collision.getGeometry())));
     }
 
     /**

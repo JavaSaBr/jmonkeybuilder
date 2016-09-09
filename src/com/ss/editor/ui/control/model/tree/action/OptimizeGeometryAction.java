@@ -8,6 +8,8 @@ import com.ss.editor.ui.control.model.tree.action.operation.OptimizeGeometryOper
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import jme3tools.optimize.GeometryBatchFactory;
 
 /**
@@ -21,6 +23,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction {
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;

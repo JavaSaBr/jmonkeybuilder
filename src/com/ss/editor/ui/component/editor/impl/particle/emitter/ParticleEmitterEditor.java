@@ -10,7 +10,6 @@ import com.ss.editor.ui.css.CSSIds;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import emitter.Emitter;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Accordion;
@@ -21,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.Util;
+import tonegod.emitter.Emitter;
 
 import static com.ss.editor.FileExtensions.PARTICLE_EMITTER_VIEW;
 
@@ -29,7 +29,7 @@ import static com.ss.editor.FileExtensions.PARTICLE_EMITTER_VIEW;
  *
  * @author JavaSaBr
  */
-public class ParticleEmitterEditor extends AbstractFileEditor<StackPane>  {
+public class ParticleEmitterEditor extends AbstractFileEditor<StackPane> {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -112,7 +112,7 @@ public class ParticleEmitterEditor extends AbstractFileEditor<StackPane>  {
         FXUtils.addToPane(accordion, parameterContainer);
         FXUtils.addToPane(parameterContainer, root);
 
-       // accordion.setExpandedPane(modelNodeTree);
+        // accordion.setExpandedPane(modelNodeTree);
 
         FXUtils.bindFixedHeight(accordion, parameterContainer.heightProperty());
     }

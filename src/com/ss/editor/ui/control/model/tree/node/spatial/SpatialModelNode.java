@@ -39,7 +39,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RenameNodeAction(nodeTree, this));
 
         Node parent = getElement().getParent();
@@ -63,6 +63,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         return createMenu;
     }
 
+    @NotNull
     @Override
     public String getName() {
         return getElement().getName();
@@ -79,7 +80,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public void changeName(final ModelNodeTree nodeTree, final String newName) {
+    public void changeName(@NotNull final ModelNodeTree nodeTree, @NotNull final String newName) {
         super.changeName(nodeTree, newName);
 
         final Spatial spatial = getElement();
@@ -90,6 +91,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         modelChangeConsumer.execute(new RenameNodeOperation(spatial.getName(), newName, index));
     }
 
+    @NotNull
     @Override
     public Array<ModelNode<?>> getChildren() {
 
@@ -111,7 +113,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public void add(final ModelNode<?> child) {
+    public void add(@NotNull final ModelNode<?> child) {
         super.add(child);
 
         final T element = getElement();
@@ -126,7 +128,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public void remove(final ModelNode<?> child) {
+    public void remove(@NotNull final ModelNode<?> child) {
         super.remove(child);
 
         final T element = getElement();

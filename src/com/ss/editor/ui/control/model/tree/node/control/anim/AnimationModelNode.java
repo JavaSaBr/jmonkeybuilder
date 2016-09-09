@@ -7,6 +7,9 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.PlayAnimationAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -34,7 +37,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     @Override
-    public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (getChannel() < 0) items.add(new PlayAnimationAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }
@@ -53,6 +56,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
         return control;
     }
 
+    @NotNull
     @Override
     public String getName() {
         return getElement().getName();
@@ -72,6 +76,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
         this.channel = channel;
     }
 
+    @Nullable
     @Override
     public Image getIcon() {
         return getChannel() < 0 ? Icons.PLAY_16 : Icons.STOP_16;

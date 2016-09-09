@@ -1,24 +1,25 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import com.jme3.light.Light;
-import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация действия по удалению источника света.
+ * The implementation of the {@link AbstractNodeAction} for removing control from the {@link
+ * Spatial}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class RemoveLightAction extends AbstractNodeAction {
+public class RemoveControlAction extends AbstractNodeAction {
 
-    public RemoveLightAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public RemoveControlAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -34,21 +35,22 @@ public class RemoveLightAction extends AbstractNodeAction {
         final ModelNode<?> node = getNode();
         final Object element = node.getElement();
 
-        if (!(element instanceof Light)) return;
-
-        final Light light = (Light) element;
+        if (!(element instanceof Control)) return;
+        final Control control = (Control) element;
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelNode<?> parentNode = nodeTree.findParent(node);
-        if (parentNode == null) return;
+
+        if (parentNode == null) {
+            LOGGER.warning("not found parent node for " + node);
+            return;
+        }
 
         final Object parent = parentNode.getElement();
-        if (!(parent instanceof Node)) return;
 
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), parent);
 
-        modelChangeConsumer.execute(new RemoveLightOperation(light, index));
+        modelChangeConsumer.execute(new RemoveControlOperation(control, index));
     }
 }

@@ -8,6 +8,8 @@ import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Реализация действия по удалению узла.
  *
@@ -19,6 +21,7 @@ public class RemoveNodeAction extends AbstractNodeAction {
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_REMOVE;

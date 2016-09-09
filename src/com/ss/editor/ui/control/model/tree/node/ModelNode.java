@@ -5,6 +5,7 @@ import com.ss.editor.model.UObject;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
@@ -41,6 +42,7 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * @return the element of the {@link com.jme3.scene.Spatial}.
      */
+    @NotNull
     public T getElement() {
         return element;
     }
@@ -48,6 +50,7 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * @return the name of this node.
      */
+    @NotNull
     public String getName() {
         return "null";
     }
@@ -62,6 +65,7 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * @return the array of children of this node.
      */
+    @NotNull
     public Array<ModelNode<?>> getChildren() {
         return EMPTY_ARRAY;
     }
@@ -69,6 +73,7 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * @return the icon of this node.
      */
+    @Nullable
     public Image getIcon() {
         return null;
     }
@@ -76,31 +81,31 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * Fill the items actions for this node.
      */
-    public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
     }
 
     /**
      * Remove the child from this node.
      */
-    public void remove(final ModelNode<?> child) {
+    public void remove(@NotNull final ModelNode<?> child) {
     }
 
     /**
      * Add the new child to this node.
      */
-    public void add(final ModelNode<?> child) {
+    public void add(@NotNull final ModelNode<?> child) {
     }
 
     /**
      * Handle changing the name of this node.
      */
-    public void changeName(final ModelNodeTree nodeTree, final String newName) {
+    public void changeName(@NotNull final ModelNodeTree nodeTree, @NotNull final String newName) {
     }
 
     /**
      * @return true of this node can have the child.
      */
-    public boolean canAccept(final ModelNode<?> child) {
+    public boolean canAccept(@NotNull final ModelNode<?> child) {
         return false;
     }
 
@@ -128,8 +133,9 @@ public abstract class ModelNode<T> implements UObject {
     /**
      * @return the new copy of this node.
      */
+    @NotNull
     public ModelNode<?> copy() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

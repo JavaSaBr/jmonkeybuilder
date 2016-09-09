@@ -8,6 +8,8 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Действие по созданию нового узла.
  *
@@ -19,6 +21,7 @@ public class CreateNodeAction extends AbstractNodeAction {
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_NODE;

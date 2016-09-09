@@ -6,6 +6,9 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RemoveLightAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -21,18 +24,20 @@ public class LightModelNode<T extends Light> extends ModelNode<T> {
         super(element, objectId);
     }
 
+    @NotNull
     @Override
     public String getName() {
         return getElement().getClass().getSimpleName();
     }
 
+    @Nullable
     @Override
     public Image getIcon() {
         return Icons.LIGHT_24;
     }
 
     @Override
-    public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveLightAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }

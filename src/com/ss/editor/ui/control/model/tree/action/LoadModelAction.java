@@ -14,6 +14,8 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 import rlib.util.array.Array;
@@ -36,6 +38,7 @@ public class LoadModelAction extends AbstractNodeAction {
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_LOAD_MODEL;

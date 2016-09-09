@@ -7,6 +7,9 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 
 import javafx.scene.image.Image;
@@ -24,11 +27,13 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
         super(element, objectId);
     }
 
+    @NotNull
     @Override
     public String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     }
 
+    @Nullable
     @Override
     public Image getIcon() {
         return Icons.ANIMATION_16;
@@ -39,6 +44,7 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
         return true;
     }
 
+    @NotNull
     @Override
     public Array<ModelNode<?>> getChildren() {
 

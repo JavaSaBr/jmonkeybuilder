@@ -4,6 +4,8 @@ import com.jme3.light.LightProbe;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Реализация узла с цветопробой для PBR.
  *
@@ -15,6 +17,7 @@ public class LightProbeModelNode extends ModelNode<LightProbe> {
         super(element, objectId);
     }
 
+    @NotNull
     @Override
     public String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;

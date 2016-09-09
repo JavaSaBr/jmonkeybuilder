@@ -10,12 +10,12 @@ import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import emitter.Emitter;
-import emitter.EmitterMesh;
-import emitter.influencers.AlphaInfluencer;
-import emitter.influencers.ColorInfluencer;
-import emitter.influencers.SizeInfluencer;
-import emitter.particle.ParticleDataTriMesh;
+import tonegod.emitter.Emitter;
+import tonegod.emitter.EmitterMesh;
+import tonegod.emitter.influencers.AlphaInfluencer;
+import tonegod.emitter.influencers.ColorInfluencer;
+import tonegod.emitter.influencers.SizeInfluencer;
+import tonegod.emitter.particle.ParticleDataTriMesh;
 
 /**
  * The action for creating new {@link Emitter}.
@@ -28,6 +28,7 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return "Create TEmitter";

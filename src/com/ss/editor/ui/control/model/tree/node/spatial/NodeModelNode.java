@@ -21,6 +21,7 @@ import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     }
 
     @Override
-    public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
         final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
@@ -78,6 +79,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
         return true;
     }
 
+    @NotNull
     @Override
     public Array<ModelNode<?>> getChildren() {
 
@@ -93,7 +95,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     }
 
     @Override
-    public boolean canAccept(final ModelNode<?> child) {
+    public boolean canAccept(@NotNull final ModelNode<?> child) {
         if (child == this) return false;
 
         final Object element = child.getElement();
@@ -101,7 +103,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     }
 
     @Override
-    public void add(final ModelNode<?> child) {
+    public void add(@NotNull final ModelNode<?> child) {
         super.add(child);
 
         final Node node = getElement();
@@ -113,7 +115,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     }
 
     @Override
-    public void remove(final ModelNode<?> child) {
+    public void remove(@NotNull final ModelNode<?> child) {
         super.remove(child);
 
         final Node node = getElement();
@@ -124,6 +126,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
         }
     }
 
+    @Nullable
     @Override
     public Image getIcon() {
         return Icons.NODE_16;

@@ -3,9 +3,9 @@ package com.ss.editor.state.editor.impl.particle.emitter;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.particle.emitter.ParticleEmitterEditor;
 
-import emitter.Emitter;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+import tonegod.emitter.Emitter;
 
 /**
  * The implementation of the {@link AbstractEditorState} for the {@link ParticleEmitterEditor}.

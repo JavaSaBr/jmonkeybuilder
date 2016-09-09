@@ -4,6 +4,9 @@ import com.jme3.light.AmbientLight;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.scene.image.Image;
 
 /**
@@ -17,11 +20,13 @@ public class AmbientLightModelNode extends LightModelNode<AmbientLight> {
         super(element, objectId);
     }
 
+    @Nullable
     @Override
     public Image getIcon() {
         return Icons.AMBIENT_16;
     }
 
+    @NotNull
     @Override
     public String getName() {
         return Messages.MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT;

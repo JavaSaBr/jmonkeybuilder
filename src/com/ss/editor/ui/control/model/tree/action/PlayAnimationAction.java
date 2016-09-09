@@ -10,6 +10,8 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
 
+import org.jetbrains.annotations.NotNull;
+
 import rlib.util.StringUtils;
 
 /**
@@ -23,6 +25,7 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;

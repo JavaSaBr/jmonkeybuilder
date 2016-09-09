@@ -4,17 +4,17 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
-import emitter.Emitter;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.ImageView;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
+import tonegod.emitter.Emitter;
 
 import static javafx.geometry.Pos.CENTER_LEFT;
 
 /**
- * The implementation of the {@link ListCell} for using {@link emitter.Emitter}.
+ * The implementation of the {@link ListCell} for using {@link Emitter}.
  *
  * @author JavaSaBr
  */

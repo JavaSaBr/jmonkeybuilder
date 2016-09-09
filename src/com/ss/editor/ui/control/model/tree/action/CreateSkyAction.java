@@ -6,6 +6,8 @@ import com.ss.editor.ui.control.model.tree.dialog.sky.CreateSkyDialog;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Действие по созданию нового фона.
  *
@@ -17,6 +19,7 @@ public class CreateSkyAction extends AbstractNodeAction {
         super(nodeTree, node);
     }
 
+    @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_SKY;

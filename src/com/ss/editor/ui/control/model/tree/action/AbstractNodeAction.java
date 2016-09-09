@@ -5,29 +5,35 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.scene.control.MenuItem;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 
 /**
- * Базовая реализация действия над моделью.
+ * The base implementation of the action for an element in a model tree.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public abstract class AbstractNodeAction extends MenuItem {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(AbstractNodeAction.class);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Компонент структуры модели.
+     * The component of the model three.
      */
     private final ModelNodeTree nodeTree;
 
     /**
-     * Узел модели.
+     * The node of the model.
      */
     private final ModelNode<?> node;
 
-    public AbstractNodeAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public AbstractNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
         setOnAction(event -> process());
@@ -35,25 +41,28 @@ public abstract class AbstractNodeAction extends MenuItem {
     }
 
     /**
-     * @return название действия.
+     * @return the name of this action.
      */
+    @NotNull
     protected abstract String getName();
 
     /**
-     * Выполнение действий.
+     * Execute this action.
      */
     protected abstract void process();
 
     /**
-     * @return компонент структуры модели.
+     * @return the component of the model three.
      */
+    @NotNull
     protected ModelNodeTree getNodeTree() {
         return nodeTree;
     }
 
     /**
-     * @return узел модели.
+     * @return the node of the model.
      */
+    @NotNull
     protected ModelNode<?> getNode() {
         return node;
     }

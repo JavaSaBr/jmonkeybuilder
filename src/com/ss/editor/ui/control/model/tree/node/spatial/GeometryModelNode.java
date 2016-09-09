@@ -10,6 +10,9 @@ import com.ss.editor.ui.control.model.tree.node.MeshModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -28,11 +31,13 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
         super(element, objectId);
     }
 
+    @Nullable
     @Override
     public Image getIcon() {
         return Icons.GEOMETRY_16;
     }
 
+    @NotNull
     @Override
     public Array<ModelNode<?>> getChildren() {
 
@@ -49,7 +54,7 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
     }
 
     @Override
-    public void fillContextMenu(final ModelNodeTree nodeTree, final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
         final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
         toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this));
@@ -60,7 +65,7 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
     }
 
     @Override
-    public boolean canAccept(final ModelNode<?> child) {
+    public boolean canAccept(@NotNull final ModelNode<?> child) {
 
         final Geometry geometry = getElement();
         if (geometry.getMesh() != null) return false;
@@ -70,7 +75,7 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
     }
 
     @Override
-    public void add(final ModelNode<?> child) {
+    public void add(@NotNull final ModelNode<?> child) {
         super.add(child);
 
         final Geometry geometry = getElement();

@@ -367,9 +367,12 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Поиск родительского элемента для указанного элемента.
+     * Find a parent for the node.
+     *
+     * @return the parent or null.
      */
-    public ModelNode<?> findParent(final ModelNode<?> modelNode) {
+    @Nullable
+    public ModelNode<?> findParent(@NotNull final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
         if (treeItem == null) return null;
