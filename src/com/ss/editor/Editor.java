@@ -378,12 +378,12 @@ public class Editor extends SimpleApplication {
 
             super.update();
 
-        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | IllegalStateException | StackOverflowError e) {
+        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
             LOGGER.warning(e);
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.save();
             System.exit(1);
-        } catch (final RendererException e) {
+        } catch (final RendererException | IllegalStateException e) {
             LOGGER.warning(e);
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.clear();

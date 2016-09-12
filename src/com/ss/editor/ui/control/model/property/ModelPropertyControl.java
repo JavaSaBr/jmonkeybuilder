@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.property;
 import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -18,51 +19,51 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Базовая реализация по изменению свойства модели.
+ * The base implementation of the property control for the {@link ModelFileEditor}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ModelPropertyControl<D, T> extends VBox {
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * Название параметра.
+     * The name of the property.
      */
     private final String propertyName;
 
     /**
-     * Потребитель изменений модели.
+     * The consumer of changes.
      */
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
-     * Редактируемый объект.
+     * The edit object.
      */
     private D editObject;
 
     /**
-     * Значение свойства объекта.
+     * The value of the property.
      */
     private T propertyValue;
 
     /**
-     * Обработчик приминения изменений.
+     * The handler for handling new value.
      */
     private BiConsumer<D, T> applyHandler;
 
     /**
-     * Обработчик синхронизации данных.
+     * The handler for getting actual value.
      */
     private Function<D, T> syncHandler;
 
     /**
-     * Надпись с названием параметра.
+     * The label of the property name.
      */
     private Label propertyNameLabel;
 
     /**
-     * Игнорировать ли слушатели.
+     * The flag for ignoring listeners.
      */
     private boolean ignoreListener;
 
@@ -83,48 +84,48 @@ public class ModelPropertyControl<D, T> extends VBox {
     }
 
     /**
-     * @param editObject редактируемый объект.
+     * @param editObject the edit object.
      */
     public void setEditObject(final D editObject) {
         this.editObject = editObject;
     }
 
     /**
-     * @param applyHandler обработчик приминения изменений.
+     * @param applyHandler the handler for handling new value.
      */
     public void setApplyHandler(final BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
 
     /**
-     * @return обработчик синхронизации данных.
+     * @return the handler for getting actual value.
      */
     protected Function<D, T> getSyncHandler() {
         return syncHandler;
     }
 
     /**
-     * @param syncHandler обработчик синхронизации данных.
+     * @param syncHandler the handler for getting actual value.
      */
     public void setSyncHandler(final Function<D, T> syncHandler) {
         this.syncHandler = syncHandler;
     }
 
     /**
-     * @return редактируемый объект.
+     * @return the edit object.
      */
     protected D getEditObject() {
         return editObject;
     }
 
     /**
-     * Инициализация данных.
+     * Initializing control.
      */
     protected void reload() {
     }
 
     /**
-     * Синхронизирование данных.
+     * Synchronize value from the edit object.
      */
     public void sync() {
         setIgnoreListener(true);
@@ -144,7 +145,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     }
 
     /**
-     * Создание компонентов контрола.
+     * Create this control.
      */
     protected void createComponents() {
         setAlignment(isSingleRow() ? Pos.CENTER_LEFT : Pos.CENTER);
@@ -170,34 +171,34 @@ public class ModelPropertyControl<D, T> extends VBox {
     }
 
     /**
-     * @return контрол в одну сторку ли.
+     * @return true if this control is single row.
      */
     protected boolean isSingleRow() {
         return false;
     }
 
     /**
-     * Создание компонентов для внесения изменений.
+     * Create components of this control.
      */
     protected void createComponents(final HBox container) {
     }
 
     /**
-     * @return название параметра.
+     * @return the name of the property.
      */
     protected String getPropertyName() {
         return propertyName;
     }
 
     /**
-     * @return потребитель изменений модели.
+     * @return the consumer of changes.
      */
     protected ModelChangeConsumer getModelChangeConsumer() {
         return modelChangeConsumer;
     }
 
     /**
-     * Уведомить о измнении чего-то.
+     * Apply new value to the edit object.
      */
     protected void changed(final T newValue, final T oldValue) {
 
@@ -214,35 +215,35 @@ public class ModelPropertyControl<D, T> extends VBox {
     }
 
     /**
-     * @return редактируемый элемент.
+     * @return the value of the property.
      */
     public T getPropertyValue() {
         return propertyValue;
     }
 
     /**
-     * @return обработчик приминения изменений.
+     * @return the handler for handling new value.
      */
     protected BiConsumer<D, T> getApplyHandler() {
         return applyHandler;
     }
 
     /**
-     * @param propertyValue редактируемый элемент.
+     * @param propertyValue the value of the property.
      */
-    protected void setPropertyValue(T propertyValue) {
+    protected void setPropertyValue(final T propertyValue) {
         this.propertyValue = propertyValue;
     }
 
     /**
-     * @param ignoreListener игнорировать ли слушатели.
+     * @param ignoreListener the flag for ignoring listeners.
      */
     public void setIgnoreListener(final boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
 
     /**
-     * @return игнорировать ли слушатели.
+     * @return true if need to ignore listeners.
      */
     public boolean isIgnoreListener() {
         return ignoreListener;

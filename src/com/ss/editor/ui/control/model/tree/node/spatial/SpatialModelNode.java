@@ -66,7 +66,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     @NotNull
     @Override
     public String getName() {
-        return getElement().getName();
+        final String name = getElement().getName();
+        return name == null ? "name is null" : name;
     }
 
     @Override

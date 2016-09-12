@@ -20,80 +20,80 @@ public interface FileEditor {
      *
      * @return страница для отображения на UI.
      */
-    public Parent getPage();
+    Parent getPage();
 
     /**
      * @return название редактируемого файла.
      */
-    public String getFileName();
+    String getFileName();
 
     /**
      * @return редактируемый файл.
      */
-    public Path getEditFile();
+    Path getEditFile();
 
     /**
      * Открыть файл на редактирование.
      *
      * @param file редактируемый файл.
      */
-    public void openFile(final Path file);
+    void openFile(final Path file);
 
     /**
      * @return изменялся ли документ.
      */
-    public BooleanProperty dirtyProperty();
+    BooleanProperty dirtyProperty();
 
     /**
      * @return изменялся ли документ.
      */
-    public boolean isDirty();
+    boolean isDirty();
 
     /**
      * Сохранить изменения.
      */
-    public default void doSave() {
+    default void doSave() {
     }
 
     /**
      * @return 3D части редактора либо null.
      */
-    public default Array<EditorState> getStates() {
+    default Array<EditorState> getStates() {
         return null;
     }
 
     /**
      * Уведомление редактора о том что его закрыли.
      */
-    public default void notifyClosed() {
+    default void notifyClosed() {
     }
 
     /**
      * Уведомление о переименовании файла.
      */
-    public default void notifyRenamed(final Path prevFile, final Path newFile) {
+    default void notifyRenamed(final Path prevFile, final Path newFile) {
     }
 
     /**
      * Уведомление о перемещении файла.
      */
-    public default void notifyMoved(final Path prevFile, final Path newFile) {
+    default void notifyMoved(final Path prevFile, final Path newFile) {
     }
 
     /**
      * @return описание редактора.
      */
-    public EditorDescription getDescription();
+    EditorDescription getDescription();
 
     /**
      * Уведомление о том, что этот редактор отобразили.
      */
-    public default void notifyShowed() {
+    default void notifyShowed() {
     }
 
     /**
      * Уведомление об скрытии редактора.
      */
-    public default void notifyHided() {
+    default void notifyHided() {
     }
 }

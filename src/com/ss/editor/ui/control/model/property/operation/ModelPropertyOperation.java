@@ -4,9 +4,12 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
+import java.util.Objects;
 import java.util.function.BiConsumer;
+
+import static com.ss.editor.util.GeomUtils.getObjectByIndex;
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * Базовая реализация операции по изменению свойства модели.
@@ -61,7 +64,9 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
-            final D target = (D) GeomUtils.getObjectByIndex(currentModel, index);
+            final D target = unsafeCast(getObjectByIndex(currentModel, index));
+
+            Objects.requireNonNull(target);
 
             apply(target, newValue);
 
@@ -81,7 +86,9 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
-            final D target = (D) GeomUtils.getObjectByIndex(currentModel, index);
+            final D target = unsafeCast(getObjectByIndex(currentModel, index));
+
+            Objects.requireNonNull(target);
 
             apply(target, oldValue);
 

@@ -253,7 +253,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             if (isIgnoreOpenedFiles()) return;
 
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-
             if (workspace != null) workspace.removeOpenedFile(editFile);
         });
     }
@@ -314,6 +313,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
         if (editor == null) return;
 
+        final long stamp = EDITOR.asyncLock();
         try {
             editor.openFile(file);
         } catch (final Exception e) {
@@ -323,6 +323,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 scene.decrementLoading();
             });
             return;
+        } finally {
+            EDITOR.asyncUnlock(stamp);
         }
 
         EXECUTOR_MANAGER.addFXTask(() -> addEditor(editor, event.isNeedShow()));

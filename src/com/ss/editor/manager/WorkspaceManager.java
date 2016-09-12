@@ -96,6 +96,7 @@ public class WorkspaceManager {
      */
     public synchronized void clear() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
+        workspaces.forEach(Workspace::clear);
         workspaces.forEach(Workspace::save);
     }
 

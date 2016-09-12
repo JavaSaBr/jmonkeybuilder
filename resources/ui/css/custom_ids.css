@@ -392,6 +392,34 @@
     -fx-max-height: -fx-min-height;
 }
 
+#ModelParamControlCheckbox {
+    -fx-alignment: center;
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ModelParamControlCheckbox > .box {
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ModelParamControlCheckbox > .box > .mark {
+    -fx-min-height: 15;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 15;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #ModelParamControlMaterialLabel {
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
