@@ -368,6 +368,15 @@
     -fx-max-height: -fx-min-height;
 }
 
+#ModelParamControlVector2fField {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 90;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #ModelParamControlVector3fField {
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
