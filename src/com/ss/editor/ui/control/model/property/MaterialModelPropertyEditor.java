@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.jme3.asset.MaterialKey;
-import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -30,11 +30,11 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация контрола по редактированию материала модели.
+ * The implementation of the {@link ModelPropertyControl} for editing the {@link MaterialKey}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, MaterialKey> {
+public class MaterialModelPropertyEditor<T extends Spatial> extends ModelPropertyControl<T, MaterialKey> {
 
     public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
@@ -49,17 +49,17 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
     }
 
     /**
-     * Надпись с названием материала.
+     * The label with name of the material.
      */
     private Label materialLabel;
 
     /**
-     * Кнопка для выбора материала.
+     * The button for choosing other material.
      */
     private Button changeButton;
 
     /**
-     * Кнопка для редактирования материала.
+     * The button for editing the material.
      */
     private Button editButton;
 
@@ -97,7 +97,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
     }
 
     /**
-     * Процесс смены материала.
+     * Show dialog for choosing another material.
      */
     private void processChange() {
 
@@ -109,7 +109,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
     }
 
     /**
-     * Добавление нового материала.
+     * Add the mew material.
      */
     private void addMaterial(final Path file) {
 
@@ -127,7 +127,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
     }
 
     /**
-     * Процесс открытия редактирования материала.
+     * Open this material in the material editor.
      */
     private void processEdit() {
 
@@ -148,7 +148,7 @@ public class MaterialModelPropertyEditor extends ModelPropertyControl<Geometry, 
     }
 
     /**
-     * @return надпись с названием материала.
+     * @return the label with name of the material.
      */
     private Label getMaterialLabel() {
         return materialLabel;

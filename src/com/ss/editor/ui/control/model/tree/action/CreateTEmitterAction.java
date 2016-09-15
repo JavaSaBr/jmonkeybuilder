@@ -48,7 +48,7 @@ public class CreateTEmitterAction extends AbstractNodeAction {
 
         // Shape & Emissions
         emitter.setShapeSimpleEmitter();
-        emitter.setDirectionType(EmitterMesh.DirectionType.Random);
+        emitter.setDirectionType(EmitterMesh.DirectionType.RANDOM);
         emitter.setEmissionsPerSecond(100);
         emitter.setParticlesPerEmission(1);
 

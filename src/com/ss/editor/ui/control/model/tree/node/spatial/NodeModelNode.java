@@ -14,6 +14,7 @@ import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
 import com.ss.editor.ui.control.model.tree.action.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSphereAction;
+import com.ss.editor.ui.control.model.tree.action.CreateTEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
@@ -33,13 +34,14 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация узла представляющего com.jme3.scene.Node.
+ * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the
+ * editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class NodeModelNode extends SpatialModelNode<Node> {
+public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
-    public NodeModelNode(final Node element, final long objectId) {
+    public NodeModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
@@ -60,7 +62,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
 
     @NotNull
     @Override
-    protected Menu createCreationMenu(final ModelNodeTree nodeTree) {
+    protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
 
         final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
         createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
@@ -69,7 +71,7 @@ public class NodeModelNode extends SpatialModelNode<Node> {
         addLightMenu.getItems().addAll(new AddSpotLightAction(nodeTree, this), new AddPointLightAction(nodeTree, this), new AddAmbientLightAction(nodeTree, this), new AddDirectionLightAction(nodeTree, this));
 
         final Menu menu = super.createCreationMenu(nodeTree);
-        menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), createPrimitiveMenu, addLightMenu);
+        menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), new CreateTEmitterAction(nodeTree, this), createPrimitiveMenu, addLightMenu);
 
         return menu;
     }
@@ -97,7 +99,6 @@ public class NodeModelNode extends SpatialModelNode<Node> {
     @Override
     public boolean canAccept(@NotNull final ModelNode<?> child) {
         if (child == this) return false;
-
         final Object element = child.getElement();
         return element instanceof Spatial && GeomUtils.canAttach(getElement(), (Spatial) element);
     }

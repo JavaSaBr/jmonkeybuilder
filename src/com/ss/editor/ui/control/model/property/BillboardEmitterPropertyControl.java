@@ -18,7 +18,7 @@ import tonegod.emitter.ParticleEmitterNode.BillboardMode;
  *
  * @author JavaSaBr
  */
-public class BillboardModelPropertyControl extends ModelPropertyControl<ParticleEmitterNode, BillboardMode> {
+public class BillboardEmitterPropertyControl extends ModelPropertyControl<ParticleEmitterNode, BillboardMode> {
 
     private static final Array<BillboardMode> BILLBOARD_MODES = ArrayFactory.newArray(BillboardMode.class);
 
@@ -31,7 +31,7 @@ public class BillboardModelPropertyControl extends ModelPropertyControl<Particle
      */
     private ComboBox<BillboardMode> billboardModeComboBox;
 
-    public BillboardModelPropertyControl(final BillboardMode element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public BillboardEmitterPropertyControl(final BillboardMode element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

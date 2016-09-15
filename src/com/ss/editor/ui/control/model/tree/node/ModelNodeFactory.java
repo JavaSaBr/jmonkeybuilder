@@ -21,10 +21,13 @@ import com.ss.editor.ui.control.model.tree.node.light.PointLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.SpotLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.ParticleEmitterModelNode;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicLong;
+
+import tonegod.emitter.ParticleEmitterNode;
 
 import static rlib.util.ClassUtils.unsafeCast;
 
@@ -62,12 +65,14 @@ public class ModelNodeFactory {
             return unsafeCast(new PointLightModelNode((PointLight) element, ID_GENERATOR.incrementAndGet()));
         }
 
-        if (element instanceof Mesh) {
+        if (element instanceof ParticleEmitterNode) {
+            return unsafeCast(new ParticleEmitterModelNode((ParticleEmitterNode) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof Mesh) {
             return unsafeCast(new MeshModelNode((Mesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Geometry) {
             return unsafeCast(new GeometryModelNode((Geometry) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Node) {
-            return unsafeCast(new NodeModelNode((Node) element, ID_GENERATOR.incrementAndGet()));
+            return unsafeCast(new NodeModelNode<>((Node) element, ID_GENERATOR.incrementAndGet()));
         }
 
         throw new IllegalArgumentException("unknown " + element);

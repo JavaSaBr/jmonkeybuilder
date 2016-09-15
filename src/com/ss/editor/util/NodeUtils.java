@@ -8,6 +8,11 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Predicate;
+
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
@@ -17,6 +22,17 @@ import rlib.util.array.Array;
  * @author Ronn
  */
 public class NodeUtils {
+
+    /**
+     * Find the parent of the model.
+     */
+    @Nullable
+    public static Spatial findParent(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
+        if (condition.test(spatial)) return spatial;
+        final Node parent = spatial.getParent();
+        if (parent == null) return null;
+        return findParent(parent, condition);
+    }
 
     /**
      * Поиск геометрии в этом узле.

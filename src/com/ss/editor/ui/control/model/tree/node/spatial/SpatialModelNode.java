@@ -9,12 +9,10 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.CreateTEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.LightModelNode;
 import com.ss.editor.util.GeomUtils;
@@ -27,14 +25,16 @@ import javafx.scene.control.MenuItem;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 /**
- * Базовая реализация структурного элемента дерева.
+ * The implementation of the {@link ModelNode} for representing the {@link Spatial} in the editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
-    public SpatialModelNode(final T element, final long objectId) {
+    public SpatialModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
@@ -52,13 +52,13 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @NotNull
-    protected Menu createCreationMenu(final ModelNodeTree nodeTree) {
+    protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
 
-        final Menu createControlMenu = new Menu("Control");
-        createControlMenu.getItems().addAll(new CreateTEmitterAction(nodeTree, this));
+        //final Menu createControlMenu = new Menu("Control");
+        //createControlMenu.getItems().addAll(new CreateTEmitterAction(nodeTree, this));
 
         final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
-        createMenu.getItems().addAll(createControlMenu);
+        //createMenu.getItems().addAll(createControlMenu);
 
         return createMenu;
     }
@@ -97,17 +97,16 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     public Array<ModelNode<?>> getChildren() {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
-
         final Spatial element = getElement();
 
         final LightList lightList = element.getLocalLightList();
-        lightList.forEach(light -> result.add(ModelNodeFactory.createFor(light)));
+        lightList.forEach(light -> result.add(createFor(light)));
 
         final int numControls = element.getNumControls();
 
         for (int i = 0; i < numControls; i++) {
             final Control control = element.getControl(i);
-            result.add(ModelNodeFactory.createFor(control));
+            result.add(createFor(control));
         }
 
         return result;

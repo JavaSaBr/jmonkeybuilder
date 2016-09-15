@@ -248,4 +248,12 @@ public class ModelPropertyControl<D, T> extends VBox {
     public boolean isIgnoreListener() {
         return ignoreListener;
     }
+
+    @Override
+    public String toString() {
+        return "ModelPropertyControl{" +
+                "propertyName='" + propertyName + '\'' +
+                ", propertyValue=" + propertyValue +
+                "} " + super.toString();
+    }
 }

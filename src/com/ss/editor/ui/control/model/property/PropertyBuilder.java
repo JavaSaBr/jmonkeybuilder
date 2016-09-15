@@ -10,6 +10,7 @@ import com.jme3.light.Light;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -35,6 +36,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
+import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
 
 import static com.ss.editor.util.EditorUtil.clipNumber;
@@ -89,7 +91,32 @@ public class PropertyBuilder {
         }
     };
 
+    public static final BiConsumer<ParticleEmitterNode, MaterialKey> MATERIAL_APPLY_TO_EMITTER_HANDLER = (emitter, materialKey) -> {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        if (materialKey == null) {
+
+            final Material material = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+            material.getAdditionalRenderState().setFaceCullMode(RenderState.FaceCullMode.Off);
+
+            emitter.setMaterial(material);
+
+        } else {
+
+            assetManager.clearCache();
+
+            final Material material = assetManager.loadAsset(materialKey);
+            emitter.setMaterial(material);
+        }
+    };
+
     public static final Function<Geometry, MaterialKey> MATERIAL_SYNC_HANDLER = geometry -> {
+        final Material material = geometry.getMaterial();
+        return (MaterialKey) material.getKey();
+    };
+
+    public static final Function<ParticleEmitterNode, MaterialKey> MATERIAL_FROM_EMITTER_SYNC_HANDLER = geometry -> {
         final Material material = geometry.getMaterial();
         return (MaterialKey) material.getKey();
     };
@@ -139,64 +166,7 @@ public class PropertyBuilder {
             final ParticleEmitterNode emitterNode = (ParticleEmitterNode) object;
 
             createEmissionControls(container, modelChangeConsumer, emitterNode);
-
-            final boolean testParticles = emitterNode.isEnabledTestParticles();
-            final boolean particlesFollowEmitter = emitterNode.isParticlesFollowEmitter();
-
-            final ParticleEmitterNode.BillboardMode billboardMode = emitterNode.getBillboardMode();
-
-            final Vector2f forceMinMax = emitterNode.getForceMinMax();
-            final Vector2f lifeMinMax = emitterNode.getLifeMinMax();
-
-            final float stretchFactor = emitterNode.getVelocityStretchFactor();
-
-            final ModelPropertyControl<ParticleEmitterNode, Boolean> testParticlesModeControl = new BooleanModelPropertyControl<>(testParticles, "Test Particles Mode", modelChangeConsumer);
-            testParticlesModeControl.setApplyHandler(ParticleEmitterNode::setEnabledTestParticles);
-            testParticlesModeControl.setSyncHandler(ParticleEmitterNode::isEnabledTestParticles);
-            testParticlesModeControl.setEditObject(emitterNode);
-
-            final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesFollowEmitControl = new BooleanModelPropertyControl<>(particlesFollowEmitter, "Particle Follow Emitter", modelChangeConsumer);
-            particlesFollowEmitControl.setApplyHandler(ParticleEmitterNode::setParticlesFollowEmitter);
-            particlesFollowEmitControl.setSyncHandler(ParticleEmitterNode::isParticlesFollowEmitter);
-            particlesFollowEmitControl.setEditObject(emitterNode);
-
-            final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesStretchingControl = new BooleanModelPropertyControl<>(particlesFollowEmitter, "Particle Stretching", modelChangeConsumer);
-            particlesStretchingControl.setApplyHandler(ParticleEmitterNode::setUseVelocityStretching);
-            particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isUseVelocityStretching);
-            particlesStretchingControl.setEditObject(emitterNode);
-
-            final ModelPropertyControl<ParticleEmitterNode, Float> magnitudeControl = new FloatModelPropertyControl<>(stretchFactor, "Particle Stretching", modelChangeConsumer);
-            magnitudeControl.setApplyHandler(ParticleEmitterNode::setVelocityStretchFactor);
-            magnitudeControl.setSyncHandler(ParticleEmitterNode::getVelocityStretchFactor);
-            magnitudeControl.setEditObject(emitterNode);
-
-            final ModelPropertyControl<ParticleEmitterNode, ParticleEmitterNode.BillboardMode> billboardModeControl = new BillboardModelPropertyControl(billboardMode, "Billboard Mode", modelChangeConsumer);
-            billboardModeControl.setApplyHandler(ParticleEmitterNode::setBillboardMode);
-            billboardModeControl.setSyncHandler(ParticleEmitterNode::getBillboardMode);
-            billboardModeControl.setEditObject(emitterNode);
-
-            final ModelPropertyControl<ParticleEmitterNode, Vector2f> forceMinMaxControl = new MinMaxModelPropertyControl<>(forceMinMax, "Initial Force", modelChangeConsumer);
-            forceMinMaxControl.setApplyHandler(ParticleEmitterNode::setForceMinMax);
-            forceMinMaxControl.setSyncHandler(ParticleEmitterNode::getForceMinMax);
-            forceMinMaxControl.setEditObject(emitterNode);
-
-            final ModelPropertyControl<ParticleEmitterNode, Vector2f> lifeMinMaxControl = new MinMaxModelPropertyControl<>(lifeMinMax, "Particle Life", modelChangeConsumer);
-            lifeMinMaxControl.setApplyHandler(ParticleEmitterNode::setLifeMinMax);
-            lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
-            lifeMinMaxControl.setEditObject(emitterNode);
-
-            final Line splitLine = createSplitLine(container);
-
-            FXUtils.addToPane(testParticlesModeControl, container);
-            FXUtils.addToPane(particlesFollowEmitControl, container);
-            FXUtils.addToPane(particlesStretchingControl, container);
-            FXUtils.addToPane(magnitudeControl, container);
-            FXUtils.addToPane(billboardModeControl, container);
-            FXUtils.addToPane(forceMinMaxControl, container);
-            FXUtils.addToPane(lifeMinMaxControl, container);
-            FXUtils.addToPane(splitLine, container);
-
-            VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+            createParticlesControls(container, modelChangeConsumer, emitterNode);
         }
 
         if (object instanceof Mesh) {
@@ -212,6 +182,76 @@ public class PropertyBuilder {
         }
     }
 
+    private static void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final ParticleEmitterNode emitterNode) {
+
+        final boolean testParticles = emitterNode.isEnabledTestParticles();
+        final boolean particlesFollowEmitter = emitterNode.isParticlesFollowEmitter();
+
+        final ParticleEmitterNode.BillboardMode billboardMode = emitterNode.getBillboardMode();
+
+        final Vector2f forceMinMax = emitterNode.getForceMinMax();
+        final Vector2f lifeMinMax = emitterNode.getLifeMinMax();
+
+        final float stretchFactor = emitterNode.getVelocityStretchFactor();
+
+        final Material material = emitterNode.getMaterial();
+        final MaterialKey materialKey = (MaterialKey) material.getKey();
+
+        final ModelPropertyControl<ParticleEmitterNode, MaterialKey> materialControl = new MaterialModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+        materialControl.setApplyHandler(MATERIAL_APPLY_TO_EMITTER_HANDLER);
+        materialControl.setSyncHandler(MATERIAL_FROM_EMITTER_SYNC_HANDLER);
+        materialControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, Boolean> testParticlesModeControl = new BooleanModelPropertyControl<>(testParticles, "Test Particles Mode", modelChangeConsumer);
+        testParticlesModeControl.setApplyHandler(ParticleEmitterNode::setEnabledTestParticles);
+        testParticlesModeControl.setSyncHandler(ParticleEmitterNode::isEnabledTestParticles);
+        testParticlesModeControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesFollowEmitControl = new BooleanModelPropertyControl<>(particlesFollowEmitter, "Particle Follow Emitter", modelChangeConsumer);
+        particlesFollowEmitControl.setApplyHandler(ParticleEmitterNode::setParticlesFollowEmitter);
+        particlesFollowEmitControl.setSyncHandler(ParticleEmitterNode::isParticlesFollowEmitter);
+        particlesFollowEmitControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesStretchingControl = new BooleanModelPropertyControl<>(particlesFollowEmitter, "Particle Stretching", modelChangeConsumer);
+        particlesStretchingControl.setApplyHandler(ParticleEmitterNode::setUseVelocityStretching);
+        particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isUseVelocityStretching);
+        particlesStretchingControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, Float> magnitudeControl = new FloatModelPropertyControl<>(stretchFactor, "Magnitude", modelChangeConsumer);
+        magnitudeControl.setApplyHandler(ParticleEmitterNode::setVelocityStretchFactor);
+        magnitudeControl.setSyncHandler(ParticleEmitterNode::getVelocityStretchFactor);
+        magnitudeControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, ParticleEmitterNode.BillboardMode> billboardModeControl = new BillboardEmitterPropertyControl(billboardMode, "Billboard Mode", modelChangeConsumer);
+        billboardModeControl.setApplyHandler(ParticleEmitterNode::setBillboardMode);
+        billboardModeControl.setSyncHandler(ParticleEmitterNode::getBillboardMode);
+        billboardModeControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, Vector2f> forceMinMaxControl = new MinMaxModelPropertyControl<>(forceMinMax, "Initial Force", modelChangeConsumer);
+        forceMinMaxControl.setApplyHandler(ParticleEmitterNode::setForceMinMax);
+        forceMinMaxControl.setSyncHandler(ParticleEmitterNode::getForceMinMax);
+        forceMinMaxControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, Vector2f> lifeMinMaxControl = new MinMaxModelPropertyControl<>(lifeMinMax, "Particle Life", modelChangeConsumer);
+        lifeMinMaxControl.setApplyHandler(ParticleEmitterNode::setLifeMinMax);
+        lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
+        lifeMinMaxControl.setEditObject(emitterNode);
+
+        final Line splitLine = createSplitLine(container);
+
+        FXUtils.addToPane(materialControl, container);
+        FXUtils.addToPane(testParticlesModeControl, container);
+        FXUtils.addToPane(particlesFollowEmitControl, container);
+        FXUtils.addToPane(particlesStretchingControl, container);
+        FXUtils.addToPane(magnitudeControl, container);
+        FXUtils.addToPane(billboardModeControl, container);
+        FXUtils.addToPane(forceMinMaxControl, container);
+        FXUtils.addToPane(lifeMinMaxControl, container);
+        FXUtils.addToPane(splitLine, container);
+
+        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+    }
+
     private static void createEmissionControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final ParticleEmitterNode emitterNode) {
 
         final boolean enabledTestEmitter = emitterNode.isEnabledTestEmitter();
@@ -223,6 +263,9 @@ public class PropertyBuilder {
         final int maxParticles = emitterNode.getMaxParticles();
         final int emissionsPerSecond = emitterNode.getEmissionsPerSecond();
         final int particlesPerEmission = emitterNode.getParticlesPerEmission();
+
+        final EmitterMesh.DirectionType directionType = emitterNode.getDirectionType();
+        final ParticleEmitterNode.ParticleEmissionPoint emissionPoint = emitterNode.getParticleEmissionPoint();
 
         final ModelPropertyControl<ParticleEmitterNode, Boolean> testEmitterModeControl = new BooleanModelPropertyControl<>(enabledTestEmitter, "Test Mode", modelChangeConsumer);
         testEmitterModeControl.setApplyHandler(ParticleEmitterNode::setEnabledTestEmitter);
@@ -249,6 +292,16 @@ public class PropertyBuilder {
         skipPatternControl.setSyncHandler(ParticleEmitterNode::isUseSequentialSkipPattern);
         skipPatternControl.setEditObject(emitterNode);
 
+        final ModelPropertyControl<ParticleEmitterNode, EmitterMesh.DirectionType> directionTypeControl = new DirectionEmitterPropertyControl(directionType, "Direction Type", modelChangeConsumer);
+        directionTypeControl.setApplyHandler(ParticleEmitterNode::setDirectionType);
+        directionTypeControl.setSyncHandler(ParticleEmitterNode::getDirectionType);
+        directionTypeControl.setEditObject(emitterNode);
+
+        final ModelPropertyControl<ParticleEmitterNode, ParticleEmitterNode.ParticleEmissionPoint> emissionPointControl = new EmissionPointEmissionPropertyControl(emissionPoint, "Direction Type", modelChangeConsumer);
+        emissionPointControl.setApplyHandler(ParticleEmitterNode::setParticleEmissionPoint);
+        emissionPointControl.setSyncHandler(ParticleEmitterNode::getParticleEmissionPoint);
+        emissionPointControl.setEditObject(emitterNode);
+
         final IntegerModelPropertyControl<ParticleEmitterNode> maxParticlesControl = new IntegerModelPropertyControl<>(maxParticles, "Max Particles", modelChangeConsumer);
         maxParticlesControl.setApplyHandler(ParticleEmitterNode::setMaxParticles);
         maxParticlesControl.setSyncHandler(ParticleEmitterNode::getMaxParticles);
@@ -274,6 +327,8 @@ public class PropertyBuilder {
         FXUtils.addToPane(randomPointControl, container);
         FXUtils.addToPane(sequentialFaceControl, container);
         FXUtils.addToPane(skipPatternControl, container);
+        FXUtils.addToPane(directionTypeControl, container);
+        FXUtils.addToPane(emissionPointControl, container);
         FXUtils.addToPane(maxParticlesControl, container);
         FXUtils.addToPane(emissionPerSecControl, container);
         FXUtils.addToPane(particlesPerEmissionControl, container);
