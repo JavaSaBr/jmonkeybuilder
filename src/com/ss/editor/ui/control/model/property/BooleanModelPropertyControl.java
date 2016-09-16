@@ -4,6 +4,8 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
@@ -26,7 +28,7 @@ public class BooleanModelPropertyControl<T extends Spatial> extends ModelPropert
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         checkBox = new CheckBox();

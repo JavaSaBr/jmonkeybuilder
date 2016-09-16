@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -72,7 +73,7 @@ public class ModelPropertyEditor extends TitledPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilder.buildFor(object, container, getModelChangeConsumer());
+            PropertyBuilderFactory.buildFor(object, container, getModelChangeConsumer());
         }
 
         setCurrentObject(object);

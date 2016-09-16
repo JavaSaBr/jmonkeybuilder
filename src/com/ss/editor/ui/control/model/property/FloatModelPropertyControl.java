@@ -4,6 +4,8 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
@@ -34,7 +36,7 @@ public class FloatModelPropertyControl<T extends Spatial> extends ModelPropertyC
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         valueField = new TextField();

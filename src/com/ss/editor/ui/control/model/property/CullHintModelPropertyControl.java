@@ -4,6 +4,8 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
@@ -35,7 +37,7 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial, 
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         cullHintComboBox = new ComboBox<>();

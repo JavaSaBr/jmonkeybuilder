@@ -9,6 +9,9 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -67,7 +70,7 @@ public class ModelPropertyControl<D, T> extends VBox {
      */
     private boolean ignoreListener;
 
-    public ModelPropertyControl(final T propertyValue, final String propertyName, final ModelChangeConsumer modelChangeConsumer) {
+    public ModelPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName, @NotNull final ModelChangeConsumer modelChangeConsumer) {
         this.propertyValue = propertyValue;
         this.propertyName = propertyName;
         this.modelChangeConsumer = modelChangeConsumer;
@@ -86,20 +89,21 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * @param editObject the edit object.
      */
-    public void setEditObject(final D editObject) {
+    public void setEditObject(@NotNull final D editObject) {
         this.editObject = editObject;
     }
 
     /**
      * @param applyHandler the handler for handling new value.
      */
-    public void setApplyHandler(final BiConsumer<D, T> applyHandler) {
+    public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
 
     /**
      * @return the handler for getting actual value.
      */
+    @Nullable
     protected Function<D, T> getSyncHandler() {
         return syncHandler;
     }
@@ -107,7 +111,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * @param syncHandler the handler for getting actual value.
      */
-    public void setSyncHandler(final Function<D, T> syncHandler) {
+    public void setSyncHandler(@Nullable final Function<D, T> syncHandler) {
         this.syncHandler = syncHandler;
     }
 
@@ -132,10 +136,7 @@ public class ModelPropertyControl<D, T> extends VBox {
         try {
 
             final Function<D, T> syncHandler = getSyncHandler();
-
-            if (syncHandler != null) {
-                setPropertyValue(syncHandler.apply(getEditObject()));
-            }
+            if (syncHandler != null) setPropertyValue(syncHandler.apply(getEditObject()));
 
             reload();
 
@@ -180,7 +181,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * Create components of this control.
      */
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
     }
 
     /**
@@ -200,7 +201,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * Apply new value to the edit object.
      */
-    protected void changed(final T newValue, final T oldValue) {
+    protected void changed(@Nullable final T newValue, @Nullable final T oldValue) {
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
         final Spatial currentModel = modelChangeConsumer.getCurrentModel();
@@ -217,6 +218,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * @return the value of the property.
      */
+    @Nullable
     public T getPropertyValue() {
         return propertyValue;
     }
@@ -224,6 +226,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * @return the handler for handling new value.
      */
+    @NotNull
     protected BiConsumer<D, T> getApplyHandler() {
         return applyHandler;
     }
@@ -231,7 +234,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * @param propertyValue the value of the property.
      */
-    protected void setPropertyValue(final T propertyValue) {
+    protected void setPropertyValue(@Nullable final T propertyValue) {
         this.propertyValue = propertyValue;
     }
 

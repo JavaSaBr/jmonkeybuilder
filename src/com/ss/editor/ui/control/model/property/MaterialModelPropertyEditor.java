@@ -15,6 +15,9 @@ import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +31,9 @@ import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 
 /**
  * The implementation of the {@link ModelPropertyControl} for editing the {@link MaterialKey}.
@@ -63,12 +69,12 @@ public class MaterialModelPropertyEditor<T extends Spatial> extends ModelPropert
      */
     private Button editButton;
 
-    public MaterialModelPropertyEditor(final MaterialKey element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public MaterialModelPropertyEditor(@Nullable final MaterialKey element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         materialLabel = new Label(NO_MATERIAL);
@@ -111,10 +117,10 @@ public class MaterialModelPropertyEditor<T extends Spatial> extends ModelPropert
     /**
      * Add the mew material.
      */
-    private void addMaterial(final Path file) {
+    private void addMaterial(@NotNull final Path file) {
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
-        final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
+        final Path assetFile = getAssetFile(file);
+        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
         changed(materialKey, getPropertyValue());
 
@@ -156,9 +162,7 @@ public class MaterialModelPropertyEditor<T extends Spatial> extends ModelPropert
 
     @Override
     protected void reload() {
-
         final MaterialKey element = getPropertyValue();
-
         final Label materialLabel = getMaterialLabel();
         materialLabel.setText(element == null || StringUtils.isEmpty(element.getName()) ? NO_MATERIAL : element.getName());
     }

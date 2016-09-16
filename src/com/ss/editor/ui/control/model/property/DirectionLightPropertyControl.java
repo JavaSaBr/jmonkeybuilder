@@ -7,6 +7,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
@@ -43,7 +46,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         final Label xLabel = new Label("x:");
@@ -184,7 +187,7 @@ public class DirectionLightPropertyControl<T extends Light> extends ModelPropert
     }
 
     @Override
-    protected void changed(final Vector3f newValue, final Vector3f oldValue) {
+    protected void changed(@Nullable final Vector3f newValue, @Nullable final Vector3f oldValue) {
 
         final T editObject = getEditObject();
 

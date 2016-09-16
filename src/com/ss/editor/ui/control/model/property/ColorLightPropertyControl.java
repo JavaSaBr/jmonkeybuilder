@@ -6,6 +6,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 import com.ss.editor.ui.util.UIUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -30,7 +33,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         colorPicker = new ColorPicker();
@@ -79,7 +82,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
     }
 
     @Override
-    protected void changed(final ColorRGBA newValue, final ColorRGBA oldValue) {
+    protected void changed(@Nullable final ColorRGBA newValue, @Nullable final ColorRGBA oldValue) {
 
         final T editObject = getEditObject();
 

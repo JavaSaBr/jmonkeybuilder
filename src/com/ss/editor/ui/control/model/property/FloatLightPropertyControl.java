@@ -5,6 +5,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
@@ -35,7 +38,7 @@ public class FloatLightPropertyControl<T extends Light> extends ModelPropertyCon
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         valueField = new TextField();
@@ -124,7 +127,7 @@ public class FloatLightPropertyControl<T extends Light> extends ModelPropertyCon
     }
 
     @Override
-    protected void changed(final Float newValue, final Float oldValue) {
+    protected void changed(@Nullable final Float newValue, @Nullable final Float oldValue) {
 
         final T editObject = getEditObject();
 

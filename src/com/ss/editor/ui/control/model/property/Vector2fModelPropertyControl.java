@@ -37,7 +37,7 @@ public class Vector2fModelPropertyControl<T extends Spatial> extends ModelProper
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         final Label xLabel = new Label(getXLabelText());

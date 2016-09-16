@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.property;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
@@ -14,7 +16,7 @@ import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.ParticleEmitterNode.BillboardMode;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for changing the {@link BillboardMode}.
+ * The implementation of the {@link ModelPropertyControl} for editing the {@link BillboardMode}.
  *
  * @author JavaSaBr
  */
@@ -36,7 +38,7 @@ public class BillboardEmitterPropertyControl extends ModelPropertyControl<Partic
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         billboardModeComboBox = new ComboBox<>();

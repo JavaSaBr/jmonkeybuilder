@@ -3,6 +3,8 @@ package com.ss.editor.ui.control.model.property;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Function;
 
 import javafx.geometry.Pos;
@@ -53,7 +55,7 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
     }
 
     @Override
-    protected void createComponents(final HBox container) {
+    protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
         propertyValueLabel = new Label();
@@ -65,7 +67,7 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
     }
 
     @Override
-    protected void reload() {
+    public void reload() {
         super.reload();
 
         final Function<T, String> func = getToStringFunction();
