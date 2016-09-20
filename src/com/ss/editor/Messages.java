@@ -149,6 +149,25 @@ public class Messages {
     public static final String MODEL_PROPERTY_INNER_ANGLE;
     public static final String MODEL_PROPERTY_OUTER_ANGLE;
 
+    public static final String PARTICLE_EMITTER_TEST_MODE;
+    public static final String PARTICLE_EMITTER_ENABLED;
+    public static final String PARTICLE_EMITTER_RANDOM_POINT;
+    public static final String PARTICLE_EMITTER_SEQUENTIAL_FACE;
+    public static final String PARTICLE_EMITTER_SKIP_PATTERN;
+    public static final String PARTICLE_EMITTER_DIRECTION_TYPE;
+    public static final String PARTICLE_EMITTER_EMISSION_POINT;
+    public static final String PARTICLE_EMITTER_MAX_PARTICLES;
+    public static final String PARTICLE_EMITTER_EMISSION_PER_SECOND;
+    public static final String PARTICLE_EMITTER_PARTICLES_PER_SECOND;
+    public static final String PARTICLE_EMITTER_TEST_PARTICLES;
+    public static final String PARTICLE_EMITTER_FOLLOW_EMITTER;
+    public static final String PARTICLE_EMITTER_STRETCHING;
+    public static final String PARTICLE_EMITTER_MAGNITUDE;
+    public static final String PARTICLE_EMITTER_BILLBOARD;
+    public static final String PARTICLE_EMITTER_INITIAL_FORCE;
+    public static final String PARTICLE_EMITTER_LIFE;
+
+
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
     public static final String RENAME_DIALOG_TITLE;
@@ -346,6 +365,24 @@ public class Messages {
         MODEL_PROPERTY_COLOR = bundle.getString("ModelPropertyColor");
         MODEL_PROPERTY_INNER_ANGLE = bundle.getString("ModelPropertyInnerAngle");
         MODEL_PROPERTY_OUTER_ANGLE = bundle.getString("ModelPropertyOuterAngle");
+
+        PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
+        PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
+        PARTICLE_EMITTER_RANDOM_POINT = bundle.getString("ParticleEmitterRandomPoint");
+        PARTICLE_EMITTER_SEQUENTIAL_FACE = bundle.getString("ParticleEmitterSequentialFace");
+        PARTICLE_EMITTER_SKIP_PATTERN = bundle.getString("ParticleEmitterSkipPattern");
+        PARTICLE_EMITTER_DIRECTION_TYPE = bundle.getString("ParticleEmitterDirectionType");
+        PARTICLE_EMITTER_EMISSION_POINT = bundle.getString("ParticleEmitterEmissionPoint");
+        PARTICLE_EMITTER_MAX_PARTICLES = bundle.getString("ParticleEmitterMaxParticles");
+        PARTICLE_EMITTER_EMISSION_PER_SECOND = bundle.getString("ParticleEmitterEmissionPerSecond");
+        PARTICLE_EMITTER_PARTICLES_PER_SECOND = bundle.getString("ParticleEmitterParticlesPerSecond");
+        PARTICLE_EMITTER_TEST_PARTICLES = bundle.getString("ParticleEmitterTestParticles");
+        PARTICLE_EMITTER_FOLLOW_EMITTER = bundle.getString("ParticleEmitterFollowEmitter");
+        PARTICLE_EMITTER_STRETCHING = bundle.getString("ParticleEmitterStretching");
+        PARTICLE_EMITTER_MAGNITUDE = bundle.getString("ParticleEmitterMagnitude");
+        PARTICLE_EMITTER_BILLBOARD = bundle.getString("ParticleEmitterBillboard");
+        PARTICLE_EMITTER_INITIAL_FORCE = bundle.getString("ParticleEmitterInitialForce");
+        PARTICLE_EMITTER_LIFE = bundle.getString("ParticleEmitterLife");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 

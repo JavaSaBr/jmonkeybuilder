@@ -7,6 +7,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.util.EditorUtil;
@@ -156,7 +157,7 @@ public class ChooseTextureControl extends HBox {
 
         final EditorFXScene scene = EDITOR.getScene();
 
-        final AssetEditorDialog dialog = new AssetEditorDialog(this::setTextureFile);
+        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::setTextureFile);
         dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
         dialog.show(scene.getWindow());
     }

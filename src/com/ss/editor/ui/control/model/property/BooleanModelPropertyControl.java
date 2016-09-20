@@ -18,6 +18,8 @@ import rlib.ui.util.FXUtils;
  */
 public class BooleanModelPropertyControl<T extends Spatial> extends ModelPropertyControl<T, Boolean> {
 
+    public static final Insets CHECK_BOX_OFFSET = new Insets(0, 0, 0, 120);
+
     /**
      * The {@link CheckBox} with current value.
      */
@@ -35,7 +37,7 @@ public class BooleanModelPropertyControl<T extends Spatial> extends ModelPropert
         checkBox.setId(CSSIds.MODEL_PARAM_CONTROL_CECHK_BOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateValue());
 
-        HBox.setMargin(checkBox, new Insets(0, 0, 0, 120));
+        HBox.setMargin(checkBox, CHECK_BOX_OFFSET);
 
         FXUtils.addToPane(checkBox, container);
     }

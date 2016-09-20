@@ -15,9 +15,9 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация контрола для смены CullHint.
+ * The implementation of the {@link ModelPropertyControl} for editing the {@link Spatial.CullHint}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial, Spatial.CullHint> {
 
@@ -28,7 +28,7 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial, 
     }
 
     /**
-     * Список доступных режимов CullHint.
+     * The list of available options of the {@link Spatial.CullHint}.
      */
     private ComboBox<Spatial.CullHint> cullHintComboBox;
 
@@ -53,14 +53,14 @@ public class CullHintModelPropertyControl extends ModelPropertyControl<Spatial, 
     }
 
     /**
-     * @return список доступных режимов CullHint.
+     * @return the list of available options of the {@link Spatial.CullHint}.
      */
     private ComboBox<Spatial.CullHint> getCullHintComboBox() {
         return cullHintComboBox;
     }
 
     /**
-     * Обновление выбранного CullHint.
+     * Update selected {@link Spatial.CullHint}.
      */
     private void updateCullHint() {
         if (isIgnoreListener()) return;

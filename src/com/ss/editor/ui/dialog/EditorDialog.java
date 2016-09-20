@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog;
 
+import com.ss.editor.Editor;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
@@ -27,9 +28,10 @@ import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.scene.text.TextAlignment.LEFT;
 
 /**
- * Базовая реализация диалога для редактора.
+ * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link
+ * Editor}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EditorDialog extends AbstractPopupDialog {
 
@@ -39,7 +41,7 @@ public class EditorDialog extends AbstractPopupDialog {
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * Слушатель изменения фокуса окна.
+     * The handler for handling changing a focus of the window.
      */
     private final EventHandler<? super Event> hideEventHandler = event -> {
         final WindowChangeFocusEvent focusEvent = (WindowChangeFocusEvent) event;
@@ -47,7 +49,7 @@ public class EditorDialog extends AbstractPopupDialog {
     };
 
     /**
-     * Слушатель изменения фокуса JavaFX.
+     * The handler for handling changing a focus of the window from JavaFX.
      */
     private final ChangeListener<Boolean> hideListener = (observable, oldValue, newValue) -> {
         if (newValue == Boolean.FALSE) hide();
@@ -82,14 +84,14 @@ public class EditorDialog extends AbstractPopupDialog {
     }
 
     /**
-     * @return скрывать ли диалог при потере фокуса.
+     * @return true if dialog will hide after losing a focus.
      */
     protected boolean isHideOnLostFocus() {
         return true;
     }
 
     /**
-     * Построение шапки диалога.
+     * Create the header of this dialog.
      */
     protected void createHeader(final VBox root) {
 
@@ -125,19 +127,19 @@ public class EditorDialog extends AbstractPopupDialog {
     }
 
     /**
-     * Создание основого содержимого диалога.
+     * Create the content of this dialog.
      */
     protected void createContent(final VBox root) {
     }
 
     /**
-     * Создание кнопок диалога.
+     * Create the actions of this dialog.
      */
     protected void createActions(final VBox root) {
     }
 
     /**
-     * @return текст шапки диалога.
+     * @return the title of this dialog.
      */
     protected String getTitleText() {
         return "Title";

@@ -146,6 +146,17 @@
     -fx-max-width: -fx-min-width;
 }
 
+#EditorDialogLabelWarning {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-min-height: 28;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 800;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
     -fx-min-height: 45;
@@ -160,6 +171,49 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 600;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ParticlesAssetEditorDialogSettingsContainer {
+    -fx-alignment: center-left;
+    -fx-min-height: 600;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 600;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-hgap: 3px;
+    -fx-vgap: 4px;
+}
+
+#ParticlesAssetEditorDialogPreviewContainer {
+    -fx-border-color: -fx-color-0;
+    -fx-border-width: 1;
+    -fx-min-height: 540;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 600;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ParticlesAssetEditorDialogLabel {
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 200;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ParticlesAssetEditorDialogControl {
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 396;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -314,7 +368,7 @@
 #ModelFileEditorParameterContainer {
     -fx-background-color: -fx-color-panel-200;
     -fx-alignment: top-left;
-    -fx-min-width: 300;
+    -fx-min-width: 340;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -356,7 +410,7 @@
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 140;
+    -fx-min-width: 180;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;
@@ -433,7 +487,7 @@
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 225;
+    -fx-min-width: 265;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-left;

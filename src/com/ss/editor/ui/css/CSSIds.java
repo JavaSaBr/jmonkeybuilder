@@ -33,9 +33,15 @@ public interface CSSIds {
     String EDITOR_DIALOG_HEADER_BUTTON_CLOSE = "EditorDialogHeaderButtonClose";
     String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
     String EDITOR_DIALOG_BUTTON_CANCEL = "EditorDialogButtonCancel";
+    String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
 
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "AssetEditorDialogPreviewContainer";
+
+    String PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER = "ParticlesAssetEditorDialogSettingsContainer";
+    String PARTICLES_ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "ParticlesAssetEditorDialogPreviewContainer";
+    String PARTICLES_ASSET_EDITOR_DIALOG_LABEL = "ParticlesAssetEditorDialogLabel";
+    String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
 
     String MATERIAL_FILE_EDITOR_TOOLBAR_LABEL = "MaterialFileEditorToolbarLabel";
     String MATERIAL_FILE_EDITOR_TOOLBAR_BOX = "MaterialFileEditorToolbarBox";

@@ -15,6 +15,7 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
@@ -312,7 +313,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final EditorFXScene scene = EDITOR.getScene();
 
-        final AssetEditorDialog dialog = new AssetEditorDialog(this::addMaterial);
+        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSION);
         dialog.show(scene.getWindow());
     }

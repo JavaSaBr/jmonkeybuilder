@@ -30,7 +30,7 @@ public abstract class AbstractPropertyBuilder implements PropertyBuilder {
         final Line line = new Line();
         line.setId(CSSIds.MODEL_PARAM_CONTROL_SPLIT_LINE);
         line.setStartX(0);
-        line.endXProperty().bind(container.widthProperty().subtract(70));
+        line.endXProperty().bind(container.widthProperty().subtract(50));
 
         return line;
     }

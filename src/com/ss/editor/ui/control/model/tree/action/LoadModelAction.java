@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
@@ -49,7 +50,7 @@ public class LoadModelAction extends AbstractNodeAction {
 
         final EditorFXScene scene = EDITOR.getScene();
 
-        final AssetEditorDialog dialog = new AssetEditorDialog(this::processOpen);
+        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
         dialog.setExtensionFilter(MODEL_EXTENSIONS);
         dialog.show(scene.getWindow());
     }

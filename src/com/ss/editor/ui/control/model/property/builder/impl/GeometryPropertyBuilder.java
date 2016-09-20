@@ -11,7 +11,7 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.DefaultModelPropertyControl;
-import com.ss.editor.ui.control.model.property.MaterialModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.MaterialKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 
@@ -95,7 +95,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         final MaterialKey materialKey = (MaterialKey) material.getKey();
         final BoundingVolume modelBound = geometry.getModelBound();
 
-        final ModelPropertyControl<Geometry, MaterialKey> materialControl = new MaterialModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+        final ModelPropertyControl<Geometry, MaterialKey> materialControl = new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
         materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
         materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
         materialControl.setEditObject(geometry);

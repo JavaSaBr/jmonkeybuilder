@@ -47,6 +47,7 @@ public interface Icons {
     public static final Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png", 24);
     public static final Image ADD_CIRCLE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add_circle.png", 24);
     public static final Image IMAGE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/image.png", 24);
+    public static final Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/warning.png", 24);
     public static final Image EDIT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/edit.png", 24);
 
     public static final Image IMAGE_512 = ICON_MANAGER.getImage("/ui/icons/512/image.png", 512);
