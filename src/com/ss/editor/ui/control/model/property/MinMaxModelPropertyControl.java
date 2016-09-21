@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.property;
 
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,12 +21,12 @@ public class MinMaxModelPropertyControl<T extends Spatial> extends Vector2fModel
     @NotNull
     @Override
     protected String getXLabelText() {
-        return "Min";
+        return Messages.MODEL_PROPERTY_MIN + ":";
     }
 
     @NotNull
     @Override
     protected String getYLabelText() {
-        return "Max";
+        return Messages.MODEL_PROPERTY_MAX + ":";
     }
 }

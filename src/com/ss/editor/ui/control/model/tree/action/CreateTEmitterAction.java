@@ -57,7 +57,6 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         emitter.setBillboardMode(BillboardMode.CAMERA);
         emitter.setForce(1);
         emitter.setLife(0.999f);
-        emitter.setSprite("graphics/textures/sprite/default.png");
 
         final SizeInfluencer sizeInfluencer = emitter.getInfluencer(SizeInfluencer.class);
 
@@ -67,6 +66,7 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         }
 
         emitter.initialize(EDITOR.getAssetManager());
+        emitter.changeTexture("graphics/textures/sprite/default.png");
 
         final ModelNode<?> modelNode = getNode();
         final Node element = (Node) modelNode.getElement();

@@ -7,6 +7,7 @@ import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 
@@ -59,7 +60,7 @@ public class ModelPropertyEditor extends TitledPane {
     private void createComponents() {
         container = new VBox();
         container.setAlignment(Pos.TOP_CENTER);
-        setContent(container);
+        setContent(new ScrollPane(container));
     }
 
     /**

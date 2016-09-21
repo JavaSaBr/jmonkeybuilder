@@ -32,8 +32,28 @@ public class Vector2fModelPropertyControl<T extends Spatial> extends ModelProper
      */
     private TextField yFiled;
 
+    /**
+     * The power of scrolling.
+     */
+    private float scrollIncrement;
+
     public Vector2fModelPropertyControl(final Vector2f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
+        this.scrollIncrement = 10F;
+    }
+
+    /**
+     * @param scrollIncrement the power of scrolling.
+     */
+    public void setScrollIncrement(float scrollIncrement) {
+        this.scrollIncrement = scrollIncrement;
+    }
+
+    /**
+     * @return the power of scrolling.
+     */
+    private float getScrollIncrement() {
+        return scrollIncrement;
     }
 
     @Override
@@ -75,7 +95,7 @@ public class Vector2fModelPropertyControl<T extends Spatial> extends ModelProper
     /**
      * The process of scrolling.
      */
-    private void processScroll(final ScrollEvent event) {
+    protected void processScroll(final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
         final TextField source = (TextField) event.getSource();
@@ -89,7 +109,7 @@ public class Vector2fModelPropertyControl<T extends Spatial> extends ModelProper
         }
 
         long longValue = (long) (value * 1000);
-        longValue += (event.getDeltaY() * 10);
+        longValue += event.getDeltaY() * getScrollIncrement();
 
         source.setText(String.valueOf(longValue / 1000F));
         updateVector(null);
@@ -121,7 +141,7 @@ public class Vector2fModelPropertyControl<T extends Spatial> extends ModelProper
     /**
      * Update the vector.
      */
-    private void updateVector(final KeyEvent event) {
+    protected void updateVector(final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final TextField xField = getXField();
@@ -144,6 +164,6 @@ public class Vector2fModelPropertyControl<T extends Spatial> extends ModelProper
         final Vector2f newValue = new Vector2f();
         newValue.set(x, y);
 
-        changed(newValue, oldValue.clone());
+        changed(newValue, oldValue == null ? null : oldValue.clone());
     }
 }

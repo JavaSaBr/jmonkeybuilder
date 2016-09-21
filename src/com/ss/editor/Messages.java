@@ -43,6 +43,9 @@ public class Messages {
     public static final String ASSET_EDITOR_DIALOG_BUTTON_OK;
     public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
 
+    public static final String PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL;
+    public static final String PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL;
+
     public static final String MATERIAL_EDITOR_MATERIAL_TYPE_LABEL;
     public static final String MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL;
 
@@ -148,6 +151,8 @@ public class Messages {
     public static final String MODEL_PROPERTY_COLOR;
     public static final String MODEL_PROPERTY_INNER_ANGLE;
     public static final String MODEL_PROPERTY_OUTER_ANGLE;
+    public static final String MODEL_PROPERTY_MIN;
+    public static final String MODEL_PROPERTY_MAX;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -166,7 +171,9 @@ public class Messages {
     public static final String PARTICLE_EMITTER_BILLBOARD;
     public static final String PARTICLE_EMITTER_INITIAL_FORCE;
     public static final String PARTICLE_EMITTER_LIFE;
-
+    public static final String PARTICLE_EMITTER_COLUMNS;
+    public static final String PARTICLE_EMITTER_ROWS;
+    public static final String PARTICLE_EMITTER_SPRITE_COUNT;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
@@ -259,6 +266,9 @@ public class Messages {
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
         ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
         ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
+
+        PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureParamLabel");
+        PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
 
         MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialFileEditorTexturesComponentTitle");
         MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorColorsComponentTitle");
@@ -365,6 +375,8 @@ public class Messages {
         MODEL_PROPERTY_COLOR = bundle.getString("ModelPropertyColor");
         MODEL_PROPERTY_INNER_ANGLE = bundle.getString("ModelPropertyInnerAngle");
         MODEL_PROPERTY_OUTER_ANGLE = bundle.getString("ModelPropertyOuterAngle");
+        MODEL_PROPERTY_MIN = bundle.getString("ModelPropertyMin");
+        MODEL_PROPERTY_MAX = bundle.getString("ModelPropertyMax");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -383,6 +395,9 @@ public class Messages {
         PARTICLE_EMITTER_BILLBOARD = bundle.getString("ParticleEmitterBillboard");
         PARTICLE_EMITTER_INITIAL_FORCE = bundle.getString("ParticleEmitterInitialForce");
         PARTICLE_EMITTER_LIFE = bundle.getString("ParticleEmitterLife");
+        PARTICLE_EMITTER_COLUMNS = bundle.getString("ParticleEmitterColumns");
+        PARTICLE_EMITTER_ROWS = bundle.getString("ParticleEmitterRows");
+        PARTICLE_EMITTER_SPRITE_COUNT = bundle.getString("ParticleEmitterSpriteCount");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 

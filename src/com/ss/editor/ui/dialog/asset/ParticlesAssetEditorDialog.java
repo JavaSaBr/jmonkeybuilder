@@ -6,6 +6,7 @@ import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -71,10 +72,10 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         final GridPane settingsContainer = new GridPane();
         settingsContainer.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER);
 
-        textureParamNameLabel = new Label("Texture param name:");
+        textureParamNameLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL + ":");
         textureParamNameLabel.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_LABEL);
 
-        applyLightingTransformLabel = new Label("Apply lighting transform:");
+        applyLightingTransformLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL + ":");
         applyLightingTransformLabel.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_LABEL);
 
         textureParamNameComboBox = new ComboBox<>();

@@ -187,7 +187,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
     /**
      * Set to true if a subclass requires updateLogicalState() even if it doesn't have any controls.
-     *  Defaults to true thus implementing the legacy behavior for any subclasses not specifically
+     * Defaults to true thus implementing the legacy behavior for any subclasses not specifically
      * turning it off. This flag should be set during construction and never changed as it's
      * supposed to be class-specific and not runtime state.
      */

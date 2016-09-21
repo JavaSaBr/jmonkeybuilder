@@ -12,6 +12,7 @@ import com.ss.editor.ui.control.model.property.IntegerModelPropertyControl;
 import com.ss.editor.ui.control.model.property.MaterialEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.MinMaxModelPropertyControl;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
+import com.ss.editor.ui.control.model.property.ParticlesSpriteCountModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +57,7 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
 
         final Vector2f forceMinMax = emitterNode.getForceMinMax();
         final Vector2f lifeMinMax = emitterNode.getLifeMinMax();
+        final Vector2f spriteCount = emitterNode.getSpriteCount();
 
         final float stretchFactor = emitterNode.getVelocityStretchFactor();
 
@@ -101,14 +103,20 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
         lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
         lifeMinMaxControl.setEditObject(emitterNode);
 
+        final ModelPropertyControl<ParticleEmitterNode, Vector2f> spriteCountControl = new ParticlesSpriteCountModelPropertyControl(spriteCount, Messages.PARTICLE_EMITTER_SPRITE_COUNT, modelChangeConsumer);
+        spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
+        spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
+        spriteCountControl.setEditObject(emitterNode);
+
         final Line splitLine = createSplitLine(container);
 
-        FXUtils.addToPane(materialControl, container);
         FXUtils.addToPane(testParticlesModeControl, container);
         FXUtils.addToPane(particlesFollowEmitControl, container);
         FXUtils.addToPane(particlesStretchingControl, container);
         FXUtils.addToPane(magnitudeControl, container);
         FXUtils.addToPane(billboardModeControl, container);
+        FXUtils.addToPane(materialControl, container);
+        FXUtils.addToPane(spriteCountControl, container);
         FXUtils.addToPane(forceMinMaxControl, container);
         FXUtils.addToPane(lifeMinMaxControl, container);
         FXUtils.addToPane(splitLine, container);
@@ -169,19 +177,16 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
         final IntegerModelPropertyControl<ParticleEmitterNode> maxParticlesControl = new IntegerModelPropertyControl<>(maxParticles, Messages.PARTICLE_EMITTER_MAX_PARTICLES, modelChangeConsumer);
         maxParticlesControl.setApplyHandler(ParticleEmitterNode::setMaxParticles);
         maxParticlesControl.setSyncHandler(ParticleEmitterNode::getMaxParticles);
-        maxParticlesControl.setScrollIncrement(30);
         maxParticlesControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> emissionPerSecControl = new IntegerModelPropertyControl<>(emissionsPerSecond, Messages.PARTICLE_EMITTER_EMISSION_PER_SECOND, modelChangeConsumer);
         emissionPerSecControl.setApplyHandler(ParticleEmitterNode::setEmissionsPerSecond);
         emissionPerSecControl.setSyncHandler(ParticleEmitterNode::getEmissionsPerSecond);
-        emissionPerSecControl.setScrollIncrement(30);
         emissionPerSecControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> particlesPerEmissionControl = new IntegerModelPropertyControl<>(particlesPerEmission, Messages.PARTICLE_EMITTER_PARTICLES_PER_SECOND, modelChangeConsumer);
         particlesPerEmissionControl.setApplyHandler(ParticleEmitterNode::setParticlesPerEmission);
         particlesPerEmissionControl.setSyncHandler(ParticleEmitterNode::getParticlesPerEmission);
-        particlesPerEmissionControl.setScrollIncrement(30);
         particlesPerEmissionControl.setEditObject(emitterNode);
 
         final Line splitLine = createSplitLine(container);

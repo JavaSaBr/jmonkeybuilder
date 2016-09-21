@@ -32,7 +32,7 @@ public class IntegerModelPropertyControl<T extends Spatial> extends ModelPropert
 
     public IntegerModelPropertyControl(final Integer element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
-        this.scrollIncrement = 1F;
+        this.scrollIncrement = 30F;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class IntegerModelPropertyControl<T extends Spatial> extends ModelPropert
     /**
      * @param scrollIncrement the power of scrolling.
      */
-    public void setScrollIncrement(float scrollIncrement) {
+    public void setScrollIncrement(final float scrollIncrement) {
         this.scrollIncrement = scrollIncrement;
     }
 

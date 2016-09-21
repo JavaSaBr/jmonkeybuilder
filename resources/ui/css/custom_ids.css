@@ -204,7 +204,7 @@
     -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 200;
+    -fx-min-width: 240;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -213,7 +213,7 @@
     -fx-min-height: 26;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 396;
+    -fx-min-width: 356;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -453,6 +453,9 @@
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-min-width: 140;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 #ModelParamControlCheckbox {
