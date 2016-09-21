@@ -4,6 +4,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.BiConsumer;
 
 /**
@@ -55,7 +57,7 @@ public class LightPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     }
 
     @Override
-    protected void redoImpl(final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             apply(light, newValue);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(light, propertyName));
@@ -70,7 +72,7 @@ public class LightPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     }
 
     @Override
-    protected void undoImpl(final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             apply(light, oldValue);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(light, propertyName));

@@ -7,6 +7,8 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Реализация операции по добавлению нового источника света.
  *
@@ -30,7 +32,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
     }
 
     @Override
-    protected void redoImpl(final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
@@ -45,7 +47,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
     }
 
     @Override
-    protected void undoImpl(final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();

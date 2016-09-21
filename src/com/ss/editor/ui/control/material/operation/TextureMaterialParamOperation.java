@@ -11,6 +11,8 @@ import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Базовая реализация операции по смене текстуры материала.
  *
@@ -62,7 +64,7 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
     }
 
     @Override
-    protected void redoImpl(final MaterialChangeConsumer editor) {
+    protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
@@ -92,7 +94,7 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
     }
 
     @Override
-    protected void undoImpl(final MaterialChangeConsumer editor) {
+    protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();

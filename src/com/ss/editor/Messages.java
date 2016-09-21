@@ -138,6 +138,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_POINT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_SPOT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -362,6 +363,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_POINT_LIGHT = bundle.getString("ModelNodeTreeActionPointLight");
         MODEL_NODE_TREE_ACTION_SPOT_LIGHT = bundle.getString("ModelNodeTreeActionSpotLight");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
+        MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

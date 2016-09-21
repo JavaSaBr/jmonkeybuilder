@@ -1,21 +1,23 @@
 package com.ss.editor.model.undo;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * Интерфейс для реализации перации.
+ * The interface for implementing an operation in an editor.
  *
- * @author Ronn
+ * @author JavaSabr
  */
 public interface EditorOperation {
 
     /**
-     * Метод для внесения изменений.
+     * Redo this operation for the editor.
      */
-    public default void redo(final UndoableEditor editor) {
+    default void redo(@NotNull final UndoableEditor editor) {
     }
 
     /**
-     * Метод для отката изменений.
+     * Undo this operation for the editor.
      */
-    public default void undo(final UndoableEditor editor) {
+    default void undo(@NotNull final UndoableEditor editor) {
     }
 }

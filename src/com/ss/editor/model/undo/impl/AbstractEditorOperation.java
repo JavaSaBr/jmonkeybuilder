@@ -5,12 +5,15 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.UndoableEditor;
 
+import org.jetbrains.annotations.NotNull;
+
 import static rlib.util.ClassUtils.unsafeCast;
 
 /**
- * Базовая реализация операции с редактором.
+ * The base implementation of the {@link EditorOperation} for supporting the generic type of an
+ * editor.
  *
- * @author Ronn
+ * @author JavaSabr
  */
 public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
@@ -21,22 +24,22 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
     }
 
     @Override
-    public void redo(final UndoableEditor editor) {
+    public void redo(@NotNull final UndoableEditor editor) {
         redoImpl(unsafeCast(editor));
     }
 
     /**
      * Реализация внесения изменений.
      */
-    protected abstract void redoImpl(E editor);
+    protected abstract void redoImpl(@NotNull E editor);
 
     @Override
-    public void undo(final UndoableEditor editor) {
+    public void undo(@NotNull final UndoableEditor editor) {
         undoImpl(unsafeCast(editor));
     }
 
     /**
      * Реализация отката изменений.
      */
-    protected abstract void undoImpl(final E editor);
+    protected abstract void undoImpl(@NotNull final E editor);
 }

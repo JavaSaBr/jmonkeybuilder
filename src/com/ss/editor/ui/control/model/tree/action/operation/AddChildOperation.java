@@ -6,30 +6,33 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * Реализация операции по добавлению нового дочернего узла.
+ * The implementation of the {@link AbstractEditorOperation} for adding a new child to node.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Новый дочерний элемент.
+     * The new child.
      */
+    @NotNull
     private final Spatial newChild;
 
     /**
-     * Индекс родительского элемента.
+     * The index of parent.
      */
     private final int index;
 
-    public AddChildOperation(final Spatial newChild, final int index) {
+    public AddChildOperation(@NotNull final Spatial newChild, final int index) {
         this.newChild = newChild;
         this.index = index;
     }
 
     @Override
-    protected void redoImpl(final ModelChangeConsumer editor) {
+    protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
@@ -44,7 +47,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     }
 
     @Override
-    protected void undoImpl(final ModelChangeConsumer editor) {
+    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();

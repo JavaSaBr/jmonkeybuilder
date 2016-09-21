@@ -5,6 +5,8 @@ import com.jme3.shader.VarType;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Базовая реализация операции по смене параметра материала.
  *
@@ -46,7 +48,7 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
     protected abstract VarType getVarType();
 
     @Override
-    protected void redoImpl(final MaterialChangeConsumer editor) {
+    protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
@@ -62,7 +64,7 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
     }
 
     @Override
-    protected void undoImpl(final MaterialChangeConsumer editor) {
+    protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();

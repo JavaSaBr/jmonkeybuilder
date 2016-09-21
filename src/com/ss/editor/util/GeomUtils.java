@@ -5,6 +5,9 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -96,19 +99,16 @@ public class GeomUtils {
     }
 
     /**
-     * Получение части модели по ее индексу в структуре модели.
+     * Find the object by the index in the model.
      */
-    public static Object getObjectByIndex(final Spatial model, final int index) {
+    @Nullable
+    public static Object getObjectByIndex(@NotNull final Spatial model, final int index) {
 
         Spatial parent = model;
         int parentIndex = 0;
 
         while (parent != null) {
-
-            if (parentIndex == index) {
-                return parent;
-            }
-
+            if (parentIndex == index) return parent;
             parent = parent.getParent();
             parentIndex--;
         }
@@ -123,18 +123,18 @@ public class GeomUtils {
         final List<Spatial> children = node.getChildren();
 
         for (final Spatial child : children) {
-
             final Object object = getObjectByIndex(child, index, counter);
-
-            if (object != null) {
-                return object;
-            }
+            if (object != null) return object;
         }
 
         return null;
     }
 
-    private static Object getObjectByIndex(final Spatial model, final int index, final AtomicInteger counter) {
+    /**
+     * Find the object by the index in the model.
+     */
+    @Nullable
+    private static Object getObjectByIndex(@NotNull final Spatial model, final int index, @NotNull final AtomicInteger counter) {
 
         if (counter.incrementAndGet() == index) {
             return model;
@@ -143,16 +143,11 @@ public class GeomUtils {
         }
 
         final Node node = (Node) model;
-
         final List<Spatial> children = node.getChildren();
 
         for (final Spatial child : children) {
-
             final Object object = getObjectByIndex(child, index, counter);
-
-            if (object != null) {
-                return object;
-            }
+            if (object != null) return object;
         }
 
         return null;

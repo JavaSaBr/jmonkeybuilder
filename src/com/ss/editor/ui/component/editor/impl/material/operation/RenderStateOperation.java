@@ -6,6 +6,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Базовая реализация операции по изменению рендера материала.
  *
@@ -31,7 +33,7 @@ public abstract class RenderStateOperation<T> extends AbstractEditorOperation<Ma
     }
 
     @Override
-    protected void redoImpl(final MaterialChangeConsumer editor) {
+    protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
@@ -46,7 +48,7 @@ public abstract class RenderStateOperation<T> extends AbstractEditorOperation<Ma
     protected abstract void apply(final RenderState renderState, final T value);
 
     @Override
-    protected void undoImpl(final MaterialChangeConsumer editor) {
+    protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();

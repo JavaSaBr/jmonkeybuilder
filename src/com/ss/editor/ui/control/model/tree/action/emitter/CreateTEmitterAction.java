@@ -1,9 +1,11 @@
-package com.ss.editor.ui.control.model.tree.action;
+package com.ss.editor.ui.control.model.tree.action.emitter;
 
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
@@ -32,7 +34,7 @@ public class CreateTEmitterAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Create TEmitter";
+        return Messages.MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
     }
 
     @Override
