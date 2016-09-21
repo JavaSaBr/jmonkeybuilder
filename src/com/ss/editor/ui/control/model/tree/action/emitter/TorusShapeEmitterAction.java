@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
 import com.jme3.scene.shape.Torus;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -17,16 +18,16 @@ import tonegod.emitter.ParticleEmitterNode;
  *
  * @author JavaSaBr
  */
-public class JMETorusShapeEmitterAction extends AbstractNodeAction {
+public class TorusShapeEmitterAction extends AbstractNodeAction {
 
-    public JMETorusShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public TorusShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @NotNull
     @Override
     protected String getName() {
-        return "Torus";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE;
     }
 
     @Override

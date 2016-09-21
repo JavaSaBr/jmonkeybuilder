@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -27,7 +28,7 @@ public class TriangleShapeEmitterAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Triangle shape";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
     }
 
     @Override

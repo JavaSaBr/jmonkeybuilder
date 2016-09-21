@@ -139,6 +139,16 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_SPOT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -364,6 +374,17 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_SPOT_LIGHT = bundle.getString("ModelNodeTreeActionSpotLight");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
+
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePrimitiveShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeCylinderShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeDomeShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeQuadShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeSphereShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTorusShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeModelShape");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

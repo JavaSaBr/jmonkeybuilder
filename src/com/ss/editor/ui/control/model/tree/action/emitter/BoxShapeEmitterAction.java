@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
-import com.jme3.scene.shape.Quad;
+import com.jme3.scene.shape.Box;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -13,20 +14,20 @@ import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link Quad}.
+ * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link Box}.
  *
  * @author JavaSaBr
  */
-public class JMEQuadShapeEmitterAction extends AbstractNodeAction {
+public class BoxShapeEmitterAction extends AbstractNodeAction {
 
-    public JMEQuadShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public BoxShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @NotNull
     @Override
     protected String getName() {
-        return "Quad";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE;
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JMEQuadShapeEmitterAction extends AbstractNodeAction {
         final ParticleEmitterNode element = (ParticleEmitterNode) modelNode.getElement();
 
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-        final Quad shape = new Quad(1, 1, true);
+        final Box shape = new Box(1, 1, 1);
 
         modelChangeConsumer.execute(new ChangeEmitterShapeOperation(shape, index));
     }

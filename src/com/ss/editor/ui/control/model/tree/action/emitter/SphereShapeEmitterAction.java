@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
 import com.jme3.scene.shape.Sphere;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -17,16 +18,16 @@ import tonegod.emitter.ParticleEmitterNode;
  *
  * @author JavaSaBr
  */
-public class JMESphereShapeEmitterAction extends AbstractNodeAction {
+public class SphereShapeEmitterAction extends AbstractNodeAction {
 
-    public JMESphereShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public SphereShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @NotNull
     @Override
     protected String getName() {
-        return "Sphere";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE;
     }
 
     @Override

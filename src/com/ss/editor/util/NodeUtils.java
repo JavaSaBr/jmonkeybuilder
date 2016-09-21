@@ -35,27 +35,18 @@ public class NodeUtils {
     }
 
     /**
-     * Поиск геометрии в этом узле.
+     * Find the first geometry in the {@link Spatial}.
      */
-    public static Geometry findGeometry(final Spatial spatial) {
-
-        if (!(spatial instanceof Node)) {
-            return null;
-        }
+    @Nullable
+    public static Geometry findGeometry(@NotNull final Spatial spatial) {
+        if (!(spatial instanceof Node)) return null;
 
         final Node node = (Node) spatial;
 
         for (final Spatial children : node.getChildren()) {
-
             final Geometry geometry = findGeometry(children);
-
-            if (geometry != null) {
-                return geometry;
-            }
-
-            if (children instanceof Geometry) {
-                return (Geometry) children;
-            }
+            if (geometry != null) return geometry;
+            if (children instanceof Geometry) return (Geometry) children;
         }
 
         return null;

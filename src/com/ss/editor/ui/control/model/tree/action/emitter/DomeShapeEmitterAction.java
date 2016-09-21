@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
-import com.jme3.scene.shape.Cylinder;
+import com.jme3.scene.shape.Dome;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -13,21 +14,20 @@ import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link
- * Cylinder}.
+ * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link Dome}.
  *
  * @author JavaSaBr
  */
-public class JMECylinderShapeEmitterAction extends AbstractNodeAction {
+public class DomeShapeEmitterAction extends AbstractNodeAction {
 
-    public JMECylinderShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public DomeShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @NotNull
     @Override
     protected String getName() {
-        return "Cylinder";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class JMECylinderShapeEmitterAction extends AbstractNodeAction {
         final ParticleEmitterNode element = (ParticleEmitterNode) modelNode.getElement();
 
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-        final Cylinder shape = new Cylinder(8, 16, 0.25F, 0.5F);
+        final Dome shape = new Dome(10, 10, 1);
 
         modelChangeConsumer.execute(new ChangeEmitterShapeOperation(shape, index));
     }
