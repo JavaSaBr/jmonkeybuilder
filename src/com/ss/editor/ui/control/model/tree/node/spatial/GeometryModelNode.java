@@ -21,13 +21,14 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация узла представляющего геометрию модели.
+ * The implementation of the {@link SpatialModelNode} for representing the {@link Geometry} in the
+ * editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class GeometryModelNode extends SpatialModelNode<Geometry> {
+public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
 
-    public GeometryModelNode(final Geometry element, final long objectId) {
+    public GeometryModelNode(final T element, final long objectId) {
         super(element, objectId);
     }
 
@@ -45,7 +46,6 @@ public class GeometryModelNode extends SpatialModelNode<Geometry> {
 
         final Geometry geometry = getElement();
         final Mesh mesh = geometry.getMesh();
-
         if (mesh != null) result.add(ModelNodeFactory.createFor(mesh));
 
         result.addAll(super.getChildren());

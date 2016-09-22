@@ -22,12 +22,14 @@ import com.ss.editor.ui.control.model.tree.node.light.SpotLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleEmitterModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.ParticleGeometryModelNode;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 import tonegod.emitter.ParticleEmitterNode;
+import tonegod.emitter.geometry.ParticleGeometry;
 
 import static rlib.util.ClassUtils.unsafeCast;
 
@@ -67,10 +69,12 @@ public class ModelNodeFactory {
 
         if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new ParticleEmitterModelNode((ParticleEmitterNode) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof ParticleGeometry) {
+            return unsafeCast(new ParticleGeometryModelNode((ParticleGeometry) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Mesh) {
             return unsafeCast(new MeshModelNode((Mesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Geometry) {
-            return unsafeCast(new GeometryModelNode((Geometry) element, ID_GENERATOR.incrementAndGet()));
+            return unsafeCast(new GeometryModelNode<>((Geometry) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Node) {
             return unsafeCast(new NodeModelNode<>((Node) element, ID_GENERATOR.incrementAndGet()));
         }

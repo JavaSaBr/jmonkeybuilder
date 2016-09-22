@@ -41,26 +41,22 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RenameNodeAction(nodeTree, this));
-
-        Node parent = getElement().getParent();
-
-        if (parent != null && parent.getUserData(ModelEditorState.class.getName()) != Boolean.TRUE) {
-            items.add(new RemoveNodeAction(nodeTree, this));
-        }
+        if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
     }
 
+    /**
+     * @return true if you can remove this node.
+     */
+    protected boolean canRemove() {
+        Node parent = getElement().getParent();
+        return parent != null && parent.getUserData(ModelEditorState.class.getName()) != Boolean.TRUE;
+    }
+
     @NotNull
     protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
-
-        //final Menu createControlMenu = new Menu("Control");
-        //createControlMenu.getItems().addAll(new CreateTEmitterAction(nodeTree, this));
-
-        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
-        //createMenu.getItems().addAll(createControlMenu);
-
-        return createMenu;
+        return new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
     }
 
     @NotNull

@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -55,7 +54,7 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         emitter.setParticlesPerEmission(1);
 
         // Particle props
-        emitter.setParticleType(ParticleDataTriMesh.class, (Mesh) null);
+        emitter.changeParticleMeshType(ParticleDataTriMesh.class, null);
         emitter.setBillboardMode(BillboardMode.CAMERA);
         emitter.setForce(1);
         emitter.setLife(0.999f);

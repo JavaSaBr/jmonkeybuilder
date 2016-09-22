@@ -37,37 +37,26 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchShape(editor));
+    }
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof ParticleEmitterNode)) return;
+    private void switchShape(final @NotNull ModelChangeConsumer editor) {
 
-            final ParticleEmitterNode node = (ParticleEmitterNode) parent;
-            final EmitterMesh emitterMesh = node.getEmitterShape();
-            final Mesh newShape = prevShape;
-            prevShape = emitterMesh.getMesh();
-            node.setEmitterShapeMesh(newShape);
+        final Spatial currentModel = editor.getCurrentModel();
+        final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
+        if (!(parent instanceof ParticleEmitterNode)) return;
 
-            //TODO надо добавить отдельное понятие таких штук EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, emitterNode));
-        });
+        final ParticleEmitterNode node = (ParticleEmitterNode) parent;
+        final EmitterMesh emitterMesh = node.getEmitterShape();
+        final Mesh newShape = prevShape;
+        prevShape = emitterMesh.getMesh();
+        node.setEmitterShapeMesh(newShape);
+
+        //TODO надо добавить отдельное понятие таких штук EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, emitterNode));
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof ParticleEmitterNode)) return;
-
-            final ParticleEmitterNode node = (ParticleEmitterNode) parent;
-            final EmitterMesh emitterMesh = node.getEmitterShape();
-            final Mesh newShape = prevShape;
-            prevShape = emitterMesh.getMesh();
-            node.setEmitterShapeMesh(newShape);
-
-            //TODO надо добавить отдельное понятие таких штук EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, emitterNode));
-        });
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchShape(editor));
     }
 }
