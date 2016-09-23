@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.tree;
 
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
@@ -28,9 +27,9 @@ import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFo
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 /**
- * Компонент реализации дерево узлов модели.
+ * The implementation of Three for presentation the structure of model in the Editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ModelNodeTree extends TitledPane {
 
@@ -39,21 +38,23 @@ public class ModelNodeTree extends TitledPane {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * Обработчик выделения элемента в дереве.
+     * THe handler of selected objects.
      */
+    @NotNull
     private final Consumer<Object> selectionHandler;
 
     /**
-     * Потребитель изменений модели.
+     * The consumer of changes of the model.
      */
+    @NotNull
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
-     * Дерево со структурой модели.
+     * The tree with structure of the model.
      */
     private TreeView<ModelNode<?>> treeView;
 
-    public ModelNodeTree(final Consumer<Object> selectionHandler, final ModelChangeConsumer modelChangeConsumer) {
+    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @NotNull final ModelChangeConsumer modelChangeConsumer) {
         this.selectionHandler = selectionHandler;
         this.modelChangeConsumer = modelChangeConsumer;
         setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
@@ -62,14 +63,7 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * @return потребитель изменений модели.
-     */
-    public ModelChangeConsumer getModelChangeConsumer() {
-        return modelChangeConsumer;
-    }
-
-    /**
-     * Создание создаержания компонента.
+     * Create components of this component.
      */
     private void createComponents() {
 
@@ -94,18 +88,9 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * @return обработчик выделения элемента в дереве.
-     */
-    private Consumer<Object> getSelectionHandler() {
-        return selectionHandler;
-    }
-
-    /**
-     * Процесс выбора элемента.
+     * Select the item.
      */
     private void processSelect(@Nullable final TreeItem<ModelNode<?>> treeItem) {
-
-        final Consumer<Object> selectionHandler = getSelectionHandler();
 
         if (treeItem == null) {
             selectionHandler.accept(null);
@@ -115,31 +100,23 @@ public class ModelNodeTree extends TitledPane {
         final ModelNode<?> value = treeItem.getValue();
         final Object element = value == null ? null : value.getElement();
 
-        Object toSelect;
-
-        if (element instanceof Spatial) {
-            toSelect = element;
-        } else if (element instanceof Mesh) {
-
-            final TreeItem<ModelNode<?>> parent = treeItem.getParent();
-            final ModelNode<?> parentElement = parent.getValue();
-
-            toSelect = parentElement.getElement();
-        } else {
-            toSelect = element;
-        }
-
-        selectionHandler.accept(toSelect);
+        selectionHandler.accept(element);
     }
 
     /**
-     * @return дерево со структурой модели.
+     * @return the tree of this model.
      */
+    @NotNull
     private TreeView<ModelNode<?>> getTreeView() {
         return treeView;
     }
 
-    public void fill(final Spatial model) {
+    /**
+     * Fill the tree for the model.
+     *
+     * @param model the model.
+     */
+    public void fill(@NotNull final Spatial model) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> currentRoot = treeView.getRoot();
@@ -152,15 +129,16 @@ public class ModelNodeTree extends TitledPane {
         final TreeItem<ModelNode<?>> newRoot = new TreeItem<>(rootElement);
         newRoot.setExpanded(true);
 
-        fill(newRoot);
+        fill(newRoot, false);
 
         treeView.setRoot(newRoot);
     }
 
     /**
-     * Заполнить узел.
+     * Fill the item.
      */
-    private void fill(final TreeItem<ModelNode<?>> treeItem) {
+    private void fill(@NotNull final TreeItem<ModelNode<?>> treeItem, final boolean expanded) {
+        treeItem.setExpanded(expanded);
 
         final ModelNode<?> element = treeItem.getValue();
         if (!element.hasChildren()) return;
@@ -170,14 +148,13 @@ public class ModelNodeTree extends TitledPane {
         final Array<ModelNode<?>> children = element.getChildren();
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
-        items.forEach(item -> item.setExpanded(true));
-        items.forEach(this::fill);
+        items.forEach(item -> fill(item, expanded));
     }
 
     /**
-     * Заполнить узел.
+     * Fill the node.
      */
-    public void refresh(final ModelNode<?> modelNode) {
+    public void refresh(@NotNull final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
         if (treeItem == null) return;
@@ -191,14 +168,13 @@ public class ModelNodeTree extends TitledPane {
         final Array<ModelNode<?>> children = element.getChildren();
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
-        items.forEach(item -> item.setExpanded(true));
-        items.forEach(this::fill);
+        items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, true));
     }
 
     /**
-     * Обновить узел.
+     * Update the node.
      */
-    public void update(final ModelNode<?> modelNode) {
+    public void update(@NotNull final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
         if (treeItem == null) return;
@@ -208,9 +184,9 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Получение контекстного меню для этого элемента.
+     * Get the context menu for the element.
      */
-    public ContextMenu getContextMenu(final ModelNode<?> modelNode) {
+    public ContextMenu getContextMenu(@NotNull final ModelNode<?> modelNode) {
 
         final ContextMenu contextMenu = getContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
@@ -224,16 +200,16 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Уведомление и обработка перемещения нода.
+     * Notify about moving the element.
      */
-    public void notifyMoved(final Object prevParent, final Object newParent, final Object node, final int index) {
+    public void notifyMoved(@NotNull final Object prevParent, @NotNull final Object newParent, @NotNull final Object node, final int index) {
         notifyMoved(createFor(prevParent), createFor(newParent), createFor(node), index);
     }
 
     /**
-     * Уведомление и обработка перемещения нода.
+     * Notify about moving the element.
      */
-    public void notifyMoved(final ModelNode<?> prevParent, final ModelNode<?> newParent, final ModelNode<?> node, final int index) {
+    public void notifyMoved(@NotNull final ModelNode<?> prevParent, @NotNull final ModelNode<?> newParent, @NotNull final ModelNode<?> node, final int index) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> prevParentItem = findItemForValue(treeView, prevParent);
@@ -251,16 +227,16 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Уведомление и обработка изменения узла модели.
+     * Notify about changing the element.
      */
-    public void notifyChanged(final Object object) {
+    public void notifyChanged(@NotNull final Object object) {
         notifyChanged(createFor(object));
     }
 
     /**
-     * Уведомление и обработка изменения узла модели.
+     * Notify about changed the element.
      */
-    public void notifyChanged(final ModelNode<?> modelNode) {
+    public void notifyChanged(@NotNull final ModelNode<?> modelNode) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
@@ -271,27 +247,25 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Уведомление и обработка добавления нового узла.
+     * Notify about replacing the element.
      */
-    public void notifyReplace(final Object parent, final Object oldChild, final Object newChild) {
-        notifyReplace(createFor(parent), createFor(oldChild), createFor(newChild));
+    public void notifyReplace(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
+        notifyReplace(createFor(parent), oldChild == null ? null : createFor(oldChild), newChild == null ? null : createFor(newChild));
     }
 
     /**
-     * Уведомление и обработка добавления нового узла.
+     * Notify about replacing the element.
      */
-    public void notifyReplace(final ModelNode<?> parent, final ModelNode<?> oldChild, final ModelNode<?> newChild) {
+    public void notifyReplace(@NotNull final ModelNode<?> parent, @Nullable final ModelNode<?> oldChild, @Nullable final ModelNode<?> newChild) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
 
         if (parentItem == null) {
-
+            if (newChild == null) return;
             final TreeItem<ModelNode<?>> childItem = new TreeItem<>(newChild);
             childItem.setExpanded(true);
-
-            fill(childItem);
-
+            fill(childItem, true);
             treeView.setRoot(childItem);
             return;
         }
@@ -299,8 +273,12 @@ public class ModelNodeTree extends TitledPane {
         int index = 0;
         boolean needExpand = false;
 
+        final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
-        final TreeItem<ModelNode<?>> oldChildItem = findItemForValue(treeView, oldChild);
+        final TreeItem<ModelNode<?>> oldChildItem = oldChild == null ? null : findItemForValue(treeView, oldChild);
+        final TreeItem<ModelNode<?>> selectedItem = selectionModel.getSelectedItem();
+
+        final boolean needSelect = selectedItem == oldChildItem;
 
         if (oldChildItem != null) {
             index = children.indexOf(oldChildItem);
@@ -308,23 +286,26 @@ public class ModelNodeTree extends TitledPane {
             children.remove(oldChildItem);
         }
 
+        if (newChild == null) return;
+
         final TreeItem<ModelNode<?>> childItem = new TreeItem<>(newChild);
         childItem.setExpanded(needExpand);
 
-        fill(childItem);
+        fill(childItem, true);
 
         children.add(index, childItem);
+        if (needSelect) selectionModel.select(childItem);
     }
 
     /**
-     * Уведомление и обработка добавления нового узла.
+     * Notify about adding the element.
      */
     public void notifyAdded(@NotNull final Object parent, @NotNull final Object child) {
         notifyAdded(createFor(parent), createFor(child));
     }
 
     /**
-     * Уведомление и обработка добавления нового узла.
+     * Notify about adding the element.
      */
     public void notifyAdded(@NotNull final ModelNode<?> parent, @NotNull final ModelNode<?> child) {
 
@@ -339,20 +320,20 @@ public class ModelNodeTree extends TitledPane {
 
         parentItem.setExpanded(true);
 
-        fill(childItem);
+        fill(childItem, true);
     }
 
     /**
-     * Уведомление и обработка удаленя нода.
+     * Notify about removing the element.
      */
-    public void notifyRemoved(final Object child) {
+    public void notifyRemoved(@NotNull final Object child) {
         notifyRemoved(createFor(child));
     }
 
     /**
-     * Уведомление и обработка удаленя нода.
+     * Notify about removing the element.
      */
-    public void notifyRemoved(final ModelNode<?> modelNode) {
+    public void notifyRemoved(@NotNull final ModelNode<?> modelNode) {
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
         if (treeItem == null) return;
@@ -382,9 +363,9 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Попробовать начать редактирование указанного элемента.
+     * Start editing the element.
      */
-    public void startEdit(final ModelNode<?> modelNode) {
+    public void startEdit(@NotNull final ModelNode<?> modelNode) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
@@ -394,9 +375,9 @@ public class ModelNodeTree extends TitledPane {
     }
 
     /**
-     * Выделение указанного объекта в дереве.
+     * Select the object in the tree.
      */
-    public void select(final Object object) {
+    public void select(@Nullable final Object object) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
@@ -415,5 +396,13 @@ public class ModelNodeTree extends TitledPane {
         }
 
         selectionModel.select(treeItem);
+    }
+
+    /**
+     * @return the consumer of changes of the model.
+     */
+    @NotNull
+    public ModelChangeConsumer getModelChangeConsumer() {
+        return modelChangeConsumer;
     }
 }

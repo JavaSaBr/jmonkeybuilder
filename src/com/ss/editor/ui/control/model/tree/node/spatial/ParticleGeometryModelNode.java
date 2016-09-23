@@ -54,4 +54,14 @@ public class ParticleGeometryModelNode extends GeometryModelNode<ParticleGeometr
     protected boolean canRemove() {
         return false;
     }
+
+    @Override
+    public boolean canMove() {
+        return false;
+    }
+
+    @Override
+    public boolean canEditName() {
+        return false;
+    }
 }

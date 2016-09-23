@@ -16,6 +16,8 @@ import java.util.function.Predicate;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 /**
  * Набор утильнымх методов для работы с узлами геометрии.
  *
@@ -27,8 +29,8 @@ public class NodeUtils {
      * Find the parent of the model.
      */
     @Nullable
-    public static Spatial findParent(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
-        if (condition.test(spatial)) return spatial;
+    public static <T> T findParent(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
+        if (condition.test(spatial)) return unsafeCast(spatial);
         final Node parent = spatial.getParent();
         if (parent == null) return null;
         return findParent(parent, condition);

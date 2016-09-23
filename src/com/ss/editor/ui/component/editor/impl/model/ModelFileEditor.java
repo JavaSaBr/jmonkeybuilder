@@ -488,6 +488,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
+    public void notifyReplaced(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyReplace(parent, oldChild, newChild);
+    }
+
+    @Override
     public void notifyMoved(@NotNull final Node prevParent, @NotNull final Node newParent, @NotNull final Spatial child, int index) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);

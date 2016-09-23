@@ -7,6 +7,7 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.model.undo.EditorOperation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The interface for notifying with model editor.
@@ -60,6 +61,11 @@ public interface ModelChangeConsumer {
      * Notify about replaced child.
      */
     void notifyReplaced(@NotNull Node parent, @NotNull Spatial oldChild, @NotNull Spatial newChild);
+
+    /**
+     * Notify about replaced child.
+     */
+    void notifyReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild);
 
     /**
      * Notify about moved child.

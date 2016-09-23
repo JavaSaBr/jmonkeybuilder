@@ -52,7 +52,7 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
         prevShape = emitterMesh.getMesh();
         node.setEmitterShapeMesh(newShape);
 
-        //TODO надо добавить отдельное понятие таких штук EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, emitterNode));
+        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(node, emitterMesh, emitterMesh));
     }
 
     @Override

@@ -17,12 +17,17 @@ import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.material.ParticlesMaterial;
+import tonegod.emitter.node.ParticleNode;
+
+import static com.ss.editor.util.NodeUtils.findParent;
 
 /**
  * The implementation of the {@link PropertyBuilder} for building property controls for {@link
@@ -40,15 +45,19 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
 
     @Override
     public void buildFor(@NotNull final Object object, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
-        if (!(object instanceof ParticleEmitterNode)) return;
 
-        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) object;
-
-        createEmissionControls(container, modelChangeConsumer, emitterNode);
-        createParticlesControls(container, modelChangeConsumer, emitterNode);
+        if (object instanceof ParticleEmitterNode) {
+            createEmissionControls(container, modelChangeConsumer, (ParticleEmitterNode) object);
+        } else if (object instanceof ParticleNode) {
+            createParticlesControls(container, modelChangeConsumer, (ParticleNode) object);
+        }
     }
 
-    private void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final ParticleEmitterNode emitterNode) {
+    private void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final ParticleNode particleGeometry) {
+
+        final ParticleEmitterNode emitterNode = findParent(particleGeometry, spatial -> spatial instanceof ParticleEmitterNode);
+
+        Objects.requireNonNull(emitterNode);
 
         final boolean testParticles = emitterNode.isEnabledTestParticles();
         final boolean particlesFollowEmitter = emitterNode.isParticlesFollowEmitter();

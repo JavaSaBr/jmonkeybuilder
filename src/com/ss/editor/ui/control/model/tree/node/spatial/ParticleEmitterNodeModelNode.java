@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.node.spatial;
 
+import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -11,15 +12,24 @@ import com.ss.editor.ui.control.model.tree.action.emitter.QuadShapeEmitterAction
 import com.ss.editor.ui.control.model.tree.action.emitter.SphereShapeEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.TorusShapeEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.TriangleShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
+import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
+
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
 
 /**
  * The implementation of the {@link NodeModelNode} for representing the {@link ParticleEmitterNode}
@@ -27,9 +37,9 @@ import tonegod.emitter.ParticleEmitterNode;
  *
  * @author JavaSaBr
  */
-public class ParticleEmitterModelNode extends NodeModelNode<ParticleEmitterNode> {
+public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterNode> {
 
-    public ParticleEmitterModelNode(final ParticleEmitterNode element, final long objectId) {
+    public ParticleEmitterNodeModelNode(final ParticleEmitterNode element, final long objectId) {
         super(element, objectId);
     }
 
@@ -57,5 +67,25 @@ public class ParticleEmitterModelNode extends NodeModelNode<ParticleEmitterNode>
         items.add(changeShapeMenu);
 
         super.fillContextMenu(nodeTree, items);
+    }
+
+    @NotNull
+    @Override
+    protected List<Spatial> getSpatials() {
+        final ParticleEmitterNode element = getElement();
+        final List<Spatial> spatials = new ArrayList<>(super.getSpatials());
+        spatials.remove(element.getEmitterTestNode());
+        return spatials;
+    }
+
+    @NotNull
+    @Override
+    public Array<ModelNode<?>> getChildren() {
+        final ParticleEmitterNode element = getElement();
+        final EmitterMesh emitterShape = element.getEmitterShape();
+        final Array<ModelNode<?>> children = ArrayFactory.newArray(ModelNode.class);
+        children.add(createFor(emitterShape));
+        children.addAll(super.getChildren());
+        return children;
     }
 }

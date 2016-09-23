@@ -18,7 +18,6 @@ import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.CreateTEmitterAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +31,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
 
 /**
  * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the
@@ -87,13 +88,18 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
 
-        final Node element = getElement();
-        final List<Spatial> children = element.getChildren();
-        children.forEach(spatial -> result.add(ModelNodeFactory.createFor(spatial)));
+        final List<Spatial> children = getSpatials();
+        children.forEach(spatial -> result.add(createFor(spatial)));
 
         result.addAll(super.getChildren());
 
         return result;
+    }
+
+    @NotNull
+    protected List<Spatial> getSpatials() {
+        final Node element = getElement();
+        return element.getChildren();
     }
 
     @Override
