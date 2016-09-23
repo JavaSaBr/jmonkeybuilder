@@ -1,8 +1,10 @@
 package com.ss.editor.ui.control.model.tree.node.spatial;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.emitter.ImpostorParticleMeshAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.ModelParticlesMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.PointParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.QuadParticleMeshAction;
 
@@ -36,11 +38,12 @@ public class ParticleGeometryModelNode extends GeometryModelNode<ParticleGeometr
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeMeshMenu = new Menu("Change Mesh");
+        final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH);
         final ObservableList<MenuItem> subItems = changeMeshMenu.getItems();
         subItems.add(new QuadParticleMeshAction(nodeTree, this));
         subItems.add(new PointParticleMeshAction(nodeTree, this));
         subItems.add(new ImpostorParticleMeshAction(nodeTree, this));
+        subItems.add(new ModelParticlesMeshAction(nodeTree, this));
 
         items.add(changeMeshMenu);
 

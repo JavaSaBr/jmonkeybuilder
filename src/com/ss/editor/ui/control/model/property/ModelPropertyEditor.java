@@ -5,6 +5,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -12,24 +13,26 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Реализация компонента для редактирования свойств моделей.
+ * The component for containing property controls in the editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ModelPropertyEditor extends TitledPane {
 
+    public static final Insets PROPERTIES_OFFSET = new Insets(0, 0, 0, 4);
+
     /**
-     * Потребитель изменений модели.
+     * The consumer of changes.
      */
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
-     * Контейнер контролов свойст объекта.
+     * The container of controls.
      */
     private VBox container;
 
     /**
-     * Текущий редактируемый объект.
+     * The current editable object.
      */
     private Object currentObject;
 
@@ -41,30 +44,24 @@ public class ModelPropertyEditor extends TitledPane {
     }
 
     /**
-     * @return контейнер контролов свойст объекта.
+     * @return The container of controls.
      */
     private VBox getContainer() {
         return container;
     }
 
     /**
-     * @return потребитель изменений модели.
-     */
-    private ModelChangeConsumer getModelChangeConsumer() {
-        return modelChangeConsumer;
-    }
-
-    /**
-     * Построение компонентов.
+     * Create components.
      */
     private void createComponents() {
         container = new VBox();
         container.setAlignment(Pos.TOP_CENTER);
-        setContent(new ScrollPane(container));
+        VBox.setMargin(container, PROPERTIES_OFFSET);
+        setContent(new ScrollPane(new VBox(container)));
     }
 
     /**
-     * Построение контролов для указанного объекта.
+     * Build property controls for the object.
      */
     public void buildFor(final Object object) {
         if (getCurrentObject() == object) return;
@@ -74,14 +71,14 @@ public class ModelPropertyEditor extends TitledPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilderFactory.buildFor(object, container, getModelChangeConsumer());
+            PropertyBuilderFactory.buildFor(object, container, modelChangeConsumer);
         }
 
         setCurrentObject(object);
     }
 
     /**
-     * Синхронизация свойств.
+     * Sync all properties with controls.
      */
     public void syncFor(final Object object) {
         if (getCurrentObject() != object) return;
@@ -96,14 +93,14 @@ public class ModelPropertyEditor extends TitledPane {
     }
 
     /**
-     * @param currentObject текущий редактируемый объект.
+     * @param currentObject the current editable object.
      */
-    private void setCurrentObject(Object currentObject) {
+    private void setCurrentObject(final Object currentObject) {
         this.currentObject = currentObject;
     }
 
     /**
-     * @return текущий редактируемый объект.
+     * @return the current editable object.
      */
     private Object getCurrentObject() {
         return currentObject;

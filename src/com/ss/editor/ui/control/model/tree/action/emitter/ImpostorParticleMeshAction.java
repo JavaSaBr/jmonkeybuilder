@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -28,7 +29,7 @@ public class ImpostorParticleMeshAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Impostor";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR;
     }
 
     @Override
