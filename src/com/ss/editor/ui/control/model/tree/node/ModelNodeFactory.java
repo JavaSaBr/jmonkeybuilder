@@ -11,6 +11,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
+import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
@@ -24,6 +25,8 @@ import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleEmitterMeshModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleEmitterNodeModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleGeometryModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.ParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.ParticleInfluencersModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleNodeModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
+import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.node.ParticleNode;
 
 import static rlib.util.ClassUtils.unsafeCast;
@@ -73,6 +77,10 @@ public class ModelNodeFactory {
 
         if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new ParticleEmitterNodeModelNode((ParticleEmitterNode) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof ParticleInfluencers) {
+            return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof ParticleInfluencer) {
+            return unsafeCast(new ParticleInfluencerModelNode((ParticleInfluencer) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof EmitterMesh) {
             return unsafeCast(new ParticleEmitterMeshModelNode((EmitterMesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleNode) {

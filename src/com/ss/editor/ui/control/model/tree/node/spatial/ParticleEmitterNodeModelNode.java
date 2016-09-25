@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.node.spatial;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.emitter.BoxShapeEmitterAction;
@@ -84,6 +85,7 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
         final ParticleEmitterNode element = getElement();
         final EmitterMesh emitterShape = element.getEmitterShape();
         final Array<ModelNode<?>> children = ArrayFactory.newArray(ModelNode.class);
+        children.add(createFor(new ParticleInfluencers(element)));
         children.add(createFor(emitterShape));
         children.addAll(super.getChildren());
         return children;

@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
+import tonegod.emitter.geometry.ParticleGeometry;
 
 import static com.ss.editor.util.EditorUtil.clipNumber;
 
@@ -59,7 +60,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         final Material material = geometry.getMaterial();
         return (MaterialKey) material.getKey();
     };
-
 
     private static final Function<BoundingVolume, String> BOUNDING_VOLUME_TO_STRING = boundingVolume -> {
 
@@ -107,10 +107,14 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         final Line splitLine = createSplitLine(container);
 
-        FXUtils.addToPane(materialControl, container);
+        if (canEditMaterial(geometry)) FXUtils.addToPane(materialControl, container);
         FXUtils.addToPane(boundingVolumeControl, container);
         FXUtils.addToPane(splitLine, container);
 
         VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+    }
+
+    protected boolean canEditMaterial(final Geometry geometry) {
+        return !(geometry instanceof ParticleGeometry);
     }
 }

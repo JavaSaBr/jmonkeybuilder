@@ -18,6 +18,7 @@ import tonegod.emitter.influencers.AlphaInfluencer;
 import tonegod.emitter.influencers.ColorInfluencer;
 import tonegod.emitter.influencers.SizeInfluencer;
 import tonegod.emitter.particle.ParticleDataTriMesh;
+import tonegod.emitter.shapes.TriangleEmitterShape;
 
 /**
  * The action for creating new {@link ParticleEmitterNode}.
@@ -48,7 +49,10 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer());
 
         // Shape & Emissions
-        emitter.setShapeSimpleEmitter();
+        final TriangleEmitterShape emitterShape = new TriangleEmitterShape();
+        emitterShape.init(1);
+
+        emitter.changeEmitterShapeMesh(emitterShape);
         emitter.setDirectionType(EmitterMesh.DirectionType.RANDOM);
         emitter.setEmissionsPerSecond(100);
         emitter.setParticlesPerEmission(1);

@@ -27,7 +27,7 @@ import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFo
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 /**
- * The implementation of Three for presentation the structure of model in the Editor.
+ * The implementation of Tree for presentation the structure of model in the Editor.
  *
  * @author JavaSaBr
  */

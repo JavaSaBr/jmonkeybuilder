@@ -10,9 +10,9 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.image.Image;
 
 /**
- * Реализация узла представляющего мешь геометрии.
+ * The implementation of the {@link ModelNode} for representing the {@link Mesh} in the editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MeshModelNode extends ModelNode<Mesh> {
 
@@ -40,5 +40,10 @@ public class MeshModelNode extends ModelNode<Mesh> {
     @Override
     public boolean canCopy() {
         return true;
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return false;
     }
 }
