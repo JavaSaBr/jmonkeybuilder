@@ -22,12 +22,12 @@ import com.ss.editor.ui.control.model.tree.node.light.PointLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.SpotLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.ParticleEmitterMeshModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.ParticleEmitterNodeModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.ParticleGeometryModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.ParticleInfluencerModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.ParticleInfluencersModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleNodeModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleEmitterMeshModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleEmitterNodeModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleGeometryModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencersModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

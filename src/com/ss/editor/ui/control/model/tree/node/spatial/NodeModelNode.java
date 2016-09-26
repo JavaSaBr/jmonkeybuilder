@@ -5,18 +5,18 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.AddAmbientLightAction;
-import com.ss.editor.ui.control.model.tree.action.AddDirectionLightAction;
-import com.ss.editor.ui.control.model.tree.action.AddPointLightAction;
-import com.ss.editor.ui.control.model.tree.action.AddSpotLightAction;
-import com.ss.editor.ui.control.model.tree.action.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
-import com.ss.editor.ui.control.model.tree.action.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
-import com.ss.editor.ui.control.model.tree.action.CreateSphereAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.CreateTEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
+import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
+import com.ss.editor.ui.control.model.tree.action.geometry.CreateSphereAction;
+import com.ss.editor.ui.control.model.tree.action.light.CreateAmbientLightAction;
+import com.ss.editor.ui.control.model.tree.action.light.CreateDirectionLightAction;
+import com.ss.editor.ui.control.model.tree.action.light.CreatePointLightAction;
+import com.ss.editor.ui.control.model.tree.action.light.CreateSpotLightAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
@@ -69,7 +69,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
 
         final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT);
-        addLightMenu.getItems().addAll(new AddSpotLightAction(nodeTree, this), new AddPointLightAction(nodeTree, this), new AddAmbientLightAction(nodeTree, this), new AddDirectionLightAction(nodeTree, this));
+        addLightMenu.getItems().addAll(new CreateSpotLightAction(nodeTree, this), new CreatePointLightAction(nodeTree, this), new CreateAmbientLightAction(nodeTree, this), new CreateDirectionLightAction(nodeTree, this));
 
         final Menu menu = super.createCreationMenu(nodeTree);
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), new CreateTEmitterAction(nodeTree, this), createPrimitiveMenu, addLightMenu);

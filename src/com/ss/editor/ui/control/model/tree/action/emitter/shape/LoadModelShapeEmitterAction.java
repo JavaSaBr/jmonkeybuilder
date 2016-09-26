@@ -1,18 +1,22 @@
-package com.ss.editor.ui.control.model.tree.action;
+package com.ss.editor.ui.control.model.tree.action.emitter.shape;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
+import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.model.tree.action.operation.ChangeEmitterShapeOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
+import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,17 +24,15 @@ import java.nio.file.Path;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
-
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The implementation of the {@link AbstractNodeAction} for loading the {@link Spatial} to the
- * editor.
+ * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link
+ * Spatial}.
  *
  * @author JavaSaBr
  */
-public class LoadModelAction extends AbstractNodeAction {
+public class LoadModelShapeEmitterAction extends AbstractNodeAction {
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -38,14 +40,14 @@ public class LoadModelAction extends AbstractNodeAction {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public LoadModelAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public LoadModelShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_LOAD_MODEL;
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE;
     }
 
     @Override
@@ -66,16 +68,22 @@ public class LoadModelAction extends AbstractNodeAction {
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.clearCache();
 
-        final Path assetFile = getAssetFile(file);
-        final String assetPath = toAssetPath(assetFile);
+        final Path assetFile = EditorUtil.getAssetFile(file);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final Spatial loadedModel = assetManager.loadModel(assetPath);
+        final Geometry geometry = NodeUtils.findGeometry(loadedModel);
+
+        if (geometry == null) {
+            LOGGER.warning(this, "not found a geometry in the model " + assetPath);
+            return;
+        }
 
         final ModelNode<?> modelNode = getNode();
         final Node element = (Node) modelNode.getElement();
 
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
 
-        modelChangeConsumer.execute(new AddChildOperation(loadedModel, index));
+        modelChangeConsumer.execute(new ChangeEmitterShapeOperation(geometry.getMesh(), index));
     }
 }
