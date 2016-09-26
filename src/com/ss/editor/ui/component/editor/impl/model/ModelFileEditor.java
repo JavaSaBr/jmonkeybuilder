@@ -411,7 +411,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyAddedChild(@NotNull final Node parent, @NotNull final Spatial added) {
+    public void notifyAddedChild(@NotNull final Node parent, @NotNull final Spatial added, final int index) {
 
         final ModelEditorState editorState = getEditorState();
         final boolean isSky = added.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
@@ -422,13 +422,19 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyAdded(parent, added);
+        modelNodeTree.notifyAdded(parent, added, index);
     }
 
     @Override
-    public void notifyAddedControl(@NotNull final Spatial spatial, @NotNull final Control control) {
+    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyAdded(spatial, control);
+        modelNodeTree.notifyAdded(parent, added, index);
+    }
+
+    @Override
+    public void notifyAddedControl(@NotNull final Spatial spatial, @NotNull final Control control, final int index) {
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyAdded(spatial, control, index);
     }
 
     @Override
@@ -438,13 +444,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyAddedLight(@NotNull final Node parent, @NotNull final Light added) {
+    public void notifyAddedLight(@NotNull final Node parent, @NotNull final Light added, final int index) {
 
         final ModelEditorState editorState = getEditorState();
         editorState.addLight(added);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyAdded(parent, added);
+        modelNodeTree.notifyAdded(parent, added, index);
     }
 
     @Override
@@ -458,6 +464,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
             editorState.updateLightProbe();
         }
 
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.notifyRemoved(removed);
+    }
+
+    @Override
+    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(removed);
     }

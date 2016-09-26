@@ -9,32 +9,33 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по удалению дочернего узла.
+ * The implementation of the {@link AbstractEditorOperation} for removing a {@link Spatial} from the
+ * {@link Node}.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Удаляемый дочерний элемент.
+     * The child to remove.
      */
-    private final Spatial removeChild;
+    private final Spatial child;
 
     /**
-     * Индекс родительского элемента.
+     * The index of the parent element.
      */
     private final int index;
 
     /**
-     * Прядок в родительском элементе.
+     * The index of position in the parent.
      */
     private final int childIndex;
 
-    public RemoveChildOperation(final Spatial removeChild, final int index) {
-        final Node parent = removeChild.getParent();
-        this.removeChild = removeChild;
+    public RemoveChildOperation(final Spatial child, final int index) {
+        final Node parent = child.getParent();
+        this.child = child;
         this.index = index;
-        this.childIndex = parent.getChildIndex(removeChild);
+        this.childIndex = parent.getChildIndex(child);
     }
 
     @Override
@@ -46,9 +47,9 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
             if (!(parent instanceof Node)) return;
 
             final Node node = (Node) parent;
-            node.detachChild(removeChild);
+            node.detachChild(child);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, removeChild));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, child));
         });
     }
 
@@ -61,9 +62,9 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
             if (!(parent instanceof Node)) return;
 
             final Node node = (Node) parent;
-            node.attachChildAt(removeChild, childIndex);
+            node.attachChildAt(child, childIndex);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, removeChild));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, child, childIndex));
         });
     }
 }

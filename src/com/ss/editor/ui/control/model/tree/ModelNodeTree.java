@@ -300,14 +300,14 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Notify about adding the element.
      */
-    public void notifyAdded(@NotNull final Object parent, @NotNull final Object child) {
-        notifyAdded(createFor(parent), createFor(child));
+    public void notifyAdded(@NotNull final Object parent, @NotNull final Object child, final int index) {
+        notifyAdded(createFor(parent), createFor(child), index);
     }
 
     /**
      * Notify about adding the element.
      */
-    public void notifyAdded(@NotNull final ModelNode<?> parent, @NotNull final ModelNode<?> child) {
+    public void notifyAdded(@NotNull final ModelNode<?> parent, @NotNull final ModelNode<?> child, final int index) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
@@ -316,7 +316,8 @@ public class ModelNodeTree extends TitledPane {
         final TreeItem<ModelNode<?>> childItem = new TreeItem<>(child);
 
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
-        children.add(0, childItem);
+        if (index == -1) children.add(childItem);
+        else children.add(index, childItem);
 
         parentItem.setExpanded(true);
 

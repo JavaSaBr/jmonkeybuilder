@@ -30,12 +30,17 @@ public interface ModelChangeConsumer {
     /**
      * Notify about added child.
      */
-    void notifyAddedChild(@NotNull Node parent, @NotNull Spatial added);
+    void notifyAddedChild(@NotNull Node parent, @NotNull Spatial added, int index);
+
+    /**
+     * Notify about added child.
+     */
+    void notifyAddedChild(@NotNull Object parent, @NotNull Object added, int index);
 
     /**
      * Notify about adding the new control to the spatial.
      */
-    void notifyAddedControl(@NotNull Spatial spatial, @NotNull Control control);
+    void notifyAddedControl(@NotNull Spatial spatial, @NotNull Control control, int index);
 
     /**
      * Notify about removing the old control from the spatial.
@@ -45,12 +50,17 @@ public interface ModelChangeConsumer {
     /**
      * Notify about added light.
      */
-    void notifyAddedLight(@NotNull Node parent, @NotNull Light added);
+    void notifyAddedLight(@NotNull Node parent, @NotNull Light added, int index);
 
     /**
      * Notify about removed child.
      */
     void notifyRemovedChild(@NotNull Node parent, @NotNull Spatial removed);
+
+    /**
+     * Notify about removed child.
+     */
+    void notifyRemovedChild(@NotNull Object parent, @NotNull Object removed);
 
     /**
      * Notify about removed light.

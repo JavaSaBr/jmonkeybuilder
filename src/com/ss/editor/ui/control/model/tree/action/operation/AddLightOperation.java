@@ -10,19 +10,20 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по добавлению нового источника света.
+ * The implementation of the {@link AbstractEditorOperation} for adding a {@link Light} to a {@link
+ * Node}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Новый источник света.
+     * The new light.
      */
     private final Light light;
 
     /**
-     * Индекс родительского элемента.
+     * The index of parent position.
      */
     private final int index;
 
@@ -42,7 +43,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
             final Node node = (Node) parent;
             node.addLight(light);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedLight(node, light));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedLight(node, light, -1));
         });
     }
 

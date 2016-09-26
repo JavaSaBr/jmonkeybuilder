@@ -5,51 +5,52 @@ import com.ss.editor.manager.FileIconManager;
 import javafx.scene.image.Image;
 
 /**
- * Интерфейс для перечисление иконок.
+ * The interface with all icons of this application.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface Icons {
 
-    public static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
+    FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
-    public static final Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
-    public static final Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");
-    public static final Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
-    public static final Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/node.png");
-    public static final Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particles.png");
-    public static final Image PARTICLE_GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particle_geometry.png");
-    public static final Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/geometry.png");
-    public static final Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/mesh.png");
-    public static final Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/edit.png");
-    public static final Image AMBIENT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/ambient.png");
-    public static final Image LAMP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/lamp.png");
-    public static final Image POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
-    public static final Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
-    public static final Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/play.png");
-    public static final Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/stop.png");
-    public static final Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/animation.png");
-    public static final Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim_channel.png");
-    public static final Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
+    Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
+    Image INFLUENCER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/influencer.png");
+    Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");
+    Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
+    Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/node.png");
+    Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particles.png");
+    Image PARTICLE_GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particle_geometry.png");
+    Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/geometry.png");
+    Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/mesh.png");
+    Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/edit.png");
+    Image AMBIENT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/ambient.png");
+    Image LAMP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/lamp.png");
+    Image POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
+    Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
+    Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/play.png");
+    Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/stop.png");
+    Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/animation.png");
+    Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim_channel.png");
+    Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
 
-    public static final Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
-    public static final Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
-    public static final Image ADD_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/add.png", 18);
-    public static final Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);
+    Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
+    Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
+    Image ADD_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/add.png", 18);
+    Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);
 
-    public static final Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png", 24);
-    public static final Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png", 24);
-    public static final Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/light.png", 24);
-    public static final Image ROTATION_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/rotation.png", 24);
-    public static final Image MOVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/move.png", 24);
-    public static final Image SCALE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/scale.png", 24);
-    public static final Image CUBE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/cube.png", 24);
-    public static final Image SPHERE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/sphere.png", 24);
-    public static final Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png", 24);
-    public static final Image ADD_CIRCLE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add_circle.png", 24);
-    public static final Image IMAGE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/image.png", 24);
-    public static final Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/warning.png", 24);
-    public static final Image EDIT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/edit.png", 24);
+    Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png", 24);
+    Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png", 24);
+    Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/light.png", 24);
+    Image ROTATION_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/rotation.png", 24);
+    Image MOVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/move.png", 24);
+    Image SCALE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/scale.png", 24);
+    Image CUBE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/cube.png", 24);
+    Image SPHERE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/sphere.png", 24);
+    Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png", 24);
+    Image ADD_CIRCLE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add_circle.png", 24);
+    Image IMAGE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/image.png", 24);
+    Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/warning.png", 24);
+    Image EDIT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/edit.png", 24);
 
-    public static final Image IMAGE_512 = ICON_MANAGER.getImage("/ui/icons/512/image.png", 512);
+    Image IMAGE_512 = ICON_MANAGER.getImage("/ui/icons/512/image.png", 512);
 }

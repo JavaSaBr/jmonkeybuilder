@@ -10,19 +10,20 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по удалению источника света.
+ * The implementation of the {@link AbstractEditorOperation} for removing a {@link Light} from the
+ * {@link Spatial}.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Удаляемый источник света.
+     * The light to remove.
      */
     private final Light light;
 
     /**
-     * Индекс родительского элемента.
+     * The index of parent position.
      */
     private final int index;
 
@@ -57,7 +58,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
             final Node node = (Node) parent;
             node.addLight(light);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedLight(node, light));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedLight(node, light, -1));
         });
     }
 }

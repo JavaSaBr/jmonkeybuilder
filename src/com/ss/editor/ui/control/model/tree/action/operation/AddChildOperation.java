@@ -9,7 +9,8 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a new child to node.
+ * The implementation of the {@link AbstractEditorOperation} for adding a new {@link Spatial} to a
+ * {@link Node}.
  *
  * @author JavaSaBr.
  */
@@ -22,7 +23,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     private final Spatial newChild;
 
     /**
-     * The index of parent.
+     * The index of parent position.
      */
     private final int index;
 
@@ -42,7 +43,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
             final Node node = (Node) parent;
             node.attachChildAt(newChild, 0);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, newChild));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, newChild, 0));
         });
     }
 

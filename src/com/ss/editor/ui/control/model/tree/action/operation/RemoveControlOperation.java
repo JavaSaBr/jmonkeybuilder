@@ -57,7 +57,7 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
             final Node node = (Node) parent;
             node.addControl(control);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedControl(node, control));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedControl(node, control, -1));
         });
     }
 }

@@ -223,7 +223,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
             newParent.add(dragItem);
 
             final ModelNodeTree nodeTree = getNodeTree();
-            nodeTree.notifyAdded(newParent, copy);
+            nodeTree.notifyAdded(newParent, copy, -1);
 
         } else if (element instanceof Spatial) {
 

@@ -30,6 +30,7 @@ import com.ss.editor.ui.control.model.tree.node.spatial.ParticleInfluencersModel
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleNodeModelNode;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -52,6 +53,11 @@ public class ModelNodeFactory {
 
     @NotNull
     public static <T, V extends ModelNode<T>> V createFor(@NotNull final T element) {
+        return createFor(element, null);
+    }
+
+    @NotNull
+    public static <T, V extends ModelNode<T>> V createFor(@NotNull final T element, @Nullable Object first) {
 
         if (element instanceof Animation) {
             return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
@@ -80,7 +86,7 @@ public class ModelNodeFactory {
         } else if (element instanceof ParticleInfluencers) {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleInfluencer) {
-            return unsafeCast(new ParticleInfluencerModelNode((ParticleInfluencer) element, ID_GENERATOR.incrementAndGet()));
+            return unsafeCast(new ParticleInfluencerModelNode((ParticleEmitterNode) first, (ParticleInfluencer) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof EmitterMesh) {
             return unsafeCast(new ParticleEmitterMeshModelNode((EmitterMesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleNode) {

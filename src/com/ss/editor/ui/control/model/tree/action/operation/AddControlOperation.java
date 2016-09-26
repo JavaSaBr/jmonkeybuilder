@@ -42,7 +42,7 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
             final Node node = (Node) parent;
             node.addControl(newControl);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedControl(node, newControl));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedControl(node, newControl, -1));
         });
     }
 
