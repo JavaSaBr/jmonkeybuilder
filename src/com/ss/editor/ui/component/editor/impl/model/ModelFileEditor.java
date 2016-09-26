@@ -440,7 +440,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyRemovedControl(@NotNull final Spatial spatial, @NotNull final Control control) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(control);
+        modelNodeTree.notifyRemoved(spatial, control);
     }
 
     @Override
@@ -465,13 +465,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(removed);
+        modelNodeTree.notifyRemoved(parent, removed);
     }
 
     @Override
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(removed);
+        modelNodeTree.notifyRemoved(parent, removed);
     }
 
     @Override
@@ -481,7 +481,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         editorState.removeLight(removed);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(removed);
+        modelNodeTree.notifyRemoved(parent, removed);
     }
 
     @Override

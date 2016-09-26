@@ -3,10 +3,10 @@ package com.ss.editor.ui.control.model.tree.node.spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.emitter.ImpostorParticleMeshAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.ModelParticlesMeshAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.PointParticleMeshAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.QuadParticleMeshAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateImpostorParticleMeshAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreatePointParticleMeshAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateQuadParticleMeshAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.LoadModelParticlesMeshAction;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,10 +40,10 @@ public class ParticleGeometryModelNode extends GeometryModelNode<ParticleGeometr
 
         final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH);
         final ObservableList<MenuItem> subItems = changeMeshMenu.getItems();
-        subItems.add(new QuadParticleMeshAction(nodeTree, this));
-        subItems.add(new PointParticleMeshAction(nodeTree, this));
-        subItems.add(new ImpostorParticleMeshAction(nodeTree, this));
-        subItems.add(new ModelParticlesMeshAction(nodeTree, this));
+        subItems.add(new CreateQuadParticleMeshAction(nodeTree, this));
+        subItems.add(new CreatePointParticleMeshAction(nodeTree, this));
+        subItems.add(new CreateImpostorParticleMeshAction(nodeTree, this));
+        subItems.add(new LoadModelParticlesMeshAction(nodeTree, this));
 
         items.add(changeMeshMenu);
 

@@ -10,8 +10,6 @@ import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
@@ -38,8 +36,6 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction {
         final ParticleInfluencerModelNode node = (ParticleInfluencerModelNode) getNode();
         final ParticleInfluencer influencer = node.getElement();
         final ParticleEmitterNode emitterNode = node.getEmitterNode();
-
-        Objects.requireNonNull(emitterNode);
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();

@@ -301,7 +301,7 @@ public class ModelNodeTree extends TitledPane {
      * Notify about adding the element.
      */
     public void notifyAdded(@NotNull final Object parent, @NotNull final Object child, final int index) {
-        notifyAdded(createFor(parent), createFor(child), index);
+        notifyAdded(createFor(parent), createFor(child, parent), index);
     }
 
     /**
@@ -327,8 +327,8 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Notify about removing the element.
      */
-    public void notifyRemoved(@NotNull final Object child) {
-        notifyRemoved(createFor(child));
+    public void notifyRemoved(@NotNull final Object parent, @NotNull final Object child) {
+        notifyRemoved(createFor(child, parent));
     }
 
     /**

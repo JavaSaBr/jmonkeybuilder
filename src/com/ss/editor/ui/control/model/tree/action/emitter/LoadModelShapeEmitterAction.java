@@ -32,7 +32,7 @@ import tonegod.emitter.ParticleEmitterNode;
  *
  * @author JavaSaBr
  */
-public class ModelShapeEmitterAction extends AbstractNodeAction {
+public class LoadModelShapeEmitterAction extends AbstractNodeAction {
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -40,7 +40,7 @@ public class ModelShapeEmitterAction extends AbstractNodeAction {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public ModelShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

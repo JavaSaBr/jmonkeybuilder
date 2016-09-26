@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.node.spatial;
 
+import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.emitter.RemoveParticleInfluencerAction;
@@ -25,12 +26,12 @@ public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
     /**
      * The emitter node.
      */
-    @Nullable
+    @NotNull
     private final ParticleEmitterNode emitterNode;
 
-    public ParticleInfluencerModelNode(@Nullable ParticleEmitterNode emitterNode, @NotNull final ParticleInfluencer element, final long objectId) {
+    public ParticleInfluencerModelNode(@NotNull ParticleInfluencers influencers, @NotNull final ParticleInfluencer element, final long objectId) {
         super(element, objectId);
-        this.emitterNode = emitterNode;
+        this.emitterNode = influencers.getEmitterNode();
     }
 
     @Nullable
@@ -48,7 +49,7 @@ public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
     /**
      * @return thr emitter node.
      */
-    @Nullable
+    @NotNull
     public ParticleEmitterNode getEmitterNode() {
         return emitterNode;
     }

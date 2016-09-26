@@ -85,8 +85,8 @@ public class ModelNodeFactory {
             return unsafeCast(new ParticleEmitterNodeModelNode((ParticleEmitterNode) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleInfluencers) {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, ID_GENERATOR.incrementAndGet()));
-        } else if (element instanceof ParticleInfluencer) {
-            return unsafeCast(new ParticleInfluencerModelNode((ParticleEmitterNode) first, (ParticleInfluencer) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof ParticleInfluencer && first instanceof ParticleInfluencers) {
+            return unsafeCast(new ParticleInfluencerModelNode((ParticleInfluencers) first, (ParticleInfluencer) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof EmitterMesh) {
             return unsafeCast(new ParticleEmitterMeshModelNode((EmitterMesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleNode) {

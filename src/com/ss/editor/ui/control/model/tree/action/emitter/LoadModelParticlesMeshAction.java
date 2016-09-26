@@ -33,7 +33,7 @@ import tonegod.emitter.particle.ParticleDataTemplateMesh;
  *
  * @author JavaSaBr
  */
-public class ModelParticlesMeshAction extends AbstractNodeAction {
+public class LoadModelParticlesMeshAction extends AbstractNodeAction {
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -41,7 +41,7 @@ public class ModelParticlesMeshAction extends AbstractNodeAction {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public ModelParticlesMeshAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelParticlesMeshAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

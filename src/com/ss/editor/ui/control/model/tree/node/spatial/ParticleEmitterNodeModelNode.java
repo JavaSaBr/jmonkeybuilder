@@ -5,14 +5,14 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.emitter.BoxShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CylinderShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.DomeShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.ModelShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.QuadShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.SphereShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.TorusShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.TriangleShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateBoxShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateCylinderShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateDomeShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateQuadShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateSphereShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateTorusShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateTriangleShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.LoadModelShapeEmitterAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,15 +55,15 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
 
         final Menu jmePrimitivesMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
         final ObservableList<MenuItem> primitivesItems = jmePrimitivesMenu.getItems();
-        primitivesItems.add(new BoxShapeEmitterAction(nodeTree, this));
-        primitivesItems.add(new CylinderShapeEmitterAction(nodeTree, this));
-        primitivesItems.add(new DomeShapeEmitterAction(nodeTree, this));
-        primitivesItems.add(new QuadShapeEmitterAction(nodeTree, this));
-        primitivesItems.add(new SphereShapeEmitterAction(nodeTree, this));
-        primitivesItems.add(new TorusShapeEmitterAction(nodeTree, this));
+        primitivesItems.add(new CreateBoxShapeEmitterAction(nodeTree, this));
+        primitivesItems.add(new CreateCylinderShapeEmitterAction(nodeTree, this));
+        primitivesItems.add(new CreateDomeShapeEmitterAction(nodeTree, this));
+        primitivesItems.add(new CreateQuadShapeEmitterAction(nodeTree, this));
+        primitivesItems.add(new CreateSphereShapeEmitterAction(nodeTree, this));
+        primitivesItems.add(new CreateTorusShapeEmitterAction(nodeTree, this));
 
         final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE);
-        changeShapeMenu.getItems().addAll(new TriangleShapeEmitterAction(nodeTree, this), jmePrimitivesMenu, new ModelShapeEmitterAction(nodeTree, this));
+        changeShapeMenu.getItems().addAll(new CreateTriangleShapeEmitterAction(nodeTree, this), jmePrimitivesMenu, new LoadModelShapeEmitterAction(nodeTree, this));
 
         items.add(changeShapeMenu);
 

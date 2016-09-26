@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
-import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -12,24 +11,16 @@ import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
-import tonegod.emitter.particle.ParticleDataPointMesh;
 
 /**
- * The action for switching the particle mesh of the {@link ParticleGeometry} to {@link
- * ParticleDataPointMesh}.
+ * The action for switching the particle mesh of the {@link ParticleGeometry} to another mesh.
  *
  * @author JavaSaBr
  */
-public class PointParticleMeshAction extends AbstractNodeAction {
+public abstract class AbstractCreateParticleMeshAction extends AbstractNodeAction {
 
-    public PointParticleMeshAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateParticleMeshAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
-    }
-
-    @NotNull
-    @Override
-    protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT;
     }
 
     @Override
@@ -42,8 +33,11 @@ public class PointParticleMeshAction extends AbstractNodeAction {
         final ParticleGeometry element = (ParticleGeometry) modelNode.getElement();
 
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-        final ParticleDataMeshInfo meshInfo = new ParticleDataMeshInfo(ParticleDataPointMesh.class, null);
+        final ParticleDataMeshInfo meshInfo = createMeshInfo();
 
         modelChangeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, index));
     }
+
+    @NotNull
+    protected abstract ParticleDataMeshInfo createMeshInfo();
 }
