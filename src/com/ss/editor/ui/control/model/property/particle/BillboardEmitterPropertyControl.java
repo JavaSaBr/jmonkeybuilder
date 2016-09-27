@@ -1,6 +1,7 @@
-package com.ss.editor.ui.control.model.property;
+package com.ss.editor.ui.control.model.property.particle;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +44,7 @@ public class BillboardEmitterPropertyControl extends ModelPropertyControl<Partic
 
         billboardModeComboBox = new ComboBox<>();
         billboardModeComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
-        billboardModeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
+        billboardModeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateBillboardMode());
         billboardModeComboBox.prefWidthProperty().bind(container.widthProperty());
 
         final ObservableList<BillboardMode> items = billboardModeComboBox.getItems();
@@ -63,7 +64,7 @@ public class BillboardEmitterPropertyControl extends ModelPropertyControl<Partic
     /**
      * Update selected {@link BillboardMode}.
      */
-    private void updateCullHint() {
+    private void updateBillboardMode() {
         if (isIgnoreListener()) return;
 
         final ComboBox<BillboardMode> billboardModeComboBox = getBillboardModeComboBox();
@@ -76,8 +77,8 @@ public class BillboardEmitterPropertyControl extends ModelPropertyControl<Partic
     @Override
     protected void reload() {
         final BillboardMode element = getPropertyValue();
-        final ComboBox<BillboardMode> cullHintComboBox = getBillboardModeComboBox();
-        final SingleSelectionModel<BillboardMode> selectionModel = cullHintComboBox.getSelectionModel();
+        final ComboBox<BillboardMode> billboardModeComboBox = getBillboardModeComboBox();
+        final SingleSelectionModel<BillboardMode> selectionModel = billboardModeComboBox.getSelectionModel();
         selectionModel.select(element);
     }
 

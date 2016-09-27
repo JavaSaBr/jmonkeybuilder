@@ -23,6 +23,7 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -401,13 +402,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyChangeProperty(@Nullable Object parent, @NotNull final Object object, @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(object);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyChanged(object);
+        modelNodeTree.notifyChanged(parent, object);
     }
 
     @Override
@@ -581,10 +582,21 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     public void processSelect(@Nullable final Object object) {
 
+        Object parent = null;
+        Object element = null;
+
+        if (object instanceof ModelNode<?>) {
+            final ModelNode modelNode = (ModelNode) object;
+            final ModelNode parentNode = modelNode.getParent();
+            parent = parentNode == null ? null : parentNode.getElement();
+            element = modelNode.getElement();
+        }
+
         Spatial spatial = null;
 
-        if (object instanceof Spatial) {
-            spatial = (Spatial) object;
+        if (element instanceof Spatial) {
+            spatial = (Spatial) element;
+            parent = spatial.getParent();
         }
 
         final Array<Spatial> spatials = ArrayFactory.newArray(Spatial.class);
@@ -594,7 +606,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         editorState.updateSelection(spatials);
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.buildFor(object);
+        modelPropertyEditor.buildFor(element, parent);
     }
 
     @Override

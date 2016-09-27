@@ -48,7 +48,7 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
             final Geometry geometry = (Geometry) object;
             geometry.setMesh(newMesh);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, "mesh"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, object, "mesh"));
         });
     }
 
@@ -63,7 +63,7 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
             final Geometry geometry = (Geometry) object;
             geometry.setMesh(oldMesh);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, "mesh"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, object, "mesh"));
         });
     }
 }

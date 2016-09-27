@@ -71,6 +71,14 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * @return the parent of this node.
+     */
+    @Nullable
+    public ModelNode<?> getParent() {
+        return null;
+    }
+
+    /**
      * @return the icon of this node.
      */
     @Nullable

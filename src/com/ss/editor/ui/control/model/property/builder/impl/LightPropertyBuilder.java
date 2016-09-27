@@ -17,6 +17,7 @@ import com.ss.editor.ui.control.model.property.PositionLightPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
@@ -59,7 +60,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
         if (object instanceof DirectionalLight) {
             buildForDirectionLight((DirectionalLight) object, container, modelChangeConsumer);
         } else if (object instanceof SpotLight) {

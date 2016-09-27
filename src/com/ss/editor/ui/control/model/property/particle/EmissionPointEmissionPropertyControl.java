@@ -1,6 +1,7 @@
-package com.ss.editor.ui.control.model.property;
+package com.ss.editor.ui.control.model.property.particle;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +46,7 @@ public class EmissionPointEmissionPropertyControl extends ModelPropertyControl<P
 
         emissionPointComboBox = new ComboBox<>();
         emissionPointComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
-        emissionPointComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
+        emissionPointComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateEmissionPoint());
         emissionPointComboBox.prefWidthProperty().bind(container.widthProperty());
 
         final ObservableList<ParticleEmissionPoint> items = emissionPointComboBox.getItems();
@@ -65,11 +66,11 @@ public class EmissionPointEmissionPropertyControl extends ModelPropertyControl<P
     /**
      * Update selected {@link ParticleEmissionPoint}.
      */
-    private void updateCullHint() {
+    private void updateEmissionPoint() {
         if (isIgnoreListener()) return;
 
-        final ComboBox<ParticleEmissionPoint> billboardModeComboBox = getEmissionPointComboBox();
-        final SingleSelectionModel<ParticleEmissionPoint> selectionModel = billboardModeComboBox.getSelectionModel();
+        final ComboBox<ParticleEmissionPoint> emissionPointComboBox = getEmissionPointComboBox();
+        final SingleSelectionModel<ParticleEmissionPoint> selectionModel = emissionPointComboBox.getSelectionModel();
         final ParticleEmissionPoint newValue = selectionModel.getSelectedItem();
 
         changed(newValue, getPropertyValue());
@@ -78,8 +79,8 @@ public class EmissionPointEmissionPropertyControl extends ModelPropertyControl<P
     @Override
     protected void reload() {
         final ParticleEmissionPoint element = getPropertyValue();
-        final ComboBox<ParticleEmissionPoint> cullHintComboBox = getEmissionPointComboBox();
-        final SingleSelectionModel<ParticleEmissionPoint> selectionModel = cullHintComboBox.getSelectionModel();
+        final ComboBox<ParticleEmissionPoint> emissionPointComboBox = getEmissionPointComboBox();
+        final SingleSelectionModel<ParticleEmissionPoint> selectionModel = emissionPointComboBox.getSelectionModel();
         selectionModel.select(element);
     }
 

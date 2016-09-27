@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 /**
  * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencer} in
  * the editor.
@@ -38,6 +40,12 @@ public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
     @Override
     public Image getIcon() {
         return Icons.INFLUENCER_16;
+    }
+
+    @Nullable
+    @Override
+    public ModelNode<?> getParent() {
+        return createFor(new ParticleInfluencers(getEmitterNode()), getEmitterNode());
     }
 
     @Override

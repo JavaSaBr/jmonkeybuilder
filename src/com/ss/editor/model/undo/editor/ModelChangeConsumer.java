@@ -25,7 +25,7 @@ public interface ModelChangeConsumer {
     /**
      * Notify about changed property.
      */
-    void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);
+    void notifyChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName);
 
     /**
      * Notify about added child.

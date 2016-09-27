@@ -1,8 +1,9 @@
-package com.ss.editor.ui.control.model.property;
+package com.ss.editor.ui.control.model.property.particle;
 
 import com.jme3.math.Vector2f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.Vector2fModelPropertyControl;
 
 import org.jetbrains.annotations.NotNull;
 

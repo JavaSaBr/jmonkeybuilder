@@ -3,19 +3,20 @@ package com.ss.editor.ui.control.model.property.builder.impl;
 import com.jme3.math.Vector2f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.BillboardEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.BooleanModelPropertyControl;
-import com.ss.editor.ui.control.model.property.DirectionEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.EmissionPointEmissionPropertyControl;
 import com.ss.editor.ui.control.model.property.FloatModelPropertyControl;
 import com.ss.editor.ui.control.model.property.IntegerModelPropertyControl;
 import com.ss.editor.ui.control.model.property.MaterialEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.MinMaxModelPropertyControl;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
-import com.ss.editor.ui.control.model.property.ParticlesSpriteCountModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.model.property.particle.BillboardEmitterPropertyControl;
+import com.ss.editor.ui.control.model.property.particle.DirectionEmitterPropertyControl;
+import com.ss.editor.ui.control.model.property.particle.EmissionPointEmissionPropertyControl;
+import com.ss.editor.ui.control.model.property.particle.ParticlesSpriteCountModelPropertyControl;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -44,7 +45,7 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
 
         if (object instanceof ParticleEmitterNode) {
             createEmissionControls(container, modelChangeConsumer, (ParticleEmitterNode) object);

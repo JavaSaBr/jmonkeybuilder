@@ -60,7 +60,7 @@ public class LightPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             apply(light, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(light, propertyName));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, light, propertyName));
         });
     }
 
@@ -75,7 +75,7 @@ public class LightPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             apply(light, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(light, propertyName));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, light, propertyName));
         });
     }
 }

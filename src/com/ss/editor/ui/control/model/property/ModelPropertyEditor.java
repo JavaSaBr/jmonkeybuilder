@@ -4,6 +4,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 
+import org.jetbrains.annotations.Nullable;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -63,7 +65,7 @@ public class ModelPropertyEditor extends TitledPane {
     /**
      * Build property controls for the object.
      */
-    public void buildFor(final Object object) {
+    public void buildFor(@Nullable final Object object, @Nullable final Object parent) {
         if (getCurrentObject() == object) return;
 
         final VBox container = getContainer();
@@ -71,7 +73,7 @@ public class ModelPropertyEditor extends TitledPane {
         children.clear();
 
         if (object != null) {
-            PropertyBuilderFactory.buildFor(object, container, modelChangeConsumer);
+            PropertyBuilderFactory.buildFor(object, parent, container, modelChangeConsumer);
         }
 
         setCurrentObject(object);

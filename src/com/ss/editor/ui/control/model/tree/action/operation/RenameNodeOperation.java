@@ -46,7 +46,7 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
             final Spatial spatial = (Spatial) object;
             spatial.setName(newName);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, "name"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, spatial.getParent(), "name"));
         });
     }
 
@@ -61,7 +61,7 @@ public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeCons
             final Spatial spatial = (Spatial) object;
             spatial.setName(oldName);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, "name"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, spatial.getParent(), "name"));
         });
     }
 }

@@ -15,6 +15,7 @@ import com.ss.editor.ui.control.model.property.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
@@ -35,7 +36,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
         if (!(object instanceof Spatial)) return;
 
         final Spatial spatial = (Spatial) object;

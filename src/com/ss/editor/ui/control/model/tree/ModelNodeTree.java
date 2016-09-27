@@ -97,10 +97,7 @@ public class ModelNodeTree extends TitledPane {
             return;
         }
 
-        final ModelNode<?> value = treeItem.getValue();
-        final Object element = value == null ? null : value.getElement();
-
-        selectionHandler.accept(element);
+        selectionHandler.accept(treeItem.getValue());
     }
 
     /**
@@ -229,8 +226,8 @@ public class ModelNodeTree extends TitledPane {
     /**
      * Notify about changing the element.
      */
-    public void notifyChanged(@NotNull final Object object) {
-        notifyChanged(createFor(object));
+    public void notifyChanged(@Nullable Object parent, @NotNull final Object object) {
+        notifyChanged(createFor(object, parent));
     }
 
     /**

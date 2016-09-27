@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.property.operation;
 
-import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
@@ -9,19 +8,17 @@ import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import static com.ss.editor.util.GeomUtils.getObjectByIndex;
-import static rlib.util.ClassUtils.unsafeCast;
+import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for editing models in the {@link
- * ModelFileEditor}.
+ * The implementation of the {@link AbstractEditorOperation} for editing {@link ParticleInfluencer}
+ * in the {@link ModelFileEditor}.
  *
  * @author JavaSaBr
  */
-public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelChangeConsumer> {
+public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T> extends AbstractEditorOperation<ModelChangeConsumer> {
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -30,6 +27,17 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
      */
     @NotNull
     private final String propertyName;
+
+    /**
+     * The particle influencer.
+     */
+    private final D influencer;
+
+    /**
+     * The parent of the infuencer.
+     */
+    @NotNull
+    private final Object parent;
 
     /**
      * The new value of the property.
@@ -44,19 +52,15 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     private final T oldValue;
 
     /**
-     * The index of node.
-     */
-    private final int index;
-
-    /**
      * The handler for applying new value.
      */
     private BiConsumer<D, T> applyHandler;
 
-    public ModelPropertyOperation(final int index, @NotNull final String propertyName, @Nullable final T newValue, @Nullable final T oldValue) {
+    public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent, @NotNull final String propertyName, @Nullable final T newValue, @Nullable final T oldValue) {
+        this.parent = parent;
         this.newValue = newValue;
         this.oldValue = oldValue;
-        this.index = index;
+        this.influencer = influencer;
         this.propertyName = propertyName;
     }
 
@@ -70,15 +74,8 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final D target = unsafeCast(getObjectByIndex(currentModel, index));
-
-            Objects.requireNonNull(target);
-
-            apply(target, newValue);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
+            apply(influencer, newValue);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(parent, influencer, propertyName));
         });
     }
 
@@ -92,15 +89,8 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final D target = unsafeCast(getObjectByIndex(currentModel, index));
-
-            Objects.requireNonNull(target);
-
-            apply(target, oldValue);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
+            apply(influencer, oldValue);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(parent, influencer, propertyName));
         });
     }
 }

@@ -1,6 +1,7 @@
-package com.ss.editor.ui.control.model.property;
+package com.ss.editor.ui.control.model.property.particle;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +44,7 @@ public class DirectionEmitterPropertyControl extends ModelPropertyControl<Partic
 
         directionTypeComboBox = new ComboBox<>();
         directionTypeComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
-        directionTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
+        directionTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateDirectionType());
         directionTypeComboBox.prefWidthProperty().bind(container.widthProperty());
 
         final ObservableList<DirectionType> items = directionTypeComboBox.getItems();
@@ -63,11 +64,11 @@ public class DirectionEmitterPropertyControl extends ModelPropertyControl<Partic
     /**
      * Update selected {@link DirectionType}.
      */
-    private void updateCullHint() {
+    private void updateDirectionType() {
         if (isIgnoreListener()) return;
 
-        final ComboBox<DirectionType> billboardModeComboBox = getDirectionTypeComboBox();
-        final SingleSelectionModel<DirectionType> selectionModel = billboardModeComboBox.getSelectionModel();
+        final ComboBox<DirectionType> directionTypeComboBox = getDirectionTypeComboBox();
+        final SingleSelectionModel<DirectionType> selectionModel = directionTypeComboBox.getSelectionModel();
         final DirectionType newValue = selectionModel.getSelectedItem();
 
         changed(newValue, getPropertyValue());
@@ -76,8 +77,8 @@ public class DirectionEmitterPropertyControl extends ModelPropertyControl<Partic
     @Override
     protected void reload() {
         final DirectionType element = getPropertyValue();
-        final ComboBox<DirectionType> cullHintComboBox = getDirectionTypeComboBox();
-        final SingleSelectionModel<DirectionType> selectionModel = cullHintComboBox.getSelectionModel();
+        final ComboBox<DirectionType> directionTypeComboBox = getDirectionTypeComboBox();
+        final SingleSelectionModel<DirectionType> selectionModel = directionTypeComboBox.getSelectionModel();
         selectionModel.select(element);
     }
 
