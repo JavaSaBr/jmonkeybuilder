@@ -2,15 +2,15 @@ package com.ss.editor.ui.control.model.property.builder.impl;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.CullHintModelPropertyControl;
+import com.ss.editor.ui.control.model.property.EnumModelPropertyControl;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.QuaternionModelPropertyControl;
-import com.ss.editor.ui.control.model.property.QueueBucketModelPropertyControl;
-import com.ss.editor.ui.control.model.property.ShadowModeModelPropertyControl;
 import com.ss.editor.ui.control.model.property.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 
@@ -40,35 +40,35 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         if (!(object instanceof Spatial)) return;
 
         final Spatial spatial = (Spatial) object;
-        final Spatial.CullHint cullHint = spatial.getLocalCullHint();
-        final RenderQueue.ShadowMode shadowMode = spatial.getLocalShadowMode();
-        final RenderQueue.Bucket queueBucket = spatial.getLocalQueueBucket();
+        final CullHint cullHint = spatial.getLocalCullHint();
+        final ShadowMode shadowMode = spatial.getLocalShadowMode();
+        final Bucket queueBucket = spatial.getLocalQueueBucket();
         final Vector3f location = spatial.getLocalTranslation().clone();
         final Vector3f scale = spatial.getLocalScale().clone();
 
         final Quaternion rotation = spatial.getLocalRotation().clone();
 
-        final ModelPropertyControl<Spatial, Spatial.CullHint> cullHintControl = new CullHintModelPropertyControl(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, CullHint> cullHintControl = new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer, CullHint.values());
         cullHintControl.setApplyHandler(Spatial::setCullHint);
         cullHintControl.setSyncHandler(Spatial::getLocalCullHint);
         cullHintControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, RenderQueue.ShadowMode> shadowModeControl = new ShadowModeModelPropertyControl(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, ShadowMode> shadowModeControl = new EnumModelPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer, ShadowMode.values());
         shadowModeControl.setApplyHandler(Spatial::setShadowMode);
         shadowModeControl.setSyncHandler(Spatial::getLocalShadowMode);
         shadowModeControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, RenderQueue.Bucket> queueBucketControl = new QueueBucketModelPropertyControl(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, Bucket> queueBucketControl = new EnumModelPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer, Bucket.values());
         queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
         queueBucketControl.setSyncHandler(Spatial::getLocalQueueBucket);
         queueBucketControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, Vector3f> locationControl = new Vector3fModelPropertyControl(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, Vector3f> locationControl = new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
         locationControl.setApplyHandler(Spatial::setLocalTranslation);
         locationControl.setSyncHandler(Spatial::getLocalTranslation);
         locationControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, Vector3f> scaleControl = new Vector3fModelPropertyControl(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, Vector3f> scaleControl = new Vector3fModelPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
         scaleControl.setApplyHandler(Spatial::setLocalScale);
         scaleControl.setSyncHandler(Spatial::getLocalScale);
         scaleControl.setEditObject(spatial);

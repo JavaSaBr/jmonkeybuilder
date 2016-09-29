@@ -4,11 +4,8 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.model.property.particle.influencer.BooleanParticleInfluencerPropertyControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.EnumParticleInfluencerEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticleInfluencerPropertyControl;
-import com.ss.editor.ui.control.model.property.particle.influencer.GravityAlignmentEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.particle.influencer.RadialPullAlignmentEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.particle.influencer.RadialPullCenterEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.particle.influencer.RadialUpAlignmentEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +18,13 @@ import tonegod.emitter.influencers.AlphaInfluencer;
 import tonegod.emitter.influencers.ColorInfluencer;
 import tonegod.emitter.influencers.DestinationInfluencer;
 import tonegod.emitter.influencers.GravityInfluencer;
+import tonegod.emitter.influencers.GravityInfluencer.GravityAlignment;
 import tonegod.emitter.influencers.ImpulseInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.influencers.RadialVelocityInfluencer;
+import tonegod.emitter.influencers.RadialVelocityInfluencer.RadialPullAlignment;
+import tonegod.emitter.influencers.RadialVelocityInfluencer.RadialPullCenter;
+import tonegod.emitter.influencers.RadialVelocityInfluencer.RadialUpAlignment;
 import tonegod.emitter.influencers.SizeInfluencer;
 
 /**
@@ -167,7 +168,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
 
         final Vector3f gravity = influencer.getGravity().clone();
-        final GravityInfluencer.GravityAlignment alignment = influencer.getAlignment();
+        final GravityAlignment alignment = influencer.getAlignment();
 
         final float magnitude = influencer.getMagnitude();
 
@@ -176,7 +177,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         gravityControl.setApplyHandler(GravityInfluencer::setGravity);
         gravityControl.setEditObject(influencer);
 
-        final GravityAlignmentEmitterPropertyControl<GravityInfluencer> gravityAlignmentControl = new GravityAlignmentEmitterPropertyControl<>(alignment, "Alignment", modelChangeConsumer, parent);
+        final EnumParticleInfluencerEmitterPropertyControl<GravityInfluencer, GravityAlignment> gravityAlignmentControl = new EnumParticleInfluencerEmitterPropertyControl<>(alignment, "Alignment", modelChangeConsumer, GravityAlignment.values(), parent);
         gravityAlignmentControl.setSyncHandler(GravityInfluencer::getAlignment);
         gravityAlignmentControl.setApplyHandler(GravityInfluencer::setAlignment);
         gravityAlignmentControl.setEditObject(influencer);
@@ -196,31 +197,31 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
 
-        final RadialVelocityInfluencer.RadialPullCenter pullCenter = influencer.getRadialPullCenter();
-        final RadialVelocityInfluencer.RadialPullAlignment pullAlignment = influencer.getRadialPullAlignment();
-        final RadialVelocityInfluencer.RadialUpAlignment upAlignment = influencer.getRadialUpAlignment();
+        final RadialPullCenter pullCenter = influencer.getRadialPullCenter();
+        final RadialPullAlignment pullAlignment = influencer.getRadialPullAlignment();
+        final RadialUpAlignment upAlignment = influencer.getRadialUpAlignment();
 
         final float tangentForce = influencer.getTangentForce();
         final float radialPull = influencer.getRadialPull();
 
         final boolean randomDirection = influencer.isRandomDirection();
 
-        final BooleanParticleInfluencerPropertyControl<RadialVelocityInfluencer> randomDirectionControl = new BooleanParticleInfluencerPropertyControl<>(randomDirection, "Random destination", modelChangeConsumer, parent);
+        final BooleanParticleInfluencerPropertyControl<RadialVelocityInfluencer> randomDirectionControl = new BooleanParticleInfluencerPropertyControl<>(randomDirection, "Random direction", modelChangeConsumer, parent);
         randomDirectionControl.setSyncHandler(RadialVelocityInfluencer::isRandomDirection);
         randomDirectionControl.setApplyHandler(RadialVelocityInfluencer::setRandomDirection);
         randomDirectionControl.setEditObject(influencer);
 
-        final RadialPullCenterEmitterPropertyControl<RadialVelocityInfluencer> pullCenterControl = new RadialPullCenterEmitterPropertyControl<>(pullCenter, "Pull center", modelChangeConsumer, parent);
+        final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullCenter> pullCenterControl = new EnumParticleInfluencerEmitterPropertyControl<>(pullCenter, "Pull center", modelChangeConsumer, RadialPullCenter.values(), parent);
         pullCenterControl.setSyncHandler(RadialVelocityInfluencer::getRadialPullCenter);
         pullCenterControl.setApplyHandler(RadialVelocityInfluencer::setRadialPullCenter);
         pullCenterControl.setEditObject(influencer);
 
-        final RadialPullAlignmentEmitterPropertyControl<RadialVelocityInfluencer> pullAlignmentControl = new RadialPullAlignmentEmitterPropertyControl<>(pullAlignment, "Pull alignment", modelChangeConsumer, parent);
+        final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullAlignment> pullAlignmentControl = new EnumParticleInfluencerEmitterPropertyControl<>(pullAlignment, "Pull alignment", modelChangeConsumer, RadialPullAlignment.values(), parent);
         pullAlignmentControl.setSyncHandler(RadialVelocityInfluencer::getRadialPullAlignment);
         pullAlignmentControl.setApplyHandler(RadialVelocityInfluencer::setRadialPullAlignment);
         pullAlignmentControl.setEditObject(influencer);
 
-        final RadialUpAlignmentEmitterPropertyControl<RadialVelocityInfluencer> upAlignmentControl = new RadialUpAlignmentEmitterPropertyControl<>(upAlignment, "Up alignment", modelChangeConsumer, parent);
+        final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialUpAlignment> upAlignmentControl = new EnumParticleInfluencerEmitterPropertyControl<>(upAlignment, "Up alignment", modelChangeConsumer, RadialUpAlignment.values(), parent);
         upAlignmentControl.setSyncHandler(RadialVelocityInfluencer::getRadialUpAlignment);
         upAlignmentControl.setApplyHandler(RadialVelocityInfluencer::setRadialUpAlignment);
         upAlignmentControl.setEditObject(influencer);
