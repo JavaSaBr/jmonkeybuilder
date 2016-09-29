@@ -89,8 +89,8 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
         particlesFollowEmitControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesStretchingControl = new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_STRETCHING, modelChangeConsumer);
-        particlesStretchingControl.setApplyHandler(ParticleEmitterNode::setUseVelocityStretching);
-        particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isUseVelocityStretching);
+        particlesStretchingControl.setApplyHandler(ParticleEmitterNode::setVelocityStretching);
+        particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isVelocityStretching);
         particlesStretchingControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, Float> magnitudeControl = new FloatModelPropertyControl<>(stretchFactor, Messages.PARTICLE_EMITTER_MAGNITUDE, modelChangeConsumer);
@@ -138,9 +138,9 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
 
         final boolean enabledTestEmitter = emitterNode.isEnabledTestEmitter();
         final boolean enabled = emitterNode.isEnabled();
-        final boolean randomEmissionPoint = emitterNode.isUseRandomEmissionPoint();
-        final boolean sequentialEmissionFace = emitterNode.isUseSequentialEmissionFace();
-        final boolean skipPattern = emitterNode.isUseSequentialSkipPattern();
+        final boolean randomEmissionPoint = emitterNode.isRandomEmissionPoint();
+        final boolean sequentialEmissionFace = emitterNode.isSequentialEmissionFace();
+        final boolean skipPattern = emitterNode.isSequentialSkipPattern();
 
         final int maxParticles = emitterNode.getMaxParticles();
         final int emissionsPerSecond = emitterNode.getEmissionsPerSecond();
@@ -160,18 +160,18 @@ public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
         enableControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, Boolean> randomPointControl = new BooleanModelPropertyControl<>(randomEmissionPoint, Messages.PARTICLE_EMITTER_RANDOM_POINT, modelChangeConsumer);
-        randomPointControl.setApplyHandler(ParticleEmitterNode::setUseRandomEmissionPoint);
-        randomPointControl.setSyncHandler(ParticleEmitterNode::isUseRandomEmissionPoint);
+        randomPointControl.setApplyHandler(ParticleEmitterNode::setRandomEmissionPoint);
+        randomPointControl.setSyncHandler(ParticleEmitterNode::isRandomEmissionPoint);
         randomPointControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, Boolean> sequentialFaceControl = new BooleanModelPropertyControl<>(sequentialEmissionFace, Messages.PARTICLE_EMITTER_SEQUENTIAL_FACE, modelChangeConsumer);
-        sequentialFaceControl.setApplyHandler(ParticleEmitterNode::setUseSequentialEmissionFace);
-        sequentialFaceControl.setSyncHandler(ParticleEmitterNode::isUseSequentialEmissionFace);
+        sequentialFaceControl.setApplyHandler(ParticleEmitterNode::setSequentialEmissionFace);
+        sequentialFaceControl.setSyncHandler(ParticleEmitterNode::isSequentialEmissionFace);
         sequentialFaceControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, Boolean> skipPatternControl = new BooleanModelPropertyControl<>(skipPattern, Messages.PARTICLE_EMITTER_SKIP_PATTERN, modelChangeConsumer);
-        skipPatternControl.setApplyHandler(ParticleEmitterNode::setUseSequentialSkipPattern);
-        skipPatternControl.setSyncHandler(ParticleEmitterNode::isUseSequentialSkipPattern);
+        skipPatternControl.setApplyHandler(ParticleEmitterNode::setSequentialSkipPattern);
+        skipPatternControl.setSyncHandler(ParticleEmitterNode::isSequentialSkipPattern);
         skipPatternControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, EmitterMesh.DirectionType> directionTypeControl = new DirectionEmitterPropertyControl(directionType, Messages.PARTICLE_EMITTER_DIRECTION_TYPE, modelChangeConsumer);
