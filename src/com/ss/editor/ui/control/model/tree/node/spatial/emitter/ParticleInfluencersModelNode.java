@@ -44,7 +44,7 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
     @NotNull
     @Override
     public String getName() {
-        return "Influencers";
+        return Messages.MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
     }
 
     @Nullable

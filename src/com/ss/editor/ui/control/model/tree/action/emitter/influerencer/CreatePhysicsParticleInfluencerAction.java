@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.influerencer;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
@@ -23,7 +24,7 @@ public class CreatePhysicsParticleInfluencerAction extends AbstractCreateParticl
     @NotNull
     @Override
     protected String getName() {
-        return "Physics influencer";
+        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_PHYSICS;
     }
 
     @NotNull
