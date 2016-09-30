@@ -11,14 +11,10 @@ import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
-import tonegod.emitter.ParticleEmitterNode.BillboardMode;
 import tonegod.emitter.influencers.AlphaInfluencer;
 import tonegod.emitter.influencers.ColorInfluencer;
 import tonegod.emitter.influencers.SizeInfluencer;
-import tonegod.emitter.particle.ParticleDataTriMesh;
-import tonegod.emitter.shapes.TriangleEmitterShape;
 
 /**
  * The action for creating new {@link ParticleEmitterNode}.
@@ -43,25 +39,9 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
 
-        final ParticleEmitterNode emitter = new ParticleEmitterNode();
-        emitter.setEnabled(true);
-        emitter.setMaxParticles(100);
+        final ParticleEmitterNode emitter = new ParticleEmitterNode(EDITOR.getAssetManager());
         emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer());
-
-        // Shape & Emissions
-        final TriangleEmitterShape emitterShape = new TriangleEmitterShape();
-        emitterShape.init(1);
-
-        emitter.changeEmitterShapeMesh(emitterShape);
-        emitter.setDirectionType(EmitterMesh.DirectionType.RANDOM);
-        emitter.setEmissionsPerSecond(100);
-        emitter.setParticlesPerEmission(1);
-
-        // Particle props
-        emitter.changeParticleMeshType(ParticleDataTriMesh.class, null);
-        emitter.setBillboardMode(BillboardMode.CAMERA);
-        emitter.setForce(1);
-        emitter.setLife(0.999f);
+        emitter.setEnabled(true);
 
         final SizeInfluencer sizeInfluencer = emitter.getInfluencer(SizeInfluencer.class);
 
@@ -69,9 +49,6 @@ public class CreateTEmitterAction extends AbstractNodeAction {
             sizeInfluencer.addSize(0.1f);
             sizeInfluencer.addSize(0f);
         }
-
-        emitter.initialize(EDITOR.getAssetManager());
-        emitter.changeTexture("graphics/textures/sprite/default.png");
 
         final ModelNode<?> modelNode = getNode();
         final Node element = (Node) modelNode.getElement();

@@ -31,9 +31,9 @@ import static com.ss.editor.ui.css.CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON;
 import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
 
 /**
- * Базовая реализация редактора.
+ * The base implementation of an editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
@@ -44,22 +44,22 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Список 3D частей этого редактора.
+     * The array of 3D parts of this editor.
      */
     private final Array<EditorState> editorStates;
 
     /**
-     * Изменялся ли документ.
+     * The dirty property.
      */
     private final BooleanProperty dirtyProperty;
 
     /**
-     * Корневой элемент редактора.
+     * The root element of this editor.
      */
     private R root;
 
     /**
-     * Редактируемый файл.
+     * Rge edit file.
      */
     private Path file;
 
@@ -70,21 +70,21 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Зарегистрировать 3D часть редактора.
+     * Add the new 3D part of this editor.
      */
     protected void addEditorState(final EditorState editorState) {
         this.editorStates.add(editorState);
     }
 
     /**
-     * @param file редактируемый файл.
+     * @param file the edit file.
      */
     protected void setEditFile(final Path file) {
         this.file = file;
     }
 
     /**
-     * Создание контента.
+     * Create content of this editor.
      */
     protected void createContent() {
 
@@ -123,37 +123,37 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Обработка ввода с клавиатуры.
+     * Handle the key released event.
      */
     protected void processKeyReleased(final KeyEvent event) {
 
         final KeyCode code = event.getCode();
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
-            doSave();
+            processSave();
         }
     }
 
     /**
-     * Обработка ввода с клавиатуры.
+     * Handle the key pressed event.
      */
     protected void processKeyPressed(final KeyEvent event) {
     }
 
     /**
-     * Создание тулбара.
+     * Create toolbar.
      */
     protected void createToolbar(final HBox container) {
     }
 
     /**
-     * Создание акшена для сохранения изменений.
+     * Create the save action.
      */
     protected Button createSaveAction() {
 
         Button action = new Button();
         action.setGraphic(new ImageView(Icons.SAVE_24));
-        action.setOnAction(event -> doSave());
+        action.setOnAction(event -> processSave());
         action.disableProperty().bind(dirtyProperty().not());
 
         FXUtils.addClassTo(action, TOOLBAR_BUTTON);
@@ -163,19 +163,31 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * @return нужен ли тулбар для этого редактора.
+     * The process of saving this file.
+     */
+    protected void processSave() {
+        final long stamp = EDITOR.asyncLock();
+        try {
+            doSave();
+        } finally {
+            EDITOR.asyncUnlock(stamp);
+        }
+    }
+
+    /**
+     * @return true if this editor needs a toolbar.
      */
     protected boolean needToolbar() {
         return false;
     }
 
     /**
-     * @return создание корневого элемента для основного контента редактора.
+     * @return the new root.
      */
     protected abstract R createRoot();
 
     /**
-     * Создание контента редактора.
+     * Create content.
      */
     protected abstract void createContent(final R root);
 
@@ -210,7 +222,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Указать есть ли изменения в редакторе.
+     * Set the flag of dirty of this editor.
      */
     protected void setDirty(final boolean dirty) {
         this.dirtyProperty.setValue(dirty);
@@ -222,7 +234,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Уведомление всех об изменении редактируемого файла.
+     * Notify about changing the file.
      */
     protected void notifyFileChanged() {
 
