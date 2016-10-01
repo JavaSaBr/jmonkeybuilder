@@ -16,12 +16,17 @@ import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+
 /**
  * Реализация контролера манипулятора маштабирования объекта.
  *
  * @author Ronn
  */
 public class ScaleToolControl extends AbstractControl implements TransformControl {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
     public static final String NODE_SCALE_X = "scale_x";
     public static final String NODE_SCALE_Y = "scale_y";
@@ -65,6 +70,11 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
 
         final SceneEditorControl editorControl = getEditorControl();
         final Transform transformCenter = editorControl.getTransformCenter();
+
+        if (transformCenter == null) {
+            LOGGER.warning(this, "not found transform center for the " + editorControl);
+            return;
+        }
 
         // Set PickedAxis
         final Geometry geometry = colResult.getGeometry();

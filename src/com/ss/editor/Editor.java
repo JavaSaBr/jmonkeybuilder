@@ -44,6 +44,8 @@ import com.sun.javafx.cursor.CursorType;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.locks.StampedLock;
@@ -218,6 +220,7 @@ public class Editor extends SimpleApplication {
     }
 
     @Override
+    @NotNull
     public Camera getCamera() {
         return super.getCamera();
     }

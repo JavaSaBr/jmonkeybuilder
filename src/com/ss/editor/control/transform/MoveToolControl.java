@@ -20,12 +20,17 @@ import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 import com.ss.editor.util.GeomUtils;
 
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+
 /**
  * Реализация контролера манипулятора перемещения.
  *
  * @author Ronn
  */
 public class MoveToolControl extends AbstractControl implements TransformControl {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
     public static final String NODE_MOVE_X = "move_x";
     public static final String NODE_MOVE_Y = "move_y";
@@ -70,6 +75,12 @@ public class MoveToolControl extends AbstractControl implements TransformControl
 
         final SceneEditorControl editorControl = getEditorControl();
         final Transform transform = editorControl.getTransformCenter();
+
+        if (transform == null) {
+            LOGGER.warning(this, "not found transform center for the " + editorControl);
+            return;
+        }
+
         final Quaternion rotation = transform.getRotation();
 
         // Set PickedAxis

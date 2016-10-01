@@ -5,61 +5,64 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
- * Интерфейс для реализации контролера редактора сцены.
+ * The interface for implementing a control of a scene editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface SceneEditorControl {
 
-    public enum TransformType {
+    enum TransformType {
         MOVE_TOOL,
         ROTATE_TOOL,
         SCALE_TOOL,
         NONE
     }
 
-    public enum PickedAxis {
+    enum PickedAxis {
         X, Y, Z, NONE
     }
 
     /**
-     * @return центр трансформации.
+     * @return the center of transformation.
      */
-    public Transform getTransformCenter();
+    @Nullable
+    Transform getTransformCenter();
 
     /**
      * Установка направления трансформаци.
      */
-    public void setPickedAxis(final PickedAxis axis);
+    void setPickedAxis(final PickedAxis axis);
 
     /**
      * @return текущее направление трансформации.
      */
-    public PickedAxis getPickedAxis();
+    PickedAxis getPickedAxis();
 
     /**
      * @return плоскость для вычисления трансформаций.
      */
-    public Node getCollisionPlane();
+    Node getCollisionPlane();
 
     /**
      * Разница между предыдущей точкой трансформации и новой.
      */
-    public void setDeltaVector(final Vector3f deltaVector);
+    void setDeltaVector(final Vector3f deltaVector);
 
     /**
      * @return разница между предыдущей точкой трансформации и новой.
      */
-    public Vector3f getDeltaVector();
+    Vector3f getDeltaVector();
 
     /**
      * @return часть модели на трансформацию.
      */
-    public Spatial getToTransform();
+    Spatial getToTransform();
 
     /**
      * Уведомление об изменении трансформации указанной части модели.
      */
-    public void notifyTransformed(final Spatial spatial);
+    void notifyTransformed(final Spatial spatial);
 }

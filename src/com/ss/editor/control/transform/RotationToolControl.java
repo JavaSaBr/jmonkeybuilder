@@ -17,12 +17,17 @@ import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+
 /**
  * Реализация контролера манипулятора вращения.
  *
  * @author Ronn
  */
 public class RotationToolControl extends AbstractControl implements TransformControl {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
     public static final String NODE_ROTATION_X = "rot_x";
     public static final String NODE_ROTATION_Y = "rot_y";
@@ -65,6 +70,11 @@ public class RotationToolControl extends AbstractControl implements TransformCon
         final Camera camera = EDITOR.getCamera();
         final SceneEditorControl editorControl = getEditorControl();
         final Transform selectedCenter = editorControl.getTransformCenter();
+
+        if (selectedCenter == null) {
+            LOGGER.warning(this, "not found transform center for the " + editorControl);
+            return;
+        }
 
         // Set PickedAxis
         final Geometry geometry = colResult.getGeometry();

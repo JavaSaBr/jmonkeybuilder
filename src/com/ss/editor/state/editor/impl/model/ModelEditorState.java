@@ -43,6 +43,9 @@ import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -53,19 +56,16 @@ import rlib.util.dictionary.ObjectDictionary;
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 
 /**
- * Реализация 3D части редактора модели.
+ * The implementation of the {@link AbstractEditorState} for the {@link ModelFileEditor}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ModelEditorState extends AbstractEditorState<ModelFileEditor> implements SceneEditorControl {
 
     public static final String USER_DATA_IS_LIGHT = ModelEditorState.class.getName() + ".isLight";
 
-    private static final Vector3f AMBIENT_LIGHT_LOCATION = new Vector3f(0, -20, 0);
-
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
-
 
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
@@ -78,7 +78,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
 
     /**
-     * Таблица моделец источников света.
+     * The table with models for presentation of the lights.
      */
     protected static final ObjectDictionary<Light.Type, Spatial> LIGHT_MODEL_TABLE;
 
@@ -94,137 +94,137 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Модели выделения выбранных частей.
+     * The selection models of selected models.
      */
     protected final ObjectDictionary<Spatial, Spatial> selectionShape;
 
     /**
-     * Набор контролов по отображению источников света.
+     * The array controls for lights.
      */
     protected final Array<EditorLightControl> editorLightControls;
 
     /**
-     * Набор кастомных фонов.
+     * The array of custom skies.
      */
     private final Array<Spatial> customSky;
 
     /**
-     * Выбранные модели.
+     * The array of selected models.
      */
     protected final Array<Spatial> selected;
 
     /**
-     * Узел для размещения модели.
+     * The node for the placement of models.
      */
     private final Node modelNode;
 
     /**
-     * Узел для размещения представления источников света.
+     * The node for the placement of lights.
      */
     private final Node lightNode;
 
     /**
-     * Узел для размещения вспомогательных графических элементов.
+     * The node for the placement of controls.
      */
     private final Node toolNode;
 
     /**
-     * Узел для размещения инструментов для трансформации
+     * The node for the placement of transform controls.
      */
     private final Node transformToolNode;
 
     /**
-     * Узел для размещения кастомного фона.
+     * The node for the placement of custom sky.
      */
     private final Node customSkyNode;
 
     /**
-     * Набор узлов для манипуляций с моделями.
+     * The nodes for the placement of model controls.
      */
     private Node moveTool, rotateTool, scaleTool;
 
     /**
-     * Плоскость для вычисления трансформаций.
+     * The plane for calculation transforms.
      */
     private Node collisionPlane;
 
     /**
-     * Разница между предыдущей точкой трансформации и новой.
+     * The difference between the previous point of transformation and new.
      */
     private Vector3f deltaVector;
 
     /**
-     * Центр трансформации.
+     * Center of transformation.
      */
     private Transform transformCenter;
 
     /**
-     * Изначальная трансформация
+     * The original transformation.
      */
     private Transform originalTransform;
 
     /**
-     * Объект на трансформацию.
+     * Object to transform.
      */
     private Spatial toTransform;
 
     /**
-     * Материал для выделения.
+     * Material for selection.
      */
     private Material selectionMaterial;
 
     /**
-     * Сетка сцены.
+     * Grid of the scene.
      */
     private Geometry grid;
 
     /**
-     * Узел на который смотрит камера.
+     * The node on which the camera is looking.
      */
     private Node cameraNode;
 
     /**
-     * Текущая отображаемая модель.
+     * Current display model.
      */
     private Spatial currentModel;
 
     /**
-     * Текущее быстрое окружение.
+     * The current fast sky.
      */
     private Spatial currentFastSky;
 
     /**
-     * Текущий тип трансформации.
+     * The current type of transformation.
      */
     private TransformType transformType;
 
     /**
-     * Текущее направление трансформации.
+     * The current direction of transformation.
      */
     private PickedAxis pickedAxis;
 
     /**
-     * Активирован ли свет камеры.
+     * The flag of activity light of the camera.
      */
     private boolean lightEnabled;
 
     /**
-     * Отображать ли выбранный узел.
+     * The flag of visibility selection.
      */
     private boolean showSelection;
 
     /**
-     * Отображать ли сетку.
+     * The flag of visibility grid.
      */
     private boolean showGrid;
 
     /**
-     * Есть ли активная трансформация.
+     * The flag of existing active transformation.
      */
     private boolean activeTransform;
 
     /**
-     * Кол-во кадров.
+     * The frame rate.
      */
     private int frame;
 
@@ -256,61 +256,65 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         setLightEnabled(true);
         setShowSelection(true);
         setShowGrid(true);
-
         setTransformType(TransformType.MOVE_TOOL);
     }
 
     /**
-     * @return узел для размещения представления источников света.
+     * @return the node for the placement of lights.
      */
+    @NotNull
     protected Node getLightNode() {
         return lightNode;
     }
 
     /**
-     * @return набор контролов по отображению источников света..
+     * @return the array controls for lights.
      */
+    @NotNull
     protected Array<EditorLightControl> getEditorLightControls() {
         return editorLightControls;
     }
 
     /**
-     * @param activeTransform есть ли активная трансформация.
+     * @param activeTransform the flag of existing active transformation.
      */
     private void setActiveTransform(final boolean activeTransform) {
         this.activeTransform = activeTransform;
     }
 
     /**
-     * @return есть ли активная трансформация.
+     * @return true of we have active transformation.
      */
     private boolean isActiveTransform() {
         return activeTransform;
     }
 
     /**
-     * @return узел для размещения инструментов для трансформации.
+     * @return the node for the placement of transform controls.
      */
+    @NotNull
     private Node getTransformToolNode() {
         return transformToolNode;
     }
 
     /**
-     * @return узел для размещения кастомного фона.
+     * @return the node for the placement of custom sky.
      */
+    @NotNull
     private Node getCustomSkyNode() {
         return customSkyNode;
     }
 
     /**
-     * @return Набор кастомных фонов.
+     * @return the array of custom skies.
      */
+    @NotNull
     private Array<Spatial> getCustomSky() {
         return customSky;
     }
 
     @Override
-    protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
+    protected void onActionImpl(@NotNull final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
         if (MOUSE_RIGHT_CLICK.equals(name)) {
             processClick(isPressed);
@@ -321,7 +325,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обработка клика мышкой по области редактора.
+     * Handling a click in the area of the ditor.
      */
     private void processClick(final boolean isPressed) {
         if (!isPressed) return;
@@ -360,7 +364,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Создание вспомогательных элементов.
+     * Create tool elementns.
      */
     private void createToolElements() {
 
@@ -376,7 +380,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Создание манипуляторов.
+     * Create manipulators.
      */
     private void createManipulators() {
 
@@ -432,7 +436,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Создание плоскости для детектирования перемещения.
+     * Create collision plane.
      */
     private void createCollisionPlane() {
 
@@ -454,72 +458,79 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @param transformType текущий тип трансформации.
+     * @param transformType the current type of the transform.
      */
     public void setTransformType(final TransformType transformType) {
         this.transformType = transformType;
     }
 
     @Override
+    @Nullable
     public Transform getTransformCenter() {
         return transformCenter;
     }
 
     /**
-     * @param pickedAxis текущее направление трансформации.
+     * @param pickedAxis the current direction of transformation.
      */
-    public void setPickedAxis(final PickedAxis pickedAxis) {
+    public void setPickedAxis(@Nullable final PickedAxis pickedAxis) {
         this.pickedAxis = pickedAxis;
     }
 
     @Override
+    @Nullable
     public PickedAxis getPickedAxis() {
         return pickedAxis;
     }
 
     @Override
+    @NotNull
     public Node getCollisionPlane() {
         if (collisionPlane == null) throw new RuntimeException("collisionPlane is null");
         return collisionPlane;
     }
 
     @Override
-    public void setDeltaVector(Vector3f deltaVector) {
+    public void setDeltaVector(@Nullable final Vector3f deltaVector) {
         this.deltaVector = deltaVector;
     }
 
     @Override
+    @Nullable
     public Vector3f getDeltaVector() {
         return deltaVector;
     }
 
     @Override
+    @Nullable
     public Spatial getToTransform() {
         return toTransform;
     }
 
     @Override
-    public void notifyTransformed(final Spatial spatial) {
+    public void notifyTransformed(@NotNull final Spatial spatial) {
         final ModelFileEditor fileEditor = getFileEditor();
         fileEditor.notifyTransformed(spatial);
     }
 
     /**
-     * @return текущий тип трансформации.
+     * @return the current type of transformation.
      */
+    @Nullable
     private TransformType getTransformType() {
         return transformType;
     }
 
     /**
-     * @return сетка.
+     * @return grid of the scene.
      */
+    @NotNull
     private Geometry getGrid() {
         return grid;
     }
 
     /**
-     * Создание материала для отображения граф. элемнтов.
+     * Create the material for presentation of selected models.
      */
     private Material createColorMaterial(final ColorRGBA color) {
         final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
@@ -529,31 +540,30 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @return узел для размещения вспомогательных графических элементов.
+     * @return the node for the placement of controls.
      */
+    @NotNull
     private Node getToolNode() {
         return toolNode;
     }
 
     @Override
+    @NotNull
     protected Node getNodeForCamera() {
-
-        if (cameraNode == null) {
-            cameraNode = new Node("CameraNode");
-        }
-
+        if (cameraNode == null) cameraNode = new Node("CameraNode");
         return cameraNode;
     }
 
     /**
-     * @return узел на который смотрит камера.
+     * @return the node on which the camera is looking.
      */
+    @NotNull
     private Node getCameraNode() {
         return cameraNode;
     }
 
     /**
-     * Активая узла с моделями.
+     * Activate the node with models.
      */
     private void notifyProbeComplete() {
 
@@ -567,37 +577,39 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @param currentFastSky текущее быстрое окружение.
+     * @param currentFastSky the current fast sky.
      */
-    private void setCurrentFastSky(final Spatial currentFastSky) {
+    private void setCurrentFastSky(@Nullable final Spatial currentFastSky) {
         this.currentFastSky = currentFastSky;
     }
 
     /**
-     * @return текущее быстрое окружение.
+     * @return the current fast sky.
      */
+    @Nullable
     private Spatial getCurrentFastSky() {
         return currentFastSky;
     }
 
     /**
-     * @return узел для размещения модели.
+     * @return the node for the placement of models.
      */
+    @NotNull
     private Node getModelNode() {
         return modelNode;
     }
 
     /**
-     * Отобразить на сцене указанную модель.
+     * Show the model in the scene.
      */
-    public void openModel(final Spatial model) {
+    public void openModel(@NotNull final Spatial model) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> openModelImpl(model));
     }
 
     /**
-     * Процесс отображения указанной модели.
+     * The process of showing the model in the scene.
      */
-    private void openModelImpl(final Spatial model) {
+    private void openModelImpl(@NotNull final Spatial model) {
 
         final Node modelNode = getModelNode();
         final Spatial currentModel = getCurrentModel();
@@ -609,37 +621,37 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @param currentModel текущая отображаемая модель.
+     * @param currentModel current display model.
      */
-    private void setCurrentModel(final Spatial currentModel) {
+    private void setCurrentModel(@Nullable final Spatial currentModel) {
         this.currentModel = currentModel;
     }
 
     /**
-     * @return текущая отображаемая модель.
+     * @return current display model.
      */
+    @Nullable
     public Spatial getCurrentModel() {
         return currentModel;
     }
 
     /**
-     * @return активирован ли свет камеры.
+     * @return true if the light of the camera is enabled.
      */
     private boolean isLightEnabled() {
         return lightEnabled;
     }
 
     /**
-     * @param lightEnabled активирован ли свет камеры.
+     * @param lightEnabled the flag of activity light of the camera.
      */
-    private void setLightEnabled(boolean lightEnabled) {
+    private void setLightEnabled(final boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
     }
 
     @Override
-    public void initialize(final AppStateManager stateManager, final Application application) {
+    public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
-
         frame = 0;
     }
 
@@ -654,28 +666,31 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @return узел для перемещения модели.
+     * @return the nodes for the placement of model controls.
      */
+    @NotNull
     private Node getMoveTool() {
         return moveTool;
     }
 
     /**
-     * @return узел для вращения модели.
+     * @return the nodes for the placement of model controls.
      */
+    @NotNull
     private Node getRotateTool() {
         return rotateTool;
     }
 
     /**
-     * @return узел для маштабирования модели.
+     * @return the nodes for the placement of model controls.
      */
+    @NotNull
     private Node getScaleTool() {
         return scaleTool;
     }
 
     @Override
-    public void update(float tpf) {
+    public void update(final float tpf) {
         super.update(tpf);
 
         if (frame == 2) {
@@ -719,6 +734,8 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         selected.forEach(spatial -> {
 
             final Spatial shape = selectionShape.get(spatial);
+            if (shape == null) return;
+
             shape.setLocalTranslation(spatial.getWorldTranslation());
             shape.setLocalRotation(spatial.getWorldRotation());
             shape.setLocalScale(spatial.getWorldScale());
@@ -761,7 +778,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Процесс обновления положения элементов трансформации.
+     * Update the transformation node.
      */
     protected void updateTransformNode(final Transform transform) {
         if (transform == null) return;
@@ -774,10 +791,8 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         transformToolNode.setLocalRotation(transform.getRotation());
     }
 
-    private Vector3f getPositionOnCamera(final Vector3f location) {
-
+    private Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
         final Camera camera = EDITOR.getCamera();
-
         final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.4f);
         return camera.getLocation().add(resultPosition);
     }
@@ -798,14 +813,14 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обновление активированности света от камеры.
+     * Update light.
      */
     public void updateLightEnabled(final boolean enabled) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightEnabledImpl(enabled));
     }
 
     /**
-     * Процесс обновление света от камеры.
+     * The process of updating the light.
      */
     private void updateLightEnabledImpl(boolean enabled) {
         if (enabled == isLightEnabled()) return;
@@ -823,14 +838,14 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обработка смены быстрого окружения редактора.
+     * Change the fast sky.
      */
     public void changeFastSky(final Spatial fastSky) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeFastSkyImpl(fastSky));
     }
 
     /**
-     * Процесс смены окружения редактора.
+     * The process of changing the fast sky.
      */
     private void changeFastSkyImpl(final Spatial fastSky) {
 
@@ -855,35 +870,38 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @return выбранные модели.
+     * @return the array of selected models.
      */
+    @NotNull
     private Array<Spatial> getSelected() {
         return selected;
     }
 
     /**
-     * @return модели выделения выбранных частей.
+     * @return the selection models of selected models.
      */
+    @NotNull
     private ObjectDictionary<Spatial, Spatial> getSelectionShape() {
         return selectionShape;
     }
 
     /**
-     * @return материал для выделения.
+     * @return material for selection.
      */
+    @Nullable
     private Material getSelectionMaterial() {
         return selectionMaterial;
     }
 
     /**
-     * Обновление выбранной части модели.
+     * Update selected models.
      */
     public void updateSelection(final Array<Spatial> spatials) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateSelectionImpl(spatials));
     }
 
     /**
-     * Процесс обновления выбранной части модели.
+     * The process of updating selected models.
      */
     private void updateSelectionImpl(final Array<Spatial> spatials) {
 
@@ -908,28 +926,29 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обновление трансформации для модификации.
+     * Update transformation.
      */
     private void updateToTransform() {
         setToTransform(getSelected().first());
     }
 
     /**
-     * @return оригинальная трансформация перед манипуляциями.
+     * @return the original transformation.
      */
+    @Nullable
     private Transform getOriginalTransform() {
         return originalTransform;
     }
 
     /**
-     * @param originalTransform оригинальная трансформация перед манипуляциями.
+     * @param originalTransform the original transformation.
      */
-    private void setOriginalTransform(final Transform originalTransform) {
+    private void setOriginalTransform(@Nullable final Transform originalTransform) {
         this.originalTransform = originalTransform;
     }
 
     /**
-     * Обновленине трансформации для манипуляции.
+     * Update the transformation's center.
      */
     private void updateTransformCenter() {
 
@@ -942,9 +961,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Добавление части модели к выделенным.
+     * Add the spatial to selection.
      */
-    private void addToSelection(final Spatial spatial) {
+    private void addToSelection(@NotNull final Spatial spatial) {
 
         Spatial shape;
 
@@ -971,9 +990,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Удаление части модели из списка выделенных.
+     * Remove the spatial from the selection.
      */
-    private void removeFromSelection(final Spatial spatial) {
+    private void removeFromSelection(@NotNull final Spatial spatial) {
         setTransformCenter(null);
         setToTransform(null);
 
@@ -984,12 +1003,10 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Построение выделения для модели.
-     *
-     * @param spatial выделяемая модель.
-     * @return выделение этой модели.
+     * Build the selection box for the spatial.
      */
-    private Spatial buildBoxSelection(final Spatial spatial) {
+    private Spatial buildBoxSelection(@NotNull final Spatial spatial) {
+        spatial.updateModelBound();
 
         final BoundingVolume bound = spatial.getWorldBound();
 
@@ -1027,12 +1044,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Построение выделения указанной геометрии.
-     *
-     * @param spatial геометря которую надо выделить.
-     * @return выделение этой геометрии.
+     * Build selection grid for the geometry.
      */
-    private Spatial buildGeometrySelection(final Geometry spatial) {
+    private Spatial buildGeometrySelection(@NotNull final Geometry spatial) {
 
         final Mesh mesh = spatial.getMesh();
         if (mesh == null) return null;
@@ -1045,44 +1059,44 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @param showGrid отображать ли сетку.
+     * @param showGrid the flag of visibility grid.
      */
-    private void setShowGrid(boolean showGrid) {
+    private void setShowGrid(final boolean showGrid) {
         this.showGrid = showGrid;
     }
 
     /**
-     * @param showSelection отображать ли выбранный узел.
+     * @param showSelection the flag of visibility selection.
      */
-    private void setShowSelection(boolean showSelection) {
+    private void setShowSelection(final boolean showSelection) {
         this.showSelection = showSelection;
     }
 
     /**
-     * @return отображать ли сетку.
+     * @return true if the grid is showed.
      */
     private boolean isShowGrid() {
         return showGrid;
     }
 
     /**
-     * @return отображать ли выбранный узел.
+     * @return true if the selection is showed.
      */
     private boolean isShowSelection() {
         return showSelection;
     }
 
     /**
-     * Обновленине видимости выделения.
+     * Update the showing selection.
      */
     public void updateShowSelection(final boolean showSelection) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateShowSelectionImpl(showSelection));
     }
 
     /**
-     * Процесс обновления видимости выделения.
+     * The process of updating the showing selection.
      */
-    private void updateShowSelectionImpl(boolean showSelection) {
+    private void updateShowSelectionImpl(final boolean showSelection) {
         if (isShowSelection() == showSelection) return;
 
         final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
@@ -1098,14 +1112,14 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обновление отображения сетки.
+     * Update the showing grid.
      */
     public void updateShowGrid(final boolean showGrid) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateShowGridImpl(showGrid));
     }
 
     /**
-     * Процесс обновления отображения сетки.
+     * The process of updating the showing grid.
      */
     private void updateShowGridImpl(final boolean showGrid) {
         if (isShowGrid() == showGrid) return;
@@ -1123,29 +1137,29 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Добавление кастомного фона.
+     * Add the custom sky.
      */
-    public void addCustomSky(final Spatial sky) {
+    public void addCustomSky(@NotNull final Spatial sky) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> addCustomSkyImpl(sky));
     }
 
     /**
-     * Процесс добавление кастомного фона.
+     * The process of adding the custom sky.
      */
-    private void addCustomSkyImpl(final Spatial sky) {
+    private void addCustomSkyImpl(@NotNull final Spatial sky) {
         final Array<Spatial> customSky = getCustomSky();
         customSky.add(sky);
     }
 
     /**
-     * Добавление источника света.
+     * Add the light.
      */
-    public void addLight(final Light light) {
+    public void addLight(@NotNull final Light light) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> addLightImpl(light));
     }
 
     /**
-     * Процесс добавление источника света.
+     * The process of adding the light.
      */
     private void addLightImpl(final Light light) {
 
@@ -1157,6 +1171,12 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         newModel.setLocalScale(0.02F);
 
         final Geometry geometry = NodeUtils.findGeometry(newModel);
+
+        if (geometry == null) {
+            LOGGER.warning(this, "not found geometry for the node " + newModel);
+            return;
+        }
+
         final Material material = geometry.getMaterial();
         material.setColor("Color", light.getColor());
 
@@ -1171,31 +1191,31 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Удаление кастомного фона.
+     * Remove the custom sky.
      */
-    public void removeCustomSky(final Spatial sky) {
+    public void removeCustomSky(@NotNull final Spatial sky) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> removeCustomSkyImpl(sky));
     }
 
     /**
-     * Процесс удаления кастомного фона.
+     * The process of removing the custom sky.
      */
-    private void removeCustomSkyImpl(final Spatial sky) {
+    private void removeCustomSkyImpl(@NotNull final Spatial sky) {
         final Array<Spatial> customSky = getCustomSky();
         customSky.slowRemove(sky);
     }
 
     /**
-     * Удаление источника света.
+     * Remove the light.
      */
-    public void removeLight(final Light light) {
+    public void removeLight(@NotNull final Light light) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> removeLightImpl(light));
     }
 
     /**
-     * Процесс удаления источника света.
+     * The process of removing the light.
      */
-    private void removeLightImpl(final Light light) {
+    private void removeLightImpl(@NotNull final Light light) {
 
         EditorLightControl control = null;
 
@@ -1217,7 +1237,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обновить цвето-пробу.
+     * Update the light probe.
      */
     public void updateLightProbe() {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
@@ -1232,14 +1252,20 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Завершение трансформации модели.
+     * Finish the transformation of the model.
      */
     private void endTransform() {
         if (!isActiveTransform()) return;
 
+        final Transform originalTransform = getOriginalTransform();
         final Spatial toTransform = getToTransform();
 
-        final Transform oldValue = getOriginalTransform().clone();
+        if (originalTransform == null || toTransform == null) {
+            LOGGER.warning(this, "not found originalTransform or toTransform");
+            return;
+        }
+
+        final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
         final int index = GeomUtils.getIndex(getCurrentModel(), toTransform);
@@ -1257,11 +1283,9 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * Обработка попытки начать трансформацию.
+     * Start transformation.
      */
     public boolean startTransform() {
-        if (getCollisionPlane() == null) return false;
-
         updateTransformCenter();
 
         final Camera camera = EDITOR.getCamera();
@@ -1305,16 +1329,16 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
     }
 
     /**
-     * @param toTransform объект на трансформацию.
+     * @param toTransform the object to transform.
      */
-    private void setToTransform(final Spatial toTransform) {
+    private void setToTransform(@Nullable final Spatial toTransform) {
         this.toTransform = toTransform;
     }
 
     /**
-     * @param transformCenter центр трансформации.
+     * @param transformCenter the center of transformation.
      */
-    private void setTransformCenter(final Transform transformCenter) {
+    private void setTransformCenter(@Nullable final Transform transformCenter) {
         this.transformCenter = transformCenter;
     }
 

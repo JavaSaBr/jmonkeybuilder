@@ -13,6 +13,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 
+import org.jetbrains.annotations.NotNull;
+
 import rlib.util.dictionary.ConcurrentObjectDictionary;
 import rlib.util.dictionary.DictionaryFactory;
 
@@ -54,7 +56,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
     }
 
     @Override
-    public void initialize(AppStateManager stateManager, Application application) {
+    public void initialize(@NotNull AppStateManager stateManager, @NotNull Application application) {
         super.initialize(stateManager, application);
 
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();

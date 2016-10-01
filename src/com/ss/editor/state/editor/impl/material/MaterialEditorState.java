@@ -23,6 +23,8 @@ import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
+import org.jetbrains.annotations.NotNull;
+
 import rlib.geom.util.AngleUtils;
 
 /**
@@ -222,7 +224,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     @Override
-    public void initialize(final AppStateManager stateManager, final Application application) {
+    public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
 
         final ModelType currentModelType = getCurrentModelType();

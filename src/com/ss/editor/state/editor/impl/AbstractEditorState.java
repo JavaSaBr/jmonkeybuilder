@@ -23,6 +23,8 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.editor.FileEditor;
 
+import org.jetbrains.annotations.NotNull;
+
 import rlib.function.BooleanFloatConsumer;
 import rlib.function.FloatFloatConsumer;
 import rlib.logging.Logger;
@@ -236,6 +238,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     /**
      * @return редактор использующий этот стейт.
      */
+    @NotNull
     protected T getFileEditor() {
         return fileEditor;
     }
@@ -417,7 +420,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     @Override
-    public void initialize(final AppStateManager stateManager, final Application application) {
+    public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
 
         final Node rootNode = EDITOR.getRootNode();
