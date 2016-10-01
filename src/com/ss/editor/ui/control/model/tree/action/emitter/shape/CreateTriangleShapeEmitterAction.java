@@ -31,8 +31,6 @@ public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitter
     @NotNull
     @Override
     protected Mesh createMesh() {
-        final TriangleEmitterShape shape = new TriangleEmitterShape();
-        shape.init(1);
-        return shape;
+        return new TriangleEmitterShape(1);
     }
 }
