@@ -1,12 +1,12 @@
 package com.ss.editor.config;
 
 /**
- * Обработчик изменения конфигурации по переданным аргументам.
+ * Parser the configuration from command-line arguments.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class CommandLineConfig {
 
-    public static void args(String[] args) {
+    public static void args(final String[] args) {
     }
 }

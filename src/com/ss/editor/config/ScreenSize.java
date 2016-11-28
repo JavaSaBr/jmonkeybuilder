@@ -11,9 +11,9 @@ import rlib.util.dictionary.ObjectDictionary;
 import static java.lang.Math.max;
 
 /**
- * Перечисление возможных разрешений экрана.
+ * The class for presentations a screen size.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class ScreenSize {
 
@@ -21,17 +21,17 @@ public class ScreenSize {
     public static final int SCREEN_SIZE_MIN_WIDTH = 1244;
 
     /**
-     * Таблица доступных расширений экрана.
+     * The table with available screen sizes.
      */
     private static final ObjectDictionary<String, ScreenSize> SCREEN_SIZE_TABLE = DictionaryFactory.newObjectDictionary();
 
     /**
-     * Список доступных разрешений.
+     * The array with available screen sizes.
      */
     private static ScreenSize[] values;
 
     /**
-     * Инициализация списка доступных разрешений экрана.
+     * Init the available screen sizes.
      */
     public static void init() {
 
@@ -68,8 +68,8 @@ public class ScreenSize {
     }
 
     /**
-     * @param size строкое представление разрешения.
-     * @return ссылка на инстанс размера.
+     * @param size the string presentation of the screen size.
+     * @return the screen size.
      */
     public static ScreenSize sizeOf(final String size) {
         final ScreenSize screenSize = SCREEN_SIZE_TABLE.get(size);
@@ -77,29 +77,29 @@ public class ScreenSize {
     }
 
     /**
-     * @return список доступных разрешений.
+     * @return the array with available screen sizes.
      */
     public static ScreenSize[] values() {
         return values;
     }
 
     /**
-     * Строковый вид.
+     * The string presentation.
      */
     private final String size;
 
     /**
-     * Ширина экрана.
+     * The width of the screen.
      */
     private final int width;
 
     /**
-     * Высота кэрана.
+     * The height of the screen.
      */
     private final int height;
 
     /**
-     * Сортировщик размеров экрана.
+     * The comparator for sorting by screen size.
      */
     private static final ArrayComparator<ScreenSize> COMPARATOR = (first, second) -> {
 
@@ -110,7 +110,7 @@ public class ScreenSize {
     };
 
     /**
-     * Поддерживается ли полный экран.
+     * Is support fullscreen.
      */
     private final boolean fullscreenSupported;
 
@@ -144,14 +144,14 @@ public class ScreenSize {
     }
 
     /**
-     * @return высота.
+     * @return the height of the screen.
      */
     public final int getHeight() {
         return height;
     }
 
     /**
-     * @return ширина.
+     * @return the width of the screen.
      */
     public final int getWidth() {
         return width;
@@ -167,7 +167,7 @@ public class ScreenSize {
     }
 
     /**
-     * @return поддерживается ли полноэкранный режим.
+     * @return is support fullscreen.
      */
     public boolean isFullscreenSupported() {
         return fullscreenSupported;

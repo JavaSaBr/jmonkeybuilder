@@ -11,9 +11,9 @@ import rlib.util.Util;
 import rlib.util.VarTable;
 
 /**
- * Класс для конфигурирование игры.
+ * The configuration of this application.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public abstract class Config {
 
@@ -25,22 +25,22 @@ public abstract class Config {
     public static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
     /**
-     * Путь к папке с программой.
+     * The path to application folder.
      */
     public static final String PROJECT_PATH;
 
     /**
-     * Отображать дебаг.
+     * Flag is for showing debug.
      */
     public static final boolean DEV_DEBUG;
 
     /**
-     * Отображать ли дебаг от JFX.
+     * Flag is for showing debug of the JavaFX.
      */
     public static final boolean DEV_DEBUG_JFX;
 
     /**
-     * Активация PBR.
+     * Flag is for activating the PBR.
      */
     public static final boolean ENABLE_PBR;
 
@@ -56,14 +56,14 @@ public abstract class Config {
     }
 
     /**
-     * Получение папки для размещения лога.
+     * @return the path to the folder for writing log files.
      */
     public static Path getFolderForLog() {
         return getAppFolderInUserHome().resolve("log");
     }
 
     /**
-     * Получение папки для размещения даных в папке пользователя.
+     * The path to the folder for storing data in the user home.
      */
     public static Path getAppFolderInUserHome() {
         final String userHome = System.getProperty("user.home");

@@ -30,9 +30,9 @@ import rlib.logging.LoggerManager;
 import static rlib.util.Util.safeGet;
 
 /**
- * Набор настроек, изменяемых пользователем.
+ * The user configuration of this editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public final class EditorConfig implements AssetEventListener {
 
@@ -55,7 +55,7 @@ public final class EditorConfig implements AssetEventListener {
 
     public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
 
-    private static EditorConfig instance;
+    private static volatile EditorConfig instance;
 
     public static EditorConfig getInstance() {
 
@@ -71,52 +71,52 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Список последних открываемых asset.
+     * The list of last opened asset folders.
      */
     private final List<String> lastOpenedAssets;
 
     /**
-     * Используемое разрешение экрана.
+     * The current screen size.
      */
     private volatile ScreenSize screenSize;
 
     /**
-     * Точка белого на фильтре экспозиции.
+     * The current white point for the tone map filter.
      */
     private volatile Vector3f toneMapFilterWhitePoint;
 
     /**
-     * Уровень анизатропной фильтрации.
+     * The current level of the anisotropy.
      */
     private volatile int anisotropy;
 
     /**
-     * Включено ли FXAA.
+     * Flag is for enabling the FXAA.
      */
     private volatile boolean fxaa;
 
     /**
-     * Включен ли полноэкранный режим.
+     * Flag is for enabling the fullscreen.
      */
     private volatile boolean fullscreen;
 
     /**
-     * Включен ли режим гамма коррекции.
+     * Flag is for enabling the gamma correction.
      */
     private volatile boolean gammaCorrection;
 
     /**
-     * Включен ли фильтр экспозиции.
+     * Flag is for enabling the tone map filter.
      */
     private volatile boolean toneMapFilter;
 
     /**
-     * Текущий выбранный Asset.
+     * The current asset folder.
      */
     private volatile Path currentAsset;
 
     /**
-     * Путь к папке с дополнительным classpath.
+     * The path to the folder with additional classpath.
      */
     private volatile Path additionalClasspath;
 
@@ -125,14 +125,14 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @return список последних открываемых asset.
+     * @return The list of last opened asset folders.
      */
     public List<String> getLastOpenedAssets() {
         return lastOpenedAssets;
     }
 
     /**
-     * Запоминание открытияуказанного Asset.
+     * Add the new last opened asset folder.
      */
     public void addOpenedAsset(final Path currentAsset) {
 
@@ -161,56 +161,56 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @param anisotropy уровень анизатропной фильтрации.
+     * @param anisotropy the new level of the anisotropy.
      */
-    public void setAnisotropy(int anisotropy) {
+    public void setAnisotropy(final int anisotropy) {
         this.anisotropy = anisotropy;
     }
 
     /**
-     * @return уровень анизатропной фильтрации.
+     * @return the current level of the anisotropy.
      */
     public int getAnisotropy() {
         return anisotropy;
     }
 
     /**
-     * @param fxaa включено ли FXAA.
+     * @param fxaa flag is for enabling the FXAA.
      */
-    public void setFXAA(boolean fxaa) {
+    public void setFXAA(final boolean fxaa) {
         this.fxaa = fxaa;
     }
 
     /**
-     * @return включено ли FXAA.
+     * @return flag is for enabling the FXAA.
      */
     public boolean isFXAA() {
         return fxaa;
     }
 
     /**
-     * @return используемое разрешение экрана.
+     * @return the current screen size.
      */
     public ScreenSize getScreenSize() {
         return screenSize;
     }
 
     /**
-     * @param screenSize используемое разрешение экрана.
+     * @param screenSize the new screen size.
      */
     public void setScreenSize(final ScreenSize screenSize) {
         this.screenSize = screenSize;
     }
 
     /**
-     * @return текущий выбранный Asset.
+     * @return the current asset folder.
      */
     public Path getCurrentAsset() {
         return currentAsset;
     }
 
     /**
-     * @param currentAsset текущий выбранный Asset.
+     * @param currentAsset the new current asset folder.
      */
     public void setCurrentAsset(final Path currentAsset) {
         this.currentAsset = currentAsset;
@@ -231,63 +231,63 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @param fullscreen включен ли полноэкранный режим.
+     * @param fullscreen flag is for enabling the fullscreen.
      */
     public void setFullscreen(final boolean fullscreen) {
         this.fullscreen = fullscreen;
     }
 
     /**
-     * @return включен ли полноэкранный режим.
+     * @return flag is for enabling the fullscreen.
      */
     public boolean isFullscreen() {
         return fullscreen;
     }
 
     /**
-     * @return включен ли режим гамма коррекции.
+     * @return flag is for enabling the gamma correction.
      */
     public boolean isGammaCorrection() {
         return gammaCorrection;
     }
 
     /**
-     * @param gammaCorrection включен ли режим гамма коррекции.
+     * @param gammaCorrection flag is for enabling the gamma correction.
      */
     public void setGammaCorrection(final boolean gammaCorrection) {
         this.gammaCorrection = gammaCorrection;
     }
 
     /**
-     * @return включен ли фильтр экспозиции.
+     * @return flag is for enabling the tone map filter.
      */
     public boolean isToneMapFilter() {
         return toneMapFilter;
     }
 
     /**
-     * @param toneMapFilter включен ли фильтр экспозиции.
+     * @param toneMapFilter flag is for enabling the tone map filter.
      */
     public void setToneMapFilter(final boolean toneMapFilter) {
         this.toneMapFilter = toneMapFilter;
     }
 
     /**
-     * @return точка белого на фильтре экспозиции.
+     * @return the current white point for the tone map filter.
      */
     public Vector3f getToneMapFilterWhitePoint() {
         return toneMapFilterWhitePoint;
     }
 
     /**
-     * @param toneMapFilterWhitePoint точка белого на фильтре экспозиции.
+     * @param toneMapFilterWhitePoint the new white point for the tone map filter.
      */
     public void setToneMapFilterWhitePoint(final Vector3f toneMapFilterWhitePoint) {
         this.toneMapFilterWhitePoint = toneMapFilterWhitePoint;
     }
 
     /**
-     * @return настройки движка.
+     * @return the settings for JME.
      */
     public AppSettings getSettings() {
 
@@ -325,7 +325,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Инициализация.
+     * Load user settings.
      */
     private void init() {
 
@@ -373,7 +373,7 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Сохранения настроек.
+     * Save these settings.
      */
     public void save() {
 
