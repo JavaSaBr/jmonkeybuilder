@@ -3,9 +3,9 @@ package com.ss.editor.state.editor;
 import com.jme3.app.state.AppState;
 
 /**
- * Интерфейс для реализации 3D части редактора.
+ * The interface for implementing 3D part of the an editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public interface EditorState extends AppState {
 }

@@ -11,6 +11,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.shader.Shader;
 import com.ss.editor.FileExtensions;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,20 +25,20 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Набор утильных методов для работы с материалами.
+ * The class with utility methods for working with {@link Material}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MaterialUtils {
 
     /**
-     * Есть ли у указанного материала указанный шейдер.
+     * Check the material on containing the shader.
      *
-     * @param material проверяемый материал.
-     * @param file     файл шейдера.
-     * @return есть ли у этого материтала такой шейдер.
+     * @param material the material for checking.
+     * @param file     the file of the shader.
+     * @return true if the material contains the shader.
      */
-    public static boolean containsShader(final Material material, final Path file) {
+    public static boolean containsShader(@NotNull final Material material, @NotNull final Path file) {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
@@ -47,47 +49,41 @@ public class MaterialUtils {
     }
 
     /**
-     * Есть ли у указанного описания материала указанный шейдер.
+     * Check the material definition on containing the shader.
      *
-     * @param materialDef описание материала.
-     * @param assetPath   путь к шейдеру.
-     * @return есть ли у этого описания такой шейдер.
+     * @param materialDef the material definition.
+     * @param assetPath   the path of the shader.
+     * @return true if the material definition contains the shader.
      */
-    public static boolean containsShader(final MaterialDef materialDef, final String assetPath) {
+    public static boolean containsShader(@NotNull final MaterialDef materialDef, @NotNull final String assetPath) {
 
         final List<TechniqueDef> defaultTechniques = materialDef.getTechniqueDefs("Default");
 
         for (final TechniqueDef technique : defaultTechniques) {
-
             final EnumMap<Shader.ShaderType, String> shaderProgramNames = technique.getShaderProgramNames();
-
-            if (shaderProgramNames.containsValue(assetPath)) {
-                return true;
-            }
+            if (shaderProgramNames.containsValue(assetPath)) return true;
         }
 
         return false;
     }
 
     /**
-     * Является ли указанный файл шейдером.
-     *
-     * @param path путь файла.
-     * @return является ли файл шейдером.
+     * @param path the file path.
+     * @return true if the file is shader.
      */
-    public static boolean isShaderFile(final Path path) {
+    public static boolean isShaderFile(@NotNull final Path path) {
         final String extension = FileUtils.getExtension(path);
         return FileExtensions.GLSL_FRAGMENT.equals(extension) || FileExtensions.GLSL_VERTEX.equals(extension);
 
     }
 
     /**
-     * Обновление первого материала до второго.
+     * Update the first material to the second material.
      *
-     * @param toUpdate материал на обновление.
-     * @param material материал до которого надо обновить.
+     * @param toUpdate the material for updating.
+     * @param material the target material.
      */
-    public static void updateTo(final Material toUpdate, final Material material) {
+    public static void updateTo(@NotNull final Material toUpdate, @NotNull final Material material) {
 
         final Collection<MatParam> oldParams = new ArrayList<>(toUpdate.getParams());
         oldParams.forEach(matParam -> {
@@ -107,12 +103,12 @@ public class MaterialUtils {
     }
 
     /**
-     * Миграция второго материала на первый.
+     * Migrate the material to second material.
      *
-     * @param toMigrate материал на миграцию.
-     * @param material  материал с которого надо мигрировать.
+     * @param toMigrate the material for migrating.
+     * @param material  the target material.
      */
-    public static void migrateTo(final Material toMigrate, final Material material) {
+    public static void migrateTo(@NotNull final Material toMigrate, @NotNull final Material material) {
 
         final MaterialDef materialDef = toMigrate.getMaterialDef();
         final Collection<MatParam> actualParams = material.getParams();
@@ -132,7 +128,7 @@ public class MaterialUtils {
         additionalRenderState.set(material.getAdditionalRenderState());
     }
 
-    public static void cleanUpMaterialParams(final Spatial spatial) {
+    public static void cleanUpMaterialParams(@NotNull final Spatial spatial) {
 
         final AtomicInteger counter = new AtomicInteger();
 
@@ -143,7 +139,7 @@ public class MaterialUtils {
         materials.forEach(material -> cleanUp(material, counter));
     }
 
-    private static void cleanUp(final Material material, final AtomicInteger counter) {
+    private static void cleanUp(@NotNull final Material material, @NotNull final AtomicInteger counter) {
         final Collection<MatParam> params = new ArrayList<>(material.getParams());
         params.forEach(matParam -> {
             if (matParam.getValue() == null) {
@@ -152,16 +148,10 @@ public class MaterialUtils {
         });
     }
 
-    private static void addMaterialsTo(final Array<Material> materials, final Spatial spatial) {
-
+    private static void addMaterialsTo(@NotNull final Array<Material> materials, @NotNull final Spatial spatial) {
         if (spatial instanceof Geometry) {
-
             final Material material = ((Geometry) spatial).getMaterial();
-
-            if (material != null) {
-                materials.add(material);
-            }
-
+            if (material != null) materials.add(material);
         } else if (spatial instanceof Node) {
             final List<Spatial> children = ((Node) spatial).getChildren();
             children.forEach(child -> addMaterialsTo(materials, child));

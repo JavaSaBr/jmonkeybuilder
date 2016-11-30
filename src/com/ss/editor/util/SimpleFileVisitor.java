@@ -7,32 +7,32 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * Упрощенная версия файлового визитера.
+ * The simple file visitor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public interface SimpleFileVisitor extends FileVisitor<Path> {
 
     @Override
-    public default FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    default FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public default FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    default FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
         visit(file, attrs);
         return FileVisitResult.CONTINUE;
     }
 
-    public void visit(Path file, BasicFileAttributes attrs);
+    void visit(final Path file, final BasicFileAttributes attrs);
 
     @Override
-    public default FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+    default FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public default FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+    default FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 }

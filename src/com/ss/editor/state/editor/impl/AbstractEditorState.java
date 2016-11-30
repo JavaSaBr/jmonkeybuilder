@@ -1,5 +1,7 @@
 package com.ss.editor.state.editor.impl;
 
+import static org.apache.commons.lang3.ArrayUtils.toArray;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
@@ -24,6 +26,7 @@ import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.editor.FileEditor;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import rlib.function.BooleanFloatConsumer;
 import rlib.function.FloatFloatConsumer;
@@ -32,12 +35,10 @@ import rlib.logging.LoggerManager;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
-import static org.apache.commons.lang3.ArrayUtils.toArray;
-
 /**
  * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public abstract class AbstractEditorState<T extends FileEditor> extends AbstractAppState implements EditorState {
 
@@ -105,68 +106,68 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Обработчики акшен событий.
+     * The table of action handlers.
      */
     private final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers;
 
     /**
-     * Обработчики аналоговых событий.
+     * The table of analog handlers.
      */
     private final ObjectDictionary<String, FloatFloatConsumer> analogHandlers;
 
     /**
-     * Слушатели сцены.
+     * The scene listeners.
      */
     private final ActionListener actionListener;
     private final AnalogListener analogListener;
 
     /**
-     * Редактор использующий этот стейт.
+     * The owner editor.
      */
     private final T fileEditor;
 
     /**
-     * Опциональная камера для сцены.
+     * The editor camera.
      */
     private final EditorCamera editorCamera;
 
     /**
-     * Источник света для chase камеры.
+     * The light of the camera.
      */
     private final DirectionalLight lightForCamera;
 
     /**
-     * Рутовый узел.
+     * The root node.
      */
     private final Node stateNode;
 
     /**
-     * Нажат ли сейчас control.
+     * Is control pressed.
      */
     private boolean controlDown;
 
     /**
-     * Нажат ли сейчас alt.
+     * Is alt pressed.
      */
     private boolean altDown;
 
     /**
-     * Нажат ли сейчас Shift.
+     * Is shift pressed.
      */
     private boolean shiftDown;
 
     /**
-     * Нажата ли сейчас левая кнопка мыши.
+     * Is left button pressed.
      */
     private boolean buttonLeftDown;
 
     /**
-     * Нажата ли сейчас правая кнопка мыши.
+     * Is right button pressed.
      */
     private boolean buttonRightDown;
 
     /**
-     * Нажат ли сейчас колесик.
+     * Is middle button pressed.
      */
     private boolean buttonMiddleDown;
 
@@ -190,7 +191,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Регистрация обработчиков акшен событий.
+     * Register action handlers.
      */
     protected void registerActionHandlers(final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
@@ -226,7 +227,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Регистрация обработчиков аналоговых событий.
+     * Register analog handlers.
      */
     protected void registerAnalogHandlers(final ObjectDictionary<String, FloatFloatConsumer> analogHandlers) {
         analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXCamera(value * 30F));
@@ -236,7 +237,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * @return редактор использующий этот стейт.
+     * @return the owner editor.
      */
     @NotNull
     protected T getFileEditor() {
@@ -244,7 +245,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Обработка перемещения мышки над 3D областью
+     * Handle analog events.
      */
     protected void onAnalogImpl(final String name, final float value, final float tpf) {
         final FloatFloatConsumer handler = analogHandlers.get(name);
@@ -255,6 +256,8 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
 
         final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera == null) return;
+
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
@@ -269,6 +272,8 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
 
         final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera == null) return;
+
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
@@ -284,7 +289,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Обработка нажатий кнопок над областью редактора.
+     * Handle action events.
      */
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
 
@@ -309,112 +314,114 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Повторонение отмененной операции.
+     * Redo last operation.
      */
     protected void redo() {
     }
 
 
     /**
-     * отмена последней операции.
+     * Undo last operation.
      */
     protected void undo() {
     }
 
     /**
-     * @return нажат ли сейчас alt.
+     * @return true if alt is pressed.
      */
     protected boolean isAltDown() {
         return altDown;
     }
 
     /**
-     * @param altDown нажат ли сейчас alt.
+     * @param altDown the alt is pressed.
      */
     protected void setAltDown(final boolean altDown) {
         this.altDown = altDown;
     }
 
     /**
-     * @return нажат ли сейчас control.
+     * @return true if control is pressed.
      */
     protected boolean isControlDown() {
         return controlDown;
     }
 
     /**
-     * @param controlDown нажат ли сейчас control.
+     * @param controlDown the control is pressed.
      */
     protected void setControlDown(final boolean controlDown) {
         this.controlDown = controlDown;
     }
 
     /**
-     * @return нажат ли сейчас Shift.
+     * @return true if shift is pressed.
      */
     protected boolean isShiftDown() {
         return shiftDown;
     }
 
     /**
-     * @param shiftDown нажат ли сейчас Shift.
+     * @param shiftDown the shift is pressed.
      */
     protected void setShiftDown(final boolean shiftDown) {
         this.shiftDown = shiftDown;
     }
 
     /**
-     * @param buttonLeftDown нажата ли сейчас левая кнопка мыши.
+     * @param buttonLeftDown the left button is pressed.
      */
     protected void setButtonLeftDown(final boolean buttonLeftDown) {
         this.buttonLeftDown = buttonLeftDown;
     }
 
     /**
-     * @param buttonMiddleDown нажат ли сейчас колесик.
+     * @param buttonMiddleDown the middle button is pressed.
      */
     protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
         this.buttonMiddleDown = buttonMiddleDown;
     }
 
     /**
-     * @param buttonRightDown нажата ли сейчас правая кнопка мыши.
+     * @param buttonRightDown the right button is pressed.
      */
     protected void setButtonRightDown(final boolean buttonRightDown) {
         this.buttonRightDown = buttonRightDown;
     }
 
     /**
-     * @return нажата ли сейчас левая кнопка мыши.
+     * @return true if left button is pressed.
      */
     protected boolean isButtonLeftDown() {
         return buttonLeftDown;
     }
 
     /**
-     * @return нажат ли сейчас колесик.
+     * @return true if middle button is pressed.
      */
     protected boolean isButtonMiddleDown() {
         return buttonMiddleDown;
     }
 
     /**
-     * @return нажата ли сейчас правая кнопка мыши.
+     * @return true if right button is pressed.
      */
     protected boolean isButtonRightDown() {
         return buttonRightDown;
     }
 
     /**
-     * @return рутовый узел.
+     * @return the root node.
      */
+    @NotNull
     protected Node getStateNode() {
         return stateNode;
     }
 
     /**
-     * @return опциональная камера для сцены.
+     * @return the editor camera.
      */
+    @Nullable
     protected EditorCamera getEditorCamera() {
         return editorCamera;
     }
@@ -440,7 +447,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Проверка и в случае отсутствия, добавление необходимых триггеров.
+     * Check and update all triggers.
      */
     protected void checkAndAddMappings(final InputManager inputManager) {
         TRIGGERS.forEach(inputManager, AbstractEditorState::addMapping);
@@ -456,14 +463,14 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Регистрация аналогового слушателя.
+     * Register the analog listener.
      */
     protected void registerAnalogListener(final InputManager inputManager) {
         inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS, MOUSE_Y_AXIS_NEGATIVE);
     }
 
     /**
-     * Регистрация слушателя нажатий.
+     * Register the action listener.
      */
     protected void registerActionListener(final InputManager inputManager) {
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
@@ -490,14 +497,14 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * Нужна ли камера для этой части.
+     * @return true if need an editor camera.
      */
     protected boolean needEditorCamera() {
         return false;
     }
 
     /**
-     * Нужен ли источник света для камеры.
+     * @return true if need a camera light.
      */
     protected boolean needLightForCamera() {
         return false;
@@ -517,7 +524,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * @return источник света для камеры.
+     * @return the light for the camera.
      */
     protected DirectionalLight createLightForCamera() {
         final DirectionalLight directionalLight = new DirectionalLight();
@@ -526,14 +533,14 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * @return узел на который должна смотреть камера.
+     * @return the node for the camera.
      */
     protected Node getNodeForCamera() {
         return stateNode;
     }
 
     /**
-     * @return источник света для камеры.
+     * @return the light for the camera.
      */
     protected DirectionalLight getLightForCamera() {
         return lightForCamera;
@@ -553,7 +560,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
     }
 
     /**
-     * @return нужно ли обновлять направление света.
+     * @return true if need to update the camera light.
      */
     protected boolean needUpdateCameraLight() {
         return false;

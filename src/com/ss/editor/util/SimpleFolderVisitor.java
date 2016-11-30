@@ -6,20 +6,20 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * Упрощенная версия визитера по папкам.
+ * The simple folder visitor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public interface SimpleFolderVisitor extends SimpleFileVisitor {
 
     @Override
-    public default FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    default FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
         visit(dir, attrs);
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public default FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    default FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 }

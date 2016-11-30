@@ -1,5 +1,7 @@
 package com.ss.editor.config;
 
+import static rlib.util.Util.safeGet;
+
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
@@ -9,7 +11,12 @@ import com.ss.editor.Editor;
 import com.ss.editor.EditorContext;
 import com.ss.editor.util.EditorUtil;
 
-import java.awt.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
@@ -26,8 +33,6 @@ import javax.imageio.ImageIO;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
-
-import static rlib.util.Util.safeGet;
 
 /**
  * The user configuration of this editor.
@@ -127,6 +132,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return The list of last opened asset folders.
      */
+    @NotNull
     public List<String> getLastOpenedAssets() {
         return lastOpenedAssets;
     }
@@ -134,7 +140,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * Add the new last opened asset folder.
      */
-    public void addOpenedAsset(final Path currentAsset) {
+    public void addOpenedAsset(@NotNull final Path currentAsset) {
 
         final String filePath = currentAsset.toString();
 
@@ -146,15 +152,15 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     @Override
-    public void assetDependencyNotFound(final AssetKey parentKey, final AssetKey dependentAssetKey) {
+    public void assetDependencyNotFound(@Nullable final AssetKey parentKey, @Nullable final AssetKey dependentAssetKey) {
     }
 
     @Override
-    public void assetLoaded(final AssetKey key) {
+    public void assetLoaded(@NotNull final AssetKey key) {
     }
 
     @Override
-    public void assetRequested(final AssetKey key) {
+    public void assetRequested(@NotNull final AssetKey key) {
         if (key instanceof TextureKey) {
             ((TextureKey) key).setAnisotropy(getAnisotropy());
         }
@@ -191,6 +197,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return the current screen size.
      */
+    @NotNull
     public ScreenSize getScreenSize() {
         return screenSize;
     }
@@ -198,13 +205,14 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param screenSize the new screen size.
      */
-    public void setScreenSize(final ScreenSize screenSize) {
+    public void setScreenSize(@NotNull final ScreenSize screenSize) {
         this.screenSize = screenSize;
     }
 
     /**
      * @return the current asset folder.
      */
+    @Nullable
     public Path getCurrentAsset() {
         return currentAsset;
     }
@@ -212,13 +220,14 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param currentAsset the new current asset folder.
      */
-    public void setCurrentAsset(final Path currentAsset) {
+    public void setCurrentAsset(@Nullable final Path currentAsset) {
         this.currentAsset = currentAsset;
     }
 
     /**
      * @return путь к папке с дополнительным classpath.
      */
+    @Nullable
     public Path getAdditionalClasspath() {
         return additionalClasspath;
     }
@@ -226,7 +235,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param additionalClasspath путь к папке с дополнительным classpath.
      */
-    public void setAdditionalClasspath(final Path additionalClasspath) {
+    public void setAdditionalClasspath(@Nullable final Path additionalClasspath) {
         this.additionalClasspath = additionalClasspath;
     }
 
@@ -275,6 +284,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return the current white point for the tone map filter.
      */
+    @NotNull
     public Vector3f getToneMapFilterWhitePoint() {
         return toneMapFilterWhitePoint;
     }
@@ -282,7 +292,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param toneMapFilterWhitePoint the new white point for the tone map filter.
      */
-    public void setToneMapFilterWhitePoint(final Vector3f toneMapFilterWhitePoint) {
+    public void setToneMapFilterWhitePoint(@NotNull final Vector3f toneMapFilterWhitePoint) {
         this.toneMapFilterWhitePoint = toneMapFilterWhitePoint;
     }
 

@@ -1,5 +1,7 @@
 package com.ss.editor.util;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.asset.AssetKey;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
@@ -16,12 +18,10 @@ import java.util.function.Predicate;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
- * Набор утильнымх методов для работы с узлами геометрии.
+ * The class with utility methods for working with {@link Node}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class NodeUtils {
 
@@ -55,13 +55,10 @@ public class NodeUtils {
     }
 
     /**
-     * Сбор всей геометрии использующих указанный материал.
+     * Collect all geometries from the asset path.
      */
-    public static void addGeometryWithMaterial(final Spatial spatial, final Array<Geometry> container, final String assetPath) {
-
-        if (StringUtils.isEmpty(assetPath)) {
-            return;
-        }
+    public static void addGeometryWithMaterial(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container, @NotNull final String assetPath) {
+        if (StringUtils.isEmpty(assetPath)) return;
 
         if (spatial instanceof Geometry) {
 
@@ -87,13 +84,10 @@ public class NodeUtils {
     }
 
     /**
-     * Сбор всех объектов использующих указанный asset path.
+     * Collect all geometries from the asset path.
      */
-    public static void addSpatialWithAssetPath(final Spatial spatial, final Array<Spatial> container, final String assetPath) {
-
-        if (StringUtils.isEmpty(assetPath)) {
-            return;
-        }
+    public static void addSpatialWithAssetPath(@NotNull final Spatial spatial, @NotNull final Array<Spatial> container, @NotNull final String assetPath) {
+        if (StringUtils.isEmpty(assetPath)) return;
 
         final AssetKey key = spatial.getKey();
 
@@ -113,9 +107,9 @@ public class NodeUtils {
     }
 
     /**
-     * Сбор всей геометрии.
+     * Collect all geometries.
      */
-    public static void addGeometry(final Spatial spatial, final Array<Geometry> container) {
+    public static void addGeometry(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container) {
 
         if (spatial instanceof Geometry) {
             container.add((Geometry) spatial);
@@ -132,16 +126,14 @@ public class NodeUtils {
     }
 
     /**
-     * Сбор всех источников света.
+     * Collect all lights.
      */
-    public static void addLight(final Spatial spatial, final Array<Light> container) {
+    public static void addLight(@NotNull final Spatial spatial, @NotNull final Array<Light> container) {
 
         final LightList lightList = spatial.getLocalLightList();
         lightList.forEach(container::add);
 
-        if (!(spatial instanceof Node)) {
-            return;
-        }
+        if (!(spatial instanceof Node)) return;
 
         final Node node = (Node) spatial;
 

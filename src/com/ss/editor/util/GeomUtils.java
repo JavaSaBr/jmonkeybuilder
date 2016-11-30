@@ -13,47 +13,46 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Набор утильных методов по работе с геометрией.
+ * The class with utility methods for working with geometry.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class GeomUtils {
 
     /**
-     * Получение вектора вверх для указанного рзаворота.
+     * Get the UP vector from the rotation.
      */
-    public static Vector3f getUp(final Quaternion rotation, final Vector3f store) {
+    @NotNull
+    public static Vector3f getUp(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
         return rotation.getRotationColumn(1, store);
     }
 
     /**
-     * Получение вектора влево для указанного разворота.
+     * Get the Left vector from the rotation.
      */
-    public static Vector3f getLeft(final Quaternion rotation, final Vector3f store) {
+    @NotNull
+    public static Vector3f getLeft(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
         return rotation.getRotationColumn(0, store);
     }
 
     /**
-     * Получение вектора направления для указанного разворота.
+     * Get the Direction vector from the rotation.
      */
-    public static Vector3f getDirection(final Quaternion rotation, final Vector3f store) {
+    @NotNull
+    public static Vector3f getDirection(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
         return rotation.getRotationColumn(2, store);
     }
 
     /**
-     * Получение индекса в структуре модели указанной ее части.
+     * Get the index of the object in the model.
      */
-    public static int getIndex(final Spatial model, final Object object) {
+    public static int getIndex(@NotNull final Spatial model, @NotNull final Object object) {
 
         Spatial parent = model;
         int parentIndex = 0;
 
         while (parent != null) {
-
-            if (Objects.equals(parent, object)) {
-                return parentIndex;
-            }
-
+            if (Objects.equals(parent, object)) return parentIndex;
             parent = parent.getParent();
             parentIndex--;
         }
@@ -63,21 +62,21 @@ public class GeomUtils {
         }
 
         final AtomicInteger counter = new AtomicInteger(0);
-
         final Node node = (Node) model;
 
         final List<Spatial> children = node.getChildren();
 
         for (final Spatial child : children) {
-            if (getIndex(child, object, counter)) {
-                return counter.get();
-            }
+            if (getIndex(child, object, counter)) return counter.get();
         }
 
         return -1;
     }
 
-    private static boolean getIndex(final Spatial model, final Object object, final AtomicInteger counter) {
+    /**
+     * Get the index of the object in the model.
+     */
+    private static boolean getIndex(@NotNull final Spatial model, @NotNull final Object object, @NotNull final AtomicInteger counter) {
         counter.incrementAndGet();
 
         if (Objects.equals(model, object)) {
@@ -154,18 +153,14 @@ public class GeomUtils {
     }
 
     /**
-     * Проверка возможности переноса части одной модели в указанный узел.
+     * @return true if the spatial can be attached to the node.
      */
-    public static boolean canAttach(final Node node, final Spatial spatial) {
+    public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial) {
 
         Spatial parent = node;
 
         while (parent != null) {
-
-            if (parent == spatial) {
-                return false;
-            }
-
+            if (parent == spatial) return false;
             parent = parent.getParent();
         }
 

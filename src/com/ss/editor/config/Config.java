@@ -4,6 +4,8 @@ import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -58,6 +60,7 @@ public abstract class Config {
     /**
      * @return the path to the folder for writing log files.
      */
+    @NotNull
     public static Path getFolderForLog() {
         return getAppFolderInUserHome().resolve("log");
     }
@@ -65,6 +68,7 @@ public abstract class Config {
     /**
      * The path to the folder for storing data in the user home.
      */
+    @NotNull
     public static Path getAppFolderInUserHome() {
         final String userHome = System.getProperty("user.home");
         return Paths.get(userHome, SS_FOLDER_IN_USER_HOME);
