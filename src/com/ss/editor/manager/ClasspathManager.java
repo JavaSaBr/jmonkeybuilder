@@ -1,5 +1,7 @@
 package com.ss.editor.manager;
 
+import static rlib.util.array.ArrayFactory.toArray;
+
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
@@ -15,8 +17,6 @@ import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.Util;
 import rlib.util.array.Array;
-
-import static rlib.util.array.ArrayFactory.toArray;
 
 /**
  * Менеджер по управлению classpath.

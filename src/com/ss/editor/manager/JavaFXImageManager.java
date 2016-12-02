@@ -7,7 +7,7 @@ import com.ss.editor.ui.Icons;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiReader;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;

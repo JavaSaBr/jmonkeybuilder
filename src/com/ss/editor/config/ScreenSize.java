@@ -1,14 +1,16 @@
 package com.ss.editor.config;
 
-import java.awt.*;
+import static java.lang.Math.max;
+
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
-
-import static java.lang.Math.max;
 
 /**
  * The class for presentations a screen size.

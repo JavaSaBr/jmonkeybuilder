@@ -1,5 +1,11 @@
 package com.ss.editor.model;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sqrt;
+import static rlib.geom.util.AngleUtils.degreeToRadians;
+import static rlib.geom.util.AngleUtils.radiansToDegree;
+
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -21,12 +27,6 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.Editor;
 
 import java.io.IOException;
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.sqrt;
-import static rlib.geom.util.AngleUtils.degreeToRadians;
-import static rlib.geom.util.AngleUtils.radiansToDegree;
 
 /**
  * Реализация камеры редактора. Базируется на com.jme3.input.ChaseCamera.

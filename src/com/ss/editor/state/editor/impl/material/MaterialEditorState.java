@@ -1,5 +1,7 @@
 package com.ss.editor.state.editor.impl.material;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -10,7 +12,7 @@ import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -18,6 +20,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.util.SkyFactory;
+import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.state.editor.impl.AbstractEditorState;
@@ -28,9 +31,9 @@ import org.jetbrains.annotations.NotNull;
 import rlib.geom.util.AngleUtils;
 
 /**
- * Реализация 3D части редактирования материала.
+ * The implementation the 3D part of the {@link MaterialFileEditor}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor> {
 
@@ -50,37 +53,37 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     };
 
     /**
-     * Тестовый бокс.
+     * The test box.
      */
     private final Geometry testBox;
 
     /**
-     * Тестовая сфера.
+     * The test sphere.
      */
     private final Geometry testSphere;
 
     /**
-     * Тестовая плоскость.
+     * The test quad.
      */
     private final Geometry testQuad;
 
     /**
-     * Узел для размещения тестовой модели.
+     * The model node.
      */
     private Node modelNode;
 
     /**
-     * Текущий режим.
+     * The current model mode.
      */
     private ModelType currentModelType;
 
     /**
-     * Активирован ли свет камеры.
+     * THe flag of enabling light.
      */
     private boolean lightEnabled;
 
     /**
-     * Кол-во кадров.
+     * The count of frmes.
      */
     private int frame;
 
@@ -105,13 +108,13 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
         final DirectionalLight light = getLightForCamera();
         light.setDirection(LIGHT_DIRECTION);
 
-        final EditorCamera editorCamera = getEditorCamera();
+        final EditorCamera editorCamera = requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
     }
 
     /**
-     * Активая узла с моделями.
+     * Attach model node to state node.
      */
     private void attachModelNode() {
         final Node stateNode = getStateNode();
@@ -119,35 +122,35 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     /**
-     * @return тестовый бокс.
+     * @return the test box.
      */
     private Geometry getTestBox() {
         return testBox;
     }
 
     /**
-     * @return тестовая плоскость.
+     * @return the test quad.
      */
     private Geometry getTestQuad() {
         return testQuad;
     }
 
     /**
-     * @return тестовая сфера.
+     * @return the test sphere.
      */
     private Geometry getTestSphere() {
         return testSphere;
     }
 
     /**
-     * Обновление материала.
+     * Update the {@link Material}.
      */
     public void updateMaterial(final Material material) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterialImpl(material));
     }
 
     /**
-     * Процесс обновления материала в потоке редаткора.
+     * Update the {@link Material} in the {@link EditorThread}.
      */
     private void updateMaterialImpl(final Material material) {
 
@@ -162,21 +165,21 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     /**
-     * @return узел для размещения тестовой модели.
+     * @return the model node.
      */
     private Node getModelNode() {
         return modelNode;
     }
 
     /**
-     * Смена режима отображения.
+     * Change the {@link ModelType}.
      */
     public void changeMode(final ModelType modelType) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeModeImpl(modelType));
     }
 
     /**
-     * Процесс смены в потоке редактора.
+     * Change the {@link ModelType} in the {@link EditorThread}.
      */
     private void changeModeImpl(final ModelType modelType) {
 
@@ -202,16 +205,16 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     /**
-     * Смена типа Bucket.
+     * Change the {@link Bucket}.
      */
-    public void changeBucketType(final RenderQueue.Bucket bucket) {
+    public void changeBucketType(final Bucket bucket) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeBucketTypeImpl(bucket));
     }
 
     /**
-     * Процесс смены типа Bucket.
+     * Change the {@link Bucket} in the {@link EditorThread}.
      */
-    private void changeBucketTypeImpl(final RenderQueue.Bucket bucket) {
+    private void changeBucketTypeImpl(final Bucket bucket) {
 
         final Geometry testQuad = getTestQuad();
         testQuad.setQueueBucket(bucket);
@@ -266,42 +269,42 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     }
 
     /**
-     * @return текущий режим.
+     * @return the current model mode.
      */
     private ModelType getCurrentModelType() {
         return currentModelType;
     }
 
     /**
-     * @param currentModelType текущий режим.
+     * @param currentModelType the current model mode.
      */
     private void setCurrentModelType(final ModelType currentModelType) {
         this.currentModelType = currentModelType;
     }
 
     /**
-     * @return активирован ли свет камеры.
+     * @return true if the light is enabled.
      */
     private boolean isLightEnabled() {
         return lightEnabled;
     }
 
     /**
-     * @param lightEnabled активирован ли свет камеры.
+     * @param lightEnabled true if the light is enabled.
      */
-    private void setLightEnabled(boolean lightEnabled) {
+    private void setLightEnabled(final boolean lightEnabled) {
         this.lightEnabled = lightEnabled;
     }
 
     /**
-     * Обновление активированности света от камеры.
+     * Update the light in the scene.
      */
     public void updateLightEnabled(final boolean enabled) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightEnabledImpl(enabled));
     }
 
     /**
-     * Процесс обновление света от камеры.
+     * Update the light in the scene in the {@link EditorThread}.
      */
     private void updateLightEnabledImpl(boolean enabled) {
         if (enabled == isLightEnabled()) return;

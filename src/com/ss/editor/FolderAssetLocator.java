@@ -1,5 +1,7 @@
 package com.ss.editor;
 
+import static java.nio.file.Files.newInputStream;
+
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
@@ -10,8 +12,6 @@ import com.ss.editor.config.EditorConfig;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static java.nio.file.Files.newInputStream;
 
 /**
  * The implementation of {@link AssetLocator} for loading the data from asset folder.

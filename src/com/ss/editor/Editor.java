@@ -1,5 +1,7 @@
 package com.ss.editor;
 
+import static java.nio.file.Files.createDirectories;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
@@ -59,8 +61,6 @@ import rlib.logging.impl.FolderFileListener;
 import rlib.manager.InitializeManager;
 import rlib.util.ArrayUtils;
 import rlib.util.Util;
-
-import static java.nio.file.Files.createDirectories;
 
 /**
  * The implementation of the {@link com.jme3.app.Application} of this Editor.

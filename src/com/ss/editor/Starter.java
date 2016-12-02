@@ -1,13 +1,13 @@
 package com.ss.editor;
 
+import static java.nio.file.Files.newOutputStream;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import static java.nio.file.Files.newOutputStream;
 
 /**
  * The started of this application.

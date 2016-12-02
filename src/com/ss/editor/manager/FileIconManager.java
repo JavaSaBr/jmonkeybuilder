@@ -1,5 +1,8 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.lang.String.valueOf;
+
 import com.ss.editor.FileExtensions;
 import com.ss.editor.util.EditorUtil;
 
@@ -15,9 +18,6 @@ import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
-
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.lang.String.valueOf;
 
 /**
  * Менеджер по работе с иконками файлов.

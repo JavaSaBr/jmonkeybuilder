@@ -1,5 +1,13 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static rlib.util.ArrayUtils.contains;
+import static rlib.util.ArrayUtils.move;
+import static rlib.util.Util.safeGet;
+import static rlib.util.array.ArrayFactory.toArray;
+
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.EditorThread;
@@ -39,14 +47,6 @@ import rlib.util.Util;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
-
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-import static rlib.util.ArrayUtils.contains;
-import static rlib.util.ArrayUtils.move;
-import static rlib.util.Util.safeGet;
-import static rlib.util.array.ArrayFactory.toArray;
 
 /**
  * Менеджер по работе с ресурсами.
