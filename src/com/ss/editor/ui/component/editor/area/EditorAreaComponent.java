@@ -1,7 +1,10 @@
 package com.ss.editor.ui.component.editor.area;
 
+import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
+
 import com.jme3.app.state.AppStateManager;
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
@@ -45,12 +48,10 @@ import rlib.util.array.Array;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
-import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
-
 /**
- * Компонент для реализации области редакторов.
+ * The component for containing editors.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
@@ -64,15 +65,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Таблица открытых редакторов.
+     * The tale of opened editors.
      */
     private final ObjectDictionary<Path, Tab> openedEditors;
 
     /**
-     * Игнорировать изменения набора открытых файлов.
+     * The flag for ignoring changing the list of opened editors.
      */
     private boolean ignoreOpenedFiles;
 
@@ -119,7 +121,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Обработка смены папки  ассет.
+     * Handle changing the current asset folder.
      */
     private void processEvent(final ChangedCurrentAssetFolderEvent event) {
         setIgnoreOpenedFiles(true);
@@ -136,21 +138,21 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * @param ignoreOpenedFiles игнорировать изменения набора открытых файлов.
+     * @param ignoreOpenedFiles the flag for ignoring changing the list of opened editors.
      */
     private void setIgnoreOpenedFiles(final boolean ignoreOpenedFiles) {
         this.ignoreOpenedFiles = ignoreOpenedFiles;
     }
 
     /**
-     * @return игнорировать изменения набора открытых файлов.
+     * @return the flag for ignoring changing the list of opened editors.
      */
     private boolean isIgnoreOpenedFiles() {
         return ignoreOpenedFiles;
     }
 
     /**
-     * Процесс обработки переименования файлаю
+     * Handle renaming a file.
      */
     private void processEvent(final RenamedFileEvent event) {
 
@@ -179,7 +181,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Процесс обработки перемещения файлаю
+     * Handle moving a file.
      */
     private void processEvent(final MovedFileEvent event) {
 
@@ -196,14 +198,14 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * @return таблица открытых редакторов.
+     * @return the tale of opened editors.
      */
     private ObjectDictionary<Path, Tab> getOpenedEditors() {
         return openedEditors;
     }
 
     /**
-     * Обработка запроса на конвертирование файла.
+     * Handle the request for converting a file.
      */
     private void processConvertFile(final RequestedConvertFileEvent event) {
 
@@ -217,7 +219,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Обработка запроса на создание нового файла.
+     * Handle the request for creating a file.
      */
     private void processCreateFile(final RequestedCreateFileEvent event) {
 
@@ -231,7 +233,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Обработка закрытия редакторов.
+     * Handle the request for closing an Editor..
      */
     private void processChangeTabs(final ListChangeListener.Change<? extends Tab> change) {
         if (!change.next()) return;
@@ -258,10 +260,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Обработка смены отображаемого редактора.
+     * Handle changing an active editor.
      *
-     * @param prevTab предыдущий редактор.
-     * @param newTab  новый редактор.
+     * @param prevTab the previous editor.
+     * @param newTab  the new editor.
      */
     private void processShowEditor(final Tab prevTab, final Tab newTab) {
 
@@ -286,7 +288,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Процесс открытия файла.
+     * Handle the request for opening a file.
      */
     private void processOpenFile(final RequestedOpenFileEvent event) {
 
@@ -301,7 +303,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
@@ -319,7 +321,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         } catch (final Exception e) {
             EditorUtil.handleException(null, this, e);
             EXECUTOR_MANAGER.addFXTask(() -> {
-                final EditorFXScene scene = EDITOR.getScene();
+                final EditorFXScene scene = JFX_APPLICATION.getScene();
                 scene.decrementLoading();
             });
             return;
@@ -331,7 +333,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Добавление нового открытого редактора в область.
+     * Add and open new editor.
      */
     public void addEditor(final FileEditor editor, final boolean needShow) {
 
@@ -359,7 +361,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
         openedEditors.put(editFile, tab);
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.decrementLoading();
 
         if (isIgnoreOpenedFiles()) {

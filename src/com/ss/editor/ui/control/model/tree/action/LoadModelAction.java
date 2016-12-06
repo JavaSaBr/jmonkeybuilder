@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -20,9 +23,6 @@ import java.nio.file.Path;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
-
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
 
 /**
  * The implementation of the {@link AbstractNodeAction} for loading the {@link Spatial} to the
@@ -50,7 +50,7 @@ public class LoadModelAction extends AbstractNodeAction {
 
     @Override
     protected void process() {
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
         dialog.setExtensionFilter(MODEL_EXTENSIONS);
         dialog.show(scene.getWindow());

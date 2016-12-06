@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
@@ -21,6 +22,7 @@ public abstract class AbstractNodeAction extends MenuItem {
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractNodeAction.class);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**

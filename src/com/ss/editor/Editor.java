@@ -2,7 +2,6 @@ package com.ss.editor;
 
 import static java.nio.file.Files.createDirectories;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -23,9 +22,11 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RendererException;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
-import com.jme3x.jfx.JmeFxContainer;
+import com.jme3.system.NativeLibraryLoader;
+import com.jme3x.jfx.injfx.JmeToJFXApplication;
+import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
+import com.jme3x.jfx.util.JFXPlatform;
 import com.jme3x.jfx.util.os.OperatingSystem;
-import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.config.ScreenSize;
@@ -36,13 +37,10 @@ import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.ui.builder.EditorFXSceneBuilder;
-import com.ss.editor.ui.cursor.UbuntuCursorProvider;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
-import com.sun.javafx.cursor.CursorType;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 
@@ -50,16 +48,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Level;
 
-import rlib.concurrent.atomic.AtomicInteger;
 import rlib.logging.Logger;
 import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
 import rlib.logging.impl.FolderFileListener;
 import rlib.manager.InitializeManager;
-import rlib.util.ArrayUtils;
 import rlib.util.Util;
 
 /**
@@ -67,7 +64,7 @@ import rlib.util.Util;
  *
  * @author JavaSaBr
  */
-public class Editor extends SimpleApplication {
+public class Editor extends JmeToJFXApplication {
 
     private static final Logger LOGGER = LoggerManager.getLogger(Editor.class);
 
@@ -85,22 +82,11 @@ public class Editor extends SimpleApplication {
         return EDITOR;
     }
 
-    public static void start(final String[] args) {
-
-        // fix of the fonts render
-        System.setProperty("prism.lcdtext", "false");
-        System.setProperty("prism.text", "t2k");
-
-        // some settings for the render of JavaFX
-        System.setProperty("prism.vsync", "false");
-        System.setProperty("javafx.animation.fullspeed", "false");
-        System.setProperty("prism.cacheshapes", "true");
+    public static Editor prepareToStart() {
 
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
         }
-
-        CommandLineConfig.args(args);
 
         configureLogger();
         try {
@@ -114,12 +100,13 @@ public class Editor extends SimpleApplication {
             EDITOR.setShowSettings(false);
             EDITOR.setDisplayStatView(false);
             EDITOR.setDisplayFps(false);
-            EDITOR.start();
 
         } catch (final Exception e) {
             LOGGER.warning(e);
             throw new RuntimeException(e);
         }
+
+        return EDITOR;
     }
 
     protected static void configureLogger() {
@@ -159,15 +146,6 @@ public class Editor extends SimpleApplication {
      */
     private LightProbe lightProbe;
 
-    /**
-     * The container of JavaFX stage.
-     */
-    private JmeFxContainer fxContainer;
-
-    /**
-     * The JavaFX scene.
-     */
-    private EditorFXScene scene;
 
     /**
      * The processor of post effects.
@@ -185,14 +163,8 @@ public class Editor extends SimpleApplication {
     private ToneMapFilter toneMapFilter;
 
     private Editor() {
+        super(JFXApplication.getStage());
         this.lock = new StampedLock();
-    }
-
-    /**
-     * @return the JavaFX scene.
-     */
-    public EditorFXScene getScene() {
-        return scene;
     }
 
     /**
@@ -225,21 +197,20 @@ public class Editor extends SimpleApplication {
         return super.getCamera();
     }
 
-    /**
-     * @return the container of JavaFX stage.
-     */
-    public JmeFxContainer getFxContainer() {
-        return fxContainer;
-    }
-
     @Override
-    public void restart() {
+    public void start() {
 
-        final JmeFxContainer fxContainer = getFxContainer();
-        final AtomicInteger waitCount = fxContainer.getWaitCount();
-        waitCount.incrementAndGet();
+        if ("LWJGL".equals(settings.getAudioRenderer())) {
+            NativeLibraryLoader.loadNativeLibrary("openal-lwjgl3", true);
+        }
 
-        super.restart();
+        NativeLibraryLoader.loadNativeLibrary("lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("glfw-lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("jemalloc-lwjgl3", true);
+        NativeLibraryLoader.loadNativeLibrary("jinput", true);
+        NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
+
+        super.start();
     }
 
     @Override
@@ -266,10 +237,6 @@ public class Editor extends SimpleApplication {
         guiNode.detachAllChildren();
 
         ExecutorManager.getInstance();
-
-        final UbuntuCursorProvider cursorDisplayProvider = new UbuntuCursorProvider(this, assetManager, inputManager);
-
-        ArrayUtils.forEach(CursorType.values(), cursorDisplayProvider::setupCursor);
 
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
@@ -305,16 +272,34 @@ public class Editor extends SimpleApplication {
             stateManager.attach(environmentCamera);
         }
 
-        JmeFxContainer.setDebug(Config.DEV_DEBUG_JFX);
-
-        fxContainer = JmeFxContainer.install(this, guiNode, cursorDisplayProvider);
-        scene = EditorFXSceneBuilder.build(fxContainer);
-
         UIUtils.overrideTooltipBehavior(1000, 3000, 500);
 
         SvgImageLoaderFactory.install();
 
         createProbe();
+
+        final EditorFXScene scene = buildAndWaitScene();
+
+        JmeToJFXIntegrator.bind(this, scene.getImageView(), EditorThread::new);
+    }
+
+    protected EditorFXScene buildAndWaitScene() {
+
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final CountDownLatch downLatch = new CountDownLatch(1);
+
+        JFXPlatform.runInFXThread(() -> {
+            jfxApplication.buildScene();
+            downLatch.countDown();
+        });
+
+        try {
+            downLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return jfxApplication.getScene();
     }
 
     /**
@@ -364,11 +349,11 @@ public class Editor extends SimpleApplication {
     public void update() {
 
         final InputManager inputManager = getInputManager();
-        final JmeFxContainer fxContainer = getFxContainer();
+        //final JmeFxContainer fxContainer = getFxContainer();
 
-        if (fxContainer.isVisibleCursor() != inputManager.isCursorVisible()) {
-            fxContainer.setVisibleCursor(inputManager.isCursorVisible());
-        }
+        //if (fxContainer.isVisibleCursor() != inputManager.isCursorVisible()) {
+        //fxContainer.setVisibleCursor(inputManager.isCursorVisible());
+        //}
 
         final long stamp = syncLock();
         try {
@@ -377,7 +362,6 @@ public class Editor extends SimpleApplication {
             editorThreadExecutor.execute();
 
             if (paused) return;
-            if (fxContainer.isNeedWriteToJME()) fxContainer.writeToJME();
 
             super.update();
 

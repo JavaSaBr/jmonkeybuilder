@@ -52,7 +52,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction {
 
     @Override
     protected void process() {
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
         dialog.setExtensionFilter(MODEL_EXTENSIONS);
         dialog.show(scene.getWindow());

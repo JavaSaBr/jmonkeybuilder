@@ -125,7 +125,7 @@
 
         <fx:application id="fxApplication"
                         name="jME3-SpaceShift-Editor"
-                        mainClass="com.ss.editor.Starter"
+                        mainClass="com.ss.editor.JFXApplication"
                         toolkit="fx"
                         version="0.7.6"
                 />

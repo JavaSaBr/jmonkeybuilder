@@ -19,14 +19,15 @@ import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 import com.ss.editor.util.GeomUtils;
+import com.ss.editor.util.LocalObjects;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
 /**
- * Реализация контролера манипулятора перемещения.
+ * THe class for implementing the moving control.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class MoveToolControl extends AbstractControl implements TransformControl {
 
@@ -39,12 +40,12 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Контролер редактора сцены.
+     * The scene editor controller.
      */
     private final SceneEditorControl editorControl;
 
     /**
-     * Поскость для определения перемещения.
+     * The collision plane.
      */
     private final Node collisionPlane;
 
@@ -54,14 +55,14 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     }
 
     /**
-     * @return плоскость для определения перемещения.
+     * @return the collision plane.
      */
     private Node getCollisionPlane() {
         return collisionPlane;
     }
 
     /**
-     * @return контролер редактора сцены.
+     * @return the scene editor controller.
      */
     private SceneEditorControl getEditorControl() {
         return editorControl;
@@ -192,13 +193,12 @@ public class MoveToolControl extends AbstractControl implements TransformControl
         collisionPlane.collideWith(ray, results);
 
         final CollisionResult result = results.getClosestCollision();
+        final Transform transformCenter = editorControl.getTransformCenter();
 
         // Complex trigonometry formula based on sin(angle)*distance
-        if (result != null) {
+        if (result != null && transformCenter != null) {
 
             Vector3f contactPoint = result.getContactPoint(); // get a point of collisionPlane
-
-            final Transform transformCenter = editorControl.getTransformCenter();
 
             //set new deltaVector if it's not set
             if (editorControl.getDeltaVector() == null) {
@@ -257,15 +257,17 @@ public class MoveToolControl extends AbstractControl implements TransformControl
      */
     private void translateObjects(final float distance, final PickedAxis pickedAxis, final Spatial toTransform, final Transform selectedCenter) {
 
+        final LocalObjects local = LocalObjects.get();
+        final Vector3f temp = local.getNextVector();
         final Vector3f currentLocation = selectedCenter.getTranslation();
         final Quaternion currentRotation = selectedCenter.getRotation();
 
         if (pickedAxis == PickedAxis.X) {
-            currentLocation.addLocal(GeomUtils.getLeft(currentRotation, null).mult(distance));
+            currentLocation.addLocal(GeomUtils.getLeft(currentRotation, temp).mult(distance));
         } else if (pickedAxis == PickedAxis.Y) {
-            currentLocation.addLocal(GeomUtils.getUp(currentRotation, null).mult(distance));
+            currentLocation.addLocal(GeomUtils.getUp(currentRotation, temp).mult(distance));
         } else if (pickedAxis == PickedAxis.Z) {
-            currentLocation.addLocal(GeomUtils.getDirection(currentRotation, null).mult(distance));
+            currentLocation.addLocal(GeomUtils.getDirection(currentRotation, temp).mult(distance));
         }
 
         toTransform.setLocalTranslation(currentLocation);

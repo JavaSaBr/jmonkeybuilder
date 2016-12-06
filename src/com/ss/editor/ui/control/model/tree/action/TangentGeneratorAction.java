@@ -9,9 +9,9 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация действия по генерации тангетов используя старый алгоритм.
+ * The action for generating tangents.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class TangentGeneratorAction extends AbstractNodeAction {
 
@@ -28,7 +28,7 @@ public class TangentGeneratorAction extends AbstractNodeAction {
     @Override
     protected void process() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());
         dialog.show(scene.getWindow());

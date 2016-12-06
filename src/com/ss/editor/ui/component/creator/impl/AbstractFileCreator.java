@@ -1,6 +1,15 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_CANCEL;
+import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_OK;
+import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER;
+import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_CANCEL;
+import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_OK;
+import static javafx.geometry.Pos.CENTER_LEFT;
+import static javafx.geometry.Pos.TOP_CENTER;
+
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
@@ -13,7 +22,7 @@ import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
 
-import java.awt.*;
+import java.awt.Point;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -33,18 +42,10 @@ import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
-import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_CANCEL;
-import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_OK;
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_CANCEL;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_OK;
-import static javafx.geometry.Pos.CENTER_LEFT;
-import static javafx.geometry.Pos.TOP_CENTER;
-
 /**
- * Базовая реализация создателя файловс.
+ * The base implementation of a file creator.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public abstract class AbstractFileCreator extends EditorDialog implements FileCreator {
 
@@ -59,25 +60,26 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Дерево ресурсов.
+     * The resources tree.
      */
     private ResourceTree resourceTree;
 
     /**
-     * Поле для ввода названия файла.
+     * The filed with new file name.
      */
     private TextField fileNameField;
 
     /**
-     * Кнопка создания файла.
+     * The creation button.
      */
     private Button okButton;
 
     /**
-     * Файл на котором было вызвано создание.
+     * The init file.
      */
     private Path initFile;
 
@@ -88,7 +90,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         show(scene.getWindow());
 
         final ResourceTree resourceTree = getResourceTree();
@@ -101,21 +103,21 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     /**
-     * @return дерево ресурсов.
+     * @return the resources tree.
      */
     protected ResourceTree getResourceTree() {
         return resourceTree;
     }
 
     /**
-     * @param initFile файл на котором было вызвано создание.
+     * @param initFile the init file.
      */
     private void setInitFile(final Path initFile) {
         this.initFile = initFile;
     }
 
     /**
-     * @return файл на котором было вызвано создание.
+     * @return the init file.
      */
     private Path getInitFile() {
         return initFile;
@@ -145,7 +147,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     /**
-     * @return выбранный файл в дереве.
+     * @return the selected file in the resources tree.
      */
     protected Path getSelectedFile() {
 
@@ -159,14 +161,14 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     /**
-     * Процесс созадния файла.
+     * The process of creation.
      */
     protected void processCreate() {
         hide();
     }
 
     /**
-     * @return получение создаваемого файла.
+     * @return the file to creating.
      */
     protected Path getFileToCreate() {
 
@@ -178,20 +180,19 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
 
         final Path selectedFile = getSelectedFile();
         final Path directory = Files.isDirectory(selectedFile) ? selectedFile : selectedFile.getParent();
-        final Path toCreate = StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) : directory.resolve(filename + "." + fileExtension);
 
-        return toCreate;
+        return StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) : directory.resolve(filename + "." + fileExtension);
     }
 
     /**
-     * @return расширение создаваемого файла.
+     * @return the file extension.
      */
     protected String getFileExtension() {
         return StringUtils.EMPTY;
     }
 
     /**
-     * Уведомление всех о создании файла.
+     * Notify about the file created.
      */
     protected void notifyFileCreated(final Path createdFile, boolean needSelect) {
     }
@@ -235,14 +236,14 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     /**
-     * @return поле для ввода названия файла.
+     * @return the filed with new file name.
      */
     protected TextField getFileNameField() {
         return fileNameField;
     }
 
     /**
-     * Создание настроек по создаваемогу файлу.
+     * Create settings of the creating file.
      */
     protected void createSettings(final VBox root) {
 
@@ -268,21 +269,21 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     /**
-     * @return текст "название файла"
+     * @return the label text "file name".
      */
     protected String getFileNameLabelText() {
         return Messages.FILE_CREATOR_FILE_NAME_LABEL;
     }
 
     /**
-     * @return кнопка создания файла.
+     * @return the creation button.
      */
     public Button getOkButton() {
         return okButton;
     }
 
     /**
-     * Валидация введенного имени файла.
+     * Validate the inputted name.
      */
     protected void validateFileName() {
 

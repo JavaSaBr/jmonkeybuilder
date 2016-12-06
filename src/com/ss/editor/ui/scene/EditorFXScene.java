@@ -1,5 +1,8 @@
 package com.ss.editor.ui.scene;
 
+import static com.ss.editor.ui.util.UIUtils.fillComponents;
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -8,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -15,44 +19,47 @@ import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.ui.util.UIUtils.fillComponents;
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
- * Реализация сцены редактора для работы JavaFX.
+ * The class implementation of the scene of JavaFX.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class EditorFXScene extends Scene {
 
     /**
-     * Список компонентов в сцене.
+     * The list of components.
      */
     private final Array<ScreenComponent> components;
 
     /**
-     * Контейнер элементов сцены.
+     * The view for drawing JME.
+     */
+    private final ImageView imageView;
+
+    /**
+     * The container of this scene.
      */
     private final StackPane container;
 
     /**
-     * Слой для отображения загрузки.
+     * The loading layer.
      */
     private final VBox loadingLayer;
 
     /**
-     * Счетчик загрузок.
+     * THe loading counter.
      */
     private final AtomicInteger loadingCount;
 
     /**
-     * Анимация загрузки.
+     * THe indicator of loading.
      */
     private ProgressIndicator progressIndicator;
 
-    public EditorFXScene(final Group root) {
-        super(root);
+    public EditorFXScene(final Group root, final double width, final double height) {
+        super(root, width, height);
 
+        this.imageView = new ImageView();
         this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
@@ -60,12 +67,23 @@ public class EditorFXScene extends Scene {
         this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
-        root.getChildren().addAll(container, loadingLayer);
+        root.getChildren().addAll(imageView, container, loadingLayer);
+
+        imageView.setPickOnBounds(true);
+        imageView.fitHeightProperty().bind(heightProperty());
+        imageView.fitWidthProperty().bind(widthProperty());
 
         FXUtils.bindFixedWidth(container, widthProperty());
         FXUtils.bindFixedHeight(container, heightProperty());
         FXUtils.bindFixedWidth(loadingLayer, widthProperty());
         FXUtils.bindFixedHeight(loadingLayer, heightProperty());
+    }
+
+    /**
+     * @return the view for drawing JME.
+     */
+    public ImageView getImageView() {
+        return imageView;
     }
 
     /**

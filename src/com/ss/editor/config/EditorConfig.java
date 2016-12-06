@@ -7,8 +7,8 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
+import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.ss.editor.Editor;
-import com.ss.editor.EditorContext;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -307,14 +307,10 @@ public final class EditorConfig implements AssetEventListener {
 
 
         final AppSettings settings = new AppSettings(true);
-        settings.setRenderer("CUSTOM" + EditorContext.class.getName());
-        settings.setTitle(Config.TITLE + " " + Config.VERSION);
-        settings.setFullscreen(isFullscreen() && screenSize.isFullscreenSupported());
         settings.setResolution(screenSize.getWidth(), screenSize.getHeight());
         settings.setFrequency(displayMode.getRefreshRate());
         settings.setGammaCorrection(isGammaCorrection());
         settings.setResizable(true);
-        settings.setFrameRate(90);
         // settings.putBoolean("GraphicsDebug", true);
 
         try {
@@ -330,6 +326,8 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
+
+        JmeToJFXIntegrator.prepareSettings(settings, displayMode.getRefreshRate());
 
         return settings;
     }

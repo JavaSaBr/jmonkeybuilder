@@ -1,6 +1,11 @@
 package com.ss.editor.ui.builder;
 
-import com.jme3x.jfx.JmeFxContainer;
+import static javafx.geometry.Pos.TOP_CENTER;
+import static javafx.scene.paint.Color.TRANSPARENT;
+import static rlib.ui.util.FXUtils.bindFixedSize;
+
+import com.ss.editor.config.EditorConfig;
+import com.ss.editor.config.ScreenSize;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
@@ -16,51 +21,52 @@ import javafx.scene.Group;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import rlib.ui.util.FXUtils;
 
-import static javafx.geometry.Pos.TOP_CENTER;
-import static javafx.scene.paint.Color.TRANSPARENT;
-import static rlib.ui.util.FXUtils.bindFixedSize;
-
 /**
- * Реализация конструктора UI сцены редактора.
+ * The scene builder for building a scene for the Editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class EditorFXSceneBuilder {
 
     /**
-     * Фаил для переопределения стандартных стилей.
+     * The path to the base CSS styles.
      */
     public static final String CSS_FILE_BASE = "/ui/css/base.css";
 
     /**
-     * Фаил для переопределения чтилей из внешних библиотек.
+     * The path to the external CSS styles.
      */
     public static final String CSS_FILE_EXTERNAL = "/ui/css/external.css";
 
     /**
-     * Фаил для описания стилей для своих id.
+     * The path to the custom ids CSS styles.
      */
     public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.css";
 
     /**
-     * Фаил для описания стилей своих классов.
+     * The path to the custom classes CSS styles.
      */
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.css";
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
-    public static EditorFXScene build(final JmeFxContainer fxContainer) {
+    public static EditorFXScene build(final Stage stage) {
 
         for (final CSSFont font : CSSFont.FONTS) {
             Font.loadFont(EditorUtil.getInputStream(font.getPath()), font.getSize());
         }
 
+        final ScreenSize screenSize = EDITOR_CONFIG.getScreenSize();
+
         final Group root = new Group();
 
-        final EditorFXScene scene = new EditorFXScene(root);
+        final EditorFXScene scene = new EditorFXScene(root, screenSize.getWidth(), screenSize.getHeight());
         scene.setFill(TRANSPARENT);
+        scene.setRoot(root);
 
         final ObservableList<String> stylesheets = scene.getStylesheets();
         stylesheets.add(CSS_FILE_BASE);
@@ -76,7 +82,7 @@ public class EditorFXSceneBuilder {
 
         EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(scene::notifyFinishBuild), 500);
 
-        fxContainer.setScene(scene, root);
+        stage.setScene(scene);
 
         return scene;
     }

@@ -4,6 +4,7 @@ import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -34,6 +35,7 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     protected static final Array<String> MATERIAL_EXTENSIONS = ArrayFactory.newArray(String.class);

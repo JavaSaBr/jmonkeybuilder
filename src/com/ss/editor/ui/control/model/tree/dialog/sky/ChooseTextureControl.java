@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.dialog.sky;
 
-import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
@@ -13,6 +13,7 @@ import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,9 +28,9 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация контрола для выбора текстуры.
+ * The control for choosing textures.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class ChooseTextureControl extends HBox {
 
@@ -47,30 +48,30 @@ public class ChooseTextureControl extends HBox {
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
-     * Подсказка для описания текущей текстуры.
+     * The image channels preview.
      */
     private ImageChannelPreview textureTooltip;
 
     /**
-     * Превью текстуры.
+     * The image preview.
      */
     private ImageView texturePreview;
 
     /**
-     * Надпись с путем текстуры.
+     * The label for the path of texture.
      */
     private Label textureLabel;
 
     /**
-     * Выбранный файл текстуры.
+     * The selected file.
      */
     private Path textureFile;
 
     /**
-     * Обработчик изменений.
+     * The handler.
      */
     private Runnable changeHandler;
 
@@ -80,14 +81,14 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
-     * @param changeHandler обработчик изменений.
+     * @param changeHandler the handler.
      */
     public void setChangeHandler(final Runnable changeHandler) {
         this.changeHandler = changeHandler;
     }
 
     /**
-     * @return обработчик изменений.
+     * tThe handler.
      */
     private Runnable getChangeHandler() {
         return changeHandler;
@@ -137,25 +138,25 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
-     * @return надпись с путем текстуры.
+     * @return the label for the path of texture.
      */
     private Label getTextureLabel() {
         return textureLabel;
     }
 
     /**
-     * @return подсказка для описания текущей текстуры.
+     * @return The image channels preview.
      */
     public ImageChannelPreview getTextureTooltip() {
         return textureTooltip;
     }
 
     /**
-     * процесс добавление текстуры.
+     * Add new texture.
      */
     private void processAdd() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::setTextureFile);
         dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
@@ -163,14 +164,14 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
-     * @return выбранный файл текстуры.
+     * @return the selected file.
      */
     public Path getTextureFile() {
         return textureFile;
     }
 
     /**
-     * @param textureFile выбранный файл текстуры.
+     * @param textureFile the selected file.
      */
     private void setTextureFile(final Path textureFile) {
         this.textureFile = textureFile;
@@ -182,14 +183,14 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
-     * Удаление текстуры.
+     * Remove the texture.
      */
     private void processRemove() {
         setTextureFile(null);
     }
 
     /**
-     * @return превью текстуры.
+     * @return the image preview.
      */
     public ImageView getTexturePreview() {
         return texturePreview;
@@ -212,6 +213,8 @@ public class ChooseTextureControl extends HBox {
         }
 
         final Path assetFile = EditorUtil.getAssetFile(textureFile);
+
+        Objects.requireNonNull(assetFile, "can't find the asset file for the " + textureFile);
 
         textureLabel.setText(assetFile.toString());
         preview.setImage(IMAGE_MANAGER.getTexturePreview(textureFile, 28, 28));

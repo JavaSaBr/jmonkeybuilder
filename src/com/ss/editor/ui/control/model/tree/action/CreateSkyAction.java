@@ -9,9 +9,9 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Действие по созданию нового фона.
+ * The action for creating sky.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class CreateSkyAction extends AbstractNodeAction {
 
@@ -28,7 +28,7 @@ public class CreateSkyAction extends AbstractNodeAction {
     @Override
     protected void process() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final CreateSkyDialog dialog = new CreateSkyDialog(getNode(), getNodeTree());
         dialog.show(scene.getWindow());

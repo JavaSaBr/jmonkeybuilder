@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.dialog.sky;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.Vector3f;
@@ -8,6 +10,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -21,7 +24,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 
-import java.awt.*;
+import java.awt.Point;
 import java.nio.file.Path;
 
 import javafx.collections.FXCollections;
@@ -39,8 +42,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
  * Реализациядиалогапо созданию нового фона.
  *
@@ -55,7 +56,9 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     private static final Insets SETTINGS_OFFSET = new Insets(0, 0, 10, 0);
 
     private static final Point DIALOG_SIZE = new Point(580, 390);
-    public static final Editor EDITOR = Editor.getInstance();
+
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final Editor EDITOR = Editor.getInstance();
 
     private enum SkyType {
         SINGLE_TEXTURE(Messages.CREATE_SKY_DIALOG_SKY_TYPE_SINGLE),
@@ -592,7 +595,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     @Override
     protected void processOk() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(this::createSkyInBackground);
@@ -605,7 +608,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
      */
     private void createSkyInBackground() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         final ModelNodeTree nodeTree = getNodeTree();

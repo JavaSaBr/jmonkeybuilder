@@ -1,6 +1,10 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import static com.ss.editor.ui.css.CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON;
+import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
+
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.Icons;
@@ -27,9 +31,6 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.ui.css.CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON;
-import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
-
 /**
  * The base implementation of an editor.
  *
@@ -41,6 +42,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**

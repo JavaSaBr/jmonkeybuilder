@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
+import static com.ss.editor.util.EditorUtil.getRealFile;
+
 import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -18,8 +20,6 @@ import rlib.util.StringUtils;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.material.ParticlesMaterial;
 
-import static com.ss.editor.util.EditorUtil.getRealFile;
-
 /**
  * The implementation of the {@link ModelPropertyControl} for editing the {@link Material}.
  *
@@ -36,7 +36,7 @@ public class MaterialEmitterPropertyControl extends MaterialModelPropertyEditor<
      */
     protected void processChange() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final ParticlesAssetEditorDialog dialog = new ParticlesAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSIONS);

@@ -1,6 +1,9 @@
 package com.ss.editor.file.converter.impl;
 
+import static rlib.util.FileUtils.containsExtensions;
+
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.event.FXEventManager;
@@ -16,12 +19,10 @@ import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static rlib.util.FileUtils.containsExtensions;
-
 /**
- * Базовая реализация конвертера файлов.
+ * The base implementation of a file converter.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public abstract class AbstractFileConverter implements FileConverter {
 
@@ -31,6 +32,7 @@ public abstract class AbstractFileConverter implements FileConverter {
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     @Override
@@ -58,7 +60,7 @@ public abstract class AbstractFileConverter implements FileConverter {
             throw new IllegalArgumentException("incorrect extension of file " + source);
         }
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> convertImpl(source, destination, Files.exists(destination)));
@@ -68,7 +70,7 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     /**
-     * @return список доступных расширений для конвертации.
+     * @return the list of available extensions.
      */
     protected Array<String> getAvailableExtensions() {
         return EMPTY_ARRAY;
@@ -80,9 +82,9 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     /**
-     * Уведомление всех об изменении файла.
+     * Notify the Editor about file changing.
      *
-     * @param file изменяемый файл.
+     * @param file the changed file.
      */
     protected void notifyFileChanged(final Path file) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileChangedImpl(file));
@@ -95,21 +97,21 @@ public abstract class AbstractFileConverter implements FileConverter {
 
         FX_EVENT_MANAGER.notify(event);
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.decrementLoading();
     }
 
     /**
-     * Уведомление всех об создании файла.
+     * Notify the Editor about file creating.
      *
-     * @param file созданный файл.
+     * @param file the created file.
      */
     protected void notifyFileCreated(final Path file) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(file));
     }
 
     private void notifyFileCreatedImpl(final Path file) {
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.decrementLoading();
     }
 }

@@ -1,5 +1,10 @@
 package com.ss.editor.ui.control.material;
 
+import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
+import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
+import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
+import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.MatParamTexture;
@@ -9,6 +14,7 @@ import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
@@ -35,16 +41,10 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
-
-
 /**
- * Реализация контрола для выбора текстуры.
+ * The implementation of the {@link MaterialParamControl} for editing textures.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
 
@@ -61,25 +61,26 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Подсказка для описания текущей текстуры.
+     * The channels preview of the texture.
      */
     private ImageChannelPreview textureTooltip;
 
     /**
-     * Превью текстуры.
+     * The preview of the texture.
      */
     private ImageView texturePreview;
 
     /**
-     * Чекбокс для установки параметра Repeat.
+     * The checkbox for editing repeat property.
      */
     private CheckBox repeatButton;
 
     /**
-     * Чекбокс дляустановки параметра Flip.
+     * The checkbox for editing flip property.
      */
     private CheckBox flipButton;
 
@@ -146,20 +147,17 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * @return подсказка для описания текущей текстуры.
+     * @return the checkbox for editing repeat property.
      */
     public ImageChannelPreview getTextureTooltip() {
         return textureTooltip;
     }
 
     /**
-     * Процесс изменения параметра Repeat.
+     * Handle changing the repeat property.
      */
     private void processChangeRepeat(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
         final Material material = getMaterial();
@@ -184,13 +182,10 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Процесс изменения флага Flip.
+     * Handle changing the flip property.
      */
     private void processChangeFlip(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
 
@@ -211,11 +206,11 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * процесс добавление текстуры.
+     * The process of adding a new texture.
      */
     private void processAdd() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addTexture);
         dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
@@ -223,9 +218,9 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Добавление новой текстуры.
+     * Add texture by the path.
      *
-     * @param path путь к текстуре.
+     * @param path the path to texture.
      */
     private void addTexture(final Path path) {
 
@@ -263,7 +258,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Удаление текстуры.
+     * Remove the current texture.
      */
     private void processRemove() {
 
@@ -283,21 +278,21 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * @return чекбокс для установки параметра Repeat.
+     * @return the checkbox for editing repeat property.
      */
     private CheckBox getRepeatButton() {
         return repeatButton;
     }
 
     /**
-     * @return чекбокс дляустановки параметра Flip.
+     * @return the checkbox for editing flip property.
      */
     private CheckBox getFlipButton() {
         return flipButton;
     }
 
     /**
-     * @return превью текстуры.
+     * @return the preview of the texture.
      */
     public ImageView getTexturePreview() {
         return texturePreview;

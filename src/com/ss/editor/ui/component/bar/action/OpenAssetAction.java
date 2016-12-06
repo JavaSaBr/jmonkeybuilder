@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
@@ -14,14 +14,14 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
 
 /**
- * Реализация действия по открытию папки с Asset.
+ * The action for opening a new asset folder.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class OpenAssetAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     public OpenAssetAction() {
         super(Messages.EDITOR_BAR_ASSET_OPEN_ASSET);
@@ -29,7 +29,7 @@ public class OpenAssetAction extends MenuItem {
     }
 
     /**
-     * Процесс выбора папки Asset.
+     * The process of selecting an asset folder.
      */
     private void process() {
 
@@ -46,7 +46,7 @@ public class OpenAssetAction extends MenuItem {
             chooser.setInitialDirectory(currentFolder);
         }
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
         if (folder == null) return;
 

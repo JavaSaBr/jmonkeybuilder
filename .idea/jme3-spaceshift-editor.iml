@@ -19,6 +19,7 @@
           <root url="file://$MODULE_DIR$/libs" />
           <root url="file://$MODULE_DIR$/../JME3-JFX/src/main/java" />
           <root url="file://$MODULE_DIR$/../JME3-JFX/src/test/java" />
+          <root url="file://$MODULE_DIR$/../JME3-JFX/src" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />

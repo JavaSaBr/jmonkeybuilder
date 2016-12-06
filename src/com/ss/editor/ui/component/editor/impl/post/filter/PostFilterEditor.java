@@ -1,5 +1,10 @@
 package com.ss.editor.ui.component.editor.impl.post.filter;
 
+import static com.ss.editor.FileExtensions.JME_MATERIAL;
+import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
+import static com.ss.editor.Messages.POST_FILTER_EDITOR_NAME;
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
@@ -11,6 +16,7 @@ import com.ss.editor.serializer.PostFilterViewSerializer;
 import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -51,15 +57,10 @@ import rlib.util.Util;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.FileExtensions.JME_MATERIAL;
-import static com.ss.editor.FileExtensions.POST_FILTER_VIEW;
-import static com.ss.editor.Messages.POST_FILTER_EDITOR_NAME;
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
- * Реализация редактора пост филтров.
+ * The implementation of the {@link FileEditor} for viewing post filters.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
@@ -82,37 +83,37 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Слушатель изменений файлов.
+     * The listener changed files events.
      */
     private final EventHandler<Event> fileChangedHandler;
 
     /**
-     * 3D часть этого редактора.
+     * The 3D part of this editor.
      */
     private final PostFilterEditorState editorState;
 
     /**
-     * Список используемых матералов.
+     * The list used materials.
      */
     private ListView<Material> materialsView;
 
     /**
-     * Кнопка добавления нового материала.
+     * The button for adding a new material.
      */
     private Button addMaterial;
 
     /**
-     * Текущий открытый файл.
+     * The current opened file.
      */
     private PostFilterViewFile currentFile;
 
     /**
-     * Оригинальное содержимое документа.
+     * The original content of the opened fie.
      */
     private String originalContent;
 
     /**
-     * Игнорировать ли слушателей.
+     * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
 
@@ -123,28 +124,28 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * @param ignoreListeners игнорировать ли слушателей.
+     * @param ignoreListeners the flag for ignoring listeners.
      */
-    private void setIgnoreListeners(boolean ignoreListeners) {
+    private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @return игнорировать ли слушателей.
+     * @return the flag for ignoring listeners.
      */
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     /**
-     * @param originalContent оригинальное содержимое документа.
+     * @param originalContent the original content of the opened fie.
      */
-    private void setOriginalContent(String originalContent) {
+    private void setOriginalContent(final String originalContent) {
         this.originalContent = originalContent;
     }
 
     /**
-     * @return оригинальное содержимое документа.
+     * @return the original content of the opened fie.
      */
     private String getOriginalContent() {
         return originalContent;
@@ -186,14 +187,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * @return слушатель изменений файлов.
+     * @return the listener changed files events.
      */
     private EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
     }
 
     /**
-     * Обработка уведомления об изминении файла.
+     * Handle the event of changing a file.
      */
     private void processChangedFile(final FileChangedEvent event) {
 
@@ -202,6 +203,8 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         if (!extension.endsWith(FileExtensions.JME_MATERIAL)) return;
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+        if (assetFile == null) return;
+
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final PostFilterViewFile currentFile = getCurrentFile();
@@ -219,7 +222,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Обработка внесения изменений.
+     * Handle a change.
      */
     private void handleChange() {
 
@@ -248,14 +251,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * @param currentFile текущий открытый файл.
+     * @param currentFile the current opened file.
      */
     private void setCurrentFile(final PostFilterViewFile currentFile) {
         this.currentFile = currentFile;
     }
 
     /**
-     * @return текущий открытый файл.
+     * @return the current opened file.
      */
     private PostFilterViewFile getCurrentFile() {
         return currentFile;
@@ -307,11 +310,11 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Обработка добавления материала.
+     * Handle adding a new material.
      */
     private void processAdd() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSION);
@@ -319,7 +322,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Обработка принятия файла.
+     * Handle dropping a new file.
      */
     private void dragDropped(final DragEvent dragEvent) {
 
@@ -341,7 +344,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Процесс добавления материала.
+     * The process of adding a new material.
      */
     private void addRelativeMaterial(final Path relativize) {
 
@@ -370,7 +373,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Процесс добавления материала.
+     * The process of adding a new material.
      */
     private void addMaterial(final Path file) {
 
@@ -382,7 +385,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * Удаление указанного материала.
+     * Remove the material.
      */
     public void remove(final Material material) {
 
@@ -405,14 +408,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * @return список используемых матералов.
+     * @return the list used materials.
      */
     private ListView<Material> getMaterialsView() {
         return materialsView;
     }
 
     /**
-     * Обработка вхождения в зону.
+     * Handle the drag entering.
      */
     private void dragOver(final DragEvent dragEvent) {
 

@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.property;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+
 import com.jme3.asset.MaterialKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -19,9 +22,6 @@ import java.nio.file.Paths;
 import javafx.scene.control.Label;
 import rlib.util.StringUtils;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-
 /**
  * The implementation of the {@link ModelPropertyControl} for editing the {@link MaterialKey}.
  *
@@ -36,7 +36,7 @@ public class MaterialKeyModelPropertyEditor<T extends Spatial> extends MaterialM
     @Override
     protected void processChange() {
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSIONS);

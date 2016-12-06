@@ -1,6 +1,6 @@
 package com.ss.editor.ui.dialog;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
@@ -9,7 +9,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.File;
 import java.nio.file.Path;
 
@@ -40,7 +40,7 @@ public class OtherSettingsDialog extends EditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(500, 110);
 
-    private static final Editor EDITOR = Editor.getInstance();
+    public static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * Поле для отображения выбранной папки дополнительного classpath.
@@ -162,7 +162,7 @@ public class OtherSettingsDialog extends EditorDialog {
 
         if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
-        final EditorFXScene scene = EDITOR.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
 
         if (folder == null) return;

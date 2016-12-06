@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
@@ -18,16 +18,17 @@ import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 
 /**
- * Реализация действия по переименованию файла.
+ * The action for renaming a file.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class RenameFileAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
-     * Элемент действия.
+     * The action element.
      */
     private final ResourceElement element;
 
@@ -38,12 +39,11 @@ public class RenameFileAction extends MenuItem {
     }
 
     /**
-     * Процесс переименования файла.
+     * The process of this action.
      */
     private void processRename() {
 
-        final Editor editor = Editor.getInstance();
-        final EditorFXScene scene = editor.getScene();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
 
         final Path file = element.getFile();
 
@@ -55,7 +55,7 @@ public class RenameFileAction extends MenuItem {
     }
 
     /**
-     * Проверка введенного имени.
+     * The checking of the new file name.
      */
     private Boolean checkName(final String newFileName) {
         if (!FileUtils.isValidName(newFileName)) return false;
@@ -70,7 +70,7 @@ public class RenameFileAction extends MenuItem {
     }
 
     /**
-     * Процесс переименования.
+     * The process of renaming.
      */
     private void processRename(final String newFileName) {
 
