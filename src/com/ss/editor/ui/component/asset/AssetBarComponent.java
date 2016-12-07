@@ -12,9 +12,9 @@ import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Компонент для реализации тулбара с акшенами.
+ * The toolbar of the {@link AssetComponent} with actions.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class AssetBarComponent extends HBox {
 

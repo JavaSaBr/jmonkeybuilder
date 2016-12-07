@@ -19,23 +19,25 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Компонент для реализации файлового дерева.
+ * The component for working with asset tree.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class AssetComponent extends VBox implements ScreenComponent {
 
     public static final String COMPONENT_ID = "AssetComponent";
 
+    public static final Insets TREE_OFFSET = new Insets(6, 3, 0, 0);
+
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * Компонент тулбара дерева.
+     * The toolbar of this component.
      */
     private AssetBarComponent barComponent;
 
     /**
-     * Компонент файлового дерева.
+     * The resource tree.
      */
     private ResourceTree resourceTree;
 
@@ -51,7 +53,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Обработка перемещения файла.
+     * Handle a moved file.
      */
     private void processEvent(final MovedFileEvent event) {
 
@@ -63,7 +65,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Обработка переименования файла.
+     * Handle a renamed file.
      */
     private void processEvent(final RenamedFileEvent event) {
 
@@ -75,7 +77,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Обработка появления нового файла в Asset.
+     * Handle a created file.
      */
     private void processEvent(final CreatedFileEvent event) {
 
@@ -88,7 +90,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Обработка удаления файла из Asset.
+     * Handle a deleted file.
      */
     private void processEvent(final DeletedFileEvent event) {
 
@@ -99,7 +101,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Обработка смены дериктории Asset.
+     * Handle changing an asset folder.
      */
     private void processChangeAsset() {
 
@@ -112,7 +114,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Обработка обновления компонента.
+     * Handle refreshing.
      */
     private void processRefresh() {
         final ResourceTree resourceTree = getResourceTree();
@@ -120,29 +122,31 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
-     * Создание компонентов.
+     * Create components.
      */
     private void createComponents() {
 
         this.barComponent = new AssetBarComponent();
         this.resourceTree = new ResourceTree(false);
 
-        FXUtils.addToPane(barComponent, this);
+        //FIXME пока он не нужен
+        //FXUtils.addToPane(barComponent, this);
         FXUtils.addToPane(resourceTree, this);
-        FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
+        FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(TREE_OFFSET.getTop()));
+        //FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
 
-        VBox.setMargin(resourceTree, new Insets(0, 3, 0, 0));
+        VBox.setMargin(resourceTree, TREE_OFFSET);
     }
 
     /**
-     * @return компонент тулбара дерева.
+     * @return the toolbar of this component.
      */
     private AssetBarComponent getBarComponent() {
         return barComponent;
     }
 
     /**
-     * @return компонент файлового дерева.
+     * @return the resource tree.
      */
     private ResourceTree getResourceTree() {
         return resourceTree;

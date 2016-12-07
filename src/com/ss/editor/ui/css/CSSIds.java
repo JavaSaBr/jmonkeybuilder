@@ -18,6 +18,8 @@ public interface CSSIds {
     String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
     String ASSET_COMPONENT_RESOURCE_TREE_CELL = "AssetComponentResourceTreeCell";
 
+    String GLOBAL_TOOL_COMPONENT = "GlobalToolComponent";
+
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";

@@ -1,5 +1,7 @@
 package com.ss.editor.ui.builder;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static rlib.ui.util.FXUtils.bindFixedSize;
@@ -7,6 +9,7 @@ import static rlib.ui.util.FXUtils.bindFixedSize;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.config.ScreenSize;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.component.GlobalToolComponent;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
@@ -18,6 +21,7 @@ import com.ss.editor.util.EditorUtil;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -91,11 +95,13 @@ public class EditorFXSceneBuilder {
 
         final EditorBarComponent barComponent = new EditorBarComponent();
 
-        final AssetComponent assetComponent = new AssetComponent();
+        final GlobalToolComponent globalToolComponent = new GlobalToolComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 
-        final SplitPane splitContainer = new SplitPane(assetComponent, editorAreaComponent);
+        final SplitPane splitContainer = new SplitPane(globalToolComponent, editorAreaComponent);
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
+
+        globalToolComponent.addComponent(new AssetComponent(), "Asset");
 
         FXUtils.addToPane(splitContainer, container);
         FXUtils.addToPane(barComponent, container);
@@ -106,9 +112,13 @@ public class EditorFXSceneBuilder {
 
         barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
 
-        final Runnable resizeHandler = () -> splitContainer.setDividerPosition(0, 0.01);
+        scene.widthProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(splitContainer, scene));
+        scene.heightProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(splitContainer, scene));
+    }
 
-        scene.widthProperty().addListener((observableValue, oldValue, newValue) -> resizeHandler.run());
-        scene.heightProperty().addListener((observableValue, oldValue, newValue) -> resizeHandler.run());
+    private static void calcSplitSize(final SplitPane splitContainer, final Scene scene) {
+        final double width = scene.getWidth();
+        final double percent = min(0.5, max(0.1, 300 / width));
+        splitContainer.setDividerPosition(0, percent);
     }
 }

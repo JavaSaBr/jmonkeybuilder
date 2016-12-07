@@ -23,6 +23,9 @@
     -fx-background-color: transparent;
 }
 
+#GlobalToolComponent {
+}
+
 #AssetComponent {
     -fx-background-color: -fx-color-panel-100;
     -fx-alignment: top-center;
@@ -37,7 +40,7 @@
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-alignment: center-right;
+    -fx-alignment: center-left;
 }
 
 #AssetComponentBarButton {
