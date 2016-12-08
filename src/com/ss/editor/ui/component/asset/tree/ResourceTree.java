@@ -1,5 +1,10 @@
 package com.ss.editor.ui.component.asset.tree;
 
+import static com.ss.editor.ui.component.asset.tree.ResourceTreeCell.CELL_FACTORY;
+import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
+import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
+import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
@@ -24,6 +29,7 @@ import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
@@ -44,15 +50,10 @@ import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 import rlib.util.array.ConcurrentArray;
 
-import static com.ss.editor.ui.component.asset.tree.ResourceTreeCell.CELL_FACTORY;
-import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
-
 /**
- * Реализация дерева ресурсов.
+ * THe implementation of a tree with resources of an asset folder.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class ResourceTree extends TreeView<ResourceElement> {
 
@@ -101,32 +102,32 @@ public class ResourceTree extends TreeView<ResourceElement> {
     };
 
     /**
-     * Развернутые элементы.
+     * The list of expanded elements.
      */
     private final ConcurrentArray<ResourceElement> expandedElements;
 
     /**
-     * Выбранные элементы.
+     * The list of selected elements.
      */
     private final ConcurrentArray<ResourceElement> selectedElements;
 
     /**
-     * Функция окрытия файла.
+     * The open resource function.
      */
     private final Consumer<ResourceElement> openFunction;
 
     /**
-     * Режим только чтения.
+     * The flag of read only mode.
      */
     private final boolean readOnly;
 
     /**
-     * Список фильтруемых расширений.
+     * The list of filtered extensions.
      */
     private Array<String> extensionFilter;
 
     /**
-     * Пост загрузачный обработчик.
+     * The post loading handler.
      */
     private Runnable onLoadHandler;
 
@@ -149,42 +150,42 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * @param extensionFilter список фильтруемых расширений.
+     * @param extensionFilter the list of filtered extensions.
      */
-    public void setExtensionFilter(Array<String> extensionFilter) {
+    public void setExtensionFilter(final Array<String> extensionFilter) {
         this.extensionFilter = extensionFilter;
     }
 
     /**
-     * @return список фильтруемых расширений.
+     * @return the list of filtered extensions.
      */
     private Array<String> getExtensionFilter() {
         return extensionFilter;
     }
 
     /**
-     * @param onLoadHandler пост загрузачный обработчик.
+     * @param onLoadHandler the post loading handler.
      */
-    public void setOnLoadHandler(Runnable onLoadHandler) {
+    public void setOnLoadHandler(final Runnable onLoadHandler) {
         this.onLoadHandler = onLoadHandler;
     }
 
     /**
-     * @return пост загрузачныый обработчик.
+     * @return the post loading handler.
      */
     private Runnable getOnLoadHandler() {
         return onLoadHandler;
     }
 
     /**
-     * @return режим только чтения.
+     * @return the flag of read only mode.
      */
     private boolean isReadOnly() {
         return readOnly;
     }
 
     /**
-     * Обновление контекстного меню под указанный элемент.
+     * Update the context menu for the element.
      */
     public void updateContextMenu(final ResourceElement element) {
         if (isReadOnly()) return;
@@ -215,7 +216,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         if (EditorUtil.hasFileInClipboard()) items.add(new PasteFileAction(element));
 
-        if (!currentAsset.equals(file)) {
+        if (!Objects.equals(currentAsset, file)) {
             items.add(new CopyFileAction(element));
             items.add(new CutFileAction(element));
             items.add(new RenameFileAction(element));
@@ -230,9 +231,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Заполнить дерево по новой папке асета.
+     * Fill the tree using the asset folder.
      *
-     * @param assetFolder новая папка ассета.
+     * @param assetFolder the asset folder.
      */
     public void fill(final Path assetFolder) {
 
@@ -245,21 +246,21 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * @return развернутые элементы.
+     * @return the list of expanded elements.
      */
     public ConcurrentArray<ResourceElement> getExpandedElements() {
         return expandedElements;
     }
 
     /**
-     * @return выбранные элементы.
+     * @return the list of selected elements.
      */
     public ConcurrentArray<ResourceElement> getSelectedElements() {
         return selectedElements;
     }
 
     /**
-     * Обновить дерево.
+     * Refresh this tree.
      */
     public void refresh() {
 
@@ -281,7 +282,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Обновление развернутых элементов.
+     * Update the list of expanded elements.
      */
     private void updateExpandedElements() {
 
@@ -303,7 +304,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Обновление списка выбранных элементов.
+     * Update the list of selected elements.
      */
     private void updateSelectedElements() {
 
@@ -323,14 +324,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Отобразить прогресс прогрузки.
+     * Show the process of loading.
      */
     private void showLoading() {
         setRoot(new TreeItem<>(ResourceLoadingElement.getInstance()));
     }
 
     /**
-     * Запустить фоновое построение дерева.
+     * Start the background process of filling.
      */
     private void startBackgroundFill(final Path assetFolder) {
 
@@ -352,7 +353,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Запустить фоновое обновление дерева.
+     * Start the background process of loading.
      */
     private void startBackgroundRefresh(final Path assetFolder) {
 
@@ -391,7 +392,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Восстановление выбранных элементов.
+     * Restore selection.
      */
     private void restoreSelection() {
         EXECUTOR_MANAGER.addFXTask(() -> {
@@ -417,7 +418,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Заполнить узел.
+     * Fill the node.
      */
     private void fill(final TreeItem<ResourceElement> treeItem) {
 
@@ -435,9 +436,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Уведомление о созданном файле.
+     * Handle a created file.
      *
-     * @param file созданный файл.
+     * @param file the created file.
      */
     public void notifyCreated(final Path file) {
 
@@ -468,7 +469,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Уведомление об удаленном файле.
+     * Handle a removed file.
      */
     public void notifyDeleted(final Path file) {
 
@@ -484,10 +485,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Уведомление о перемещении файла.
+     * Handle a moved file.
      *
-     * @param prevFile старая версия файла.
-     * @param newFile  новая версия файла.
+     * @param prevFile the prev version.
+     * @param newFile  the new version.
      */
     public void notifyMoved(final Path prevFile, final Path newFile) {
 
@@ -527,10 +528,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Уведомление о переименовании файла.
+     * Handle a renamed file.
      *
-     * @param prevFile старая версия файла.
-     * @param newFile  новая версия файла.
+     * @param prevFile the prev version.
+     * @param newFile  the new version.
      */
     public void notifyRenamed(final Path prevFile, final Path newFile) {
 
@@ -557,7 +558,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Обработка нажатий на хоткеи.
+     * Handle pressing on hotkey.
      */
     private void processKey(final KeyEvent event) {
         if (isReadOnly()) return;
@@ -571,6 +572,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) return;
 
         final KeyCode keyCode = event.getCode();
 
@@ -601,14 +603,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * @return функция окрытия файла.
+     * @return the open resource function.
      */
     public Consumer<ResourceElement> getOpenFunction() {
         return openFunction;
     }
 
     /**
-     * Очистка дерева от пустых узлов.
+     * Cleanup the tree.
      */
     public void cleanup(final TreeItem<ResourceElement> treeItem) {
 
@@ -629,7 +631,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Развернуть девео до указанного файла.
+     * Expand tree to the file.
      */
     public void expandTo(final Path file, boolean needSelect) {
 

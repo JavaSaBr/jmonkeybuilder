@@ -24,6 +24,7 @@
 }
 
 #GlobalToolComponent {
+    -fx-tab-max-height: 15;
 }
 
 #AssetComponent {
@@ -57,11 +58,12 @@
 
 #EditorAreaComponent {
     -fx-min-width: 500;
+    -fx-tab-max-height: 15;
 }
 
 #FileEditorToolbar {
     -fx-alignment: center-left;
-    -fx-min-height: 34;
+    -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-background-color: -fx-color-panel-200;
@@ -228,10 +230,10 @@
 }
 
 #MaterialFileEditorToolbarBox {
-    -fx-min-height: 28;
+    -fx-min-height: 22;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 400;
+    -fx-min-width: 300;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }

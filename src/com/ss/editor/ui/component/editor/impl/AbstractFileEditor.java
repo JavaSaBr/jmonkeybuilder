@@ -1,14 +1,12 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.editor.ui.css.CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON;
-import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
-
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -91,6 +89,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected void createContent() {
 
         final VBox container = new VBox();
+        final StackPane page = new StackPane(container);
 
         HBox toolbar = null;
 
@@ -98,11 +97,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
             toolbar = new HBox();
             toolbar.setId(CSSIds.FILE_EDITOR_TOOLBAR);
+            toolbar.prefWidthProperty().bind(container.widthProperty());
 
             createToolbar(toolbar);
 
             FXUtils.addToPane(toolbar, container);
-            FXUtils.bindFixedWidth(toolbar, container.widthProperty());
         }
 
         root = createRoot();
@@ -114,14 +113,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         FXUtils.addToPane(root, container);
 
         if (toolbar != null) {
-            FXUtils.bindFixedHeight(root, container.heightProperty().subtract(toolbar.heightProperty()));
+            root.prefHeightProperty().bind(container.heightProperty().subtract(toolbar.heightProperty()));
         } else {
-            FXUtils.bindFixedHeight(root, container.heightProperty());
+            root.prefHeightProperty().bind(container.heightProperty());
         }
 
-        FXUtils.bindFixedWidth(root, container.widthProperty());
-
-        new StackPane(container);
+        root.prefWidthProperty().bind(container.widthProperty());
     }
 
     /**
@@ -154,12 +151,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected Button createSaveAction() {
 
         Button action = new Button();
-        action.setGraphic(new ImageView(Icons.SAVE_24));
+        action.setGraphic(new ImageView(Icons.SAVE_16));
         action.setOnAction(event -> processSave());
         action.disableProperty().bind(dirtyProperty().not());
 
-        FXUtils.addClassTo(action, TOOLBAR_BUTTON);
-        FXUtils.addClassTo(action, FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(action, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(action, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         return action;
     }

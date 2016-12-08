@@ -19,18 +19,13 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
 /**
- * Реализация меню бара для редактора.
+ * The toolbar of the Editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class EditorBarComponent extends MenuBar implements ScreenComponent {
 
     public static final String COMPONENT_ID = "EditorBarComponent";
-
-    /**
-     * Меню с переоткрытием ассетов.
-     */
-    private ReopenAssetMenu reopenAssetMenu;
 
     public EditorBarComponent() {
         super();
@@ -77,13 +72,6 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         items.add(otherSettings);
 
         return result;
-    }
-
-    /**
-     * @return меню с переоткрытием ассетов.
-     */
-    public ReopenAssetMenu getReopenAssetMenu() {
-        return reopenAssetMenu;
     }
 
     @Override

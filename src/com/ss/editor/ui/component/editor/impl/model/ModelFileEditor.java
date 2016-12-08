@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
+import static javafx.geometry.Pos.TOP_RIGHT;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
@@ -61,8 +63,6 @@ import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static javafx.geometry.Pos.TOP_RIGHT;
-
 /**
  * The implementation of the {@link AbstractFileEditor} for working with {@link Spatial}.
  *
@@ -73,6 +73,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
     public static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
+    public static final Insets LIGHT_BUTTON_OFFSET = new Insets(0, 0, 0, 4);
+    public static final Insets FAST_SKY_LABEL_OFFSET = new Insets(0, 0, 0, 8);
+    public static final Insets MOVE_TOOL_BUTTON_OFFSET = new Insets(0, 0, 0, 8);
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -558,8 +561,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FXUtils.addToPane(parameterContainer, root);
 
         accordion.setExpandedPane(modelNodeTree);
-
-        FXUtils.bindFixedHeight(accordion, parameterContainer.heightProperty());
+        accordion.prefHeightProperty().bind(parameterContainer.heightProperty());
+        parameterContainer.prefHeightProperty().bind(root.heightProperty());
     }
 
     /**
@@ -619,17 +622,17 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FXUtils.addToPane(createSaveAction(), container);
 
         lightButton = new ToggleButton();
-        lightButton.setGraphic(new ImageView(Icons.LIGHT_24));
+        lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
         lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
         selectionButton = new ToggleButton();
-        selectionButton.setGraphic(new ImageView(Icons.CUBE_24));
+        selectionButton.setGraphic(new ImageView(Icons.CUBE_16));
         selectionButton.setSelected(true);
         selectionButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeSelectionVisible(newValue));
 
         gridButton = new ToggleButton();
-        gridButton.setGraphic(new ImageView(Icons.PLANE_24));
+        gridButton.setGraphic(new ImageView(Icons.PLANE_16));
         gridButton.setSelected(true);
         gridButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeGridVisible(newValue));
 
@@ -644,16 +647,16 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FAST_SKY_LIST.forEach(skyItems::add);
 
         moveToolButton = new ToggleButton();
-        moveToolButton.setGraphic(new ImageView(Icons.MOVE_24));
+        moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
         moveToolButton.setSelected(true);
         moveToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(moveToolButton, newValue));
 
         rotationToolButton = new ToggleButton();
-        rotationToolButton.setGraphic(new ImageView(Icons.ROTATION_24));
+        rotationToolButton.setGraphic(new ImageView(Icons.ROTATION_16));
         rotationToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(rotationToolButton, newValue));
 
         scaleToolButton = new ToggleButton();
-        scaleToolButton.setGraphic(new ImageView(Icons.SCALE_24));
+        scaleToolButton.setGraphic(new ImageView(Icons.SCALE_16));
         scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(scaleToolButton, newValue));
 
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
@@ -668,8 +671,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FXUtils.addClassTo(rotationToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(scaleToolButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(fastSkyLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(fastSkyComboBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(fastSkyLabel, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(fastSkyComboBox, CSSClasses.MAIN_FONT_12);
 
         FXUtils.addToPane(lightButton, container);
         FXUtils.addToPane(selectionButton, container);
@@ -680,11 +683,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FXUtils.addToPane(rotationToolButton, container);
         FXUtils.addToPane(scaleToolButton, container);
 
-        HBox.setMargin(lightButton, new Insets(0, 0, 0, 4));
+        HBox.setMargin(lightButton, LIGHT_BUTTON_OFFSET);
         HBox.setMargin(selectionButton, SMALL_OFFSET);
         HBox.setMargin(gridButton, SMALL_OFFSET);
-        HBox.setMargin(fastSkyLabel, new Insets(0, 0, 0, 8));
-        HBox.setMargin(moveToolButton, new Insets(0, 0, 0, 8));
+        HBox.setMargin(fastSkyLabel, FAST_SKY_LABEL_OFFSET);
+        HBox.setMargin(moveToolButton, MOVE_TOOL_BUTTON_OFFSET);
         HBox.setMargin(rotationToolButton, SMALL_OFFSET);
         HBox.setMargin(scaleToolButton, SMALL_OFFSET);
     }

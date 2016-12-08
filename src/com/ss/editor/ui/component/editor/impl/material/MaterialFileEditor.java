@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
+import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
@@ -50,12 +52,10 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
-import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
-
 /**
- * Реализация редактора для редактирования материалов.
+ * The implementation of the Editor for editing materials.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, MaterialChangeConsumer {
 
@@ -76,87 +76,87 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
 
     /**
-     * Слушатель изменений файлов.
+     * The handler of file changing.
      */
     private final EventHandler<Event> fileChangedHandler;
 
     /**
-     * 3D часть редактора.
+     * 3D part of this editor.
      */
     private final MaterialEditorState editorState;
 
     /**
-     * Контролер операций редактора.
+     * The operation control.
      */
     private final EditorOperationControl operationControl;
 
     /**
-     * Счетчик внесения изменений.
+     * The changes counter.
      */
     private final AtomicInteger changeCounter;
 
     /**
-     * Компонент для редактирования текстур.
+     * The textures editor.
      */
     private MaterialTexturesComponent materialTexturesComponent;
 
     /**
-     * Компонетн для редактирования цветов.
+     * The colors editor.
      */
     private MaterialColorsComponent materialColorsComponent;
 
     /**
-     * Компонент для редактирования различных параметров.
+     * The other parameters editor.
      */
     private MaterialOtherParamsComponent materialOtherParamsComponent;
 
     /**
-     * Компонент для редактирования настроек рендера материала.
+     * The render settings editor.
      */
     private MaterialRenderParamsComponent materialRenderParamsComponent;
 
     /**
-     * Текущий редактируемый материал.
+     * The current editing material.
      */
     private Material currentMaterial;
 
     /**
-     * Кнопка активации модели куба.
+     * The button for using a cube.
      */
     private ToggleButton cubeButton;
 
     /**
-     * Кнопка активации модели сферы.
+     * The button for using a sphere.
      */
     private ToggleButton sphereButton;
 
     /**
-     * Кнопка активации модели плоскости.
+     * The button for using a plane.
      */
     private ToggleButton planeButton;
 
     /**
-     * Кнопка активации света камеры.
+     * The button for using a light.
      */
     private ToggleButton lightButton;
 
     /**
-     * Выпадающий список с выбором RenderQueue.Bucket.
+     * The list of RenderQueue.Bucket.
      */
     private ComboBox<RenderQueue.Bucket> bucketComboBox;
 
     /**
-     * Список доступных типов материалов.
+     * The list of material definitions.
      */
     private ComboBox<String> materialDefinitionBox;
 
     /**
-     * Обработчик внесения изменений.
+     * The change handler.
      */
     private Consumer<EditorOperation> changeHandler;
 
     /**
-     * Игнорировать ли слушателей.
+     * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
 
@@ -181,7 +181,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Обработка изменения других файлов.
+     * Handle changed file.
      */
     private void processChangedFile(final FileChangedEvent event) {
 
@@ -204,28 +204,28 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @param ignoreListeners игнорировать ли слушателей.
+     * @param ignoreListeners the flag for ignoring listeners.
      */
-    private void setIgnoreListeners(boolean ignoreListeners) {
+    private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @return игнорировать ли слушателей.
+     * @return the flag for ignoring listeners.
      */
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     /**
-     * @return контролер операций редактора.
+     * @return the operation control.
      */
     private EditorOperationControl getOperationControl() {
         return operationControl;
     }
 
     /**
-     * Обработка внесения изменений.
+     * Execute the operation.
      */
     private void handleChanges(final EditorOperation operation) {
         final EditorOperationControl operationControl = getOperationControl();
@@ -272,7 +272,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Повторение отмененной операции.
+     * Redo the last operation.
      */
     public void redo() {
         final EditorOperationControl operationControl = getOperationControl();
@@ -280,7 +280,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Отмена последней операции.
+     * Undo the last operation.
      */
     public void undo() {
         final EditorOperationControl operationControl = getOperationControl();
@@ -313,40 +313,39 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addToPane(parameterContainer, root);
 
         accordion.setExpandedPane(materialTexturesComponent);
-
-        FXUtils.bindFixedHeight(accordion, parameterContainer.heightProperty());
+        accordion.prefHeightProperty().bind(parameterContainer.heightProperty());
     }
 
     /**
-     * @return компонент для редактирования текстур.
+     * @return the textures editor.
      */
     private MaterialTexturesComponent getMaterialTexturesComponent() {
         return materialTexturesComponent;
     }
 
     /**
-     * @return компонетн для редактирования цветов.
+     * @return the colors editor.
      */
     private MaterialColorsComponent getMaterialColorsComponent() {
         return materialColorsComponent;
     }
 
     /**
-     * @return компонент для редактирования различных параметров.
+     * @return the other parameters editor.
      */
     private MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
         return materialOtherParamsComponent;
     }
 
     /**
-     * @return компонент для редактирования настроек рендера материала.
+     * @return the render settings editor.
      */
     private MaterialRenderParamsComponent getMaterialRenderParamsComponent() {
         return materialRenderParamsComponent;
     }
 
     /**
-     * @return слушатель изменений файлов.
+     * @return the handler of file changing.
      */
     private EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
@@ -373,7 +372,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Загрузка материала.
+     * Reload the material.
      */
     private void reload(final Material material) {
         setCurrentMaterial(material);
@@ -419,7 +418,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @return список доступных типов материалов.
+     * @return the list of material definitions.
      */
     private ComboBox<String> getMaterialDefinitionBox() {
         return materialDefinitionBox;
@@ -446,7 +445,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         planeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(planeButton, newValue));
 
         lightButton = new ToggleButton();
-        lightButton.setGraphic(new ImageView(Icons.LIGHT_24));
+        lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
         lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
@@ -483,10 +482,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addClassTo(planeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(bucketLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(bucketComboBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(bucketLabel, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(bucketComboBox, CSSClasses.MAIN_FONT_12);
 
         HBox.setMargin(cubeButton, SMALL_OFFSET);
         HBox.setMargin(sphereButton, SMALL_OFFSET);
@@ -497,7 +496,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Обработка смны Bucket типа.
+     * Handle changing the bucket type.
      */
     private void changeBucketType(final RenderQueue.Bucket newValue) {
         final MaterialEditorState editorState = getEditorState();
@@ -505,7 +504,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Обработка смены типа материала.
+     * Handle changing the type.
      */
     private void changeType(final String newType) {
         if (isIgnoreListeners()) return;
@@ -513,7 +512,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Процесс смены типа материала.
+     * Handle changing the type.
      */
     private void processChangeTypeImpl(final String newType) {
 
@@ -533,7 +532,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * Обновление активности света камеры.
+     * Handle changing the light enabling.
      */
     private void changeLight(final Boolean newValue) {
         final MaterialEditorState editorState = getEditorState();
@@ -541,28 +540,28 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @return кнопка активации модели куба.
+     * @return the button for using a cube.
      */
     private ToggleButton getCubeButton() {
         return cubeButton;
     }
 
     /**
-     * @return кнопка активации модели плоскости.
+     * @return the button for using a plane.
      */
     private ToggleButton getPlaneButton() {
         return planeButton;
     }
 
     /**
-     * @return кнопка активации модели сферы.
+     * @return the button for using a sphere.
      */
     private ToggleButton getSphereButton() {
         return sphereButton;
     }
 
     /**
-     * Обработка смены режима модели.
+     * Handle changing model type.
      */
     private void changeModelType(final ToggleButton button, final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
@@ -622,14 +621,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @param currentMaterial текущий редактируемый материал.
+     * @param currentMaterial the current editing material.
      */
     private void setCurrentMaterial(final Material currentMaterial) {
         this.currentMaterial = currentMaterial;
     }
 
     /**
-     * @return 3D часть редактора.
+     * @return 3D part of this editor.
      */
     private MaterialEditorState getEditorState() {
         return editorState;

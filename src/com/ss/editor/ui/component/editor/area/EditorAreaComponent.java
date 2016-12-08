@@ -20,6 +20,7 @@ import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
@@ -43,6 +44,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.dictionary.DictionaryFactory;
@@ -342,6 +344,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Tab tab = new Tab(editor.getFileName());
         tab.setGraphic(new ImageView(ICON_MANAGER.getIcon(editFile, DEFAULT_FILE_ICON_SIZE)));
         tab.setContent(editor.getPage());
+
+        FXUtils.addClassTo(tab, CSSClasses.MAIN_FONT_12);
 
         final ObservableMap<Object, Object> properties = tab.getProperties();
         properties.put(KEY_EDITOR, editor);

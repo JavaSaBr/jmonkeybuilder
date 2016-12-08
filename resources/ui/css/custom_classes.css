@@ -1,5 +1,16 @@
 
 /* Main Fonts */
+
+.main-font-11 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 11;
+}
+
+.main-font-12 {
+    -fx-font-family: "Roboto Lt";
+    -fx-font-size: 12;
+}
+
 .main-font-13 {
     -fx-font-family: "Roboto Lt";
     -fx-font-size: 13;
@@ -225,10 +236,10 @@
 
 
 .file-editor-toolbar-button {
-    -fx-min-height: 30;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 30;
+    -fx-min-width: 24;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }

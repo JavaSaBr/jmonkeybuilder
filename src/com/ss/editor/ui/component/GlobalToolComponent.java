@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component;
 
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import javafx.geometry.Side;
@@ -25,6 +26,8 @@ public class GlobalToolComponent extends TabPane implements ScreenComponent {
         final Tab tab = new Tab(name);
         tab.setContent(component);
         tab.setClosable(false);
+
+        FXUtils.addClassTo(tab, CSSClasses.MAIN_FONT_12);
 
         getTabs().add(tab);
 

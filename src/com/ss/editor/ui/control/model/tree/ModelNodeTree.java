@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.tree;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
@@ -22,9 +25,6 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-
-import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 /**
  * The implementation of Tree for presentation the structure of model in the Editor.
@@ -74,13 +74,13 @@ public class ModelNodeTree extends TitledPane {
         treeView.setShowRoot(true);
         treeView.setEditable(true);
         treeView.setFocusTraversable(true);
+        treeView.prefHeightProperty().bind(container.heightProperty().subtract(20));
 
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
 
         FXUtils.addToPane(treeView, container);
         FXUtils.addClassTo(treeView, CSSClasses.TRANSPARENT_TREE_VIEW);
-        FXUtils.bindFixedHeight(treeView, container.heightProperty().subtract(20));
         FXUtils.bindFixedWidth(treeView, container.widthProperty().subtract(30));
 
         setContent(container);

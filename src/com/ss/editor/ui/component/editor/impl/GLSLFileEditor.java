@@ -1,5 +1,8 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
+
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -24,13 +27,10 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.Util;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singleton;
-
 /**
- * Реализация редактора GLSL файлов.
+ * The implementation of editor for editing GLSL files.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
@@ -133,12 +133,12 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * Контент на момент открытия документа.
+     * The original content of the opened file.
      */
     private String originalContent;
 
     /**
-     * Область для редактирования кода.
+     * The code area.
      */
     private CodeArea codeArea;
 
@@ -152,14 +152,15 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
         codeArea = new CodeArea();
         codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
-        //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
         codeArea.setStyle("-fx-stroke: white;");
+        codeArea.prefHeightProperty().bind(root.heightProperty());
+        codeArea.prefWidthProperty().bind(root.widthProperty());
+        //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
         FXUtils.addToPane(codeArea, root);
         FXUtils.addClassTo(codeArea, CSSClasses.MAIN_FONT_13);
-        FXUtils.bindFixedSize(codeArea, root.widthProperty(), root.heightProperty());
     }
 
     /**
@@ -181,7 +182,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @return область для редактирования кода.
+     * @return the code area.
      */
     private CodeArea getCodeArea() {
         return codeArea;
@@ -206,14 +207,14 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @return контент на момент открытия документа.
+     * @return the original content of the opened file.
      */
     public String getOriginalContent() {
         return originalContent;
     }
 
     /**
-     * @param originalContent контент на момент открытия документа.
+     * @param originalContent the original content of the opened file.
      */
     public void setOriginalContent(final String originalContent) {
         this.originalContent = originalContent;

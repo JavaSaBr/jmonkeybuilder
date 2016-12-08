@@ -1,34 +1,36 @@
 package com.ss.editor.ui.css;
 
 /**
- * Интерфейс с набором констант классов используемых в CSS.
+ * The list of custom css classes.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public interface CSSClasses {
 
-    public static final String MAIN_FONT_13 = "main-font-13";
-    public static final String MAIN_FONT_14 = "main-font-14";
-    public static final String MAIN_FONT_14_BOLD = "main-font-14-bold";
-    public static final String MAIN_FONT_15 = "main-font-15";
-    public static final String MAIN_FONT_15_BOLD = "main-font-15-bold";
-    public static final String MAIN_FONT_15_BOLD_WITH_SHADOW = "main-font-15-bold-with-shadow";
-    public static final String MAIN_FONT_17 = "main-font-17";
-    public static final String MAIN_FONT_20 = "main-font-20";
+    String MAIN_FONT_11 = "main-font-11";
+    String MAIN_FONT_12 = "main-font-12";
+    String MAIN_FONT_13 = "main-font-13";
+    String MAIN_FONT_14 = "main-font-14";
+    String MAIN_FONT_14_BOLD = "main-font-14-bold";
+    String MAIN_FONT_15 = "main-font-15";
+    String MAIN_FONT_15_BOLD = "main-font-15-bold";
+    String MAIN_FONT_15_BOLD_WITH_SHADOW = "main-font-15-bold-with-shadow";
+    String MAIN_FONT_17 = "main-font-17";
+    String MAIN_FONT_20 = "main-font-20";
 
-    public static final String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
-    public static final String TRANSPARENT_TREE_CELL = "transparent-tree-cell";
-    public static final String TRANSPARENT_LIST_VIEW = "transparent-list-view";
-    public static final String TRANSPARENT_LIST_CELL = "transparent-list-cell";
+    String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
+    String TRANSPARENT_TREE_CELL = "transparent-tree-cell";
+    String TRANSPARENT_LIST_VIEW = "transparent-list-view";
+    String TRANSPARENT_LIST_CELL = "transparent-list-cell";
 
-    public static final String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
+    String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
 
-    public static final String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
+    String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
 
-    public static final String TOOLBAR_BUTTON = "toolbar-button";
+    String TOOLBAR_BUTTON = "toolbar-button";
 
-    public static final String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
+    String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
 
-    public static final String MATERIAL_PARAM_CONTROL = "material-param-control";
-    public static final String MODEL_PARAM_CONTROL = "model-param-control";
+    String MATERIAL_PARAM_CONTROL = "material-param-control";
+    String MODEL_PARAM_CONTROL = "model-param-control";
 }

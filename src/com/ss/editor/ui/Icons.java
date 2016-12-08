@@ -13,7 +13,12 @@ public interface Icons {
 
     FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
+    Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/save.png", 16);
+    Image SCALE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scale.png", 16);
+    Image ROTATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rotation.png", 16);
     Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
+    Image MOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/move.png", 16);
+    Image LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/light.png", 16);
     Image INFLUENCER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/influencer.png");
     Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");
     Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");

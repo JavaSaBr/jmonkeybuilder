@@ -1,10 +1,15 @@
 package com.ss.editor.ui.component.asset.tree;
 
+import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
+import static com.ss.editor.ui.css.CSSIds.ASSET_COMPONENT_RESOURCE_TREE_CELL;
+import static java.util.Collections.singletonList;
+
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
+import com.ss.editor.ui.css.CSSClasses;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,16 +34,10 @@ import javafx.util.Callback;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
-import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.css.CSSClasses.TRANSPARENT_TREE_CELL;
-import static com.ss.editor.ui.css.CSSIds.ASSET_COMPONENT_RESOURCE_TREE_CELL;
-import static java.util.Collections.singletonList;
-
 /**
- * Реализация ячейки ресурса для дерева ресурсов.
+ * The implementation of the cell for {@link TreeView} for showing a resource.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
@@ -47,17 +46,17 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     /**
-     * Всплывающая подсказка.
+     * The tooltip of this resource.
      */
     private final Tooltip tooltip;
 
     public ResourceTreeCell() {
         setId(ASSET_COMPONENT_RESOURCE_TREE_CELL);
-        setMinHeight(20);
+        setMinHeight(15);
         setOnMouseClicked(this::processClick);
 
-        FXUtils.addClassTo(this, TRANSPARENT_TREE_CELL);
-        FXUtils.addClassTo(this, MAIN_FONT_13);
+        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
+        FXUtils.addClassTo(this, CSSClasses.MAIN_FONT_12);
 
         this.tooltip = new Tooltip();
 
@@ -66,7 +65,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     /**
-     * Обработка завершения перемещения.
+     * Handle stopping dragging.
      */
     private void stopDrag(final DragEvent event) {
         setCursor(Cursor.DEFAULT);
@@ -74,7 +73,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     /**
-     * Обработка старта перемещения файла.
+     * Handle starting dragging.
      */
     private void startDrag(final MouseEvent mouseEvent) {
 
@@ -95,7 +94,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     /**
-     * Процесс обработки клика на элемент дерева.
+     * Handle a click.
      */
     private void processClick(final MouseEvent event) {
 
@@ -157,7 +156,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     }
 
     /**
-     * Обновление текста всплывающей подсказки.
+     * Update the tooltip.
      */
     private void updateTooltip(final String text) {
         tooltip.setText(text);

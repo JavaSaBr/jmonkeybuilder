@@ -18,9 +18,9 @@ import rlib.ui.util.FXUtils;
 import rlib.util.Util;
 
 /**
- * Реализация редактора текстовых файлов.
+ * The implementation of editor for editing text files.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class TextFileEditor extends AbstractFileEditor<VBox> {
 
@@ -34,12 +34,12 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * Контент на момент открытия документа.
+     * The original content of the opened file.
      */
     private String originalContent;
 
     /**
-     * Область для редактирования текста.
+     * The text area.
      */
     private TextArea textArea;
 
@@ -54,14 +54,15 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         textArea = new TextArea();
         textArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
+        textArea.prefHeightProperty().bind(root.heightProperty());
+        textArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(textArea, root);
         FXUtils.addClassTo(textArea, CSSClasses.MAIN_FONT_13);
-        FXUtils.bindFixedSize(textArea, root.widthProperty(), root.heightProperty());
     }
 
     /**
-     * Обновление состояния измененности.
+     * Update dirty state.
      */
     private void updateDirty(final String newContent) {
         setDirty(!getOriginalContent().equals(newContent));
@@ -79,7 +80,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @return область для редактирования текста.
+     * @return the text area.
      */
     private TextArea getTextArea() {
         return textArea;
@@ -98,14 +99,14 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @return контент на момент открытия документа.
+     * @return the original content of the opened file.
      */
     public String getOriginalContent() {
         return originalContent;
     }
 
     /**
-     * @param originalContent контент на момент открытия документа.
+     * @param originalContent the original content of the opened file.
      */
     public void setOriginalContent(final String originalContent) {
         this.originalContent = originalContent;
