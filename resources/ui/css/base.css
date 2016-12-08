@@ -415,13 +415,21 @@
 }
 
 .split-pane > .split-pane-divider {
-    -fx-padding: 0 0.05em 0 0.05em; /* 0 3 0 3 */
+    -fx-padding: 0 0.01em 0 0.01em; /* 0 3 0 3 */
 }
 
 .split-pane:horizontal > .split-pane-divider {
     -fx-background-color: -fx-color-600;
     -fx-background-insets: 0;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-effect: null;
+    -fx-border-color: red;
+    -fx-cursor: move;
+}
+
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: -fx-color-600;
+    -fx-background-insets: 0;
+    -fx-effect: null;
     -fx-border-color: red;
     -fx-cursor: move;
 }

@@ -96,6 +96,8 @@ public class JFXApplication extends Application {
         icons.add(new Image("/ui/icons/app/SSEd32.png"));
         icons.add(new Image("/ui/icons/app/SSEd16.png"));
 
+        stage.setMinHeight(600);
+        stage.setMinWidth(800);
         stage.setTitle(Config.TITLE + " " + Config.VERSION);
         stage.setOnCloseRequest(event -> onExit());
         stage.show();

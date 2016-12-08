@@ -9,90 +9,90 @@ import javafx.scene.Parent;
 import rlib.util.array.Array;
 
 /**
- * Интерфейс для реализации редактора.
+ * The interface for implementing file editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public interface FileEditor {
 
     /**
-     * Получение страницы для отображения на UI.
+     * Get the page for showing the editor.
      *
-     * @return страница для отображения на UI.
+     * @return the page for showing the editor.
      */
     Parent getPage();
 
     /**
-     * @return название редактируемого файла.
+     * @return the file name of the current opened file.
      */
     String getFileName();
 
     /**
-     * @return редактируемый файл.
+     * @return the editing file.
      */
     Path getEditFile();
 
     /**
-     * Открыть файл на редактирование.
+     * Open the file.
      *
-     * @param file редактируемый файл.
+     * @param file the file.
      */
     void openFile(final Path file);
 
     /**
-     * @return изменялся ли документ.
+     * @return the dirty property of this editor.
      */
     BooleanProperty dirtyProperty();
 
     /**
-     * @return изменялся ли документ.
+     * @return true if the current file was changed.
      */
     boolean isDirty();
 
     /**
-     * Сохранить изменения.
+     * Save new changes.
      */
     default void doSave() {
     }
 
     /**
-     * @return 3D части редактора либо null.
+     * @return the 3D part of this editor.
      */
     default Array<EditorState> getStates() {
         return null;
     }
 
     /**
-     * Уведомление редактора о том что его закрыли.
+     * Notify that this editor was closed.
      */
     default void notifyClosed() {
     }
 
     /**
-     * Уведомление о переименовании файла.
+     * Notify about renamed files.
      */
     default void notifyRenamed(final Path prevFile, final Path newFile) {
     }
 
     /**
-     * Уведомление о перемещении файла.
+     * Notify about moved file.
      */
     default void notifyMoved(final Path prevFile, final Path newFile) {
     }
 
     /**
-     * @return описание редактора.
+     * @return the description of this editor.
      */
     EditorDescription getDescription();
 
     /**
-     * Уведомление о том, что этот редактор отобразили.
+     * Notify that this editor was showed.
      */
     default void notifyShowed() {
     }
 
     /**
-     * Уведомление об скрытии редактора.
+     * Notify that this editor was hided.
      */
     default void notifyHided() {
     }

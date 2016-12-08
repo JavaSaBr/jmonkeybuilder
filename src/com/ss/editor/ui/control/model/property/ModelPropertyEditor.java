@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.property;
 
-import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 
@@ -11,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -19,7 +17,7 @@ import javafx.scene.layout.VBox;
  *
  * @author JavaSaBr
  */
-public class ModelPropertyEditor extends TitledPane {
+public class ModelPropertyEditor extends ScrollPane {
 
     public static final Insets PROPERTIES_OFFSET = new Insets(0, 0, 0, 4);
 
@@ -40,9 +38,8 @@ public class ModelPropertyEditor extends TitledPane {
 
     public ModelPropertyEditor(final ModelChangeConsumer modelChangeConsumer) {
         this.modelChangeConsumer = modelChangeConsumer;
-        setText(Messages.MODEL_FILE_EDITOR_PROPERTIES);
+        //setText(Messages.MODEL_FILE_EDITOR_PROPERTIES);
         createComponents();
-        setAnimated(false);
     }
 
     /**
@@ -59,7 +56,7 @@ public class ModelPropertyEditor extends TitledPane {
         container = new VBox();
         container.setAlignment(Pos.TOP_CENTER);
         VBox.setMargin(container, PROPERTIES_OFFSET);
-        setContent(new ScrollPane(new VBox(container)));
+        setContent(new VBox(container));
     }
 
     /**

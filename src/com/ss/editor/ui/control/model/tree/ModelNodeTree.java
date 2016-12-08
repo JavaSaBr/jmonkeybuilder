@@ -4,7 +4,6 @@ import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFo
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 import com.jme3.scene.Spatial;
-import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
@@ -19,7 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
@@ -31,7 +30,7 @@ import rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
-public class ModelNodeTree extends TitledPane {
+public class ModelNodeTree extends ScrollPane {
 
     public static final String USER_DATA_IS_SKY = ModelNodeTree.class.getName() + ".isSky";
 
@@ -57,9 +56,8 @@ public class ModelNodeTree extends TitledPane {
     public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @NotNull final ModelChangeConsumer modelChangeConsumer) {
         this.selectionHandler = selectionHandler;
         this.modelChangeConsumer = modelChangeConsumer;
-        setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
+        //setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
         createComponents();
-        setAnimated(false);
     }
 
     /**
@@ -74,17 +72,17 @@ public class ModelNodeTree extends TitledPane {
         treeView.setShowRoot(true);
         treeView.setEditable(true);
         treeView.setFocusTraversable(true);
-        treeView.prefHeightProperty().bind(container.heightProperty().subtract(20));
+        treeView.prefHeightProperty().bind(heightProperty());
+        treeView.prefWidthProperty().bind(widthProperty());
+        treeView.setContextMenu(new ContextMenu());
 
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
 
         FXUtils.addToPane(treeView, container);
         FXUtils.addClassTo(treeView, CSSClasses.TRANSPARENT_TREE_VIEW);
-        FXUtils.bindFixedWidth(treeView, container.widthProperty().subtract(30));
 
         setContent(container);
-        setContextMenu(new ContextMenu());
     }
 
     /**
@@ -185,7 +183,7 @@ public class ModelNodeTree extends TitledPane {
      */
     public ContextMenu getContextMenu(@NotNull final ModelNode<?> modelNode) {
 
-        final ContextMenu contextMenu = getContextMenu();
+        final ContextMenu contextMenu = treeView.getContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
         items.clear();
 

@@ -1,7 +1,5 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
-import static javafx.geometry.Pos.TOP_RIGHT;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
@@ -47,15 +45,15 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Accordion;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -543,26 +541,37 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     protected void createContent(final StackPane root) {
         this.selectionHandler = this::processSelect;
 
-        root.setAlignment(TOP_RIGHT);
-
-        final Accordion accordion = new Accordion();
-
         final VBox parameterContainer = new VBox();
         parameterContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_CONTAINER);
+
+        final Pane emptyPane = new Pane();
 
         modelNodeTree = new ModelNodeTree(selectionHandler, this);
         modelPropertyEditor = new ModelPropertyEditor(this);
 
-        final ObservableList<TitledPane> panes = accordion.getPanes();
-        panes.add(modelNodeTree);
-        panes.add(modelPropertyEditor);
+        final SplitPane parameterSplitContainer = new SplitPane(modelNodeTree, modelPropertyEditor);
+        parameterSplitContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_SPLIT_PANE);
+        parameterSplitContainer.prefHeightProperty().bind(parameterContainer.heightProperty());
 
-        FXUtils.addToPane(accordion, parameterContainer);
-        FXUtils.addToPane(parameterContainer, root);
-
-        accordion.setExpandedPane(modelNodeTree);
-        accordion.prefHeightProperty().bind(parameterContainer.heightProperty());
         parameterContainer.prefHeightProperty().bind(root.heightProperty());
+
+        final SplitPane mainSplitContainer = new SplitPane(emptyPane, parameterContainer);
+        mainSplitContainer.setId(CSSIds.MODEL_FILE_EDITOR_MAIN_SPLIT_PANE);
+
+        FXUtils.addToPane(parameterSplitContainer, parameterContainer);
+        FXUtils.addToPane(mainSplitContainer, root);
+
+
+        root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(mainSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(parameterSplitContainer));
+    }
+
+    private static void calcHSplitSize(final SplitPane splitContainer) {
+        splitContainer.setDividerPosition(0, 0.8);
+    }
+
+    private static void calcVSplitSize(final SplitPane splitContainer) {
+        splitContainer.setDividerPosition(0, 0.3);
     }
 
     /**

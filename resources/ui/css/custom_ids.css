@@ -370,12 +370,17 @@
     -fx-min-width: 20;
 }
 
+#ModelFileEditorMainSplitPane {
+    -fx-background-color: transparent;
+}
+
+#ModelFileEditorParameterSplitPane {
+    -fx-background-color: transparent;
+    -fx-orientation: vertical;
+}
+
 #ModelFileEditorParameterContainer {
     -fx-background-color: -fx-color-panel-200;
-    -fx-alignment: top-left;
-    -fx-min-width: 340;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
 }
 
 #ModelNodeTreeCell {

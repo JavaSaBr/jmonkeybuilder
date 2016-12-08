@@ -67,6 +67,8 @@ public interface CSSIds {
     String GRAPHICS_DIALOG_FIELD = "GraphicsDialogField";
     String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
+    String MODEL_FILE_EDITOR_MAIN_SPLIT_PANE = "ModelFileEditorMainSplitPane";
+    String MODEL_FILE_EDITOR_PARAMETER_SPLIT_PANE = "ModelFileEditorParameterSplitPane";
     String MODEL_FILE_EDITOR_PARAMETER_CONTAINER = "ModelFileEditorParameterContainer";
 
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
