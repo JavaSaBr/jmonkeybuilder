@@ -23,6 +23,9 @@ public interface CSSIds {
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
+    String FILE_EDITOR_MAIN_SPLIT_PANE = "FileEditorMainSplitPane";
+    String FILE_EDITOR_TOOL_SPLIT_PANE = "FileEditorToolSplitPane";
+    String FILE_EDITOR_TOOL_COMPONENT = "FileEditorToolComponent";
 
     String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
 
@@ -66,10 +69,6 @@ public interface CSSIds {
     String GRAPHICS_DIALOG_LABEL = "GraphicsDialogLabel";
     String GRAPHICS_DIALOG_FIELD = "GraphicsDialogField";
     String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
-
-    String MODEL_FILE_EDITOR_MAIN_SPLIT_PANE = "ModelFileEditorMainSplitPane";
-    String MODEL_FILE_EDITOR_PARAMETER_SPLIT_PANE = "ModelFileEditorParameterSplitPane";
-    String MODEL_FILE_EDITOR_PARAMETER_CONTAINER = "ModelFileEditorParameterContainer";
 
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
     String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";

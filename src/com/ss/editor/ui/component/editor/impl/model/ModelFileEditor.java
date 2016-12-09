@@ -19,6 +19,7 @@ import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.state.editor.impl.model.ModelEditorState;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.EditorToolComponent;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
@@ -41,6 +42,7 @@ import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -55,7 +57,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
@@ -541,32 +542,37 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     protected void createContent(final StackPane root) {
         this.selectionHandler = this::processSelect;
 
-        final VBox parameterContainer = new VBox();
-        parameterContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_CONTAINER);
-
         final Pane emptyPane = new Pane();
 
         modelNodeTree = new ModelNodeTree(selectionHandler, this);
         modelPropertyEditor = new ModelPropertyEditor(this);
 
         final SplitPane parameterSplitContainer = new SplitPane(modelNodeTree, modelPropertyEditor);
-        parameterSplitContainer.setId(CSSIds.MODEL_FILE_EDITOR_PARAMETER_SPLIT_PANE);
-        parameterSplitContainer.prefHeightProperty().bind(parameterContainer.heightProperty());
+        parameterSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        parameterSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        parameterSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        parameterContainer.prefHeightProperty().bind(root.heightProperty());
+        final SplitPane mainSplitContainer = new SplitPane(emptyPane);
+        mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
-        final SplitPane mainSplitContainer = new SplitPane(emptyPane, parameterContainer);
-        mainSplitContainer.setId(CSSIds.MODEL_FILE_EDITOR_MAIN_SPLIT_PANE);
+        final EditorToolComponent editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
+        editorToolComponent.prefHeightProperty().bind(root.heightProperty());
+        editorToolComponent.addComponent(parameterSplitContainer, "Objects");
 
-        FXUtils.addToPane(parameterSplitContainer, parameterContainer);
+        mainSplitContainer.getItems().add(editorToolComponent);
+
         FXUtils.addToPane(mainSplitContainer, root);
 
-
-        root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(mainSplitContainer));
+        root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(editorToolComponent, mainSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(parameterSplitContainer));
     }
 
-    private static void calcHSplitSize(final SplitPane splitContainer) {
+    private static void calcHSplitSize(final EditorToolComponent toolComponent, final SplitPane splitContainer) {
+        if (toolComponent.isCollapsed()) {
+            splitContainer.setDividerPosition(0, 0.99);
+            Platform.runLater(() -> splitContainer.setDividerPosition(0, 1));
+            return;
+        }
         splitContainer.setDividerPosition(0, 0.8);
     }
 

@@ -24,7 +24,8 @@
 }
 
 #GlobalToolComponent {
-    -fx-tab-max-height: 15;
+    -fx-min-width: 32;
+    -fx-tab-max-height: 18;
 }
 
 #AssetComponent {
@@ -58,7 +59,7 @@
 
 #EditorAreaComponent {
     -fx-min-width: 500;
-    -fx-tab-max-height: 15;
+    -fx-tab-max-height: 18;
 }
 
 #FileEditorToolbar {
@@ -68,6 +69,19 @@
     -fx-max-height: -fx-min-height;
     -fx-background-color: -fx-color-panel-200;
     -fx-padding: 10, 0, 0, 0;
+}
+
+#FileEditorMainSplitPane {
+    -fx-background-color: transparent;
+}
+
+#FileEditorToolSplitPane {
+    -fx-background-color: transparent;
+    -fx-orientation: vertical;
+}
+
+#FileEditorToolComponent {
+    -fx-min-width: 32;
 }
 
 #TextEditorTextArea {
@@ -368,19 +382,6 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20;
-}
-
-#ModelFileEditorMainSplitPane {
-    -fx-background-color: transparent;
-}
-
-#ModelFileEditorParameterSplitPane {
-    -fx-background-color: transparent;
-    -fx-orientation: vertical;
-}
-
-#ModelFileEditorParameterContainer {
-    -fx-background-color: -fx-color-panel-200;
 }
 
 #ModelNodeTreeCell {

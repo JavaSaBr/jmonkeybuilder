@@ -415,23 +415,21 @@
 }
 
 .split-pane > .split-pane-divider {
-    -fx-padding: 0 0.01em 0 0.01em; /* 0 3 0 3 */
+    -fx-padding: 0 1px 0 1px; /* 0 3 0 3 */
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: -fx-color-600;
+    -fx-background-color: -fx-color-panel-900;
     -fx-background-insets: 0;
     -fx-effect: null;
-    -fx-border-color: red;
-    -fx-cursor: move;
+    -fx-border-width: 0;
 }
 
 .split-pane:vertical > .split-pane-divider {
-    -fx-background-color: -fx-color-600;
+    -fx-background-color: -fx-color-panel-900;
     -fx-background-insets: 0;
     -fx-effect: null;
-    -fx-border-color: red;
-    -fx-cursor: move;
+    -fx-border-width: 0;
 }
 
 /* TabPane */

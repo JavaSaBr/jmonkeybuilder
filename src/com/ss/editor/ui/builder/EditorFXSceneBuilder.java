@@ -94,14 +94,15 @@ public class EditorFXSceneBuilder {
     private static void build(final EditorFXScene scene, final StackPane container) {
 
         final EditorBarComponent barComponent = new EditorBarComponent();
-
-        final GlobalToolComponent globalToolComponent = new GlobalToolComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 
-        final SplitPane splitContainer = new SplitPane(globalToolComponent, editorAreaComponent);
+        final SplitPane splitContainer = new SplitPane();
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
+        final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer, 0);
         globalToolComponent.addComponent(new AssetComponent(), "Asset");
+
+        splitContainer.getItems().addAll(globalToolComponent, editorAreaComponent);
 
         FXUtils.addToPane(splitContainer, container);
         FXUtils.addToPane(barComponent, container);
@@ -112,11 +113,16 @@ public class EditorFXSceneBuilder {
 
         barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
 
-        scene.widthProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(splitContainer, scene));
-        scene.heightProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(splitContainer, scene));
+        scene.widthProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(globalToolComponent, splitContainer, scene));
     }
 
-    private static void calcSplitSize(final SplitPane splitContainer, final Scene scene) {
+    private static void calcSplitSize(final GlobalToolComponent toolComponent, final SplitPane splitContainer, final Scene scene) {
+
+        if (toolComponent.isCollapsed()) {
+            splitContainer.setDividerPosition(0, 0);
+            return;
+        }
+
         final double width = scene.getWidth();
         final double percent = min(0.5, max(0.1, 300 / width));
         splitContainer.setDividerPosition(0, percent);
