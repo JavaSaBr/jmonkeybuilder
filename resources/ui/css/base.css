@@ -299,7 +299,6 @@
     -fx-selection-bar-text: -fx-text-background-color;
 
     /* These are needed for Popup */
-    -fx-background-color: inherit;
     -fx-background-radius: inherit;
     -fx-background-insets: inherit;
     -fx-padding: inherit;
@@ -352,10 +351,10 @@
 
     -fx-control-app-bar: #343434;
 
-    -fx-backgound-status-bar: #000000;
-    -fx-backgound-app-bar: #212121;
-    -fx-backgound-background: #303030;
-    -fx-backgound-dialogs: #424242;
+    -fx-background-status-bar: #000000;
+    -fx-background-app-bar: #212121;
+    -fx-background-background: #303030;
+    -fx-background-dialogs: #424242;
 
     -fx-material-shadow-panel: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.01, 1, 1);
     -fx-material-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1, 0, 1);
@@ -416,6 +415,10 @@
 
 /* ScrollBar */
 
+.corner {
+    -fx-background-color: transparent;
+}
+
 .scroll-bar:horizontal {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
@@ -433,14 +436,37 @@
     -fx-background-insets: 0;
 }
 .scroll-bar > .thumb {
-    -fx-background-color: -fx-color-500;
+    -fx-background-color: -fx-color-600;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 }
 .scroll-bar:vertical > .thumb {
-    -fx-background-color: -fx-color-500;
+    -fx-background-color: -fx-color-600;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
+}
+
+.scroll-bar > .track {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical > .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .track-background {
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical > .track-background {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .increment-button,
+.scroll-bar > .decrement-button,
+.scroll-bar > .increment-button:hover,
+.scroll-bar > .decrement-button:hover,
+.scroll-bar > .increment-button:pressed,
+.scroll-bar > .decrement-button:pressed {
+    -fx-padding: 2px;
 }
 
 .scroll-bar > .increment-button > .increment-arrow,
@@ -456,7 +482,6 @@
 .scroll-bar:horizontal > .increment-button > .increment-arrow,
 .scroll-bar:vertical > .decrement-button > .decrement-arrow,
 .scroll-bar:vertical > .increment-button > .increment-arrow {
-    -fx-shape: null;
     -fx-padding: 0;
 }
 
@@ -473,13 +498,13 @@
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: -fx-color-15;
+    -fx-background-color: -fx-background-status-bar;
     -fx-background-insets: 0;
     -fx-effect: null;
 }
 
 .split-pane:vertical > .split-pane-divider {
-    -fx-background-color: -fx-color-15;
+    -fx-background-color: -fx-background-status-bar;
     -fx-background-insets: 0;
     -fx-effect: null;
 }
@@ -549,7 +574,7 @@
 
 .tab-pane > .tab-header-area > .tab-header-background {
     /* TODO should not be using text-box-border I think? */
-    -fx-background-color: -fx-backgound-background;
+    -fx-background-color: -fx-background-background;
 }
 
 .tab-pane:top > .tab-header-area > .tab-header-background {
@@ -676,10 +701,10 @@
 .check-box > .box,
 .choice-box,
 .color-picker.split-button > .color-picker-label {
-    -fx-body-color: -fx-color-500;
+    -fx-body-color: transparent;
     -fx-background-color: -fx-body-color;
     -fx-background-insets: 0;
-    -fx-background-radius: 0;
+    -fx-background-radius: 2px;
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-border-insets: 0;
@@ -688,10 +713,6 @@
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
     -fx-cursor: hand;
-    -fx-effect: -fx-material-shadow-control;
-}
-
-.check-box > .box {
     -fx-effect: null;
 }
 
@@ -712,6 +733,12 @@
     -fx-effect: null;
 }
 
+.combo-box-base .arrow,
+.combo-box-base:hover .arrow {
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+}
+
 .button:hover,
 .toggle-button:hover,
 .radio-button:hover > .radio,
@@ -726,12 +753,13 @@
 .color-picker.split-button > .arrow-button:hover,
 .color-picker.split-button > .color-picker-label:hover,
 .tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:hover {
-    -fx-body-color: -fx-color-400;
+    -fx-body-color: -fx-button-background-hover;
 }
 
 .combo-box-base:hover,
 .combo-box-base:editable > .arrow-button:hover {
 }
+
 
 .button:armed,
 .toggle-button:armed,
@@ -746,7 +774,7 @@
 .scroll-bar > .decrement-button:pressed,
 .choice-box:showing,
 .tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:pressed {
-    -fx-body-color: -fx-color-600;
+    -fx-body-color: -fx-button-background-arm;
 }
 
 .button:focused,
@@ -766,6 +794,40 @@
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 }
+
+.check-box .box  {
+    -fx-border-color: -fx-color-0;
+    -fx-border-width: 1;
+    -fx-border-radius: 2;
+    -fx-border-insets: 0;
+    -fx-padding: 2;
+}
+
+.check-box:selected .box  {
+    -fx-border-color: -fx-color-500;
+    -fx-border-width: 1;
+    -fx-border-radius: 2;
+    -fx-border-insets: 0;
+    -fx-padding: 2;
+    -fx-background-color: -fx-color-500;
+    -fx-background-radius: 2px;
+}
+
+.check-box .mark {
+    -fx-border-color: transparent;
+    -fx-effect: null;
+}
+
+.check-box:hover .mark {
+    -fx-effect: null;
+}
+
+
+.check-box:selected .mark {
+    -fx-background-color: -fx-background-background;
+    -fx-effect: null;
+}
+
 
 /* MenuBar */
 

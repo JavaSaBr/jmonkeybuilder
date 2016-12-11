@@ -1,7 +1,10 @@
 package com.ss.editor.ui.dialog;
 
+import static javafx.geometry.Pos.BOTTOM_LEFT;
+import static javafx.scene.text.TextAlignment.LEFT;
+
 import com.ss.editor.Editor;
-import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
@@ -9,11 +12,9 @@ import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -22,11 +23,6 @@ import rlib.ui.hanlder.WindowDragHandler;
 import rlib.ui.util.FXUtils;
 import rlib.ui.window.popup.dialog.AbstractPopupDialog;
 
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
-import static com.ss.editor.ui.css.CSSClasses.TOOLBAR_BUTTON;
-import static javafx.geometry.Pos.BOTTOM_LEFT;
-import static javafx.scene.text.TextAlignment.LEFT;
-
 /**
  * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link
  * Editor}.
@@ -34,9 +30,6 @@ import static javafx.scene.text.TextAlignment.LEFT;
  * @author JavaSaBr
  */
 public class EditorDialog extends AbstractPopupDialog {
-
-    public static final Insets TITLE_LABEL_OFFSET = new Insets(0, 0, 0, 10);
-    public static final Insets CLOSE_BUTTON_OFFSET = new Insets(0, 10, 0, 0);
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
@@ -108,20 +101,16 @@ public class EditorDialog extends AbstractPopupDialog {
 
         final Button closeButton = new Button();
         closeButton.setId(CSSIds.EDITOR_DIALOG_HEADER_BUTTON_CLOSE);
-        closeButton.setGraphic(new ImageView(Icons.CLOSE_18));
         closeButton.setOnAction(event -> hide());
 
-        FXUtils.addClassTo(titleLabel, MAIN_FONT_13);
-        FXUtils.addClassTo(closeButton, TOOLBAR_BUTTON);
+        FXUtils.addClassTo(titleLabel, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(closeButton, CSSClasses.EDITOR_BAR_BUTTON);
 
         FXUtils.addToPane(titleLabel, titleContainer);
         FXUtils.addToPane(closeButton, header);
         FXUtils.addToPane(titleContainer, header);
 
         WindowDragHandler.install(header);
-
-        HBox.setMargin(titleLabel, TITLE_LABEL_OFFSET);
-        StackPane.setMargin(closeButton, CLOSE_BUTTON_OFFSET);
 
         FXUtils.addToPane(header, root);
     }

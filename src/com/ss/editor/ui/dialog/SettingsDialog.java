@@ -4,14 +4,19 @@ import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.config.ScreenSize;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.scene.EditorFXScene;
 
 import java.awt.Point;
+import java.io.File;
+import java.nio.file.Path;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -23,9 +28,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
@@ -33,28 +41,28 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация диалога для настроек графики.
+ * The dialog with settings.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class GraphicSettingsDialog extends EditorDialog {
+public class SettingsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
     private static final Insets MESSAGE_OFFSET = new Insets(5, 0, 5, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(5, CANCEL_BUTTON_OFFSET.getRight(), 29, 0);
-    private static final Insets FIELD_OFFSET = new Insets(5, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    private static final Insets LAST_FIELD_OFFSET = new Insets(5, 20, 10, 0);
+    private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
+    private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(500, 365);
+    private static final Point DIALOG_SIZE = new Point(600, 320);
 
-    private static final Array<ScreenSize> SCREEN_SIZES = ArrayFactory.newArray(ScreenSize.class);
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
     static {
-        SCREEN_SIZES.addAll(ScreenSize.values());
         ANISOTROPYCS.add(0);
         ANISOTROPYCS.add(2);
         ANISOTROPYCS.add(4);
@@ -63,17 +71,12 @@ public class GraphicSettingsDialog extends EditorDialog {
     }
 
     /**
-     * Надпись с сообщением.
+     * The message label.
      */
     private Label messageLabel;
 
     /**
-     * Комбобокс с выбором разрешения.
-     */
-    private ComboBox<ScreenSize> screenSizeComboBox;
-
-    /**
-     * Комбобокс с выбором анизатропного фильтра.
+     * The combobox with anisotropy levels.
      */
     private ComboBox<Integer> anisotropyComboBox;
 
@@ -93,11 +96,6 @@ public class GraphicSettingsDialog extends EditorDialog {
     private Spinner<Double> toneMapFilterWhitePointZ;
 
     /**
-     * Включение/выключение полноэкранного режима.
-     */
-    private CheckBox fullscreenCheckBox;
-
-    /**
      * Включение/выключение режима гамма коррекции.
      */
     private CheckBox gammaCorrectionCheckBox;
@@ -111,6 +109,16 @@ public class GraphicSettingsDialog extends EditorDialog {
      * Включение/выключение FXAA.
      */
     private CheckBox fxaaFilterCheckBox;
+
+    /**
+     * Поле для отображения выбранной папки дополнительного classpath.
+     */
+    private TextField additionalClasspathField;
+
+    /**
+     * Выбранная папка для расширения classpath.
+     */
+    private Path additionalClasspathFolder;
 
     /**
      * Игнорировать ли слушателей.
@@ -147,21 +155,104 @@ public class GraphicSettingsDialog extends EditorDialog {
         super.createContent(root);
 
         messageLabel = new Label();
-        messageLabel.setId(CSSIds.GRAPHICS_DIALOG_MESSAGE_LABEL);
+        messageLabel.setId(CSSIds.SETTINGS_DIALOG_MESSAGE_LABEL);
 
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty().multiply(0.8));
-        FXUtils.addClassTo(messageLabel, CSSClasses.MAIN_FONT_15);
+        FXUtils.addClassTo(messageLabel, CSSClasses.SPECIAL_FONT_15);
         FXUtils.addToPane(messageLabel, root);
 
         VBox.setMargin(messageLabel, MESSAGE_OFFSET);
 
-        createScreenSizeControl(root);
-        createFullscreenControl(root);
         createAnisotropyControl(root);
         createGammaCorrectionControl(root);
         createFXAAControl(root);
         createToneMapFilterControl(root);
         createToneMapFilterWhitePointControl(root);
+        createAdditionalClasspathControl(root);
+    }
+
+    /**
+     * Создание настройки для выбора папки для расширения classpath.
+     */
+    private void createAdditionalClasspathControl(final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        additionalClasspathField = new TextField();
+        additionalClasspathField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        additionalClasspathField.setEditable(false);
+        additionalClasspathField.prefWidthProperty().bind(root.widthProperty());
+
+        final Button addButton = new Button();
+        addButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
+        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setOnAction(event -> processAddCF());
+
+        final Button removeButton = new Button();
+        removeButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setOnAction(event -> processRemoveCF());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(additionalClasspathField, container);
+        FXUtils.addToPane(addButton, container);
+        FXUtils.addToPane(removeButton, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(additionalClasspathField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+
+        HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
+        HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
+        VBox.setMargin(container, LAST_FIELD_OFFSET);
+    }
+
+    /**
+     * Процесс удаления дополнительного classpath.
+     */
+    private void processRemoveCF() {
+        setAdditionalClasspathFolder(null);
+
+        final TextField textField = getAdditionalClasspathField();
+        textField.setText(StringUtils.EMPTY);
+    }
+
+    /**
+     * @return поле для отображения выбранной папки дополнительного classpath.
+     */
+    private TextField getAdditionalClasspathField() {
+        return additionalClasspathField;
+    }
+
+    /**
+     * Процесс указания папки для расширения classpath.
+     */
+    private void processAddCF() {
+
+        final DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(Messages.OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final Path currentAdditionalCP = config.getAdditionalClasspath();
+        final File currentFolder = currentAdditionalCP == null ? null : currentAdditionalCP.toFile();
+
+        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final File folder = chooser.showDialog(scene.getWindow());
+
+        if (folder == null) return;
+
+        setAdditionalClasspathFolder(folder.toPath());
+
+        final TextField textField = getAdditionalClasspathField();
+        textField.setText(folder.toString());
     }
 
     /**
@@ -172,19 +263,19 @@ public class GraphicSettingsDialog extends EditorDialog {
         final HBox gammaCorrectionContainer = new HBox();
         gammaCorrectionContainer.setAlignment(Pos.CENTER_LEFT);
 
-        final Label gammaCorrectionLabel = new Label(Messages.GRAPHICS_DIALOG_GAMMA_CORRECTION + ":");
-        gammaCorrectionLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
+        final Label gammaCorrectionLabel = new Label(Messages.SETTINGS_DIALOG_GAMMA_CORRECTION + ":");
+        gammaCorrectionLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         gammaCorrectionCheckBox = new CheckBox();
-        gammaCorrectionCheckBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        gammaCorrectionCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         gammaCorrectionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
         FXUtils.addToPane(gammaCorrectionLabel, gammaCorrectionContainer);
         FXUtils.addToPane(gammaCorrectionCheckBox, gammaCorrectionContainer);
         FXUtils.addToPane(gammaCorrectionContainer, root);
 
-        FXUtils.addClassTo(gammaCorrectionLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(gammaCorrectionCheckBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(gammaCorrectionLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(gammaCorrectionCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(gammaCorrectionContainer, FIELD_OFFSET);
     }
@@ -197,19 +288,19 @@ public class GraphicSettingsDialog extends EditorDialog {
         final HBox toneMapFilterContainer = new HBox();
         toneMapFilterContainer.setAlignment(Pos.CENTER_LEFT);
 
-        final Label toneMapFilterLabel = new Label(Messages.GRAPHICS_DIALOG_TONEMAP_FILTER + ":");
-        toneMapFilterLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
+        final Label toneMapFilterLabel = new Label(Messages.SETTINGS_DIALOG_TONEMAP_FILTER + ":");
+        toneMapFilterLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         toneMapFilterCheckBox = new CheckBox();
-        toneMapFilterCheckBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        toneMapFilterCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         toneMapFilterCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
         FXUtils.addToPane(toneMapFilterLabel, toneMapFilterContainer);
         FXUtils.addToPane(toneMapFilterCheckBox, toneMapFilterContainer);
         FXUtils.addToPane(toneMapFilterContainer, root);
 
-        FXUtils.addClassTo(toneMapFilterLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(toneMapFilterCheckBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(toneMapFilterLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(toneMapFilterCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(toneMapFilterContainer, FIELD_OFFSET);
     }
@@ -223,22 +314,22 @@ public class GraphicSettingsDialog extends EditorDialog {
         toneMapFilterWhitePointContainer.setAlignment(Pos.CENTER_LEFT);
         toneMapFilterWhitePointContainer.disableProperty().bind(toneMapFilterCheckBox.selectedProperty().not());
 
-        final Label toneMapFilterWhitePointLabel = new Label(Messages.GRAPHICS_DIALOG_TONEMAP_FILTER_WHITE_POINT + ":");
-        toneMapFilterWhitePointLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
+        final Label toneMapFilterWhitePointLabel = new Label(Messages.SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT + ":");
+        toneMapFilterWhitePointLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        xLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD);
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        yLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD);
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        zLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD);
 
         SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
 
         toneMapFilterWhitePointX = new Spinner<>();
-        toneMapFilterWhitePointX.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        toneMapFilterWhitePointX.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         toneMapFilterWhitePointX.setValueFactory(valueFactory);
         toneMapFilterWhitePointX.setEditable(true);
         toneMapFilterWhitePointX.setOnScroll(event -> processScroll(toneMapFilterWhitePointX, event));
@@ -247,7 +338,7 @@ public class GraphicSettingsDialog extends EditorDialog {
         valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
 
         toneMapFilterWhitePointY = new Spinner<>();
-        toneMapFilterWhitePointY.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        toneMapFilterWhitePointY.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         toneMapFilterWhitePointY.setValueFactory(valueFactory);
         toneMapFilterWhitePointY.setEditable(true);
         toneMapFilterWhitePointY.setOnScroll(event -> processScroll(toneMapFilterWhitePointY, event));
@@ -256,7 +347,7 @@ public class GraphicSettingsDialog extends EditorDialog {
         valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
 
         toneMapFilterWhitePointZ = new Spinner<>();
-        toneMapFilterWhitePointZ.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        toneMapFilterWhitePointZ.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         toneMapFilterWhitePointZ.setValueFactory(valueFactory);
         toneMapFilterWhitePointZ.setEditable(true);
         toneMapFilterWhitePointZ.setOnScroll(event -> processScroll(toneMapFilterWhitePointZ, event));
@@ -271,16 +362,16 @@ public class GraphicSettingsDialog extends EditorDialog {
         FXUtils.addToPane(toneMapFilterWhitePointZ, toneMapFilterWhitePointContainer);
         FXUtils.addToPane(toneMapFilterWhitePointContainer, root);
 
-        FXUtils.addClassTo(toneMapFilterWhitePointLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(xLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(toneMapFilterWhitePointX, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(yLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(toneMapFilterWhitePointY, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(zLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(toneMapFilterWhitePointZ, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(toneMapFilterWhitePointLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(toneMapFilterWhitePointX, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(toneMapFilterWhitePointY, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(toneMapFilterWhitePointZ, CSSClasses.SPECIAL_FONT_14);
 
         HBox.setMargin(xLabel, new Insets(0, 0, 0, 4));
-        VBox.setMargin(toneMapFilterWhitePointContainer, LAST_FIELD_OFFSET);
+        VBox.setMargin(toneMapFilterWhitePointContainer, FIELD_OFFSET);
     }
 
     /**
@@ -299,31 +390,6 @@ public class GraphicSettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание настройки для активации полноэкранного режима.
-     */
-    private void createFullscreenControl(final VBox root) {
-
-        final HBox fullscreenContainer = new HBox();
-        fullscreenContainer.setAlignment(Pos.CENTER_LEFT);
-
-        final Label fullscreenLabel = new Label(Messages.GRAPHICS_DIALOG_FULLSCREEN + ":");
-        fullscreenLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
-
-        fullscreenCheckBox = new CheckBox();
-        fullscreenCheckBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
-        fullscreenCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
-
-        FXUtils.addToPane(fullscreenLabel, fullscreenContainer);
-        FXUtils.addToPane(fullscreenCheckBox, fullscreenContainer);
-        FXUtils.addToPane(fullscreenContainer, root);
-
-        FXUtils.addClassTo(fullscreenLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(fullscreenCheckBox, CSSClasses.MAIN_FONT_13);
-
-        VBox.setMargin(fullscreenContainer, FIELD_OFFSET);
-    }
-
-    /**
      * Создание настройки для активации FXAA.
      */
     private void createFXAAControl(final VBox root) {
@@ -331,19 +397,19 @@ public class GraphicSettingsDialog extends EditorDialog {
         final HBox fxaaContainer = new HBox();
         fxaaContainer.setAlignment(Pos.CENTER_LEFT);
 
-        final Label fxaaLabel = new Label(Messages.GRAPHICS_DIALOG_FXAA + ":");
-        fxaaLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
+        final Label fxaaLabel = new Label(Messages.SETTINGS_DIALOG_FXAA + ":");
+        fxaaLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         fxaaFilterCheckBox = new CheckBox();
-        fxaaFilterCheckBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        fxaaFilterCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         fxaaFilterCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
         FXUtils.addToPane(fxaaLabel, fxaaContainer);
         FXUtils.addToPane(fxaaFilterCheckBox, fxaaContainer);
         FXUtils.addToPane(fxaaContainer, root);
 
-        FXUtils.addClassTo(fxaaLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(fxaaLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(fxaaContainer, FIELD_OFFSET);
     }
@@ -356,11 +422,11 @@ public class GraphicSettingsDialog extends EditorDialog {
         final HBox anisotropyContainer = new HBox();
         anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
 
-        final Label anisotropyLabel = new Label(Messages.GRAPHICS_DIALOG_ANISOTROPY + ":");
-        anisotropyLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
+        final Label anisotropyLabel = new Label(Messages.SETTINGS_DIALOG_ANISOTROPY + ":");
+        anisotropyLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         anisotropyComboBox = new ComboBox<>();
-        anisotropyComboBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
+        anisotropyComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         anisotropyComboBox.prefWidthProperty().bind(root.widthProperty());
         anisotropyComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> validate());
 
@@ -368,44 +434,14 @@ public class GraphicSettingsDialog extends EditorDialog {
         FXUtils.addToPane(anisotropyComboBox, anisotropyContainer);
         FXUtils.addToPane(anisotropyContainer, root);
 
-        FXUtils.addClassTo(anisotropyLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(anisotropyComboBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(anisotropyLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(anisotropyComboBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(anisotropyContainer, FIELD_OFFSET);
 
         final ObservableList<Integer> items = anisotropyComboBox.getItems();
 
         ANISOTROPYCS.forEach(items::add);
-    }
-
-    /**
-     * Создание настройки для выбора разрешения экрана.
-     */
-    private void createScreenSizeControl(final VBox root) {
-
-        final HBox screenSizeContainer = new HBox();
-        screenSizeContainer.setAlignment(Pos.CENTER_LEFT);
-
-        final Label screenSizeLabel = new Label(Messages.GRAPHICS_DIALOG_SCREEN_SIZE + ":");
-        screenSizeLabel.setId(CSSIds.GRAPHICS_DIALOG_LABEL);
-
-        screenSizeComboBox = new ComboBox<>();
-        screenSizeComboBox.setId(CSSIds.GRAPHICS_DIALOG_FIELD);
-        screenSizeComboBox.prefWidthProperty().bind(root.widthProperty());
-        screenSizeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> validate());
-
-        FXUtils.addToPane(screenSizeLabel, screenSizeContainer);
-        FXUtils.addToPane(screenSizeComboBox, screenSizeContainer);
-        FXUtils.addToPane(screenSizeContainer, root);
-
-        FXUtils.addClassTo(screenSizeLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(screenSizeComboBox, CSSClasses.MAIN_FONT_13);
-
-        VBox.setMargin(screenSizeContainer, FIELD_OFFSET);
-
-        final ObservableList<ScreenSize> items = screenSizeComboBox.getItems();
-
-        SCREEN_SIZES.forEach(items::add);
     }
 
     /**
@@ -451,24 +487,10 @@ public class GraphicSettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return включение/выключение полноэкранного режима.
-     */
-    private CheckBox getFullscreenCheckBox() {
-        return fullscreenCheckBox;
-    }
-
-    /**
      * @return комбобокс с выбором анизатропного фильтра.
      */
     private ComboBox<Integer> getAnisotropyComboBox() {
         return anisotropyComboBox;
-    }
-
-    /**
-     * @return комбобокс с выбором разрешения.
-     */
-    private ComboBox<ScreenSize> getScreenSizeComboBox() {
-        return screenSizeComboBox;
     }
 
     /**
@@ -489,35 +511,23 @@ public class GraphicSettingsDialog extends EditorDialog {
         int needRestart = 0;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final ScreenSize currentScreenSize = editorConfig.getScreenSize();
         final int currentAnisotropy = editorConfig.getAnisotropy();
-        final boolean currentFullscreen = editorConfig.isFullscreen();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
-
-        final ComboBox<ScreenSize> screenSizeComboBox = getScreenSizeComboBox();
-        final ScreenSize screenSize = screenSizeComboBox.getSelectionModel().getSelectedItem();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
 
-        final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
-        final boolean fullscreen = fullscreenCheckBox.isSelected();
-
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
 
-        if (currentScreenSize != screenSize) {
-            needRestart++;
-        } else if (currentAnisotropy != anisotropy) {
-            needRestart++;
-        } else if (currentFullscreen != fullscreen) {
+        if (currentAnisotropy != anisotropy) {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
             needRestart++;
         }
 
         if (needRestart > 0) {
-            messageLabel.setText(Messages.GRAPHICS_DIALOG_MESSAGE);
+            messageLabel.setText(Messages.SETTINGS_DIALOG_MESSAGE);
         } else {
             messageLabel.setText(StringUtils.EMPTY);
         }
@@ -530,19 +540,12 @@ public class GraphicSettingsDialog extends EditorDialog {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
 
-        final ComboBox<ScreenSize> screenSizeComboBox = getScreenSizeComboBox();
-        final SingleSelectionModel<ScreenSize> selectedScreenSize = screenSizeComboBox.getSelectionModel();
-        selectedScreenSize.select(editorConfig.getScreenSize());
-
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final SingleSelectionModel<Integer> selectedAnisotropy = anisotropyComboBox.getSelectionModel();
         selectedAnisotropy.select(Integer.valueOf(editorConfig.getAnisotropy()));
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         fxaaFilterCheckBox.setSelected(editorConfig.isFXAA());
-
-        final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
-        fullscreenCheckBox.setSelected(editorConfig.isFullscreen());
 
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         gammaCorrectionCheckBox.setSelected(editorConfig.isGammaCorrection());
@@ -560,6 +563,30 @@ public class GraphicSettingsDialog extends EditorDialog {
 
         final Spinner<Double> toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ();
         toneMapFilterWhitePointZ.getValueFactory().setValue((double) toneMapFilterWhitePoint.getZ());
+
+        final Path additionalClasspath = editorConfig.getAdditionalClasspath();
+
+        final TextField additionalClasspathField = getAdditionalClasspathField();
+
+        if (additionalClasspath != null) {
+            additionalClasspathField.setText(additionalClasspath.toString());
+        }
+
+        setAdditionalClasspathFolder(additionalClasspath);
+    }
+
+    /**
+     * @return выбранная папка для расширения classpath.
+     */
+    private Path getAdditionalClasspathFolder() {
+        return additionalClasspathFolder;
+    }
+
+    /**
+     * @param additionalClasspathFolder выбранная папка для расширения classpath.
+     */
+    private void setAdditionalClasspathFolder(final Path additionalClasspathFolder) {
+        this.additionalClasspathFolder = additionalClasspathFolder;
     }
 
     @Override
@@ -569,13 +596,16 @@ public class GraphicSettingsDialog extends EditorDialog {
         final HBox container = new HBox();
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
-        final Button okButton = new Button(Messages.GRAPHICS_DIALOG_BUTTON_OK);
+        final Button okButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_OK);
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
 
-        final Button cancelButton = new Button(Messages.GRAPHICS_DIALOG_BUTTON_CANCEL);
+        final Button cancelButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_CANCEL);
         cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
+
+        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
 
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);
@@ -593,22 +623,14 @@ public class GraphicSettingsDialog extends EditorDialog {
         int needRestart = 0;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final ScreenSize currentScreenSize = editorConfig.getScreenSize();
         final int currentAnisotropy = editorConfig.getAnisotropy();
-        final boolean currentFullscreen = editorConfig.isFullscreen();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
-
-        final ComboBox<ScreenSize> screenSizeComboBox = getScreenSizeComboBox();
-        final ScreenSize screenSize = screenSizeComboBox.getSelectionModel().getSelectedItem();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
-
-        final CheckBox fullscreenCheckBox = getFullscreenCheckBox();
-        final boolean fullscreen = fullscreenCheckBox.isSelected();
 
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
@@ -622,23 +644,21 @@ public class GraphicSettingsDialog extends EditorDialog {
 
         final Vector3f toneMapFilterWhitePoint = new Vector3f(toneMapFilterWhitePointX, toneMapFilterWhitePointY, toneMapFilterWhitePointZ);
 
-        if (currentScreenSize != screenSize) {
-            needRestart++;
-        } else if (currentAnisotropy != anisotropy) {
-            needRestart++;
-        } else if (currentFullscreen != fullscreen) {
+        if (currentAnisotropy != anisotropy) {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
             needRestart++;
         }
 
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+        classpathManager.updateAdditionalCL();
+
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
-        editorConfig.setScreenSize(screenSize);
-        editorConfig.setFullscreen(fullscreen);
         editorConfig.setGammaCorrection(gammaCorrection);
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
+        editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
         editorConfig.save();
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
@@ -660,7 +680,7 @@ public class GraphicSettingsDialog extends EditorDialog {
 
     @Override
     protected String getTitleText() {
-        return Messages.GRAPHICS_DIALOG_TITLE;
+        return Messages.SETTINGS_DIALOG_TITLE;
     }
 
     @Override

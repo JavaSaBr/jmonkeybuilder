@@ -7,8 +7,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.CloseEditorAction;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
-import com.ss.editor.ui.component.bar.action.OpenGraphicSettingsAction;
-import com.ss.editor.ui.component.bar.action.OpenOtherSettingsAction;
+import com.ss.editor.ui.component.bar.action.OpenSettingsAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -233,12 +232,8 @@ public class EditorBarComponent extends StackPane implements ScreenComponent {
     }
 
     private void createSettingsMenu(final Array<Node> nodes) {
-
-        final Button graphicSettings = new OpenGraphicSettingsAction();
-        final Button otherSettings = new OpenOtherSettingsAction();
-
+        final Button graphicSettings = new OpenSettingsAction();
         nodes.add(graphicSettings);
-        nodes.add(otherSettings);
     }
 
     private void processMenu() {

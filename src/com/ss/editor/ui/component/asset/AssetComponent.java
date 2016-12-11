@@ -27,7 +27,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
     public static final String COMPONENT_ID = "AssetComponent";
 
-    public static final Insets TREE_OFFSET = new Insets(6, 3, 0, 0);
+    private static final Insets TREE_OFFSET = new Insets(6, 3, 0, 0);
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 

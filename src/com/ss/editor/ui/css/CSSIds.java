@@ -71,9 +71,9 @@ public interface CSSIds {
     String FILE_CREATOR_LABEL = "FileCreatorLabel";
     String FILE_CREATOR_TEXT_FIELD = "FileCreatorTextField";
 
-    String GRAPHICS_DIALOG_MESSAGE_LABEL = "GraphicsDialogMessageLabel";
-    String GRAPHICS_DIALOG_LABEL = "GraphicsDialogLabel";
-    String GRAPHICS_DIALOG_FIELD = "GraphicsDialogField";
+    String SETTINGS_DIALOG_MESSAGE_LABEL = "SettingsDialogMessageLabel";
+    String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
+    String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
     String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";

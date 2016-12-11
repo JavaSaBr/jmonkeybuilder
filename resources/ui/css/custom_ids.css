@@ -4,7 +4,7 @@
     -fx-min-height: 36;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -fx-backgound-app-bar;
+    -fx-background-color: -fx-background-app-bar;
     -fx-effect: -fx-material-shadow-panel;;
 }
 
@@ -26,7 +26,7 @@
 
 #EditorBarDrawer {
     -fx-padding: 1 0 0 0;
-    -fx-background-color: -fx-backgound-background;
+    -fx-background-color: -fx-background-background;
     -fx-alignment: top-left;
     -fx-effect: -fx-material-shadow-panel;
     -fx-pref-width: 200;
@@ -52,17 +52,15 @@
 }
 
 #GlobalToolComponent {
-    -fx-min-width: 28;
+    -fx-min-width: 26;
     -fx-tab-max-height: 18;
 }
 
 #AssetComponent {
-    -fx-background-color: -fx-color-panel-100;
+    -fx-background-color: -fx-background-background;
     -fx-alignment: top-center;
-    -fx-effect: null;
-    -fx-border-color: red;
-    -fx-border-width: 0;
     -fx-min-width: 250;
+    -fx-effect: null;
 }
 
 #AssetComponentBar {
@@ -109,7 +107,7 @@
 }
 
 #FileEditorToolComponent {
-    -fx-min-width: 28;
+    -fx-min-width: 26;
 }
 
 #TextEditorTextArea {
@@ -152,31 +150,31 @@
 
 #EditorDialogBackground {
     -fx-alignment: top-center;
-    -fx-background-color: -fx-color-panel-100;
+    -fx-background-color: -fx-background-dialogs;
     -fx-effect: -fx-material-shadow-panel;
 }
 
 #EditorDialogHeader {
     -fx-alignment: center-right;
-    -fx-background-color: -fx-color-panel-200;
-    -fx-effect: -fx-material-shadow-panel;
-    -fx-min-height: 30;
+    -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-padding: 0 0 0 10;
     -fx-cursor: move;
 }
 
 #EditorDialogHeaderButtonClose {
-    -fx-min-height: 30;
+    -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 30;
+    -fx-min-width: 32;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+    -fx-graphic: url("/ui/icons/actions/24/close.png");
 }
 
 #EditorDialogButtonOk {
-    -fx-min-height: 28;
+    -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 150;
@@ -185,7 +183,7 @@
 }
 
 #EditorDialogButtonCancel {
-    -fx-min-height: 28;
+    -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 150;
@@ -385,27 +383,28 @@
     -fx-max-height: -fx-min-height;
 }
 
-#GraphicsDialogMessageLabel {
+#SettingsDialogMessageLabel {
     -fx-alignment: center;
     -fx-min-height: 35;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-fill: -fx-color-400;
-    -fx-text-fill: -fx-color-400;
+    -fx-fill: red;
+    -fx-text-fill: red;
     -fx-wrap-text: true;
 }
 
-#GraphicsDialogLabel {
+#SettingsDialogLabel {
     -fx-alignment: center-right;
-    -fx-min-width: 200;
+    -fx-min-width: 240;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-padding: 0 6 0 0;
 }
 
-#GraphicsDialogField {
+#SettingsDialogField {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;

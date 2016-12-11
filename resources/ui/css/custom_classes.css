@@ -92,6 +92,13 @@
     -fx-font-style: oblique;
 }
 
+.special-font-16 {
+    -fx-font-family: "Roboto Condensed";
+    -fx-font-size: 16;
+    -fx-font-smoothing-type: lcd;
+    -fx-font-style: oblique;
+}
+
 /* Transparent TreeView */
 .transparent-tree-view {
     -fx-background-color: transparent;
@@ -109,45 +116,8 @@
     -fx-effect: null;
 }
 
-.transparent-tree-view *.scroll-bar:horizontal,
-.transparent-tree-view *.scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-background-insets: 0;
-    -fx-padding: 0;
-}
-
-.transparent-tree-view .scroll-bar:horizontal .track,
-.transparent-tree-view .scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-radius: 0;
-    -fx-effect: null;
-}
-
-.transparent-tree-view .scroll-bar:horizontal .increment-button ,
-.transparent-tree-view .scroll-bar:horizontal .decrement-button {
-    -fx-background-color: orange;
-    -fx-background-radius: 0em;
-    -fx-padding: 0 0 10 0;
-}
-
-.transparent-tree-view .scroll-bar:vertical .increment-button ,
-.transparent-tree-view .scroll-bar:vertical .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0em;
-    -fx-padding: 0 10 0 0;
-}
-
-.transparent-tree-view .scroll-bar .increment-arrow,
-.transparent-tree-view .scroll-bar .decrement-arrow {
-    -fx-shape: " ";
-    -fx-padding: 0;
-}
-
 .transparent-tree-view > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
-    -fx-background: -fx-color-panel-50;
+    -fx-background: -fx-color-600;
     -fx-background-insets: 0;
     -fx-table-cell-border-color: transparent;
     -fx-border-color: transparent;
@@ -155,7 +125,7 @@
 }
 
 .transparent-tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
-    -fx-background: -fx-color-500;
+    -fx-background: -fx-color-600;
     -fx-background-insets: 0;
     -fx-table-cell-border-color: transparent;
     -fx-border-color: transparent;

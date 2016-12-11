@@ -21,8 +21,6 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER;
     public static final String EDITOR_BAR_ASSET_CLOSE_EDITOR;
     public static final String EDITOR_BAR_SETTINGS;
-    public static final String EDITOR_BAR_SETTINGS_GRAPHICS;
-    public static final String EDITOR_BAR_SETTINGS_OTHER;
 
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
@@ -86,17 +84,17 @@ public class Messages {
     public static final String POST_FILTER_VIEW_FILE_CREATOR_TITLE;
     public static final String POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
 
-    public static final String GRAPHICS_DIALOG_TITLE;
-    public static final String GRAPHICS_DIALOG_FXAA;
-    public static final String GRAPHICS_DIALOG_FULLSCREEN;
-    public static final String GRAPHICS_DIALOG_GAMMA_CORRECTION;
-    public static final String GRAPHICS_DIALOG_TONEMAP_FILTER;
-    public static final String GRAPHICS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
-    public static final String GRAPHICS_DIALOG_SCREEN_SIZE;
-    public static final String GRAPHICS_DIALOG_ANISOTROPY;
-    public static final String GRAPHICS_DIALOG_BUTTON_OK;
-    public static final String GRAPHICS_DIALOG_BUTTON_CANCEL;
-    public static final String GRAPHICS_DIALOG_MESSAGE;
+    public static final String SETTINGS_DIALOG_TITLE;
+    public static final String SETTINGS_DIALOG_FXAA;
+    public static final String SETTINGS_DIALOG_FULLSCREEN;
+    public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
+    public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
+    public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
+    public static final String SETTINGS_DIALOG_SCREEN_SIZE;
+    public static final String SETTINGS_DIALOG_ANISOTROPY;
+    public static final String SETTINGS_DIALOG_BUTTON_OK;
+    public static final String SETTINGS_DIALOG_BUTTON_CANCEL;
+    public static final String SETTINGS_DIALOG_MESSAGE;
 
     public static final String OTHER_SETTINGS_DIALOG_TITLE;
     public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
@@ -289,8 +287,6 @@ public class Messages {
         EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponent.asset.close");
 
         EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
-        EDITOR_BAR_SETTINGS_GRAPHICS = bundle.getString("EditorBarComponent.settings.graphics");
-        EDITOR_BAR_SETTINGS_OTHER = bundle.getString("EditorBarComponent.settings.other");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
@@ -353,17 +349,17 @@ public class Messages {
         POST_FILTER_VIEW_FILE_CREATOR_TITLE = bundle.getString("PostFilterViewFileCreatorTitle");
         POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("PostFilterViewFileCreatorFileDescription");
 
-        GRAPHICS_DIALOG_TITLE = bundle.getString("GraphicsDialogTitle");
-        GRAPHICS_DIALOG_FXAA = bundle.getString("GraphicsDialogFXAA");
-        GRAPHICS_DIALOG_FULLSCREEN = bundle.getString("GraphicsDialogFullscreen");
-        GRAPHICS_DIALOG_GAMMA_CORRECTION = bundle.getString("GraphicsDialogGammaCorrection");
-        GRAPHICS_DIALOG_TONEMAP_FILTER = bundle.getString("GraphicsDialogToneMapFilter");
-        GRAPHICS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("GraphicsDialogToneMapFilterWhitePoint");
-        GRAPHICS_DIALOG_SCREEN_SIZE = bundle.getString("GraphicsDialogScreenSize");
-        GRAPHICS_DIALOG_ANISOTROPY = bundle.getString("GraphicsDialogAnisotropy");
-        GRAPHICS_DIALOG_BUTTON_OK = bundle.getString("GraphicsDialogButtonOk");
-        GRAPHICS_DIALOG_BUTTON_CANCEL = bundle.getString("GraphicsDialogButtonCancel");
-        GRAPHICS_DIALOG_MESSAGE = bundle.getString("GraphicsDialogMessage");
+        SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
+        SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
+        SETTINGS_DIALOG_FULLSCREEN = bundle.getString("SettingsDialogFullscreen");
+        SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
+        SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
+        SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
+        SETTINGS_DIALOG_SCREEN_SIZE = bundle.getString("SettingsDialogScreenSize");
+        SETTINGS_DIALOG_ANISOTROPY = bundle.getString("SettingsDialogAnisotropy");
+        SETTINGS_DIALOG_BUTTON_OK = bundle.getString("SettingsDialogButtonOk");
+        SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("SettingsDialogButtonCancel");
+        SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
 
         OTHER_SETTINGS_DIALOG_TITLE = bundle.getString("OtherSettingsDialogTitle");
         OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("OtherSettingsDialogClasspathFolderLabel");
