@@ -17,6 +17,7 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * The starter of the JavaFX application.
@@ -96,6 +97,7 @@ public class JFXApplication extends Application {
         icons.add(new Image("/ui/icons/app/SSEd32.png"));
         icons.add(new Image("/ui/icons/app/SSEd16.png"));
 
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
         stage.setTitle(Config.TITLE + " " + Config.VERSION);
@@ -103,7 +105,7 @@ public class JFXApplication extends Application {
         stage.show();
     }
 
-    protected void onExit() {
+    public void onExit() {
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
         executor.addToExecute(() -> {
             final Editor editor = Editor.getInstance();

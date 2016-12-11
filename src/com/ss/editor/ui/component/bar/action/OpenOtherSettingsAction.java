@@ -5,14 +5,14 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.OtherSettingsDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 
 /**
  * The action for opening the dialog with other settings.
  *
  * @author JavaSaBr.
  */
-public class OpenOtherSettingsAction extends MenuItem {
+public class OpenOtherSettingsAction extends Button {
 
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 

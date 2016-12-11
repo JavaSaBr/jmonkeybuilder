@@ -43,7 +43,7 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
         tab.setContent(component);
         tab.setClosable(false);
 
-        FXUtils.addClassTo(tab, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
 
         getTabs().add(tab);
 

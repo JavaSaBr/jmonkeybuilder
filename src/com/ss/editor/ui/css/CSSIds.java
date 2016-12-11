@@ -8,6 +8,12 @@ package com.ss.editor.ui.css;
 public interface CSSIds {
 
     String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+    String EDITOR_BAR_COMPONENT_MENU_BUTTON = "EditorBarComponentMenuButton";
+    String EDITOR_BAR_COMPONENT_FULLSCREEN_BUTTON = "EditorBarComponentFullscreenButton";
+    String EDITOR_BAR_COMPONENT_CLOSE_BUTTON = "EditorBarComponentCloseButton";
+    String EDITOR_BAR_DRAWER_CONTAINER = "EditorBarDrawerContainer";
+    String EDITOR_BAR_DRAWER = "EditorBarDrawer";
+
     String EDITOR_LOADING_LAYER = "EditorLoadingLayer";
     String EDITOR_LOADING_PROGRESS = "EditorLoadingProgress";
 

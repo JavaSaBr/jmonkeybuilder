@@ -1,21 +1,21 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 
 /**
- * Реализация действия по закрытию редактора.
+ * The action for closing the Editor.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
-public class CloseEditorAction extends MenuItem {
+public class CloseEditorAction extends Button {
 
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JFXApplication APPLICATION = JFXApplication.getInstance();
 
     public CloseEditorAction() {
         super(Messages.EDITOR_BAR_ASSET_CLOSE_EDITOR);
-        setOnAction(event -> EDITOR.requestClose(true));
+        setOnAction(event -> APPLICATION.onExit());
     }
 }

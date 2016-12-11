@@ -18,6 +18,12 @@ public interface CSSClasses {
     String MAIN_FONT_17 = "main-font-17";
     String MAIN_FONT_20 = "main-font-20";
 
+    String SPECIAL_FONT_13 = "special-font-13";
+    String SPECIAL_FONT_14 = "special-font-14";
+    String SPECIAL_FONT_15 = "special-font-15";
+
+    String EDITOR_BAR_BUTTON = "editor-bar-button";
+
     String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
     String TRANSPARENT_TREE_CELL = "transparent-tree-cell";
     String TRANSPARENT_LIST_VIEW = "transparent-list-view";
@@ -28,6 +34,7 @@ public interface CSSClasses {
     String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
 
     String TOOLBAR_BUTTON = "toolbar-button";
+    String DRAWER_BUTTON = "drawer-button";
 
     String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
 

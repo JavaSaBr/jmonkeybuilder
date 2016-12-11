@@ -1,4 +1,40 @@
 
+@font-face {
+    font-family: Roboto;
+    src: url("/ui/fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Medium";
+    src: url("/ui/fonts/Roboto-Medium.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Light";
+    src: url("/ui/fonts/Roboto-Light.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Bold";
+    src: url("/ui/fonts/Roboto-Bold.ttf");
+}
+
+@font-face {
+    font-family: Roboto Condensed;
+    src: url("/ui/fonts/RobotoCondensed-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Condensed Light";
+    src: url("/ui/fonts/RobotoCondensed-Light.ttf");
+}
+
+@font-face {
+    font-family: "Roboto Condensed Bold";
+    src: url("/ui/fonts/RobotoCondensed-Bold.ttf");
+}
+
+
 .root {
     /***************************************************************************
      *                                                                         *
@@ -287,16 +323,17 @@
     -fx-background-color: -fx-background;
 
     -fx-color-0: white;
-    -fx-color-50: #FFEBEE;
-    -fx-color-100: #FFCDD2;
-    -fx-color-200: #EF9A9A;
-    -fx-color-300: #E57373;
-    -fx-color-400: #EF5350;
-    -fx-color-500: #F44336;
-    -fx-color-600: #E53935;
-    -fx-color-700: #D32F2F;
-    -fx-color-800: #C62828;
-    -fx-color-900: #B71C1C;
+    -fx-color-15: #e2f6ff;
+    -fx-color-50: #E1F5FE;
+    -fx-color-100: #B3E5FC;
+    -fx-color-200: #81D4FA;
+    -fx-color-300: #4FC3F7;
+    -fx-color-400: #29B6F6;
+    -fx-color-500: #03A9F4;
+    -fx-color-600: #039BE5;
+    -fx-color-700: #0288D1;
+    -fx-color-800: #0277BD;
+    -fx-color-900: #01579B;
     -fx-color-A100: #82B1FF;
     -fx-color-A200: #448AFF;
     -fx-color-A300: #2979FF;
@@ -310,8 +347,25 @@
     -fx-color-panel-400-transparent: rgba(71, 71, 71, 0.5);
     -fx-color-panel-900: #3d3d3d;
 
-    -fx-material-shadow-panel: dropshadow(three-pass-box, #1a1a1a, 10, 0.01, 1, 1);
+    -fx-button-background-hover: rgba(255, 255, 255, 0.1);
+    -fx-button-background-arm: rgba(255, 255, 255, 0.2);
+
+    -fx-control-app-bar: #343434;
+
+    -fx-backgound-status-bar: #000000;
+    -fx-backgound-app-bar: #212121;
+    -fx-backgound-background: #303030;
+    -fx-backgound-dialogs: #424242;
+
+    -fx-material-shadow-panel: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.01, 1, 1);
     -fx-material-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1, 0, 1);
+
+    /*
+    rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px
+    rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px */
+    /* dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,
+		1.5); */
+    /* dropshadow(three-pass-box, #1a1a1a, 10, 0.01, 1, 1); */
 
     -fx-control-width: 180;
     -fx-control-medium-width: 200;
@@ -334,11 +388,11 @@
 
 /** ContextMenu */
 .context-menu {
-    -fx-padding: 0.333333em 0.083333em 0.333333em 0.083333em; /* 4 1 8 1 */
+    -fx-padding: 0;
     -fx-background-color: -fx-color-panel-900;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-effect: -fx-material-shadow-control;
 }
 .context-menu .separator:horizontal .line {
     -fx-border-color: -fx-box-border transparent transparent transparent;
@@ -415,21 +469,19 @@
 }
 
 .split-pane > .split-pane-divider {
-    -fx-padding: 0 1px 0 1px; /* 0 3 0 3 */
+    -fx-padding: 0 1 0 0;
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: -fx-color-panel-900;
+    -fx-background-color: -fx-color-15;
     -fx-background-insets: 0;
     -fx-effect: null;
-    -fx-border-width: 0;
 }
 
 .split-pane:vertical > .split-pane-divider {
-    -fx-background-color: -fx-color-panel-900;
+    -fx-background-color: -fx-color-15;
     -fx-background-insets: 0;
     -fx-effect: null;
-    -fx-border-width: 0;
 }
 
 /* TabPane */
@@ -445,46 +497,38 @@
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab {
-    -fx-background-insets: 0 1 1 0, 1 2 1 1, 2 3 1 2;
-    -fx-background-radius: 0;
-    -fx-padding: 0.083333em 0.5em 0.0769em 0.5em; /* 1 6 0.99 6 */
-}
-
-.tab-pane > .tab-header-area > .headers-region > .tab:top {
+    -fx-border-color: transparent;
+    -fx-alignment: center-right;
     -fx-body-color: transparent;
     -fx-background-color: -fx-body-color, -fx-body-color;
     -fx-background-insets: 0, 0;
     -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-padding: 4, 0, 0, 0;
-    -fx-alignment: center-right;
     -fx-cursor: hand;
 }
 
+.tab-pane > .tab-header-area > .headers-region > .tab:top {
+    -fx-padding: 2 6 2 6;
+}
+
 .tab-pane > .tab-header-area > .headers-region > .tab:right {
-    -fx-background-color: -fx-outer-border, -fx-inner-border-bottomup, -fx-body-color-bottomup;
+    -fx-padding: 2 6 2 6;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:bottom {
-    -fx-background-color: -fx-outer-border, -fx-inner-border-bottomup, -fx-body-color-bottomup;
+    -fx-padding: 2 6 2 6;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:left {
-    -fx-background-color: -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-padding: 2 6 2 6;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:hover {
-    -fx-body-color: -fx-color-300;
-    -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-400 0%,
-    -fx-color-400 7%,
-    transparent 10%);
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:selected {
     -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-500 0%,
-    -fx-color-500 7%,
+    -fx-color-600 0%,
+    -fx-color-600 7%,
     transparent 10%);
 }
 
@@ -505,7 +549,7 @@
 
 .tab-pane > .tab-header-area > .tab-header-background {
     /* TODO should not be using text-box-border I think? */
-    -fx-background-color: -fx-color-panel-200;
+    -fx-background-color: -fx-backgound-background;
 }
 
 .tab-pane:top > .tab-header-area > .tab-header-background {
@@ -517,7 +561,7 @@
 }
 
 .tab-pane:left > .tab-header-area > .tab-header-background {
-    -fx-background-insets: 0, 0 1 0 0, 1;
+    -fx-background-insets: 0; /* 0, 0 1 0 0, 1 */
 }
 
 .tab-pane:right > .tab-header-area > .tab-header-background {
@@ -526,7 +570,7 @@
 
 .tab-pane:top > .tab-header-area {
     /*-fx-padding: 0.416667em 0.166667em 0.0em 0.416667em; *//* 5 2 0 5 */
-    -fx-padding: 0.416667em 5 0.0em 0; /* 5 2 0 5 */
+    -fx-padding: 0; /* 5 2 0 5 */
 }
 
 .tab-pane:bottom > .tab-header-area {
@@ -534,11 +578,11 @@
 }
 
 .tab-pane:left > .tab-header-area {
-    -fx-padding: 0.416667em 0.0em 0.166667em 0.416667em; /* 5 0 2 5 */
+    -fx-padding: 0; /* 5 0 2 5 */
 }
 
 .tab-pane:right > .tab-header-area {
-    -fx-padding: 0.416667em 0.416667em 0.166667em 0.0em; /* 5 5 2 0 */
+    -fx-padding: 0; /* 5 5 2 0 */
 }
 
 /* TODO: scaling the shape seems to make it way too large */

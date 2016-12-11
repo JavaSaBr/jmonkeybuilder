@@ -10,7 +10,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import java.io.File;
 import java.nio.file.Path;
 
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -18,7 +18,7 @@ import javafx.stage.DirectoryChooser;
  *
  * @author JavaSaBr.
  */
-public class OpenAssetAction extends MenuItem {
+public class OpenAssetAction extends Button {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();

@@ -11,7 +11,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
-import java.awt.*;
+import java.awt.Point;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -37,7 +37,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author Ronn
  */
-public class GraphicSetingsDialog extends EditorDialog {
+public class GraphicSettingsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);

@@ -1,8 +1,36 @@
 
 #EditorBarComponent {
-    -fx-min-height: 30;
+    -fx-padding: 2px;
+    -fx-min-height: 36;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-background-color: -fx-backgound-app-bar;
+    -fx-effect: -fx-material-shadow-panel;;
+}
+
+#EditorBarComponentMenuButton {
+    -fx-graphic: url("/ui/icons/actions/24/menu.png");
+}
+
+#EditorBarComponentFullscreenButton {
+}
+
+#EditorBarComponentCloseButton {
+    -fx-graphic: url("/ui/icons/actions/24/close.png");
+}
+
+#EditorBarDrawerContainer {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-alignment: center-left;
+}
+
+#EditorBarDrawer {
+    -fx-padding: 1 0 0 0;
+    -fx-background-color: -fx-backgound-background;
+    -fx-alignment: top-left;
+    -fx-effect: -fx-material-shadow-panel;
+    -fx-pref-width: 200;
+    -fx-max-width: -fx-pref-width;
 }
 
 #EditorLoadingLayer {
@@ -24,7 +52,7 @@
 }
 
 #GlobalToolComponent {
-    -fx-min-width: 32;
+    -fx-min-width: 28;
     -fx-tab-max-height: 18;
 }
 
@@ -81,7 +109,7 @@
 }
 
 #FileEditorToolComponent {
-    -fx-min-width: 32;
+    -fx-min-width: 28;
 }
 
 #TextEditorTextArea {

@@ -16,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tooltip;
@@ -109,6 +110,15 @@ public class UIUtils {
         final ObservableList<MenuItem> items = ((Menu) menuItem).getItems();
         items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
     }
+
+    /**
+     * Collect all items.
+     */
+    public static void getAllItems(final Array<MenuItem> container, final MenuButton menuButton) {
+        final ObservableList<MenuItem> items = menuButton.getItems();
+        items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
+    }
+
 
     public static void addTo(TreeItem<? super Object> item, TreeItem<? super Object> parent) {
         final ObservableList<TreeItem<Object>> children = parent.getChildren();

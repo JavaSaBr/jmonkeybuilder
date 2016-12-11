@@ -13,10 +13,8 @@ import com.ss.editor.ui.component.GlobalToolComponent;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
-import com.ss.editor.ui.css.CSSFont;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.util.EditorUtil;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,7 +22,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import rlib.ui.util.FXUtils;
 
@@ -60,12 +57,7 @@ public class EditorFXSceneBuilder {
 
     public static EditorFXScene build(final Stage stage) {
 
-        for (final CSSFont font : CSSFont.FONTS) {
-            Font.loadFont(EditorUtil.getInputStream(font.getPath()), font.getSize());
-        }
-
         final ScreenSize screenSize = EDITOR_CONFIG.getScreenSize();
-
         final Group root = new Group();
 
         final EditorFXScene scene = new EditorFXScene(root, screenSize.getWidth(), screenSize.getHeight());
@@ -81,7 +73,7 @@ public class EditorFXSceneBuilder {
         final StackPane container = scene.getContainer();
         container.setAlignment(TOP_CENTER);
 
-        build(scene, container);
+        build(scene, container, stage);
         bindFixedSize(container, scene.widthProperty(), scene.heightProperty());
 
         EXECUTOR_MANAGER.schedule(() -> EXECUTOR_MANAGER.addFXTask(scene::notifyFinishBuild), 500);
@@ -91,7 +83,7 @@ public class EditorFXSceneBuilder {
         return scene;
     }
 
-    private static void build(final EditorFXScene scene, final StackPane container) {
+    private static void build(final EditorFXScene scene, final StackPane container, final Stage stage) {
 
         final EditorBarComponent barComponent = new EditorBarComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
@@ -106,6 +98,9 @@ public class EditorFXSceneBuilder {
 
         FXUtils.addToPane(splitContainer, container);
         FXUtils.addToPane(barComponent, container);
+
+        barComponent.createDrawer(container, stage);
+        barComponent.toFront();
 
         FXUtils.bindFixedHeight(splitContainer, container.heightProperty().subtract(barComponent.heightProperty()).add(2));
         FXUtils.bindFixedWidth(splitContainer, container.widthProperty());
