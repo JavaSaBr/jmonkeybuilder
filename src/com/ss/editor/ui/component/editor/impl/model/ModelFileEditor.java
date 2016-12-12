@@ -47,6 +47,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
@@ -172,6 +173,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Игнорировать ли слушателей.
      */
     private boolean ignoreListeners;
+
+    /**
+     * The pane of editor area.
+     */
+    private Pane editorAreaPane;
 
     public ModelFileEditor() {
         this.editorState = new ModelEditorState(this);
@@ -542,7 +548,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     protected void createContent(final StackPane root) {
         this.selectionHandler = this::processSelect;
 
-        final Pane emptyPane = new Pane();
+        editorAreaPane = new Pane();
 
         modelNodeTree = new ModelNodeTree(selectionHandler, this);
         modelPropertyEditor = new ModelPropertyEditor(this);
@@ -552,7 +558,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         parameterSplitContainer.prefHeightProperty().bind(root.heightProperty());
         parameterSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane mainSplitContainer = new SplitPane(emptyPane);
+        final SplitPane mainSplitContainer = new SplitPane(editorAreaPane);
         mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
         final EditorToolComponent editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
@@ -565,6 +571,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(editorToolComponent, mainSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(parameterSplitContainer));
+    }
+
+    @Override
+    public boolean isInside(final double sceneX, final double sceneY) {
+        final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
+        return editorAreaPane.contains(point2D);
     }
 
     private static void calcHSplitSize(final EditorToolComponent toolComponent, final SplitPane splitContainer) {

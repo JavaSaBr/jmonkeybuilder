@@ -71,6 +71,14 @@
     -fx-font-style: oblique;
 }
 
+
+.special-font-12 {
+    -fx-font-family: "Roboto Condensed";
+    -fx-font-size: 12;
+    -fx-font-smoothing-type: lcd;
+    -fx-font-style: oblique;
+}
+
 .special-font-13 {
     -fx-font-family: "Roboto Condensed";
     -fx-font-size: 13;

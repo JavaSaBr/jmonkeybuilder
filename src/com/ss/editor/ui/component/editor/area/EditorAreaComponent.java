@@ -31,6 +31,7 @@ import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
+import com.sun.javafx.scene.control.skin.TabPaneSkin;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -82,6 +83,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     public EditorAreaComponent() {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
+        setPickOnBounds(true);
+
+        skinProperty().addListener((observable1, oldValue1, newValue1) -> {
+            final TabPaneSkin skin = (TabPaneSkin) newValue1;
+            skin.getSkinnable().setPickOnBounds(true);
+        });
+
 
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
@@ -259,6 +267,18 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
             if (workspace != null) workspace.removeOpenedFile(editFile);
         });
+    }
+
+    /**
+     * Get the current showed editor.
+     *
+     * @return the current editor.
+     */
+    public FileEditor getCurrentEditor() {
+        final Tab selectedTab = getSelectionModel().getSelectedItem();
+        if (selectedTab == null) return null;
+        final ObservableMap<Object, Object> properties = selectedTab.getProperties();
+        return (FileEditor) properties.get(KEY_EDITOR);
     }
 
     /**

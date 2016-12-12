@@ -12,15 +12,21 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.GlobalToolComponent;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
+import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventTarget;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import rlib.ui.util.FXUtils;
@@ -85,8 +91,11 @@ public class EditorFXSceneBuilder {
 
     private static void build(final EditorFXScene scene, final StackPane container, final Stage stage) {
 
+        final ImageView imageView = scene.getImageView();
         final EditorBarComponent barComponent = new EditorBarComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
+
+        prepareEvents(stage, imageView, editorAreaComponent);
 
         final SplitPane splitContainer = new SplitPane();
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
@@ -109,6 +118,53 @@ public class EditorFXSceneBuilder {
         barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
 
         scene.widthProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(globalToolComponent, splitContainer, scene));
+    }
+
+    private static void prepareEvents(final Stage stage, final ImageView imageView, final EditorAreaComponent editorAreaComponent) {
+        stage.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
+            final EventTarget target = event.getTarget();
+            if (target == imageView) return;
+            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY()))
+                return;
+            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+        });
+
+        stage.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            final EventTarget target = event.getTarget();
+            if (target == imageView) return;
+            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY()))
+                return;
+            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+        });
+
+        stage.addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
+            final EventTarget target = event.getTarget();
+            if (target == imageView) return;
+            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY()))
+                return;
+            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+        });
+
+        stage.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            final EventTarget target = event.getTarget();
+            if (target == imageView) return;
+            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY()))
+                return;
+            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+        });
+
+        stage.addEventHandler(ScrollEvent.ANY, event -> {
+            final EventTarget target = event.getTarget();
+            if (target == imageView) return;
+            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY()))
+                return;
+            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+        });
     }
 
     private static void calcSplitSize(final GlobalToolComponent toolComponent, final SplitPane splitContainer, final Scene scene) {

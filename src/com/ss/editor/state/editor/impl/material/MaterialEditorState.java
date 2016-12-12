@@ -83,7 +83,7 @@ public class MaterialEditorState extends AbstractEditorState<MaterialFileEditor>
     private boolean lightEnabled;
 
     /**
-     * The count of frmes.
+     * The count of frames.
      */
     private int frame;
 

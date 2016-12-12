@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
+import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
@@ -100,6 +101,8 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         texturePreview = new ImageView();
         texturePreview.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
         texturePreview.fitWidthProperty().bind(previewContainer.widthProperty().subtract(2));
+        texturePreview.setCache(true);
+        texturePreview.setCacheHint(CacheHint.SPEED);
 
         Tooltip.install(texturePreview, textureTooltip);
 

@@ -18,6 +18,7 @@ public interface CSSClasses {
     String MAIN_FONT_17 = "main-font-17";
     String MAIN_FONT_20 = "main-font-20";
 
+    String SPECIAL_FONT_12 = "special-font-12";
     String SPECIAL_FONT_13 = "special-font-13";
     String SPECIAL_FONT_14 = "special-font-14";
     String SPECIAL_FONT_15 = "special-font-15";

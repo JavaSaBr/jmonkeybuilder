@@ -24,7 +24,6 @@ import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.NativeLibraryLoader;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
-import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.jme3x.jfx.util.JFXPlatform;
 import com.jme3x.jfx.util.os.OperatingSystem;
 import com.ss.editor.config.Config;
@@ -39,7 +38,6 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
@@ -48,7 +46,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Level;
 
@@ -278,28 +275,10 @@ public class Editor extends JmeToJFXApplication {
 
         createProbe();
 
-        final EditorFXScene scene = buildAndWaitScene();
-
-        JmeToJFXIntegrator.bind(this, scene.getImageView(), EditorThread::new);
-    }
-
-    protected EditorFXScene buildAndWaitScene() {
-
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final CountDownLatch downLatch = new CountDownLatch(1);
-
         JFXPlatform.runInFXThread(() -> {
+            final JFXApplication jfxApplication = JFXApplication.getInstance();
             jfxApplication.buildScene();
-            downLatch.countDown();
         });
-
-        try {
-            downLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return jfxApplication.getScene();
     }
 
     /**

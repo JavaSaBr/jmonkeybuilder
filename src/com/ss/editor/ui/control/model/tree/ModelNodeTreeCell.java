@@ -84,7 +84,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         setOnDragExited(this::dragExited);
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_12);
 
         setConverter(stringConverter);
     }

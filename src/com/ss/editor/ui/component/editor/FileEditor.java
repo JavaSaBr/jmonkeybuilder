@@ -96,4 +96,11 @@ public interface FileEditor {
      */
     default void notifyHided() {
     }
+
+    /**
+     * @return true if the point is inside in this editor.
+     */
+    default boolean isInside(double sceneX, double sceneY) {
+        return false;
+    }
 }

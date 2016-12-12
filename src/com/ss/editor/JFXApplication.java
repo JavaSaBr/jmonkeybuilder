@@ -1,5 +1,6 @@
 package com.ss.editor;
 
+import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static java.nio.file.Files.newOutputStream;
 
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
@@ -43,11 +44,10 @@ public class JFXApplication extends Application {
         System.setProperty("prism.text", "t2k");
 
         // some settings for the render of JavaFX
-        System.setProperty("prism.vsync", "false");
-        System.setProperty("javafx.animation.fullspeed", "false");
         System.setProperty("prism.cacheshapes", "true");
 
         CommandLineConfig.args(args);
+
 
         launch(args);
     }
@@ -88,7 +88,7 @@ public class JFXApplication extends Application {
             return;
         }
 
-        new EditorThread(application::start).start();
+        new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
 
         final ObservableList<Image> icons = stage.getIcons();
         icons.add(new Image("/ui/icons/app/SSEd256.png"));
@@ -118,6 +118,9 @@ public class JFXApplication extends Application {
      */
     public void buildScene() {
         this.scene = EditorFXSceneBuilder.build(stage);
+        this.scene.notifyFinishBuild();
+        final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
+        executor.addToExecute(() -> bind(Editor.getInstance(), scene.getImageView()));
     }
 
     /**
