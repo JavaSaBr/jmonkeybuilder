@@ -93,7 +93,7 @@
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -fx-color-panel-200;
+    -fx-background-color: -fx-background-background;
     -fx-padding: 10, 0, 0, 0;
 }
 
@@ -111,7 +111,7 @@
 }
 
 #TextEditorTextArea {
-    -fx-background-color: -fx-color-panel-200;
+    -fx-background-color: -fx-background-background;
 }
 
 #TextEditorTextArea .caret {
@@ -119,7 +119,7 @@
 }
 
 #TextEditorTextArea .content {
-    -fx-background-color: -fx-color-panel-200;
+    -fx-background-color: -fx-background-background;
 }
 
 #PostFilterEditorMaterialListContainer {
@@ -270,7 +270,7 @@
 }
 
 #MaterialFileEditorToolbarBox {
-    -fx-min-height: 22;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 300;
@@ -411,6 +411,11 @@
     -fx-min-width: 20;
 }
 
+#ModelNodeTreeContainer {
+    -fx-background-color: -fx-background-background;
+    -fx-padding: 4 0 0 0;
+}
+
 #ModelNodeTreeCell {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
@@ -429,6 +434,11 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-background: -fx-color-A200;
+}
+
+#ModelParamControlContainer {
+    -fx-alignment: top-center;
+    -fx-padding: 0 0 0 4;
 }
 
 #ModelParamControlSplitLine {

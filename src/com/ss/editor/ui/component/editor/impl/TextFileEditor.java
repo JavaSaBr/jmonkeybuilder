@@ -20,7 +20,7 @@ import rlib.util.Util;
 /**
  * The implementation of editor for editing text files.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class TextFileEditor extends AbstractFileEditor<VBox> {
 

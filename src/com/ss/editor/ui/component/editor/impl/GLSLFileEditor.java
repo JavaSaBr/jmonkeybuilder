@@ -30,7 +30,7 @@ import rlib.util.Util;
 /**
  * The implementation of editor for editing GLSL files.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 

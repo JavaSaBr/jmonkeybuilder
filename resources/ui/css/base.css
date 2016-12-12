@@ -412,7 +412,6 @@
     -fx-stroke: -fx-text-fill;
 }
 
-
 /* ScrollBar */
 
 .corner {
@@ -900,12 +899,12 @@
     -fx-border-color: transparent;
     -fx-border-width: 0;
     -fx-border-insets: 0;
-    -fx-padding: 2, 2, 2, 2; /* 4 8 4 8 */
+    -fx-padding: 0; /* 4 8 4 8 */
     -fx-text-fill: -fx-text-base-color;
     -fx-alignment: CENTER;
-    -fx-content-display: LEFT;
+    -fx-content-display: CENTER;
     -fx-cursor: hand;
-    -fx-effect: -fx-material-shadow-control;
+    -fx-effect: null;
 }
 
 .toggle-button:selected {
@@ -1242,10 +1241,6 @@
     -fx-text-fill: derive(-fx-control-inner-background,-30%);
 }
 
-/*
-    -fx-color-panel-400-transparent: rgba(71, 71, 71, 0.5);
-    -fx-color-panel-900: #3d3d3d;
-
-    -fx-material-shadow-panel: dropshadow(three-pass-box, #1a1a1a, 10, 0.01, 1, 1);
-    -fx-material-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1,
-    */
+.scroll-pane > .viewport {
+    -fx-background-color: -fx-background-background;
+}

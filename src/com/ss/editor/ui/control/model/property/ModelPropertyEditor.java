@@ -2,12 +2,11 @@ package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
+import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.Nullable;
 
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -18,8 +17,6 @@ import javafx.scene.layout.VBox;
  * @author JavaSaBr
  */
 public class ModelPropertyEditor extends ScrollPane {
-
-    public static final Insets PROPERTIES_OFFSET = new Insets(0, 0, 0, 4);
 
     /**
      * The consumer of changes.
@@ -54,8 +51,7 @@ public class ModelPropertyEditor extends ScrollPane {
      */
     private void createComponents() {
         container = new VBox();
-        container.setAlignment(Pos.TOP_CENTER);
-        VBox.setMargin(container, PROPERTIES_OFFSET);
+        container.setId(CSSIds.MODEL_PARAM_CONTROL_CONTAINER);
         setContent(new VBox(container));
     }
 

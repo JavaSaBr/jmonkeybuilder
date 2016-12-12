@@ -651,16 +651,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         gridButton.setSelected(true);
         gridButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeGridVisible(newValue));
 
-        final Label fastSkyLabel = new Label(Messages.MODEL_FILE_EDITOR_FAST_SKY + ":");
-
-        fastSkyComboBox = new ComboBox<>();
-        fastSkyComboBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
-        fastSkyComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeFastSky(newValue));
-
-        final ObservableList<String> skyItems = fastSkyComboBox.getItems();
-
-        FAST_SKY_LIST.forEach(skyItems::add);
-
         moveToolButton = new ToggleButton();
         moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
         moveToolButton.setSelected(true);
@@ -674,6 +664,16 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         scaleToolButton.setGraphic(new ImageView(Icons.SCALE_16));
         scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(scaleToolButton, newValue));
 
+        final Label fastSkyLabel = new Label(Messages.MODEL_FILE_EDITOR_FAST_SKY + ":");
+
+        fastSkyComboBox = new ComboBox<>();
+        fastSkyComboBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
+        fastSkyComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeFastSky(newValue));
+
+        final ObservableList<String> skyItems = fastSkyComboBox.getItems();
+
+        FAST_SKY_LIST.forEach(skyItems::add);
+
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(selectionButton, CSSClasses.TOOLBAR_BUTTON);
@@ -686,25 +686,20 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FXUtils.addClassTo(rotationToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(scaleToolButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(fastSkyLabel, CSSClasses.MAIN_FONT_12);
-        FXUtils.addClassTo(fastSkyComboBox, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(fastSkyLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(fastSkyComboBox, CSSClasses.SPECIAL_FONT_13);
 
         FXUtils.addToPane(lightButton, container);
         FXUtils.addToPane(selectionButton, container);
         FXUtils.addToPane(gridButton, container);
-        FXUtils.addToPane(fastSkyLabel, container);
-        FXUtils.addToPane(fastSkyComboBox, container);
         FXUtils.addToPane(moveToolButton, container);
         FXUtils.addToPane(rotationToolButton, container);
         FXUtils.addToPane(scaleToolButton, container);
+        FXUtils.addToPane(fastSkyLabel, container);
+        FXUtils.addToPane(fastSkyComboBox, container);
 
         HBox.setMargin(lightButton, LIGHT_BUTTON_OFFSET);
-        HBox.setMargin(selectionButton, SMALL_OFFSET);
-        HBox.setMargin(gridButton, SMALL_OFFSET);
         HBox.setMargin(fastSkyLabel, FAST_SKY_LABEL_OFFSET);
-        HBox.setMargin(moveToolButton, MOVE_TOOL_BUTTON_OFFSET);
-        HBox.setMargin(rotationToolButton, SMALL_OFFSET);
-        HBox.setMargin(scaleToolButton, SMALL_OFFSET);
     }
 
     /**
@@ -741,25 +736,16 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final ModelEditorState editorState = getEditorState();
 
         if (toggleButton == moveToolButton) {
-            moveToolButton.setDisable(true);
             rotationToolButton.setSelected(false);
-            rotationToolButton.setDisable(false);
             scaleToolButton.setSelected(false);
-            scaleToolButton.setDisable(false);
             editorState.setTransformType(TransformType.MOVE_TOOL);
         } else if (toggleButton == rotationToolButton) {
-            rotationToolButton.setDisable(true);
             moveToolButton.setSelected(false);
-            moveToolButton.setDisable(false);
             scaleToolButton.setSelected(false);
-            scaleToolButton.setDisable(false);
             editorState.setTransformType(TransformType.ROTATE_TOOL);
         } else if (toggleButton == scaleToolButton) {
-            scaleToolButton.setDisable(true);
             rotationToolButton.setSelected(false);
-            rotationToolButton.setDisable(false);
             moveToolButton.setSelected(false);
-            moveToolButton.setDisable(false);
             editorState.setTransformType(TransformType.SCALE_TOOL);
         }
     }

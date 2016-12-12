@@ -53,7 +53,7 @@
 .main-font-15-bold-with-shadow {
     -fx-font-family: "Roboto Bold";
     -fx-font-size: 15;
-    -fx-font-style: "Bold";
+    -fx-font-style: oblique;
     -fx-effect: dropshadow(one-pass-box, black, 2, 1, 1, 1);
 }
 
@@ -216,7 +216,7 @@
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
     -fx-cursor: hand;
-    -fx-effect: -fx-material-shadow-control;
+    -fx-effect: null;
     -fx-focus-traversable: false;
 }
 
@@ -236,7 +236,16 @@
 
 .toolbar-button:selected,
 .editor-bar-button:selected {
-    -fx-body-color: -fx-color-panel-900;
+    -fx-body-color: -fx-button-background-arm;
+}
+
+.file-editor-toolbar-button {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 /** Drawer button */
@@ -286,15 +295,6 @@
 .transparent-combo-box:editable,
 .transparent-combo-box:editable > .arrow-button {
     -fx-background-color: -fx-body-color;
-}
-
-.file-editor-toolbar-button {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
 }
 
 .material-param-control {

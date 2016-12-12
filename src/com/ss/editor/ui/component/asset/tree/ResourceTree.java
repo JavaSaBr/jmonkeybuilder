@@ -35,6 +35,7 @@ import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -147,6 +148,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
         setContextMenu(new ContextMenu());
+        setOnScroll(Event::consume);
     }
 
     /**

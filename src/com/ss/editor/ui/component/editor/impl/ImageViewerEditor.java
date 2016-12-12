@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.JavaFXImageManager;
@@ -14,9 +15,9 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализация редактора для просмотра картинок.
+ * The implementation of the {@link Editor} for viewing an image.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
@@ -39,7 +40,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * Область для просмотра картинки.
+     * The image view.
      */
     private ImageView imageView;
 
@@ -60,7 +61,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @return область для просмотра картинки.
+     * @return the image view.
      */
     private ImageView getImageView() {
         return imageView;

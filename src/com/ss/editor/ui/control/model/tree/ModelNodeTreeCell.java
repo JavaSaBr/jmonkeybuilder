@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.tree;
 
+import static com.ss.editor.ui.util.UIUtils.findItem;
+import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -29,9 +32,6 @@ import javafx.scene.input.TransferMode;
 import javafx.util.StringConverter;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
-
-import static com.ss.editor.ui.util.UIUtils.findItem;
-import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 /**
  * Реализация ячейки узла модели в дереве.
@@ -84,7 +84,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         setOnDragExited(this::dragExited);
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
-        FXUtils.addClassTo(this, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
 
         setConverter(stringConverter);
     }

@@ -8,6 +8,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
@@ -30,7 +30,7 @@ import rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
-public class ModelNodeTree extends ScrollPane {
+public class ModelNodeTree extends VBox {
 
     public static final String USER_DATA_IS_SKY = ModelNodeTree.class.getName() + ".isSky";
 
@@ -54,9 +54,9 @@ public class ModelNodeTree extends ScrollPane {
     private TreeView<ModelNode<?>> treeView;
 
     public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+        setId(CSSIds.MODEL_NODE_TREE_CONTAINER);
         this.selectionHandler = selectionHandler;
         this.modelChangeConsumer = modelChangeConsumer;
-        //setText(Messages.MODEL_FILE_EDITOR_NODE_TREE);
         createComponents();
     }
 
@@ -64,8 +64,6 @@ public class ModelNodeTree extends ScrollPane {
      * Create components of this component.
      */
     private void createComponents() {
-
-        final VBox container = new VBox();
 
         treeView = new TreeView<>();
         treeView.setCellFactory(param -> new ModelNodeTreeCell(this));
@@ -79,10 +77,8 @@ public class ModelNodeTree extends ScrollPane {
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
 
-        FXUtils.addToPane(treeView, container);
+        FXUtils.addToPane(treeView, this);
         FXUtils.addClassTo(treeView, CSSClasses.TRANSPARENT_TREE_VIEW);
-
-        setContent(container);
     }
 
     /**

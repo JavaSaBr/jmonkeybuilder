@@ -76,10 +76,12 @@ public interface CSSIds {
     String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
     String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
+    String MODEL_NODE_TREE_CONTAINER = "ModelNodeTreeContainer";
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
     String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
     String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
 
+    String MODEL_PARAM_CONTROL_CONTAINER = "ModelParamControlContainer";
     String MODEL_PARAM_CONTROL_SPLIT_LINE = "ModelParamControlSplitLine";
     String MODEL_PARAM_CONTROL_PARAM_NAME = "ModelParamControlParamName";
     String MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "ModelParamControlParamNameSingleRow";
