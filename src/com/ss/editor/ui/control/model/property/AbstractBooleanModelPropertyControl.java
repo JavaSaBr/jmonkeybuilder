@@ -5,7 +5,6 @@ import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
@@ -16,8 +15,6 @@ import rlib.ui.util.FXUtils;
  * @author JavaSaBr
  */
 public abstract class AbstractBooleanModelPropertyControl<T> extends ModelPropertyControl<T, Boolean> {
-
-    public static final Insets CHECK_BOX_OFFSET = new Insets(0, 0, 0, 120);
 
     /**
      * The {@link CheckBox} with current value.
@@ -33,10 +30,9 @@ public abstract class AbstractBooleanModelPropertyControl<T> extends ModelProper
         super.createComponents(container);
 
         checkBox = new CheckBox();
-        checkBox.setId(CSSIds.MODEL_PARAM_CONTROL_CECHK_BOX);
+        checkBox.setId(CSSIds.MODEL_PARAM_CONTROL_CHECK_BOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateValue());
-
-        HBox.setMargin(checkBox, CHECK_BOX_OFFSET);
+        checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(checkBox, container);
     }

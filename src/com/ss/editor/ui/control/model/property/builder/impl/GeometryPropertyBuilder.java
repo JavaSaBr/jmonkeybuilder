@@ -67,7 +67,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         if (boundingVolume instanceof BoundingSphere) {
             final BoundingSphere boundingSphere = (BoundingSphere) boundingVolume;
-            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE + ": " + "[" + Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
+            return "[" + Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
         } else if (boundingVolume instanceof BoundingBox) {
 
             final BoundingBox boundingBox = (BoundingBox) boundingVolume;
@@ -76,7 +76,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
             final float yExtent = clipNumber(boundingBox.getYExtent(), 100);
             final float zExtent = clipNumber(boundingBox.getZExtent(), 100);
 
-            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX + ": " + "[x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
+            return "[x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
         }
 
         return StringUtils.EMPTY;

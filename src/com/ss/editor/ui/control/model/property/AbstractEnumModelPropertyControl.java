@@ -37,7 +37,7 @@ public abstract class AbstractEnumModelPropertyControl<T, E extends Enum<E>> ext
         enumComboBox = new ComboBox<>();
         enumComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
-        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(0.5));
+        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(enumComboBox, container);
         FXUtils.addClassTo(enumComboBox, CSSClasses.SPECIAL_FONT_13);

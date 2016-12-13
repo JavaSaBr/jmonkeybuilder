@@ -438,7 +438,7 @@
 
 #ModelParamControlContainer {
     -fx-alignment: top-center;
-    -fx-padding: 0 0 0 4;
+    -fx-padding: 2 10 0 4;
 }
 
 #ModelParamControlSplitLine {
@@ -474,13 +474,23 @@
     -fx-padding: 0 2 0 2;
 }
 
-#ModelParamControlVector2fField {
-    -fx-min-height: 24;
+#ModelParamControlNumberLabel2F {
+    -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 90;
+    -fx-padding: 0 2 0 2;
+    -fx-min-width: 60;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+}
+
+#ModelParamControlVector2fField {
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 2 0 2;
 }
 
 #ModelParamControlVector3fField {
@@ -507,28 +517,25 @@
 
 #ModelParamControlCheckbox {
     -fx-alignment: center;
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#ModelParamControlCheckbox > .box {
     -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 20;
+}
+
+#ModelParamControlCheckbox > .box {
+    -fx-min-height: 16;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 16;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
 
 #ModelParamControlCheckbox > .box > .mark {
-    -fx-min-height: 15;
+    -fx-min-height: 12;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 15;
+    -fx-min-width: 12;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }

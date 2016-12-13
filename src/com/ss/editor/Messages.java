@@ -86,11 +86,9 @@ public class Messages {
 
     public static final String SETTINGS_DIALOG_TITLE;
     public static final String SETTINGS_DIALOG_FXAA;
-    public static final String SETTINGS_DIALOG_FULLSCREEN;
     public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
-    public static final String SETTINGS_DIALOG_SCREEN_SIZE;
     public static final String SETTINGS_DIALOG_ANISOTROPY;
     public static final String SETTINGS_DIALOG_BUTTON_OK;
     public static final String SETTINGS_DIALOG_BUTTON_CANCEL;
@@ -107,8 +105,6 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NAME;
     public static final String MODEL_FILE_EDITOR_NO_SKY;
     public static final String MODEL_FILE_EDITOR_FAST_SKY;
-    public static final String MODEL_FILE_EDITOR_NODE_TREE;
-    public static final String MODEL_FILE_EDITOR_PROPERTIES;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
     public static final String MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT;
     public static final String MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT;
@@ -351,11 +347,9 @@ public class Messages {
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
-        SETTINGS_DIALOG_FULLSCREEN = bundle.getString("SettingsDialogFullscreen");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
         SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
         SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
-        SETTINGS_DIALOG_SCREEN_SIZE = bundle.getString("SettingsDialogScreenSize");
         SETTINGS_DIALOG_ANISOTROPY = bundle.getString("SettingsDialogAnisotropy");
         SETTINGS_DIALOG_BUTTON_OK = bundle.getString("SettingsDialogButtonOk");
         SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("SettingsDialogButtonCancel");
@@ -372,8 +366,6 @@ public class Messages {
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
         MODEL_FILE_EDITOR_NO_SKY = bundle.getString("ModelFileEditorNoSky");
         MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
-        MODEL_FILE_EDITOR_NODE_TREE = bundle.getString("ModelFileEditorNodeTree");
-        MODEL_FILE_EDITOR_PROPERTIES = bundle.getString("ModelFileEditorProperties");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
         MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT = bundle.getString("ModelFileEditorNodeAmbientLight");
         MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT = bundle.getString("ModelFileEditorNodeDirectionLight");

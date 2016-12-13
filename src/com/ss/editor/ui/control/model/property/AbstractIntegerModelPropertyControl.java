@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.property;
 
-import static java.lang.Float.parseFloat;
+import static java.lang.Integer.parseInt;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
@@ -14,11 +14,11 @@ import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing float values.
+ * The implementation of the {@link ModelPropertyControl} for editing integer values.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractFloatModelPropertyControl<T> extends ModelPropertyControl<T, Float> {
+public abstract class AbstractIntegerModelPropertyControl<T> extends ModelPropertyControl<T, Integer> {
 
     /**
      * The filed with current value.
@@ -30,9 +30,9 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
      */
     private float scrollIncrement;
 
-    public AbstractFloatModelPropertyControl(final Float element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public AbstractIntegerModelPropertyControl(final Integer element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
-        this.scrollIncrement = 1F;
+        this.scrollIncrement = 30F;
     }
 
     @Override
@@ -52,7 +52,7 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
     /**
      * @param scrollIncrement the power of scrolling.
      */
-    public void setScrollIncrement(float scrollIncrement) {
+    public void setScrollIncrement(final float scrollIncrement) {
         this.scrollIncrement = scrollIncrement;
     }
 
@@ -77,9 +77,9 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
         final TextField source = (TextField) event.getSource();
         final String text = source.getText();
 
-        float value;
+        int value;
         try {
-            value = parseFloat(text);
+            value = parseInt(text);
         } catch (final NumberFormatException e) {
             return;
         }
@@ -88,7 +88,7 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
         longValue += event.getDeltaY() * getScrollIncrement();
 
         final int caretPosition = source.getCaretPosition();
-        final String result = String.valueOf(longValue / 1000F);
+        final String result = String.valueOf(longValue / 1000);
         source.setText(result);
         source.positionCaret(caretPosition);
     }
@@ -102,7 +102,7 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
 
     @Override
     protected void reload() {
-        final Float element = getPropertyValue();
+        final Integer element = getPropertyValue();
         final TextField valueField = getValueField();
         final int caretPosition = valueField.getCaretPosition();
         valueField.setText(String.valueOf(element));
@@ -116,14 +116,14 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
         if (isIgnoreListener()) return;
 
         final TextField valueField = getValueField();
-        float value;
+        int value;
         try {
-            value = parseFloat(valueField.getText());
+            value = parseInt(valueField.getText());
         } catch (final NumberFormatException e) {
             return;
         }
 
-        final Float oldValue = getPropertyValue();
+        final Integer oldValue = getPropertyValue();
         changed(value, oldValue);
     }
 }

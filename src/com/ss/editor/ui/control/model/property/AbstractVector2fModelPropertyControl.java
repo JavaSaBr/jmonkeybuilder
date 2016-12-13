@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.property;
 
 import static java.util.Objects.requireNonNull;
 
-import com.jme3.math.Vector3f;
+import com.jme3.math.Vector2f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -18,11 +18,11 @@ import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing {@link Vector3f} values.
+ * The implementation of the {@link ModelPropertyControl} for editing {@link Vector2f} values.
  *
- * @author JavaSaBr
+ * @author JavaSaBr.
  */
-public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPropertyControl<T, Vector3f> {
+public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPropertyControl<T, Vector2f> {
 
     /**
      * The field X.
@@ -35,16 +35,11 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
     private TextField yFiled;
 
     /**
-     * The field Z.
-     */
-    private TextField zField;
-
-    /**
      * The power of scrolling.
      */
     private float scrollIncrement;
 
-    public AbstractVector3fModelPropertyControl(final Vector3f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public AbstractVector2fModelPropertyControl(final Vector2f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
         this.scrollIncrement = 10F;
     }
@@ -67,52 +62,49 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
-        final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        final Label xLabel = new Label(getXLabelText());
+        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL2F);
 
         xField = new TextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::updateVector);
-        xField.prefWidthProperty().bind(widthProperty().divide(3));
+        xField.prefWidthProperty().bind(widthProperty().divide(2));
 
-        final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        final Label yLabel = new Label(getYLabelText());
+        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL2F);
 
         yFiled = new TextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
         yFiled.setOnScroll(this::processScroll);
         yFiled.setOnKeyReleased(this::updateVector);
-        yFiled.prefWidthProperty().bind(widthProperty().divide(3));
-
-        final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
-
-        zField = new TextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
-        zField.setOnScroll(this::processScroll);
-        zField.setOnKeyReleased(this::updateVector);
-        zField.prefWidthProperty().bind(widthProperty().divide(3));
+        yFiled.prefWidthProperty().bind(widthProperty().divide(2));
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
         FXUtils.addToPane(yLabel, container);
         FXUtils.addToPane(yFiled, container);
-        FXUtils.addToPane(zLabel, container);
-        FXUtils.addToPane(zField, container);
 
         FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(yFiled, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_13);
+    }
+
+    @NotNull
+    protected String getYLabelText() {
+        return "y:";
+    }
+
+    @NotNull
+    protected String getXLabelText() {
+        return "x:";
     }
 
     /**
      * The process of scrolling.
      */
-    private void processScroll(final ScrollEvent event) {
+    protected void processScroll(final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
         final TextField source = (TextField) event.getSource();
@@ -126,7 +118,7 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         }
 
         long longValue = (long) (value * 1000);
-        longValue += (event.getDeltaY() * getScrollIncrement());
+        longValue += event.getDeltaY() * getScrollIncrement();
 
         final String result = String.valueOf(longValue / 1000F);
         source.setText(result);
@@ -138,28 +130,21 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
     /**
      * @return the field X.
      */
-    protected TextField getXField() {
+    private TextField getXField() {
         return xField;
     }
 
     /**
      * @return the field Y.
      */
-    protected TextField getYFiled() {
+    private TextField getYFiled() {
         return yFiled;
-    }
-
-    /**
-     * @return the field Z.
-     */
-    protected TextField getZField() {
-        return zField;
     }
 
     @Override
     protected void reload() {
 
-        final Vector3f element = requireNonNull(getPropertyValue(), "The property value can't be null.");
+        final Vector2f element = requireNonNull(getPropertyValue(), "The property value can't be null.");
 
         final TextField xField = getXField();
         xField.setText(String.valueOf(element.getX()));
@@ -168,10 +153,6 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         final TextField yFiled = getYFiled();
         yFiled.setText(String.valueOf(element.getY()));
         yFiled.positionCaret(xField.getText().length());
-
-        final TextField zField = getZField();
-        zField.setText(String.valueOf(element.getZ()));
-        zField.positionCaret(xField.getText().length());
     }
 
     /**
@@ -181,7 +162,6 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final TextField xField = getXField();
-
         float x;
         try {
             x = Float.parseFloat(xField.getText());
@@ -190,7 +170,6 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         }
 
         final TextField yFiled = getYFiled();
-
         float y;
         try {
             y = Float.parseFloat(yFiled.getText());
@@ -198,19 +177,10 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
             return;
         }
 
-        final TextField zField = getZField();
+        final Vector2f oldValue = requireNonNull(getPropertyValue(), "The property value can't be null.");
+        final Vector2f newValue = new Vector2f();
+        newValue.set(x, y);
 
-        float z;
-        try {
-            z = Float.parseFloat(zField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        final Vector3f oldValue = requireNonNull(getPropertyValue(), "The property value can't be null.");
-        final Vector3f newValue = new Vector3f();
-        newValue.set(x, y, z);
-
-        changed(newValue, oldValue.clone());
+        changed(newValue, oldValue == null ? null : oldValue.clone());
     }
 }

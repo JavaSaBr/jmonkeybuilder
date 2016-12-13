@@ -28,6 +28,8 @@ import rlib.ui.util.FXUtils;
  */
 public class ModelPropertyControl<D, T> extends VBox {
 
+    protected static final double CONTROL_WIDTH_PERCENT = 0.4;
+
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**

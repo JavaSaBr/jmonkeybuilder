@@ -39,7 +39,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
 
         colorPicker = new ColorPicker();
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> updateValue());
-        colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.5));
+        colorPicker.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(colorPicker, container);
