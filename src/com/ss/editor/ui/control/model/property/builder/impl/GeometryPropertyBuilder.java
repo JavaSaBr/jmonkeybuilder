@@ -13,7 +13,6 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.DefaultModelPropertyControl;
-import com.ss.editor.ui.control.model.property.DefaultModelSinglePropertyControl;
 import com.ss.editor.ui.control.model.property.MaterialKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
@@ -67,7 +66,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         if (boundingVolume instanceof BoundingSphere) {
             final BoundingSphere boundingSphere = (BoundingSphere) boundingVolume;
-            return "[" + Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
+            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE + ": [" + Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
         } else if (boundingVolume instanceof BoundingBox) {
 
             final BoundingBox boundingBox = (BoundingBox) boundingVolume;
@@ -76,7 +75,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
             final float yExtent = clipNumber(boundingBox.getYExtent(), 100);
             final float zExtent = clipNumber(boundingBox.getZExtent(), 100);
 
-            return "[x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
+            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX + ": [x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
         }
 
         return StringUtils.EMPTY;
@@ -104,7 +103,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         materialControl.setEditObject(geometry);
 
         final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
-                new DefaultModelSinglePropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+                new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);

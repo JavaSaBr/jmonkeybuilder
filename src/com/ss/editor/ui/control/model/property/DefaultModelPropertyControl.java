@@ -22,7 +22,7 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
     /**
      * The label with value of the property.
      */
-    private Label propertyValueLabel;
+    protected Label propertyValueLabel;
 
     /**
      * The string function.
@@ -60,7 +60,6 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
 
         propertyValueLabel = new Label();
         propertyValueLabel.setId(CSSIds.MODEL_PARAM_CONTROL_LABEL_VALUE);
-        propertyValueLabel.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addClassTo(propertyValueLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(propertyValueLabel, container);

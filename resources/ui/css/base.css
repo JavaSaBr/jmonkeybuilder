@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: Roboto;
     src: url("/ui/fonts/Roboto-Regular.ttf");
@@ -33,7 +32,6 @@
     font-family: "Roboto Condensed Bold";
     src: url("/ui/fonts/RobotoCondensed-Bold.ttf");
 }
-
 
 .root {
     /***************************************************************************
@@ -385,29 +383,34 @@
     -fx-background-color: transparent;
 }
 
-/** ContextMenu */
+/* ContextMenu */
+
 .context-menu {
-    -fx-padding: 0;
-    -fx-background-color: -fx-color-panel-900;
+    -fx-padding: 0 0 0 0;
+    -fx-background-color: -fx-background-background;
     -fx-background-insets: 0;
-    -fx-background-radius: 0;
+    -fx-background-radius: 2px;
     -fx-effect: -fx-material-shadow-control;
 }
+
 .context-menu .separator:horizontal .line {
     -fx-border-color: -fx-box-border transparent transparent transparent;
     -fx-border-insets: 1 0 0 0;
 }
+
 .context-menu > .scroll-arrow {
     -fx-padding: 0.416667em 0.416667em 0.416667em 0.416667em; /* 5 */
     -fx-background-color: transparent;
     -fx-background-radius: 0;
 }
+
 .context-menu > .scroll-arrow:hover {
     -fx-background: -fx-selection-bar;
     -fx-background-color: -fx-background;
     -fx-background-radius: 0;
     -fx-text-fill: -fx-text-background-color;
 }
+
 .context-menu:show-mnemonics > .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
 }
@@ -418,43 +421,27 @@
     -fx-background-color: transparent;
 }
 
-.scroll-bar:horizontal {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-}
-.scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-}
-.scroll-bar:focused {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-}
+.scroll-bar:horizontal,
+.scroll-bar:vertical,
+.scroll-bar:focused,
 .scroll-bar:vertical:focused {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
-.scroll-bar > .thumb {
-    -fx-background-color: -fx-color-600;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-}
+
+.scroll-bar > .thumb,
 .scroll-bar:vertical > .thumb {
     -fx-background-color: -fx-color-600;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 }
 
-.scroll-bar > .track {
-    -fx-background-color: transparent;
-}
+.scroll-bar > .track,
 .scroll-bar:vertical > .track {
     -fx-background-color: transparent;
 }
 
-.scroll-bar > .track-background {
-    -fx-background-color: transparent;
-}
+.scroll-bar > .track-background,
 .scroll-bar:vertical > .track-background {
     -fx-background-color: transparent;
 }
@@ -484,6 +471,12 @@
     -fx-padding: 0;
 }
 
+/* Scroll Pane */
+
+.scroll-pane > .viewport,
+.scroll-pane {
+    -fx-background-color: -fx-background-background;
+}
 
 /* SplitPane */
 
@@ -734,8 +727,9 @@
 
 .combo-box-base .arrow,
 .combo-box-base:hover .arrow {
-    -fx-border-color: white;
-    -fx-border-width: 2px;
+    -fx-background-color: -fx-color-panel-50;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
 }
 
 .button:hover,
@@ -758,7 +752,6 @@
 .combo-box-base:hover,
 .combo-box-base:editable > .arrow-button:hover {
 }
-
 
 .button:armed,
 .toggle-button:armed,
@@ -794,7 +787,7 @@
     -fx-background-radius: 0;
 }
 
-.check-box .box  {
+.check-box .box {
     -fx-border-color: -fx-color-0;
     -fx-border-width: 1;
     -fx-border-radius: 2;
@@ -802,7 +795,7 @@
     -fx-padding: 2;
 }
 
-.check-box:selected .box  {
+.check-box:selected .box {
     -fx-border-color: -fx-color-500;
     -fx-border-width: 1;
     -fx-border-radius: 2;
@@ -821,12 +814,10 @@
     -fx-effect: null;
 }
 
-
 .check-box:selected .mark {
     -fx-background-color: -fx-background-background;
     -fx-effect: null;
 }
-
 
 /* MenuBar */
 
@@ -842,8 +833,9 @@
 /* MenuItem */
 
 .menu-item {
-    -fx-background-color: transparent;
-    -fx-padding: 0.333333em 0.41777em 0.333333em 0.41777em; /* 4 5 4 5 */
+    -fx-body-color: transparent;
+    -fx-background-color: -fx-body-color;
+    -fx-padding: 6 14 6 14; /* 4 5 4 5 */
     -fx-cursor: hand;
 }
 
@@ -855,25 +847,31 @@
     -fx-padding: 0em 0.333em 0em 0em;
 }
 
-.menu-item >.label {
+.menu-item > .label {
+    -fx-font-family: "Roboto Condensed";
+    -fx-font-size: 15;
+    -fx-font-smoothing-type: lcd;
+    -fx-font-style: italic;
     -fx-padding: 0em 0.5em 0em 0em;
     -fx-text-fill: -fx-text-base-color;
 }
 
 .menu-item:focused {
-    -fx-background: -fx-selection-bar;
-    -fx-background-color: -fx-background;
-    -fx-text-fill:  -fx-text-background-color;
+    -fx-body-color: -fx-button-background-hover;
 }
+
 .menu-item:focused > .label {
     -fx-text-fill: white;
 }
+
 .menu-item:hover > .label {
     -fx-text-fill: white;
 }
+
 .menu-item > .right-container {
     -fx-padding: 0em 0em 0em 0.5em;
 }
+
 .menu-item:show-mnemonics > .mnemonic-underline {
     -fx-stroke: -fx-text-fill;
 }
@@ -1183,7 +1181,6 @@
     transparent 8%);
 }
 
-
 /* TextArea */
 
 .text-area {
@@ -1195,15 +1192,19 @@
 .text-area > .scroll-pane {
     -fx-background-color: null;
 }
+
 .text-area > .scroll-pane > .scroll-bar:horizontal {
     -fx-background-radius: 0 0 2 2;
 }
+
 .text-area > .scroll-pane > .scroll-bar:vertical {
     -fx-background-radius: 0 2 2 0;
 }
+
 .text-area > .scroll-pane > .corner {
     -fx-background-radius: 0 0 2 0;
 }
+
 .text-area .content {
     /*the is 1px less top and bottom than TextInput because of scrollpane border */
     -fx-padding: 3 3 3 3; /* 3 7 3 7 */
@@ -1211,6 +1212,7 @@
     -fx-background-color: transparent;
     -fx-background-radius: 0;
 }
+
 .text-area:focused .content {
     -fx-background-color: transparent;
     -fx-background-radius: 0;
@@ -1224,23 +1226,23 @@
     -fx-background-radius: 0;
     -fx-effect: -fx-material-shadow-panel;
 }
+
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {
     -fx-padding: 4 0 4 5;
     /* No alternate highlighting */
     -fx-background: transparent;
     -fx-background-insets: 0;
 }
+
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
     -fx-background: -fx-accent;
 }
-.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
-.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
     -fx-background: -fx-accent;
 }
-.combo-box-popup > .list-view > .placeholder > .label {
-    -fx-text-fill: derive(-fx-control-inner-background,-30%);
-}
 
-.scroll-pane > .viewport {
-    -fx-background-color: -fx-background-background;
+.combo-box-popup > .list-view > .placeholder > .label {
+    -fx-text-fill: derive(-fx-control-inner-background, -30%);
 }
