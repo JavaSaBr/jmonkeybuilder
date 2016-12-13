@@ -310,7 +310,7 @@
 }
 
 .model-param-control {
-    -fx-alignment: center-left;
+    -fx-padding: 0 2 0 0;
 }
 
 .plain-code {

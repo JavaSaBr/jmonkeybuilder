@@ -1,11 +1,18 @@
 package com.ss.editor.ui.control.model.property;
 
+import static java.lang.Float.parseFloat;
+import static rlib.geom.util.AngleUtils.degreeToRadians;
+import static rlib.geom.util.AngleUtils.radiansToDegree;
+
 import com.jme3.math.Quaternion;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,29 +23,25 @@ import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.ArrayFactory;
 
-import static java.lang.Float.parseFloat;
-import static rlib.geom.util.AngleUtils.degreeToRadians;
-import static rlib.geom.util.AngleUtils.radiansToDegree;
-
 /**
- * Реализация контрола по редактированию разворота.
+ * The implementation of the {@link ModelPropertyControl} for editing {@link Quaternion} values.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial, Quaternion> {
 
     /**
-     * Поле X.
+     * The field Y.
      */
     private TextField xField;
 
     /**
-     * Поле Y.
+     * The field X.
      */
     private TextField yFiled;
 
     /**
-     * Поле Z.
+     * The field Z.
      */
     private TextField zField;
 
@@ -57,6 +60,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::updateRotation);
+        xField.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -65,6 +69,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         yFiled.setOnScroll(this::processScroll);
         yFiled.setOnKeyReleased(this::updateRotation);
+        yFiled.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -73,6 +78,7 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
         zField.setOnKeyReleased(this::updateRotation);
+        zField.prefWidthProperty().bind(widthProperty().divide(3));
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
@@ -80,10 +86,17 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         FXUtils.addToPane(yFiled, container);
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
+
+        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(yFiled, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_13);
     }
 
     /**
-     * Процесс скролирования значения.
+     * The process of scrolling.
      */
     private void processScroll(final ScrollEvent event) {
         if (!event.isControlDown()) return;
@@ -101,26 +114,29 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         long longValue = (long) (value * 1000);
         longValue += event.getDeltaY() * 50;
 
-        source.setText(String.valueOf(longValue / 1000F));
+        final String result = String.valueOf(longValue / 1000F);
+        source.setText(result);
+        source.positionCaret(result.length());
+
         updateRotation(null);
     }
 
     /**
-     * @return поле X.
+     * @return the field X.
      */
     private TextField getXField() {
         return xField;
     }
 
     /**
-     * @return поле Y.
+     * @return the field Y.
      */
     private TextField getYFiled() {
         return yFiled;
     }
 
     /**
-     * @return поле Z.
+     * @return the field Z.
      */
     private TextField getZField() {
         return zField;
@@ -132,23 +148,31 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
         final float[] angles = new float[3];
 
         final Quaternion element = getPropertyValue();
+        Objects.requireNonNull(element, "The property value can't be null.");
+
         element.toAngles(angles);
 
         final TextField xField = getXField();
         xField.setText(String.valueOf(radiansToDegree(angles[0])));
+        xField.positionCaret(xField.getText().length());
 
         final TextField yFiled = getYFiled();
         yFiled.setText(String.valueOf(radiansToDegree(angles[1])));
+        yFiled.positionCaret(yFiled.getText().length());
 
         final TextField zField = getZField();
         zField.setText(String.valueOf(radiansToDegree(angles[2])));
+        zField.positionCaret(zField.getText().length());
     }
 
     /**
-     * Обновление вектора.
+     * Updating rotation.
      */
     private void updateRotation(final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+
+        final Quaternion oldValue = getPropertyValue();
+        Objects.requireNonNull(oldValue, "The old value can't be null.");
 
         final TextField xField = getXField();
 
@@ -177,7 +201,6 @@ public class QuaternionModelPropertyControl extends ModelPropertyControl<Spatial
             return;
         }
 
-        final Quaternion oldValue = getPropertyValue();
         final Quaternion newValue = new Quaternion();
         newValue.fromAngles(ArrayFactory.toFloatArray(x, y, z));
 

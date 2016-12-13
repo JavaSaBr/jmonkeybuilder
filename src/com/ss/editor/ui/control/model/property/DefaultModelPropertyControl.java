@@ -2,30 +2,30 @@ package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализация свойства отображения свойства объекта.
+ * The default implementation of the property control.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object, T> {
 
     /**
-     * Надпись со значением свойства.
+     * The label with value of the property.
      */
     private Label propertyValueLabel;
 
     /**
-     * Функция конвертации объекта в строку.
+     * The string function.
      */
     private Function<T, String> toStringFunction;
 
@@ -34,21 +34,21 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
     }
 
     /**
-     * @param toStringFunction функция конвертации объекта в строку.
+     * @param toStringFunction the string function.
      */
     public void setToStringFunction(final Function<T, String> toStringFunction) {
         this.toStringFunction = toStringFunction;
     }
 
     /**
-     * @return функция конвертации объекта в строку.
+     * @return the string function.
      */
     private Function<T, String> getToStringFunction() {
         return toStringFunction;
     }
 
     /**
-     * @return надпись со значением свойства.
+     * @return the label with value of the property.
      */
     private Label getPropertyValueLabel() {
         return propertyValueLabel;
@@ -59,11 +59,11 @@ public class DefaultModelPropertyControl<T> extends ModelPropertyControl<Object,
         super.createComponents(container);
 
         propertyValueLabel = new Label();
-        propertyValueLabel.setAlignment(Pos.CENTER);
+        propertyValueLabel.setId(CSSIds.MODEL_PARAM_CONTROL_LABEL_VALUE);
+        propertyValueLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
-        FXUtils.addClassTo(propertyValueLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(propertyValueLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(propertyValueLabel, container);
-        FXUtils.bindFixedWidth(propertyValueLabel, container.widthProperty());
     }
 
     @Override

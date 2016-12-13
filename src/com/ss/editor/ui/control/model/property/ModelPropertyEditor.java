@@ -52,6 +52,8 @@ public class ModelPropertyEditor extends ScrollPane {
     private void createComponents() {
         container = new VBox();
         container.setId(CSSIds.MODEL_PARAM_CONTROL_CONTAINER);
+        container.setStyle("-fx-background-color: red;");
+        container.prefWidthProperty().bind(widthProperty());
         setContent(new VBox(container));
     }
 

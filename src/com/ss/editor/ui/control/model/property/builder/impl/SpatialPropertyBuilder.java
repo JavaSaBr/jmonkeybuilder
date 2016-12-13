@@ -29,6 +29,10 @@ import rlib.ui.util.FXUtils;
  */
 public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
 
+    private static final CullHint[] CULL_HINTS = CullHint.values();
+    private static final ShadowMode[] SHADOW_MODES = ShadowMode.values();
+    private static final Bucket[] BUCKETS = Bucket.values();
+
     private static final PropertyBuilder INSTANCE = new SpatialPropertyBuilder();
 
     public static PropertyBuilder getInstance() {
@@ -48,32 +52,38 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
 
         final Quaternion rotation = spatial.getLocalRotation().clone();
 
-        final ModelPropertyControl<Spatial, CullHint> cullHintControl = new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer, CullHint.values());
+        final ModelPropertyControl<Spatial, CullHint> cullHintControl =
+                new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer, CULL_HINTS);
         cullHintControl.setApplyHandler(Spatial::setCullHint);
         cullHintControl.setSyncHandler(Spatial::getLocalCullHint);
         cullHintControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, ShadowMode> shadowModeControl = new EnumModelPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer, ShadowMode.values());
+        final ModelPropertyControl<Spatial, ShadowMode> shadowModeControl =
+                new EnumModelPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer, SHADOW_MODES);
         shadowModeControl.setApplyHandler(Spatial::setShadowMode);
         shadowModeControl.setSyncHandler(Spatial::getLocalShadowMode);
         shadowModeControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, Bucket> queueBucketControl = new EnumModelPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer, Bucket.values());
+        final ModelPropertyControl<Spatial, Bucket> queueBucketControl =
+                new EnumModelPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer, BUCKETS);
         queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
         queueBucketControl.setSyncHandler(Spatial::getLocalQueueBucket);
         queueBucketControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, Vector3f> locationControl = new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, Vector3f> locationControl =
+                new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
         locationControl.setApplyHandler(Spatial::setLocalTranslation);
         locationControl.setSyncHandler(Spatial::getLocalTranslation);
         locationControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, Vector3f> scaleControl = new Vector3fModelPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, Vector3f> scaleControl =
+                new Vector3fModelPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
         scaleControl.setApplyHandler(Spatial::setLocalScale);
         scaleControl.setSyncHandler(Spatial::getLocalScale);
         scaleControl.setEditObject(spatial);
 
-        final ModelPropertyControl<Spatial, Quaternion> rotationControl = new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, modelChangeConsumer);
+        final ModelPropertyControl<Spatial, Quaternion> rotationControl =
+                new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, modelChangeConsumer);
         rotationControl.setApplyHandler(Spatial::setLocalRotation);
         rotationControl.setSyncHandler(Spatial::getLocalRotation);
         rotationControl.setEditObject(spatial);

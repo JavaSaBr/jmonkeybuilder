@@ -1,6 +1,9 @@
 package com.ss.editor.ui.control.model.property;
 
+import static java.lang.Float.parseFloat;
+
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +12,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-
-import static java.lang.Float.parseFloat;
 
 /**
  * The implementation of the {@link ModelPropertyControl} for editing float values.
@@ -42,7 +43,9 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
         valueField.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
         valueField.setOnScroll(this::processScroll);
         valueField.textProperty().addListener((observable, oldValue, newValue) -> updateValue());
+        valueField.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
+        FXUtils.addClassTo(valueField, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(valueField, container);
     }
 
@@ -84,7 +87,10 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
         long longValue = (long) (value * 1000);
         longValue += event.getDeltaY() * getScrollIncrement();
 
-        source.setText(String.valueOf(longValue / 1000F));
+        final int caretPosition = source.getCaretPosition();
+        final String result = String.valueOf(longValue / 1000F);
+        source.setText(result);
+        source.positionCaret(caretPosition);
     }
 
     /**
@@ -98,7 +104,9 @@ public abstract class AbstractFloatModelPropertyControl<T> extends ModelProperty
     protected void reload() {
         final Float element = getPropertyValue();
         final TextField valueField = getValueField();
+        final int caretPosition = valueField.getCaretPosition();
         valueField.setText(String.valueOf(element));
+        valueField.positionCaret(caretPosition);
     }
 
     /**

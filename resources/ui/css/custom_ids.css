@@ -442,12 +442,12 @@
 }
 
 #ModelParamControlSplitLine {
-    -fx-stroke: -fx-color-500;
+    -fx-stroke: -fx-color-600;
     -fx-stroke-width: 2;
 }
 
 #ModelParamControlParamName {
-    -fx-min-height: 24;
+    -fx-min-height: 16;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-alignment: center;
@@ -455,19 +455,23 @@
 }
 
 #ModelParamControlParamNameSingleRow {
-    -fx-min-height: 24;
+    -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 180;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;
+    -fx-padding: 0 3 0 0;
+}
+
+#ModelParamControlLabelValue {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 #ModelParamControlNumberLabel {
-    -fx-min-height: 24;
+    -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
+    -fx-padding: 0 2 0 2;
 }
 
 #ModelParamControlVector2fField {
@@ -480,12 +484,10 @@
 }
 
 #ModelParamControlVector3fField {
-    -fx-min-height: 24;
+    -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 72;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
+    -fx-padding: 0 2 0 2;
 }
 
 #ModelParamControlVector4fField {
@@ -498,12 +500,9 @@
 }
 
 #ModelParamControlComboBox {
-    -fx-min-height: 24;
+    -fx-min-height: 22;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 140;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
 }
 
 #ModelParamControlCheckbox {
@@ -535,23 +534,14 @@
 }
 
 #ModelParamControlMaterialLabel {
-    -fx-min-height: 24;
+    -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 265;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
     -fx-alignment: center-left;
     -fx-text-alignment: left;
 }
 
 #ModelParamControlMaterialButton {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
 }
 
 #RenameDialogLabel {

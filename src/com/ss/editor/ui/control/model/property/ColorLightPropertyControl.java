@@ -1,9 +1,12 @@
 package com.ss.editor.ui.control.model.property;
 
+import static java.lang.Math.min;
+
 import com.jme3.light.Light;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -14,17 +17,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import rlib.ui.util.FXUtils;
 
-import static java.lang.Math.min;
-
 /**
- * Реализация контрола по редактированию цвета источника света.
+ * The implementation of the {@link ModelPropertyControl} for editing a color of the {@link Light}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ColorLightPropertyControl<T extends Light> extends ModelPropertyControl<T, ColorRGBA> {
 
     /**
-     * Контрол для выбора цвета.
+     * The color picker.
      */
     private ColorPicker colorPicker;
 
@@ -38,7 +39,9 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
 
         colorPicker = new ColorPicker();
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> updateValue());
+        colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
+        FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(colorPicker, container);
     }
 
@@ -48,7 +51,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
     }
 
     /**
-     * @return контрол для выбора цвета.
+     * @return the color picker.
      */
     private ColorPicker getColorPicker() {
         return colorPicker;
@@ -69,7 +72,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
     }
 
     /**
-     * Обновление вектора.
+     * Updating value.
      */
     private void updateValue() {
         if (isIgnoreListener()) return;

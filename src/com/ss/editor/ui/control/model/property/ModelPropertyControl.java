@@ -149,10 +149,10 @@ public class ModelPropertyControl<D, T> extends VBox {
      * Create this control.
      */
     protected void createComponents() {
-        setAlignment(isSingleRow() ? Pos.CENTER_LEFT : Pos.CENTER);
+        setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
         final HBox container = new HBox();
-        container.setAlignment(isSingleRow() ? Pos.CENTER_LEFT : Pos.CENTER);
+        container.setAlignment(isSingleRow() ? Pos.CENTER_RIGHT : Pos.CENTER);
 
         propertyNameLabel = new Label(getPropertyName() + ":");
 
@@ -160,10 +160,9 @@ public class ModelPropertyControl<D, T> extends VBox {
             propertyNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         } else {
             propertyNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME);
-            propertyNameLabel.prefWidthProperty().bind(widthProperty());
         }
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(propertyNameLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(propertyNameLabel, isSingleRow() ? container : this);
 
         createComponents(container);

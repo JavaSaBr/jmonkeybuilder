@@ -17,7 +17,7 @@ import javafx.scene.shape.Line;
  */
 public abstract class AbstractPropertyBuilder implements PropertyBuilder {
 
-    protected static final Insets SPLIT_LINE_OFFSET = new Insets(14, 0, 14, 0);
+    protected static final Insets SPLIT_LINE_OFFSET = new Insets(6, 0, 6, 0);
 
     protected static final Editor EDITOR = Editor.getInstance();
 

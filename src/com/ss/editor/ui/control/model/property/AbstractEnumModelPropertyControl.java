@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +37,10 @@ public abstract class AbstractEnumModelPropertyControl<T, E extends Enum<E>> ext
         enumComboBox = new ComboBox<>();
         enumComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
-        enumComboBox.prefWidthProperty().bind(container.widthProperty());
+        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
         FXUtils.addToPane(enumComboBox, container);
+        FXUtils.addClassTo(enumComboBox, CSSClasses.SPECIAL_FONT_13);
     }
 
     /**

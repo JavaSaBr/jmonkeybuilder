@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
+import static com.ss.editor.util.EditorUtil.clipNumber;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.bounding.BoundingBox;
@@ -11,6 +13,7 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.DefaultModelPropertyControl;
+import com.ss.editor.ui.control.model.property.DefaultModelSinglePropertyControl;
 import com.ss.editor.ui.control.model.property.MaterialKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
@@ -26,8 +29,6 @@ import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
-
-import static com.ss.editor.util.EditorUtil.clipNumber;
 
 /**
  * The implementation of the {@link PropertyBuilder} for building property controls for {@link
@@ -96,12 +97,14 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         final MaterialKey materialKey = (MaterialKey) material.getKey();
         final BoundingVolume modelBound = geometry.getModelBound();
 
-        final ModelPropertyControl<Geometry, MaterialKey> materialControl = new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+        final ModelPropertyControl<Geometry, MaterialKey> materialControl =
+                new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
         materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
         materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
         materialControl.setEditObject(geometry);
 
-        final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl = new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+        final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
+                new DefaultModelSinglePropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);

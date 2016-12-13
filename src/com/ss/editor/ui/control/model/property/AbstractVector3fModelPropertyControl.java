@@ -1,7 +1,10 @@
 package com.ss.editor.ui.control.model.property;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +16,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * The implementation of the {@link ModelPropertyControl} for editing vector3f values.
@@ -53,6 +54,7 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::updateVector);
+        xField.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -61,6 +63,7 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         yFiled.setOnScroll(this::processScroll);
         yFiled.setOnKeyReleased(this::updateVector);
+        yFiled.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -69,6 +72,7 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
         zField.setOnKeyReleased(this::updateVector);
+        zField.prefWidthProperty().bind(widthProperty().divide(3));
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
@@ -76,6 +80,13 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         FXUtils.addToPane(yFiled, container);
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
+
+        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(yFiled, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_13);
     }
 
     /**
@@ -97,28 +108,31 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         long longValue = (long) (value * 1000);
         longValue += (event.getDeltaY() * 10);
 
-        source.setText(String.valueOf(longValue / 1000F));
+        final String result = String.valueOf(longValue / 1000F);
+        source.setText(result);
+        source.positionCaret(result.length());
+
         updateVector(null);
     }
 
     /**
      * @return the field X.
      */
-    private TextField getXField() {
+    protected TextField getXField() {
         return xField;
     }
 
     /**
      * @return the field Y.
      */
-    private TextField getYFiled() {
+    protected TextField getYFiled() {
         return yFiled;
     }
 
     /**
      * @return the field Z.
      */
-    private TextField getZField() {
+    protected TextField getZField() {
         return zField;
     }
 
@@ -129,18 +143,21 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
 
         final TextField xField = getXField();
         xField.setText(String.valueOf(element.getX()));
+        xField.positionCaret(xField.getText().length());
 
         final TextField yFiled = getYFiled();
         yFiled.setText(String.valueOf(element.getY()));
+        yFiled.positionCaret(xField.getText().length());
 
         final TextField zField = getZField();
         zField.setText(String.valueOf(element.getZ()));
+        zField.positionCaret(xField.getText().length());
     }
 
     /**
      * Update the vector.
      */
-    private void updateVector(final KeyEvent event) {
+    protected void updateVector(final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final TextField xField = getXField();

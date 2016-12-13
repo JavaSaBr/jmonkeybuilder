@@ -81,6 +81,11 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
         editButton.disableProperty().bind(materialLabel.textProperty().isEqualTo(NO_MATERIAL));
         editButton.setOnAction(event -> processEdit());
 
+        materialLabel.prefWidthProperty().bind(widthProperty()
+                .subtract(changeButton.widthProperty())
+                .subtract(editButton.widthProperty())
+                .subtract(BUTTON_OFFSET.getLeft() * 2));
+
         FXUtils.addToPane(materialLabel, container);
         FXUtils.addToPane(changeButton, container);
         FXUtils.addToPane(editButton, container);
@@ -88,8 +93,11 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
         HBox.setMargin(changeButton, BUTTON_OFFSET);
         HBox.setMargin(editButton, BUTTON_OFFSET);
 
+        FXUtils.addClassTo(materialLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(changeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(editButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 
     /**
