@@ -8,6 +8,10 @@
     -fx-effect: -fx-material-shadow-panel;;
 }
 
+#EditorBarComponentTitleLabel {
+    -fx-padding: 0 0 0 20;
+}
+
 #EditorBarComponentMenuButton {
     -fx-graphic: url("/ui/icons/actions/24/menu.png");
 }
@@ -204,9 +208,12 @@
 
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
-    -fx-min-height: 45;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 0 20 0;
+}
+
+#AssetEditorDialogResourcesContainer {
+    -fx-alignment: center-left;
+    -fx-padding: 15 0 0 0;
 }
 
 #AssetEditorDialogPreviewContainer {
@@ -661,4 +668,7 @@
     -fx-min-width: 350;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+}
+
+#JmePreviewManagerImageView {
 }

@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.bar;
 import static javafx.util.Duration.millis;
 
 import com.ss.editor.JFXApplication;
+import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.CloseEditorAction;
@@ -20,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -34,7 +36,7 @@ import rlib.util.array.ArrayFactory;
 /**
  * The toolbar of the Editor.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class EditorBarComponent extends StackPane implements ScreenComponent {
 
@@ -101,6 +103,9 @@ public class EditorBarComponent extends StackPane implements ScreenComponent {
         menuButton.setId(CSSIds.EDITOR_BAR_COMPONENT_MENU_BUTTON);
         menuButton.setOnAction(event -> processMenu());
 
+        final Label titleLabel = new Label(Config.TITLE + " " + Config.VERSION);
+        titleLabel.setId(CSSIds.EDITOR_BAR_COMPONENT_TITLE_LABEL);
+
         fullscreenButton = new Button();
         fullscreenButton.setId(CSSIds.EDITOR_BAR_COMPONENT_FULLSCREEN_BUTTON);
         fullscreenButton.setOnAction(event -> processMaximize());
@@ -111,10 +116,12 @@ public class EditorBarComponent extends StackPane implements ScreenComponent {
         closeButton.setOnAction(event -> JFX_APPLICATION.onExit());
 
         FXUtils.addClassTo(menuButton, CSSClasses.EDITOR_BAR_BUTTON);
+        FXUtils.addClassTo(titleLabel, CSSClasses.MAIN_FONT_15);
         FXUtils.addClassTo(fullscreenButton, CSSClasses.EDITOR_BAR_BUTTON);
         FXUtils.addClassTo(closeButton, CSSClasses.EDITOR_BAR_BUTTON);
 
         FXUtils.addToPane(menuButton, menuContainer);
+        FXUtils.addToPane(titleLabel, menuContainer);
         FXUtils.addToPane(fullscreenButton, actionsContainer);
         FXUtils.addToPane(closeButton, actionsContainer);
         FXUtils.addToPane(menuContainer, this);

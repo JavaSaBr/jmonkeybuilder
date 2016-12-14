@@ -8,6 +8,7 @@ package com.ss.editor.ui.css;
 public interface CSSIds {
 
     String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+    String EDITOR_BAR_COMPONENT_TITLE_LABEL = "EditorBarComponentTitleLabel";
     String EDITOR_BAR_COMPONENT_MENU_BUTTON = "EditorBarComponentMenuButton";
     String EDITOR_BAR_COMPONENT_FULLSCREEN_BUTTON = "EditorBarComponentFullscreenButton";
     String EDITOR_BAR_COMPONENT_CLOSE_BUTTON = "EditorBarComponentCloseButton";
@@ -23,6 +24,8 @@ public interface CSSIds {
     String ASSET_COMPONENT_BAR = "AssetComponentBar";
     String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
     String ASSET_COMPONENT_RESOURCE_TREE_CELL = "AssetComponentResourceTreeCell";
+
+    String JME_PREVIEW_MANAGER_IMAGE_VIEW = "JmePreviewManagerImageView";
 
     String GLOBAL_TOOL_COMPONENT = "GlobalToolComponent";
 
@@ -47,6 +50,7 @@ public interface CSSIds {
     String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
 
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
+    String ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER = "AssetEditorDialogResourcesContainer";
     String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "AssetEditorDialogPreviewContainer";
 
     String PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER = "ParticlesAssetEditorDialogSettingsContainer";

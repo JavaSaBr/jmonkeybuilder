@@ -54,7 +54,7 @@ import rlib.util.dictionary.ObjectDictionary;
 /**
  * The component for containing editors.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class EditorAreaComponent extends TabPane implements ScreenComponent {
 

@@ -7,8 +7,11 @@ import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.scene.EditorFXScene;
+
+import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -47,7 +50,6 @@ public class JFXApplication extends Application {
         System.setProperty("prism.cacheshapes", "true");
 
         CommandLineConfig.args(args);
-
 
         launch(args);
     }
@@ -88,6 +90,8 @@ public class JFXApplication extends Application {
             return;
         }
 
+        SvgImageLoaderFactory.install();
+
         new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
 
         final ObservableList<Image> icons = stage.getIcons();
@@ -119,8 +123,10 @@ public class JFXApplication extends Application {
     public void buildScene() {
         this.scene = EditorFXSceneBuilder.build(stage);
         this.scene.notifyFinishBuild();
+        final Editor editor = Editor.getInstance();
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
-        executor.addToExecute(() -> bind(Editor.getInstance(), scene.getImageView()));
+        executor.addToExecute(() -> bind(editor, scene.getImageView(), editor.getViewPort()));
+        JMEFilePreviewManager.getInstance();
     }
 
     /**

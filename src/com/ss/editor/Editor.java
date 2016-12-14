@@ -20,6 +20,7 @@ import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RendererException;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.NativeLibraryLoader;
@@ -39,8 +40,6 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UIUtils;
-
-import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -134,15 +133,39 @@ public class Editor extends JmeToJFXApplication {
     private final StampedLock lock;
 
     /**
+     * The node for preview.
+     */
+    private final Node previewNode;
+
+    /**
+     * The preview view port.
+     */
+    private ViewPort previewViewPort;
+
+    /**
+     * The camera for preview.
+     */
+    private Camera previewCamera;
+
+    /**
      * The environment camera.
      */
     private EnvironmentCamera environmentCamera;
+
+    /**
+     * The preview environment camera.
+     */
+    private EnvironmentCamera previewEnvironmentCamera;
 
     /**
      * The light probe.
      */
     private LightProbe lightProbe;
 
+    /**
+     * The preview light probe.
+     */
+    private LightProbe previewLightProbe;
 
     /**
      * The processor of post effects.
@@ -162,6 +185,7 @@ public class Editor extends JmeToJFXApplication {
     private Editor() {
         super(JFXApplication.getStage());
         this.lock = new StampedLock();
+        this.previewNode = new Node("Preview Node");
     }
 
     /**
@@ -230,6 +254,13 @@ public class Editor extends JmeToJFXApplication {
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 10000);
 
+        // create preview view port
+        previewCamera = cam.clone();
+        previewViewPort = renderManager.createPostView("Preview viewport", previewCamera);
+        previewViewPort.setClearFlags(true, true, true);
+        previewViewPort.attachScene(previewNode);
+        previewViewPort.setBackgroundColor(viewPort.getBackgroundColor());
+
         final Node guiNode = getGuiNode();
         guiNode.detachAllChildren();
 
@@ -266,12 +297,12 @@ public class Editor extends JmeToJFXApplication {
 
         if (Config.ENABLE_PBR) {
             environmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
+            previewEnvironmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
             stateManager.attach(environmentCamera);
+            stateManager.attach(previewEnvironmentCamera);
         }
 
         UIUtils.overrideTooltipBehavior(1000, 3000, 500);
-
-        SvgImageLoaderFactory.install();
 
         createProbe();
 
@@ -325,6 +356,14 @@ public class Editor extends JmeToJFXApplication {
     }
 
     @Override
+    public void simpleUpdate(final float tpf) {
+        super.simpleUpdate(tpf);
+
+        previewNode.updateLogicalState(tpf);
+        previewNode.updateGeometricState();
+    }
+
+    @Override
     public void update() {
 
         final InputManager inputManager = getInputManager();
@@ -339,6 +378,9 @@ public class Editor extends JmeToJFXApplication {
 
             final EditorThreadExecutor editorThreadExecutor = EditorThreadExecutor.getInstance();
             editorThreadExecutor.execute();
+
+            //System.out.println(cam.getRotation());
+            //System.out.println(cam.getLocation());
 
             if (paused) return;
 
@@ -385,11 +427,16 @@ public class Editor extends JmeToJFXApplication {
         }
 
         lightProbe = LightProbeFactory.makeProbe(getEnvironmentCamera(), rootNode, EMPTY_JOB_ADAPTER);
+        previewLightProbe = LightProbeFactory.makeProbe(getPreviewEnvironmentCamera(), previewNode, EMPTY_JOB_ADAPTER);
 
-        final BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
+        BoundingSphere bounds = (BoundingSphere) lightProbe.getBounds();
+        bounds.setRadius(100);
+
+        bounds = (BoundingSphere) previewLightProbe.getBounds();
         bounds.setRadius(100);
 
         rootNode.addLight(lightProbe);
+        previewNode.addLight(previewLightProbe);
     }
 
     /**
@@ -408,6 +455,21 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Update the light probe.
+     */
+    public void updatePreviewProbe(final JobProgressAdapter<LightProbe> progressAdapter) {
+
+        final LightProbe lightProbe = getPreviewLightProbe();
+
+        if (lightProbe == null) {
+            progressAdapter.done(null);
+            return;
+        }
+
+        LightProbeFactory.updateProbe(lightProbe, getPreviewEnvironmentCamera(), previewNode, progressAdapter);
+    }
+
+    /**
      * @return the light probe.
      */
     public LightProbe getLightProbe() {
@@ -415,10 +477,45 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * @return The preview view port.
+     */
+    public ViewPort getPreviewViewPort() {
+        return previewViewPort;
+    }
+
+    /**
+     * @return the preview light probe.
+     */
+    public LightProbe getPreviewLightProbe() {
+        return previewLightProbe;
+    }
+
+    /**
      * @return the environment camera.
      */
     public EnvironmentCamera getEnvironmentCamera() {
         return environmentCamera;
+    }
+
+    /**
+     * @return the camera for preview.
+     */
+    public Camera getPreviewCamera() {
+        return previewCamera;
+    }
+
+    /**
+     * @return the preview environment camera.
+     */
+    public EnvironmentCamera getPreviewEnvironmentCamera() {
+        return previewEnvironmentCamera;
+    }
+
+    /**
+     * @return The node for preview.
+     */
+    public Node getPreviewNode() {
+        return previewNode;
     }
 
     /**

@@ -1,9 +1,14 @@
 package com.ss.editor.ui.dialog.asset;
 
+import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
+import static com.ss.editor.manager.JavaFXImageManager.isImage;
+import static java.nio.file.Files.isDirectory;
+
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
@@ -15,32 +20,29 @@ import com.ss.editor.ui.dialog.EditorDialog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Point;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-
-import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
-import static com.ss.editor.manager.JavaFXImageManager.isImage;
-import static java.nio.file.Files.isDirectory;
 
 /**
  * The implementation of the {@link EditorDialog} for choosing the object from asset.
@@ -51,9 +53,9 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-    protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
 
-    protected static final Point DIALOG_SIZE = new Point(1200, 700);
+    protected static final Point DIALOG_SIZE = new Point(1204, 720);
 
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -83,6 +85,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * The label with any warning.
      */
     protected Label warningLabel;
+    private TextArea textView;
 
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
         this(consumer, null);
@@ -104,7 +107,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected void createContent(final VBox root) {
 
         final HBox container = new HBox();
-        container.setAlignment(Pos.CENTER_LEFT);
+        container.setId(CSSIds.ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER);
 
         resourceTree = new ResourceTree(this::processOpen, true);
         resourceTree.prefHeightProperty().bind(root.heightProperty());
@@ -123,15 +126,18 @@ public class AssetEditorDialog<C> extends EditorDialog {
     @NotNull
     protected Parent buildSecondPart(final HBox container) {
 
-        final VBox previewContainer = new VBox();
+        final StackPane previewContainer = new StackPane();
         previewContainer.setId(CSSIds.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         imageView = new ImageView();
         imageView.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
         imageView.fitWidthProperty().bind(previewContainer.widthProperty().subtract(2));
 
-        FXUtils.addToPane(imageView, previewContainer);
+        textView = new TextArea();
+        textView.prefWidthProperty().bind(previewContainer.widthProperty().subtract(2));
+        textView.prefHeightProperty().bind(previewContainer.heightProperty().subtract(2));
 
+        FXUtils.addToPane(imageView, previewContainer);
         HBox.setMargin(previewContainer, SECOND_PART_OFFSET_OFFSET);
 
         return previewContainer;
@@ -204,7 +210,18 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
         final ImageView imageView = getImageView();
 
+        if (JMEFilePreviewManager.isJmeFile(file)) {
+
+            final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+            previewManager.show(file, (int) imageView.getFitWidth(), (int) imageView.getFitHeight());
+
+            final ImageView sourceView = previewManager.getImageView();
+            imageView.imageProperty().bind(sourceView.imageProperty());
+            return;
+        }
+
         if (file == null || isDirectory(file) || !isImage(file)) {
+            imageView.imageProperty().unbind();
             imageView.setImage(null);
             return;
         }
@@ -246,6 +263,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addClassTo(warningLabel, CSSClasses.MAIN_FONT_15_BOLD);
+        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
 
         FXUtils.addToPane(warningLabel, container);
         FXUtils.addToPane(okButton, container);

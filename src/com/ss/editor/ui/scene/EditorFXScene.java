@@ -42,6 +42,11 @@ public class EditorFXScene extends Scene {
     private final StackPane container;
 
     /**
+     * The hide layer.
+     */
+    private final StackPane hideLayer;
+
+    /**
      * The loading layer.
      */
     private final VBox loadingLayer;
@@ -64,16 +69,19 @@ public class EditorFXScene extends Scene {
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
         this.container.setPickOnBounds(false);
+        this.hideLayer = new StackPane();
         this.loadingLayer = new VBox();
         this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
-        root.getChildren().addAll(imageView, container, loadingLayer);
+        root.getChildren().addAll(hideLayer, imageView, container, loadingLayer);
 
         imageView.setPickOnBounds(true);
         imageView.fitHeightProperty().bind(heightProperty());
         imageView.fitWidthProperty().bind(widthProperty());
 
+        FXUtils.bindFixedWidth(hideLayer, widthProperty());
+        FXUtils.bindFixedHeight(hideLayer, heightProperty());
         FXUtils.bindFixedWidth(container, widthProperty());
         FXUtils.bindFixedHeight(container, heightProperty());
         FXUtils.bindFixedWidth(loadingLayer, widthProperty());
@@ -117,6 +125,13 @@ public class EditorFXScene extends Scene {
      */
     private VBox getLoadingLayer() {
         return loadingLayer;
+    }
+
+    /**
+     * @return the hide layer.
+     */
+    public StackPane getHideLayer() {
+        return hideLayer;
     }
 
     /**

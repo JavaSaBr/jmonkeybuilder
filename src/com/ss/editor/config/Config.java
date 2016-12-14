@@ -22,7 +22,7 @@ public abstract class Config {
     public static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.7.6";
+    public static final String VERSION = "v.0.7.7";
 
     public static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
