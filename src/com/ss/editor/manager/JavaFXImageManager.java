@@ -7,6 +7,8 @@ import com.ss.editor.ui.Icons;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiReader;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -29,9 +31,9 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация менеджера по работе с изображениями в JavaFX.
+ * The manager for creating preview for image files.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class JavaFXImageManager {
 
@@ -60,9 +62,10 @@ public class JavaFXImageManager {
     }
 
     /**
-     * Определение, является ли файл картинкой.
+     * @return true if the file is image.
      */
-    public static boolean isImage(final Path file) {
+    public static boolean isImage(@Nullable final Path file) {
+        if (file == null) return false;
         final String extension = FileUtils.getExtension(file);
         return IMAGE_FORMATS.contains(extension);
     }
@@ -75,7 +78,7 @@ public class JavaFXImageManager {
     }
 
     /**
-     * Папка для размещения кеша картинок.
+     * The cache folder.
      */
     private final Path cacheFolder;
 
@@ -86,22 +89,22 @@ public class JavaFXImageManager {
     }
 
     /**
-     * @return папка для размещения кеша картинок.
+     * @return the cache folder.
      */
     private Path getCacheFolder() {
         return cacheFolder;
     }
 
     /**
-     * Получение упрощенного превью текстуры.
+     * Get image preview.
      *
-     * @param file   файл с текстурой.
-     * @param width  ширина для превью.
-     * @param height высота для превью.
-     * @return загруженное изображение.
+     * @param file   the image file.
+     * @param width  the required width.
+     * @param height the required height.
+     * @return the image.
      */
-    public Image getTexturePreview(final Path file, final int width, final int height) {
-        if (!Files.exists(file)) return Icons.IMAGE_512;
+    public Image getTexturePreview(@Nullable final Path file, final int width, final int height) {
+        if (file == null || !Files.exists(file)) return Icons.IMAGE_512;
 
         final String absolutePath = file.toAbsolutePath().toString();
         final String fileHash = StringUtils.passwordToHash(absolutePath) + ".png";

@@ -6,6 +6,9 @@ import static rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Group;
@@ -22,7 +25,7 @@ import rlib.util.array.ArrayFactory;
 /**
  * The class implementation of the scene of JavaFX.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class EditorFXScene extends Scene {
 
@@ -70,6 +73,7 @@ public class EditorFXScene extends Scene {
         this.container = new StackPane();
         this.container.setPickOnBounds(false);
         this.hideLayer = new StackPane();
+        this.hideLayer.setVisible(false);
         this.loadingLayer = new VBox();
         this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
@@ -91,38 +95,43 @@ public class EditorFXScene extends Scene {
     /**
      * @return the view for drawing JME.
      */
+    @NotNull
     public ImageView getImageView() {
         return imageView;
     }
 
     /**
-     * Поиск интересуемого компонента через его ид.
+     * Find the component with the ID.
      *
-     * @param id ид интересуемого компонента.
-     * @return искомый компонент либо <code>null</code>.
+     * @param id the component id.
+     * @return the component or null.
      */
-    public <T extends ScreenComponent> T findComponent(final String id) {
+    @Nullable
+    public <T extends ScreenComponent> T findComponent(@NotNull final String id) {
         final Array<ScreenComponent> components = getComponents();
         return unsafeCast(components.search(id, (component, toCheck) -> StringUtils.equals(toCheck, component.getComponentId())));
     }
 
     /**
-     * @return список компонентов в сцене.
+     * @return the list of components.
      */
+    @NotNull
     public Array<ScreenComponent> getComponents() {
         return components;
     }
 
     /**
-     * @return контейнер элементов сцены.
+     * @return the container of this scene.
      */
+    @NotNull
     public StackPane getContainer() {
         return container;
     }
 
     /**
-     * @return слой для отображения загрузки.
+     * @return the loading layer.
      */
+    @NotNull
     private VBox getLoadingLayer() {
         return loadingLayer;
     }
@@ -130,12 +139,13 @@ public class EditorFXScene extends Scene {
     /**
      * @return the hide layer.
      */
+    @NotNull
     public StackPane getHideLayer() {
         return hideLayer;
     }
 
     /**
-     * Увеличение счетчика загрузок.
+     * Increase the loading counter.
      */
     public synchronized void incrementLoading() {
         if (loadingCount.incrementAndGet() == 1) {
@@ -144,7 +154,7 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Уменьшение счетчика загрузок.
+     * Decrease the loading counter.
      */
     public synchronized void decrementLoading() {
         if (loadingCount.decrementAndGet() == 0) {
@@ -153,7 +163,7 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Отобразить загрузку.
+     * Show the loading process.
      */
     private void showLoading() {
 
@@ -171,7 +181,7 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Скрыть загрузку.
+     * Hide the loading process.
      */
     private void hideLoading() {
 
@@ -186,7 +196,7 @@ public class EditorFXScene extends Scene {
     }
 
     /**
-     * Уведомление сцены о том, что было завершено ее построение.
+     * Notify all components about finished building.
      */
     public void notifyFinishBuild() {
         final Array<ScreenComponent> components = getComponents();

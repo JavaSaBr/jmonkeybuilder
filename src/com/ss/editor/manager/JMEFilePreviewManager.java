@@ -6,6 +6,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
+import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -28,6 +29,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -47,15 +49,18 @@ import rlib.util.array.ArrayFactory;
 public class JMEFilePreviewManager extends AbstractControl {
 
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
+    private static final Vector3f CAMERA_LOCATION = new Vector3f(13.660254F, 5.176381F, 13.660254F);
+
+    private static final Quaternion CAMERA_ROTATION = new Quaternion(0.9159756F, 0.04995022F, -0.37940952F, 0.12059049F);
 
     private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
-    public static final EditorThreadExecutor EDITOR_THREAD_EXECUTOR = EditorThreadExecutor.getInstance();
 
     static {
         JME_FORMATS.add(FileExtensions.JME_MATERIAL);
         JME_FORMATS.add(FileExtensions.JME_OBJECT);
     }
 
+    private static final EditorThreadExecutor EDITOR_THREAD_EXECUTOR = EditorThreadExecutor.getInstance();
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
@@ -76,7 +81,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     /**
      * @return true is the file is a JME file.
      */
-    public static boolean isJmeFile(final Path file) {
+    public static boolean isJmeFile(@Nullable final Path file) {
+        if (file == null) return false;
         final String extension = FileUtils.getExtension(file);
         return JME_FORMATS.contains(extension);
     }
@@ -89,6 +95,9 @@ public class JMEFilePreviewManager extends AbstractControl {
         }
     };
 
+    /**
+     * The preview container.
+     */
     private final ImageView imageView;
 
     /**
@@ -100,6 +109,11 @@ public class JMEFilePreviewManager extends AbstractControl {
      * The model node.
      */
     private final Node modelNode;
+
+    /**
+     * THe copy processor.
+     */
+    private volatile SceneProcessorCopyToImageView processor;
 
     /**
      * The count of frames.
@@ -126,7 +140,6 @@ public class JMEFilePreviewManager extends AbstractControl {
     protected void controlUpdate(final float tpf) {
 
         if (frame == 2) {
-            System.out.println("probe started updating");
             EDITOR.updatePreviewProbe(probeHandler);
         }
 
@@ -136,7 +149,6 @@ public class JMEFilePreviewManager extends AbstractControl {
     private void notifyProbeComplete() {
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.attachChild(modelNode);
-        System.out.println("probe updated");
     }
 
     @Override
@@ -161,11 +173,12 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     private void showObject(final String path) {
+        if (processor != null) processor.setEnabled(true);
         frame = 0;
 
         final Camera camera = EDITOR.getPreviewCamera();
-        camera.setLocation(new Vector3f(13.660254F, 5.176381F, 13.660254F));
-        camera.setRotation(new Quaternion(-0.04995022F, 0.9159756F, -0.12059049F, -0.37940952F));
+        camera.setLocation(CAMERA_LOCATION);
+        camera.setRotation(CAMERA_ROTATION);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial model = assetManager.loadModel(path);
@@ -178,10 +191,33 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     private void showMaterial(final String path) {
+        if (processor != null) processor.setEnabled(true);
         frame = 0;
+
+        final Camera camera = EDITOR.getPreviewCamera();
+        camera.setLocation(CAMERA_LOCATION);
+        camera.setRotation(CAMERA_ROTATION);
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Material material = assetManager.loadMaterial(path);
+
+        testBox.setMaterial(material);
+
+        modelNode.detachAllChildren();
+        modelNode.attachChild(testBox);
+
+        final Node rootNode = EDITOR.getPreviewNode();
+        rootNode.detachChild(modelNode);
     }
 
-    private void clear() {
+    public void clear() {
+        EDITOR_THREAD_EXECUTOR.addToExecute(this::clearImpl);
+    }
+
+    private void clearImpl() {
+        final Node rootNode = EDITOR.getPreviewNode();
+        rootNode.detachChild(modelNode);
+        if (processor != null) processor.setEnabled(false);
 
     }
 
@@ -204,6 +240,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         rootNode.addLight(light);
         rootNode.attachChild(modelNode);
 
-        return bind(EDITOR, imageView, imageView, EDITOR.getPreviewViewPort(), false);
+        processor = bind(EDITOR, imageView, imageView, EDITOR.getPreviewViewPort(), false);
+        return processor;
     }
 }

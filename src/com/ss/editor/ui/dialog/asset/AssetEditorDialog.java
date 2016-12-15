@@ -1,8 +1,6 @@
 package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
-import static com.ss.editor.manager.JavaFXImageManager.isImage;
-import static java.nio.file.Files.isDirectory;
 
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
@@ -21,10 +19,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Point;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -42,6 +42,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
 import rlib.util.array.Array;
 
 /**
@@ -82,10 +83,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected ImageView imageView;
 
     /**
+     * The preview of text files.
+     */
+    protected TextArea textView;
+
+    /**
      * The label with any warning.
      */
     protected Label warningLabel;
-    private TextArea textView;
 
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
         this(consumer, null);
@@ -138,6 +143,9 @@ public class AssetEditorDialog<C> extends EditorDialog {
         textView.prefHeightProperty().bind(previewContainer.heightProperty().subtract(2));
 
         FXUtils.addToPane(imageView, previewContainer);
+        FXUtils.addToPane(textView, previewContainer);
+        FXUtils.addClassTo(textView, CSSClasses.MAIN_FONT_13);
+
         HBox.setMargin(previewContainer, SECOND_PART_OFFSET_OFFSET);
 
         return previewContainer;
@@ -169,10 +177,17 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
-     * @return The image preview.
+     * @return the image preview.
      */
     private ImageView getImageView() {
         return imageView;
+    }
+
+    /**
+     * @return the text preview.
+     */
+    public TextArea getTextView() {
+        return textView;
     }
 
     /**
@@ -209,25 +224,58 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected void updatePreview(@Nullable final Path file) {
 
         final ImageView imageView = getImageView();
+        final TextArea textView = getTextView();
+
+        final int width = (int) imageView.getFitWidth();
+        final int height = (int) imageView.getFitHeight();
 
         if (JMEFilePreviewManager.isJmeFile(file)) {
 
             final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
-            previewManager.show(file, (int) imageView.getFitWidth(), (int) imageView.getFitHeight());
+            previewManager.show(file, width, height);
 
             final ImageView sourceView = previewManager.getImageView();
-            imageView.imageProperty().bind(sourceView.imageProperty());
-            return;
-        }
+            final ObjectProperty<Image> imageProperty = imageView.imageProperty();
 
-        if (file == null || isDirectory(file) || !isImage(file)) {
+            if (!imageProperty.isBound()) {
+                imageProperty.bind(sourceView.imageProperty());
+            }
+
+            textView.setVisible(false);
+            imageView.setVisible(true);
+
+        } else if (JavaFXImageManager.isImage(file)) {
+
+            final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, width, height);
+            imageView.setImage(preview);
+
+            textView.setVisible(false);
+            imageView.setVisible(true);
+
+        } else if (file != null && !Files.isDirectory(file)) {
+
             imageView.imageProperty().unbind();
             imageView.setImage(null);
-            return;
-        }
 
-        final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, (int) imageView.getFitWidth(), (int) imageView.getFitHeight());
-        imageView.setImage(preview);
+            textView.setText(FileUtils.read(file));
+            textView.setVisible(true);
+            imageView.setVisible(false);
+
+        } else {
+
+            imageView.imageProperty().unbind();
+            imageView.setImage(null);
+
+            textView.setVisible(false);
+            imageView.setVisible(false);
+        }
+    }
+
+    @Override
+    public void hide() {
+        final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
+        previewManager.clear();
+        super.hide();
     }
 
     /**

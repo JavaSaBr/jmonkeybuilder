@@ -19,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -121,8 +120,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root.prefWidthProperty().bind(container.widthProperty());
-
-        page.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> System.out.println("event2 " + event));
     }
 
     /**

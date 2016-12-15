@@ -31,12 +31,12 @@ import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
-import com.sun.javafx.scene.control.skin.TabPaneSkin;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -85,12 +85,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
         setPickOnBounds(true);
 
-        skinProperty().addListener((observable1, oldValue1, newValue1) -> {
-            final TabPaneSkin skin = (TabPaneSkin) newValue1;
-            skin.getSkinnable().setPickOnBounds(true);
-        });
-
-
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
         final ObservableList<Tab> tabs = getTabs();
@@ -116,8 +110,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
                 fileEditor.notifyHided();
             }
 
-            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-            workspace.updateCurrentEditFile(newCurrentFile);
+            final Workspace workspace = Objects.requireNonNull(WORKSPACE_MANAGER.getCurrentWorkspace(),
+                    "The current workspace can't be null.");
+
+            workspace.updateCurrentEditedFile(newCurrentFile);
 
             EXECUTOR_MANAGER.addEditorThreadTask(() -> processShowEditor(oldValue, newValue));
         });
@@ -420,22 +416,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         if (workspace == null) return;
 
         final Path assetFolder = workspace.getAssetFolder();
-        final String editFile = workspace.getCurrentEditFile();
+        final String editFile = workspace.getCurrentEditedFile();
 
         final Map<String, String> openedFiles = workspace.getOpenedFiles();
         openedFiles.forEach((assetPath, editorId) -> {
 
             final EditorDescription description = EDITOR_REGISTRY.getDescription(editorId);
-
-            if (description == null) {
-                return;
-            }
+            if (description == null) return;
 
             final Path file = assetFolder.resolve(assetPath);
-
-            if (!Files.exists(file)) {
-                return;
-            }
+            if (!Files.exists(file)) return;
 
             final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
             event.setFile(file);

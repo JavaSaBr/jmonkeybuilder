@@ -4,6 +4,9 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -13,9 +16,9 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * Реализация менеджера по работе с воркспейсом.
+ * The manager for working with workspaces.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class WorkspaceManager {
 
@@ -30,7 +33,7 @@ public class WorkspaceManager {
     }
 
     /**
-     * Таблица воркспейсов.
+     * The table of workspaces.
      */
     private final ObjectDictionary<Path, Workspace> workspaces;
 
@@ -40,15 +43,19 @@ public class WorkspaceManager {
     }
 
     /**
-     * @return таблица воркспейсов.
+     * @return the table of workspaces.
      */
+    @NotNull
     private ObjectDictionary<Path, Workspace> getWorkspaces() {
         return workspaces;
     }
 
     /**
-     * Получение текущего воркспейса.
+     * Get the current workspace.
+     *
+     * @return the current workspace or null.
      */
+    @Nullable
     public Workspace getCurrentWorkspace() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -59,13 +66,15 @@ public class WorkspaceManager {
     }
 
     /**
-     * Получение воркспейса для указанного asset папки.
+     * Get the workspace for the asset folder.
+     *
+     * @return the workspace.
      */
-    public synchronized Workspace getWorkspace(final Path assetFolder) {
+    @NotNull
+    public synchronized Workspace getWorkspace(@NotNull final Path assetFolder) {
 
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         final Workspace exists = workspaces.get(assetFolder);
-
         if (exists != null) return exists;
 
         final Path workspaceFile = assetFolder.resolve(FOLDER_EDITOR).resolve(FILE_WORKSPACE);
@@ -79,9 +88,11 @@ public class WorkspaceManager {
             return workspace;
         }
 
-        Workspace workspace = EditorUtil.deserialize(Util.safeGet(workspaceFile, Files::readAllBytes));
+        Workspace workspace;
 
-        if (workspace == null) {
+        try {
+            workspace = EditorUtil.deserialize(Util.safeGet(workspaceFile, Files::readAllBytes));
+        } catch (final RuntimeException e) {
             workspace = new Workspace();
         }
 
@@ -92,7 +103,7 @@ public class WorkspaceManager {
     }
 
     /**
-     * Очистить воркспейсы.
+     * Clear all workspaces.
      */
     public synchronized void clear() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
@@ -101,7 +112,7 @@ public class WorkspaceManager {
     }
 
     /**
-     * Сохранить воркспейсы.
+     * Save all workspaces.
      */
     public synchronized void save() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();

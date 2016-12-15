@@ -6,6 +6,9 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -22,9 +25,9 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
 /**
- * Реализация воркспейса.
+ * The workspace.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class Workspace implements Serializable {
 
@@ -33,29 +36,29 @@ public class Workspace implements Serializable {
     private static final Logger LOGGER = LoggerManager.getLogger(Workspace.class);
 
     /**
-     * Счетчик изменений.
+     * The changes counter.
      */
     private final AtomicInteger changes;
 
     /**
-     * Папка с Asset.
+     * The asset folder of this workspace.
      */
     private transient Path assetFolder;
 
     /**
-     * Таблица открытых файлов.
+     * The table of opened files.
      */
     private final Map<String, String> openedFiles;
 
     /**
-     * Таблица состояний редакторов в воркспейсе.
+     * The table with states of editors.
      */
     private Map<String, EditorState> editorStateMap;
 
     /**
-     * Текущий редактируемый файл.
+     * The current edited file.
      */
-    private String currentEditFile;
+    private String currentEditedFile;
 
     public Workspace() {
         this.changes = new AtomicInteger();
@@ -63,42 +66,44 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * @return текущий редактируемый файл.
+     * @return the current edited file.
      */
-    public String getCurrentEditFile() {
-        return currentEditFile;
+    @Nullable
+    public String getCurrentEditedFile() {
+        return currentEditedFile;
     }
 
     /**
-     * Обновление текущего редактируемого файла.
+     * Update the current edited file.
      *
-     * @param file текущий редактируемый файл.
+     * @param file the current edited file.
      */
-    public synchronized void updateCurrentEditFile(final Path file) {
+    public synchronized void updateCurrentEditedFile(@Nullable final Path file) {
 
         if (file == null) {
-            this.currentEditFile = null;
+            this.currentEditedFile = null;
             return;
         }
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        this.currentEditFile = EditorUtil.toAssetPath(assetFile);
+        this.currentEditedFile = EditorUtil.toAssetPath(assetFile);
     }
 
     /**
-     * @return таблица состояний редакторов в воркспейсе.
+     * @return the table with states of editors.
      */
+    @NotNull
     private Map<String, EditorState> getEditorStateMap() {
         return editorStateMap;
     }
 
     /**
-     * Получение состояния редактора для указанного файла.
+     * Get the editor state for the file.
      *
-     * @param file редактируемый файл.
-     * @return состояние редактора.
+     * @param file the edited file.
+     * @return the state of the editor or null.
      */
-    public synchronized EditorState getEditorState(final Path file) {
+    public synchronized EditorState getEditorState(@NotNull final Path file) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
@@ -108,9 +113,9 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Обновление состояния редактора.
+     * Update the editor state.
      */
-    public synchronized void updateEditorState(final Path file, final EditorState editorState) {
+    public synchronized void updateEditorState(@NotNull final Path file, @NotNull final EditorState editorState) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
@@ -122,9 +127,9 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Удаление состояния редактора.
+     * Remove the editor state.
      */
-    public synchronized void removeEditorState(final Path file, final EditorState editorState) {
+    public synchronized void removeEditorState(@NotNull final Path file, @NotNull final EditorState editorState) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
@@ -136,26 +141,27 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * @param assetFolder папка Asset.
+     * @param assetFolder the asset folder of this workspace.
      */
-    public void setAssetFolder(final Path assetFolder) {
+    public void setAssetFolder(@NotNull final Path assetFolder) {
         this.assetFolder = assetFolder;
     }
 
     /**
-     * @return таблица открытых файлов.
+     * @return the table of opened files.
      */
+    @NotNull
     public Map<String, String> getOpenedFiles() {
         return openedFiles;
     }
 
     /**
-     * Добавление нового открытого файла.
+     * Add a new opened file.
      *
-     * @param file       открытый файл.
-     * @param fileEditor редактор, в котором он открыт.
+     * @param file       the opened file.
+     * @param fileEditor the editor.
      */
-    public synchronized void addOpenedFile(final Path file, final FileEditor fileEditor) {
+    public synchronized void addOpenedFile(@NotNull final Path file, @NotNull final FileEditor fileEditor) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
@@ -169,9 +175,9 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Удаление открытого файла.
+     * Remove the opened file.
      */
-    public synchronized void removeOpenedFile(final Path file) {
+    public synchronized void removeOpenedFile(@NotNull final Path file) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
@@ -183,28 +189,29 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * @return папка с Asset.
+     * @return the asset folder of this workspace.
      */
+    @NotNull
     public Path getAssetFolder() {
         return assetFolder;
     }
 
     /**
-     * Увелические счетчика зименений.
+     * Increase the counter of changes.
      */
     private void incrementChanges() {
         changes.incrementAndGet();
     }
 
     /**
-     * Очистка воркспейса.
+     * Clear this workspace.
      */
     public void clear() {
         getOpenedFiles().clear();
     }
 
     /**
-     * Сохранение состояния в файл.
+     * Save this workspace.
      */
     public void save() {
         if (changes.get() == 0) return;
