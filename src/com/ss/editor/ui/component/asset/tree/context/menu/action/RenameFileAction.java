@@ -5,7 +5,6 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
@@ -85,13 +84,6 @@ public class RenameFileAction extends MenuItem {
             Files.move(file, newFile);
         } catch (IOException e) {
             EditorUtil.handleException(null, this, e);
-            return;
         }
-
-        final RenamedFileEvent event = new RenamedFileEvent();
-        event.setPrevFile(file);
-        event.setNewFile(newFile);
-
-        FX_EVENT_MANAGER.notify(event);
     }
 }

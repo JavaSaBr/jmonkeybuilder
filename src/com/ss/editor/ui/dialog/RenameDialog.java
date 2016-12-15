@@ -5,7 +5,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -15,42 +15,44 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализация диалога для ввода нового имени.
+ * The implementation of a dialog for renaming.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RenameDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+    private static final Insets NAME_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     private static final Point DIALOG_SIZE = new Point(400, 140);
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * Функция валидирования имени.
+     * The function for validation name.
      */
     private Function<String, Boolean> validator;
 
     /**
-     * Функция обработки введеного имени.
+     * The function for handling a new name.
      */
     private Consumer<String> handler;
 
     /**
-     * Поле для ввода имени.
+     * The text field.
      */
     private TextField nameField;
 
     /**
-     * Кнопка приминения.
+     * The ok button.
      */
     private Button okButton;
 
@@ -76,16 +78,7 @@ public class RenameDialog extends EditorDialog {
         FXUtils.addClassTo(nameLabel, CSSClasses.MAIN_FONT_13);
         FXUtils.addClassTo(nameField, CSSClasses.MAIN_FONT_13);
 
-        VBox.setMargin(nameContainer, new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0));
-
-        root.setOnKeyReleased(event -> {
-
-            final Button okButton = getOkButton();
-
-            if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
-                processOk();
-            }
-        });
+        VBox.setMargin(nameContainer, NAME_OFFSET);
     }
 
     @Override
@@ -100,7 +93,7 @@ public class RenameDialog extends EditorDialog {
     }
 
     /**
-     * @param initName изначальное имя.
+     * @param initName the initial name.
      */
     public void setInitName(final String initName) {
         final TextField nameField = getNameField();
@@ -108,49 +101,49 @@ public class RenameDialog extends EditorDialog {
     }
 
     /**
-     * @return поле для ввода имени.
+     * @return the text field.
      */
     private TextField getNameField() {
         return nameField;
     }
 
     /**
-     * @return кнопка приминения.
+     * @return the ok button.
      */
     private Button getOkButton() {
         return okButton;
     }
 
     /**
-     * @return функция валидирования имени.
+     * @return the function for validation name.
      */
     public Function<String, Boolean> getValidator() {
         return validator;
     }
 
     /**
-     * @param validator функция валидирования имени.
+     * @param validator the function for validation name.
      */
     public void setValidator(final Function<String, Boolean> validator) {
         this.validator = validator;
     }
 
     /**
-     * @return функция обработки введеного имени.
+     * @return the function for handling a new name.
      */
     private Consumer<String> getHandler() {
         return handler;
     }
 
     /**
-     * @param handler функция обработки введеного имени.
+     * @param handler the function for handling a new name.
      */
     public void setHandler(final Consumer<String> handler) {
         this.handler = handler;
     }
 
     /**
-     * Валидация нового имени.
+     * Validate a new name.
      */
     private void validateName(final String name) {
         final Function<String, Boolean> validator = getValidator();
@@ -177,12 +170,23 @@ public class RenameDialog extends EditorDialog {
         FXUtils.addToPane(cancelButton, container);
         FXUtils.addToPane(container, root);
 
+        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
+
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
+    @Override
+    protected void processKey(final KeyEvent event) {
+        super.processKey(event);
+        if (event.getCode() == KeyCode.ENTER) {
+            processOk();
+        }
+    }
+
     /**
-     * Процесс принятия выборанного имени.
+     * Finish this dialog.
      */
     private void processOk() {
 

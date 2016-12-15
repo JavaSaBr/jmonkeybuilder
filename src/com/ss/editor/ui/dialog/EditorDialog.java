@@ -15,6 +15,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -55,6 +57,13 @@ public class EditorDialog extends AbstractPopupDialog {
         createHeader(root);
         createContent(root);
         createActions(root);
+        addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
+    }
+
+    protected void processKey(final KeyEvent event) {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            hide();
+        }
     }
 
     @Override

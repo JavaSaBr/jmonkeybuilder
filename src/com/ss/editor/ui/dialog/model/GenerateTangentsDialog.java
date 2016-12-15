@@ -1,5 +1,7 @@
 package com.ss.editor.ui.dialog.model;
 
+import static javafx.collections.FXCollections.observableArrayList;
+
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
@@ -13,7 +15,7 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.util.GeomUtils;
 
-import java.awt.*;
+import java.awt.Point;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,23 +24,23 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
-import static javafx.collections.FXCollections.observableArrayList;
-
 /**
- * Реализация диалога генерации тангентов.
+ * The implementation of a dialog for generating tangents.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class GenerateTangentsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
-    private static final Point DIALOG_SIZE = new Point(600, 160);
+    private static final Point DIALOG_SIZE = new Point(500, 160);
 
     private static final Insets ALGORITHM_OFFSET = new Insets(15, 0, 0, 0);
     private static final Insets SPLIT_OFFSET = new Insets(8, 0, 10, 150);
@@ -50,27 +52,27 @@ public class GenerateTangentsDialog extends EditorDialog {
     }
 
     /**
-     * Компонент структуры модели.
+     * The model tree component.
      */
     private final ModelNodeTree nodeTree;
 
     /**
-     * Узел модели.
+     * The generated node.
      */
     private final ModelNode<?> node;
 
     /**
-     * Комбобокс с выбором алгоритма.
+     * The list of types.
      */
     private ComboBox<AlgorithmType> algorithmTypeComboBox;
 
     /**
-     * Флаг необходимости разделять зеркальные UV.
+     * The check box about spliting morrored.
      */
     private CheckBox splitMirroredCheckBox;
 
     /**
-     * Кнопка генерации.
+     * The ok button.
      */
     private Button okButton;
 
@@ -80,14 +82,14 @@ public class GenerateTangentsDialog extends EditorDialog {
     }
 
     /**
-     * @return компонент структуры модели.
+     * @return the model tree component.
      */
     protected ModelNodeTree getNodeTree() {
         return nodeTree;
     }
 
     /**
-     * @return узел модели.
+     * @return the generated node.
      */
     protected ModelNode<?> getNode() {
         return node;
@@ -125,12 +127,20 @@ public class GenerateTangentsDialog extends EditorDialog {
 
         FXUtils.addToPane(splitMirroredCheckBox, root);
 
-        FXUtils.addClassTo(algorithmTypeLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(algorithmTypeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(algorithmTypeContainer, ALGORITHM_OFFSET);
         VBox.setMargin(splitMirroredCheckBox, SPLIT_OFFSET);
+    }
+
+    @Override
+    protected void processKey(final KeyEvent event) {
+        super.processKey(event);
+        if (event.getCode() == KeyCode.ENTER) {
+            processOk();
+        }
     }
 
     @Override
@@ -152,26 +162,29 @@ public class GenerateTangentsDialog extends EditorDialog {
         FXUtils.addToPane(cancelButton, container);
         FXUtils.addToPane(container, root);
 
+        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
+
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
     /**
-     * @return флаг необходимости разделять зеркальные UV.
+     * @return the check box about spliting morrored.
      */
     private CheckBox getSplitMirroredCheckBox() {
         return splitMirroredCheckBox;
     }
 
     /**
-     * @return комбобокс с выбором алгоритма.
+     * @return the list of types.
      */
     private ComboBox<AlgorithmType> getAlgorithmTypeComboBox() {
         return algorithmTypeComboBox;
     }
 
     /**
-     * Обработка генерации.
+     * Handle generating.
      */
     private void processOk() {
 
