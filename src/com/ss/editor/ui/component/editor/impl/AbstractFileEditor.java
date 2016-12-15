@@ -11,6 +11,9 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.nio.file.Path;
 
 import javafx.beans.property.BooleanProperty;
@@ -72,14 +75,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Add the new 3D part of this editor.
      */
-    protected void addEditorState(final EditorState editorState) {
+    protected void addEditorState(@NotNull final EditorState editorState) {
         this.editorStates.add(editorState);
     }
 
     /**
      * @param file the edit file.
      */
-    protected void setEditFile(final Path file) {
+    protected void setEditFile(@NotNull final Path file) {
         this.file = file;
     }
 
@@ -125,7 +128,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Handle the key released event.
      */
-    protected void processKeyReleased(final KeyEvent event) {
+    protected void processKeyReleased(@NotNull final KeyEvent event) {
 
         final KeyCode code = event.getCode();
 
@@ -137,18 +140,19 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Handle the key pressed event.
      */
-    protected void processKeyPressed(final KeyEvent event) {
+    protected void processKeyPressed(@NotNull final KeyEvent event) {
     }
 
     /**
      * Create toolbar.
      */
-    protected void createToolbar(final HBox container) {
+    protected void createToolbar(@NotNull final HBox container) {
     }
 
     /**
      * Create the save action.
      */
+    @NotNull
     protected Button createSaveAction() {
 
         Button action = new Button();
@@ -184,33 +188,38 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * @return the new root.
      */
+    @NotNull
     protected abstract R createRoot();
 
     /**
      * Create content.
      */
-    protected abstract void createContent(final R root);
+    protected abstract void createContent(@NotNull final R root);
 
+    @NotNull
     @Override
     public Pane getPage() {
         return (Pane) root.getParent().getParent();
     }
 
+    @NotNull
     @Override
     public Path getEditFile() {
         return file;
     }
 
+    @NotNull
     @Override
     public String getFileName() {
         return file.getFileName().toString();
     }
 
     @Override
-    public void openFile(final Path file) {
+    public void openFile(@NotNull final Path file) {
         this.file = file;
     }
 
+    @NotNull
     @Override
     public BooleanProperty dirtyProperty() {
         return dirtyProperty;
@@ -228,6 +237,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.dirtyProperty.setValue(dirty);
     }
 
+    @Nullable
     @Override
     public Array<EditorState> getStates() {
         return editorStates;
@@ -245,7 +255,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    public void notifyRenamed(final Path prevFile, final Path newFile) {
+    public void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
         final Path editFile = getEditFile();
 
@@ -263,7 +273,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    public void notifyMoved(Path prevFile, Path newFile) {
+    public void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
 
         final Path editFile = getEditFile();
 

@@ -2,6 +2,9 @@ package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.state.editor.EditorState;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.nio.file.Path;
 
 import javafx.beans.property.BooleanProperty;
@@ -20,16 +23,19 @@ public interface FileEditor {
      *
      * @return the page for showing the editor.
      */
+    @NotNull
     Parent getPage();
 
     /**
      * @return the file name of the current opened file.
      */
+    @NotNull
     String getFileName();
 
     /**
      * @return the editing file.
      */
+    @NotNull
     Path getEditFile();
 
     /**
@@ -37,11 +43,12 @@ public interface FileEditor {
      *
      * @param file the file.
      */
-    void openFile(final Path file);
+    void openFile(@NotNull final Path file);
 
     /**
      * @return the dirty property of this editor.
      */
+    @NotNull
     BooleanProperty dirtyProperty();
 
     /**
@@ -58,6 +65,7 @@ public interface FileEditor {
     /**
      * @return the 3D part of this editor.
      */
+    @Nullable
     default Array<EditorState> getStates() {
         return null;
     }
@@ -71,18 +79,19 @@ public interface FileEditor {
     /**
      * Notify about renamed files.
      */
-    default void notifyRenamed(final Path prevFile, final Path newFile) {
+    default void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
     }
 
     /**
      * Notify about moved file.
      */
-    default void notifyMoved(final Path prevFile, final Path newFile) {
+    default void notifyMoved(@NotNull final Path prevFile, @NotNull final Path newFile) {
     }
 
     /**
      * @return the description of this editor.
      */
+    @NotNull
     EditorDescription getDescription();
 
     /**

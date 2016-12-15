@@ -1,5 +1,7 @@
 package com.ss.editor.state.editor.impl.model;
 
+import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -46,14 +48,14 @@ import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.array.ArrayIterator;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
-
-import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 
 /**
  * The implementation of the {@link AbstractEditorState} for the {@link ModelFileEditor}.
@@ -249,7 +251,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         createToolElements();
         createManipulators();
 
-        final EditorCamera editorCamera = getEditorCamera();
+        final EditorCamera editorCamera = Objects.requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
@@ -1259,8 +1261,12 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
         final Transform originalTransform = getOriginalTransform();
         final Spatial toTransform = getToTransform();
+        final Spatial currentModel = getCurrentModel();
 
-        if (originalTransform == null || toTransform == null) {
+        if (currentModel == null) {
+            LOGGER.warning(this, "not found current model for finishing transform...");
+            return;
+        } else if (originalTransform == null || toTransform == null) {
             LOGGER.warning(this, "not found originalTransform or toTransform");
             return;
         }
@@ -1268,7 +1274,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
         final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
-        final int index = GeomUtils.getIndex(getCurrentModel(), toTransform);
+        final int index = GeomUtils.getIndex(currentModel, toTransform);
 
         final ModelPropertyOperation<Spatial, Transform> operation = new ModelPropertyOperation<>(index, "transform", newValue, oldValue);
         operation.setApplyHandler(Spatial::setLocalTransform);

@@ -6,6 +6,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 import javafx.geometry.Pos;
@@ -44,13 +46,14 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
      */
     private ImageView imageView;
 
+    @NotNull
     @Override
     protected VBox createRoot() {
         return new VBox();
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         root.setAlignment(Pos.CENTER);
 
         imageView = new ImageView();
@@ -68,7 +71,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    public void openFile(final Path file) {
+    public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
         final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, IMAGE_SIZE, IMAGE_SIZE);
@@ -77,6 +80,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         imageView.setImage(preview);
     }
 
+    @NotNull
     @Override
     public EditorDescription getDescription() {
         return DESCRIPTION;

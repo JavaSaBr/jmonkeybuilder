@@ -26,6 +26,8 @@ import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -157,12 +159,12 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     @Override
-    protected void createToolbar(final HBox container) {
+    protected void createToolbar(@NotNull final HBox container) {
         FXUtils.addToPane(createSaveAction(), container);
     }
 
     @Override
-    public void openFile(final Path file) {
+    public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
         final PostFilterViewFile currentFile = PostFilterViewSerializer.deserialize(file);
@@ -264,13 +266,14 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         return currentFile;
     }
 
+    @NotNull
     @Override
     protected StackPane createRoot() {
         return new StackPane();
     }
 
     @Override
-    protected void createContent(final StackPane root) {
+    protected void createContent(@NotNull final StackPane root) {
         root.setAlignment(Pos.TOP_RIGHT);
 
         final VBox materialListContainer = new VBox();
@@ -431,6 +434,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         dragEvent.consume();
     }
 
+    @NotNull
     @Override
     public EditorDescription getDescription() {
         return DESCRIPTION;

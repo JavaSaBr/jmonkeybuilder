@@ -13,6 +13,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.fxmisc.undo.UndoManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -142,13 +143,14 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
      */
     private CodeArea codeArea;
 
+    @NotNull
     @Override
     protected VBox createRoot() {
         return new VBox();
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
 
         codeArea = new CodeArea();
         codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
@@ -176,7 +178,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    protected void createToolbar(final HBox container) {
+    protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
         FXUtils.addToPane(createSaveAction(), container);
     }
@@ -189,7 +191,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    public void openFile(final Path file) {
+    public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
         final byte[] content = Util.safeGet(file, Files::readAllBytes);
@@ -238,6 +240,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         notifyFileChanged();
     }
 
+    @NotNull
     @Override
     public EditorDescription getDescription() {
         return DESCRIPTION;

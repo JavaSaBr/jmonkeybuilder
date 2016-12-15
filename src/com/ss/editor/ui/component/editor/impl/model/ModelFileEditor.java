@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -72,10 +73,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
     public static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
-    public static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
     public static final Insets LIGHT_BUTTON_OFFSET = new Insets(0, 0, 0, 4);
     public static final Insets FAST_SKY_LABEL_OFFSET = new Insets(0, 0, 0, 8);
-    public static final Insets MOVE_TOOL_BUTTON_OFFSET = new Insets(0, 0, 0, 8);
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -95,82 +94,82 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Слушатель изменений файлов.
+     * The file changes listener.
      */
     private final EventHandler<Event> fileChangedHandler;
 
     /**
-     * 3D часть редактора.
+     * The 3D part of this editor.
      */
     private final ModelEditorState editorState;
 
     /**
-     * Контролер операций редактора.
+     * The operation control.
      */
     private final EditorOperationControl operationControl;
 
     /**
-     * Счетчик внесения изменений.
+     * The changes counter.
      */
     private final AtomicInteger changeCounter;
 
     /**
-     * Текущая модель.
+     * The opened model.
      */
     private Spatial currentModel;
 
     /**
-     * Обработчик выделения.
+     * THe selection handler.
      */
     private Consumer<Object> selectionHandler;
 
     /**
-     * Дерево узлов модели.
+     * The model tree.
      */
     private ModelNodeTree modelNodeTree;
 
     /**
-     * Редактор свойств модели.
+     * The model property editor.
      */
     private ModelPropertyEditor modelPropertyEditor;
 
     /**
-     * Список доступных быстрых окружений.
+     * The list of fast skies.
      */
     private ComboBox<String> fastSkyComboBox;
 
     /**
-     * Кнопка активации света камеры.
+     * The light toggle.
      */
     private ToggleButton lightButton;
 
     /**
-     * Кнопка включения отображения выделения.
+     * The selection toggle.
      */
     private ToggleButton selectionButton;
 
     /**
-     * Кнопка включения отображения сетки.
+     * The grid toggle.
      */
     private ToggleButton gridButton;
 
     /**
-     * Тогл активаци трансформации перемещения.
+     * The move tool toggle.
      */
     private ToggleButton moveToolButton;
 
     /**
-     * Тогл активации трансформации вращения.
+     * The rotation tool toggle.
      */
     private ToggleButton rotationToolButton;
 
     /**
-     * Тогл активации трансформации маштабирования.
+     * The scaling tool toggle.
      */
     private ToggleButton scaleToolButton;
 
     /**
-     * Игнорировать ли слушателей.
+     * The flag of ignoring listeners.
      */
     private boolean ignoreListeners;
 
@@ -200,9 +199,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Обработка изменений файла.
+     * Handle a changed file.
      */
-    private void processChangedFile(final FileChangedEvent event) {
+    private void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
@@ -213,11 +212,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Процесс обновления материала.
+     * Updating a material from the file.
      */
-    private void updateMaterial(final Path file) {
+    private void updateMaterial(@NotNull final Path file) {
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+        if (assetFile == null) return;
+
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
@@ -237,50 +238,57 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * @return слушатель изменений файлов.
+     * @return the file changes listener.
      */
+    @NotNull
     private EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
     }
 
+    @NotNull
     @Override
     protected StackPane createRoot() {
         return new StackPane();
     }
 
     /**
-     * @return 3D часть редактора.
+     * @return the 3D part of this editor.
      */
+    @NotNull
     private ModelEditorState getEditorState() {
         return editorState;
     }
 
     /**
-     * @return список доступных быстрых окружений.
+     * @return the list of fast skies.
      */
+    @NotNull
     private ComboBox<String> getFastSkyComboBox() {
         return fastSkyComboBox;
     }
 
     /**
-     * @return дерево узлов модели.
+     * @return the model tree.
      */
     private ModelNodeTree getModelNodeTree() {
         return modelNodeTree;
     }
 
     /**
-     * @return редактор свойств модели.
+     * @return the model property editor..
      */
     private ModelPropertyEditor getModelPropertyEditor() {
         return modelPropertyEditor;
     }
 
     @Override
-    public void openFile(final Path file) {
+    public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
+
+        Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
+
         final ModelKey modelKey = new ModelKey(EditorUtil.toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -313,9 +321,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Проверка и обработка наличия объектов требующий специальной обработки.
+     * Handle the model.
      */
-    private void handleObjects(final Spatial model) {
+    private void handleObjects(@NotNull final Spatial model) {
 
         final ModelEditorState editorState = getEditorState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
@@ -340,7 +348,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    protected void processKeyReleased(KeyEvent event) {
+    protected void processKeyReleased(@NotNull KeyEvent event) {
         super.processKeyReleased(event);
 
         if (!event.isControlDown()) return;
@@ -357,7 +365,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Повторение отмененной операции.
+     * Redo the last operation.
      */
     public void redo() {
         final EditorOperationControl operationControl = getOperationControl();
@@ -365,7 +373,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Отмена последней операции.
+     * Undo the last operation.
      */
     public void undo() {
         final EditorOperationControl operationControl = getOperationControl();
@@ -377,29 +385,30 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
+    @NotNull
     @Override
     public EditorDescription getDescription() {
         return DESCRIPTION;
     }
 
     /**
-     * @return игнорировать ли слушателей.
+     * @return true if needs to ignore events.
      */
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     /**
-     * @param ignoreListeners игнорировать ли слушателей.
+     * @param ignoreListeners true if needs to ignore events.
      */
     private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @param currentModel текущая модель.
+     * @param currentModel the opened model.
      */
-    private void setCurrentModel(final Spatial currentModel) {
+    private void setCurrentModel(@NotNull final Spatial currentModel) {
         this.currentModel = currentModel;
     }
 
@@ -545,8 +554,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    protected void createContent(final StackPane root) {
-        this.selectionHandler = this::processSelect;
+    protected void createContent(@NotNull final StackPane root) {
+        this.selectionHandler = this::processSelectFromTree;
 
         editorAreaPane = new Pane();
 
@@ -579,7 +588,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         return editorAreaPane.contains(point2D);
     }
 
-    private static void calcHSplitSize(final EditorToolComponent toolComponent, final SplitPane splitContainer) {
+    private static void calcHSplitSize(@NotNull final EditorToolComponent toolComponent, @NotNull final SplitPane splitContainer) {
         if (toolComponent.isCollapsed()) {
             splitContainer.setDividerPosition(0, 0.99);
             Platform.runLater(() -> splitContainer.setDividerPosition(0, 1));
@@ -588,29 +597,30 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         splitContainer.setDividerPosition(0, 0.8);
     }
 
-    private static void calcVSplitSize(final SplitPane splitContainer) {
+    private static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
         splitContainer.setDividerPosition(0, 0.3);
     }
 
     /**
-     * @return контролер операций редактора.
+     * @return the operation control.
      */
+    @NotNull
     private EditorOperationControl getOperationControl() {
         return operationControl;
     }
 
     /**
-     * Обработка выделения узла в дереве.
+     * Handle the selected object.
      */
-    public void notifySelected(final Object object) {
+    public void notifySelected(@Nullable final Object object) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
     }
 
     /**
-     * Обработка выделения узла в дереве.
+     * Handle the selected object from the Tree.
      */
-    public void processSelect(@Nullable final Object object) {
+    public void processSelectFromTree(@Nullable final Object object) {
 
         Object parent = null;
         Object element = null;
@@ -645,7 +655,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    protected void createToolbar(final HBox container) {
+    protected void createToolbar(@NotNull final HBox container) {
         FXUtils.addToPane(createSaveAction(), container);
 
         lightButton = new ToggleButton();
@@ -715,28 +725,31 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * @return тогл активации трансформации маштабирования.
+     * @return the scaling tool toggle.
      */
+    @NotNull
     private ToggleButton getScaleToolButton() {
         return scaleToolButton;
     }
 
     /**
-     * @return тогл активаци трансформации перемещения.
+     * @return the move tool toggle.
      */
+    @NotNull
     private ToggleButton getMoveToolButton() {
         return moveToolButton;
     }
 
     /**
-     * @return тогл активации трансформации вращения.
+     * @return the rotation tool toggle.
      */
+    @NotNull
     private ToggleButton getRotationToolButton() {
         return rotationToolButton;
     }
 
     /**
-     * Обновление режима трансформации.
+     * Switch transformation mode.
      */
     private void updateTransformTool(final ToggleButton toggleButton, final Boolean newValue) {
         if (newValue != Boolean.TRUE) return;
@@ -763,9 +776,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Обработка изменения видимости выделения.
+     * Handle changing select visibility.
      */
-    private void changeSelectionVisible(final Boolean newValue) {
+    private void changeSelectionVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final ModelEditorState editorState = getEditorState();
@@ -773,9 +786,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Обработка изменения видимости сетки.
+     * Handle changing grid visibility.
      */
-    private void changeGridVisible(final Boolean newValue) {
+    private void changeGridVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final ModelEditorState editorState = getEditorState();
@@ -783,9 +796,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Обработка смены быстрого окружения.
+     * Handle changing a sky.
      */
-    private void changeFastSky(final String newSky) {
+    private void changeFastSky(@NotNull final String newSky) {
         if (isIgnoreListeners()) return;
 
         final ModelEditorState editorState = getEditorState();
@@ -802,22 +815,22 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * Обновление активности света камеры.
+     * Handle changing camera light visibility.
      */
-    private void changeLight(final Boolean newValue) {
+    private void changeLight(@NotNull final Boolean newValue) {
         final ModelEditorState editorState = getEditorState();
         editorState.updateLightEnabled(newValue);
     }
 
     /**
-     * Уведомление о выполнении трансформации над частью модели.
+     * Notify about transformed the object.
      */
     public void notifyTransformed(final Spatial spatial) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyTransformedImpl(spatial));
     }
 
     /**
-     * Процесс обработки уведомления о выполнении трансформации.
+     * Notify about transformed the object.
      */
     private void notifyTransformedImpl(final Spatial spatial) {
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();

@@ -25,6 +25,8 @@ import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -249,13 +251,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         notifyFileChanged();
     }
 
+    @NotNull
     @Override
     protected StackPane createRoot() {
         return new StackPane();
     }
 
     @Override
-    protected void processKeyReleased(final KeyEvent event) {
+    protected void processKeyReleased(@NotNull final KeyEvent event) {
         super.processKeyReleased(event);
 
         if (!event.isControlDown()) return;
@@ -288,7 +291,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
-    protected void createContent(final StackPane root) {
+    protected void createContent(@NotNull final StackPane root) {
         root.setAlignment(Pos.TOP_RIGHT);
 
         final Accordion accordion = new Accordion();
@@ -352,7 +355,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
-    public void openFile(final Path file) {
+    public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
@@ -430,7 +433,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
-    protected void createToolbar(final HBox container) {
+    protected void createToolbar(@NotNull final HBox container) {
 
         cubeButton = new ToggleButton();
         cubeButton.setGraphic(new ImageView(Icons.CUBE_16));
@@ -634,6 +637,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         return editorState;
     }
 
+    @NotNull
     @Override
     public EditorDescription getDescription() {
         return DESCRIPTION;
