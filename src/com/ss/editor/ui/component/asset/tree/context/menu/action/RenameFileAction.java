@@ -4,7 +4,6 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
@@ -23,7 +22,6 @@ import rlib.util.StringUtils;
  */
 public class RenameFileAction extends MenuItem {
 
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
