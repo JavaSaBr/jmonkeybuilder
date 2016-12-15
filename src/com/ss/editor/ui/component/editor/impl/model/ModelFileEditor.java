@@ -572,7 +572,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         final EditorToolComponent editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
-        editorToolComponent.addComponent(parameterSplitContainer, "Objects");
+        editorToolComponent.addComponent(parameterSplitContainer, Messages.MODEL_FILE_EDITOR_TOOL_OBJECTS);
 
         mainSplitContainer.getItems().add(editorToolComponent);
 

@@ -518,7 +518,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
         editorCamera.setMaxDistance(10000);
         editorCamera.setSmoothMotion(false);
         editorCamera.setRotationSensitivity(1);
-        editorCamera.setZoomSensitivity(0.5F);
+        editorCamera.setZoomSensitivity(0.2F);
 
         return editorCamera;
     }

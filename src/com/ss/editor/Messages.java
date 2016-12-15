@@ -21,6 +21,7 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER;
     public static final String EDITOR_BAR_ASSET_CLOSE_EDITOR;
     public static final String EDITOR_BAR_SETTINGS;
+    public static final String EDITOR_TOOL_ASSET;
 
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE;
@@ -103,6 +104,7 @@ public class Messages {
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
     public static final String MODEL_FILE_EDITOR_NAME;
+    public static final String MODEL_FILE_EDITOR_TOOL_OBJECTS;
     public static final String MODEL_FILE_EDITOR_NO_SKY;
     public static final String MODEL_FILE_EDITOR_FAST_SKY;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
@@ -276,13 +278,15 @@ public class Messages {
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
 
-        EDITOR_BAR_ASSET = bundle.getString("EditorBarComponent.asset");
-        EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponent.asset.openAsset");
-        EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponent.asset.openAsset.DirectoryChooser");
-        EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponent.asset.reopen");
-        EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponent.asset.close");
+        EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
+        EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
+        EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponentAssetOpenAssetDirectoryChooser");
+        EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponentAssetReopen");
+        EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponentAssetClose");
 
         EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
+
+        EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
@@ -364,6 +368,7 @@ public class Messages {
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
 
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
+        MODEL_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("ModelFileEditorToolObjects");
         MODEL_FILE_EDITOR_NO_SKY = bundle.getString("ModelFileEditorNoSky");
         MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");

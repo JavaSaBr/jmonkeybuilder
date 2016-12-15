@@ -8,7 +8,6 @@ import static rlib.ui.util.FXUtils.bindFixedSize;
 
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.config.ScreenSize;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.GlobalToolComponent;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
@@ -54,7 +53,6 @@ public class EditorFXSceneBuilder {
      */
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.css";
 
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     public static EditorFXScene build(final Stage stage) {
