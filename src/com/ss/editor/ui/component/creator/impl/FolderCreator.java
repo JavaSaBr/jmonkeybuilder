@@ -4,6 +4,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +29,7 @@ public class FolderCreator extends AbstractFileCreator {
     public FolderCreator() {
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.FOLDER_CREATOR_TITLE;

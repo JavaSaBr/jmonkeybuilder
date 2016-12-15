@@ -8,9 +8,9 @@ import java.nio.file.Path;
 import javafx.event.EventType;
 
 /**
- * Событие об запроса на создание файла.
+ * The event-request for creating a new file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RequestedCreateFileEvent extends SceneEvent {
 
@@ -24,28 +24,28 @@ public class RequestedCreateFileEvent extends SceneEvent {
     }
 
     /**
-     * @return описание создателя.
+     * @return the creator description.
      */
     public FileCreatorDescription getDescription() {
         return get(CREATOR);
     }
 
     /**
-     * @param description описание создателя.
+     * @param description the creator description.
      */
     public void setDescription(final FileCreatorDescription description) {
         set(CREATOR, description);
     }
 
     /**
-     * @return открываемый файл.
+     * @return the file.
      */
     public Path getFile() {
         return get(FILE);
     }
 
     /**
-     * @param file открываемый файл.
+     * @param file the file.
      */
     public void setFile(final Path file) {
         set(FILE, file);

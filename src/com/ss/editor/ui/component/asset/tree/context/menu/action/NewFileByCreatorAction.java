@@ -8,21 +8,21 @@ import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 import javafx.scene.control.MenuItem;
 
 /**
- * Реализация действия по созданию файла.
+ * The action for creating a new file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class NewFileByCreatorAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * Элемент действия.
+     * The node element.
      */
     private final ResourceElement element;
 
     /**
-     * Описание создателя файлов.
+     * The creator description.
      */
     private final FileCreatorDescription description;
 
@@ -34,7 +34,7 @@ public class NewFileByCreatorAction extends MenuItem {
     }
 
     /**
-     * Процесс создания файла.
+     * Handle creating.
      */
     private void processCreate() {
 

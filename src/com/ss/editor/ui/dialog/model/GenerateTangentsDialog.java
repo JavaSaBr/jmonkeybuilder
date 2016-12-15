@@ -15,6 +15,8 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Point;
 
 import javafx.geometry.Insets;
@@ -95,13 +97,14 @@ public class GenerateTangentsDialog extends EditorDialog {
         return node;
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.GENERATE_TANGENTS_DIALOG_TITLE;
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
         root.setAlignment(Pos.CENTER_LEFT);
@@ -136,7 +139,7 @@ public class GenerateTangentsDialog extends EditorDialog {
     }
 
     @Override
-    protected void processKey(final KeyEvent event) {
+    protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
         if (event.getCode() == KeyCode.ENTER) {
             processOk();
@@ -144,7 +147,7 @@ public class GenerateTangentsDialog extends EditorDialog {
     }
 
     @Override
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
         final HBox container = new HBox();

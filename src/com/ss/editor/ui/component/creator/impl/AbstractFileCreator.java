@@ -22,6 +22,8 @@ import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Point;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -124,7 +126,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     @Override
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
         final HBox container = new HBox();
@@ -141,6 +143,9 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);
         FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
@@ -198,7 +203,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
         final HBox container = new HBox();
@@ -262,8 +267,8 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         FXUtils.addToPane(fileNameField, fileNameContainer);
         FXUtils.addToPane(fileNameContainer, root);
 
-        FXUtils.addClassTo(fileNameLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(fileNameField, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(fileNameLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(fileNameField, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(fileNameContainer, FILE_NAME_CONTAINER_OFFSET);
     }

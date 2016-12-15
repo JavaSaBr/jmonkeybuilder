@@ -634,6 +634,7 @@
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;
+    -fx-padding: 0 2 0 0;
 }
 
 #CreateSkyDialogComboBox {
@@ -646,7 +647,7 @@
 }
 
 #CreateSkyDialogSpinner {
-    -fx-min-height: 24;
+    -fx-min-height: 22;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 70;

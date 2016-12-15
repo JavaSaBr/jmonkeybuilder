@@ -6,15 +6,17 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Реализация создателя новых пустых моделей.
+ * The creator for creating an empty model.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EmptyModelCreator extends AbstractFileCreator {
 
@@ -28,6 +30,7 @@ public class EmptyModelCreator extends AbstractFileCreator {
     public EmptyModelCreator() {
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.EMPTY_MODEL_CREATOR_TITLE;

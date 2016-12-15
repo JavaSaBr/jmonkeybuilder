@@ -24,11 +24,14 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Point;
 import java.nio.file.Path;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -43,9 +46,9 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализациядиалогапо созданию нового фона.
+ * The dialog for creating a sky.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class CreateSkyDialog extends AbstractNodeDialog {
 
@@ -67,11 +70,11 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         private static final SkyType[] VALUES = values();
 
         /**
-         * Название типа для UI.
+         * The sky name.
          */
         private final String title;
 
-        private SkyType(String title) {
+        SkyType(final String title) {
             this.title = title;
         }
 
@@ -82,87 +85,87 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * Родительский узел.
+     * The parent node.
      */
     private final ModelNode<?> parentNode;
 
     /**
-     * Дерево структуры модели.
+     * The model tree.
      */
     private final ModelNodeTree nodeTree;
 
     /**
-     * Список типов фонов.
+     * The list of sky types.
      */
     private ComboBox<SkyType> skyTypeComboBox;
 
     /**
-     * Контрол для управления маштабированием текстуры по X.
+     * The scale control for X.
      */
     private Spinner<Double> normalScaleXSpinner;
 
     /**
-     * Контрол для управления маштабированием текстуры по Y.
+     * The scale control for Y.
      */
     private Spinner<Double> normalScaleYSpinner;
 
     /**
-     * Контрол для управления маштабированием текстуры по Z.
+     * The scale control for Z.
      */
     private Spinner<Double> normalScaleZSpinner;
 
     /**
-     * Контейнер настроек для фона из одной текстуры.
+     * The container of single texture settings.
      */
     private VBox singleTextureSettings;
 
     /**
-     * Контейнер нестроек для фона из нескольких текстур.
+     * The container of multiply texture settings.
      */
     private VBox multipleTextureSettings;
 
     /**
-     * Выбор текстуры для однотекстурного фона.
+     * The single texture control.
      */
     private ChooseTextureControl singleTextureControl;
 
     /**
-     * Список выбора типов текстур для окружения.
+     * The list of env types.
      */
     private ComboBox<SkyFactory.EnvMapType> envMapTypeComboBox;
 
     /**
-     * Указание необходимости переворачивать текстуру по Y.
+     * The check box for fliping.
      */
     private CheckBox flipYCheckBox;
 
     /**
-     * Выбор текстуры для северной части фона.
+     * The north texture control.
      */
     private ChooseTextureControl northTextureControl;
 
     /**
-     * Выбор текстуры для южной части фона.
+     * The south texture control.
      */
     private ChooseTextureControl southTextureControl;
 
     /**
-     * Выбор текстуры для северной восточной фона.
+     * The east texture control.
      */
     private ChooseTextureControl eastTextureControl;
 
     /**
-     * Выбор текстуры для северной западной фона.
+     * The west texture control.
      */
     private ChooseTextureControl westTextureControl;
 
     /**
-     * Выбор текстуры для верхней части фона.
+     * The top texture control.
      */
     private ChooseTextureControl topTextureControl;
 
     /**
-     * Выбор текстуры для нижней части фона.
+     * The bottom texture control.
      */
     private ChooseTextureControl bottomTextureControl;
 
@@ -173,19 +176,20 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * @return список типов фонов.
+     * @return the list of sky types.
      */
     private ComboBox<SkyType> getSkyTypeComboBox() {
         return skyTypeComboBox;
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.CREATE_SKY_DIALOG_TITLE;
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
         createSkyTypeComboBox(root);
@@ -219,6 +223,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     private void createMultipleTextureSettings() {
 
         final HBox northTextureContainer = new HBox();
+        northTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label northTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_NORTH_LABEL + ":");
         northTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -231,6 +236,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(northTextureContainer, multipleTextureSettings);
 
         final HBox southTextureContainer = new HBox();
+        southTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label southTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_SOUTH_LABEL + ":");
         southTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -243,6 +249,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(southTextureContainer, multipleTextureSettings);
 
         final HBox eastTextureContainer = new HBox();
+        eastTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label eastTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_EAST_LABEL + ":");
         eastTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -255,6 +262,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(eastTextureContainer, multipleTextureSettings);
 
         final HBox westTextureContainer = new HBox();
+        westTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label westTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_WEST_LABEL + ":");
         westTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -267,6 +275,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(westTextureContainer, multipleTextureSettings);
 
         final HBox topTextureContainer = new HBox();
+        topTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label topTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TOP_LABEL + ":");
         topTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -279,6 +288,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(topTextureContainer, multipleTextureSettings);
 
         final HBox bottomTextureContainer = new HBox();
+        bottomTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label bottomTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_BOTTOM_LABEL + ":");
         bottomTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -289,6 +299,13 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(bottomTextureLabel, bottomTextureContainer);
         FXUtils.addToPane(bottomTextureControl, bottomTextureContainer);
         FXUtils.addToPane(bottomTextureContainer, multipleTextureSettings);
+
+        FXUtils.addClassTo(northTextureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(southTextureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(eastTextureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(westTextureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(topTextureContainer, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(bottomTextureLabel, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(bottomTextureContainer, FIELD_OFFSET);
         VBox.setMargin(eastTextureContainer, FIELD_OFFSET);
@@ -301,6 +318,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     private void createSingleTextureSettings() {
 
         final HBox singleTextureContainer = new HBox();
+        singleTextureContainer.setAlignment(Pos.CENTER_LEFT);
 
         final Label singleTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE_LABEL + ":");
         singleTextureLabel.setId(CSSIds.CREATE_SKY_DIALOG_LABEL);
@@ -330,8 +348,8 @@ public class CreateSkyDialog extends AbstractNodeDialog {
 
         FXUtils.addToPane(flipYCheckBox, singleTextureSettings);
 
-        FXUtils.addClassTo(singleTextureLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(envMapTypeLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(singleTextureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(envMapTypeLabel, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(singleTextureContainer, FIELD_OFFSET);
         VBox.setMargin(envMapTypeContainer, FIELD_OFFSET);
@@ -378,10 +396,10 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(normalScaleZSpinner, normalScaleContainer);
         FXUtils.addToPane(normalScaleContainer, root);
 
-        FXUtils.addClassTo(normalScaleLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(normalScaleXSpinner, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(normalScaleYSpinner, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(normalScaleZSpinner, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(normalScaleLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(normalScaleXSpinner, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(normalScaleYSpinner, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(normalScaleZSpinner, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(normalScaleContainer, FIELD_OFFSET);
     }
@@ -401,28 +419,28 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(skyTypeComboBox, skyTypeContainer);
         FXUtils.addToPane(skyTypeContainer, root);
 
-        FXUtils.addClassTo(skyTypeLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(skyTypeComboBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(skyTypeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(skyTypeComboBox, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(skyTypeContainer, SKY_TYPE_OFFSET);
     }
 
     /**
-     * @return контейнер настроек для фона из одной текстуры.
+     * @return the container of single texture settings.
      */
     private VBox getSingleTextureSettings() {
         return singleTextureSettings;
     }
 
     /**
-     * @return контейнер нестроек для фона из нескольких текстур.
+     * @return the container of multiply texture settings.
      */
     private VBox getMultipleTextureSettings() {
         return multipleTextureSettings;
     }
 
     /**
-     * Обработка смены типа фона.
+     * Handle changing sky type.
      */
     private void processChange(final SkyType newValue) {
 
@@ -436,63 +454,63 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * @return выбор текстуры для однотекстурного фона.
+     * @return the single texture control.
      */
     private ChooseTextureControl getSingleTextureControl() {
         return singleTextureControl;
     }
 
     /**
-     * @return список выбора типов текстур для окружения.
+     * @return the list of env types.
      */
     private ComboBox<SkyFactory.EnvMapType> getEnvMapTypeComboBox() {
         return envMapTypeComboBox;
     }
 
     /**
-     * @return выбор текстуры для верхней части фона.
+     * @return the top texture control.
      */
     private ChooseTextureControl getTopTextureControl() {
         return topTextureControl;
     }
 
     /**
-     * @return выбор текстуры для нижней части фона.
+     * @return the bottom texture control.
      */
     private ChooseTextureControl getBottomTextureControl() {
         return bottomTextureControl;
     }
 
     /**
-     * @return выбор текстуры для передней части фона.
+     * @return the north texture control.
      */
     private ChooseTextureControl getNorthTextureControl() {
         return northTextureControl;
     }
 
     /**
-     * @return выбор текстуры для задней части фона.
+     * @return the south texture control.
      */
     private ChooseTextureControl getSouthTextureControl() {
         return southTextureControl;
     }
 
     /**
-     * @return выбор текстуры для правой части фона.
+     * @return the east texture control.
      */
     private ChooseTextureControl getEastTextureControl() {
         return eastTextureControl;
     }
 
     /**
-     * @return выбор текстуры для левой части фона.
+     * @return the west texture control.
      */
     private ChooseTextureControl getWestTextureControl() {
         return westTextureControl;
     }
 
     /**
-     * Валидация диалога.
+     * Validate the dialog.
      */
     private void validate() {
 
@@ -551,42 +569,42 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * @return небоходимо ли переворачивать по Y.
+     * @return the check box for fliping.
      */
     private CheckBox getFlipYCheckBox() {
         return flipYCheckBox;
     }
 
     /**
-     * @return контрол для управления маштабированием текстуры по X.
+     * @return the scale control for X.
      */
     private Spinner<Double> getNormalScaleXSpinner() {
         return normalScaleXSpinner;
     }
 
     /**
-     * @return контрол для управления маштабированием текстуры по Y.
+     * @return the scale control for Y.
      */
     private Spinner<Double> getNormalScaleYSpinner() {
         return normalScaleYSpinner;
     }
 
     /**
-     * @return контрол для управления маштабированием текстуры по Z.
+     * @return the scale control for Z.
      */
     private Spinner<Double> getNormalScaleZSpinner() {
         return normalScaleZSpinner;
     }
 
     /**
-     * @return дерево структуры модели.
+     * @return the model tree.
      */
     private ModelNodeTree getNodeTree() {
         return nodeTree;
     }
 
     /**
-     * @return родительский узел.
+     * @return the parent node.
      */
     private ModelNode<?> getParentNode() {
         return parentNode;
@@ -604,7 +622,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * Процесс создания фона сцены в фоновом режиме.
+     * The process of creating a new sky.
      */
     private void createSkyInBackground() {
 
@@ -637,7 +655,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * Создание варианта с кубической картой.
+     * Create a new sky using multiply textures.
      */
     private void createMultipleTexture(final AssetManager assetManager, final ModelChangeConsumer modelChangeConsumer, final Vector3f scale) {
 
@@ -688,7 +706,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * Создание варианта с одной текстуры.
+     * Create a new sky using a single texture.
      */
     private void createSingleTexture(AssetManager assetManager, ModelChangeConsumer modelChangeConsumer, Vector3f scale) {
 
@@ -728,7 +746,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     }
 
     /**
-     * Процесс скролирования значения.
+     * Scroll a value.
      */
     private void processScroll(final ScrollEvent event) {
         if (!event.isControlDown()) return;

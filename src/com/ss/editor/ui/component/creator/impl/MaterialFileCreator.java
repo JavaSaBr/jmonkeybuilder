@@ -13,6 +13,8 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -32,9 +34,9 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
 /**
- * Реализация создателя новых материалов.
+ * The creator for creating a new material.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MaterialFileCreator extends AbstractFileCreator {
 
@@ -47,18 +49,19 @@ public class MaterialFileCreator extends AbstractFileCreator {
     }
 
     /**
-     * Список доступных типов материалов.
+     * The list of available definitions.
      */
     private Array<String> definitions;
 
     /**
-     * Список с выбором типов материалов.
+     * The combo box.
      */
     private ComboBox<String> materialTypeComboBox;
 
     public MaterialFileCreator() {
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.MATERIAL_FILE_CREATOR_TITLE;
@@ -70,7 +73,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
     }
 
     /**
-     * @return список с выбором типов материалов.
+     * @return the combo box.
      */
     public ComboBox<String> getMaterialTypeComboBox() {
         return materialTypeComboBox;
@@ -116,6 +119,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
         FXUtils.addToPane(materialTypeContainer, root);
 
         FXUtils.addClassTo(materialTypeComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
+        FXUtils.addClassTo(materialTypeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(materialTypeComboBox, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(materialTypeContainer, FILE_NAME_CONTAINER_OFFSET);
     }

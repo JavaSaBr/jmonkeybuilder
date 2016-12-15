@@ -4,6 +4,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Point;
 import java.util.function.Consumer;
 
@@ -50,13 +52,14 @@ public class ConfirmDialog extends EditorDialog {
         this.questionLabel.setText(question);
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.QUESTION_DIALOG_TITLE;
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
         questionLabel = new Label();
@@ -71,7 +74,7 @@ public class ConfirmDialog extends EditorDialog {
     }
 
     @Override
-    protected void processKey(final KeyEvent event) {
+    protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
         if (event.getCode() == KeyCode.ENTER) {
             processCancel();
@@ -79,7 +82,7 @@ public class ConfirmDialog extends EditorDialog {
     }
 
     @Override
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
         final HBox container = new HBox();

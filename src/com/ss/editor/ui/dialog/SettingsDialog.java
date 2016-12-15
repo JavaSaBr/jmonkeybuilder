@@ -14,6 +14,8 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Point;
 import java.io.File;
 import java.nio.file.Path;
@@ -126,7 +128,7 @@ public class SettingsDialog extends EditorDialog {
     private boolean ignoreListeners;
 
     @Override
-    public void show(final Window owner) {
+    public void show(@NotNull final Window owner) {
         super.show(owner);
         setIgnoreListeners(true);
         try {
@@ -151,7 +153,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
         messageLabel = new Label();
@@ -590,7 +592,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     @Override
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
         final HBox container = new HBox();
@@ -678,6 +680,7 @@ public class SettingsDialog extends EditorDialog {
         }
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.SETTINGS_DIALOG_TITLE;

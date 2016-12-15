@@ -109,7 +109,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
 
         final HBox container = new HBox();
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER);
@@ -165,7 +165,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @Override
-    public void show(final Window owner) {
+    public void show(@NotNull final Window owner) {
         super.show(owner);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -287,7 +287,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @Override
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
 
         final HBox container = new HBox();
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
@@ -354,6 +354,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
         processOpen(selectedItem.getValue());
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return ASSET_EDITOR_DIALOG_TITLE;

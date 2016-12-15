@@ -1,16 +1,18 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.editor.Messages.POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
+import static com.ss.editor.Messages.POST_FILTER_VIEW_FILE_CREATOR_TITLE;
+
 import com.ss.editor.FileExtensions;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static com.ss.editor.Messages.POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
-import static com.ss.editor.Messages.POST_FILTER_VIEW_FILE_CREATOR_TITLE;
 
 /**
  * Реализация создателя новых файлов для PostFilterView.
@@ -29,6 +31,7 @@ public class PostFilterViewFileCreator extends AbstractFileCreator {
     public PostFilterViewFileCreator() {
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return POST_FILTER_VIEW_FILE_CREATOR_TITLE;

@@ -5,6 +5,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.awt.Point;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -57,7 +59,7 @@ public class RenameDialog extends EditorDialog {
     private Button okButton;
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
         final HBox nameContainer = new HBox();
@@ -82,11 +84,12 @@ public class RenameDialog extends EditorDialog {
     }
 
     @Override
-    public void show(Window owner) {
+    public void show(@NotNull Window owner) {
         super.show(owner);
         EXECUTOR_MANAGER.addFXTask(() -> getNameField().requestFocus());
     }
 
+    @NotNull
     @Override
     protected String getTitleText() {
         return Messages.RENAME_DIALOG_TITLE;
@@ -152,7 +155,7 @@ public class RenameDialog extends EditorDialog {
     }
 
     @Override
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
         final HBox container = new HBox();
@@ -178,7 +181,7 @@ public class RenameDialog extends EditorDialog {
     }
 
     @Override
-    protected void processKey(final KeyEvent event) {
+    protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
         if (event.getCode() == KeyCode.ENTER) {
             processOk();

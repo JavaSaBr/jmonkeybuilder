@@ -9,6 +9,8 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -60,14 +62,14 @@ public class EditorDialog extends AbstractPopupDialog {
         addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
 
-    protected void processKey(final KeyEvent event) {
+    protected void processKey(@NotNull final KeyEvent event) {
         if (event.getCode() == KeyCode.ESCAPE) {
             hide();
         }
     }
 
     @Override
-    public void show(final Window owner) {
+    public void show(@NotNull final Window owner) {
         super.show(owner);
         if (isHideOnLostFocus()) {
             owner.focusedProperty().addListener(hideListener);
@@ -95,7 +97,7 @@ public class EditorDialog extends AbstractPopupDialog {
     /**
      * Create the header of this dialog.
      */
-    protected void createHeader(final VBox root) {
+    protected void createHeader(@NotNull final VBox root) {
 
         final StackPane header = new StackPane();
         header.setId(CSSIds.EDITOR_DIALOG_HEADER);
@@ -127,18 +129,19 @@ public class EditorDialog extends AbstractPopupDialog {
     /**
      * Create the content of this dialog.
      */
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final VBox root) {
     }
 
     /**
      * Create the actions of this dialog.
      */
-    protected void createActions(final VBox root) {
+    protected void createActions(@NotNull final VBox root) {
     }
 
     /**
      * @return the title of this dialog.
      */
+    @NotNull
     protected String getTitleText() {
         return "Title";
     }
