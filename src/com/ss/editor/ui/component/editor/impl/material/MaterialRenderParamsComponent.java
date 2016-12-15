@@ -1,5 +1,9 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
+import static java.lang.Float.parseFloat;
+import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.geometry.Pos.CENTER_LEFT;
+
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
@@ -18,21 +22,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
-import static java.lang.Float.parseFloat;
-import static javafx.collections.FXCollections.observableArrayList;
-import static javafx.geometry.Pos.CENTER_LEFT;
-
 /**
- * Реализация компонента конфигурирования параметров рендера материала.
+ * The component for editing material other properties.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class MaterialRenderParamsComponent extends TitledPane {
+public class MaterialRenderParamsComponent extends VBox {
 
     private static final ObservableList<FaceCullMode> FACE_CULL_MODES = observableArrayList(FaceCullMode.values());
     private static final ObservableList<BlendMode> BLEND_MODES = observableArrayList(BlendMode.values());
@@ -43,11 +42,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Обработчик внесения изменений.
      */
     private final Consumer<EditorOperation> changeHandler;
-
-    /**
-     * Контейнер контролов различных параметров.
-     */
-    private final VBox container;
 
     /**
      * Выбор режима FaceCullMode.
@@ -101,11 +95,7 @@ public class MaterialRenderParamsComponent extends TitledPane {
 
     public MaterialRenderParamsComponent(final Consumer<EditorOperation> changeHandler) {
         this.changeHandler = changeHandler;
-        this.container = new VBox();
-        setText(Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
         createContent();
-        setContent(container);
-        setAnimated(false);
     }
 
     /**
@@ -133,8 +123,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
      * Создание контролов.
      */
     private void createContent() {
-
-        final VBox container = getContainer();
 
         final Label faceCullModeLabel = new Label(Messages.MATERIAL_RENDER_STATE_FACE_CULL_MODE + ":");
         faceCullModeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
@@ -180,13 +168,13 @@ public class MaterialRenderParamsComponent extends TitledPane {
         final HBox polyOffsetContainer = new HBox(polyOffsetFactorLabel, polyOffsetFactorField, polyOffsetUnitsLabel, polyOffsetUnitsField);
         polyOffsetContainer.setAlignment(CENTER_LEFT);
 
-        FXUtils.addToPane(faceCullModeContainer, container);
-        FXUtils.addToPane(blendModeContainer, container);
-        FXUtils.addToPane(polyOffsetContainer, container);
-        FXUtils.addToPane(depthWriteCheckBox, container);
-        FXUtils.addToPane(colorWriteCheckBox, container);
-        FXUtils.addToPane(depthTestCheckBox, container);
-        FXUtils.addToPane(wireframeCheckBox, container);
+        FXUtils.addToPane(faceCullModeContainer, this);
+        FXUtils.addToPane(blendModeContainer, this);
+        FXUtils.addToPane(polyOffsetContainer, this);
+        FXUtils.addToPane(depthWriteCheckBox, this);
+        FXUtils.addToPane(colorWriteCheckBox, this);
+        FXUtils.addToPane(depthTestCheckBox, this);
+        FXUtils.addToPane(wireframeCheckBox, this);
 
         VBox.setMargin(faceCullModeContainer, ELEMENT_OFFSET);
         VBox.setMargin(blendModeContainer, ELEMENT_OFFSET);
@@ -373,13 +361,6 @@ public class MaterialRenderParamsComponent extends TitledPane {
             }
         });
 
-    }
-
-    /**
-     * @return контейнер контролов различных параметров.
-     */
-    private VBox getContainer() {
-        return container;
     }
 
     /**

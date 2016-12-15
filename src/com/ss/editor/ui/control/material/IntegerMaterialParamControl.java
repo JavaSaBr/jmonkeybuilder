@@ -9,25 +9,21 @@ import com.ss.editor.ui.css.CSSIds;
 
 import java.util.function.Consumer;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализация контрола для установки целочисленного значения.
+ * The base implementation of control for editing integer material parameter.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class IntegerMaterialParamControl extends MaterialParamControl {
 
-    public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
-
     /**
-     * Контрол для установки целочисленного значения.
+     * The integer spinner.
      */
     private Spinner<Integer> spinner;
 
@@ -47,22 +43,22 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
         spinner.setEditable(true);
         spinner.setOnScroll(this::processScroll);
         spinner.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        spinner.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
 
         FXUtils.addToPane(spinner, this);
-        FXUtils.addClassTo(spinner, CSSClasses.MAIN_FONT_13);
-        FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(90));
+        FXUtils.addClassTo(spinner, CSSClasses.SPECIAL_FONT_13);
+    }
 
-        HBox.setMargin(spinner, ELEMENT_OFFSET);
+    @Override
+    protected double getLabelPercentWidth() {
+        return LABEL_PERCENT_WIDTH2;
     }
 
     /**
-     * Процесс скролирования значения.
+     * The process of scrolling value.
      */
     private void processScroll(final ScrollEvent event) {
-
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final double deltaY = event.getDeltaY();
 
@@ -74,13 +70,10 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Процесс обновления целочисленного значения.
+     * Update a value.
      */
     private void processChange(final Integer newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
         final Material material = getMaterial();

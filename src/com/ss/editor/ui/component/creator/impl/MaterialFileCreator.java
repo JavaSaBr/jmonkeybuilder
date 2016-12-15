@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.editor.FileExtensions.JME_MATERIAL;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
@@ -28,8 +30,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-
-import static com.ss.editor.FileExtensions.JME_MATERIAL;
 
 /**
  * Реализация создателя новых материалов.
@@ -130,7 +130,14 @@ public class MaterialFileCreator extends AbstractFileCreator {
         final ComboBox<String> materialTypeComboBox = getMaterialTypeComboBox();
         final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
 
-        okButton.setDisable(!definitions.contains(selectionModel.getSelectedItem()));
+        final String selectedItem = selectionModel.getSelectedItem();
+
+        if (selectedItem == null) {
+            okButton.setDisable(true);
+            return;
+        }
+
+        okButton.setDisable(!definitions.contains(selectedItem));
     }
 
     @Override

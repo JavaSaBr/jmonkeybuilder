@@ -36,7 +36,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
@@ -45,7 +44,7 @@ import rlib.util.array.ArrayFactory;
 /**
  * The implementation of the {@link MaterialParamControl} for editing textures.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
 
@@ -85,6 +84,16 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox flipButton;
 
+    /**
+     * The add button.
+     */
+    private Button addButton;
+
+    /**
+     * The remove button.
+     */
+    private Button removeButton;
+
     public Texture2DMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
     }
@@ -106,7 +115,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         Tooltip.install(texturePreview, textureTooltip);
 
-        final Button addButton = new Button();
+        addButton = new Button();
         addButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         addButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD));
         addButton.setGraphic(new ImageView(Icons.ADD_18));
@@ -115,14 +124,14 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         repeatButton = new CheckBox();
         repeatButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         repeatButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT));
-        repeatButton.selectedProperty().addListener((observable1, oldValue1, newValue) -> processChangeRepeat(newValue));
+        repeatButton.selectedProperty().addListener((observ, old, newValue) -> processChangeRepeat(newValue));
 
         flipButton = new CheckBox();
         flipButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         flipButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP));
-        flipButton.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeFlip(newValue));
+        flipButton.selectedProperty().addListener((observ, old, newValue) -> processChangeFlip(newValue));
 
-        final Button removeButton = new Button();
+        removeButton = new Button();
         removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE));
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
@@ -138,15 +147,14 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
 
-        HBox.setMargin(previewContainer, ELEMENT_OFFSET);
-        HBox.setMargin(addButton, ELEMENT_OFFSET);
-        HBox.setMargin(repeatButton, ELEMENT_OFFSET);
-        HBox.setMargin(flipButton, ELEMENT_OFFSET);
-        HBox.setMargin(removeButton, ELEMENT_OFFSET);
-
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());
         repeatButton.disableProperty().bind(texturePreview.imageProperty().isNull());
         flipButton.disableProperty().bind(texturePreview.imageProperty().isNull());
+    }
+
+    @Override
+    protected double getLabelPercentWidth() {
+        return 0.9;
     }
 
     /**

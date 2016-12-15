@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.material;
 
+import static com.ss.editor.Messages.COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
+import static java.lang.Math.min;
+
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -21,20 +24,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import rlib.ui.util.FXUtils;
 
-import static com.ss.editor.Messages.COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
-import static java.lang.Math.min;
-
 /**
- * Реализация контрола для выбора цвета.
+ * The implementation of a control for editing colors properties.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ColorMaterialParamControl extends MaterialParamControl {
 
     public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
 
     /**
-     * Контрол для выбора цвета.
+     * The color picker.
      */
     private ColorPicker colorPicker;
 
@@ -47,6 +47,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         super.createComponents();
 
         colorPicker = new ColorPicker();
+        colorPicker.setId(CSSIds.MATERIAL_PARAM_CONTROL_COLOR_PICKER);
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
         final Button removeButton = new Button();
@@ -56,9 +57,11 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         removeButton.setOnAction(event -> processRemove());
         removeButton.disableProperty().bind(colorPicker.valueProperty().isNull());
 
+        colorPicker.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH).subtract(removeButton.widthProperty()));
+
         FXUtils.addToPane(colorPicker, this);
         FXUtils.addToPane(removeButton, this);
-        FXUtils.addClassTo(colorPicker, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
 
         HBox.setMargin(colorPicker, ELEMENT_OFFSET);
@@ -66,7 +69,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Процесс обновления цвета.
+     * Update a color.
      */
     private void processChange(final Color newValue) {
 
@@ -88,7 +91,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Удаление цвета.
+     * Remove a color.
      */
     private void processRemove() {
 

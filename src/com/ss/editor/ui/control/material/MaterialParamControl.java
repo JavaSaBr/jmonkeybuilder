@@ -14,36 +14,41 @@ import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 
 /**
- * Базовая реализация контрола для изменения параметра материала.
+ * The base implementation of control for editing material parameter.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MaterialParamControl extends HBox {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(MaterialParamControl.class);
 
+    protected static final double LABEL_PERCENT_WIDTH = 0.4;
+    protected static final double LABEL_PERCENT_WIDTH2 = 0.6;
+    protected static final double CONTROL_PERCENT_WIDTH = 0.6;
+    protected static final double CONTROL_PERCENT_WIDTH2 = 0.4;
+
     /**
-     * Обработчик внесения изменений.
+     * The change handler.
      */
     private final Consumer<EditorOperation> changeHandler;
 
     /**
-     * Текущий материал.
+     * The current material.
      */
     private final Material material;
 
     /**
-     * Название параметра.
+     * The parameter name.
      */
     private final String parameterName;
 
     /**
-     * Надпись с названием параметра.
+     * The label with parameter name.
      */
     private Label paramNameLabel;
 
     /**
-     * Флаг игнорирования слушателей.
+     * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
 
@@ -64,60 +69,69 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
-     * @param operation операция с внесением изменения.
+     * @param operation the new operation.
      */
     protected void execute(final EditorOperation operation) {
         changeHandler.accept(operation);
     }
 
     /**
-     * @return флаг игнорирования слушателей.
+     * @return true if the listeners is ignored.
      */
     public boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     /**
-     * @param ignoreListeners флаг игнорирования слушателей.
+     * @param ignoreListeners true if the listeners is ignored.
      */
     public void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * Создание компонентов контрола.
+     * Create components.
      */
     protected void createComponents() {
 
         paramNameLabel = new Label(getParameterName() + ":");
         paramNameLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        bindParamNameLabel();
 
-        FXUtils.addClassTo(paramNameLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(paramNameLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(paramNameLabel, this);
     }
 
+    protected void bindParamNameLabel() {
+        paramNameLabel.prefWidthProperty().bind(widthProperty().multiply(getLabelPercentWidth()));
+    }
+
+    protected double getLabelPercentWidth() {
+        return LABEL_PERCENT_WIDTH;
+    }
+
     /**
-     * @return надпись с названием параметра.
+     * @return the label with parameter name.
      */
     protected Label getParamNameLabel() {
         return paramNameLabel;
     }
 
     /**
-     * Инициализация контрола.
+     * Reload a value of the material parameter.
      */
     public void reload() {
     }
 
     /**
-     * @return название параметра.
+     * @return the parameter name.
      */
     public String getParameterName() {
         return parameterName;
     }
 
     /**
-     * @return текущий материал.
+     * @return the current material.
      */
     public Material getMaterial() {
         return material;

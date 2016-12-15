@@ -61,9 +61,10 @@ public interface CSSIds {
     String MATERIAL_FILE_EDITOR_TOOLBAR_LABEL = "MaterialFileEditorToolbarLabel";
     String MATERIAL_FILE_EDITOR_TOOLBAR_BOX = "MaterialFileEditorToolbarBox";
     String MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX = "MaterialFileEditorToolbarSmallBox";
-    String MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER = "MaterialFileEditorParameterContainer";
+    String MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT = "MaterialFileEditorPropertiesComponent";
 
     String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
+    String MATERIAL_PARAM_CONTROL_COLOR_PICKER = "MaterialParamColorPicker";
     String MATERIAL_PARAM_CONTROL_BUTTON = "MaterialParamControlButton";
     String MATERIAL_PARAM_CONTROL_CHECKBOX = "MaterialParamControlCheckbox";
     String MATERIAL_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";

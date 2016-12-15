@@ -305,6 +305,7 @@
 }
 
 .material-param-control {
+    -fx-padding: 1;
     -fx-alignment: center-left;
 }
 

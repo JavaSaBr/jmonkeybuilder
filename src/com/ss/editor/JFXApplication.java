@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 
+import javax.imageio.ImageIO;
+
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
@@ -92,6 +94,7 @@ public class JFXApplication extends Application {
 
         SvgImageLoaderFactory.install();
 
+        ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
         new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
 
         final ObservableList<Image> icons = stage.getIcons();

@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.material;
 
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.FloatMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -10,27 +9,21 @@ import com.ss.editor.ui.css.CSSIds;
 
 import java.util.function.Consumer;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализация контрола для установки дробных значения.
+ * The base implementation of control for editing float material parameter.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FloatMaterialParamControl extends MaterialParamControl {
 
-    public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
     /**
-     * Контрол для установки дробных значения.
+     * The float spinner.
      */
     private Spinner<Double> spinner;
 
@@ -50,22 +43,22 @@ public class FloatMaterialParamControl extends MaterialParamControl {
         spinner.setEditable(true);
         spinner.setOnScroll(this::processScroll);
         spinner.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        spinner.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
 
         FXUtils.addToPane(spinner, this);
-        FXUtils.addClassTo(spinner, CSSClasses.MAIN_FONT_13);
-        FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(90));
+        FXUtils.addClassTo(spinner, CSSClasses.SPECIAL_FONT_13);
+    }
 
-        HBox.setMargin(spinner, ELEMENT_OFFSET);
+    @Override
+    protected double getLabelPercentWidth() {
+        return LABEL_PERCENT_WIDTH2;
     }
 
     /**
-     * Процесс скролирования значения.
+     * The process of scrolling value.
      */
     private void processScroll(final ScrollEvent event) {
-
-        if (!event.isControlDown()) {
-            return;
-        }
+        if (!event.isControlDown()) return;
 
         final double deltaY = event.getDeltaY();
 
@@ -77,13 +70,10 @@ public class FloatMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Процесс обновления дробных значения.
+     * Update a value.
      */
     private void processChange(final Double newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final Float newFValue = newValue == null ? null : newValue.floatValue();
         final String parameterName = getParameterName();

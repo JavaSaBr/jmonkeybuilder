@@ -1,27 +1,25 @@
 package com.ss.editor.ui.tooltip;
 
-import com.ss.editor.ui.css.CSSIds;
+import org.jetbrains.annotations.NotNull;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.VBox;
-import javafx.stage.Window;
+import javafx.scene.layout.Region;
 
 /**
- * Базовая реализация для костомного тултипа.
+ * The base implementation of custom tooltip.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class CustomTooltip extends Tooltip {
+public abstract class CustomTooltip<R extends Region> extends Tooltip {
 
     /**
-     * Рутовый контейнер описания.
+     * The root container.
      */
-    private final VBox root;
+    private final R root;
 
     public CustomTooltip() {
-        this.root = new VBox();
-        this.root.setId(CSSIds.IMAGE_CHANNEL_PREVIEW);
+        this.root = createRoot();
 
         final Scene scene = getScene();
         scene.setRoot(root);
@@ -29,15 +27,12 @@ public class CustomTooltip extends Tooltip {
         createContent(root);
     }
 
+    @NotNull
+    protected abstract R createRoot();
+
     /**
-     * Создание контента для кастомного тултипа.
+     * Create content of this tooltip.
      */
-    protected void createContent(final VBox root) {
-
-    }
-
-    @Override
-    public void show(final Window ownerWindow, final double anchorX, final double anchorY) {
-        super.show(ownerWindow, anchorX + 6, anchorY + 3);
+    protected void createContent(@NotNull final R root) {
     }
 }

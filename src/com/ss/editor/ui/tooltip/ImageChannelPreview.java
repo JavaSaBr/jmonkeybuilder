@@ -3,64 +3,63 @@ package com.ss.editor.ui.tooltip;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
-import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
+import javafx.scene.layout.GridPane;
 
 /**
- * Реализация превью каналов изображения.
+ * THe implementation of tooltip for showing image channels.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public class ImageChannelPreview extends CustomTooltip {
+public class ImageChannelPreview extends CustomTooltip<GridPane> {
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
     /**
-     * Картинка для отображения красного канала.
+     * The red image.
      */
     private final WritableImage redImage;
 
     /**
-     * Картинка для отображения зеленого канала.
+     * The green image.
      */
     private final WritableImage greenImage;
 
     /**
-     * Картинка для отображения синего канала.
+     * The blue image.
      */
     private final WritableImage blueImage;
 
     /**
-     * Картинка для отображения альфа канала.
+     * The alpha image.
      */
     private final WritableImage alphaImage;
 
     /**
-     * Просмотр красного канала.
+     * The red image view.
      */
     private ImageView redView;
 
     /**
-     * Просмотр зеленого канала.
+     * The green image view.
      */
     private ImageView greenView;
 
     /**
-     * Просмотр синего канала.
+     * The blue image view.
      */
     private ImageView blueView;
 
     /**
-     * Просмотр альфа канала.
+     * The alpha image view.
      */
     private ImageView alphaView;
 
@@ -72,35 +71,37 @@ public class ImageChannelPreview extends CustomTooltip {
     }
 
     /**
-     * @return картинка для отображения альфа канала.
+     * @return the alpha image.
      */
     private WritableImage getAlphaImage() {
         return alphaImage;
     }
 
     /**
-     * @return картинка для отображения красного канала.
+     * @return the red image.
      */
     private WritableImage getRedImage() {
         return redImage;
     }
 
     /**
-     * @return картинка для отображения синего канала.
+     * @return the blue image.
      */
     private WritableImage getBlueImage() {
         return blueImage;
     }
 
     /**
-     * @return картинка для отображения зеленого канала.
+     * @return the green image.
      */
     private WritableImage getGreenImage() {
         return greenImage;
     }
 
     @Override
-    protected void createContent(final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
+        root.setId(CSSIds.IMAGE_CHANNEL_PREVIEW);
+
         super.createContent(root);
 
         redView = new ImageView();
@@ -119,54 +120,48 @@ public class ImageChannelPreview extends CustomTooltip {
         alphaView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
         alphaView.setImage(getAlphaImage());
 
-        final HBox firstRow = new HBox();
-        final HBox secondRow = new HBox();
+        root.add(redView, 0, 0);
+        root.add(greenView, 1, 0);
+        root.add(blueView, 0, 1);
+        root.add(alphaView, 1, 1);
+    }
 
-        FXUtils.addToPane(redView, firstRow);
-        FXUtils.addToPane(greenView, firstRow);
-        FXUtils.addToPane(blueView, secondRow);
-        FXUtils.addToPane(alphaView, secondRow);
-        FXUtils.addToPane(firstRow, root);
-        FXUtils.addToPane(secondRow, root);
-
-        HBox.setMargin(redView, new Insets(0, 0, 0, 0));
-        HBox.setMargin(greenView, new Insets(0, 0, 0, 10));
-        HBox.setMargin(blueView, new Insets(0, 0, 0, 0));
-        HBox.setMargin(alphaView, new Insets(0, 0, 0, 10));
-        VBox.setMargin(firstRow, new Insets(10, 10, 10, 10));
-        VBox.setMargin(secondRow, new Insets(0, 10, 10, 10));
+    @NotNull
+    @Override
+    protected GridPane createRoot() {
+        return new GridPane();
     }
 
     /**
-     * @return просмотр альфа канала.
+     * @return the alpha image view.
      */
     private ImageView getAlphaView() {
         return alphaView;
     }
 
     /**
-     * @return просмотр синего канала.
+     * @return the blue image view.
      */
     private ImageView getBlueView() {
         return blueView;
     }
 
     /**
-     * @return просмотр зеленого канала.
+     * @return the green image view.
      */
     private ImageView getGreenView() {
         return greenView;
     }
 
     /**
-     * @return просмотр красного канала.
+     * @return the red image view.
      */
     private ImageView getRedView() {
         return redView;
     }
 
     /**
-     * Отобразить каналы для указанного файла.
+     * Show the file.
      */
     public void showImage(final Path file) {
 

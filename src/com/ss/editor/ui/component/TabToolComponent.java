@@ -29,14 +29,45 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      */
     private final int index;
 
+    /**
+     * Is collapsed.
+     */
     private boolean collapsed;
+
+    private boolean changingTab;
 
     public TabToolComponent(final SplitPane pane, final int index) {
         this.pane = pane;
         this.index = index;
         addEventHandler(MouseEvent.MOUSE_CLICKED, this::processMouseClick);
+        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changedTab());
     }
 
+    /**
+     * @param changingTab true if now is changing tab.
+     */
+    public void setChangingTab(final boolean changingTab) {
+        this.changingTab = changingTab;
+    }
+
+    /**
+     * @return true if now is changing tab.
+     */
+    public boolean isChangingTab() {
+        return changingTab;
+    }
+
+    /**
+     * Handle a changed tab.
+     */
+    private void changedTab() {
+        if (isCollapsed()) expand();
+        setChangingTab(true);
+    }
+
+    /**
+     * Add a new component to this tool container.
+     */
     public void addComponent(final Region component, final String name) {
 
         final Tab tab = new Tab(name);
@@ -58,6 +89,11 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
         if (!(target instanceof Node)) return;
         final Node node = (Node) target;
         if (!(node instanceof Text || node.getStyleClass().contains("tab-container"))) return;
+
+        if (isChangingTab()) {
+            setChangingTab(false);
+            return;
+        }
 
         final double minWidth = getMinWidth();
         final double width = getWidth();

@@ -786,7 +786,6 @@
     -fx-background-insets: 0;
     -fx-background-radius: 0;
 }
-
 .check-box .box {
     -fx-border-color: -fx-color-0;
     -fx-border-width: 1;
@@ -806,7 +805,7 @@
 }
 
 .check-box .mark {
-    -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-effect: null;
 }
 

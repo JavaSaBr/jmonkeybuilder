@@ -17,6 +17,8 @@ import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorState.ModelType;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.ScrollableEditorToolComponent;
+import com.ss.editor.ui.component.EditorToolComponent;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.css.CSSClasses;
@@ -34,23 +36,23 @@ import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Accordion;
+import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
@@ -151,6 +153,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * The list of material definitions.
      */
     private ComboBox<String> materialDefinitionBox;
+
+    /**
+     * The pane of editor area.
+     */
+    private Pane editorAreaPane;
 
     /**
      * The change handler.
@@ -292,31 +299,49 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     protected void createContent(@NotNull final StackPane root) {
-        root.setAlignment(Pos.TOP_RIGHT);
-
-        final Accordion accordion = new Accordion();
-
-        final VBox parameterContainer = new VBox();
-        parameterContainer.setId(CSSIds.MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER);
-
         changeHandler = this::handleChanges;
+        editorAreaPane = new Pane();
+
+        // root.setAlignment(Pos.TOP_RIGHT);
+
+        //final VBox parameterContainer = new VBox();
+        // parameterContainer.setId(CSSIds.MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER);
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);
-        materialOtherParamsComponent = new MaterialOtherParamsComponent(changeHandler);
         materialRenderParamsComponent = new MaterialRenderParamsComponent(changeHandler);
+        materialOtherParamsComponent = new MaterialOtherParamsComponent(changeHandler);
 
-        final ObservableList<TitledPane> panes = accordion.getPanes();
-        panes.add(materialTexturesComponent);
-        panes.add(materialColorsComponent);
-        panes.add(materialOtherParamsComponent);
-        panes.add(materialRenderParamsComponent);
+        final SplitPane mainSplitContainer = new SplitPane(editorAreaPane);
+        mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
-        FXUtils.addToPane(accordion, parameterContainer);
-        FXUtils.addToPane(parameterContainer, root);
+        final EditorToolComponent editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
+        editorToolComponent.prefHeightProperty().bind(root.heightProperty());
+        editorToolComponent.addComponent(materialTexturesComponent, Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
+        editorToolComponent.addComponent(materialColorsComponent, Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
+        editorToolComponent.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
+        editorToolComponent.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
 
-        accordion.setExpandedPane(materialTexturesComponent);
-        accordion.prefHeightProperty().bind(parameterContainer.heightProperty());
+        mainSplitContainer.getItems().add(editorToolComponent);
+
+        FXUtils.addToPane(mainSplitContainer, root);
+
+        root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(editorToolComponent, mainSplitContainer));
+    }
+
+    private static void calcHSplitSize(@NotNull final EditorToolComponent toolComponent, @NotNull final SplitPane splitContainer) {
+        if (toolComponent.isCollapsed()) {
+            splitContainer.setDividerPosition(0, 0.99);
+            Platform.runLater(() -> splitContainer.setDividerPosition(0, 1));
+            return;
+        }
+        splitContainer.setDividerPosition(0, 0.8);
+    }
+
+    @Override
+    public boolean isInside(final double sceneX, final double sceneY) {
+        final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
+        return editorAreaPane.contains(point2D);
     }
 
     /**

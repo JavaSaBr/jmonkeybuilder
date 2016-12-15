@@ -294,49 +294,46 @@
     -fx-max-width: -fx-min-width;
 }
 
-#MaterialFileEditorParameterContainer {
-    -fx-background-color: -fx-color-panel-200;
+#MaterialFileEditorPropertiesComponent {
+    -fx-background-color: -fx-background-background;
     -fx-alignment: top-left;
-    -fx-min-width: 300;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
+    -fx-padding: 0 0 0 4;
 }
 
 #MaterialParamControlParamName {
-    -fx-min-width: 140;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+    -fx-padding: 0 2 0 0;
 }
 
 #MaterialParamControlButton {
-    -fx-min-height: 24;
+    -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
+    -fx-min-width: 20;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+    -fx-padding: 1;
 }
 
 #MaterialParamControlSpinner {
-    -fx-min-height: 24;
+    -fx-min-height: 22;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 84;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
+}
+
+#MaterialParamControlColorPicker {
+    -fx-alignment: center;
+    -fx-min-height: 22;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
 }
 
 #MaterialParamControlCheckbox {
     -fx-alignment: center;
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#MaterialParamControlCheckbox > .box {
     -fx-min-height: 20;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
@@ -345,11 +342,20 @@
     -fx-max-width: -fx-min-width;
 }
 
-#MaterialParamControlCheckbox > .box > .mark {
-    -fx-min-height: 15;
+#MaterialParamControlCheckbox > .box {
+    -fx-min-height: 16;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 15;
+    -fx-min-width: 16;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#MaterialParamControlCheckbox > .box > .mark {
+    -fx-min-height: 12;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 12;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -575,8 +581,11 @@
 }
 
 #ImageChannelPreview {
-    -fx-background-color: -fx-color-panel-200;
+    -fx-background-color: -fx-background-background;
     -fx-effect: -fx-material-shadow-panel;
+    -fx-padding: 8;
+    -fx-hgap: 4;
+    -fx-vgap: 4;
 }
 
 #ImageChannelPreviewImageContainer {

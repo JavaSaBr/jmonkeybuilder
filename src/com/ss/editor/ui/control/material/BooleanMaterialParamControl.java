@@ -9,22 +9,18 @@ import com.ss.editor.ui.css.CSSIds;
 
 import java.util.function.Consumer;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
-import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * Реализация контрола для установки флага.
+ * The implementation of a control for editing boolean properties.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class BooleanMaterialParamControl extends MaterialParamControl {
 
-    public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
-
     /**
-     * Контрол для установки флага.
+     * THe check box.
      */
     private CheckBox checkBox;
 
@@ -39,22 +35,22 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
         checkBox = new CheckBox();
         checkBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
 
         FXUtils.addToPane(checkBox, this);
         FXUtils.addClassTo(checkBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.bindFixedWidth(getParamNameLabel(), widthProperty().subtract(30));
+    }
 
-        HBox.setMargin(checkBox, ELEMENT_OFFSET);
+    @Override
+    protected double getLabelPercentWidth() {
+        return LABEL_PERCENT_WIDTH2;
     }
 
     /**
-     * Процесс обновления флага.
+     * Update a value.
      */
     private void processChange(final Boolean newValue) {
-
-        if (isIgnoreListeners()) {
-            return;
-        }
+        if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
         final Material material = getMaterial();
