@@ -11,6 +11,7 @@ import com.jme3.material.RenderState.FaceCullMode;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.component.editor.impl.material.operation.RenderStateOperation;
+import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -94,6 +95,7 @@ public class MaterialRenderParamsComponent extends VBox {
     private boolean ignoreListeners;
 
     public MaterialRenderParamsComponent(final Consumer<EditorOperation> changeHandler) {
+        setId(CSSIds.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
         this.changeHandler = changeHandler;
         createContent();
     }
@@ -126,38 +128,75 @@ public class MaterialRenderParamsComponent extends VBox {
 
         final Label faceCullModeLabel = new Label(Messages.MATERIAL_RENDER_STATE_FACE_CULL_MODE + ":");
         faceCullModeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        faceCullModeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         faceCullModeComboBox = new ComboBox<>(FACE_CULL_MODES);
+        faceCullModeComboBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_COMBO_BOX);
         faceCullModeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        faceCullModeComboBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label blendModeLabel = new Label(Messages.MATERIAL_RENDER_STATE_BLEND_MODE + ":");
         blendModeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        blendModeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         blendModeComboBox = new ComboBox<>(BLEND_MODES);
+        blendModeComboBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_COMBO_BOX);
         blendModeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        blendModeComboBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label polyOffsetFactorLabel = new Label(Messages.MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR + ":");
-        final Label polyOffsetUnitsLabel = new Label(Messages.MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS + ":");
+        polyOffsetFactorLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        polyOffsetFactorLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         polyOffsetFactorField = new TextField();
         polyOffsetFactorField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
         polyOffsetFactorField.textProperty().addListener((observable, oldValue, newValue) -> processChangeFactor(newValue));
+        polyOffsetFactorField.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
+
+        final Label polyOffsetUnitsLabel = new Label(Messages.MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS + ":");
+        polyOffsetUnitsLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        polyOffsetUnitsLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         polyOffsetUnitsField = new TextField();
         polyOffsetUnitsField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
         polyOffsetUnitsField.textProperty().addListener((observable, oldValue, newValue) -> processChangeUnits(newValue));
+        polyOffsetUnitsField.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
-        depthWriteCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_DEPTH_WRITE);
+        final Label depthWriteLabel = new Label(Messages.MATERIAL_RENDER_STATE_DEPTH_WRITE + ":");
+        depthWriteLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        depthWriteLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
+
+        depthWriteCheckBox = new CheckBox();
+        depthWriteCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         depthWriteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> pointChangeDepthWrite(newValue));
+        depthWriteCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
-        colorWriteCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_COLOR_WRITE);
+        final Label colorWriteLabel = new Label(Messages.MATERIAL_RENDER_STATE_COLOR_WRITE + ":");
+        colorWriteLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        colorWriteLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
+
+        colorWriteCheckBox = new CheckBox();
+        colorWriteCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         colorWriteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeColorWrite(newValue));
+        colorWriteCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
-        depthTestCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_DEPTH_TEST);
+        final Label depthTestLabel = new Label(Messages.MATERIAL_RENDER_STATE_DEPTH_TEST + ":");
+        depthTestLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        depthTestLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
+
+        depthTestCheckBox = new CheckBox();
+        depthTestCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         depthTestCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeDepthTest(newValue));
+        depthTestCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
-        wireframeCheckBox = new CheckBox(Messages.MATERIAL_RENDER_STATE_WIREFRAME);
+        final Label wireframeLabel = new Label(Messages.MATERIAL_RENDER_STATE_WIREFRAME + ":");
+        wireframeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+        wireframeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
+
+        wireframeCheckBox = new CheckBox();
+        wireframeCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         wireframeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeWireframe(newValue));
+        wireframeCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final HBox faceCullModeContainer = new HBox(faceCullModeLabel, faceCullModeComboBox);
         faceCullModeContainer.setAlignment(CENTER_LEFT);
@@ -165,37 +204,45 @@ public class MaterialRenderParamsComponent extends VBox {
         final HBox blendModeContainer = new HBox(blendModeLabel, blendModeComboBox);
         blendModeContainer.setAlignment(CENTER_LEFT);
 
-        final HBox polyOffsetContainer = new HBox(polyOffsetFactorLabel, polyOffsetFactorField, polyOffsetUnitsLabel, polyOffsetUnitsField);
-        polyOffsetContainer.setAlignment(CENTER_LEFT);
+        final HBox polyOffsetFactorContainer = new HBox(polyOffsetFactorLabel, polyOffsetFactorField);
+        polyOffsetFactorContainer.setAlignment(CENTER_LEFT);
+
+        final HBox polyOffsetUnitsContainer = new HBox(polyOffsetUnitsLabel, polyOffsetUnitsField);
+        polyOffsetUnitsContainer.setAlignment(CENTER_LEFT);
+
+        final HBox depthWriteContainer = new HBox(depthWriteLabel, depthWriteCheckBox);
+        depthWriteContainer.setAlignment(CENTER_LEFT);
+
+        final HBox colorWriteContainer = new HBox(colorWriteLabel, colorWriteCheckBox);
+        colorWriteContainer.setAlignment(CENTER_LEFT);
+
+        final HBox depthTestContainer = new HBox(depthTestLabel, depthTestCheckBox);
+        depthTestContainer.setAlignment(CENTER_LEFT);
+
+        final HBox wireframeContainer = new HBox(wireframeLabel, wireframeCheckBox);
+        wireframeContainer.setAlignment(CENTER_LEFT);
 
         FXUtils.addToPane(faceCullModeContainer, this);
         FXUtils.addToPane(blendModeContainer, this);
-        FXUtils.addToPane(polyOffsetContainer, this);
-        FXUtils.addToPane(depthWriteCheckBox, this);
-        FXUtils.addToPane(colorWriteCheckBox, this);
-        FXUtils.addToPane(depthTestCheckBox, this);
-        FXUtils.addToPane(wireframeCheckBox, this);
+        FXUtils.addToPane(polyOffsetFactorContainer, this);
+        FXUtils.addToPane(polyOffsetUnitsContainer, this);
+        FXUtils.addToPane(depthWriteContainer, this);
+        FXUtils.addToPane(colorWriteContainer, this);
+        FXUtils.addToPane(depthTestContainer, this);
+        FXUtils.addToPane(wireframeContainer, this);
 
-        VBox.setMargin(faceCullModeContainer, ELEMENT_OFFSET);
-        VBox.setMargin(blendModeContainer, ELEMENT_OFFSET);
-        VBox.setMargin(polyOffsetContainer, ELEMENT_OFFSET);
-        VBox.setMargin(depthWriteCheckBox, ELEMENT_OFFSET);
-        VBox.setMargin(colorWriteCheckBox, ELEMENT_OFFSET);
-        VBox.setMargin(depthTestCheckBox, ELEMENT_OFFSET);
-        VBox.setMargin(wireframeCheckBox, ELEMENT_OFFSET);
-
-        FXUtils.addClassTo(faceCullModeLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(faceCullModeComboBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(blendModeLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(blendModeComboBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(polyOffsetFactorLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(polyOffsetUnitsLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(polyOffsetFactorField, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(polyOffsetUnitsField, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(depthWriteCheckBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(colorWriteCheckBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(depthTestCheckBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(wireframeCheckBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(faceCullModeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(faceCullModeComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(blendModeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(blendModeComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(polyOffsetFactorLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(polyOffsetUnitsLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(polyOffsetFactorField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(polyOffsetUnitsField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(depthWriteLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(colorWriteLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(depthTestLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(wireframeLabel, CSSClasses.SPECIAL_FONT_13);
     }
 
     /**

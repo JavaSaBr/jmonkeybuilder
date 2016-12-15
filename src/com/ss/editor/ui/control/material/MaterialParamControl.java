@@ -22,10 +22,10 @@ public class MaterialParamControl extends HBox {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(MaterialParamControl.class);
 
-    protected static final double LABEL_PERCENT_WIDTH = 0.4;
-    protected static final double LABEL_PERCENT_WIDTH2 = 0.6;
-    protected static final double CONTROL_PERCENT_WIDTH = 0.6;
-    protected static final double CONTROL_PERCENT_WIDTH2 = 0.4;
+    public static final double LABEL_PERCENT_WIDTH = 0.4;
+    public static final double LABEL_PERCENT_WIDTH2 = 0.6;
+    public static final double CONTROL_PERCENT_WIDTH = 0.6;
+    public static final double CONTROL_PERCENT_WIDTH2 = 0.4;
 
     /**
      * The change handler.

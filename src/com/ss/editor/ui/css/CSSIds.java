@@ -65,6 +65,7 @@ public interface CSSIds {
 
     String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
     String MATERIAL_PARAM_CONTROL_COLOR_PICKER = "MaterialParamColorPicker";
+    String MATERIAL_PARAM_CONTROL_COMBO_BOX = "MaterialParamComboBox";
     String MATERIAL_PARAM_CONTROL_BUTTON = "MaterialParamControlButton";
     String MATERIAL_PARAM_CONTROL_CHECKBOX = "MaterialParamControlCheckbox";
     String MATERIAL_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
