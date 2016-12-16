@@ -117,7 +117,7 @@ public class ResourceManager extends EditorThread {
         final ClassPathScanner scanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
         scanner.scanning(path -> {
 
-            if (!path.contains("jme3-core")) {
+            if (!(path.contains("jme3-core") || path.contains("jme3-effects"))) {
                 return false;
             } else if (path.contains("natives")) {
                 return false;

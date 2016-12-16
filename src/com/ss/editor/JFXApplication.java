@@ -39,7 +39,7 @@ public class JFXApplication extends Application {
     }
 
     public static Stage getStage() {
-        return instance.stage;
+        return instance == null ? null : instance.stage;
     }
 
     public static void main(final String[] args) throws IOException {
@@ -50,13 +50,35 @@ public class JFXApplication extends Application {
 
         // some settings for the render of JavaFX
         System.setProperty("prism.cacheshapes", "true");
+        System.setProperty("prism.scrollcacheopt", "true");
+
+        //System.setProperty("prism.order", "sw");
+        //System.setProperty("prism.showdirty", "true");
+        //System.setProperty("prism.showoverdraw", "true");
+        //System.setProperty("prism.printrendergraph", "true");
+        //System.setProperty("prism.debug", "true");
+        //System.setProperty("prism.verbose", "true");
 
         CommandLineConfig.args(args);
 
-        launch(args);
+        JmeToJFXApplication application;
+        try {
+            application = Editor.prepareToStart();
+        } catch (final Throwable e) {
+            printError(e);
+            System.exit(-1);
+            return;
+        }
+
+        application.start();
+    }
+
+    public static void start() {
+        launch();
     }
 
     private static void printError(final Throwable throwable) {
+        throwable.printStackTrace();
 
         final String userHome = System.getProperty("user.home");
         final String fileName = "jme3-spaceshift-editor-error.log";
@@ -83,19 +105,9 @@ public class JFXApplication extends Application {
         JFXApplication.instance = this;
         this.stage = stage;
 
-        JmeToJFXApplication application;
-        try {
-            application = Editor.prepareToStart();
-        } catch (final Throwable e) {
-            printError(e);
-            System.exit(-1);
-            return;
-        }
-
         SvgImageLoaderFactory.install();
 
         ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
-        new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
 
         final ObservableList<Image> icons = stage.getIcons();
         icons.add(new Image("/ui/icons/app/SSEd256.png"));
@@ -110,6 +122,8 @@ public class JFXApplication extends Application {
         stage.setTitle(Config.TITLE + " " + Config.VERSION);
         stage.setOnCloseRequest(event -> onExit());
         stage.show();
+
+        buildScene();
     }
 
     public void onExit() {

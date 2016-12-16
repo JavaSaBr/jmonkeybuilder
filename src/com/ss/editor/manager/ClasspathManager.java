@@ -11,21 +11,17 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.Util;
 import rlib.util.array.Array;
 
 /**
- * Менеджер по управлению classpath.
+ * THe manager for managing custom classpathes.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ClasspathManager {
-
-    private static final Logger LOGGER = LoggerManager.getLogger(ClasspathManager.class);
 
     private static final Editor EDITOR = Editor.getInstance();
     private static final AssetManager ASSET_MANAGER = EDITOR.getAssetManager();
@@ -41,7 +37,7 @@ public class ClasspathManager {
     }
 
     /**
-     * Дополнительный загрузчик классов.
+     * The additional class loader.
      */
     private URLClassLoader additionalCL;
 
@@ -51,7 +47,7 @@ public class ClasspathManager {
     }
 
     /**
-     * Обновление дополнительного загрузчика классов.
+     * Update additional classpath.
      */
     public void updateAdditionalCL() {
 
@@ -75,14 +71,14 @@ public class ClasspathManager {
     }
 
     /**
-     * @param additionalCL дополнительный загрузчик классов.
+     * @param additionalCL the additional class loader.
      */
     private void setAdditionalCL(final URLClassLoader additionalCL) {
         this.additionalCL = additionalCL;
     }
 
     /**
-     * @return дополнительный загрузчик классов.
+     * @return the additional class loader.
      */
     private URLClassLoader getAdditionalCL() {
         return additionalCL;

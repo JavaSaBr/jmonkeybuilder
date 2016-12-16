@@ -25,7 +25,6 @@ import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.NativeLibraryLoader;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
-import com.jme3x.jfx.util.JFXPlatform;
 import com.jme3x.jfx.util.os.OperatingSystem;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
@@ -183,7 +182,6 @@ public class Editor extends JmeToJFXApplication {
     private ToneMapFilter toneMapFilter;
 
     private Editor() {
-        super(JFXApplication.getStage());
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
     }
@@ -221,13 +219,6 @@ public class Editor extends JmeToJFXApplication {
     @Override
     public void start() {
 
-        if ("LWJGL".equals(settings.getAudioRenderer())) {
-            NativeLibraryLoader.loadNativeLibrary("openal-lwjgl3", true);
-        }
-
-        NativeLibraryLoader.loadNativeLibrary("lwjgl3", true);
-        NativeLibraryLoader.loadNativeLibrary("glfw-lwjgl3", true);
-        NativeLibraryLoader.loadNativeLibrary("jemalloc-lwjgl3", true);
         NativeLibraryLoader.loadNativeLibrary("jinput", true);
         NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
 
@@ -306,10 +297,12 @@ public class Editor extends JmeToJFXApplication {
 
         createProbe();
 
-        JFXPlatform.runInFXThread(() -> {
-            final JFXApplication jfxApplication = JFXApplication.getInstance();
-            jfxApplication.buildScene();
-        });
+        new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
+
+//        JFXPlatform.runInFXThread(() -> {
+//            final JFXApplication jfxApplication = JFXApplication.getInstance();
+//            jfxApplication.buildScene();
+//        });
     }
 
     /**

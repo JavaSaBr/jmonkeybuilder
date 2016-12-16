@@ -159,10 +159,10 @@
             <fx:platform >
                 <fx:jvmarg value="-Xms1024m"/>
                 <fx:jvmarg value="-Xmx2048m"/>
-                <fx:jvmarg value="-XX:CompileThreshold=1000"/>
                 <fx:jvmarg value="-XX:+AggressiveOpts"/>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
                 <fx:jvmarg value="-XX:+UseTLAB"/>
+                <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:6005,suspend=y"/>-->
             </fx:platform>
 
             <preferences shortcut="true" menu="true" install="false"/>
