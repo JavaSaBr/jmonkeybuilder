@@ -4,10 +4,10 @@ import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static rlib.ui.util.FXUtils.bindFixedSize;
 
-import com.ss.editor.ui.component.GlobalToolSplitPane;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
+import com.ss.editor.ui.component.split.pane.GlobalToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
@@ -84,7 +84,7 @@ public class EditorFXSceneBuilder {
         final GlobalToolSplitPane splitContainer = new GlobalToolSplitPane(scene);
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
-        final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer, 0);
+        final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer);
         globalToolComponent.addComponent(new AssetComponent(), "Asset");
 
         splitContainer.initFor(globalToolComponent, editorAreaComponent);

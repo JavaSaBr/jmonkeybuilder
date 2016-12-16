@@ -40,20 +40,14 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     private double expandPosition;
 
     /**
-     * The index.
-     */
-    private final int index;
-
-    /**
      * Is changing tab.
      */
     private boolean changingTab;
 
-    public TabToolComponent(@NotNull final SplitPane pane, final int index) {
+    public TabToolComponent(@NotNull final SplitPane pane) {
         this.collapsed = new SimpleBooleanProperty(this, "collapsed", false);
         this.collapsed.bind(widthProperty().lessThanOrEqualTo(minWidthProperty()));
         this.pane = pane;
-        this.index = index;
         addEventHandler(MouseEvent.MOUSE_CLICKED, this::processMouseClick);
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changedTab(oldValue));
     }
@@ -145,17 +139,11 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      * Collapse selected tab.
      */
     public void collapse() {
-        switch (index) {
-            case 0: {
-                final int dividerIndex = 0;
-                pane.setDividerPosition(dividerIndex, 0);
-                break;
-            }
-            case 1: {
-                pane.setDividerPosition(0, 1);
-                break;
-            }
-        }
+        pane.setDividerPosition(getDividerIndex(), getCollapsePosition());
+    }
+
+    protected int getCollapsePosition() {
+        return 0;
     }
 
     /**

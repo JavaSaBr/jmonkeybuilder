@@ -10,7 +10,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.impl.AbstractEditorState;
+import com.ss.editor.state.editor.impl.AbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ import rlib.util.dictionary.DictionaryFactory;
  *
  * @author Ronn
  */
-public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor> {
+public class PostFilterEditorAppState extends AbstractEditorAppState<PostFilterEditor> {
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -32,7 +32,7 @@ public class PostFilterEditorState extends AbstractEditorState<PostFilterEditor>
      */
     private final ConcurrentObjectDictionary<MaterialKey, GenericFilter> filters;
 
-    public PostFilterEditorState(final PostFilterEditor fileEditor) {
+    public PostFilterEditorAppState(final PostFilterEditor fileEditor) {
         super(fileEditor);
         this.filters = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 

@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.editor.impl;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.EditorState;
+import com.ss.editor.state.editor.EditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
@@ -49,7 +49,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * The array of 3D parts of this editor.
      */
-    private final Array<EditorState> editorStates;
+    private final Array<EditorAppState> editorStates;
 
     /**
      * The dirty property.
@@ -67,7 +67,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private Path file;
 
     public AbstractFileEditor() {
-        this.editorStates = ArrayFactory.newArray(EditorState.class);
+        this.editorStates = ArrayFactory.newArray(EditorAppState.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         createContent();
     }
@@ -75,8 +75,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Add the new 3D part of this editor.
      */
-    protected void addEditorState(@NotNull final EditorState editorState) {
-        this.editorStates.add(editorState);
+    protected void addEditorState(@NotNull final EditorAppState editorAppState) {
+        this.editorStates.add(editorAppState);
     }
 
     /**
@@ -239,7 +239,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Nullable
     @Override
-    public Array<EditorState> getStates() {
+    public Array<EditorAppState> getStates() {
         return editorStates;
     }
 

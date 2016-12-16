@@ -15,8 +15,13 @@ import javafx.scene.control.SplitPane;
 public class EditorToolComponent extends TabToolComponent {
 
     public EditorToolComponent(@NotNull final SplitPane pane, final int index) {
-        super(pane, index);
+        super(pane);
         setId(CSSIds.FILE_EDITOR_TOOL_COMPONENT);
         setSide(Side.RIGHT);
+    }
+
+    @Override
+    protected int getCollapsePosition() {
+        return 1;
     }
 }

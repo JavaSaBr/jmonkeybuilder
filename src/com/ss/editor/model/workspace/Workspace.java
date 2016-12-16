@@ -1,9 +1,11 @@
 package com.ss.editor.model.workspace;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.ss.editor.manager.WorkspaceManager;
-import com.ss.editor.state.editor.EditorState;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -48,7 +51,7 @@ public class Workspace implements Serializable {
     /**
      * The table of opened files.
      */
-    private final Map<String, String> openedFiles;
+    private Map<String, String> openedFiles;
 
     /**
      * The table with states of editors.
@@ -62,7 +65,20 @@ public class Workspace implements Serializable {
 
     public Workspace() {
         this.changes = new AtomicInteger();
-        this.openedFiles = new HashMap<>();
+    }
+
+    /**
+     * Notify about finished restoring this workspace.
+     */
+    public void notifyRestored() {
+
+        if (openedFiles == null) {
+            openedFiles = new HashMap<>();
+        }
+
+        if (editorStateMap == null) {
+            editorStateMap = new HashMap<>();
+        }
     }
 
     /**
@@ -103,13 +119,29 @@ public class Workspace implements Serializable {
      * @param file the edited file.
      * @return the state of the editor or null.
      */
-    public synchronized EditorState getEditorState(@NotNull final Path file) {
+    public synchronized <T extends EditorState> T getEditorState(@NotNull final Path file) {
+        return getEditorState(file, null);
+    }
+
+    /**
+     * Get the editor state for the file.
+     *
+     * @param file         the edited file.
+     * @param stateFactory the state factory.
+     * @return the state of the editor or null.
+     */
+    public synchronized <T extends EditorState> T getEditorState(@NotNull final Path file, @Nullable Supplier<EditorState> stateFactory) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
-        return editorStateMap.get(assetPath);
+
+        if (stateFactory != null && !editorStateMap.containsKey(assetPath)) {
+            editorStateMap.put(assetPath, stateFactory.get());
+        }
+
+        return unsafeCast(editorStateMap.get(assetPath));
     }
 
     /**

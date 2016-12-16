@@ -1,7 +1,6 @@
-package com.ss.editor.ui.component;
+package com.ss.editor.ui.component.split.pane;
 
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.TabToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalToolComponent;
 
 import org.jetbrains.annotations.NotNull;

@@ -13,14 +13,18 @@ import com.jme3.util.SkyFactory;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
+import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.state.editor.impl.model.ModelEditorState;
+import com.ss.editor.model.workspace.Workspace;
+import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
+import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -101,7 +105,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     /**
      * The 3D part of this editor.
      */
-    private final ModelEditorState editorState;
+    private final ModelEditorAppState editorAppState;
 
     /**
      * The operation control.
@@ -114,12 +118,17 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private final AtomicInteger changeCounter;
 
     /**
+     * The state of this editor.
+     */
+    private ModelFileEditorState editorState;
+
+    /**
      * The opened model.
      */
     private Spatial currentModel;
 
     /**
-     * THe selection handler.
+     * The selection handler.
      */
     private Consumer<Object> selectionHandler;
 
@@ -178,12 +187,17 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     private Pane editorAreaPane;
 
+    /**
+     * The main split container.
+     */
+    private EditorToolSplitPane mainSplitContainer;
+
     public ModelFileEditor() {
-        this.editorState = new ModelEditorState(this);
+        this.editorAppState = new ModelEditorAppState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
-        addEditorState(editorState);
+        addEditorState(editorAppState);
     }
 
     @Override
@@ -255,8 +269,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * @return the 3D part of this editor.
      */
     @NotNull
-    private ModelEditorState getEditorState() {
-        return editorState;
+    private ModelEditorAppState getEditorAppState() {
+        return editorAppState;
     }
 
     /**
@@ -285,6 +299,14 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
+                "Current workspace can't be null.");
+
+        this.editorState = currentWorkspace.getEditorState(file, ModelFileEditorState::new);
+
+        Platform.runLater(() -> mainSplitContainer.updateFor(editorState));
+
         final Path assetFile = EditorUtil.getAssetFile(file);
 
         Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
@@ -298,7 +320,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.openModel(model);
 
         handleObjects(model);
@@ -325,7 +347,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     private void handleObjects(@NotNull final Spatial model) {
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -431,7 +453,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyAddedChild(@NotNull final Node parent, @NotNull final Spatial added, final int index) {
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         final boolean isSky = added.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
 
         if (isSky) {
@@ -464,7 +486,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyAddedLight(@NotNull final Node parent, @NotNull final Light added, final int index) {
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.addLight(added);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -474,7 +496,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyRemovedChild(@NotNull final Node parent, @NotNull final Spatial removed) {
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         final boolean isSky = removed.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
 
         if (isSky) {
@@ -495,7 +517,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyRemovedLight(@NotNull final Node parent, @NotNull final Light removed) {
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.removeLight(removed);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -505,7 +527,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     @Override
     public void notifyReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         final Spatial currentModel = getCurrentModel();
 
         if (currentModel == oldChild) {
@@ -567,18 +589,17 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         parameterSplitContainer.prefHeightProperty().bind(root.heightProperty());
         parameterSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane mainSplitContainer = new SplitPane(editorAreaPane);
+        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
         mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
         final EditorToolComponent editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
         editorToolComponent.addComponent(parameterSplitContainer, Messages.MODEL_FILE_EDITOR_TOOL_OBJECTS);
 
-        mainSplitContainer.getItems().add(editorToolComponent);
+        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
 
-        root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(editorToolComponent, mainSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(parameterSplitContainer));
     }
 
@@ -586,15 +607,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public boolean isInside(final double sceneX, final double sceneY) {
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
         return editorAreaPane.contains(point2D);
-    }
-
-    private static void calcHSplitSize(@NotNull final EditorToolComponent toolComponent, @NotNull final SplitPane splitContainer) {
-        if (toolComponent.isCollapsed()) {
-            splitContainer.setDividerPosition(0, 0.99);
-            Platform.runLater(() -> splitContainer.setDividerPosition(0, 1));
-            return;
-        }
-        splitContainer.setDividerPosition(0, 0.8);
     }
 
     private static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
@@ -642,7 +654,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final Array<Spatial> spatials = ArrayFactory.newArray(Spatial.class);
         if (spatial != null) spatials.add(spatial);
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.updateSelection(spatials);
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
@@ -758,7 +770,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final ToggleButton moveToolButton = getMoveToolButton();
         final ToggleButton rotationToolButton = getRotationToolButton();
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
 
         if (toggleButton == moveToolButton) {
             rotationToolButton.setSelected(false);
@@ -781,7 +793,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void changeSelectionVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.updateShowSelection(newValue);
     }
 
@@ -791,7 +803,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void changeGridVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.updateShowGrid(newValue);
     }
 
@@ -801,7 +813,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void changeFastSky(@NotNull final String newSky) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
 
         if (NO_FAST_SKY.equals(newSky)) {
             editorState.changeFastSky(null);
@@ -818,7 +830,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * Handle changing camera light visibility.
      */
     private void changeLight(@NotNull final Boolean newValue) {
-        final ModelEditorState editorState = getEditorState();
+        final ModelEditorAppState editorState = getEditorAppState();
         editorState.updateLightEnabled(newValue);
     }
 

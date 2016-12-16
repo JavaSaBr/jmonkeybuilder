@@ -96,6 +96,7 @@ public class WorkspaceManager {
             workspace = new Workspace();
         }
 
+        workspace.notifyRestored();
         workspace.setAssetFolder(assetFolder);
         workspaces.put(assetFolder, workspace);
 

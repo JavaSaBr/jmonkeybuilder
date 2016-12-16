@@ -12,8 +12,8 @@ import javafx.scene.control.SplitPane;
  */
 public class GlobalToolComponent extends TabToolComponent {
 
-    public GlobalToolComponent(final SplitPane pane, final int index) {
-        super(pane, index);
+    public GlobalToolComponent(final SplitPane pane) {
+        super(pane);
         setId(CSSIds.GLOBAL_TOOL_COMPONENT);
         setSide(Side.LEFT);
     }

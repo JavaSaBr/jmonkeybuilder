@@ -435,11 +435,12 @@ public final class EditorConfig implements AssetEventListener {
             }
         }
 
+        final byte[] byteArray = prefs.getByteArray(PREF_LAST_OPENED_ASSETS, null);
+        if (byteArray == null) return;
+
+        final List<String> lastOpenedAssets = getLastOpenedAssets();
         try {
-
-            final List<String> deserializeLastOpened = EditorUtil.deserialize(prefs.getByteArray(PREF_LAST_OPENED_ASSETS, null));
-            getLastOpenedAssets().addAll(deserializeLastOpened);
-
+            lastOpenedAssets.addAll(EditorUtil.deserialize(byteArray));
         } catch (final RuntimeException e) {
             LOGGER.warning(e);
         }

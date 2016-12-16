@@ -12,7 +12,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.workspace.Workspace;
-import com.ss.editor.state.editor.EditorState;
+import com.ss.editor.state.editor.EditorAppState;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -292,7 +292,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = prevTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<EditorState> states = fileEditor.getStates();
+            final Array<EditorAppState> states = fileEditor.getStates();
             states.forEach(stateManager::detach);
         }
 
@@ -301,7 +301,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final ObservableMap<Object, Object> properties = newTab.getProperties();
         final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-        final Array<EditorState> states = fileEditor.getStates();
+        final Array<EditorAppState> states = fileEditor.getStates();
         states.forEach(stateManager::attach);
     }
 

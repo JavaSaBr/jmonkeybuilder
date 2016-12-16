@@ -13,7 +13,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.PostFilterViewFile;
 import com.ss.editor.serializer.PostFilterViewSerializer;
-import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorState;
+import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -92,7 +92,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     /**
      * The 3D part of this editor.
      */
-    private final PostFilterEditorState editorState;
+    private final PostFilterEditorAppState editorState;
 
     /**
      * The list used materials.
@@ -120,7 +120,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     private boolean ignoreListeners;
 
     public PostFilterEditor() {
-        this.editorState = new PostFilterEditorState(this);
+        this.editorState = new PostFilterEditorAppState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
     }

@@ -22,7 +22,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.Editor;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.state.editor.EditorState;
+import com.ss.editor.state.editor.EditorAppState;
 import com.ss.editor.ui.component.editor.FileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,9 +40,9 @@ import rlib.util.dictionary.ObjectDictionary;
  *
  * @author JavaSaBr.
  */
-public abstract class AbstractEditorState<T extends FileEditor> extends AbstractAppState implements EditorState {
+public abstract class AbstractEditorAppState<T extends FileEditor> extends AbstractAppState implements EditorAppState {
 
-    protected static final Logger LOGGER = LoggerManager.getLogger(EditorState.class);
+    protected static final Logger LOGGER = LoggerManager.getLogger(EditorAppState.class);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
@@ -171,7 +171,7 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      */
     private boolean buttonMiddleDown;
 
-    public AbstractEditorState(final T fileEditor) {
+    public AbstractEditorAppState(final T fileEditor) {
         this.fileEditor = fileEditor;
         this.stateNode = new Node(getClass().getSimpleName());
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
@@ -450,8 +450,8 @@ public abstract class AbstractEditorState<T extends FileEditor> extends Abstract
      * Check and update all triggers.
      */
     protected void checkAndAddMappings(final InputManager inputManager) {
-        TRIGGERS.forEach(inputManager, AbstractEditorState::addMapping);
-        MULTI_TRIGGERS.forEach(inputManager, AbstractEditorState::addMapping);
+        TRIGGERS.forEach(inputManager, AbstractEditorAppState::addMapping);
+        MULTI_TRIGGERS.forEach(inputManager, AbstractEditorAppState::addMapping);
     }
 
     private static void addMapping(final InputManager inputManager, final String name, final Trigger[] triggers) {

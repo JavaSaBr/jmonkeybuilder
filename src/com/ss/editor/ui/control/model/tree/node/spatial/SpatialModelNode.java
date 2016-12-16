@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node.spatial;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.Node;
@@ -7,7 +9,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.state.editor.impl.model.ModelEditorState;
+import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
@@ -24,8 +26,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
-
-import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
 
 /**
  * The implementation of the {@link ModelNode} for representing the {@link Spatial} in the editor.
@@ -51,7 +51,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
      */
     protected boolean canRemove() {
         Node parent = getElement().getParent();
-        return parent != null && parent.getUserData(ModelEditorState.class.getName()) != Boolean.TRUE;
+        return parent != null && parent.getUserData(ModelEditorAppState.class.getName()) != Boolean.TRUE;
     }
 
     @NotNull

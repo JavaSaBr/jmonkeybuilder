@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor;
 
-import com.ss.editor.state.editor.EditorState;
+import com.ss.editor.state.editor.EditorAppState;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,7 +66,7 @@ public interface FileEditor {
      * @return the 3D part of this editor.
      */
     @Nullable
-    default Array<EditorState> getStates() {
+    default Array<EditorAppState> getStates() {
         return null;
     }
 

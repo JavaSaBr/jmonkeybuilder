@@ -39,7 +39,7 @@ import com.ss.editor.control.transform.ScaleToolControl;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.state.editor.impl.AbstractEditorState;
+import com.ss.editor.state.editor.impl.AbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.GeomUtils;
@@ -58,13 +58,13 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * The implementation of the {@link AbstractEditorState} for the {@link ModelFileEditor}.
+ * The implementation of the {@link AbstractEditorAppState} for the {@link ModelFileEditor}.
  *
  * @author JavaSaBr
  */
-public class ModelEditorState extends AbstractEditorState<ModelFileEditor> implements SceneEditorControl {
+public class ModelEditorAppState extends AbstractEditorAppState<ModelFileEditor> implements SceneEditorControl {
 
-    public static final String USER_DATA_IS_LIGHT = ModelEditorState.class.getName() + ".isLight";
+    public static final String USER_DATA_IS_LIGHT = ModelEditorAppState.class.getName() + ".isLight";
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
@@ -230,10 +230,10 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
      */
     private int frame;
 
-    public ModelEditorState(final ModelFileEditor fileEditor) {
+    public ModelEditorAppState(final ModelFileEditor fileEditor) {
         super(fileEditor);
         this.modelNode = new Node("ModelNode");
-        this.modelNode.setUserData(ModelEditorState.class.getName(), true);
+        this.modelNode.setUserData(ModelEditorAppState.class.getName(), true);
         this.toolNode = new Node("ToolNode");
         this.transformToolNode = new Node("TransformToolNode");
         this.customSkyNode = new Node("Custom Sky");
@@ -1350,7 +1350,7 @@ public class ModelEditorState extends AbstractEditorState<ModelFileEditor> imple
 
     @Override
     public String toString() {
-        return "ModelEditorState{" +
+        return "ModelEditorAppState{" +
                 "modelNode=" + modelNode +
                 ", showGrid=" + showGrid +
                 ", showSelection=" + showSelection +
