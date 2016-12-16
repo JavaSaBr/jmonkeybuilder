@@ -6,8 +6,6 @@ import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static rlib.ui.util.FXUtils.bindFixedSize;
 
-import com.ss.editor.config.EditorConfig;
-import com.ss.editor.config.ScreenSize;
 import com.ss.editor.ui.component.GlobalToolComponent;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
@@ -53,14 +51,11 @@ public class EditorFXSceneBuilder {
      */
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.css";
 
-    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
-
     public static EditorFXScene build(final Stage stage) {
 
-        final ScreenSize screenSize = EDITOR_CONFIG.getScreenSize();
         final Group root = new Group();
 
-        final EditorFXScene scene = new EditorFXScene(root, screenSize.getWidth(), screenSize.getHeight());
+        final EditorFXScene scene = new EditorFXScene(root);
         scene.setFill(TRANSPARENT);
         scene.setRoot(root);
 

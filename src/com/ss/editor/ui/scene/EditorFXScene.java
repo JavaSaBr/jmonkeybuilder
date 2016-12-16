@@ -64,8 +64,8 @@ public class EditorFXScene extends Scene {
      */
     private ProgressIndicator progressIndicator;
 
-    public EditorFXScene(final Group root, final double width, final double height) {
-        super(root, width, height);
+    public EditorFXScene(final Group root) {
+        super(root);
 
         this.imageView = new ImageView();
         this.loadingCount = new AtomicInteger();

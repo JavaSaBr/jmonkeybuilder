@@ -44,13 +44,16 @@ public final class EditorConfig implements AssetEventListener {
     private static final Logger LOGGER = LoggerManager.getLogger(EditorConfig.class);
 
     public static final String GRAPHICS_ALIAS = "Graphics";
+    public static final String SCREEN_ALIAS = "Screen";
     public static final String ASSET_ALIAS = "ASSET";
     public static final String ASSET_OTHER = "Other";
 
-    public static final String PREF_GRAPHIC_SCREEN_SIZE = GRAPHICS_ALIAS + "." + "screenSize";
+    public static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
+    public static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
+    public static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
+
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
-    public static final String PREF_GRAPHIC_FULLSCREEN = GRAPHICS_ALIAS + "." + "fullscreen";
     public static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
     public static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
     public static final String PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT = GRAPHICS_ALIAS + "." + "toneMapFilterWhitePoint";
@@ -81,11 +84,6 @@ public final class EditorConfig implements AssetEventListener {
     private final List<String> lastOpenedAssets;
 
     /**
-     * The current screen size.
-     */
-    private volatile ScreenSize screenSize;
-
-    /**
      * The current white point for the tone map filter.
      */
     private volatile Vector3f toneMapFilterWhitePoint;
@@ -96,14 +94,19 @@ public final class EditorConfig implements AssetEventListener {
     private volatile int anisotropy;
 
     /**
+     * The width of this screen.
+     */
+    private volatile int screenWidth;
+
+    /**
+     * The height of this screen.
+     */
+    private volatile int screenHeight;
+
+    /**
      * Flag is for enabling the FXAA.
      */
     private volatile boolean fxaa;
-
-    /**
-     * Flag is for enabling the fullscreen.
-     */
-    private volatile boolean fullscreen;
 
     /**
      * Flag is for enabling the gamma correction.
@@ -114,6 +117,11 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is for enabling the tone map filter.
      */
     private volatile boolean toneMapFilter;
+
+    /**
+     * Flag is for maximizing a window.
+     */
+    private volatile boolean maximized;
 
     /**
      * The current asset folder.
@@ -195,21 +203,6 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @return the current screen size.
-     */
-    @NotNull
-    public ScreenSize getScreenSize() {
-        return screenSize;
-    }
-
-    /**
-     * @param screenSize the new screen size.
-     */
-    public void setScreenSize(@NotNull final ScreenSize screenSize) {
-        this.screenSize = screenSize;
-    }
-
-    /**
      * @return the current asset folder.
      */
     @Nullable
@@ -237,20 +230,6 @@ public final class EditorConfig implements AssetEventListener {
      */
     public void setAdditionalClasspath(@Nullable final Path additionalClasspath) {
         this.additionalClasspath = additionalClasspath;
-    }
-
-    /**
-     * @param fullscreen flag is for enabling the fullscreen.
-     */
-    public void setFullscreen(final boolean fullscreen) {
-        this.fullscreen = fullscreen;
-    }
-
-    /**
-     * @return flag is for enabling the fullscreen.
-     */
-    public boolean isFullscreen() {
-        return fullscreen;
     }
 
     /**
@@ -297,6 +276,48 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @param screenHeight the height of this screen.
+     */
+    public void setScreenHeight(final int screenHeight) {
+        this.screenHeight = screenHeight;
+    }
+
+    /**
+     * @param screenWidth the width of this screen.
+     */
+    public void setScreenWidth(final int screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    /**
+     * @return the height of this screen.
+     */
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
+    /**
+     * @return the width of this screen.
+     */
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    /**
+     * @return true is a window is maximized.
+     */
+    public boolean isMaximized() {
+        return maximized;
+    }
+
+    /**
+     * @param maximized flag is for maximizing a window.
+     */
+    public void setMaximized(final boolean maximized) {
+        this.maximized = maximized;
+    }
+
+    /**
      * @return the settings for JME.
      */
     public AppSettings getSettings() {
@@ -307,7 +328,6 @@ public final class EditorConfig implements AssetEventListener {
 
 
         final AppSettings settings = new AppSettings(true);
-        settings.setResolution(screenSize.getWidth(), screenSize.getHeight());
         settings.setFrequency(displayMode.getRefreshRate());
         settings.setGammaCorrection(isGammaCorrection());
         settings.setResizable(true);
@@ -339,12 +359,13 @@ public final class EditorConfig implements AssetEventListener {
 
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
 
-        this.screenSize = ScreenSize.sizeOf(prefs.get(PREF_GRAPHIC_SCREEN_SIZE, "1244x700"));
         this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
         this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
-        this.fullscreen = prefs.getBoolean(PREF_GRAPHIC_FULLSCREEN, false);
         this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, false);
         this.toneMapFilter = prefs.getBoolean(PREF_GRAPHIC_TONEMAP_FILTER, false);
+        this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);
+        this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 1200);
+        this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 800);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -373,10 +394,13 @@ public final class EditorConfig implements AssetEventListener {
             }
         }
 
-        final List<String> deserializeLastOpened = EditorUtil.deserialize(prefs.getByteArray(PREF_LAST_OPENED_ASSETS, null));
+        try {
 
-        if (deserializeLastOpened != null) {
+            final List<String> deserializeLastOpened = EditorUtil.deserialize(prefs.getByteArray(PREF_LAST_OPENED_ASSETS, null));
             getLastOpenedAssets().addAll(deserializeLastOpened);
+
+        } catch (final RuntimeException e) {
+            LOGGER.warning(e);
         }
     }
 
@@ -386,12 +410,13 @@ public final class EditorConfig implements AssetEventListener {
     public void save() {
 
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
-        prefs.put(PREF_GRAPHIC_SCREEN_SIZE, getScreenSize().toString());
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
         prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
-        prefs.putBoolean(PREF_GRAPHIC_FULLSCREEN, isFullscreen());
         prefs.putBoolean(PREF_GRAPHIC_GAMA_CORRECTION, isGammaCorrection());
         prefs.putBoolean(PREF_GRAPHIC_TONEMAP_FILTER, isToneMapFilter());
+        prefs.putInt(PREF_SCREEN_HEIGHT, getScreenHeight());
+        prefs.putInt(PREF_SCREEN_WIDTH, getScreenWidth());
+        prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 

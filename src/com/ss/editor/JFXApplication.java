@@ -6,6 +6,7 @@ import static java.nio.file.Files.newOutputStream;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
@@ -116,17 +117,39 @@ public class JFXApplication extends Application {
         icons.add(new Image("/ui/icons/app/SSEd32.png"));
         icons.add(new Image("/ui/icons/app/SSEd16.png"));
 
+        final EditorConfig config = EditorConfig.getInstance();
+
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
+        stage.setWidth(config.getScreenWidth());
+        stage.setHeight(config.getScreenHeight());
+        stage.setMaximized(config.isMaximized());
         stage.setTitle(Config.TITLE + " " + Config.VERSION);
         stage.setOnCloseRequest(event -> onExit());
         stage.show();
+
+        if (!stage.isMaximized()) stage.centerOnScreen();
+
+        stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (stage.isMaximized()) return;
+            config.setScreenWidth(newValue.intValue());
+        });
+        stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (stage.isMaximized()) return;
+            config.setScreenHeight(newValue.intValue());
+        });
+
+        stage.maximizedProperty().addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
 
         buildScene();
     }
 
     public void onExit() {
+
+        final EditorConfig config = EditorConfig.getInstance();
+        config.save();
+
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
         executor.addToExecute(() -> {
             final Editor editor = Editor.getInstance();

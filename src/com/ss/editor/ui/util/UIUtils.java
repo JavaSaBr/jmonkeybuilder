@@ -19,6 +19,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -47,6 +49,9 @@ public class UIUtils {
         if (node instanceof SplitPane) {
             final ObservableList<Node> items = ((SplitPane) node).getItems();
             items.forEach(child -> fillComponents(container, child));
+        } else if (node instanceof TabPane) {
+            final ObservableList<Tab> tabs = ((TabPane) node).getTabs();
+            tabs.forEach(tab -> fillComponents(container, tab.getContent()));
         }
 
         if (!(node instanceof Parent)) {
