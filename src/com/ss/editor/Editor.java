@@ -28,7 +28,6 @@ import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.util.os.OperatingSystem;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.config.ScreenSize;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
@@ -85,8 +84,6 @@ public class Editor extends JmeToJFXApplication {
 
         configureLogger();
         try {
-
-            ScreenSize.init();
 
             final EditorConfig config = EditorConfig.getInstance();
             final AppSettings settings = config.getSettings();

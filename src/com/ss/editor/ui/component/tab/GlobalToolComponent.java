@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component;
+package com.ss.editor.ui.component.tab;
 
 import com.ss.editor.ui.css.CSSIds;
 

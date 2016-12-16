@@ -1,15 +1,14 @@
 package com.ss.editor.ui.builder;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static rlib.ui.util.FXUtils.bindFixedSize;
 
-import com.ss.editor.ui.component.GlobalToolComponent;
+import com.ss.editor.ui.component.GlobalToolSplitPane;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
+import com.ss.editor.ui.component.tab.GlobalToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -17,8 +16,6 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -84,13 +81,13 @@ public class EditorFXSceneBuilder {
 
         new EventRedirector(editorAreaComponent, imageView, stage);
 
-        final SplitPane splitContainer = new SplitPane();
+        final GlobalToolSplitPane splitContainer = new GlobalToolSplitPane(scene);
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
         final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer, 0);
         globalToolComponent.addComponent(new AssetComponent(), "Asset");
 
-        splitContainer.getItems().addAll(globalToolComponent, editorAreaComponent);
+        splitContainer.initFor(globalToolComponent, editorAreaComponent);
 
         FXUtils.addToPane(splitContainer, container);
         FXUtils.addToPane(barComponent, container);
@@ -103,19 +100,5 @@ public class EditorFXSceneBuilder {
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 
         barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
-
-        scene.widthProperty().addListener((observableValue, oldValue, newValue) -> calcSplitSize(globalToolComponent, splitContainer, scene));
-    }
-
-    private static void calcSplitSize(final GlobalToolComponent toolComponent, final SplitPane splitContainer, final Scene scene) {
-
-        if (toolComponent.isCollapsed()) {
-            splitContainer.setDividerPosition(0, 0);
-            return;
-        }
-
-        final double width = scene.getWidth();
-        final double percent = min(0.5, max(0.1, 300 / width));
-        splitContainer.setDividerPosition(0, percent);
     }
 }

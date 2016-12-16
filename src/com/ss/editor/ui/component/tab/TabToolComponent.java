@@ -1,7 +1,12 @@
-package com.ss.editor.ui.component;
+package com.ss.editor.ui.component.tab;
 
+import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSClasses;
 
+import org.jetbrains.annotations.NotNull;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventTarget;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
@@ -22,7 +27,17 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * The split pane.
      */
-    private final SplitPane pane;
+    protected final SplitPane pane;
+
+    /**
+     * Is collapsed.
+     */
+    protected final BooleanProperty collapsed;
+
+    /**
+     * The last expand position.
+     */
+    private double expandPosition;
 
     /**
      * The index.
@@ -30,17 +45,31 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     private final int index;
 
     /**
-     * Is collapsed.
+     * Is changing tab.
      */
-    private boolean collapsed;
-
     private boolean changingTab;
 
-    public TabToolComponent(final SplitPane pane, final int index) {
+    public TabToolComponent(@NotNull final SplitPane pane, final int index) {
+        this.collapsed = new SimpleBooleanProperty(this, "collapsed", false);
+        this.collapsed.bind(widthProperty().lessThanOrEqualTo(minWidthProperty()));
         this.pane = pane;
         this.index = index;
         addEventHandler(MouseEvent.MOUSE_CLICKED, this::processMouseClick);
-        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changedTab());
+        getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changedTab(oldValue));
+    }
+
+    /**
+     * @param expandPosition the last expand position.
+     */
+    public void setExpandPosition(final double expandPosition) {
+        this.expandPosition = expandPosition;
+    }
+
+    /**
+     * @return the last expand position.
+     */
+    public double getExpandPosition() {
+        return expandPosition;
     }
 
     /**
@@ -60,15 +89,15 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * Handle a changed tab.
      */
-    private void changedTab() {
+    private void changedTab(final Tab oldValue) {
         if (isCollapsed()) expand();
-        setChangingTab(true);
+        setChangingTab(oldValue != null);
     }
 
     /**
      * Add a new component to this tool container.
      */
-    public void addComponent(final Region component, final String name) {
+    public void addComponent(@NotNull final Region component, @NotNull final String name) {
 
         final Tab tab = new Tab(name);
         tab.setContent(component);
@@ -84,7 +113,7 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * Handle a click to a tab.
      */
-    private void processMouseClick(final MouseEvent event) {
+    private void processMouseClick(@NotNull final MouseEvent event) {
         final EventTarget target = event.getTarget();
         if (!(target instanceof Node)) return;
         final Node node = (Node) target;
@@ -105,18 +134,21 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
         }
     }
 
+    /**
+     * @return true if this is collapsed.
+     */
     public boolean isCollapsed() {
-        return collapsed;
+        return collapsed.get();
     }
 
     /**
      * Collapse selected tab.
      */
-    private void collapse() {
-        collapsed = true;
+    public void collapse() {
         switch (index) {
             case 0: {
-                pane.setDividerPosition(0, 0);
+                final int dividerIndex = 0;
+                pane.setDividerPosition(dividerIndex, 0);
                 break;
             }
             case 1: {
@@ -129,17 +161,22 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * Expand selected tab.
      */
-    private void expand() {
-        collapsed = false;
-        switch (index) {
-            case 0: {
-                pane.setDividerPosition(0, 0.2);
-                break;
-            }
-            case 1: {
-                pane.setDividerPosition(0, 0.8);
-                break;
-            }
-        }
+    public void expand() {
+
+        final int dividerIndex = getDividerIndex();
+        final double position = getExpandPosition();
+
+        expand(dividerIndex, position);
+    }
+
+    protected int getDividerIndex() {
+        return 0;
+    }
+
+    /**
+     * Expand selected tab.
+     */
+    public void expand(final int dividerIndex, final double position) {
+        pane.setDividerPosition(dividerIndex, position);
     }
 }

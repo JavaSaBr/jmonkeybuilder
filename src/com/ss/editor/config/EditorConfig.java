@@ -37,7 +37,7 @@ import rlib.logging.LoggerManager;
 /**
  * The user configuration of this editor.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public final class EditorConfig implements AssetEventListener {
 
@@ -62,6 +62,8 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
     public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
+    public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
+    public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
 
     private static volatile EditorConfig instance;
 
@@ -102,6 +104,16 @@ public final class EditorConfig implements AssetEventListener {
      * The height of this screen.
      */
     private volatile int screenHeight;
+
+    /**
+     * The global tool width.
+     */
+    private volatile int globalToolWidth;
+
+    /**
+     * Flag is for collapsing the global tool.
+     */
+    private volatile boolean globalToolCollapsed;
 
     /**
      * Flag is for enabling the FXAA.
@@ -318,6 +330,34 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return the global tool width.
+     */
+    public int getGlobalToolWidth() {
+        return globalToolWidth;
+    }
+
+    /**
+     * @param globalToolWidth the global tool width.
+     */
+    public void setGlobalToolWidth(final int globalToolWidth) {
+        this.globalToolWidth = globalToolWidth;
+    }
+
+    /**
+     * @param globalToolCollapsed flag is for collapsing the global tool.
+     */
+    public void setGlobalToolCollapsed(final boolean globalToolCollapsed) {
+        this.globalToolCollapsed = globalToolCollapsed;
+    }
+
+    /**
+     * @return true if the global tool is collapsed.
+     */
+    public boolean isGlobalToolCollapsed() {
+        return globalToolCollapsed;
+    }
+
+    /**
      * @return the settings for JME.
      */
     public AppSettings getSettings() {
@@ -325,7 +365,6 @@ public final class EditorConfig implements AssetEventListener {
         final GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         final GraphicsDevice device = graphicsEnvironment.getDefaultScreenDevice();
         final DisplayMode displayMode = device.getDisplayMode();
-
 
         final AppSettings settings = new AppSettings(true);
         settings.setFrequency(displayMode.getRefreshRate());
@@ -366,6 +405,8 @@ public final class EditorConfig implements AssetEventListener {
         this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);
         this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 1200);
         this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 800);
+        this.globalToolWidth = prefs.getInt(PREF_GLOBAL_TOOL_WIDTH, 300);
+        this.globalToolCollapsed = prefs.getBoolean(PREF_GLOBAL_TOOL_COLLAPSED, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -417,6 +458,8 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_SCREEN_HEIGHT, getScreenHeight());
         prefs.putInt(PREF_SCREEN_WIDTH, getScreenWidth());
         prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
+        prefs.putInt(PREF_GLOBAL_TOOL_WIDTH, getGlobalToolWidth());
+        prefs.putBoolean(PREF_GLOBAL_TOOL_COLLAPSED, isGlobalToolCollapsed());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 

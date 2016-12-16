@@ -1,6 +1,8 @@
-package com.ss.editor.ui.component;
+package com.ss.editor.ui.component.tab;
 
 import com.ss.editor.ui.css.CSSIds;
+
+import org.jetbrains.annotations.NotNull;
 
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
@@ -12,7 +14,7 @@ import javafx.scene.control.SplitPane;
  */
 public class EditorToolComponent extends TabToolComponent {
 
-    public EditorToolComponent(final SplitPane pane, final int index) {
+    public EditorToolComponent(@NotNull final SplitPane pane, final int index) {
         super(pane, index);
         setId(CSSIds.FILE_EDITOR_TOOL_COMPONENT);
         setSide(Side.RIGHT);

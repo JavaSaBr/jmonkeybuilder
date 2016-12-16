@@ -1,7 +1,8 @@
-package com.ss.editor.ui;
+package com.ss.editor.ui.component.tab;
 
-import com.ss.editor.ui.component.EditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
+
+import org.jetbrains.annotations.NotNull;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
@@ -22,7 +23,7 @@ public class ScrollableEditorToolComponent extends EditorToolComponent {
     }
 
     @Override
-    public void addComponent(final Region component, final String name) {
+    public void addComponent(@NotNull final Region component, @NotNull final String name) {
 
         final ScrollPane scrollPane = new ScrollPane(new VBox(component));
         component.prefWidthProperty().bind(scrollPane.widthProperty());
