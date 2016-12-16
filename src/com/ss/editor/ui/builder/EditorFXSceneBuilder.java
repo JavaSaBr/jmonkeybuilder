@@ -99,6 +99,6 @@ public class EditorFXSceneBuilder {
         FXUtils.bindFixedWidth(splitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 
-        barComponent.heightProperty().addListener((observable, oldValue, newValue) -> StackPane.setMargin(splitContainer, new Insets(barComponent.getHeight() - 2, 0, 0, 0)));
+        StackPane.setMargin(splitContainer, new Insets(34, 0, 0, 0));
     }
 }

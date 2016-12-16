@@ -82,6 +82,7 @@ public class WorkspaceManager {
         if (!Files.exists(workspaceFile)) {
 
             final Workspace workspace = new Workspace();
+            workspace.notifyRestored();
             workspace.setAssetFolder(assetFolder);
             workspaces.put(assetFolder, workspace);
 

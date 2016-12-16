@@ -51,12 +51,12 @@ public class Workspace implements Serializable {
     /**
      * The table of opened files.
      */
-    private Map<String, String> openedFiles;
+    private volatile Map<String, String> openedFiles;
 
     /**
      * The table with states of editors.
      */
-    private Map<String, EditorState> editorStateMap;
+    private volatile Map<String, EditorState> editorStateMap;
 
     /**
      * The current edited file.

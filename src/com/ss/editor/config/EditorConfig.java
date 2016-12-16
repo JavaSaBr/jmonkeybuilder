@@ -403,8 +403,8 @@ public final class EditorConfig implements AssetEventListener {
         this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, false);
         this.toneMapFilter = prefs.getBoolean(PREF_GRAPHIC_TONEMAP_FILTER, false);
         this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);
-        this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 1200);
-        this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 800);
+        this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 800);
+        this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 1200);
         this.globalToolWidth = prefs.getInt(PREF_GLOBAL_TOOL_WIDTH, 300);
         this.globalToolCollapsed = prefs.getBoolean(PREF_GLOBAL_TOOL_COLLAPSED, false);
 

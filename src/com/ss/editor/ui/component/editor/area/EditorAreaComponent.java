@@ -45,6 +45,8 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
@@ -57,6 +59,8 @@ import rlib.util.dictionary.ObjectDictionary;
  * @author JavaSaBr
  */
 public class EditorAreaComponent extends TabPane implements ScreenComponent {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(EditorAreaComponent.class);
 
     public static final String COMPONENT_ID = "EditorAreaComponent";
     public static final String KEY_EDITOR = "editor";
