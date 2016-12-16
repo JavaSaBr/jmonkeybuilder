@@ -121,8 +121,21 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      * Handle changing scene's width.
      */
     private void handleSceneChanged(@NotNull final Number newWidth) {
-        if (isCollapsed()) return;
-        setDividerPosition(0, getExpandPosition(width, newWidth.doubleValue()));
+
+        if (isCollapsed()) {
+            setDividerPosition(getDividerIndex(), getCollapsedPosition());
+            return;
+        }
+
+        setDividerPosition(getDividerIndex(), getExpandPosition(width, newWidth.doubleValue()));
+    }
+
+    protected double getCollapsedPosition() {
+        return 0;
+    }
+
+    protected int getDividerIndex() {
+        return 0;
     }
 
     /**
