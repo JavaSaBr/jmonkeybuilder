@@ -3,13 +3,13 @@ package com.ss.editor.ui.component.editor;
 import com.ss.editor.state.editor.EditorAppState;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Parent;
 import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * The interface for implementing file editor.
@@ -17,6 +17,8 @@ import rlib.util.array.Array;
  * @author JavaSaBr.
  */
 public interface FileEditor {
+
+    Array<EditorAppState> EMPTY_STATES = ArrayFactory.newArray(EditorAppState.class);
 
     /**
      * Get the page for showing the editor.
@@ -65,9 +67,9 @@ public interface FileEditor {
     /**
      * @return the 3D part of this editor.
      */
-    @Nullable
+    @NotNull
     default Array<EditorAppState> getStates() {
-        return null;
+        return EMPTY_STATES;
     }
 
     /**

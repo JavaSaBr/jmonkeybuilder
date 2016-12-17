@@ -9,5 +9,8 @@ import java.io.Serializable;
  */
 public interface EditorState extends Serializable {
 
-
+    /**
+     * @param handle the change handler.
+     */
+    void setChangeHandler(final Runnable handle);
 }

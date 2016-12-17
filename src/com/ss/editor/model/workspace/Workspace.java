@@ -19,13 +19,18 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
+import rlib.util.StringUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * The workspace.
@@ -34,7 +39,7 @@ import rlib.logging.LoggerManager;
  */
 public class Workspace implements Serializable {
 
-    public static final long serialVersionUID = 61;
+    public static final long serialVersionUID = 63;
 
     private static final Logger LOGGER = LoggerManager.getLogger(Workspace.class);
 
@@ -47,6 +52,11 @@ public class Workspace implements Serializable {
      * The asset folder of this workspace.
      */
     private transient Path assetFolder;
+
+    /**
+     * The list of expanded folders.
+     */
+    private volatile List<String> expandedFolders;
 
     /**
      * The table of opened files.
@@ -78,6 +88,12 @@ public class Workspace implements Serializable {
 
         if (editorStateMap == null) {
             editorStateMap = new HashMap<>();
+        } else {
+            editorStateMap.forEach((key, editorState) -> editorState.setChangeHandler(this::incrementChanges));
+        }
+
+        if (expandedFolders == null) {
+            expandedFolders = new ArrayList<>();
         }
     }
 
@@ -114,6 +130,31 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * @return the list of expanded folders.
+     */
+    public synchronized Array<Path> getExpandedFolders() {
+
+        final Array<Path> result = ArrayFactory.newArray(Path.class);
+        final Path assetFolder = getAssetFolder();
+
+        expandedFolders.forEach(path -> result.add(assetFolder.resolve(path)));
+
+        return result;
+    }
+
+    /**
+     * Update the list of expanded folders.
+     */
+    public synchronized void updateExpandedFolders(final Array<Path> folders) {
+        expandedFolders.clear();
+
+        final Path assetFolder = getAssetFolder();
+        folders.forEach(path -> expandedFolders.add(assetFolder.relativize(path).toString()));
+
+        incrementChanges();
+    }
+
+    /**
      * Get the editor state for the file.
      *
      * @param file the edited file.
@@ -138,7 +179,10 @@ public class Workspace implements Serializable {
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
 
         if (stateFactory != null && !editorStateMap.containsKey(assetPath)) {
-            editorStateMap.put(assetPath, stateFactory.get());
+            final EditorState editorState = stateFactory.get();
+            editorState.setChangeHandler(this::incrementChanges);
+            editorStateMap.put(assetPath, editorState);
+            incrementChanges();
         }
 
         return unsafeCast(editorStateMap.get(assetPath));
@@ -161,14 +205,33 @@ public class Workspace implements Serializable {
     /**
      * Remove the editor state.
      */
-    public synchronized void removeEditorState(@NotNull final Path file, @NotNull final EditorState editorState) {
+    public synchronized void removeEditorState(@NotNull final Path file) {
 
         final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
-        editorStateMap.remove(assetPath);
+        if (editorStateMap.remove(assetPath) == null) return;
 
+        incrementChanges();
+    }
+
+    /**
+     * Update the editor state for moved/renamed file.
+     */
+    public synchronized void updateEditorState(@NotNull final Path prevFile, @NotNull final Path newFile) {
+
+        final Path prevAssetFile = EditorUtil.getAssetFile(getAssetFolder(), prevFile);
+        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
+
+        final Map<String, EditorState> editorStateMap = getEditorStateMap();
+        final EditorState editorState = editorStateMap.remove(prevAssetPath);
+        if (editorState == null) return;
+
+        final Path newAssetFile = EditorUtil.getAssetFile(getAssetFolder(), newFile);
+        final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
+
+        editorStateMap.put(newAssetPath, editorState);
         incrementChanges();
     }
 
@@ -201,7 +264,8 @@ public class Workspace implements Serializable {
         final EditorDescription description = fileEditor.getDescription();
 
         final Map<String, String> openedFiles = getOpenedFiles();
-        openedFiles.put(assetPath, description.getEditorId());
+        final String previous = openedFiles.put(assetPath, description.getEditorId());
+        if (StringUtils.equals(previous, description.getEditorId())) return;
 
         incrementChanges();
     }
@@ -286,7 +350,7 @@ public class Workspace implements Serializable {
 
             channel.write(buffer);
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOGGER.warning(e);
         }
     }

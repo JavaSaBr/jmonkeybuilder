@@ -1,8 +1,12 @@
 package com.ss.editor.ui.component.asset;
 
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.WorkspaceManager;
+import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
+import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
 import com.ss.editor.ui.css.CSSIds;
@@ -36,6 +40,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
     private static final Insets TREE_OFFSET = new Insets(6, 3, 0, 0);
 
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
@@ -52,6 +57,11 @@ public class AssetComponent extends VBox implements ScreenComponent {
      * The resource tree.
      */
     private ResourceTree resourceTree;
+
+    /**
+     * The flag for ignoring expand changes.
+     */
+    private boolean ignoreExpanded;
 
     public AssetComponent() {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
@@ -102,6 +112,11 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.notifyMoved(prevFile, newFile);
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace workspace = workspaceManager.getCurrentWorkspace();
+        if (workspace == null) return;
+        workspace.updateEditorState(prevFile, newFile);
     }
 
     /**
@@ -114,6 +129,11 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.notifyRenamed(prevFile, newFile);
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace workspace = workspaceManager.getCurrentWorkspace();
+        if (workspace == null) return;
+        workspace.updateEditorState(prevFile, newFile);
     }
 
     /**
@@ -142,6 +162,11 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.notifyDeleted(file);
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace workspace = workspaceManager.getCurrentWorkspace();
+        if (workspace == null) return;
+        workspace.removeEditorState(file);
     }
 
     /**
@@ -169,9 +194,12 @@ public class AssetComponent extends VBox implements ScreenComponent {
      * Create components.
      */
     private void createComponents() {
+        setIgnoreExpanded(true);
 
         this.barComponent = new AssetBarComponent();
         this.resourceTree = new ResourceTree(false);
+        this.resourceTree.setExpandHandler(this::updateExpanded);
+        this.resourceTree.setOnLoadHandler(this::handleTreeLoading);
 
         //FIXME пока он не нужен
         //FXUtils.addToPane(barComponent, this);
@@ -180,6 +208,62 @@ public class AssetComponent extends VBox implements ScreenComponent {
         //FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
 
         VBox.setMargin(resourceTree, TREE_OFFSET);
+    }
+
+    /**
+     * Handle changing loading state of the tree.
+     */
+    private void handleTreeLoading(final Boolean finished) {
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace workspace = workspaceManager.getCurrentWorkspace();
+
+        if (finished && workspace != null) {
+            final Array<Path> expandedFolders = workspace.getExpandedFolders();
+            expandedFolders.forEach(path -> resourceTree.expandTo(path, false));
+        }
+
+        if (finished) {
+            EXECUTOR_MANAGER.addFXTask(() -> setIgnoreExpanded(false));
+        } else {
+            setIgnoreExpanded(true);
+        }
+    }
+
+    /**
+     * @return true if the expand listener is ignored.
+     */
+    public boolean isIgnoreExpanded() {
+        return ignoreExpanded;
+    }
+
+    /**
+     * @param ignoreExpanded the flag for ignoring expand changes.
+     */
+    public void setIgnoreExpanded(final boolean ignoreExpanded) {
+        this.ignoreExpanded = ignoreExpanded;
+    }
+
+    /**
+     * Handle changes count of expanded folders.
+     */
+    private void updateExpanded(final int count, final ResourceTree tree) {
+        if (isIgnoreExpanded()) return;
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace workspace = workspaceManager.getCurrentWorkspace();
+        if (workspace == null) return;
+
+        final Array<Path> expanded = ArrayFactory.newArray(Path.class);
+        final Array<TreeItem<ResourceElement>> allItems = UIUtils.getAllItems(tree);
+        allItems.stream().filter(TreeItem::isExpanded)
+                .filter(treeItem -> !treeItem.isLeaf())
+                .map(TreeItem::getValue)
+                .filter(element -> element instanceof FolderElement)
+                .map(ResourceElement::getFile)
+                .forEach(expanded::add);
+
+        workspace.updateExpandedFolders(expanded);
     }
 
     /**

@@ -45,6 +45,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import rlib.function.IntObjectConsumer;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
@@ -131,7 +132,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * The post loading handler.
      */
-    private Runnable onLoadHandler;
+    private Consumer<Boolean> onLoadHandler;
+
+    /**
+     * The handler for listening expand items.
+     */
+    private IntObjectConsumer<ResourceTree> expandHandler;
 
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_FUNCTION, readOnly);
@@ -145,11 +151,34 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
 
+        expandedItemCountProperty().addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
+
         setCellFactory(CELL_FACTORY);
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
+    }
+
+    /**
+     * Handle changed count of expanded elements.
+     */
+    private void processChangedExpands(final Number newValue) {
+        expandHandler.accept(newValue.intValue(), this);
+    }
+
+    /**
+     * @param expandHandler the handler for listening expand items.
+     */
+    public void setExpandHandler(final IntObjectConsumer<ResourceTree> expandHandler) {
+        this.expandHandler = expandHandler;
+    }
+
+    /**
+     * @return the handler for listening expand items.
+     */
+    private IntObjectConsumer<ResourceTree> getExpandHandler() {
+        return expandHandler;
     }
 
     /**
@@ -169,14 +198,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @param onLoadHandler the post loading handler.
      */
-    public void setOnLoadHandler(final Runnable onLoadHandler) {
+    public void setOnLoadHandler(final Consumer<Boolean> onLoadHandler) {
         this.onLoadHandler = onLoadHandler;
     }
 
     /**
      * @return the post loading handler.
      */
-    private Runnable getOnLoadHandler() {
+    private Consumer<Boolean> getOnLoadHandler() {
         return onLoadHandler;
     }
 
@@ -240,6 +269,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     public void fill(final Path assetFolder) {
 
+        final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
+        if (onLoadHandler != null) onLoadHandler.accept(Boolean.FALSE);
+
         final TreeItem<ResourceElement> currentRoot = getRoot();
         if (currentRoot != null) setRoot(null);
 
@@ -274,6 +306,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
             setRoot(null);
             return;
         }
+
+        final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
+        if (onLoadHandler != null) onLoadHandler.accept(Boolean.FALSE);
 
         updateSelectedElements();
         updateExpandedElements();
@@ -350,8 +385,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         EXECUTOR_MANAGER.addFXTask(() -> {
             setRoot(newRoot);
 
-            final Runnable onLoadHandler = getOnLoadHandler();
-            if (onLoadHandler != null) onLoadHandler.run();
+            final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
+            if (onLoadHandler != null) onLoadHandler.accept(Boolean.TRUE);
         });
     }
 
@@ -389,8 +424,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
             setRoot(newRoot);
             restoreSelection();
 
-            final Runnable onLoadHandler = getOnLoadHandler();
-            if (onLoadHandler != null) onLoadHandler.run();
+            final Consumer<Boolean> onLoadHandler = getOnLoadHandler();
+            if (onLoadHandler != null) onLoadHandler.accept(Boolean.TRUE);
         });
     }
 

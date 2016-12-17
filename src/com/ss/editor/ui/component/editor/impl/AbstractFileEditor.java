@@ -12,7 +12,6 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -237,7 +236,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.dirtyProperty.setValue(dirty);
     }
 
-    @Nullable
+    @NotNull
     @Override
     public Array<EditorAppState> getStates() {
         return editorStates;

@@ -97,12 +97,16 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         show(scene.getWindow());
 
         final ResourceTree resourceTree = getResourceTree();
-        resourceTree.setOnLoadHandler(() -> resourceTree.expandTo(file, true));
+        resourceTree.setOnLoadHandler(finished -> expand(file, resourceTree, finished));
         resourceTree.fill(currentAsset);
 
         EXECUTOR_MANAGER.addFXTask(getFileNameField()::requestFocus);
 
         validateFileName();
+    }
+
+    protected void expand(final Path file, final ResourceTree resourceTree, final Boolean finished) {
+        if (finished) resourceTree.expandTo(file, true);
     }
 
     /**
