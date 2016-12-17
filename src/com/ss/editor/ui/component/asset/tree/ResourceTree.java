@@ -164,6 +164,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * Handle changed count of expanded elements.
      */
     private void processChangedExpands(final Number newValue) {
+        if (expandHandler == null) return;
         expandHandler.accept(newValue.intValue(), this);
     }
 

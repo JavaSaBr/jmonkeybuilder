@@ -127,8 +127,7 @@
                         name="jME3-SpaceShift-Editor"
                         mainClass="com.ss.editor.JFXApplication"
                         toolkit="fx"
-                        version="0.7.7"
-                />
+                        version="0.7.8" />
 
         <mkdir dir="build/classes/META-INF"/>
 
@@ -140,7 +139,7 @@
             <manifest>
                 <attribute name="Implementation-Vendor" value="spaceshift.ru"/>
                 <attribute name="Implementation-Title" value="jME3 SpaceShift Editor"/>
-                <attribute name="Implementation-Version" value="0.7.7"/>
+                <attribute name="Implementation-Version" value="0.7.8"/>
             </manifest>
         </fx:jar>
 
@@ -167,7 +166,7 @@
 
             <preferences shortcut="true" menu="true" install="false"/>
 
-            <info category="Tool;Tools" copyright="spaceshift.ru" description="Editor for jMonkeyEngine 3 by SpaceShift Team"
+            <info category="graphics" copyright="spaceshift.ru" description="Editor for jMonkeyEngine 3 by SpaceShift Team"
                   email="javasabr@gmail.com" license="Freeware" title="jME3 SpaceShift Editor" vendor="spaceshift.ru"/>
 
             <application refId="fxApplication"/>
