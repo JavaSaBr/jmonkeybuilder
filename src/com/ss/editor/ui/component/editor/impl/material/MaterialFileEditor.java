@@ -9,16 +9,20 @@ import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
+import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditorAppState;
 import com.ss.editor.state.editor.impl.material.MaterialEditorAppState.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.component.editor.state.impl.MaterialFileEditorState;
+import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
@@ -33,6 +37,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -45,7 +50,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -87,7 +91,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * 3D part of this editor.
      */
-    private final MaterialEditorAppState editorState;
+    private final MaterialEditorAppState editorAppState;
+
+    /**
+     * The state of this editor.
+     */
+    private MaterialFileEditorState editorState;
 
     /**
      * The operation control.
@@ -118,6 +127,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * The render settings editor.
      */
     private MaterialRenderParamsComponent materialRenderParamsComponent;
+
+    /**
+     * The main split container.
+     */
+    private EditorToolSplitPane mainSplitContainer;
 
     /**
      * The current editing material.
@@ -168,13 +182,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
+    ;
 
     public MaterialFileEditor() {
-        this.editorState = new MaterialEditorAppState(this);
+        this.editorAppState = new MaterialEditorAppState(this);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
-        addEditorState(editorState);
+        addEditorState(editorAppState);
     }
 
     @Override
@@ -302,17 +317,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         changeHandler = this::handleChanges;
         editorAreaPane = new Pane();
 
-        // root.setAlignment(Pos.TOP_RIGHT);
-
-        //final VBox parameterContainer = new VBox();
-        // parameterContainer.setId(CSSIds.MATERIAL_FILE_EDITOR_PARAMETER_CONTAINER);
-
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);
         materialRenderParamsComponent = new MaterialRenderParamsComponent(changeHandler);
         materialOtherParamsComponent = new MaterialOtherParamsComponent(changeHandler);
 
-        final SplitPane mainSplitContainer = new SplitPane(editorAreaPane);
+        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
         mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
         final EditorToolComponent editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
@@ -322,20 +332,9 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         editorToolComponent.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
         editorToolComponent.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
 
-        mainSplitContainer.getItems().add(editorToolComponent);
+        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
-
-        root.widthProperty().addListener((observableValue, oldValue, newValue) -> calcHSplitSize(editorToolComponent, mainSplitContainer));
-    }
-
-    private static void calcHSplitSize(@NotNull final EditorToolComponent toolComponent, @NotNull final SplitPane splitContainer) {
-        if (toolComponent.isCollapsed()) {
-            splitContainer.setDividerPosition(0, 0.99);
-            Platform.runLater(() -> splitContainer.setDividerPosition(0, 1));
-            return;
-        }
-        splitContainer.setDividerPosition(0, 0.8);
     }
 
     @Override
@@ -383,6 +382,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
+                "Current workspace can't be null.");
+
+        this.editorState = currentWorkspace.getEditorState(file, MaterialFileEditorState::new);
+
+        Platform.runLater(() -> mainSplitContainer.updateFor(editorState));
+
         final Path assetFile = EditorUtil.getAssetFile(file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
@@ -391,7 +398,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         final Material material = assetManager.loadMaterial(assetPath);
 
-        final MaterialEditorAppState editorState = getEditorState();
+        final MaterialEditorAppState editorState = getEditorAppState();
         editorState.changeMode(ModelType.BOX);
 
         reload(material);
@@ -408,7 +415,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         setIgnoreListeners(true);
         try {
 
-            final MaterialEditorAppState editorState = getEditorState();
+            final MaterialEditorAppState editorState = getEditorAppState();
             editorState.updateMaterial(material);
 
             final ToggleButton cubeButton = getCubeButton();
@@ -527,7 +534,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Handle changing the bucket type.
      */
     private void changeBucketType(final RenderQueue.Bucket newValue) {
-        final MaterialEditorAppState editorState = getEditorState();
+        final MaterialEditorAppState editorState = getEditorAppState();
         editorState.changeBucketType(newValue);
     }
 
@@ -563,7 +570,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Handle changing the light enabling.
      */
     private void changeLight(final Boolean newValue) {
-        final MaterialEditorAppState editorState = getEditorState();
+        final MaterialEditorAppState editorState = getEditorAppState();
         editorState.updateLightEnabled(newValue);
     }
 
@@ -594,7 +601,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private void changeModelType(final ToggleButton button, final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
-        final MaterialEditorAppState editorState = getEditorState();
+        final MaterialEditorAppState editorState = getEditorAppState();
 
         final ToggleButton cubeButton = getCubeButton();
         final ToggleButton sphereButton = getSphereButton();
@@ -658,8 +665,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return 3D part of this editor.
      */
-    private MaterialEditorAppState getEditorState() {
-        return editorState;
+    private MaterialEditorAppState getEditorAppState() {
+        return editorAppState;
     }
 
     @NotNull

@@ -8,6 +8,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
+import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +16,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -52,6 +54,11 @@ public class EditorDialog extends AbstractPopupDialog {
         if (newValue == Boolean.FALSE) hide();
     };
 
+    /**
+     * The last focus owner.
+     */
+    private Node focusOwner;
+
     @Override
     protected void createControls(final VBox root) {
         super.createControls(root);
@@ -70,7 +77,15 @@ public class EditorDialog extends AbstractPopupDialog {
 
     @Override
     public void show(@NotNull final Window owner) {
+
+        final EditorFXScene scene = (EditorFXScene) owner.getScene();
+        final StackPane container = scene.getContainer();
+        container.setDisable(true);
+
+        focusOwner = scene.getFocusOwner();
+
         super.show(owner);
+
         if (isHideOnLostFocus()) {
             owner.focusedProperty().addListener(hideListener);
             FX_EVENT_MANAGER.addEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
@@ -79,9 +94,19 @@ public class EditorDialog extends AbstractPopupDialog {
 
     @Override
     public void hide() {
+
+        final Window window = getOwnerWindow();
+        final EditorFXScene scene = (EditorFXScene) window.getScene();
+        final StackPane container = scene.getContainer();
+        container.setDisable(false);
+
+        if (focusOwner != null) {
+            focusOwner.requestFocus();
+        }
+
         super.hide();
+
         if (isHideOnLostFocus()) {
-            final Window window = getOwnerWindow();
             window.focusedProperty().removeListener(hideListener);
             FX_EVENT_MANAGER.removeEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
         }

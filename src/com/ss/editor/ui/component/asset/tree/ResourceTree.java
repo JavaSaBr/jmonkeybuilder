@@ -28,6 +28,8 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -147,6 +149,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
         setContextMenu(new ContextMenu());
+        setFocusTraversable(true);
     }
 
     /**
@@ -633,7 +636,28 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Expand tree to the file.
      */
-    public void expandTo(final Path file, boolean needSelect) {
+    public void expandTo(@NotNull final TreeItem<ResourceElement> treeItem, final boolean needSelect) {
+
+        TreeItem<ResourceElement> parent = treeItem;
+
+        while (parent != null) {
+            parent.setExpanded(true);
+            parent = parent.getParent();
+        }
+
+        if (needSelect) {
+            EXECUTOR_MANAGER.addFXTask(() -> {
+                final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+                selectionModel.select(treeItem);
+                scrollTo(getRow(treeItem));
+            });
+        }
+    }
+
+    /**
+     * Expand tree to the file.
+     */
+    public void expandTo(@NotNull final Path file, final boolean needSelect) {
 
         final ResourceElement element = ResourceElementFactory.createFor(file);
         final TreeItem<ResourceElement> treeItem = UIUtils.findItemForValue(getRoot(), element);

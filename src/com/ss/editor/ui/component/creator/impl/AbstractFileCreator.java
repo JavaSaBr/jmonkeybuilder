@@ -20,6 +20,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -199,7 +200,13 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * Notify about the file created.
      */
-    protected void notifyFileCreated(final Path createdFile, boolean needSelect) {
+    protected void notifyFileCreated(final Path createdFile, final boolean needSelect) {
+        if (!needSelect) return;
+
+        final RequestSelectFileEvent event = new RequestSelectFileEvent();
+        event.setFile(createdFile);
+
+        FX_EVENT_MANAGER.notify(event);
     }
 
     @Override

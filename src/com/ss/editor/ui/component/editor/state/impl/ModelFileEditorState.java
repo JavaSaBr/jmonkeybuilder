@@ -1,7 +1,9 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
+import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
+
 /**
- * The implementation of a state container for the {@link ModelFileEditorState}.
+ * The implementation of a state container for the {@link ModelFileEditor}.
  *
  * @author JavaSaBr
  */

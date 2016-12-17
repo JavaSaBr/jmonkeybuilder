@@ -26,8 +26,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -143,12 +141,6 @@ public class MaterialFileCreator extends AbstractFileCreator {
         }
 
         okButton.setDisable(!definitions.contains(selectedItem));
-    }
-
-    @Override
-    protected void processEnter(final KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) return;
-        super.processEnter(event);
     }
 
     @Override

@@ -28,6 +28,8 @@ import rlib.ui.util.FXUtils;
  */
 public class EditorFXSceneBuilder {
 
+    public static final Insets BAR_OFFSET = new Insets(34, 0, 0, 0);
+
     /**
      * The path to the base CSS styles.
      */
@@ -99,6 +101,6 @@ public class EditorFXSceneBuilder {
         FXUtils.bindFixedWidth(splitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 
-        StackPane.setMargin(splitContainer, new Insets(34, 0, 0, 0));
+        StackPane.setMargin(splitContainer, BAR_OFFSET);
     }
 }

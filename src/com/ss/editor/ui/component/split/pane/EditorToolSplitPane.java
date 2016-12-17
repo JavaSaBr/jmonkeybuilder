@@ -35,6 +35,10 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     }
 
     @Override
+    protected void bindToScene() {
+    }
+
+    @Override
     protected void addElements(final @NotNull TabToolComponent toolComponent, final @NotNull Node other) {
         getItems().setAll(other, toolComponent);
     }
