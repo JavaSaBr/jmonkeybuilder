@@ -426,7 +426,8 @@ public class ResourceManager extends EditorThread {
     @Override
     public void run() {
         super.run();
-        while (true) {
+
+        for (;;) {
             ThreadUtils.sleep(200);
 
             final Array<WatchKey> watchKeys = getWatchKeys();
