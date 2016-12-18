@@ -142,6 +142,26 @@ public abstract class AbstractEditorAppState<T extends FileEditor> extends Abstr
     private final Node stateNode;
 
     /**
+     * The previous camera location.
+     */
+    private final Vector3f prevCameraLocation;
+
+    /**
+     * The previous camera zoom.
+     */
+    private float prevTargetDistance;
+
+    /**
+     * The previous vertical camera rotation.
+     */
+    private float prevVRotation;
+
+    /**
+     * The previous horizontal camera rotation.
+     */
+    private float prevHRotation;
+
+    /**
      * Is control pressed.
      */
     private boolean controlDown;
@@ -176,6 +196,7 @@ public abstract class AbstractEditorAppState<T extends FileEditor> extends Abstr
         this.stateNode = new Node(getClass().getSimpleName());
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
+        this.prevCameraLocation = new Vector3f();
 
         if (lightForCamera != null) {
             stateNode.addLight(lightForCamera);
@@ -546,17 +567,123 @@ public abstract class AbstractEditorAppState<T extends FileEditor> extends Abstr
         return lightForCamera;
     }
 
+    public float getPrevHRotation() {
+        return prevHRotation;
+    }
+
+    public void setPrevHRotation(final float prevHRotation) {
+        this.prevHRotation = prevHRotation;
+    }
+
+    public float getPrevTargetDistance() {
+        return prevTargetDistance;
+    }
+
+    public void setPrevTargetDistance(final float prevTargetDistance) {
+        this.prevTargetDistance = prevTargetDistance;
+    }
+
+    public float getPrevVRotation() {
+        return prevVRotation;
+    }
+
+    public void setPrevVRotation(final float prevVRotation) {
+        this.prevVRotation = prevVRotation;
+    }
+
+    public Vector3f getPrevCameraLocation() {
+        return prevCameraLocation;
+    }
+
     @Override
     public void update(float tpf) {
         super.update(tpf);
 
         final EditorCamera editorCamera = getEditorCamera();
+
+        if (editorCamera != null) {
+            checkCameraChanges(editorCamera);
+        }
+
         final DirectionalLight lightForCamera = getLightForCamera();
 
         if (editorCamera != null && lightForCamera != null && needUpdateCameraLight()) {
             final Camera camera = EDITOR.getCamera();
             lightForCamera.setDirection(camera.getDirection().normalize());
         }
+    }
+
+    /**
+     * Check camera changes.
+     */
+    protected void checkCameraChanges(@NotNull final EditorCamera editorCamera) {
+
+        int changes = 0;
+
+        final Node nodeForCamera = getNodeForCamera();
+        final Vector3f prevCameraLocation = getPrevCameraLocation();
+        final Vector3f cameraLocation = nodeForCamera.getLocalTranslation();
+
+        if (!prevCameraLocation.equals(cameraLocation)) {
+            changes++;
+        }
+
+        final float prevHRotation = getPrevHRotation();
+        final float hRotation = editorCamera.getHorizontalRotation();
+
+        final float prevVRotation = getPrevVRotation();
+        final float vRotation = editorCamera.getVerticalRotation();
+
+        if (prevHRotation != hRotation || prevVRotation != vRotation) {
+            changes++;
+        }
+
+        final float prevTargetDistance = getPrevTargetDistance();
+        final float targetDistance = editorCamera.getTargetDistance();
+
+        if (prevTargetDistance != targetDistance) {
+            changes++;
+        }
+
+        if (changes > 0) {
+            notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance);
+        }
+
+        prevCameraLocation.set(cameraLocation);
+
+        setPrevHRotation(hRotation);
+        setPrevVRotation(vRotation);
+        setPrevTargetDistance(targetDistance);
+    }
+
+    /**
+     * Notify about changed camera.
+     */
+    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                       final float vRotation, final float targetDistance) {
+    }
+
+    /**
+     * Update the editor camera.
+     */
+    public void updateCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                             final float vRotation, final float targetDistance) {
+
+        final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera == null) return;
+
+        editorCamera.setTargetRotation(hRotation);
+        editorCamera.setTargetVRotation(vRotation);
+        editorCamera.setTargetDistance(targetDistance);
+
+        getNodeForCamera().setLocalTranslation(cameraLocation);
+        getPrevCameraLocation().set(cameraLocation);
+
+        setPrevHRotation(hRotation);
+        setPrevVRotation(vRotation);
+        setPrevTargetDistance(targetDistance);
+
+        editorCamera.update(1F);
     }
 
     /**

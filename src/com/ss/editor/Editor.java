@@ -10,7 +10,6 @@ import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
-import com.jme3.input.InputManager;
 import com.jme3.light.LightProbe;
 import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
@@ -295,11 +294,6 @@ public class Editor extends JmeToJFXApplication {
         createProbe();
 
         new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
-
-//        JFXPlatform.runInFXThread(() -> {
-//            final JFXApplication jfxApplication = JFXApplication.getInstance();
-//            jfxApplication.buildScene();
-//        });
     }
 
     /**
@@ -355,14 +349,6 @@ public class Editor extends JmeToJFXApplication {
 
     @Override
     public void update() {
-
-        final InputManager inputManager = getInputManager();
-        //final JmeFxContainer fxContainer = getFxContainer();
-
-        //if (fxContainer.isVisibleCursor() != inputManager.isCursorVisible()) {
-        //fxContainer.setVisibleCursor(inputManager.isCursorVisible());
-        //}
-
         final long stamp = syncLock();
         try {
 

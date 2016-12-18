@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.ExecutorManager;
@@ -287,6 +288,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         final Path resultFile = newFile.resolve(relativeFile);
 
         setEditFile(resultFile);
+    }
+
+    /**
+     * Notify about changing editor camera.
+     */
+    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                    final float vRotation, final float targetDistance) {
     }
 
     @Override

@@ -691,6 +691,18 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Mark the element as expanded.
+     */
+    public void markExpand(@NotNull final Path file) {
+
+        final ResourceElement element = ResourceElementFactory.createFor(file);
+        final TreeItem<ResourceElement> treeItem = UIUtils.findItemForValue(getRoot(), element);
+        if (treeItem == null) return;
+
+        treeItem.setExpanded(true);
+    }
+
+    /**
      * Expand tree to the file.
      */
     public void expandTo(@NotNull final Path file, final boolean needSelect) {

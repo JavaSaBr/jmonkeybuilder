@@ -1349,6 +1349,12 @@ public class ModelEditorAppState extends AbstractEditorAppState<ModelFileEditor>
     }
 
     @Override
+    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                       final float vRotation, final float targetDistance) {
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    }
+
+    @Override
     public String toString() {
         return "ModelEditorAppState{" +
                 "modelNode=" + modelNode +

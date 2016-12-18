@@ -80,7 +80,7 @@ public class EditorDialog extends AbstractPopupDialog {
 
         final EditorFXScene scene = (EditorFXScene) owner.getScene();
         final StackPane container = scene.getContainer();
-        container.setDisable(true);
+        container.setFocusTraversable(false);
 
         focusOwner = scene.getFocusOwner();
 
@@ -98,7 +98,7 @@ public class EditorDialog extends AbstractPopupDialog {
         final Window window = getOwnerWindow();
         final EditorFXScene scene = (EditorFXScene) window.getScene();
         final StackPane container = scene.getContainer();
-        container.setDisable(false);
+        container.setFocusTraversable(true);
 
         if (focusOwner != null) {
             focusOwner.requestFocus();

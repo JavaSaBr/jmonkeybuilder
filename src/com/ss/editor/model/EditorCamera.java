@@ -215,7 +215,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * @param targetRotation целевой разворот камеры.
      */
-    private void setTargetRotation(float targetRotation) {
+    public void setTargetRotation(final float targetRotation) {
         this.targetRotation = targetRotation;
     }
 
@@ -229,7 +229,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * @param targetVRotation целевой разворот камеры по вертикали.
      */
-    private void setTargetVRotation(float targetVRotation) {
+    public void setTargetVRotation(final float targetVRotation) {
         this.targetVRotation = targetVRotation;
     }
 
@@ -336,6 +336,10 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     public float getTargetDistance() {
         return targetDistance;
+    }
+
+    public void setTargetDistance(final float targetDistance) {
+        this.targetDistance = max(min(targetDistance, maxDistance), minDistance);
     }
 
     //move the camera toward or away the target

@@ -5,6 +5,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -18,7 +19,14 @@ public interface SceneEditorControl {
         MOVE_TOOL,
         ROTATE_TOOL,
         SCALE_TOOL,
-        NONE
+        NONE;
+
+        private static final TransformType[] VALUES = values();
+
+        @NotNull
+        public static TransformType valueOf(final int index) {
+            return VALUES[index];
+        }
     }
 
     enum PickedAxis {

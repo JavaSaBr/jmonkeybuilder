@@ -55,6 +55,8 @@ public class JFXApplication extends Application {
         System.setProperty("prism.cacheshapes", "true");
         System.setProperty("prism.scrollcacheopt", "true");
 
+        //Logging.getCSSLogger().setLevel(PlatformLogger.Level.ALL);
+
         //System.setProperty("prism.order", "sw");
         //System.setProperty("prism.showdirty", "true");
         //System.setProperty("prism.showoverdraw", "true");

@@ -86,6 +86,7 @@
             </fileset>
             <fileset dir="project/resources">
                 <include name="**/*"/>
+                <exclude name="**/*.css"/>
             </fileset>
         </copy>
     </target>
@@ -143,7 +144,6 @@
             </manifest>
         </fx:jar>
 
-
         <mkdir dir="deploy"/>
         <!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
         <fx:deploy
@@ -164,7 +164,7 @@
                 <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
             </fx:platform>
 
-            <preferences shortcut="true" menu="true" install="false"/>
+            <preferences shortcut="true" menu="true" install="false" />
 
             <info category="graphics" copyright="spaceshift.ru" description="Editor for jMonkeyEngine 3 by SpaceShift Team"
                   email="javasabr@gmail.com" license="Freeware" title="jME3 SpaceShift Editor" vendor="spaceshift.ru"/>

@@ -4,6 +4,7 @@ import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import static rlib.ui.util.FXUtils.bindFixedSize;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
@@ -33,22 +34,22 @@ public class EditorFXSceneBuilder {
     /**
      * The path to the base CSS styles.
      */
-    public static final String CSS_FILE_BASE = "/ui/css/base.css";
+    public static final String CSS_FILE_BASE = "/ui/css/base.bss";
 
     /**
      * The path to the external CSS styles.
      */
-    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.css";
+    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
 
     /**
      * The path to the custom ids CSS styles.
      */
-    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.css";
+    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
 
     /**
      * The path to the custom classes CSS styles.
      */
-    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.css";
+    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
     public static EditorFXScene build(final Stage stage) {
 
@@ -87,7 +88,7 @@ public class EditorFXSceneBuilder {
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
         final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer);
-        globalToolComponent.addComponent(new AssetComponent(), "Asset");
+        globalToolComponent.addComponent(new AssetComponent(), Messages.EDITOR_TOOL_ASSET);
 
         splitContainer.initFor(globalToolComponent, editorAreaComponent);
 
@@ -97,7 +98,7 @@ public class EditorFXSceneBuilder {
         barComponent.createDrawer(container, stage);
         barComponent.toFront();
 
-        FXUtils.bindFixedHeight(splitContainer, container.heightProperty().subtract(barComponent.heightProperty()).add(2));
+        FXUtils.bindFixedHeight(splitContainer, container.heightProperty().subtract(BAR_OFFSET.getTop()).add(2));
         FXUtils.bindFixedWidth(splitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 

@@ -5,6 +5,7 @@ import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -47,7 +48,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -55,6 +55,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
@@ -178,11 +179,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private ToggleButton scaleToolButton;
 
     /**
-     * The flag of ignoring listeners.
-     */
-    private boolean ignoreListeners;
-
-    /**
      * The pane of editor area.
      */
     private Pane editorAreaPane;
@@ -191,6 +187,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      * The main split container.
      */
     private EditorToolSplitPane mainSplitContainer;
+
+    /**
+     * The flag of ignoring listeners.
+     */
+    private boolean ignoreListeners;
 
     public ModelFileEditor() {
         this.editorAppState = new ModelEditorAppState(this);
@@ -234,10 +235,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         if (assetFile == null) return;
 
         final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Spatial currentModel = getCurrentModel();
 
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
-
-        final Spatial currentModel = getCurrentModel();
 
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
 
@@ -274,6 +274,14 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
+     * @return the state of this editor.
+     */
+    @Nullable
+    public ModelFileEditorState getEditorState() {
+        return editorState;
+    }
+
+    /**
      * @return the list of fast skies.
      */
     @NotNull
@@ -289,7 +297,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     /**
-     * @return the model property editor..
+     * @return the model property editor.
      */
     private ModelPropertyEditor getModelPropertyEditor() {
         return modelPropertyEditor;
@@ -305,7 +313,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         this.editorState = currentWorkspace.getEditorState(file, ModelFileEditorState::new);
 
-        Platform.runLater(() -> mainSplitContainer.updateFor(editorState));
+        EXECUTOR_MANAGER.addFXTask(this::loadState);
 
         final Path assetFile = EditorUtil.getAssetFile(file);
 
@@ -340,6 +348,57 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+    }
+
+    /**
+     * Load the saved state.
+     */
+    protected void loadState() {
+
+        final ModelFileEditorState editorState = Objects.requireNonNull(getEditorState(), "State can't be null.");
+
+        mainSplitContainer.updateFor(editorState);
+        fastSkyComboBox.getSelectionModel().select(editorState.getSkyType());
+        lightButton.setSelected(editorState.isEnableLight());
+        gridButton.setSelected(editorState.isEnableGrid());
+        selectionButton.setSelected(editorState.isEnableSelection());
+
+        final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
+
+        switch (transformType) {
+            case MOVE_TOOL:
+                moveToolButton.setSelected(true);
+                break;
+            case ROTATE_TOOL:
+                rotationToolButton.setSelected(true);
+                break;
+            case SCALE_TOOL:
+                scaleToolButton.setSelected(true);
+                break;
+            default:
+                break;
+        }
+
+        final ModelEditorAppState editorAppState = getEditorAppState();
+        final Vector3f cameraLocation = editorState.getCameraLocation();
+
+        final float hRotation = editorState.getCameraHRotation();
+        final float vRotation = editorState.getCameraVRotation();
+        final float tDistance = editorState.getCameraTDistance();
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+    }
+
+    @Override
+    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation, final float vRotation, final float targetDistance) {
+
+        final ModelFileEditorState editorState = getEditorState();
+        if (editorState == null) return;
+
+        editorState.setCameraHRotation(hRotation);
+        editorState.setCameraVRotation(vRotation);
+        editorState.setCameraTDistance(targetDistance);
+        editorState.setCameraLocation(cameraLocation);
     }
 
     /**
@@ -441,7 +500,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyChangeProperty(@Nullable Object parent, @NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object, @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(object);
@@ -688,15 +747,15 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         moveToolButton = new ToggleButton();
         moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
         moveToolButton.setSelected(true);
-        moveToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(moveToolButton, newValue));
+        moveToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(TransformType.MOVE_TOOL, newValue));
 
         rotationToolButton = new ToggleButton();
         rotationToolButton.setGraphic(new ImageView(Icons.ROTATION_16));
-        rotationToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(rotationToolButton, newValue));
+        rotationToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(TransformType.ROTATE_TOOL, newValue));
 
         scaleToolButton = new ToggleButton();
         scaleToolButton.setGraphic(new ImageView(Icons.SCALE_16));
-        scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(scaleToolButton, newValue));
+        scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) -> updateTransformTool(TransformType.SCALE_TOOL, newValue));
 
         final Label fastSkyLabel = new Label(Messages.MODEL_FILE_EDITOR_FAST_SKY + ":");
 
@@ -763,27 +822,32 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     /**
      * Switch transformation mode.
      */
-    private void updateTransformTool(final ToggleButton toggleButton, final Boolean newValue) {
+    private void updateTransformTool(final TransformType transformType, final Boolean newValue) {
         if (newValue != Boolean.TRUE) return;
 
         final ToggleButton scaleToolButton = getScaleToolButton();
         final ToggleButton moveToolButton = getMoveToolButton();
         final ToggleButton rotationToolButton = getRotationToolButton();
 
-        final ModelEditorAppState editorState = getEditorAppState();
+        final ModelEditorAppState editorAppState = getEditorAppState();
+        final ModelFileEditorState editorState = getEditorState();
 
-        if (toggleButton == moveToolButton) {
+        if (transformType == TransformType.MOVE_TOOL) {
             rotationToolButton.setSelected(false);
             scaleToolButton.setSelected(false);
-            editorState.setTransformType(TransformType.MOVE_TOOL);
-        } else if (toggleButton == rotationToolButton) {
+            editorAppState.setTransformType(transformType);
+        } else if (transformType == TransformType.ROTATE_TOOL) {
             moveToolButton.setSelected(false);
             scaleToolButton.setSelected(false);
-            editorState.setTransformType(TransformType.ROTATE_TOOL);
-        } else if (toggleButton == scaleToolButton) {
+            editorAppState.setTransformType(transformType);
+        } else if (transformType == TransformType.SCALE_TOOL) {
             rotationToolButton.setSelected(false);
             moveToolButton.setSelected(false);
-            editorState.setTransformType(TransformType.SCALE_TOOL);
+            editorAppState.setTransformType(transformType);
+        }
+
+        if (editorState != null) {
+            editorState.setTransformationType(transformType.ordinal());
         }
     }
 
@@ -793,8 +857,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void changeSelectionVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorAppState editorState = getEditorAppState();
-        editorState.updateShowSelection(newValue);
+        final ModelEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateShowSelection(newValue);
+
+        final ModelFileEditorState editorState = getEditorState();
+        if (editorState != null) editorState.setEnableSelection(newValue);
     }
 
     /**
@@ -803,8 +870,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void changeGridVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorAppState editorState = getEditorAppState();
-        editorState.updateShowGrid(newValue);
+        final ModelEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateShowGrid(newValue);
+
+        final ModelFileEditorState editorState = getEditorState();
+        if (editorState != null) editorState.setEnableGrid(newValue);
     }
 
     /**
@@ -813,25 +883,35 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void changeFastSky(@NotNull final String newSky) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorAppState editorState = getEditorAppState();
+        final ModelEditorAppState editorAppState = getEditorAppState();
 
         if (NO_FAST_SKY.equals(newSky)) {
-            editorState.changeFastSky(null);
+            editorAppState.changeFastSky(null);
             return;
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial newFastSky = SkyFactory.createSky(assetManager, newSky, SkyFactory.EnvMapType.EquirectMap);
 
-        editorState.changeFastSky(newFastSky);
+        editorAppState.changeFastSky(newFastSky);
+
+        final SingleSelectionModel<String> selectionModel = fastSkyComboBox.getSelectionModel();
+        final int selectedIndex = selectionModel.getSelectedIndex();
+
+        final ModelFileEditorState editorState = getEditorState();
+        if (editorState != null) editorState.setSkyType(selectedIndex);
     }
 
     /**
      * Handle changing camera light visibility.
      */
     private void changeLight(@NotNull final Boolean newValue) {
-        final ModelEditorAppState editorState = getEditorAppState();
-        editorState.updateLightEnabled(newValue);
+        if (isIgnoreListeners()) return;
+
+        final ModelEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateLightEnabled(newValue);
+
+        if (editorState != null) editorState.setEnableLight(newValue);
     }
 
     /**
