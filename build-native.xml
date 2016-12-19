@@ -2,6 +2,8 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
+    <property name="editor.version" value="0.8.0" />
+
     <target name="init-fx-tasks">
         <path id="fxant">
             <filelist>
@@ -128,7 +130,7 @@
                         name="jME3-SpaceShift-Editor"
                         mainClass="com.ss.editor.JFXApplication"
                         toolkit="fx"
-                        version="0.7.9" />
+                        version="${editor.version}" />
 
         <mkdir dir="build/classes/META-INF"/>
 
@@ -140,9 +142,11 @@
             <manifest>
                 <attribute name="Implementation-Vendor" value="spaceshift.ru"/>
                 <attribute name="Implementation-Title" value="jME3 SpaceShift Editor"/>
-                <attribute name="Implementation-Version" value="0.7.9"/>
+                <attribute name="Implementation-Version" value="${editor.version}"/>
             </manifest>
         </fx:jar>
+
+        <replace file="package/linux/control" token="@version@" value="${editor.version}"/>
 
         <mkdir dir="deploy"/>
         <!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
@@ -172,5 +176,7 @@
             <application refId="fxApplication"/>
             <resources refid="appRes"/>
         </fx:deploy>
+
+        <replace file="package/linux/control" token="${editor.version}" value="@version@"/>
     </target>
 </project>

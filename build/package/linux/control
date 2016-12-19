@@ -1,5 +1,5 @@
 Package: jme3-spaceshift-editor
-Version: 0.7.9
+Version: @version@
 Section: graphics
 Maintainer: spaceshift.ru <javasabr@gmail.com>
 Priority: optional
