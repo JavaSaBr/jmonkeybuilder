@@ -24,6 +24,8 @@ public interface CSSClasses {
     String SPECIAL_FONT_15 = "special-font-15";
     String SPECIAL_FONT_16 = "special-font-16";
 
+    String MONO_FONT_13 = "mono-font-13";
+
     String EDITOR_BAR_BUTTON = "editor-bar-button";
 
     String TRANSPARENT_TREE_VIEW = "transparent-tree-view";

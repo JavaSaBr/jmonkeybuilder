@@ -1,37 +1,48 @@
 @font-face {
     font-family: Roboto;
-    src: url("/ui/fonts/Roboto-Regular.ttf");
+    src: url("/ui/fonts/roboto/Roboto-Regular.ttf");
 }
 
 @font-face {
     font-family: "Roboto Medium";
-    src: url("/ui/fonts/Roboto-Medium.ttf");
+    src: url("/ui/fonts/roboto/Roboto-Medium.ttf");
 }
 
 @font-face {
     font-family: "Roboto Light";
-    src: url("/ui/fonts/Roboto-Light.ttf");
+    src: url("/ui/fonts/roboto/Roboto-Light.ttf");
 }
 
 @font-face {
     font-family: "Roboto Bold";
-    src: url("/ui/fonts/Roboto-Bold.ttf");
+    src: url("/ui/fonts/roboto/Roboto-Bold.ttf");
 }
 
 @font-face {
     font-family: Roboto Condensed;
-    src: url("/ui/fonts/RobotoCondensed-Regular.ttf");
+    src: url("/ui/fonts/roboto/RobotoCondensed-Regular.ttf");
 }
 
 @font-face {
     font-family: "Roboto Condensed Light";
-    src: url("/ui/fonts/RobotoCondensed-Light.ttf");
+    src: url("/ui/fonts/roboto/RobotoCondensed-Light.ttf");
 }
 
 @font-face {
     font-family: "Roboto Condensed Bold";
-    src: url("/ui/fonts/RobotoCondensed-Bold.ttf");
+    src: url("/ui/fonts/roboto/RobotoCondensed-Bold.ttf");
 }
+
+@font-face {
+    font-family: Ubuntu Mono;
+    src: url("/ui/fonts/ubuntu/Ubuntu-M.ttf");
+}
+
+@font-face {
+    font-family: Ubuntu Mono Bold;
+    src: url("/ui/fonts/ubuntu/UbuntuMono-B.ttf");
+}
+
 
 .root {
     /***************************************************************************
@@ -356,13 +367,6 @@
 
     -fx-material-shadow-panel: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.01, 1, 1);
     -fx-material-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1, 0, 1);
-
-    /*
-    rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px
-    rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px */
-    /* dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,
-		1.5); */
-    /* dropshadow(three-pass-box, #1a1a1a, 10, 0.01, 1, 1); */
 
     -fx-control-width: 180;
     -fx-control-medium-width: 200;

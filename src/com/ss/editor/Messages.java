@@ -257,6 +257,7 @@ public class Messages {
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
     public static final String GLSL_FILE_EDITOR_NAME;
+    public static final String MATERIAL_DEFINITION_FILE_EDITOR_NAME;
 
     public static final String GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED;
     public static final String GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL;
@@ -526,6 +527,7 @@ public class Messages {
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
 
         GLSL_FILE_EDITOR_NAME = bundle.getString("GLSLFileEditorName");
+        MATERIAL_DEFINITION_FILE_EDITOR_NAME = bundle.getString("MaterialDefinitionFileEditorName");
 
         GENERATE_TANGENTS_DIALOG_TITLE = bundle.getString("GenerateTangentsDialogTitle");
         GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL = bundle.getString("GenerateTangentsDialogAlgorithmLabel");

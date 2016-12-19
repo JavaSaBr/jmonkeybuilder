@@ -29,40 +29,41 @@ import rlib.ui.util.FXUtils;
 import rlib.util.Util;
 
 /**
- * The implementation of editor for editing GLSL files.
+ * The implementation of editor for editing material definition files.
  *
  * @author JavaSaBr
  */
-public class GLSLFileEditor extends AbstractFileEditor<VBox> {
+public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
-        DESCRIPTION.setConstructor(GLSLFileEditor::new);
-        DESCRIPTION.setEditorName(Messages.GLSL_FILE_EDITOR_NAME);
-        DESCRIPTION.setEditorId(GLSLFileEditor.class.getName());
-        DESCRIPTION.addExtension(FileExtensions.GLSL_FRAGMENT);
-        DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
+        DESCRIPTION.setConstructor(MaterialDefinitionFileEditor::new);
+        DESCRIPTION.setEditorName(Messages.MATERIAL_DEFINITION_FILE_EDITOR_NAME);
+        DESCRIPTION.setEditorId(MaterialDefinitionFileEditor.class.getName());
+        DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL_DEFINITION);
     }
 
     private static final String[] KEYWORDS = new String[]{
-            "define", "undef", "if", "ifdef", "ifndef",
-            "else", "elif", "endif", "error", "pragma",
-            "extension", "version", "line", "attribute", "const",
-            "uniform", "varying", "layout", "centroid", "flat",
-            "smooth", "noperspective", "patch", "sample", "break",
-            "continue", "do", "for", "while", "switch",
-            "case", "default", "if", "subroutine", "in", "out", "inout",
-            "void", "true", "false", "invariant", "discard", "return", "struct"
+            "MaterialDef", "MaterialParameters", "Technique", "WorldParameters", "Defines"
     };
 
     private static final String[] VALUE_TYPES = new String[]{
-            "float", "double", "int", "bool", "mat2", "mat3", "mat4", "uint", "uvec2", "uvec3", "uvec4",
-            "sampler1D", "sampler2D", "sampler3D", "samplerCube", "vec2", "vec3", "vec4"
+            "Texture2D", "Float", "Boolean", "Int", "Color", "Vector3", "TextureCubeMap", "Matrix4", "Vector4", "Vector2",
+            "VertexShader", "FragmentShader", "LightMode", "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
+            "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
+            "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix"
+    };
+
+    private static final String[] VALUE_VALUES = new String[]{
+            "true", "false", "Off", "On", "True", "False", "Disable", "SinglePass", "MultiPass",
+            "SinglePassAndImageBased", "FixedPipeline", "StaticPass", "InPass", "PostPass", "World", "View",
+            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
     private static final String VALUE_TYPE_PATTERN = "\\b(" + String.join("|", VALUE_TYPES) + ")\\b";
+    private static final String VALUE_VALUE_PATTERN = "\\b(" + String.join("|", VALUE_VALUES) + ")\\b";
     private static final String PAREN_PATTERN = "\\(|\\)";
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";
@@ -73,6 +74,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
     private static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
                     + "|(?<VALUETYPE>" + VALUE_TYPE_PATTERN + ")"
+                    + "|(?<VALUEVALUE>" + VALUE_VALUE_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
                     + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
@@ -94,6 +96,10 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
             if (styleClass == null) {
                 styleClass = matcher.group("VALUETYPE") != null ? "value-type" : null;
+            }
+
+            if (styleClass == null) {
+                styleClass = matcher.group("VALUEVALUE") != null ? "value-value" : null;
             }
 
             if (styleClass == null) {
@@ -159,7 +165,6 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         codeArea.setStyle("-fx-stroke: white;");
         codeArea.prefHeightProperty().bind(root.heightProperty());
         codeArea.prefWidthProperty().bind(root.widthProperty());
-        //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
         FXUtils.addToPane(codeArea, root);
         FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);

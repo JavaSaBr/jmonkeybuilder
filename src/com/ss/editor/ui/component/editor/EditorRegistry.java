@@ -2,10 +2,14 @@ package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.ui.component.editor.impl.GLSLFileEditor;
 import com.ss.editor.ui.component.editor.impl.ImageViewerEditor;
+import com.ss.editor.ui.component.editor.impl.MaterialDefinitionFileEditor;
 import com.ss.editor.ui.component.editor.impl.TextFileEditor;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -20,9 +24,9 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * Реестр редакторов.
+ * THe registry of editors.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EditorRegistry {
 
@@ -32,13 +36,18 @@ public class EditorRegistry {
 
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
+    @NotNull
+    public static EditorRegistry getInstance() {
+        return INSTANCE;
+    }
+
     /**
-     * Таблица с описаниями редакторов.
+     * The table with editor descriptions.
      */
     private final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions;
 
     /**
-     * Таблица описаний редакторов.
+     * The table with mapping editor id to editor description.
      */
     private final ObjectDictionary<String, EditorDescription> editorIdToDescription;
 
@@ -48,12 +57,8 @@ public class EditorRegistry {
         loadDescriptions();
     }
 
-    public static EditorRegistry getInstance() {
-        return INSTANCE;
-    }
-
     /**
-     * Загрузка описаний редакторов.
+     * Load available descriptors.
      */
     private void loadDescriptions() {
         addDescription(TextFileEditor.DESCRIPTION);
@@ -62,26 +67,29 @@ public class EditorRegistry {
         addDescription(ModelFileEditor.DESCRIPTION);
         addDescription(ImageViewerEditor.DESCRIPTION);
         addDescription(GLSLFileEditor.DESCRIPTION);
+        addDescription(MaterialDefinitionFileEditor.DESCRIPTION);
     }
 
     /**
-     * @return таблица описаний редакторов.
+     * @return the table with editor descriptions.
      */
+    @NotNull
     private ObjectDictionary<String, Array<EditorDescription>> getEditorDescriptions() {
         return editorDescriptions;
     }
 
     /**
-     * @return таблица описаний редакторов.
+     * @return the table with maaping editor id to editor description.
      */
+    @NotNull
     private ObjectDictionary<String, EditorDescription> getEditorIdToDescription() {
         return editorIdToDescription;
     }
 
     /**
-     * Добавление нового описания редактора.
+     * Add new description.
      */
-    private void addDescription(final EditorDescription description) {
+    private void addDescription(@NotNull final EditorDescription description) {
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
 
@@ -96,20 +104,22 @@ public class EditorRegistry {
     }
 
     /**
-     * Получение описания редактора по ид редактора.
+     * @return the description for the editor id or null.
      */
-    public EditorDescription getDescription(final String editorId) {
+    @Nullable
+    public EditorDescription getDescription(@NotNull final String editorId) {
         final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
         return editorIdToDescription.get(editorId);
     }
 
     /**
-     * Создание редактора для указанного файла.
+     * Create an editor for the file.
      *
-     * @param file редактируемый файл.
-     * @return редактор для этого файла или null.
+     * @param file the edited file.
+     * @return the editor for this file or null.
      */
-    public FileEditor createEditorFor(final Path file) {
+    @Nullable
+    public FileEditor createEditorFor(@NotNull final Path file) {
         if (Files.isDirectory(file)) return null;
 
         final String extension = FileUtils.getExtension(file);
@@ -139,13 +149,14 @@ public class EditorRegistry {
     }
 
     /**
-     * Создание редактора для указанного файла.
+     * Create an editor for the file.
      *
-     * @param description описание выбранного редактора.
-     * @param file        редактируемый файл.
-     * @return редактор для этого файла или null.
+     * @param description the editor description.
+     * @param file        the editred file.
+     * @return the editor or null.
      */
-    public FileEditor createEditorFor(final EditorDescription description, final Path file) {
+    @Nullable
+    public FileEditor createEditorFor(@NotNull final EditorDescription description, @NotNull final Path file) {
 
         final Callable<FileEditor> constructor = description.getConstructor();
 
@@ -159,9 +170,10 @@ public class EditorRegistry {
     }
 
     /**
-     * Получить список доступных редакторов для этого файла.
+     * @return the list of available editors for the file.
      */
-    public Array<EditorDescription> getAvailableEditorsFor(final Path file) {
+    @NotNull
+    public Array<EditorDescription> getAvailableEditorsFor(@NotNull final Path file) {
 
         final Array<EditorDescription> result = ArrayFactory.newArray(EditorDescription.class);
         final String extension = FileUtils.getExtension(file);

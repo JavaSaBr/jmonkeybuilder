@@ -100,7 +100,14 @@
 
 .special-font-16 {
     -fx-font-family: "Roboto Condensed";
-    -fx-font-size: 16px;
+    -fx-font-size: 16;
+    -fx-font-smoothing-type: lcd;
+    -fx-font-style: oblique;
+}
+
+.mono-font-13 {
+    -fx-font-family: "Ubuntu Mono";
+    -fx-font-size: 13px;
     -fx-font-smoothing-type: lcd;
     -fx-font-style: oblique;
 }
@@ -318,14 +325,20 @@
 }
 
 .keyword {
-    -fx-fill: #f92647;
+    -fx-fill: #f92670;
     -fx-font-weight: bold;
 }
 
 .value-type {
-    -fx-fill: #66d9ef;
+    -fx-fill: #62c59f;
     -fx-font-weight: bold;
 }
+
+.value-value {
+    -fx-fill: #a776a7;
+    -fx-font-weight: bold;
+}
+
 
 .semicolon {
     -fx-fill: white;
@@ -348,11 +361,11 @@
 }
 
 .string {
-    -fx-fill: #d4db68;
+    -fx-fill: #ddb03f;
 }
 
 .comment {
-    -fx-fill: #b2ae94;
+    -fx-fill: #5f6c5a;
 }
 
 .paragraph-box:has-caret {
