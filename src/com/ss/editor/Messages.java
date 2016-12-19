@@ -88,6 +88,7 @@ public class Messages {
 
     public static final String SETTINGS_DIALOG_TITLE;
     public static final String SETTINGS_DIALOG_FXAA;
+    public static final String SETTINGS_DIALOG_DECORATED;
     public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
@@ -358,6 +359,7 @@ public class Messages {
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
+        SETTINGS_DIALOG_DECORATED = bundle.getString("SettingsDialogDecorated");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
         SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
         SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");

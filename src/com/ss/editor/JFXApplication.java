@@ -121,8 +121,9 @@ public class JFXApplication extends Application {
         icons.add(new Image("/ui/icons/app/SSEd16.png"));
 
         final EditorConfig config = EditorConfig.getInstance();
+        final boolean decorated = CommandLineConfig.decorated || config.isDecorated();
 
-        stage.initStyle(CommandLineConfig.decorated ? StageStyle.DECORATED : StageStyle.UNDECORATED);
+        stage.initStyle(decorated ? StageStyle.DECORATED : StageStyle.UNDECORATED);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
         stage.setWidth(config.getScreenWidth());

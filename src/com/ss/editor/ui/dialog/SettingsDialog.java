@@ -56,7 +56,7 @@ public class SettingsDialog extends EditorDialog {
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 320);
+    private static final Point DIALOG_SIZE = new Point(600, 340);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -111,6 +111,11 @@ public class SettingsDialog extends EditorDialog {
      * Включение/выключение FXAA.
      */
     private CheckBox fxaaFilterCheckBox;
+
+    /**
+     * The checkbox for enabling decorating.
+     */
+    private CheckBox decoratedCheckBox;
 
     /**
      * Поле для отображения выбранной папки дополнительного classpath.
@@ -168,6 +173,7 @@ public class SettingsDialog extends EditorDialog {
         createAnisotropyControl(root);
         createGammaCorrectionControl(root);
         createFXAAControl(root);
+        createDecoratedControl(root);
         createToneMapFilterControl(root);
         createToneMapFilterWhitePointControl(root);
         createAdditionalClasspathControl(root);
@@ -417,6 +423,31 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * Create the checkbox for configuring decorated windows.
+     */
+    private void createDecoratedControl(final VBox root) {
+
+        final HBox decoratedContainer = new HBox();
+        decoratedContainer.setAlignment(Pos.CENTER_LEFT);
+
+        final Label decoratedLabel = new Label(Messages.SETTINGS_DIALOG_DECORATED + ":");
+        decoratedLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        decoratedCheckBox = new CheckBox();
+        decoratedCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        decoratedCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(decoratedLabel, decoratedContainer);
+        FXUtils.addToPane(decoratedCheckBox, decoratedContainer);
+        FXUtils.addToPane(decoratedContainer, root);
+
+        FXUtils.addClassTo(decoratedLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(decoratedCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(decoratedContainer, FIELD_OFFSET);
+    }
+
+    /**
      * Создание настройкид ля выбора анизатроной фильтрации.
      */
     private void createAnisotropyControl(final VBox root) {
@@ -496,6 +527,13 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * @return the checkbox for enabling decorating.
+     */
+    private CheckBox getDecoratedCheckBox() {
+        return decoratedCheckBox;
+    }
+
+    /**
      * @return надпись с сообщением.
      */
     public Label getMessageLabel() {
@@ -515,6 +553,7 @@ public class SettingsDialog extends EditorDialog {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
+        final boolean currentDecorated = editorConfig.isDecorated();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -522,9 +561,14 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
 
+        final CheckBox decoratedCheckBox = getDecoratedCheckBox();
+        final boolean decorated = decoratedCheckBox.isSelected();
+
         if (currentAnisotropy != anisotropy) {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
+            needRestart++;
+        } else if (decorated != currentDecorated) {
             needRestart++;
         }
 
@@ -554,6 +598,9 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox toneMapFilterCheckBox = getToneMapFilterCheckBox();
         toneMapFilterCheckBox.setSelected(editorConfig.isToneMapFilter());
+
+        final CheckBox decoratedCheckBox = getDecoratedCheckBox();
+        decoratedCheckBox.setSelected(editorConfig.isDecorated());
 
         final Vector3f toneMapFilterWhitePoint = editorConfig.getToneMapFilterWhitePoint();
 
@@ -627,6 +674,7 @@ public class SettingsDialog extends EditorDialog {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
+        final boolean currentDecorated = editorConfig.isDecorated();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -640,6 +688,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox toneMapFilterCheckBox = getToneMapFilterCheckBox();
         final boolean toneMapFilter = toneMapFilterCheckBox.isSelected();
 
+        final CheckBox decoratedCheckBox = getDecoratedCheckBox();
+        final boolean decorated = decoratedCheckBox.isSelected();
+
         final float toneMapFilterWhitePointX = getToneMapFilterWhitePointX().getValue().floatValue();
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
@@ -650,6 +701,8 @@ public class SettingsDialog extends EditorDialog {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
             needRestart++;
+        } else if (currentDecorated != decorated) {
+            needRestart++;
         }
 
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
@@ -657,6 +710,7 @@ public class SettingsDialog extends EditorDialog {
 
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
+        editorConfig.setDecorated(decorated);
         editorConfig.setGammaCorrection(gammaCorrection);
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);

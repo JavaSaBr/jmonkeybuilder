@@ -1,3 +1,5 @@
+package com.ss.editor;
+
 import com.sun.javafx.css.Stylesheet;
 
 import java.io.File;

@@ -52,7 +52,9 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
             "Texture2D", "Float", "Boolean", "Int", "Color", "Vector3", "TextureCubeMap", "Matrix4", "Vector4", "Vector2",
             "VertexShader", "FragmentShader", "LightMode", "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
             "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
-            "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix"
+            "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix",
+            "IntArray", "FloatArray", "Vector2Array", "Vector3Array", "Vector4Array", "Matrix3",
+            "Matrix3Array", "Matrix4Array", "TextureBuffer", "Texture3D", "TextureArray"
     };
 
     private static final String[] VALUE_VALUES = new String[]{

@@ -51,6 +51,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
     public static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
     public static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
+    public static final String PREF_SCREEN_DECORATED = SCREEN_ALIAS + "." + "decorated";
 
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
@@ -134,6 +135,11 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is for maximizing a window.
      */
     private volatile boolean maximized;
+
+    /**
+     * Flag is for decorating a window.
+     */
+    private volatile boolean decorated;
 
     /**
      * The current asset folder.
@@ -330,6 +336,20 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return true if this windows needs to decorate.
+     */
+    public boolean isDecorated() {
+        return decorated;
+    }
+
+    /**
+     * @param decorated flag is for decorating a window.
+     */
+    public void setDecorated(final boolean decorated) {
+        this.decorated = decorated;
+    }
+
+    /**
      * @return the global tool width.
      */
     public int getGlobalToolWidth() {
@@ -407,6 +427,7 @@ public final class EditorConfig implements AssetEventListener {
         this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 1200);
         this.globalToolWidth = prefs.getInt(PREF_GLOBAL_TOOL_WIDTH, 300);
         this.globalToolCollapsed = prefs.getBoolean(PREF_GLOBAL_TOOL_COLLAPSED, false);
+        this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -461,6 +482,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
         prefs.putInt(PREF_GLOBAL_TOOL_WIDTH, getGlobalToolWidth());
         prefs.putBoolean(PREF_GLOBAL_TOOL_COLLAPSED, isGlobalToolCollapsed());
+        prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
