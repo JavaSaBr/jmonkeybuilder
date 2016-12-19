@@ -132,4 +132,15 @@ public class ModelFileEditorState extends AbstractEditorState {
             changeHandler.run();
         }
     }
+
+    @Override
+    public String toString() {
+        return "ModelFileEditorState{" +
+                "skyType=" + skyType +
+                ", transformationType=" + transformationType +
+                ", enableLight=" + enableLight +
+                ", enableGrid=" + enableGrid +
+                ", enableSelection=" + enableSelection +
+                "} " + super.toString();
+    }
 }

@@ -358,9 +358,21 @@ public class MaterialEditorAppState extends AbstractEditorAppState<MaterialFileE
         return false;
     }
 
+    @Override
+    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                       final float vRotation, final float targetDistance) {
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    }
+
     public enum ModelType {
         SPHERE,
         BOX,
-        QUAD,
+        QUAD;
+
+        private static final ModelType[] VALUES = values();
+
+        public static ModelType valueOf(final int index) {
+            return VALUES[index];
+        }
     }
 }

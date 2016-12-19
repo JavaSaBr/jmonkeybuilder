@@ -1,7 +1,7 @@
 
 #EditorBarComponent {
     -fx-padding: 2px;
-    -fx-min-height: 36;
+    -fx-min-height: 36px;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-background-color: -fx-background-app-bar;

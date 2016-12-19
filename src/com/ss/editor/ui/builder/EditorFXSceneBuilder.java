@@ -2,7 +2,6 @@ package com.ss.editor.ui.builder;
 
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
-import static rlib.ui.util.FXUtils.bindFixedSize;
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.AssetComponent;
@@ -54,6 +53,7 @@ public class EditorFXSceneBuilder {
     public static EditorFXScene build(final Stage stage) {
 
         final Group root = new Group();
+        //root.getTransforms().add(new Scale(1.5, 1.5));
 
         final EditorFXScene scene = new EditorFXScene(root);
         scene.setFill(TRANSPARENT);
@@ -69,7 +69,7 @@ public class EditorFXSceneBuilder {
         container.setAlignment(TOP_CENTER);
 
         build(scene, container, stage);
-        bindFixedSize(container, scene.widthProperty(), scene.heightProperty());
+        //bindFixedSize(container, scene.widthProperty().divide(1.5), scene.heightProperty().divide(1.5));
 
         stage.setScene(scene);
 

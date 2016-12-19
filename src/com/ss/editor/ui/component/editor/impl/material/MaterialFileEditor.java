@@ -5,6 +5,7 @@ import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -23,7 +24,6 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.impl.MaterialFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
-import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -41,7 +41,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -134,6 +133,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private EditorToolSplitPane mainSplitContainer;
 
     /**
+     * Editor tool component.
+     */
+    private ScrollableEditorToolComponent editorToolComponent;
+
+    /**
      * The current editing material.
      */
     private Material currentMaterial;
@@ -182,7 +186,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
-    ;
 
     public MaterialFileEditor() {
         this.editorAppState = new MaterialEditorAppState(this);
@@ -325,12 +328,16 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
         mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
-        final EditorToolComponent editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
+        editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
         editorToolComponent.addComponent(materialTexturesComponent, Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
         editorToolComponent.addComponent(materialColorsComponent, Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
         editorToolComponent.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
         editorToolComponent.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
+        editorToolComponent.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            final MaterialFileEditorState editorState = getEditorState();
+            if (editorState != null) editorState.setOpenedTool(newValue.intValue());
+        });
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
@@ -382,15 +389,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
-                "Current workspace can't be null.");
-
-        this.editorState = currentWorkspace.getEditorState(file, MaterialFileEditorState::new);
-
-        Platform.runLater(() -> mainSplitContainer.updateFor(editorState));
-
         final Path assetFile = EditorUtil.getAssetFile(file);
+
+        Objects.requireNonNull(assetFile, "Asset file can't be null.");
+
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -404,6 +406,65 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         reload(material);
 
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+        EXECUTOR_MANAGER.addFXTask(this::loadState);
+    }
+
+    /**
+     * @return the state of this editor.
+     */
+    private MaterialFileEditorState getEditorState() {
+        return editorState;
+    }
+
+    @Override
+    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                    final float vRotation, final float targetDistance) {
+
+        final MaterialFileEditorState editorState = getEditorState();
+        if (editorState == null) return;
+
+        editorState.setCameraHRotation(hRotation);
+        editorState.setCameraVRotation(vRotation);
+        editorState.setCameraTDistance(targetDistance);
+        editorState.setCameraLocation(cameraLocation);
+    }
+
+    /**
+     * Loading a state of this editor.
+     */
+    protected void loadState() {
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
+                "Current workspace can't be null.");
+
+        editorState = currentWorkspace.getEditorState(getEditFile(), MaterialFileEditorState::new);
+
+        switch (ModelType.valueOf(editorState.getModelType())) {
+            case BOX:
+                cubeButton.setSelected(true);
+                break;
+            case SPHERE:
+                sphereButton.setSelected(true);
+                break;
+            case QUAD:
+                planeButton.setSelected(true);
+                break;
+        }
+
+        editorToolComponent.getSelectionModel().select(editorState.getOpenedTool());
+        bucketComboBox.getSelectionModel().select(editorState.getBucketType());
+        mainSplitContainer.updateFor(editorState);
+        lightButton.setSelected(editorState.isLightEnable());
+
+        final MaterialEditorAppState editorAppState = getEditorAppState();
+        final Vector3f cameraLocation = editorState.getCameraLocation();
+
+        final float hRotation = editorState.getCameraHRotation();
+        final float vRotation = editorState.getCameraVRotation();
+        final float tDistance = editorState.getCameraTDistance();
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
     }
 
     /**
@@ -469,15 +530,15 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         cubeButton = new ToggleButton();
         cubeButton.setGraphic(new ImageView(Icons.CUBE_16));
-        cubeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(cubeButton, newValue));
+        cubeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.BOX, newValue));
 
         sphereButton = new ToggleButton();
         sphereButton.setGraphic(new ImageView(Icons.SPHERE_16));
-        sphereButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(sphereButton, newValue));
+        sphereButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.SPHERE, newValue));
 
         planeButton = new ToggleButton();
         planeButton.setGraphic(new ImageView(Icons.PLANE_16));
-        planeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(planeButton, newValue));
+        planeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.QUAD, newValue));
 
         lightButton = new ToggleButton();
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
@@ -534,8 +595,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Handle changing the bucket type.
      */
     private void changeBucketType(final RenderQueue.Bucket newValue) {
-        final MaterialEditorAppState editorState = getEditorAppState();
-        editorState.changeBucketType(newValue);
+
+        final MaterialEditorAppState editorAppState = getEditorAppState();
+        editorAppState.changeBucketType(newValue);
+
+        final MaterialFileEditorState editorState = getEditorState();
+        if (editorState != null) editorState.setBucketType(newValue);
+
     }
 
     /**
@@ -570,8 +636,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * Handle changing the light enabling.
      */
     private void changeLight(final Boolean newValue) {
-        final MaterialEditorAppState editorState = getEditorAppState();
-        editorState.updateLightEnabled(newValue);
+
+        final MaterialEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateLightEnabled(newValue);
+
+        final MaterialFileEditorState editorState = getEditorState();
+        if (editorState != null) editorState.setLightEnable(newValue);
     }
 
     /**
@@ -598,37 +668,31 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing model type.
      */
-    private void changeModelType(final ToggleButton button, final Boolean newValue) {
+    private void changeModelType(@NotNull final ModelType modelType, final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
-        final MaterialEditorAppState editorState = getEditorAppState();
+        final MaterialEditorAppState editorAppState = getEditorAppState();
 
         final ToggleButton cubeButton = getCubeButton();
         final ToggleButton sphereButton = getSphereButton();
         final ToggleButton planeButton = getPlaneButton();
 
-        if (button == cubeButton) {
+        if (modelType == ModelType.BOX) {
             sphereButton.setSelected(false);
             planeButton.setSelected(false);
-            sphereButton.setDisable(false);
-            planeButton.setDisable(false);
-            cubeButton.setDisable(true);
-            editorState.changeMode(ModelType.BOX);
-        } else if (button == sphereButton) {
+            editorAppState.changeMode(modelType);
+        } else if (modelType == ModelType.SPHERE) {
             cubeButton.setSelected(false);
             planeButton.setSelected(false);
-            cubeButton.setDisable(false);
-            planeButton.setDisable(false);
-            sphereButton.setDisable(true);
-            editorState.changeMode(ModelType.SPHERE);
-        } else if (button == planeButton) {
+            editorAppState.changeMode(modelType);
+        } else if (modelType == ModelType.QUAD) {
             sphereButton.setSelected(false);
             cubeButton.setSelected(false);
-            sphereButton.setDisable(false);
-            cubeButton.setDisable(false);
-            planeButton.setDisable(true);
-            editorState.changeMode(ModelType.QUAD);
+            editorAppState.changeMode(modelType);
         }
+
+        final MaterialFileEditorState editorState = getEditorState();
+        if (editorState != null) editorState.setModelType(modelType);
     }
 
     @Override

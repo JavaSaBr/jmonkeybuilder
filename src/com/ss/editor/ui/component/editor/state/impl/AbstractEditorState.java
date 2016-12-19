@@ -177,4 +177,16 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public float getCameraVRotation() {
         return cameraVRotation;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractEditorState{" +
+                "cameraLocation=" + cameraLocation +
+                ", cameraVRotation=" + cameraVRotation +
+                ", cameraHRotation=" + cameraHRotation +
+                ", cameraTDistance=" + cameraTDistance +
+                ", toolWidth=" + toolWidth +
+                ", toolCollapsed=" + toolCollapsed +
+                '}';
+    }
 }

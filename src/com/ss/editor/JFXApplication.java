@@ -22,9 +22,7 @@ import javax.imageio.ImageIO;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -48,12 +46,13 @@ public class JFXApplication extends Application {
     public static void main(final String[] args) throws IOException {
 
         // fix of the fonts render
-        System.setProperty("prism.lcdtext", "false");
-        System.setProperty("prism.text", "t2k");
+        //System.setProperty("prism.lcdtext", "false");
+        //System.setProperty("prism.text", "t2k");
 
         // some settings for the render of JavaFX
-        System.setProperty("prism.cacheshapes", "true");
-        System.setProperty("prism.scrollcacheopt", "true");
+        //System.setProperty("prism.cacheshapes", "true");
+        //System.setProperty("prism.scrollcacheopt", "true");
+        //System.setProperty("prism.allowhidpi", "true");
 
         //Logging.getCSSLogger().setLevel(PlatformLogger.Level.ALL);
 
@@ -123,14 +122,9 @@ public class JFXApplication extends Application {
 
         final EditorConfig config = EditorConfig.getInstance();
 
-        final Screen primary = Screen.getPrimary();
-        final Rectangle2D bounds = primary.getBounds();
-
         stage.initStyle(CommandLineConfig.decorated ? StageStyle.DECORATED : StageStyle.UNDECORATED);
         stage.setMinHeight(600);
-        stage.setMaxHeight(bounds.getHeight());
         stage.setMinWidth(800);
-        stage.setMaxWidth(bounds.getWidth());
         stage.setWidth(config.getScreenWidth());
         stage.setHeight(config.getScreenHeight());
         stage.setMaximized(config.isMaximized());

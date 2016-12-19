@@ -307,14 +307,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
-                "Current workspace can't be null.");
-
-        this.editorState = currentWorkspace.getEditorState(file, ModelFileEditorState::new);
-
-        EXECUTOR_MANAGER.addFXTask(this::loadState);
-
         final Path assetFile = EditorUtil.getAssetFile(file);
 
         Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
@@ -348,6 +340,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+        EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
     /**
@@ -355,8 +348,11 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     protected void loadState() {
 
-        final ModelFileEditorState editorState = Objects.requireNonNull(getEditorState(), "State can't be null.");
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
+                "Current workspace can't be null.");
 
+        editorState = currentWorkspace.getEditorState(getEditFile(), ModelFileEditorState::new);
         mainSplitContainer.updateFor(editorState);
         fastSkyComboBox.getSelectionModel().select(editorState.getSkyType());
         lightButton.setSelected(editorState.isEnableLight());
@@ -390,7 +386,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation, final float vRotation, final float targetDistance) {
+    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                    final float vRotation, final float targetDistance) {
 
         final ModelFileEditorState editorState = getEditorState();
         if (editorState == null) return;
