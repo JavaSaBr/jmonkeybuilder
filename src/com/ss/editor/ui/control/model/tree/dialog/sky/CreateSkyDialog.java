@@ -56,6 +56,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
 
     private static final Insets SKY_TYPE_OFFSET = new Insets(16, 0, 0, 0);
     private static final Insets FIELD_OFFSET = new Insets(8, 0, 0, 0);
+    private static final Insets CHECK_BOX_OFFSET = new Insets(FIELD_OFFSET.getTop(), 0, 0, 200);
     private static final Insets SETTINGS_OFFSET = new Insets(0, 0, 10, 0);
 
     private static final Point DIALOG_SIZE = new Point(580, 390);
@@ -350,10 +351,11 @@ public class CreateSkyDialog extends AbstractNodeDialog {
 
         FXUtils.addClassTo(singleTextureLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(envMapTypeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(flipYCheckBox, CSSClasses.SPECIAL_FONT_13);
 
         VBox.setMargin(singleTextureContainer, FIELD_OFFSET);
         VBox.setMargin(envMapTypeContainer, FIELD_OFFSET);
-        VBox.setMargin(flipYCheckBox, new Insets(FIELD_OFFSET.getTop(), 0, 0, 200));
+        VBox.setMargin(flipYCheckBox, CHECK_BOX_OFFSET);
     }
 
     private void createNormalScaleControls(final VBox root) {
