@@ -8,6 +8,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.BooleanPartic
 import com.ss.editor.ui.control.model.property.particle.influencer.EnumParticleInfluencerEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.color.ColorInfluencerControl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,6 +80,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
 
         final boolean randomStartColor = influencer.isRandomStartColor();
 
+        final ColorInfluencerControl colorControl = new ColorInfluencerControl(modelChangeConsumer, influencer, parent);
+        colorControl.reload();
+
         final BooleanParticleInfluencerPropertyControl<ColorInfluencer> randomStartColorControl = new BooleanParticleInfluencerPropertyControl<>(randomStartColor, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR, modelChangeConsumer, parent);
         randomStartColorControl.setSyncHandler(ColorInfluencer::isRandomStartColor);
         randomStartColorControl.setApplyHandler(ColorInfluencer::setRandomStartColor);
@@ -89,8 +93,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         fixedDurationControl.setApplyHandler(ColorInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
+        final Line splitLine = createSplitLine(container);
+
+        FXUtils.addToPane(colorControl, container);
+        FXUtils.addToPane(splitLine, container);
         FXUtils.addToPane(randomStartColorControl, container);
         FXUtils.addToPane(fixedDurationControl, container);
+
+        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {

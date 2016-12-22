@@ -475,7 +475,7 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-alignment: center-right;
-    -fx-padding: 0 3 0 0;
+    -fx-padding: 0 3 0 2;
 }
 
 #ModelParamControlLabelValue {
@@ -531,6 +531,12 @@
     -fx-max-height: -fx-min-height;
 }
 
+#ModelParamControlColorPicker {
+    -fx-min-height: 22;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
 #ModelParamControlCheckbox {
     -fx-alignment: center;
     -fx-min-height: 20;
@@ -565,6 +571,17 @@
 }
 
 #ModelParamControlMaterialButton {
+}
+
+#ModelParamControlInfluencerControl {
+    -fx-alignment: top-center;
+}
+
+#ModelParamControlColorInfluencerElement {
+    -fx-padding: 2;
+}
+
+#ModelParamControlColorInfluencerControlIconButton {
 }
 
 #RenameDialogLabel {

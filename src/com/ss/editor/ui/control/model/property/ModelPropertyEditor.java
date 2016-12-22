@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -81,8 +82,8 @@ public class ModelPropertyEditor extends ScrollPane {
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> {
-            if (node instanceof ModelPropertyControl<?, ?>) {
-                ((ModelPropertyControl) node).sync();
+            if (node instanceof UpdatableControl) {
+                ((UpdatableControl) node).sync();
             }
         });
     }

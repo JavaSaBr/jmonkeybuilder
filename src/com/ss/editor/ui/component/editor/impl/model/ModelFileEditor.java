@@ -426,19 +426,19 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     }
 
     @Override
-    protected void processKeyReleased(@NotNull KeyEvent event) {
+    protected void processKeyReleased(@NotNull final KeyEvent event) {
         super.processKeyReleased(event);
 
         if (!event.isControlDown()) return;
 
         final KeyCode code = event.getCode();
 
-        if (code == KeyCode.S && isDirty()) {
-            doSave();
-        } else if (code == KeyCode.Z) {
+        if (code == KeyCode.Z) {
             undo();
+            event.consume();
         } else if (code == KeyCode.Y) {
             redo();
+            event.consume();
         }
     }
 

@@ -290,12 +290,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         final KeyCode code = event.getCode();
 
-        if (code == KeyCode.S && isDirty()) {
-            doSave();
-        } else if (code == KeyCode.Z) {
+        if (code == KeyCode.Z) {
             undo();
+            event.consume();
         } else if (code == KeyCode.Y) {
             redo();
+            event.consume();
         }
     }
 
