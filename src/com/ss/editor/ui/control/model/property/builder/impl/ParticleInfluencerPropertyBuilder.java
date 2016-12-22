@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticle
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AlphaInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.ColorInfluencerControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.SizeInfluencerControl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -120,6 +121,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         final float randomSizeTolerance = influencer.getRandomSizeTolerance();
         final float fixedDuration = influencer.getFixedDuration();
 
+        final SizeInfluencerControl sizeControl = new SizeInfluencerControl(modelChangeConsumer, influencer, parent);
+        sizeControl.reload();
+
         final BooleanParticleInfluencerPropertyControl<SizeInfluencer> randomStartSizeControl = new BooleanParticleInfluencerPropertyControl<>(randomSize, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE, modelChangeConsumer, parent);
         randomStartSizeControl.setSyncHandler(SizeInfluencer::isRandomSize);
         randomStartSizeControl.setApplyHandler(SizeInfluencer::setRandomSize);
@@ -135,9 +139,15 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         fixedDurationControl.setApplyHandler(SizeInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
+        final Line splitLine = createSplitLine(container);
+
+        FXUtils.addToPane(sizeControl, container);
+        FXUtils.addToPane(splitLine, container);
         FXUtils.addToPane(randomStartSizeControl, container);
         FXUtils.addToPane(sizeVariationTolereControl, container);
         FXUtils.addToPane(fixedDurationControl, container);
+
+        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {

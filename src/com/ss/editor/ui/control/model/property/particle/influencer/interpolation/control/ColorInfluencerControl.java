@@ -73,16 +73,29 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
 
     @Override
     protected void processAdd() {
+        execute(true, false, (colorInfluencer, needAdd) -> {
+            if (needAdd) {
+                colorInfluencer.addColor(new ColorRGBA(ColorRGBA.White), Interpolation.LINEAR);
+            } else {
+                colorInfluencer.removeLast();
+            }
+        });
+    }
+
+    @Override
+    protected void processRemove() {
 
         final ColorInfluencer influencer = getInfluencer();
         final Array<ColorRGBA> colors = influencer.getColors();
-        final int index = colors.size();
 
-        execute(-1, index, (colorInfluencer, newIndex) -> {
-            if (newIndex != -1) {
-                colorInfluencer.removeColor(newIndex);
+        final ColorRGBA color = influencer.getColor(colors.size() - 1);
+        final Interpolation interpolation = influencer.getInterpolation(colors.size() - 1);
+
+        execute(true, false, (colorInfluencer, needRemove) -> {
+            if (needRemove) {
+                colorInfluencer.removeLast();
             } else {
-                colorInfluencer.addColor(new ColorRGBA(ColorRGBA.White), Interpolation.LINEAR);
+                colorInfluencer.addColor(color, interpolation);
             }
         });
     }

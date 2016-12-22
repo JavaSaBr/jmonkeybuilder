@@ -42,7 +42,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
         final TextField textField = new TextField();
         textField.setOnScroll(this::processScroll);
         textField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
-        textField.prefWidthProperty().bind(widthProperty().multiply(0.3));
+        textField.prefWidthProperty().bind(widthProperty().multiply(0.35));
         textField.setOnKeyReleased(this::processChange);
 
         return textField;
@@ -71,7 +71,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
         source.setText(result);
         source.positionCaret(result.length());
 
-        processChange(null);
+        processChange((KeyEvent) null);
     }
 
     private void processChange(@Nullable final KeyEvent event) {

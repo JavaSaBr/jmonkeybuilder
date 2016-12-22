@@ -12,7 +12,7 @@ import tonegod.emitter.influencers.AlphaInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
 /**
- * The control for editing colors in the {@link AlphaInfluencer}.
+ * The control for editing alphas in the {@link AlphaInfluencer}.
  *
  * @author JavaSaBr
  */
@@ -72,16 +72,29 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
 
     @Override
     protected void processAdd() {
+        execute(true, false, (alphaInfluencer, needAdd) -> {
+            if (needAdd) {
+                alphaInfluencer.addAlpha(1F, Interpolation.LINEAR);
+            } else {
+                alphaInfluencer.removeLast();
+            }
+        });
+    }
+
+    @Override
+    protected void processRemove() {
 
         final AlphaInfluencer influencer = getInfluencer();
         final Array<Float> alphas = influencer.getAlphas();
-        final int index = alphas.size();
 
-        execute(-1, index, (colorInfluencer, newIndex) -> {
-            if (newIndex != -1) {
-                colorInfluencer.removeAlpha(newIndex);
+        final Float alpha = influencer.getAlpha(alphas.size() - 1);
+        final Interpolation interpolation = influencer.getInterpolation(alphas.size() - 1);
+
+        execute(true, false, (alphaInfluencer, needRemove) -> {
+            if (needRemove) {
+                alphaInfluencer.removeLast();
             } else {
-                colorInfluencer.addAlpha(1F, Interpolation.LINEAR);
+                alphaInfluencer.addAlpha(alpha, interpolation);
             }
         });
     }

@@ -14,11 +14,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import tonegod.emitter.influencers.ParticleInfluencer;
@@ -71,9 +74,20 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
         addButton.setGraphic(new ImageView(Icons.ADD_24));
         addButton.setOnAction(event -> processAdd());
 
+        final Button removeButton = new Button();
+        removeButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setOnAction(event -> processRemove());
+
+        final HBox buttonContainer = new HBox(addButton, removeButton);
+        buttonContainer.setAlignment(Pos.CENTER);
+
+        final ObservableList<Node> children = elementContainer.getChildren();
+        children.addListener((ListChangeListener<Node>) c -> removeButton.setDisable(children.size() < 3));
+
         FXUtils.addToPane(propertyNameLabel, this);
         FXUtils.addToPane(elementContainer, this);
-        FXUtils.addToPane(addButton, this);
+        FXUtils.addToPane(buttonContainer, this);
 
         FXUtils.addClassTo(propertyNameLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(addButton, CSSClasses.SPECIAL_FONT_13);
@@ -134,6 +148,12 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
      * Fill this control.
      */
     protected void fillControl(@NotNull final I influencer, @NotNull final VBox root) {
+    }
+
+    /**
+     * Handle removing last interpolation.
+     */
+    protected void processRemove() {
     }
 
     /**

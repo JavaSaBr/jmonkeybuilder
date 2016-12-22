@@ -38,7 +38,7 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
 
         final ColorPicker colorPicker = new ColorPicker();
         colorPicker.setId(CSSIds.MODEL_PARAM_CONTROL_COLOR_PICKER);
-        colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.3));
+        colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.35));
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
         return colorPicker;

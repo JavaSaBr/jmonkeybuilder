@@ -27,7 +27,7 @@ import tonegod.emitter.interpolation.InterpolationManager;
  */
 public abstract class InterpolationElement<P extends ParticleInfluencer, E extends Node, C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
 
-    private static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<Interpolation>() {
+    protected static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<Interpolation>() {
 
         @Override
         public String toString(final Interpolation object) {
@@ -40,7 +40,7 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
         }
     };
 
-    private static final ObservableList<Interpolation> INTERPOLATIONS;
+    protected static final ObservableList<Interpolation> INTERPOLATIONS;
 
     static {
 
@@ -56,12 +56,12 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
     /**
      * The editable control.
      */
-    private E editableControl;
+    protected E editableControl;
 
     /**
      * The interpolation chooser.
      */
-    private ComboBox<Interpolation> interpolationComboBox;
+    protected ComboBox<Interpolation> interpolationComboBox;
 
     /**
      * The index.
@@ -72,6 +72,7 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
      * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
+    private boolean tr;
 
     public InterpolationElement(@NotNull final C control, final int index) {
         setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT);
@@ -86,30 +87,42 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
     /**
      * Create components.
      */
-    private void createComponents() {
+    protected void createComponents() {
 
-        final Label editableLabel = new Label(getEditableTitle());
-        editableLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        Label editableLabel = null;
+
+        if (isNeedEditableLabel()) {
+            editableLabel = new Label(getEditableTitle());
+            editableLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+            editableLabel.prefWidthProperty().bind(widthProperty().multiply(0.2));
+        }
 
         editableControl = createEditableControl();
 
         final Label interpolationLabel = new Label("Interpolation:");
         interpolationLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 
         interpolationComboBox = new ComboBox<>();
         interpolationComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
         interpolationComboBox.setEditable(false);
-        interpolationComboBox.prefWidthProperty().bind(widthProperty().multiply(0.3));
+        interpolationComboBox.prefWidthProperty().bind(widthProperty().multiply(0.35));
         interpolationComboBox.setConverter(STRING_CONVERTER);
         interpolationComboBox.getItems().setAll(INTERPOLATIONS);
         interpolationComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
-        FXUtils.addToPane(editableLabel, this);
+        if (editableLabel != null) {
+            FXUtils.addToPane(editableLabel, this);
+        }
+
         FXUtils.addToPane(editableControl, this);
         FXUtils.addToPane(interpolationLabel, this);
         FXUtils.addToPane(interpolationComboBox, this);
 
-        FXUtils.addClassTo(editableLabel, CSSClasses.SPECIAL_FONT_13);
+        if (editableLabel != null) {
+            FXUtils.addClassTo(editableLabel, CSSClasses.SPECIAL_FONT_13);
+        }
+
         FXUtils.addClassTo(editableControl, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(interpolationLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(interpolationComboBox, CSSClasses.SPECIAL_FONT_13);
@@ -125,7 +138,7 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
      */
     protected abstract E createEditableControl();
 
-    private void processChange(@NotNull final Interpolation newValue) {
+    protected void processChange(@NotNull final Interpolation newValue) {
         if (isIgnoreListeners()) return;
         final C control = getControl();
         control.requestToChange(newValue, index);
@@ -177,5 +190,9 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
      * Reload this element.
      */
     public void reload() {
+    }
+
+    public boolean isNeedEditableLabel() {
+        return true;
     }
 }
