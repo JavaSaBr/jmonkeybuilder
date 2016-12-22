@@ -1,9 +1,10 @@
-package com.ss.editor.ui.control.model.property.particle.influencer;
+package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
@@ -13,12 +14,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import tonegod.emitter.influencers.ParticleInfluencer;
+import tonegod.emitter.interpolation.Interpolation;
 
 /**
  * The control for editing interpolations in the {@link ParticleInfluencer}.
@@ -63,7 +67,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
         elementContainer = new VBox();
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_CONTROL_ICON_BUTTON);
+        addButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_24));
         addButton.setOnAction(event -> processAdd());
 
@@ -111,10 +115,19 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
 
         final I influencer = getInfluencer();
         final VBox root = getElementContainer();
+        final ObservableList<Node> children = root.getChildren();
 
-        UIUtils.clear(root);
+        if (isNeedRebuild(influencer, children.size())) {
+            UIUtils.clear(root);
+            fillControl(influencer, root);
+        } else {
+            children.stream().map(node -> (InterpolationElement) node)
+                    .forEach(InterpolationElement::reload);
+        }
+    }
 
-        fillControl(influencer, root);
+    protected boolean isNeedRebuild(@NotNull final I influencer, final int currentCount) {
+        return true;
     }
 
     /**
@@ -128,6 +141,14 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
      */
     protected void processAdd() {
     }
+
+    /**
+     * Request to change interpolation.
+     *
+     * @param newValue the new interpolation.
+     * @param index    the index.
+     */
+    public abstract void requestToChange(final Interpolation newValue, final int index);
 
     /**
      * Execute change operation.

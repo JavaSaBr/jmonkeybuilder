@@ -8,7 +8,8 @@ import com.ss.editor.ui.control.model.property.particle.influencer.BooleanPartic
 import com.ss.editor.ui.control.model.property.particle.influencer.EnumParticleInfluencerEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
-import com.ss.editor.ui.control.model.property.particle.influencer.color.ColorInfluencerControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AlphaInfluencerControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.ColorInfluencerControl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,12 +67,21 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
 
+        final AlphaInfluencerControl influencerControl = new AlphaInfluencerControl(modelChangeConsumer, influencer, parent);
+        influencerControl.reload();
+
         final FloatParticleInfluencerPropertyControl<AlphaInfluencer> fixedDurationControl = new FloatParticleInfluencerPropertyControl<>(0F, Messages.PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION, modelChangeConsumer, parent);
         fixedDurationControl.setSyncHandler(AlphaInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(AlphaInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
+        final Line splitLine = createSplitLine(container);
+
+        FXUtils.addToPane(influencerControl, container);
+        FXUtils.addToPane(splitLine, container);
         FXUtils.addToPane(fixedDurationControl, container);
+
+        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {

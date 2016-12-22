@@ -1,8 +1,8 @@
-package com.ss.editor.ui.control.model.property.particle.influencer.color;
+package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.particle.influencer.AbstractInterpolationInfluencerControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.ColorAndInterpolationElement;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,20 +49,26 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
         }
     }
 
-    public void requestToChange(final ColorRGBA newValue, final int index) {
+    public void requestToChange(@NotNull final ColorRGBA newValue, final int index) {
 
         final ColorInfluencer influencer = getInfluencer();
-        final ColorRGBA oldValue = influencer.getColors().get(index);
+        final ColorRGBA oldValue = influencer.getColor(index);
 
         execute(newValue, oldValue, (colorInfluencer, colorRGBA) -> colorInfluencer.updateColor(colorRGBA, index));
     }
 
-    public void requestToChange(final Interpolation newValue, final int index) {
+    @Override
+    public void requestToChange(@NotNull final Interpolation newValue, final int index) {
 
         final ColorInfluencer influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolations().get(index);
+        final Interpolation oldValue = influencer.getInterpolation(index);
 
         execute(newValue, oldValue, (colorInfluencer, interpolation) -> colorInfluencer.updateInterpolation(interpolation, index));
+    }
+
+    @Override
+    protected boolean isNeedRebuild(@NotNull final ColorInfluencer influencer, final int currentCount) {
+        return influencer.getColors().size() != currentCount;
     }
 
     @Override

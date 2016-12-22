@@ -1,35 +1,31 @@
-package com.ss.editor.ui.control.model.property.particle.influencer.color;
+package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element;
 
-import static java.lang.Math.min;
-
-import com.jme3.math.ColorRGBA;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.util.UIUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.ColorInfluencer;
+import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 import tonegod.emitter.interpolation.InterpolationManager;
 
 /**
- * The implementation of the element for {@link ColorInfluencerControl} for editing color and
- * interpolation.
+ * The implementation of the element for {@link AbstractInterpolationInfluencerControl} for editing
+ * something and interpolation.
  *
  * @author JavaSaBr
  */
-public class ColorAndInterpolationElement extends HBox {
+public abstract class InterpolationElement<P extends ParticleInfluencer, E extends Node, C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
 
     private static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<Interpolation>() {
 
@@ -55,12 +51,12 @@ public class ColorAndInterpolationElement extends HBox {
     }
 
     @NotNull
-    private final ColorInfluencerControl control;
+    private final C control;
 
     /**
-     * The color picker.
+     * The editable control.
      */
-    private ColorPicker colorPicker;
+    private E editableControl;
 
     /**
      * The interpolation chooser.
@@ -77,8 +73,8 @@ public class ColorAndInterpolationElement extends HBox {
      */
     private boolean ignoreListeners;
 
-    public ColorAndInterpolationElement(@NotNull final ColorInfluencerControl control, final int index) {
-        setId(CSSIds.MODEL_PARAM_CONTROL_COLOR_INFLUENCER_ELEMENT);
+    public InterpolationElement(@NotNull final C control, final int index) {
+        setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT);
         this.control = control;
         this.index = index;
         createComponents();
@@ -92,13 +88,10 @@ public class ColorAndInterpolationElement extends HBox {
      */
     private void createComponents() {
 
-        final Label colorLabel = new Label("Color:");
-        colorLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        final Label editableLabel = new Label(getEditableTitle());
+        editableLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
 
-        colorPicker = new ColorPicker();
-        colorPicker.setId(CSSIds.MODEL_PARAM_CONTROL_COLOR_PICKER);
-        colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.3));
-        colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        editableControl = createEditableControl();
 
         final Label interpolationLabel = new Label("Interpolation:");
         interpolationLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
@@ -111,46 +104,56 @@ public class ColorAndInterpolationElement extends HBox {
         interpolationComboBox.getItems().setAll(INTERPOLATIONS);
         interpolationComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
 
-        FXUtils.addToPane(colorLabel, this);
-        FXUtils.addToPane(colorPicker, this);
+        FXUtils.addToPane(editableLabel, this);
+        FXUtils.addToPane(editableControl, this);
         FXUtils.addToPane(interpolationLabel, this);
         FXUtils.addToPane(interpolationComboBox, this);
 
-        FXUtils.addClassTo(colorLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(editableLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(editableControl, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(interpolationLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(interpolationComboBox, CSSClasses.SPECIAL_FONT_13);
     }
 
+    @NotNull
+    protected String getEditableTitle() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Create editable control.
+     */
+    protected abstract E createEditableControl();
+
     private void processChange(@NotNull final Interpolation newValue) {
         if (isIgnoreListeners()) return;
-        final ColorInfluencerControl control = getControl();
+        final C control = getControl();
         control.requestToChange(newValue, index);
     }
 
-    private void processChange(@NotNull final Color newValue) {
-        if (isIgnoreListeners()) return;
-        final ColorRGBA newColor = UIUtils.convertColor(newValue);
-        final ColorInfluencerControl control = getControl();
-        control.requestToChange(newColor, index);
-    }
-
     @NotNull
-    private ColorInfluencerControl getControl() {
+    protected C getControl() {
         return control;
     }
 
     /**
      * @return true if listeners is ignored.
      */
-    private boolean isIgnoreListeners() {
+    protected boolean isIgnoreListeners() {
         return ignoreListeners;
+    }
+
+    /**
+     * @return the index.
+     */
+    protected int getIndex() {
+        return index;
     }
 
     /**
      * @param ignoreListeners the flag for ignoring listeners.
      */
-    private void setIgnoreListeners(final boolean ignoreListeners) {
+    protected void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
@@ -158,15 +161,15 @@ public class ColorAndInterpolationElement extends HBox {
      * @return the color picker.
      */
     @NotNull
-    private ColorPicker getColorPicker() {
-        return colorPicker;
+    protected E getEditableControl() {
+        return editableControl;
     }
 
     /**
      * @return the interpolation chooser.
      */
     @NotNull
-    private ComboBox<Interpolation> getInterpolationComboBox() {
+    protected ComboBox<Interpolation> getInterpolationComboBox() {
         return interpolationComboBox;
     }
 
@@ -174,22 +177,5 @@ public class ColorAndInterpolationElement extends HBox {
      * Reload this element.
      */
     public void reload() {
-
-        final ColorInfluencerControl control = getControl();
-        final ColorInfluencer influencer = control.getInfluencer();
-
-        final ColorRGBA newColor = influencer.getColors().get(index);
-        final Interpolation newInterpolation = influencer.getInterpolations().get(index);
-
-        final float red = min(newColor.getRed(), 1F);
-        final float green = min(newColor.getGreen(), 1F);
-        final float blue = min(newColor.getBlue(), 1F);
-        final float alpha = min(newColor.getAlpha(), 1F);
-
-        final ColorPicker colorPicker = getColorPicker();
-        colorPicker.setValue(new Color(red, green, blue, alpha));
-
-        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
-        interpolationComboBox.getSelectionModel().select(newInterpolation);
     }
 }

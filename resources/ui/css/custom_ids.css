@@ -577,11 +577,11 @@
     -fx-alignment: top-center;
 }
 
-#ModelParamControlColorInfluencerElement {
+#ModelParamControlInfluencerElement {
     -fx-padding: 2;
 }
 
-#ModelParamControlColorInfluencerControlIconButton {
+#ModelParamControlInfluencerIconButton {
 }
 
 #RenameDialogLabel {
