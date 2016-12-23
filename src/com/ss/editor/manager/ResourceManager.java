@@ -49,9 +49,9 @@ import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Менеджер по работе с ресурсами.
+ * The manager for working with resources.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ResourceManager extends EditorThread {
 
@@ -427,7 +427,7 @@ public class ResourceManager extends EditorThread {
     public void run() {
         super.run();
 
-        for (;;) {
+        for (; ; ) {
             ThreadUtils.sleep(200);
 
             final Array<WatchKey> watchKeys = getWatchKeys();
