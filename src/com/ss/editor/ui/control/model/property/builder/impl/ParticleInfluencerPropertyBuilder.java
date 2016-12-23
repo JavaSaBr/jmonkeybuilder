@@ -76,19 +76,16 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         fixedDurationControl.setApplyHandler(AlphaInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(influencerControl, container);
-        FXUtils.addToPane(splitLine, container);
-        FXUtils.addToPane(fixedDurationControl, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        addLine(container);
+
+        FXUtils.addToPane(fixedDurationControl, container);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
 
         final float fixedDuration = influencer.getFixedDuration();
-
         final boolean randomStartColor = influencer.isRandomStartColor();
 
         final ColorInfluencerControl colorControl = new ColorInfluencerControl(modelChangeConsumer, influencer, parent);
@@ -104,14 +101,12 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         fixedDurationControl.setApplyHandler(ColorInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(colorControl, container);
-        FXUtils.addToPane(splitLine, container);
+
+        addLine(container);
+
         FXUtils.addToPane(randomStartColorControl, container);
         FXUtils.addToPane(fixedDurationControl, container);
-
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
@@ -139,15 +134,13 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         fixedDurationControl.setApplyHandler(SizeInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(sizeControl, container);
-        FXUtils.addToPane(splitLine, container);
+
+        addLine(container);
+
         FXUtils.addToPane(randomStartSizeControl, container);
         FXUtils.addToPane(sizeVariationTolereControl, container);
         FXUtils.addToPane(fixedDurationControl, container);
-
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
@@ -218,12 +211,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         magnitudeControl.setApplyHandler(GravityInfluencer::setMagnitude);
         magnitudeControl.setEditObject(influencer);
 
-        FXUtils.addToPane(gravityControl, container);
-
-        addLine(container);
-
         FXUtils.addToPane(gravityAlignmentControl, container);
         FXUtils.addToPane(magnitudeControl, container);
+        FXUtils.addToPane(gravityControl, container);
     }
 
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
