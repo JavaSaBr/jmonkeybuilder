@@ -60,9 +60,9 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @Override
     protected void fillControl(@NotNull final SizeInfluencer influencer, @NotNull final VBox root) {
 
-        final Array<Vector3f> alphas = influencer.getSizes();
+        final Array<Vector3f> sizes = influencer.getSizes();
 
-        for (int i = 0, length = alphas.size(); i < length; i++) {
+        for (int i = 0, length = sizes.size(); i < length; i++) {
 
             final SizeAndInterpolationElement element = new SizeAndInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
@@ -73,11 +73,11 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
 
     @Override
     protected void processAdd() {
-        execute(true, false, (alphaInfluencer, needAdd) -> {
+        execute(true, false, (influencer, needAdd) -> {
             if (needAdd) {
-                alphaInfluencer.addSize(1F, Interpolation.LINEAR);
+                influencer.addSize(1F, Interpolation.LINEAR);
             } else {
-                alphaInfluencer.removeLast();
+                influencer.removeLast();
             }
         });
     }
@@ -91,11 +91,11 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
         final Vector3f size = influencer.getSize(sizes.size() - 1);
         final Interpolation interpolation = influencer.getInterpolation(sizes.size() - 1);
 
-        execute(true, false, (alphaInfluencer, needRemove) -> {
+        execute(true, false, (sizeInfluencer, needRemove) -> {
             if (needRemove) {
-                alphaInfluencer.removeLast();
+                sizeInfluencer.removeLast();
             } else {
-                alphaInfluencer.addSize(size, interpolation);
+                sizeInfluencer.addSize(size, interpolation);
             }
         });
     }

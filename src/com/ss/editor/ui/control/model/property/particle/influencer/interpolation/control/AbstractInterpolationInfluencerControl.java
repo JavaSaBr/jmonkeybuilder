@@ -83,7 +83,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
         buttonContainer.setAlignment(Pos.CENTER);
 
         final ObservableList<Node> children = elementContainer.getChildren();
-        children.addListener((ListChangeListener<Node>) c -> removeButton.setDisable(children.size() < 3));
+        children.addListener((ListChangeListener<Node>) c -> removeButton.setDisable(children.size() < (getMinElements() + 1)));
 
         FXUtils.addToPane(propertyNameLabel, this);
         FXUtils.addToPane(elementContainer, this);
@@ -91,6 +91,15 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
 
         FXUtils.addClassTo(propertyNameLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(addButton, CSSClasses.SPECIAL_FONT_13);
+    }
+
+    /**
+     * Get the count of minimum elements.
+     *
+     * @return the count of minimum elements.
+     */
+    protected int getMinElements() {
+        return 2;
     }
 
     @NotNull

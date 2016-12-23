@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticle
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AlphaInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.ColorInfluencerControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.RotationInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.SizeInfluencerControl;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +30,7 @@ import tonegod.emitter.influencers.RadialVelocityInfluencer;
 import tonegod.emitter.influencers.RadialVelocityInfluencer.RadialPullAlignment;
 import tonegod.emitter.influencers.RadialVelocityInfluencer.RadialPullCenter;
 import tonegod.emitter.influencers.RadialVelocityInfluencer.RadialUpAlignment;
+import tonegod.emitter.influencers.RotationInfluencer;
 import tonegod.emitter.influencers.SizeInfluencer;
 
 /**
@@ -63,6 +65,8 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
             createControls(container, modelChangeConsumer, (GravityInfluencer) object, parent);
         } else if (object instanceof RadialVelocityInfluencer) {
             createControls(container, modelChangeConsumer, (RadialVelocityInfluencer) object, parent);
+        } else if (object instanceof RotationInfluencer) {
+            createControls(container, modelChangeConsumer, (RotationInfluencer) object, parent);
         }
     }
 
@@ -263,6 +267,53 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(upAlignmentControl, container);
         FXUtils.addToPane(radialPullControl, container);
         FXUtils.addToPane(tangetForceControl, container);
+    }
+
+    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
+
+        final boolean randomDirection = influencer.isRandomDirection();
+        final boolean randomSpeed = influencer.isRandomSpeed();
+        final boolean randomStartRotationX = influencer.isRandomStartRotationX();
+        final boolean randomStartRotationY = influencer.isRandomStartRotationY();
+        final boolean randomStartRotationZ = influencer.isRandomStartRotationZ();
+
+        final RotationInfluencerControl influencerControl = new RotationInfluencerControl(modelChangeConsumer, influencer, parent);
+        influencerControl.reload();
+
+        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomDirectionControl = new BooleanParticleInfluencerPropertyControl<>(randomDirection, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_DIRECTION, modelChangeConsumer, parent);
+        randomDirectionControl.setSyncHandler(RotationInfluencer::isRandomDirection);
+        randomDirectionControl.setApplyHandler(RotationInfluencer::setRandomDirection);
+        randomDirectionControl.setEditObject(influencer);
+
+        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomSpeedControl = new BooleanParticleInfluencerPropertyControl<>(randomSpeed, "Random Speed", modelChangeConsumer, parent);
+        randomSpeedControl.setSyncHandler(RotationInfluencer::isRandomSpeed);
+        randomSpeedControl.setApplyHandler(RotationInfluencer::setRandomSpeed);
+        randomSpeedControl.setEditObject(influencer);
+
+        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationXControl = new BooleanParticleInfluencerPropertyControl<>(randomStartRotationX, "Start random rotation X", modelChangeConsumer, parent);
+        randomStartRotationXControl.setSyncHandler(RotationInfluencer::isRandomStartRotationX);
+        randomStartRotationXControl.setApplyHandler(RotationInfluencer::setRandomStartRotationX);
+        randomStartRotationXControl.setEditObject(influencer);
+
+        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationYControl = new BooleanParticleInfluencerPropertyControl<>(randomStartRotationY, "Start random rotation Y", modelChangeConsumer, parent);
+        randomStartRotationYControl.setSyncHandler(RotationInfluencer::isRandomStartRotationY);
+        randomStartRotationYControl.setApplyHandler(RotationInfluencer::setRandomStartRotationY);
+        randomStartRotationYControl.setEditObject(influencer);
+
+        final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationZControl = new BooleanParticleInfluencerPropertyControl<>(randomStartRotationZ, "Start random rotation Z", modelChangeConsumer, parent);
+        randomStartRotationZControl.setSyncHandler(RotationInfluencer::isRandomStartRotationZ);
+        randomStartRotationZControl.setApplyHandler(RotationInfluencer::setRandomStartRotationZ);
+        randomStartRotationZControl.setEditObject(influencer);
+
+        FXUtils.addToPane(influencerControl, container);
+
+        addLine(container);
+
+        FXUtils.addToPane(randomDirectionControl, container);
+        FXUtils.addToPane(randomSpeedControl, container);
+        FXUtils.addToPane(randomStartRotationXControl, container);
+        FXUtils.addToPane(randomStartRotationYControl, container);
+        FXUtils.addToPane(randomStartRotationZControl, container);
     }
 
     private void addLine(final @NotNull VBox container) {

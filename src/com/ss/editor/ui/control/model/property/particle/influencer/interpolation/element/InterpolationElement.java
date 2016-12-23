@@ -72,7 +72,6 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
      * The flag for ignoring listeners.
      */
     private boolean ignoreListeners;
-    private boolean tr;
 
     public InterpolationElement(@NotNull final C control, final int index) {
         setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT);
