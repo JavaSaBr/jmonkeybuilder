@@ -48,18 +48,14 @@ public class MaterialEmitterPropertyControl extends MaterialModelPropertyEditor<
      */
     private void addMaterial(@NotNull final ParticlesMaterial particlesMaterial) {
         changed(particlesMaterial, getPropertyValue());
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
-        }
     }
 
     @Override
     protected void processEdit() {
 
         final ParticlesMaterial element = getPropertyValue();
+        if (element == null) return;
+
         final Material material = element.getMaterial();
         if (material == null) return;
 
@@ -68,7 +64,7 @@ public class MaterialEmitterPropertyControl extends MaterialModelPropertyEditor<
 
         final Path assetFile = Paths.get(key.getName());
         final Path realFile = getRealFile(assetFile);
-        if (!Files.exists(realFile)) return;
+        if (realFile == null || !Files.exists(realFile)) return;
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
         event.setFile(realFile);
@@ -76,11 +72,12 @@ public class MaterialEmitterPropertyControl extends MaterialModelPropertyEditor<
         FX_EVENT_MANAGER.notify(event);
     }
 
-
     @Override
     protected void reload() {
 
         final ParticlesMaterial element = getPropertyValue();
+        if (element == null) return;
+
         final Material material = element.getMaterial();
         final AssetKey<?> key = material == null ? null : material.getKey();
 

@@ -46,7 +46,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
         final RotationInfluencer influencer = getInfluencer();
         final Interpolation oldValue = influencer.getInterpolation(index);
 
-        execute(newValue, oldValue, (colorInfluencer, interpolation) -> colorInfluencer.updateInterpolation(interpolation, index));
+        execute(newValue, oldValue, (rotationInfluencer, interpolation) -> rotationInfluencer.updateInterpolation(interpolation, index));
     }
 
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
@@ -54,7 +54,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
         final RotationInfluencer influencer = getInfluencer();
         final Vector3f oldValue = influencer.getRotationSpeed(index);
 
-        execute(newValue, oldValue, (colorInfluencer, alpha) -> colorInfluencer.updateRotationSpeed(alpha, index));
+        execute(newValue, oldValue, (rotationInfluencer, alpha) -> rotationInfluencer.updateRotationSpeed(alpha, index));
     }
 
     @Override

@@ -36,9 +36,9 @@ import tonegod.emitter.node.ParticleNode;
  *
  * @author JavaSaBr
  */
-public class ParticlesEmissionPropertyBuilder extends AbstractPropertyBuilder {
+public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
 
-    private static final PropertyBuilder INSTANCE = new ParticlesEmissionPropertyBuilder();
+    private static final PropertyBuilder INSTANCE = new ParticlesPropertyBuilder();
 
     public static PropertyBuilder getInstance() {
         return INSTANCE;

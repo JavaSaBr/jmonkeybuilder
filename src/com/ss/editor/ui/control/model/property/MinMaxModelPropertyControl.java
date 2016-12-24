@@ -18,6 +18,11 @@ public class MinMaxModelPropertyControl<T extends Spatial> extends Vector2fModel
         super(element, paramName, modelChangeConsumer);
     }
 
+    @Override
+    protected float checkResultValue(final float original) {
+        return Math.max(original, 0);
+    }
+
     @NotNull
     @Override
     protected String getXLabelText() {

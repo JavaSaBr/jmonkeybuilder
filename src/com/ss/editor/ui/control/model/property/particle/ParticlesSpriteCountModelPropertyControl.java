@@ -22,6 +22,12 @@ public class ParticlesSpriteCountModelPropertyControl extends Vector2fModelPrope
         setScrollIncrement(30F);
     }
 
+    @Override
+    protected float checkResultValue(final float original) {
+        final int integer = (int) original;
+        return Math.max(integer, 1);
+    }
+
     @NotNull
     @Override
     protected String getXLabelText() {

@@ -40,7 +40,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
         final AlphaInfluencer influencer = getInfluencer();
         final Interpolation oldValue = influencer.getInterpolation(index);
 
-        execute(newValue, oldValue, (colorInfluencer, interpolation) -> colorInfluencer.updateInterpolation(interpolation, index));
+        execute(newValue, oldValue, (alphaInfluencer, interpolation) -> alphaInfluencer.updateInterpolation(interpolation, index));
     }
 
     public void requestToChange(@NotNull final Float newValue, final int index) {
@@ -48,7 +48,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
         final AlphaInfluencer influencer = getInfluencer();
         final Float oldValue = influencer.getAlpha(index);
 
-        execute(newValue, oldValue, (colorInfluencer, alpha) -> colorInfluencer.updateAlpha(alpha, index));
+        execute(newValue, oldValue, (alphaInfluencer, alpha) -> alphaInfluencer.updateAlpha(alpha, index));
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticle
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AlphaInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.ColorInfluencerControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.DestinationInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.RotationInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.SizeInfluencerControl;
 
@@ -153,6 +154,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
 
         final boolean randomStartDestination = influencer.isRandomStartDestination();
 
+        final DestinationInfluencerControl influencerControl = new DestinationInfluencerControl(modelChangeConsumer, influencer, parent);
+        influencerControl.reload();
+
         final BooleanParticleInfluencerPropertyControl<DestinationInfluencer> randomStartDestinationControl = new BooleanParticleInfluencerPropertyControl<>(randomStartDestination, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION, modelChangeConsumer, parent);
         randomStartDestinationControl.setSyncHandler(DestinationInfluencer::isRandomStartDestination);
         randomStartDestinationControl.setApplyHandler(DestinationInfluencer::setRandomStartDestination);
@@ -162,6 +166,10 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         fixedDurationControl.setSyncHandler(DestinationInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(DestinationInfluencer::setFixedDuration);
         fixedDurationControl.setEditObject(influencer);
+
+        FXUtils.addToPane(influencerControl, container);
+
+        addLine(container);
 
         FXUtils.addToPane(randomStartDestinationControl, container);
         FXUtils.addToPane(fixedDurationControl, container);

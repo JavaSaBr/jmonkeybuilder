@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Insets;
@@ -297,14 +298,10 @@ public class AssetEditorDialog<C> extends EditorDialog {
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
-        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
-        final ReadOnlyObjectProperty<TreeItem<ResourceElement>> selectedItemProperty = selectionModel.selectedItemProperty();
-
         final Button okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processSelect());
-        okButton.disableProperty().bind(warningLabel.visibleProperty()
-                .or(selectedItemProperty.isNull()));
+        okButton.disableProperty().bind(buildDisableCondition());
 
         final Button cancelButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
@@ -321,6 +318,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
+    }
+
+    protected BooleanBinding buildDisableCondition() {
+
+        final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
+        final ReadOnlyObjectProperty<TreeItem<ResourceElement>> selectedItemProperty = selectionModel.selectedItemProperty();
+
+        return warningLabel.visibleProperty().or(selectedItemProperty.isNull());
     }
 
     /**

@@ -41,7 +41,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
         final SizeInfluencer influencer = getInfluencer();
         final Interpolation oldValue = influencer.getInterpolation(index);
 
-        execute(newValue, oldValue, (colorInfluencer, interpolation) -> colorInfluencer.updateInterpolation(interpolation, index));
+        execute(newValue, oldValue, (sizeInfluencer, interpolation) -> sizeInfluencer.updateInterpolation(interpolation, index));
     }
 
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
@@ -49,7 +49,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
         final SizeInfluencer influencer = getInfluencer();
         final Vector3f oldValue = influencer.getSize(index);
 
-        execute(newValue, oldValue, (colorInfluencer, alpha) -> colorInfluencer.updateSize(alpha, index));
+        execute(newValue, oldValue, (sizeInfluencer, alpha) -> sizeInfluencer.updateSize(alpha, index));
     }
 
     @Override
