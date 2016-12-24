@@ -20,6 +20,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -28,6 +30,8 @@ import rlib.ui.util.FXUtils;
  * @author JavaSaBr
  */
 public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(ModelPropertyControl.class);
 
     protected static final double CONTROL_WIDTH_PERCENT = 0.4;
 
