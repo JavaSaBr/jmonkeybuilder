@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
 import com.jme3.math.ColorRGBA;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.ColorAndInterpolationElement;
 
@@ -26,13 +27,7 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @NotNull
     @Override
     protected String getControlTitle() {
-        return "Colors";
-    }
-
-    @NotNull
-    @Override
-    protected String getPropertyName() {
-        return "Colors";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION;
     }
 
     @Override

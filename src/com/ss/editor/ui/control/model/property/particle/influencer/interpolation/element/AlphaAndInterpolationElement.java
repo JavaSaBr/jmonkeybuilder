@@ -4,6 +4,7 @@ import static java.lang.Float.parseFloat;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AlphaInfluencerControl;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -31,7 +32,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return "Alpha:";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_ALPHA;
     }
 
     @Override

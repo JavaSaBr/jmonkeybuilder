@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.DestinationWeightAndInterpolationElement;
 
@@ -26,13 +27,7 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
     @NotNull
     @Override
     protected String getControlTitle() {
-        return "Destinations";
-    }
-
-    @NotNull
-    @Override
-    protected String getPropertyName() {
-        return "Destinations";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element;
 
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.RotationInfluencerControl;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public class RotationAndInterpolationElement extends Vector3fAndInterpolationEle
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return "Speeds:";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_SPEED;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.property.particle.influencer.interpolatio
 import static java.lang.Math.min;
 
 import com.jme3.math.ColorRGBA;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.ColorInfluencerControl;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
@@ -28,7 +29,7 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return "Color:";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_COLOR;
     }
 
     @Override

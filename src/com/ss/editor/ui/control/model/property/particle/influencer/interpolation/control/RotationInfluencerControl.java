@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.RotationAndInterpolationElement;
 
@@ -26,13 +27,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @NotNull
     @Override
     protected String getControlTitle() {
-        return "Speeds";
-    }
-
-    @NotNull
-    @Override
-    protected String getPropertyName() {
-        return "Speeds";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION;
     }
 
     @Override

@@ -207,7 +207,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
 
     @NotNull
     protected String getPropertyName() {
-        throw new UnsupportedOperationException();
+        return getControlTitle();
     }
 
     @Override

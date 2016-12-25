@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.SizeAndInterpolationElement;
 
@@ -26,13 +27,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @NotNull
     @Override
     protected String getControlTitle() {
-        return "Sizes";
-    }
-
-    @NotNull
-    @Override
-    protected String getPropertyName() {
-        return "Sizes";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION;
     }
 
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {

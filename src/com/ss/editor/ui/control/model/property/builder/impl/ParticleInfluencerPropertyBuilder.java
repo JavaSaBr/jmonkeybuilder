@@ -181,21 +181,21 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         final boolean randomStartImage = influencer.isRandomStartImage();
 
         final IntArrayParticleInfluencerPropertyControl<SpriteInfluencer> frameSequenceControl =
-                new IntArrayParticleInfluencerPropertyControl<>(frameSequence, "Frame sequence", modelChangeConsumer, parent);
+                new IntArrayParticleInfluencerPropertyControl<>(frameSequence, Messages.PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE, modelChangeConsumer, parent);
 
         frameSequenceControl.setSyncHandler(SpriteInfluencer::getFrameSequence);
         frameSequenceControl.setApplyHandler(SpriteInfluencer::setFrameSequence);
         frameSequenceControl.setEditObject(influencer);
 
         final BooleanParticleInfluencerPropertyControl<SpriteInfluencer> randomStartImageControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartImage, "Random start image", modelChangeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(randomStartImage, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE, modelChangeConsumer, parent);
 
         randomStartImageControl.setSyncHandler(SpriteInfluencer::isRandomStartImage);
         randomStartImageControl.setApplyHandler(SpriteInfluencer::setRandomStartImage);
         randomStartImageControl.setEditObject(influencer);
 
         final BooleanParticleInfluencerPropertyControl<SpriteInfluencer> animateControl =
-                new BooleanParticleInfluencerPropertyControl<>(animate, "Animate", modelChangeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(animate, Messages.PARTICLE_EMITTER_INFLUENCER_ANIMATE, modelChangeConsumer, parent);
 
         animateControl.setSyncHandler(SpriteInfluencer::isAnimate);
         animateControl.setApplyHandler(SpriteInfluencer::setAnimate);
@@ -310,14 +310,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         final float restitution = influencer.getRestitution();
 
         final EnumParticleInfluencerEmitterPropertyControl<PhysicsInfluencer, CollisionReaction> reactionControl =
-                new EnumParticleInfluencerEmitterPropertyControl<>(collisionReaction, "Reaction", modelChangeConsumer, COLLISION_REACTIONS, parent);
+                new EnumParticleInfluencerEmitterPropertyControl<>(collisionReaction, Messages.PARTICLE_EMITTER_INFLUENCER_REACTION, modelChangeConsumer, COLLISION_REACTIONS, parent);
 
         reactionControl.setSyncHandler(PhysicsInfluencer::getCollisionReaction);
         reactionControl.setApplyHandler(PhysicsInfluencer::setCollisionReaction);
         reactionControl.setEditObject(influencer);
 
         final FloatParticleInfluencerPropertyControl<PhysicsInfluencer> restitutionControl =
-                new FloatParticleInfluencerPropertyControl<>(restitution, "Restitution", modelChangeConsumer, parent);
+                new FloatParticleInfluencerPropertyControl<>(restitution, Messages.PARTICLE_EMITTER_INFLUENCER_RESTITUTION, modelChangeConsumer, parent);
 
         restitutionControl.setSyncHandler(PhysicsInfluencer::getRestitution);
         restitutionControl.setApplyHandler(PhysicsInfluencer::setRestitution);
@@ -409,28 +409,28 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         randomDirectionControl.setEditObject(influencer);
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomSpeedControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomSpeed, "Random Speed", modelChangeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(randomSpeed, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED, modelChangeConsumer, parent);
 
         randomSpeedControl.setSyncHandler(RotationInfluencer::isRandomSpeed);
         randomSpeedControl.setApplyHandler(RotationInfluencer::setRandomSpeed);
         randomSpeedControl.setEditObject(influencer);
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationXControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationX, "Start random rotation X", modelChangeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationX, Messages.PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X + " X", modelChangeConsumer, parent);
 
         randomStartRotationXControl.setSyncHandler(RotationInfluencer::isRandomStartRotationX);
         randomStartRotationXControl.setApplyHandler(RotationInfluencer::setRandomStartRotationX);
         randomStartRotationXControl.setEditObject(influencer);
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationYControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationY, "Start random rotation Y", modelChangeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationY, Messages.PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X + " Y", modelChangeConsumer, parent);
 
         randomStartRotationYControl.setSyncHandler(RotationInfluencer::isRandomStartRotationY);
         randomStartRotationYControl.setApplyHandler(RotationInfluencer::setRandomStartRotationY);
         randomStartRotationYControl.setEditObject(influencer);
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationZControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationZ, "Start random rotation Z", modelChangeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(randomStartRotationZ, Messages.PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X + " Z", modelChangeConsumer, parent);
 
         randomStartRotationZControl.setSyncHandler(RotationInfluencer::isRandomStartRotationZ);
         randomStartRotationZControl.setApplyHandler(RotationInfluencer::setRandomStartRotationZ);

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -91,14 +92,14 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         Label editableLabel = null;
 
         if (isNeedEditableLabel()) {
-            editableLabel = new Label(getEditableTitle());
+            editableLabel = new Label(getEditableTitle() + ":");
             editableLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
             editableLabel.prefWidthProperty().bind(widthProperty().multiply(0.2));
         }
 
         editableControl = createEditableControl();
 
-        final Label interpolationLabel = new Label("Interpolation:");
+        final Label interpolationLabel = new Label(Messages.PARTICLE_EMITTER_INFLUENCER_INTERPOLATION + ":");
         interpolationLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 

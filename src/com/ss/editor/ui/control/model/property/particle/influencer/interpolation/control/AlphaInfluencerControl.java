@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control;
 
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.element.AlphaAndInterpolationElement;
 
@@ -26,13 +27,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     @NotNull
     @Override
     protected String getControlTitle() {
-        return "Alphas";
-    }
-
-    @NotNull
-    @Override
-    protected String getPropertyName() {
-        return "Alphas";
+        return Messages.PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION;
     }
 
     public void requestToChange(@NotNull final Float newValue, final int index) {
