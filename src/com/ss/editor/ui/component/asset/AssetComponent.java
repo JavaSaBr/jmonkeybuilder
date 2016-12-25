@@ -14,8 +14,6 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
-import com.ss.editor.ui.event.impl.MovedFileEvent;
-import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 import com.ss.editor.ui.util.UIUtils;
@@ -72,8 +70,6 @@ public class AssetComponent extends VBox implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, event -> processEvent((RequestSelectFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
-        FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
     }
 
     /**
@@ -100,40 +96,6 @@ public class AssetComponent extends VBox implements ScreenComponent {
         }
 
         resourceTree.expandTo(treeItem, true);
-    }
-
-    /**
-     * Handle a moved file.
-     */
-    private void processEvent(final MovedFileEvent event) {
-
-        final Path newFile = event.getNewFile();
-        final Path prevFile = event.getPrevFile();
-
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.notifyMoved(prevFile, newFile);
-
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace workspace = workspaceManager.getCurrentWorkspace();
-        if (workspace == null) return;
-        workspace.updateEditorState(prevFile, newFile);
-    }
-
-    /**
-     * Handle a renamed file.
-     */
-    private void processEvent(final RenamedFileEvent event) {
-
-        final Path newFile = event.getNewFile();
-        final Path prevFile = event.getPrevFile();
-
-        final ResourceTree resourceTree = getResourceTree();
-        resourceTree.notifyRenamed(prevFile, newFile);
-
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace workspace = workspaceManager.getCurrentWorkspace();
-        if (workspace == null) return;
-        workspace.updateEditorState(prevFile, newFile);
     }
 
     /**

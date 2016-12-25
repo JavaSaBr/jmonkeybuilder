@@ -177,15 +177,19 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             fileEditor.notifyRenamed(prevFile, newFile);
 
             final Path editFile = fileEditor.getEditFile();
-
-            if (!editFile.equals(newFile)) {
-                return;
-            }
+            if (!editFile.equals(newFile)) return;
 
             if (fileEditor.isDirty()) {
                 tab.setText("*" + fileEditor.getFileName());
             } else {
                 tab.setText(fileEditor.getFileName());
+            }
+
+            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+
+            if (workspace != null) {
+                workspace.removeOpenedFile(prevFile);
+                workspace.addOpenedFile(newFile, fileEditor);
             }
         });
     }
@@ -204,6 +208,16 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = tab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
             fileEditor.notifyMoved(prevFile, newFile);
+
+            final Path editFile = fileEditor.getEditFile();
+            if (!editFile.equals(newFile)) return;
+
+            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+
+            if (workspace != null) {
+                workspace.removeOpenedFile(prevFile);
+                workspace.addOpenedFile(newFile, fileEditor);
+            }
         });
     }
 

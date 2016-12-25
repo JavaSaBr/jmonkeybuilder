@@ -2,7 +2,7 @@
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
-## [Video about this editor.](https://www.youtube.com/watch?v=uOm08VobK-A&feature=youtu.be) ##
+## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.7.8 ##
 * -Implemented saving states of window, resource tree and split panels.

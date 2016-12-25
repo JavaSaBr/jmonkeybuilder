@@ -4,6 +4,8 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
+import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.RenamedFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
@@ -23,6 +25,7 @@ import rlib.util.StringUtils;
 public class RenameFileAction extends MenuItem {
 
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * The action element.
@@ -80,8 +83,15 @@ public class RenameFileAction extends MenuItem {
 
         try {
             Files.move(file, newFile);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             EditorUtil.handleException(null, this, e);
+            return;
         }
+
+        final RenamedFileEvent event = new RenamedFileEvent();
+        event.setNewFile(newFile);
+        event.setPrevFile(file);
+
+        FX_EVENT_MANAGER.notify(event);
     }
 }

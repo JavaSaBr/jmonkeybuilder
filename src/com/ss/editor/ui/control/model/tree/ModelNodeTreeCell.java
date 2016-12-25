@@ -18,6 +18,7 @@ import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTreeCell;
@@ -34,9 +35,9 @@ import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
 /**
- * Реализация ячейки узла модели в дереве.
+ * THe implementation of {@link TreeCell} for showing model nodes.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
@@ -62,12 +63,12 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     };
 
     /**
-     * Компонент дерева узлов модели.
+     * The tree.
      */
     private final ModelNodeTree nodeTree;
 
     /**
-     * Компонент для отображения иконки.
+     * The icon of node.
      */
     private final ImageView imageView;
 
@@ -91,10 +92,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
     @Override
     public void startEdit() {
-
-        if (!isEditable()) {
-            return;
-        }
+        if (!isEditable()) return;
 
         super.startEdit();
 
@@ -103,7 +101,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * @return компонент для отображения иконки.
+     * @return the icon of node.
      */
     private ImageView getImageView() {
         return imageView;
@@ -129,14 +127,14 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * @return компонент дерева узлов модели.
+     * @return the tree.
      */
     private ModelNodeTree getNodeTree() {
         return nodeTree;
     }
 
     /**
-     * Процесс обработки клика на элемент дерева.
+     * Handle a mouse click.
      */
     private void processClick(final MouseEvent event) {
 
@@ -154,7 +152,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * Обработка завершения перемещения.
+     * Handle stopping dragging.
      */
     private void stopDrag(final DragEvent event) {
         setId(CSSIds.MODEL_NODE_TREE_CELL);
@@ -163,7 +161,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * Обработка старта перемещения файла.
+     * Handle starting dragging.
      */
     private void startDrag(final MouseEvent mouseEvent) {
 
@@ -190,7 +188,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * Обработка принятия.
+     * Handle dropping a dragged element.
      */
     private void dragDropped(final DragEvent dragEvent) {
 
@@ -252,7 +250,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * Обработка вхождения в зону.
+     * Handle entering a dragged element.
      */
     private void dragOver(final DragEvent dragEvent) {
 
@@ -281,7 +279,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * Обработка выхода из зоны.
+     * Handle exiting a dragged element.
      */
     private void dragExited(final DragEvent dragEvent) {
         setId(CSSIds.MODEL_NODE_TREE_CELL);
