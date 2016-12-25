@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.ParticleInfluencer;
+import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 import tonegod.emitter.interpolation.InterpolationManager;
 
@@ -25,7 +25,7 @@ import tonegod.emitter.interpolation.InterpolationManager;
  *
  * @author JavaSaBr
  */
-public abstract class InterpolationElement<P extends ParticleInfluencer, E extends Node, C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
+public abstract class InterpolationElement<P extends InterpolatedParticleInfluencer, E extends Node, C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
 
     protected static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<Interpolation>() {
 
@@ -189,6 +189,13 @@ public abstract class InterpolationElement<P extends ParticleInfluencer, E exten
      * Reload this element.
      */
     public void reload() {
+
+        final C control = getControl();
+        final P influencer = control.getInfluencer();
+
+        final Interpolation newInterpolation = influencer.getInterpolation(getIndex());
+        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
+        interpolationComboBox.getSelectionModel().select(newInterpolation);
     }
 
     public boolean isNeedEditableLabel() {

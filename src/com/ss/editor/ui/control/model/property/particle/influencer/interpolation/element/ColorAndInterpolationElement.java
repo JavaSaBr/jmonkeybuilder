@@ -10,10 +10,8 @@ import com.ss.editor.ui.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
-import tonegod.emitter.influencers.ColorInfluencer;
-import tonegod.emitter.interpolation.Interpolation;
+import tonegod.emitter.influencers.impl.ColorInfluencer;
 
 /**
  * The implementation of the element for {@link ColorInfluencerControl} for editing color and
@@ -44,6 +42,9 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
         return colorPicker;
     }
 
+    /**
+     * Handle change color value.
+     */
     private void processChange(@NotNull final Color newValue) {
         if (isIgnoreListeners()) return;
         final ColorRGBA newColor = UIUtils.convertColor(newValue);
@@ -51,16 +52,13 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
         control.requestToChange(newColor, getIndex());
     }
 
-    /**
-     * Reload this element.
-     */
+    @Override
     public void reload() {
 
         final ColorInfluencerControl control = getControl();
         final ColorInfluencer influencer = control.getInfluencer();
 
         final ColorRGBA newColor = influencer.getColor(getIndex());
-        final Interpolation newInterpolation = influencer.getInterpolation(getIndex());
 
         final float red = min(newColor.getRed(), 1F);
         final float green = min(newColor.getGreen(), 1F);
@@ -70,7 +68,6 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
         final ColorPicker colorPicker = getEditableControl();
         colorPicker.setValue(new Color(red, green, blue, alpha));
 
-        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
-        interpolationComboBox.getSelectionModel().select(newInterpolation);
+        super.reload();
     }
 }

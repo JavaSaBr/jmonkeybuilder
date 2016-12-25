@@ -5,8 +5,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.interpolation
 
 import org.jetbrains.annotations.NotNull;
 
-import tonegod.emitter.influencers.RotationInfluencer;
-import tonegod.emitter.interpolation.Interpolation;
+import tonegod.emitter.influencers.impl.RotationInfluencer;
 
 /**
  * The implementation of the element for {@link RotationInfluencer} for editing speeds and
@@ -35,11 +34,6 @@ public class RotationAndInterpolationElement extends Vector3fAndInterpolationEle
     @Override
     protected Vector3f getValue(final RotationInfluencer influencer) {
         return influencer.getRotationSpeed(getIndex());
-    }
-
-    @Override
-    protected Interpolation getInterpolation(final RotationInfluencer influencer) {
-        return influencer.getInterpolation(getIndex());
     }
 
     @Override

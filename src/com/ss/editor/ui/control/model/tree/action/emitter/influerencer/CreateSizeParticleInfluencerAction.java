@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.SizeInfluencer;
+import tonegod.emitter.influencers.impl.SizeInfluencer;
 
 /**
  * The action for creating the {@link SizeInfluencer} for the {@link ParticleEmitterNode}.

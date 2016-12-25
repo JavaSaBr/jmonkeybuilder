@@ -24,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
@@ -32,7 +33,7 @@ import tonegod.emitter.interpolation.Interpolation;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractInterpolationInfluencerControl<I extends ParticleInfluencer> extends VBox implements UpdatableControl {
+public abstract class AbstractInterpolationInfluencerControl<I extends InterpolatedParticleInfluencer> extends VBox implements UpdatableControl {
 
     /**
      * The consumer of changes.
@@ -54,7 +55,8 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
      */
     private VBox elementContainer;
 
-    public AbstractInterpolationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final I influencer, @NotNull final Object parent) {
+    public AbstractInterpolationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final I influencer,
+                                                  @NotNull final Object parent) {
         setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_CONTROL);
         this.modelChangeConsumer = modelChangeConsumer;
         this.parent = parent;
@@ -144,13 +146,14 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
             UIUtils.clear(root);
             fillControl(influencer, root);
         } else {
-            children.stream().map(node -> (InterpolationElement) node)
+            children.stream()
+                    .map(node -> (InterpolationElement) node)
                     .forEach(InterpolationElement::reload);
         }
     }
 
     protected boolean isNeedRebuild(@NotNull final I influencer, final int currentCount) {
-        return true;
+        return influencer.getStepCount() != currentCount;
     }
 
     /**
@@ -177,7 +180,13 @@ public abstract class AbstractInterpolationInfluencerControl<I extends ParticleI
      * @param newValue the new interpolation.
      * @param index    the index.
      */
-    public abstract void requestToChange(final Interpolation newValue, final int index);
+    public void requestToChange(final Interpolation newValue, final int index) {
+
+        final I influencer = getInfluencer();
+        final Interpolation oldValue = influencer.getInterpolation(index);
+
+        execute(newValue, oldValue, (alphaInfluencer, interpolation) -> alphaInfluencer.updateInterpolation(interpolation, index));
+    }
 
     /**
      * Execute change operation.

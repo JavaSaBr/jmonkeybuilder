@@ -7,8 +7,8 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
-import tonegod.emitter.influencers.AlphaInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
+import tonegod.emitter.influencers.impl.AlphaInfluencer;
 
 /**
  * The action for creating the {@link AlphaInfluencer} for the {@link ParticleEmitterNode}.

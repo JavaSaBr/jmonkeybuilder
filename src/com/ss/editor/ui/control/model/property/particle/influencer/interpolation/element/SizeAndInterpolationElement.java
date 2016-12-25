@@ -5,8 +5,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.interpolation
 
 import org.jetbrains.annotations.NotNull;
 
-import tonegod.emitter.influencers.SizeInfluencer;
-import tonegod.emitter.interpolation.Interpolation;
+import tonegod.emitter.influencers.impl.SizeInfluencer;
 
 /**
  * The implementation of the element for {@link SizeInfluencer} for editing size and interpolation.
@@ -34,10 +33,5 @@ public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement
     @Override
     protected Vector3f getValue(final SizeInfluencer influencer) {
         return influencer.getSize(getIndex());
-    }
-
-    @Override
-    protected Interpolation getInterpolation(final SizeInfluencer influencer) {
-        return influencer.getInterpolation(getIndex());
     }
 }

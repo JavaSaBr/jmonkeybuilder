@@ -10,13 +10,11 @@ import com.ss.editor.ui.css.CSSIds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
-import tonegod.emitter.influencers.AlphaInfluencer;
-import tonegod.emitter.interpolation.Interpolation;
+import tonegod.emitter.influencers.impl.AlphaInfluencer;
 
 /**
  * The implementation of the element for {@link AlphaInfluencer} for editing alpha and
@@ -74,6 +72,9 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
         processChange((KeyEvent) null);
     }
 
+    /**
+     * Handle changing alpha value.
+     */
     private void processChange(@Nullable final KeyEvent event) {
         if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
@@ -100,14 +101,12 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
         final AlphaInfluencer influencer = control.getInfluencer();
 
         final Float alpha = influencer.getAlpha(getIndex());
-        final Interpolation newInterpolation = influencer.getInterpolation(getIndex());
 
         final TextField editableControl = getEditableControl();
         final int caretPosition = editableControl.getCaretPosition();
         editableControl.setText(alpha.toString());
         editableControl.positionCaret(caretPosition);
 
-        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
-        interpolationComboBox.getSelectionModel().select(newInterpolation);
+        super.reload();
     }
 }

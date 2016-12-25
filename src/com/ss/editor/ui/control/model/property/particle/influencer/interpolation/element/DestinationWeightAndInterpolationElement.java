@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -19,8 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-import tonegod.emitter.influencers.DestinationInfluencer;
-import tonegod.emitter.interpolation.Interpolation;
+import tonegod.emitter.influencers.impl.DestinationInfluencer;
 
 /**
  * The implementation of the element for editing vector values and interpolation.
@@ -144,7 +142,9 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
         }
     }
 
-
+    /**
+     * Handle changing destination value.
+     */
     private void processDestinationChange(@Nullable final KeyEvent event) {
         if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
@@ -173,6 +173,9 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
         control.requestToChange(new Vector3f(x, y, z), getIndex());
     }
 
+    /**
+     * Handle changing weight value.
+     */
     private void processWeightChange(@Nullable final KeyEvent event) {
         if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
@@ -183,22 +186,17 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
             return;
         }
 
-
         final DestinationInfluencerControl control = getControl();
         control.requestToChange(weight, getIndex());
     }
 
-
-    /**
-     * Reload this element.
-     */
+    @Override
     public void reload() {
 
         final DestinationInfluencerControl control = getControl();
         final DestinationInfluencer influencer = control.getInfluencer();
 
         final Vector3f destination = influencer.getDestination(getIndex());
-        final Interpolation newInterpolation = influencer.getInterpolation(getIndex());
         final Float weight = influencer.getWeight(getIndex());
 
         xField.setText(String.valueOf(destination.getX()));
@@ -213,7 +211,6 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
         weightField.setText(String.valueOf(weight));
         weightField.positionCaret(weightField.getText().length());
 
-        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
-        interpolationComboBox.getSelectionModel().select(newInterpolation);
+        super.reload();
     }
 }

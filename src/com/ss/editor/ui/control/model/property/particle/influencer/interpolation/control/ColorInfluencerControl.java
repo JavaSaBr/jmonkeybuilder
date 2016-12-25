@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.ColorInfluencer;
+import tonegod.emitter.influencers.impl.ColorInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
 /**
@@ -55,20 +55,6 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
         final ColorRGBA oldValue = influencer.getColor(index);
 
         execute(newValue, oldValue, (colorInfluencer, colorRGBA) -> colorInfluencer.updateColor(colorRGBA, index));
-    }
-
-    @Override
-    public void requestToChange(@NotNull final Interpolation newValue, final int index) {
-
-        final ColorInfluencer influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolation(index);
-
-        execute(newValue, oldValue, (colorInfluencer, interpolation) -> colorInfluencer.updateInterpolation(interpolation, index));
-    }
-
-    @Override
-    protected boolean isNeedRebuild(@NotNull final ColorInfluencer influencer, final int currentCount) {
-        return influencer.getColors().size() != currentCount;
     }
 
     @Override

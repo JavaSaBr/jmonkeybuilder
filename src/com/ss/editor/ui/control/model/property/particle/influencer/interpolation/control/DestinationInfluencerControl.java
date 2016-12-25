@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.DestinationInfluencer;
+import tonegod.emitter.influencers.impl.DestinationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
 /**
@@ -40,15 +40,6 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
         return 1;
     }
 
-    @Override
-    public void requestToChange(@NotNull final Interpolation newValue, final int index) {
-
-        final DestinationInfluencer influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolation(index);
-
-        execute(newValue, oldValue, (destinationInfluencer, interpolation) -> destinationInfluencer.updateInterpolation(interpolation, index));
-    }
-
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
 
         final DestinationInfluencer influencer = getInfluencer();
@@ -63,11 +54,6 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
         final Float oldValue = influencer.getWeight(index);
 
         execute(newValue, oldValue, (destinationInfluencer, weight) -> destinationInfluencer.updateWeight(weight, index));
-    }
-
-    @Override
-    protected boolean isNeedRebuild(@NotNull final DestinationInfluencer influencer, final int currentCount) {
-        return influencer.getDestinations().size() != currentCount;
     }
 
     @Override

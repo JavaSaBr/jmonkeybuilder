@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.RotationInfluencer;
+import tonegod.emitter.influencers.impl.RotationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
 /**
@@ -40,26 +40,12 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
         return 1;
     }
 
-    @Override
-    public void requestToChange(@NotNull final Interpolation newValue, final int index) {
-
-        final RotationInfluencer influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolation(index);
-
-        execute(newValue, oldValue, (rotationInfluencer, interpolation) -> rotationInfluencer.updateInterpolation(interpolation, index));
-    }
-
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
 
         final RotationInfluencer influencer = getInfluencer();
         final Vector3f oldValue = influencer.getRotationSpeed(index);
 
         execute(newValue, oldValue, (rotationInfluencer, alpha) -> rotationInfluencer.updateRotationSpeed(alpha, index));
-    }
-
-    @Override
-    protected boolean isNeedRebuild(@NotNull final RotationInfluencer influencer, final int currentCount) {
-        return influencer.getRotationSpeeds().size() != currentCount;
     }
 
     @Override

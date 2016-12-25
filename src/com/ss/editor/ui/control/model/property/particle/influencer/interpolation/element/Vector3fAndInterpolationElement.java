@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -21,15 +20,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
-import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.interpolation.Interpolation;
+import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 
 /**
  * The implementation of the element for editing vector values and interpolation.
  *
  * @author JavaSaBr
  */
-public class Vector3fAndInterpolationElement<P extends ParticleInfluencer, C extends AbstractInterpolationInfluencerControl<P>> extends InterpolationElement<P, Parent, C> {
+public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInfluencer, C extends AbstractInterpolationInfluencerControl<P>> extends InterpolationElement<P, Parent, C> {
 
     /**
      * The field X.
@@ -126,14 +124,23 @@ public class Vector3fAndInterpolationElement<P extends ParticleInfluencer, C ext
         processChange((KeyEvent) null);
     }
 
+    /**
+     * @return the min available value.
+     */
     protected float getMinValue() {
         return 0F;
     }
 
+    /**
+     * @return the max available value.
+     */
     protected float getMaxValue() {
         return 1F;
     }
 
+    /**
+     * Handle changing vector value.
+     */
     private void processChange(@Nullable final KeyEvent event) {
         if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
@@ -161,6 +168,9 @@ public class Vector3fAndInterpolationElement<P extends ParticleInfluencer, C ext
         requestToChange(x, y, z);
     }
 
+    /**
+     * Request to change the vector value.
+     */
     protected void requestToChange(final float x, final float y, final float z) {
     }
 
@@ -173,7 +183,6 @@ public class Vector3fAndInterpolationElement<P extends ParticleInfluencer, C ext
         final P influencer = control.getInfluencer();
 
         final Vector3f value = getValue(influencer);
-        final Interpolation newInterpolation = getInterpolation(influencer);
 
         xField.setText(String.valueOf(value.getX()));
         xField.positionCaret(xField.getText().length());
@@ -184,14 +193,12 @@ public class Vector3fAndInterpolationElement<P extends ParticleInfluencer, C ext
         zField.setText(String.valueOf(value.getZ()));
         zField.positionCaret(xField.getText().length());
 
-        final ComboBox<Interpolation> interpolationComboBox = getInterpolationComboBox();
-        interpolationComboBox.getSelectionModel().select(newInterpolation);
+        super.reload();
     }
 
-    protected Interpolation getInterpolation(final P influencer) {
-        throw new UnsupportedOperationException();
-    }
-
+    /**
+     * Get vector value from the influencer.
+     */
     protected Vector3f getValue(final P influencer) {
         throw new UnsupportedOperationException();
     }

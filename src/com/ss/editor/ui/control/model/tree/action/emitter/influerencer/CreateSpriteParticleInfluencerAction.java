@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.SpriteInfluencer;
+import tonegod.emitter.influencers.impl.SpriteInfluencer;
 
 /**
  * The action for creating the {@link SpriteInfluencer} for the {@link ParticleEmitterNode}.

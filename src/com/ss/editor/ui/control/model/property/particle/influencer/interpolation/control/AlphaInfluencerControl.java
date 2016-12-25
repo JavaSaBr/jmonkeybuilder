@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.AlphaInfluencer;
+import tonegod.emitter.influencers.impl.AlphaInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
 /**
@@ -18,7 +18,8 @@ import tonegod.emitter.interpolation.Interpolation;
  */
 public class AlphaInfluencerControl extends AbstractInterpolationInfluencerControl<AlphaInfluencer> {
 
-    public AlphaInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
+    public AlphaInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final AlphaInfluencer influencer,
+                                  @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -34,26 +35,12 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
         return "Alphas";
     }
 
-    @Override
-    public void requestToChange(@NotNull final Interpolation newValue, final int index) {
-
-        final AlphaInfluencer influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolation(index);
-
-        execute(newValue, oldValue, (alphaInfluencer, interpolation) -> alphaInfluencer.updateInterpolation(interpolation, index));
-    }
-
     public void requestToChange(@NotNull final Float newValue, final int index) {
 
         final AlphaInfluencer influencer = getInfluencer();
         final Float oldValue = influencer.getAlpha(index);
 
         execute(newValue, oldValue, (alphaInfluencer, alpha) -> alphaInfluencer.updateAlpha(alpha, index));
-    }
-
-    @Override
-    protected boolean isNeedRebuild(@NotNull final AlphaInfluencer influencer, final int currentCount) {
-        return influencer.getAlphas().size() != currentCount;
     }
 
     @Override

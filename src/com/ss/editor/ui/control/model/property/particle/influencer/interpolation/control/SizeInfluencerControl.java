@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
-import tonegod.emitter.influencers.SizeInfluencer;
+import tonegod.emitter.influencers.impl.SizeInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 
 /**
@@ -35,26 +35,12 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
         return "Sizes";
     }
 
-    @Override
-    public void requestToChange(@NotNull final Interpolation newValue, final int index) {
-
-        final SizeInfluencer influencer = getInfluencer();
-        final Interpolation oldValue = influencer.getInterpolation(index);
-
-        execute(newValue, oldValue, (sizeInfluencer, interpolation) -> sizeInfluencer.updateInterpolation(interpolation, index));
-    }
-
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
 
         final SizeInfluencer influencer = getInfluencer();
         final Vector3f oldValue = influencer.getSize(index);
 
         execute(newValue, oldValue, (sizeInfluencer, alpha) -> sizeInfluencer.updateSize(alpha, index));
-    }
-
-    @Override
-    protected boolean isNeedRebuild(@NotNull final SizeInfluencer influencer, final int currentCount) {
-        return influencer.getSizes().size() != currentCount;
     }
 
     @Override
