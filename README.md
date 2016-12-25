@@ -5,10 +5,10 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.8.5 ##
--Finished implementing editing particle influencers;
--Fixed material definition duplicates in the material editor;
--Changed fonts;
--Fixed some errors with standard shaders.
+* -Finished implementing editing particle influencers;
+* -Fixed material definition duplicates in the material editor;
+* -Changed fonts;
+* -Fixed some errors with standard shaders.
 
 ## ver. 0.7.8 ##
 * -Implemented saving states of window, resource tree and split panels.
