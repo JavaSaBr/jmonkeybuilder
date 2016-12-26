@@ -496,6 +496,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
             final ComboBox<String> materialDefinitionBox = getMaterialDefinitionBox();
             final ObservableList<String> items = materialDefinitionBox.getItems();
+            items.clear();
 
             final Array<String> availableMaterialDefinitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
             availableMaterialDefinitions.forEach(items::add);
