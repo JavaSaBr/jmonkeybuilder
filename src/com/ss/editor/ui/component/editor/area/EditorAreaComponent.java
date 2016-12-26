@@ -32,6 +32,8 @@ import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -50,7 +52,9 @@ import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
+import rlib.util.dictionary.ConcurrentObjectDictionary;
 import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.DictionaryUtils;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
@@ -78,7 +82,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * The tale of opened editors.
      */
-    private final ObjectDictionary<Path, Tab> openedEditors;
+    private final ConcurrentObjectDictionary<Path, Tab> openedEditors;
 
     /**
      * The flag for ignoring changing the list of opened editors.
@@ -169,29 +173,32 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Path prevFile = event.getPrevFile();
         final Path newFile = event.getNewFile();
 
-        final ObservableList<Tab> tabs = getTabs();
-        tabs.forEach(tab -> {
+        final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
+        final Tab tab = DictionaryUtils.getInReadLock(openedEditors, prevFile, ObjectDictionary::get);
+        if (tab == null) return;
 
-            final ObservableMap<Object, Object> properties = tab.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-            fileEditor.notifyRenamed(prevFile, newFile);
+        final ObservableMap<Object, Object> properties = tab.getProperties();
+        final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+        fileEditor.notifyRenamed(prevFile, newFile);
 
-            final Path editFile = fileEditor.getEditFile();
-            if (!editFile.equals(newFile)) return;
+        final Path editFile = fileEditor.getEditFile();
+        if (!editFile.equals(newFile)) return;
 
-            if (fileEditor.isDirty()) {
-                tab.setText("*" + fileEditor.getFileName());
-            } else {
-                tab.setText(fileEditor.getFileName());
-            }
+        if (fileEditor.isDirty()) {
+            tab.setText("*" + fileEditor.getFileName());
+        } else {
+            tab.setText(fileEditor.getFileName());
+        }
 
-            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+        final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
 
-            if (workspace != null) {
-                workspace.removeOpenedFile(prevFile);
-                workspace.addOpenedFile(newFile, fileEditor);
-            }
-        });
+        if (workspace != null) {
+            workspace.removeOpenedFile(prevFile);
+            workspace.addOpenedFile(newFile, fileEditor);
+        }
+
+        DictionaryUtils.runInWriteLock(openedEditors, prevFile, ObjectDictionary::remove);
+        DictionaryUtils.runInWriteLock(openedEditors, newFile, tab, ObjectDictionary::put);
     }
 
     /**
@@ -222,13 +229,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * @return the tale of opened editors.
-     */
-    private ObjectDictionary<Path, Tab> getOpenedEditors() {
-        return openedEditors;
-    }
-
-    /**
      * Handle the request for converting a file.
      */
     private void processConvertFile(final RequestedConvertFileEvent event) {
@@ -240,6 +240,14 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         if (converter == null) return;
 
         converter.convert(file);
+    }
+
+    /**
+     * @return the tale of opened editors.
+     */
+    @NotNull
+    private ConcurrentObjectDictionary<Path, Tab> getOpenedEditors() {
+        return openedEditors;
     }
 
     /**
@@ -271,8 +279,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
             final Path editFile = fileEditor.getEditFile();
 
-            final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
-            openedEditors.remove(editFile);
+            DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, ObjectDictionary::remove);
 
             fileEditor.notifyClosed();
 
@@ -330,8 +337,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final Path file = event.getFile();
 
-        final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
-        final Tab tab = openedEditors.get(file);
+        final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
+        final Tab tab = DictionaryUtils.getInReadLock(openedEditors, file, ObjectDictionary::get);
 
         if (tab != null) {
             final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
@@ -396,8 +403,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             selectionModel.select(tab);
         }
 
-        final ObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
-        openedEditors.put(editFile, tab);
+        DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.decrementLoading();
