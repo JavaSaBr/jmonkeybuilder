@@ -56,7 +56,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         setOnMouseClicked(this::processClick);
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_12);
+        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
 
         this.tooltip = new Tooltip();
 

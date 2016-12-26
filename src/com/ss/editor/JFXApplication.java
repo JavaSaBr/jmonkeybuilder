@@ -12,6 +12,7 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
+import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
@@ -46,6 +47,8 @@ public class JFXApplication extends Application {
     }
 
     public static void main(final String[] args) throws IOException {
+
+        LogView.getInstance();
 
         // fix of the fonts render
         //System.setProperty("prism.lcdtext", "false");

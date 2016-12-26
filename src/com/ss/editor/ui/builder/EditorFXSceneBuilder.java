@@ -7,6 +7,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
+import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.component.split.pane.GlobalToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalToolComponent;
 import com.ss.editor.ui.css.CSSIds;
@@ -89,6 +90,7 @@ public class EditorFXSceneBuilder {
 
         final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer);
         globalToolComponent.addComponent(new AssetComponent(), Messages.EDITOR_TOOL_ASSET);
+        globalToolComponent.addComponent(LogView.getInstance(), Messages.LOG_VIEW_TITLE);
 
         splitContainer.initFor(globalToolComponent, editorAreaComponent);
 

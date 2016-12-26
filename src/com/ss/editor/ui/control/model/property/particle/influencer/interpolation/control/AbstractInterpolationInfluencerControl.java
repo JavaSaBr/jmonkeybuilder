@@ -66,7 +66,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
 
     protected void createControls() {
 
-        final Label propertyNameLabel = new Label(getControlTitle());
+        final Label propertyNameLabel = new Label(getControlTitle() + ":");
         propertyNameLabel.setId(CSSIds.MODEL_PARAM_CONTROL_PARAM_NAME);
 
         elementContainer = new VBox();

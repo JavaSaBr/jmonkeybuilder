@@ -289,6 +289,8 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
 
+    public static final String LOG_VIEW_TITLE;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -577,5 +579,7 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS = bundle.getString("BoundingVolumeModelPropertyControlSphereRadius");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
+
+        LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
     }
 }
