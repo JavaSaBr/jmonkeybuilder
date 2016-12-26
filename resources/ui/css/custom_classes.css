@@ -1,91 +1,81 @@
 /* Main Fonts */
 
 .main-font-11 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 11px;
-    -fx-font-weight: bolder;
 }
 
 .main-font-12 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 12px;
-    -fx-font-weight: bolder;
 }
 
 .main-font-13 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 13px;
-    -fx-font-weight: bolder;
 }
 
 .main-font-14 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 14px;
-    -fx-font-weight: bolder;
 }
 
 .main-font-14-bold {
-    -fx-font-family: "Roboto Bold";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 14px;
+    -fx-font-weight: bolder;
 }
 
 .main-font-15 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
+    -fx-font-size: 15px;
+}
+
+.main-font-15-bold {
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 15px;
     -fx-font-weight: bolder;
 }
 
-.main-font-15-bold {
-    -fx-font-family: "Roboto Bold";
-    -fx-font-size: 15px;
-}
-
 .main-font-15-bold-with-shadow {
-    -fx-font-family: "Roboto Bold";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 15px;
     -fx-effect: dropshadow(one-pass-box, black, 2, 1, 1, 1);
 }
 
 .main-font-17 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 17px;
-    -fx-font-weight: bolder;
 }
 
 .main-font-20 {
-    -fx-font-family: "Roboto";
+    -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 20px;
-    -fx-font-weight: bolder;
 }
 
 .special-font-12 {
-    -fx-font-family: "Roboto Condensed";
+    -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 12px;
-    -fx-font-weight: bolder;
 }
 
 .special-font-13 {
-    -fx-font-family: "Roboto Condensed";
+    -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 13px;
-    -fx-font-weight: bolder;
 }
 
 .special-font-14 {
-    -fx-font-family: "Roboto Condensed";
+    -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14px;
-    -fx-font-weight: bolder;
 }
 
 .special-font-15 {
-    -fx-font-family: "Roboto Condensed";
+    -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 15px;
-    -fx-font-weight: bolder;
 }
 
 .special-font-16 {
-    -fx-font-family: "Roboto Condensed";
+    -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 16;
-    -fx-font-weight: bolder;
 }
 
 .mono-font-13 {
