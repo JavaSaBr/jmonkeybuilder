@@ -65,6 +65,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
     public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
     public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
+    public static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
 
     private static volatile EditorConfig instance;
 
@@ -140,6 +141,11 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is for decorating a window.
      */
     private volatile boolean decorated;
+
+    /**
+     * Flag is of enabling analytics.
+     */
+    private volatile boolean analytics;
 
     /**
      * The current asset folder.
@@ -378,6 +384,20 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @param analytics true if you want to enable analytics.
+     */
+    public void setAnalytics(final boolean analytics) {
+        this.analytics = analytics;
+    }
+
+    /**
+     * @return true if analytics is enabled.
+     */
+    public boolean isAnalytics() {
+        return analytics;
+    }
+
+    /**
      * @return the settings for JME.
      */
     public AppSettings getSettings() {
@@ -428,6 +448,7 @@ public final class EditorConfig implements AssetEventListener {
         this.globalToolWidth = prefs.getInt(PREF_GLOBAL_TOOL_WIDTH, 300);
         this.globalToolCollapsed = prefs.getBoolean(PREF_GLOBAL_TOOL_COLLAPSED, false);
         this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
+        this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -483,6 +504,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_GLOBAL_TOOL_WIDTH, getGlobalToolWidth());
         prefs.putBoolean(PREF_GLOBAL_TOOL_COLLAPSED, isGlobalToolCollapsed());
         prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
+        prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 

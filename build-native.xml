@@ -76,8 +76,11 @@
                     <include name="*"/>
                 </fileset>
                 <fileset dir="build/libs/svg">
-                <include name="*"/>
-            </fileset>
+                    <include name="*"/>
+                </fileset>
+                <fileset dir="build/libs/http">
+                    <include name="*"/>
+                </fileset>
             </classpath>
         </javac>
 
@@ -118,11 +121,18 @@
             </fileset>
         </copy>
 
+        <copy todir="dist/libs/http">
+            <fileset dir="externalLibs/http">
+                <include name="*"/>
+            </fileset>
+        </copy>
+
         <fx:resources id="appRes">
             <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
             <fx:fileset dir="dist" includes="libs/*"/>
             <fx:fileset dir="dist" includes="libs/jME/*"/>
             <fx:fileset dir="dist" includes="libs/svg/*"/>
+            <fx:fileset dir="dist" includes="libs/http/*"/>
             <fx:fileset dir="package"/>
         </fx:resources>
 

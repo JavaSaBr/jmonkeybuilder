@@ -25,6 +25,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.NativeLibraryLoader;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.util.os.OperatingSystem;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
@@ -364,11 +365,15 @@ public class Editor extends JmeToJFXApplication {
 
         } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
             LOGGER.warning(e);
+            GAnalytics.sendException(e, true);
+            GAnalytics.waitForSend();
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.save();
             System.exit(1);
         } catch (final RendererException | IllegalStateException e) {
             LOGGER.warning(e);
+            GAnalytics.sendException(e, true);
+            GAnalytics.waitForSend();
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.clear();
             workspaceManager.save();

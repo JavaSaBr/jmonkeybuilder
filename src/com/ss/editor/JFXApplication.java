@@ -4,6 +4,8 @@ import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static java.nio.file.Files.newOutputStream;
 
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
+import com.ss.editor.analytics.google.GAEvent;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
@@ -151,6 +153,9 @@ public class JFXApplication extends Application {
 
     public void onExit() {
 
+        GAnalytics.sendEvent(GAEvent.Category.EDITOR,
+                GAEvent.Action.EDITOR_CLOSED, GAEvent.Label.THE_EDITOR_WAS_CLOSED);
+
         final EditorConfig config = EditorConfig.getInstance();
         config.save();
 
@@ -159,6 +164,8 @@ public class JFXApplication extends Application {
             final Editor editor = Editor.getInstance();
             editor.destroy();
         });
+
+        GAnalytics.waitForSend();
     }
 
     /**
@@ -167,10 +174,15 @@ public class JFXApplication extends Application {
     public void buildScene() {
         this.scene = EditorFXSceneBuilder.build(stage);
         this.scene.notifyFinishBuild();
+
         final Editor editor = Editor.getInstance();
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
         executor.addToExecute(() -> bind(editor, scene.getImageView(), editor.getViewPort()));
+
         JMEFilePreviewManager.getInstance();
+
+        GAnalytics.sendEvent(GAEvent.Category.EDITOR,
+                GAEvent.Action.EDITOR_LAUNCHED, GAEvent.Label.THE_EDITOR_WAS_LAUNCHED);
     }
 
     /**

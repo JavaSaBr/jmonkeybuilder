@@ -5,6 +5,7 @@ import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 
@@ -247,6 +248,8 @@ public abstract class EditorUtil {
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
         executorManager.addFXTask(() -> {
+
+            GAnalytics.sendException(e, false);
 
             final StringWriter writer = new StringWriter();
             final PrintWriter printWriter = new PrintWriter(writer);
