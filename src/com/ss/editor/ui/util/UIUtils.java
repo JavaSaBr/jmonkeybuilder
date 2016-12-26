@@ -14,6 +14,7 @@ import java.util.Objects;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Control;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuButton;
@@ -24,6 +25,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import rlib.util.ClassUtils;
@@ -31,11 +33,29 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Набор утилитных методов для работы с UI.
+ * The utility class with utility UI methods.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class UIUtils {
+
+    public static void clear(final Pane node) {
+        final ObservableList<Node> children = node.getChildren();
+        children.forEach(UIUtils::unbind);
+        children.clear();
+    }
+
+    public static void unbind(final Node node) {
+        if(node instanceof Control) {
+            final Control control = (Control) node;
+            control.prefWidthProperty().unbind();
+            control.prefHeightProperty().unbind();
+        } else if(node instanceof Pane) {
+            final Pane pane = (Pane) node;
+            pane.prefHeightProperty().unbind();
+            pane.prefWidthProperty().unbind();
+        }
+    }
 
     /**
      * Поиск всех компонентов экрана.

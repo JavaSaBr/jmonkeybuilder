@@ -12,9 +12,9 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
-import tonegod.emitter.influencers.AlphaInfluencer;
-import tonegod.emitter.influencers.ColorInfluencer;
-import tonegod.emitter.influencers.SizeInfluencer;
+import tonegod.emitter.influencers.impl.AlphaInfluencer;
+import tonegod.emitter.influencers.impl.ColorInfluencer;
+import tonegod.emitter.influencers.impl.SizeInfluencer;
 
 /**
  * The action for creating new {@link ParticleEmitterNode}.

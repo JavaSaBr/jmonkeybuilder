@@ -215,6 +215,23 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT;
     public static final String PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL;
     public static final String PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE;
+    public static final String PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_ALPHA;
+    public static final String PARTICLE_EMITTER_INFLUENCER_COLOR;
+    public static final String PARTICLE_EMITTER_INFLUENCER_SPEED;
+    public static final String PARTICLE_EMITTER_INFLUENCER_SIZE;
+    public static final String PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE;
+    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE;
+    public static final String PARTICLE_EMITTER_INFLUENCER_ANIMATE;
+    public static final String PARTICLE_EMITTER_INFLUENCER_REACTION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_RESTITUTION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED;
+    public static final String PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X;
+    public static final String PARTICLE_EMITTER_INFLUENCER_INTERPOLATION;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
@@ -486,6 +503,23 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT = bundle.getString("ParticleEmitterInfluencerUpAlignment");
         PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL = bundle.getString("ParticleEmitterInfluencerRadialPull");
         PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE = bundle.getString("ParticleEmitterInfluencerTangetForce");
+        PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerAlphaInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerColorInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerDestinationInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerRotationInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerSizeInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_ALPHA = bundle.getString("ParticleEmitterInfluencerAlpha");
+        PARTICLE_EMITTER_INFLUENCER_COLOR = bundle.getString("ParticleEmitterInfluencerColor");
+        PARTICLE_EMITTER_INFLUENCER_SPEED = bundle.getString("ParticleEmitterInfluencerSpeed");
+        PARTICLE_EMITTER_INFLUENCER_SIZE = bundle.getString("ParticleEmitterInfluencerSize");
+        PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE = bundle.getString("ParticleEmitterInfluencerFrameSequence");
+        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE = bundle.getString("ParticleEmitterInfluencerRandomStartImage");
+        PARTICLE_EMITTER_INFLUENCER_ANIMATE = bundle.getString("ParticleEmitterInfluencerAnimate");
+        PARTICLE_EMITTER_INFLUENCER_REACTION = bundle.getString("ParticleEmitterInfluencerReaction");
+        PARTICLE_EMITTER_INFLUENCER_RESTITUTION = bundle.getString("ParticleEmitterInfluencerRestitution");
+        PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED = bundle.getString("ParticleEmitterInfluencerRandomSpeed");
+        PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X = bundle.getString("ParticleEmitterInfluencerStartRandomRotationX");
+        PARTICLE_EMITTER_INFLUENCER_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerInterpolation");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 

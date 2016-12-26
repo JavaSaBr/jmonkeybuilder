@@ -2,7 +2,7 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="0.8.0" />
+    <property name="editor.version" value="0.8.5" />
 
     <target name="init-fx-tasks">
         <path id="fxant">

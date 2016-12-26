@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.RadialVelocityInfluencer;
+import tonegod.emitter.influencers.impl.RadialVelocityInfluencer;
 
 /**
  * The action for creating the {@link RadialVelocityInfluencer} for the {@link

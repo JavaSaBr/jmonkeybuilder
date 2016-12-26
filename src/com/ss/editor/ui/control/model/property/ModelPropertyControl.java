@@ -4,6 +4,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
+import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -19,6 +20,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -26,7 +29,9 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class ModelPropertyControl<D, T> extends VBox {
+public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(ModelPropertyControl.class);
 
     protected static final double CONTROL_WIDTH_PERCENT = 0.4;
 
@@ -133,6 +138,7 @@ public class ModelPropertyControl<D, T> extends VBox {
     /**
      * Synchronize value from the edit object.
      */
+    @Override
     public void sync() {
         setIgnoreListener(true);
         try {

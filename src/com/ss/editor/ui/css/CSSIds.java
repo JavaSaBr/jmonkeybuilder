@@ -98,7 +98,11 @@ public interface CSSIds {
     String MODEL_PARAM_CONTROL_VECTOR3F_FIELD = "ModelParamControlVector3fField";
     String MODEL_PARAM_CONTROL_VECTOR4F_FIELD = "ModelParamControlVector4fField";
     String MODEL_PARAM_CONTROL_COMBO_BOX = "ModelParamControlComboBox";
+    String MODEL_PARAM_CONTROL_COLOR_PICKER = "ModelParamControlColorPicker";
     String MODEL_PARAM_CONTROL_CHECK_BOX = "ModelParamControlCheckbox";
+    String MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT = "ModelParamControlInfluencerElement";
+    String MODEL_PARAM_CONTROL_INFLUENCER_CONTROL = "ModelParamControlInfluencerControl";
+    String MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON = "ModelParamControlInfluencerIconButton";
 
     String MODEL_PARAM_CONTROL_MATERIAL_LABEL = "ModelParamControlMaterialLabel";
     String MODEL_PARAM_CONTROL_MATERIAL_BUTTON = "ModelParamControlMaterialButton";

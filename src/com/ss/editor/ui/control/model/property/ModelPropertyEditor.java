@@ -1,8 +1,11 @@
 package com.ss.editor.ui.control.model.property;
 
+import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +13,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import tonegod.emitter.ParticleEmitterNode;
+import tonegod.emitter.node.ParticleNode;
 
 /**
  * The component for containing property controls in the editor.
@@ -76,15 +81,28 @@ public class ModelPropertyEditor extends ScrollPane {
      * Sync all properties with controls.
      */
     public void syncFor(final Object object) {
-        if (getCurrentObject() != object) return;
+        if (!isNeedUpdate(object)) return;
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> {
-            if (node instanceof ModelPropertyControl<?, ?>) {
-                ((ModelPropertyControl) node).sync();
+            if (node instanceof UpdatableControl) {
+                ((UpdatableControl) node).sync();
             }
         });
+    }
+
+    protected boolean isNeedUpdate(final Object object) {
+
+        final Object currentObject = getCurrentObject();
+        if (currentObject == object) return true;
+
+        if (currentObject instanceof ParticleNode && object instanceof ParticleEmitterNode) {
+            final Object parent = NodeUtils.findParent((Spatial) currentObject, spatial -> spatial instanceof ParticleEmitterNode);
+            return parent == object;
+        }
+
+        return false;
     }
 
     /**

@@ -7,6 +7,7 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,7 @@ public class ColorLightPropertyControl<T extends Light> extends ModelPropertyCon
         super.createComponents(container);
 
         colorPicker = new ColorPicker();
+        colorPicker.setId(CSSIds.MODEL_PARAM_CONTROL_COLOR_PICKER);
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> updateValue());
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

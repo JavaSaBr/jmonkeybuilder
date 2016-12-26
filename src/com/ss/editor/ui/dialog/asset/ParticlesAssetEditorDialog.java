@@ -1,5 +1,8 @@
 package com.ss.editor.ui.dialog.asset;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.MatParam;
@@ -8,6 +11,7 @@ import com.jme3.material.MaterialDef;
 import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,21 +21,20 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.ObservableList;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import rlib.ui.util.FXUtils;
 import tonegod.emitter.material.ParticlesMaterial;
-
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
 
 /**
  * The implementation of the {@link AssetEditorDialog} for choosing the {@link ParticlesMaterial}
@@ -84,14 +87,25 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         applyLightingTransformCheckBox = new CheckBox();
         applyLightingTransformCheckBox.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_CONTROL);
 
-        final VBox previewContainer = new VBox();
+        final StackPane previewContainer = new StackPane();
         previewContainer.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         imageView = new ImageView();
         imageView.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
         imageView.fitWidthProperty().bind(previewContainer.widthProperty().subtract(2));
 
+        textView = new TextArea();
+        textView.prefWidthProperty().bind(previewContainer.widthProperty().subtract(2));
+        textView.prefHeightProperty().bind(previewContainer.heightProperty().subtract(2));
+
         FXUtils.addToPane(imageView, previewContainer);
+        FXUtils.addToPane(textView, previewContainer);
+
+        FXUtils.addClassTo(textView, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(textureParamNameLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(applyLightingTransformLabel, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(textureParamNameComboBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(applyLightingTransformCheckBox, CSSClasses.MAIN_FONT_13);
 
         settingsContainer.add(textureParamNameLabel, 0, 0);
         settingsContainer.add(textureParamNameComboBox, 1, 0);
@@ -133,10 +147,21 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         final Path file = element.getFile();
         final Path assetFile = getAssetFile(file);
 
+        if (assetFile == null) {
+            throw new RuntimeException("AssetFile can't be null.");
+        }
+
         final Material material = assetManager.loadAsset(new MaterialKey(toAssetPath(assetFile)));
 
         final Consumer<ParticlesMaterial> consumer = getConsumer();
         consumer.accept(new ParticlesMaterial(material, textureParamName, transformBox.isSelected()));
+    }
+
+    @Override
+    protected BooleanBinding buildDisableCondition() {
+        final ComboBox<String> comboBox = getTextureParamNameComboBox();
+        final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
+        return super.buildDisableCondition().or(selectionModel.selectedItemProperty().isNull());
     }
 
     @Override
@@ -153,15 +178,26 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Path assetFile = getAssetFile(file);
 
+            if (assetFile == null) {
+                throw new RuntimeException("AssetFile can't be null.");
+            }
+
             final Material material = assetManager.loadAsset(new MaterialKey(toAssetPath(assetFile)));
             final MaterialDef materialDef = material.getMaterialDef();
 
             final Collection<MatParam> materialParams = materialDef.getMaterialParams();
             materialParams.stream()
-                    .filter(matParam -> matParam.getVarType() == VarType.Texture2D)
+                    .filter(param -> param.getVarType() == VarType.Texture2D)
+                    .filter(matParam -> material.getTextureParam(matParam.getName()) != null)
                     .forEach(filtred -> items.add(filtred.getName()));
 
-            if (!items.isEmpty()) comboBox.getSelectionModel().select(0);
+            final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
+
+            if (!items.isEmpty()) {
+                selectionModel.select(0);
+            } else {
+                selectionModel.select(null);
+            }
         }
 
         super.validate(warningLabel, element);

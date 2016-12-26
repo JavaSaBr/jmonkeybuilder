@@ -4,7 +4,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.LightPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.ParticlesEmissionPropertyBuilder;
+import com.ss.editor.ui.control.model.property.builder.impl.ParticlesPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.SpatialPropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class PropertyBuilderFactory {
 
     static {
         BUILDERS.add(ParticleInfluencerPropertyBuilder.getInstance());
-        BUILDERS.add(ParticlesEmissionPropertyBuilder.getInstance());
+        BUILDERS.add(ParticlesPropertyBuilder.getInstance());
         BUILDERS.add(GeometryPropertyBuilder.getInstance());
         BUILDERS.add(LightPropertyBuilder.getInstance());
         BUILDERS.add(SpatialPropertyBuilder.getInstance());

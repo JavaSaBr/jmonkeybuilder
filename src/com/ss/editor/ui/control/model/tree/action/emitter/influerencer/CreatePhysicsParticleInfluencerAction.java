@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.PhysicsInfluencer;
+import tonegod.emitter.influencers.impl.PhysicsInfluencer;
 
 /**
  * The action for creating the {@link PhysicsInfluencer} for the {@link ParticleEmitterNode}.

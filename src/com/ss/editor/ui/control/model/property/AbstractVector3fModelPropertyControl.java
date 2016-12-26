@@ -32,7 +32,7 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
     /**
      * The field Y.
      */
-    private TextField yFiled;
+    private TextField yField;
 
     /**
      * The field Z.
@@ -79,11 +79,11 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         final Label yLabel = new Label("y:");
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
 
-        yFiled = new TextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
-        yFiled.setOnScroll(this::processScroll);
-        yFiled.setOnKeyReleased(this::updateVector);
-        yFiled.prefWidthProperty().bind(widthProperty().divide(3));
+        yField = new TextField();
+        yField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yField.setOnScroll(this::processScroll);
+        yField.setOnKeyReleased(this::updateVector);
+        yField.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label zLabel = new Label("z:");
         zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
@@ -97,14 +97,14 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
         FXUtils.addToPane(yLabel, container);
-        FXUtils.addToPane(yFiled, container);
+        FXUtils.addToPane(yField, container);
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
 
         FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yFiled, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_13);
     }
@@ -146,7 +146,7 @@ public abstract class AbstractVector3fModelPropertyControl<T> extends ModelPrope
      * @return the field Y.
      */
     protected TextField getYFiled() {
-        return yFiled;
+        return yField;
     }
 
     /**

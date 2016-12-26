@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.RotationInfluencer;
+import tonegod.emitter.influencers.impl.RotationInfluencer;
 
 /**
  * The action for creating the {@link RotationInfluencer} for the {@link ParticleEmitterNode}.

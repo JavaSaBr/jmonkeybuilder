@@ -120,11 +120,17 @@ public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPrope
         long longValue = (long) (value * 1000);
         longValue += event.getDeltaY() * getScrollIncrement();
 
-        final String result = String.valueOf(longValue / 1000F);
+        final float resultValue = checkResultValue(longValue / 1000F);
+
+        final String result = String.valueOf(resultValue);
         source.setText(result);
         source.positionCaret(result.length());
 
         updateVector(null);
+    }
+
+    protected float checkResultValue(final float original) {
+        return original;
     }
 
     /**
@@ -179,7 +185,7 @@ public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPrope
 
         final Vector2f oldValue = requireNonNull(getPropertyValue(), "The property value can't be null.");
         final Vector2f newValue = new Vector2f();
-        newValue.set(x, y);
+        newValue.set(checkResultValue(x), checkResultValue(y));
 
         changed(newValue, oldValue == null ? null : oldValue.clone());
     }

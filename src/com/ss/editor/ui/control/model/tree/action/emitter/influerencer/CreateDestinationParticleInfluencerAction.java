@@ -7,8 +7,8 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
-import tonegod.emitter.influencers.DestinationInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
+import tonegod.emitter.influencers.impl.DestinationInfluencer;
 
 /**
  * The action for creating the {@link DestinationInfluencer} for the {@link ParticleEmitterNode}.

@@ -320,20 +320,20 @@
 }
 
 #MaterialParamControlSpinner {
-    -fx-min-height: 22;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
 
 #MaterialParamControlColorPicker {
     -fx-alignment: center;
-    -fx-min-height: 22;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
 
 #MaterialParamComboBox {
-    -fx-min-height: 22;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
@@ -471,11 +471,11 @@
 }
 
 #ModelParamControlParamNameSingleRow {
-    -fx-min-height: 20;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-alignment: center-right;
-    -fx-padding: 0 3 0 0;
+    -fx-padding: 0 3 0 2;
 }
 
 #ModelParamControlLabelValue {
@@ -484,14 +484,14 @@
 }
 
 #ModelParamControlNumberLabel {
-    -fx-min-height: 20;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 0 2 0 2;
 }
 
 #ModelParamControlNumberLabel2F {
-    -fx-min-height: 20;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 0 2 0 2;
@@ -503,14 +503,14 @@
 }
 
 #ModelParamControlVector2fField {
-    -fx-min-height: 20;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 0 2 0 2;
 }
 
 #ModelParamControlVector3fField {
-    -fx-min-height: 20;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 0 2 0 2;
@@ -526,7 +526,13 @@
 }
 
 #ModelParamControlComboBox {
-    -fx-min-height: 22;
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#ModelParamControlColorPicker {
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
@@ -565,6 +571,23 @@
 }
 
 #ModelParamControlMaterialButton {
+}
+
+#ModelParamControlInfluencerControl {
+    -fx-alignment: top-center;
+}
+
+#ModelParamControlInfluencerElement {
+    -fx-padding: 2;
+}
+
+#ModelParamControlInfluencerIconButton {
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
 }
 
 #RenameDialogLabel {
