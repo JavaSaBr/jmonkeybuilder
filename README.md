@@ -1,13 +1,17 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.8.5 #
+# jMonkeyEngine 3 SpaceShift Editor 0.8.6 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
+## ver. 0.8.6 ##
+* -Fixed opening a renamed file in a new editor.
+* -Added google analytics, you can disable this in a settings dialog.
+
 ## ver. 0.8.5 ##
-* -Finished implementing editing particle influencers;
-* -Fixed material definition duplicates in the material editor;
-* -Changed fonts;
+* -Finished implementing editing particle influencers.
+* -Fixed material definition duplicates in the material editor.
+* -Changed fonts.
 * -Fixed some errors with standard shaders.
 
 ## ver. 0.7.8 ##
