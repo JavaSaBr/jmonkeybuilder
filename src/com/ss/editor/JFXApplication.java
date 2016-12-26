@@ -153,8 +153,8 @@ public class JFXApplication extends Application {
 
     public void onExit() {
 
-        GAnalytics.sendEvent(GAEvent.Category.EDITOR,
-                GAEvent.Action.EDITOR_CLOSED, GAEvent.Label.THE_EDITOR_WAS_CLOSED);
+        GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
+                GAEvent.Action.CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
 
         final EditorConfig config = EditorConfig.getInstance();
         config.save();
@@ -181,8 +181,8 @@ public class JFXApplication extends Application {
 
         JMEFilePreviewManager.getInstance();
 
-        GAnalytics.sendEvent(GAEvent.Category.EDITOR,
-                GAEvent.Action.EDITOR_LAUNCHED, GAEvent.Label.THE_EDITOR_WAS_LAUNCHED);
+        GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
+                GAEvent.Action.LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
     }
 
     /**

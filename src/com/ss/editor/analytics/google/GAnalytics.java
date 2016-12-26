@@ -4,6 +4,7 @@ import static org.apache.http.impl.client.HttpClients.createMinimal;
 import static rlib.util.StringUtils.isEmpty;
 
 import com.ss.editor.EditorThread;
+import com.ss.editor.config.Config;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -19,6 +20,7 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,8 +28,10 @@ import rlib.concurrent.util.ConcurrentUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.StringUtils;
+import rlib.util.Util;
 import rlib.util.linkedlist.LinkedList;
 import rlib.util.linkedlist.LinkedListFactory;
+import rlib.util.os.OperatingSystem;
 
 /**
  * @author JavaSaBr
@@ -40,18 +44,16 @@ public class GAnalytics extends EditorThread {
     public static final String PARAM_TRACKING_ID = "tid";
     public static final String PARAM_CLIENT_ID = "cid";
     public static final String PARAM_HIT_TYPE = "t";
-    public static final String PARAM_DATA_SOURCE = "ds";
-    public static final String PARAM_QUEUE_TIME = "qt";
-    public static final String PARAM_CACHE_BUSTER = "z";
     public static final String PARAM_USER_ID = "uid";
-    public static final String PARAM_SESSION_CONTROL = "sc";
-    public static final String PARAM_SCREEN_RESOLUTION = "sr";
     public static final String PARAM_USER_LANGUAGE = "ul";
     public static final String PARAM_APPLICATION_VERSION = "av";
     public static final String PARAM_EVENT_CATEGORY = "ec";
     public static final String PARAM_EVENT_ACTION = "ea";
     public static final String PARAM_EVENT_LABEL = "el";
     public static final String PARAM_EVENT_VALUE = "ev";
+    public static final String PARAM_PAGE_VIEW_LOCATION = "dl";
+    public static final String PARAM_PAGE_VIEW_TITLE = "dt";
+    public static final String PARAM_PAGE_VIEW_PAGE = "dp";
     public static final String PARAM_USER_TIMING_CATEGORY = "utc";
     public static final String PARAM_USER_TIMING_VAR_NAME = "utv";
     public static final String PARAM_USER_TIMING_TIME = "utt";
@@ -61,7 +63,6 @@ public class GAnalytics extends EditorThread {
     public static final String PARAM_CUSTOM_DIMENSION = "cd";
 
     public static final String FIELD_OS = PARAM_CUSTOM_DIMENSION + "1";
-    public static final String FIELD_GRAPHICS_ADAPTER = PARAM_CUSTOM_DIMENSION + "2";
 
     public static final String PROP_ANALYTICS_HOST = "http://www.google-analytics.com/collect";
     public static final String PROP_TRACKING_ID = "UA-89459340-1";
@@ -73,29 +74,53 @@ public class GAnalytics extends EditorThread {
         return INSTANCE;
     }
 
+    /**
+     * Wait for sending max 2 sec.
+     */
     public static void waitForSend() {
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;
-        if(progressCount.get() < 1) return;
+        if (progressCount.get() < 1) return;
         ConcurrentUtils.wait(progressCount, 2000);
     }
 
+    /**
+     * Send an event.
+     *
+     * @param category the category.
+     * @param action   the action.
+     */
     public static void sendEvent(@NotNull final String category, @NotNull final String action) {
         sendEvent(category, action, null, null);
     }
 
+    /**
+     * Send an event.
+     *
+     * @param category the category.
+     * @param action   the action.
+     * @param label    the label.
+     */
     public static void sendEvent(@NotNull final String category, @NotNull final String action, @Nullable final String label) {
         sendEvent(category, action, label, null);
     }
 
+    /**
+     * Send an event.
+     *
+     * @param category the category.
+     * @param action   the action.
+     * @param label    the label.
+     * @param value    the value.
+     */
     public static void sendEvent(@NotNull final String category, @NotNull final String action, @Nullable final String label, @Nullable final String value) {
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_EVENT_CATEGORY, category);
         parameters.put(PARAM_EVENT_ACTION, action);
 
-        if(!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
-        if(!isEmpty(value)) parameters.put(PARAM_EVENT_VALUE, value);
+        if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
+        if (!isEmpty(value)) parameters.put(PARAM_EVENT_VALUE, value);
 
         send(HitType.EVENT, parameters);
     }
@@ -104,7 +129,7 @@ public class GAnalytics extends EditorThread {
      * Send an exception.
      *
      * @param exception the exception.
-     * @param fatal true if the exception is fatal.
+     * @param fatal     true if the exception is fatal.
      */
     public static void sendException(@NotNull final Throwable exception, final boolean fatal) {
 
@@ -123,33 +148,93 @@ public class GAnalytics extends EditorThread {
         send(HitType.EXCEPTION, parameters);
     }
 
+    /**
+     * Send a page view event.
+     *
+     * @param title    the title.
+     * @param location the location.
+     * @param page     the page.
+     */
+    public static void sendPageView(@Nullable final String title, @Nullable final String location,
+                                    @Nullable final String page) {
+
+        final Map<String, Object> parameters = new HashMap<>();
+        if (!isEmpty(title)) parameters.put(PARAM_PAGE_VIEW_TITLE, title);
+        if (!isEmpty(location)) parameters.put(PARAM_PAGE_VIEW_LOCATION, location);
+        if (!isEmpty(page)) parameters.put(PARAM_PAGE_VIEW_PAGE, page);
+
+        send(HitType.PAGE_VIEW, parameters);
+    }
+
+    /**
+     * Send a timing stats.
+     *
+     * @param timingCategory the category.
+     * @param timingVar      the variable.
+     * @param timingValue    the value.
+     * @param timingLabel    the label.
+     */
+    public static void sendTiming(@NotNull final String timingCategory, @NotNull final String timingVar,
+                                  final int timingValue, @Nullable final String timingLabel) {
+
+        final Map<String, Object> parameters = new HashMap<>();
+        parameters.put(PARAM_USER_TIMING_CATEGORY, timingCategory);
+        parameters.put(PARAM_USER_TIMING_VAR_NAME, timingVar);
+        parameters.put(PARAM_USER_TIMING_TIME, timingValue);
+
+        if (!isEmpty(timingLabel)) parameters.put(PARAM_USER_TIMING_LABEL, timingLabel);
+
+        send(HitType.TIMING, parameters);
+    }
+
+    /**
+     * Send an analytic event.
+     *
+     * @param hitType    the hit type.
+     * @param parameters the parameters.
+     */
     private static void send(final HitType hitType, final Map<String, Object> parameters) {
         parameters.put(PARAM_HIT_TYPE, hitType.toString());
         send(parameters);
     }
 
+    /**
+     * Send an analytic event.
+     *
+     * @param parameters the parameters.
+     */
     private static void send(final Map<String, Object> parameters) {
         getInstance().addTask(() -> doSend(parameters));
     }
 
+    /**
+     * Process sending an analytic events.
+     *
+     * @param parameters the parameters.
+     */
     private static void doSend(final Map<String, Object> parameters) {
 
-        String os = null;
-        String graphicsAdapter = null;
+        final OperatingSystem operatingSystem = Config.OPERATING_SYSTEM;
+
+        final String distribution = operatingSystem.getDistribution();
+        final String os = StringUtils.isEmpty(distribution) ? operatingSystem.getName() + " " + operatingSystem.getVersion() : distribution;
+        final String appVersion = Config.VERSION;
+        final String language = Locale.getDefault().toString();
+        final String userId = Util.getUserName();
 
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;
 
-        System.out.println("start sending " + parameters);
-
-        try(final CloseableHttpClient httpClient = createMinimal()) {
+        try (final CloseableHttpClient httpClient = createMinimal()) {
 
             parameters.put(PARAM_PROTOCOL_VERSION, "1");
             parameters.put(PARAM_TRACKING_ID, PROP_TRACKING_ID);
             parameters.put(PARAM_CLIENT_ID, PROP_CLIENT_ID);
 
-            if(!StringUtils.isEmpty(os)) parameters.put(FIELD_OS, os);
-            if(!StringUtils.isEmpty(graphicsAdapter)) parameters.put(FIELD_GRAPHICS_ADAPTER, graphicsAdapter);
+            if (!StringUtils.isEmpty(os)) parameters.put(FIELD_OS, os);
+            if (!StringUtils.isEmpty(appVersion)) parameters.put(PARAM_APPLICATION_VERSION, appVersion);
+            if (!StringUtils.isEmpty(language)) parameters.put(PARAM_USER_LANGUAGE, language);
+            if (!StringUtils.isEmpty(userId)) parameters.put(PARAM_USER_ID, userId);
 
             final String stringParameters = buildParameters(parameters);
             final byte[] byteParameters = stringParameters.getBytes("UTF-8");
@@ -164,8 +249,6 @@ public class GAnalytics extends EditorThread {
                 LOGGER.warning("failed analytics request: " + response);
             }
 
-            System.out.println("finished sending.");
-
         } catch (final IOException e) {
             LOGGER.warning(e);
         } finally {
@@ -175,23 +258,20 @@ public class GAnalytics extends EditorThread {
     }
 
     private static String buildParameters(final Map<String, Object> parameters) {
-
         final StringBuilder builder = new StringBuilder();
-
         parameters.forEach((key, value) -> appendParam(builder, key, value));
-
         return builder.toString();
     }
 
     private static void appendParam(final StringBuilder builder, final String key, final Object value) {
-        if(value == null) return;
-        else if(builder.length() > 1) {
+        if (value == null) return;
+        else if (builder.length() > 1) {
             builder.append('&');
         }
 
         builder.append(key).append('=');
 
-        if(value instanceof String) {
+        if (value instanceof String) {
             try {
                 builder.append(URLEncoder.encode((String) value, "UTF-8"));
             } catch (final UnsupportedEncodingException e) {
@@ -233,13 +313,13 @@ public class GAnalytics extends EditorThread {
 
     @Override
     public void run() {
-        for(;;) {
+        for (; ; ) {
 
-            Runnable next = null;
+            Runnable next;
 
             synchronized (queue) {
                 next = queue.pollFirst();
-                if(next == null) {
+                if (next == null) {
                     ConcurrentUtils.waitInSynchronize(queue);
                     continue;
                 }

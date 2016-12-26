@@ -4,6 +4,8 @@ import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.scene.text.TextAlignment.LEFT;
 
 import com.ss.editor.Editor;
+import com.ss.editor.analytics.google.GAEvent;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
@@ -11,6 +13,9 @@ import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.LocalTime;
 
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
@@ -30,8 +35,7 @@ import rlib.ui.util.FXUtils;
 import rlib.ui.window.popup.dialog.AbstractPopupDialog;
 
 /**
- * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link
- * Editor}.
+ * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link Editor}.
  *
  * @author JavaSaBr
  */
@@ -55,9 +59,19 @@ public class EditorDialog extends AbstractPopupDialog {
     };
 
     /**
+     * The time when this DIALOG was showed.
+     */
+    @NotNull
+    private volatile LocalTime showedTime;
+
+    /**
      * The last focus owner.
      */
     private Node focusOwner;
+
+    public EditorDialog() {
+        this.showedTime = LocalTime.now();
+    }
 
     @Override
     protected void createControls(final VBox root) {
@@ -90,10 +104,22 @@ public class EditorDialog extends AbstractPopupDialog {
             owner.focusedProperty().addListener(hideListener);
             FX_EVENT_MANAGER.addEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
         }
+
+        GAnalytics.sendPageView(null, null, "/dialog/" + getDialogId());
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED,
+                GAEvent.Label.THE_DIALOG_WAS_OPENED, getDialogId());
+    }
+
+    @NotNull
+    protected String getDialogId() {
+        return getClass().getSimpleName();
     }
 
     @Override
     public void hide() {
+
+        final Duration duration = Duration.between(showedTime, LocalTime.now());
+        final int seconds = (int) duration.getSeconds();
 
         final Window window = getOwnerWindow();
         final EditorFXScene scene = (EditorFXScene) window.getScene();
@@ -110,6 +136,12 @@ public class EditorDialog extends AbstractPopupDialog {
             window.focusedProperty().removeListener(hideListener);
             FX_EVENT_MANAGER.removeEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
         }
+
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED,
+                GAEvent.Label.THE_DIALOG_WAS_CLOSED, getDialogId());
+
+        GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG,
+                seconds, getDialogId());
     }
 
     /**

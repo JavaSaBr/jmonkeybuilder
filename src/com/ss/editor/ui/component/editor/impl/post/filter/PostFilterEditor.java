@@ -78,7 +78,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         DESCRIPTION.setEditorName(POST_FILTER_EDITOR_NAME);
         DESCRIPTION.setConstructor(PostFilterEditor::new);
-        DESCRIPTION.setEditorId(PostFilterEditor.class.getName());
+        DESCRIPTION.setEditorId(PostFilterEditor.class.getSimpleName());
         DESCRIPTION.addExtension(POST_FILTER_VIEW);
 
         MATERIAL_EXTENSION.add(FileExtensions.JME_MATERIAL);

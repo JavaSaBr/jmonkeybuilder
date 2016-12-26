@@ -71,7 +71,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     static {
         DESCRIPTION.setConstructor(MaterialFileEditor::new);
         DESCRIPTION.setEditorName(MATERIAL_EDITOR_NAME);
-        DESCRIPTION.setEditorId(MaterialFileEditor.class.getName());
+        DESCRIPTION.setEditorId(MaterialFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL);
     }
 

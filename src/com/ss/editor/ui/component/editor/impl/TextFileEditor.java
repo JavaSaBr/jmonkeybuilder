@@ -31,7 +31,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     static {
         DESCRIPTION.setConstructor(TextFileEditor::new);
         DESCRIPTION.setEditorName(Messages.TEXT_FILE_EDITOR_NAME);
-        DESCRIPTION.setEditorId(TextFileEditor.class.getName());
+        DESCRIPTION.setEditorId(TextFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(EditorRegistry.ALL_FORMATS);
     }
 

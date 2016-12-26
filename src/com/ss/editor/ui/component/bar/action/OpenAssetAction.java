@@ -2,6 +2,8 @@ package com.ss.editor.ui.component.bar.action;
 
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.analytics.google.GAEvent;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
@@ -46,8 +48,16 @@ public class OpenAssetAction extends Button {
             chooser.setInitialDirectory(currentFolder);
         }
 
+        GAnalytics.sendPageView(null, null, "/dialog/AssetChooseDialog");
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED,
+                GAEvent.Label.THE_DIALOG_WAS_OPENED, "AssetChooseDialog");
+
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
+
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED,
+                GAEvent.Label.THE_DIALOG_WAS_CLOSED, "AssetChooseDialog");
+
         if (folder == null) return;
 
         final Path newAsset = folder.toPath();

@@ -3,9 +3,12 @@ package com.ss.editor.ui.component.editor.impl;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.analytics.google.GAEvent;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorAppState;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -15,6 +18,8 @@ import com.ss.editor.ui.event.impl.FileChangedEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalTime;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -49,12 +54,20 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * The array of 3D parts of this editor.
      */
+    @NotNull
     private final Array<EditorAppState> editorStates;
 
     /**
      * The dirty property.
      */
+    @NotNull
     private final BooleanProperty dirtyProperty;
+
+    /**
+     * The time when this editor was showed.
+     */
+    @NotNull
+    private volatile LocalTime showedTime;
 
     /**
      * The root element of this editor.
@@ -67,6 +80,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private Path file;
 
     public AbstractFileEditor() {
+        this.showedTime = LocalTime.now();
         this.editorStates = ArrayFactory.newArray(EditorAppState.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         createContent();
@@ -217,6 +231,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Override
     public void openFile(@NotNull final Path file) {
         this.file = file;
+        this.showedTime = LocalTime.now();
+
+        final EditorDescription description = getDescription();
+
+        GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_OPENED,
+                GAEvent.Label.THE_EDITOR_WAS_OPENED, description.getEditorId() + ":" + getFileName());
     }
 
     @NotNull
@@ -295,6 +315,41 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                                     final float vRotation, final float targetDistance) {
+    }
+
+    @Override
+    public void notifyShowed() {
+        this.showedTime = LocalTime.now();
+
+        final EditorDescription description = getDescription();
+        GAnalytics.sendPageView(null, null, "/editing/" + description.getEditorId());
+    }
+
+    @Override
+    public void notifyHided() {
+
+        final Duration duration = Duration.between(showedTime, LocalTime.now());
+        final int seconds = (int) duration.getSeconds();
+
+        final EditorDescription description = getDescription();
+
+        GAnalytics.sendTiming(GAEvent.Category.EDITOR, GAEvent.Label.WORKING_ON_AN_EDITOR,
+                seconds, description.getEditorId());
+    }
+
+    @Override
+    public void notifyClosed() {
+
+        final Duration duration = Duration.between(showedTime, LocalTime.now());
+        final int seconds = (int) duration.getSeconds();
+
+        final EditorDescription description = getDescription();
+
+        GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_CLOSED,
+                GAEvent.Label.THE_EDITOR_WAS_CLOSED, description.getEditorId() + ":" + getFileName());
+
+        GAnalytics.sendTiming(GAEvent.Category.EDITOR, GAEvent.Label.WORKING_ON_AN_EDITOR,
+                seconds, description.getEditorId());
     }
 
     @Override

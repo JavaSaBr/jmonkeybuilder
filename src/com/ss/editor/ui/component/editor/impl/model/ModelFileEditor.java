@@ -86,7 +86,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     static {
         DESCRIPTION.setEditorName(Messages.MODEL_FILE_EDITOR_NAME);
         DESCRIPTION.setConstructor(ModelFileEditor::new);
-        DESCRIPTION.setEditorId(ModelFileEditor.class.getName());
+        DESCRIPTION.setEditorId(ModelFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.JME_OBJECT);
     }
 

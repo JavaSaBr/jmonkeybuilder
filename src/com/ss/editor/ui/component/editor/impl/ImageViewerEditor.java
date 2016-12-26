@@ -31,7 +31,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     static {
         DESCRIPTION.setConstructor(ImageViewerEditor::new);
         DESCRIPTION.setEditorName(Messages.IMAGE_VIEWER_EDITOR_NAME);
-        DESCRIPTION.setEditorId(ImageViewerEditor.class.getName());
+        DESCRIPTION.setEditorId(ImageViewerEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.IMAGE_BMP);
         DESCRIPTION.addExtension(FileExtensions.IMAGE_GIF);
         DESCRIPTION.addExtension(FileExtensions.IMAGE_JPEG);

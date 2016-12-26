@@ -40,7 +40,7 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
     static {
         DESCRIPTION.setConstructor(MaterialDefinitionFileEditor::new);
         DESCRIPTION.setEditorName(Messages.MATERIAL_DEFINITION_FILE_EDITOR_NAME);
-        DESCRIPTION.setEditorId(MaterialDefinitionFileEditor.class.getName());
+        DESCRIPTION.setEditorId(MaterialDefinitionFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL_DEFINITION);
     }
 
