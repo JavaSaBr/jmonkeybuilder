@@ -106,8 +106,7 @@ public class EditorDialog extends AbstractPopupDialog {
         }
 
         GAnalytics.sendPageView(null, null, "/dialog/" + getDialogId());
-        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED,
-                GAEvent.Label.THE_DIALOG_WAS_OPENED, getDialogId());
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
     }
 
     @NotNull
@@ -137,11 +136,8 @@ public class EditorDialog extends AbstractPopupDialog {
             FX_EVENT_MANAGER.removeEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
         }
 
-        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED,
-                GAEvent.Label.THE_DIALOG_WAS_CLOSED, getDialogId());
-
-        GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG,
-                seconds, getDialogId());
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, getDialogId());
+        GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG, seconds, getDialogId());
     }
 
     /**

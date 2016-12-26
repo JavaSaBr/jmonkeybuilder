@@ -49,14 +49,12 @@ public class OpenAssetAction extends Button {
         }
 
         GAnalytics.sendPageView(null, null, "/dialog/AssetChooseDialog");
-        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED,
-                GAEvent.Label.THE_DIALOG_WAS_OPENED, "AssetChooseDialog");
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "AssetChooseDialog");
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
 
-        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED,
-                GAEvent.Label.THE_DIALOG_WAS_CLOSED, "AssetChooseDialog");
+        GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, "AssetChooseDialog");
 
         if (folder == null) return;
 

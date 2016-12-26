@@ -23,10 +23,6 @@ public interface GAEvent {
     interface Label {
         String THE_EDITOR_APP_WAS_CLOSED = "The editor application was closed";
         String THE_EDITOR_APP_WAS_LAUNCHED = "The editor application was launched";
-        String THE_EDITOR_WAS_OPENED = "The editor was opened for editing a file";
-        String THE_EDITOR_WAS_CLOSED = "The editor was closed";
-        String THE_DIALOG_WAS_OPENED = "The dialog was opened";
-        String THE_DIALOG_WAS_CLOSED = "The dialog was closed";
         String WORKING_ON_AN_EDITOR = "Working on an editor";
         String SHOWING_A_DIALOG = "Showing a dialog";
     }

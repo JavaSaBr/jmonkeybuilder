@@ -56,7 +56,7 @@ public class SettingsDialog extends EditorDialog {
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 340);
+    private static final Point DIALOG_SIZE = new Point(600, 370);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -78,7 +78,7 @@ public class SettingsDialog extends EditorDialog {
     private Label messageLabel;
 
     /**
-     * The combobox with anisotropy levels.
+     * The list with anisotropy levels.
      */
     private ComboBox<Integer> anisotropyComboBox;
 
@@ -116,6 +116,11 @@ public class SettingsDialog extends EditorDialog {
      * The checkbox for enabling decorating.
      */
     private CheckBox decoratedCheckBox;
+
+    /**
+     * The checkbox for enabling google analytics.
+     */
+    private CheckBox googleAnalyticsCheckBox;
 
     /**
      * Поле для отображения выбранной папки дополнительного classpath.
@@ -173,6 +178,7 @@ public class SettingsDialog extends EditorDialog {
         createAnisotropyControl(root);
         createGammaCorrectionControl(root);
         createFXAAControl(root);
+        createGoogleAnalyticsControl(root);
         createDecoratedControl(root);
         createToneMapFilterControl(root);
         createToneMapFilterWhitePointControl(root);
@@ -448,6 +454,31 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * Create the checkbox for configuring decorated windows.
+     */
+    private void createGoogleAnalyticsControl(final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_GOOGLE_ANALYTICS + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        googleAnalyticsCheckBox = new CheckBox();
+        googleAnalyticsCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        googleAnalyticsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(googleAnalyticsCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(googleAnalyticsCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
      * Создание настройкид ля выбора анизатроной фильтрации.
      */
     private void createAnisotropyControl(final VBox root) {
@@ -534,6 +565,13 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * @return the checkbox for enabling google analytics.
+     */
+    private CheckBox getGoogleAnalyticsCheckBox() {
+        return googleAnalyticsCheckBox;
+    }
+
+    /**
      * @return надпись с сообщением.
      */
     public Label getMessageLabel() {
@@ -541,7 +579,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Валидация изменений.
+     * Validate changes.
      */
     private void validate() {
         if (isIgnoreListeners()) return;
@@ -601,6 +639,9 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox decoratedCheckBox = getDecoratedCheckBox();
         decoratedCheckBox.setSelected(editorConfig.isDecorated());
+
+        final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
+        googleAnalyticsCheckBox.setSelected(editorConfig.isAnalytics());
 
         final Vector3f toneMapFilterWhitePoint = editorConfig.getToneMapFilterWhitePoint();
 
@@ -691,6 +732,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox decoratedCheckBox = getDecoratedCheckBox();
         final boolean decorated = decoratedCheckBox.isSelected();
 
+        final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
+        final boolean analytics = googleAnalyticsCheckBox.isSelected();
+
         final float toneMapFilterWhitePointX = getToneMapFilterWhitePointX().getValue().floatValue();
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
@@ -711,6 +755,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
         editorConfig.setDecorated(decorated);
+        editorConfig.setAnalytics(analytics);
         editorConfig.setGammaCorrection(gammaCorrection);
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);

@@ -236,7 +236,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         final EditorDescription description = getDescription();
 
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_OPENED,
-                GAEvent.Label.THE_EDITOR_WAS_OPENED, description.getEditorId() + ":" + getFileName());
+                description.getEditorId() + "/" + getFileName());
     }
 
     @NotNull
@@ -346,7 +346,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         final EditorDescription description = getDescription();
 
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_CLOSED,
-                GAEvent.Label.THE_EDITOR_WAS_CLOSED, description.getEditorId() + ":" + getFileName());
+                description.getEditorId() + "/" + getFileName());
 
         GAnalytics.sendTiming(GAEvent.Category.EDITOR, GAEvent.Label.WORKING_ON_AN_EDITOR,
                 seconds, description.getEditorId());

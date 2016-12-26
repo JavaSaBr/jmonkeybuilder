@@ -5,6 +5,7 @@ import static rlib.util.StringUtils.isEmpty;
 
 import com.ss.editor.EditorThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.config.EditorConfig;
 
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -44,13 +45,9 @@ public class GAnalytics extends EditorThread {
     public static final String PARAM_TRACKING_ID = "tid";
     public static final String PARAM_CLIENT_ID = "cid";
     public static final String PARAM_HIT_TYPE = "t";
-    public static final String PARAM_USER_ID = "uid";
-    public static final String PARAM_USER_LANGUAGE = "ul";
-    public static final String PARAM_APPLICATION_VERSION = "av";
     public static final String PARAM_EVENT_CATEGORY = "ec";
     public static final String PARAM_EVENT_ACTION = "ea";
     public static final String PARAM_EVENT_LABEL = "el";
-    public static final String PARAM_EVENT_VALUE = "ev";
     public static final String PARAM_PAGE_VIEW_LOCATION = "dl";
     public static final String PARAM_PAGE_VIEW_TITLE = "dt";
     public static final String PARAM_PAGE_VIEW_PAGE = "dp";
@@ -63,11 +60,15 @@ public class GAnalytics extends EditorThread {
     public static final String PARAM_CUSTOM_DIMENSION = "cd";
 
     public static final String FIELD_OS = PARAM_CUSTOM_DIMENSION + "1";
+    public static final String FIELD_APP_VERSION = PARAM_CUSTOM_DIMENSION + "2";
+    public static final String FIELD_LOCALE = PARAM_CUSTOM_DIMENSION + "3";
+    public static final String FIELD_USER_ID = PARAM_CUSTOM_DIMENSION + "4";
 
     public static final String PROP_ANALYTICS_HOST = "http://www.google-analytics.com/collect";
     public static final String PROP_TRACKING_ID = "UA-89459340-1";
     public static final String PROP_CLIENT_ID = "89459340";
 
+    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
     private static final GAnalytics INSTANCE = new GAnalytics();
 
     public static GAnalytics getInstance() {
@@ -78,6 +79,7 @@ public class GAnalytics extends EditorThread {
      * Wait for sending max 2 sec.
      */
     public static void waitForSend() {
+        if (!EDITOR_CONFIG.isAnalytics()) return;
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;
         if (progressCount.get() < 1) return;
@@ -91,7 +93,7 @@ public class GAnalytics extends EditorThread {
      * @param action   the action.
      */
     public static void sendEvent(@NotNull final String category, @NotNull final String action) {
-        sendEvent(category, action, null, null);
+        sendEvent(category, action, null);
     }
 
     /**
@@ -102,25 +104,12 @@ public class GAnalytics extends EditorThread {
      * @param label    the label.
      */
     public static void sendEvent(@NotNull final String category, @NotNull final String action, @Nullable final String label) {
-        sendEvent(category, action, label, null);
-    }
-
-    /**
-     * Send an event.
-     *
-     * @param category the category.
-     * @param action   the action.
-     * @param label    the label.
-     * @param value    the value.
-     */
-    public static void sendEvent(@NotNull final String category, @NotNull final String action, @Nullable final String label, @Nullable final String value) {
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_EVENT_CATEGORY, category);
         parameters.put(PARAM_EVENT_ACTION, action);
 
         if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
-        if (!isEmpty(value)) parameters.put(PARAM_EVENT_VALUE, value);
 
         send(HitType.EVENT, parameters);
     }
@@ -204,6 +193,7 @@ public class GAnalytics extends EditorThread {
      * @param parameters the parameters.
      */
     private static void send(final Map<String, Object> parameters) {
+        if (!EDITOR_CONFIG.isAnalytics()) return;
         getInstance().addTask(() -> doSend(parameters));
     }
 
@@ -232,9 +222,9 @@ public class GAnalytics extends EditorThread {
             parameters.put(PARAM_CLIENT_ID, PROP_CLIENT_ID);
 
             if (!StringUtils.isEmpty(os)) parameters.put(FIELD_OS, os);
-            if (!StringUtils.isEmpty(appVersion)) parameters.put(PARAM_APPLICATION_VERSION, appVersion);
-            if (!StringUtils.isEmpty(language)) parameters.put(PARAM_USER_LANGUAGE, language);
-            if (!StringUtils.isEmpty(userId)) parameters.put(PARAM_USER_ID, userId);
+            if (!StringUtils.isEmpty(appVersion)) parameters.put(FIELD_APP_VERSION, appVersion);
+            if (!StringUtils.isEmpty(language)) parameters.put(FIELD_LOCALE, language);
+            if (!StringUtils.isEmpty(userId)) parameters.put(FIELD_USER_ID, userId);
 
             final String stringParameters = buildParameters(parameters);
             final byte[] byteParameters = stringParameters.getBytes("UTF-8");
@@ -313,7 +303,7 @@ public class GAnalytics extends EditorThread {
 
     @Override
     public void run() {
-        for (; ; ) {
+        for (;;) {
 
             Runnable next;
 
