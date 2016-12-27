@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node.spatial.emitter;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
@@ -23,11 +25,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import rlib.util.ArrayUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
-
-import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
  * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencers} in
@@ -79,7 +79,8 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
     public Array<ModelNode<?>> getChildren() {
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final ParticleInfluencers element = getElement();
-        ArrayUtils.forEach(element.getInfluencers(), influencer -> result.add(createFor(influencer, element)));
+        final Array<ParticleInfluencer> influencers = element.getInfluencers();
+        influencers.forEach(result, element, (influencer, toStore, el) -> toStore.add(createFor(influencer, el)));
         return result;
     }
 

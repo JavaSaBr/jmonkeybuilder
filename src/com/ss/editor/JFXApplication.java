@@ -48,8 +48,6 @@ public class JFXApplication extends Application {
 
     public static void main(final String[] args) throws IOException {
 
-        LogView.getInstance();
-
         // fix of the fonts render
         //System.setProperty("prism.lcdtext", "false");
         //System.setProperty("prism.text", "t2k");
@@ -111,6 +109,8 @@ public class JFXApplication extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
+        LogView.getInstance();
+
         JFXApplication.instance = this;
         this.stage = stage;
 

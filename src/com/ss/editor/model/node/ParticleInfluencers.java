@@ -2,6 +2,7 @@ package com.ss.editor.model.node;
 
 import org.jetbrains.annotations.NotNull;
 
+import rlib.util.array.Array;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
@@ -32,7 +33,7 @@ public class ParticleInfluencers {
      * @return the array of influencers.
      */
     @NotNull
-    public ParticleInfluencer[] getInfluencers() {
+    public Array<ParticleInfluencer> getInfluencers() {
         return emitterNode.getInfluencers();
     }
 
