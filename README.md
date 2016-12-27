@@ -5,7 +5,7 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.8.7 ##
-* -Imlemented saving/loading particle emitter nodes.
+* -Implemented saving/loading particle emitter nodes.
 * -Added a LogView panel.
 
 ## ver. 0.8.6 ##
