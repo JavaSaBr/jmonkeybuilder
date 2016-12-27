@@ -18,7 +18,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.shape.Box;
 import com.jme3.util.SkyFactory;
-import com.jme3x.jfx.injfx.SceneProcessorCopyToImageView;
+import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
@@ -113,7 +113,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     /**
      * THe copy processor.
      */
-    private volatile SceneProcessorCopyToImageView processor;
+    private volatile FrameTransferSceneProcessor processor;
 
     /**
      * The count of frames.
@@ -226,7 +226,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     @NotNull
-    protected SceneProcessorCopyToImageView prepareScene() {
+    protected FrameTransferSceneProcessor prepareScene() {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr", SkyFactory.EnvMapType.EquirectMap);
