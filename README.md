@@ -1,8 +1,12 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.8.6 #
+# jMonkeyEngine 3 SpaceShift Editor 0.8.7 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.8.7 ##
+* -Imlemented saving/loading particle emiter nodes.
+* -Added Log View panel.
 
 ## ver. 0.8.6 ##
 * -Fixed opening a renamed file in a new editor.
