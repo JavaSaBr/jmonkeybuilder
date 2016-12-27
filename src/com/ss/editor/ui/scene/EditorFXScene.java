@@ -13,8 +13,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -37,7 +37,7 @@ public class EditorFXScene extends Scene {
     /**
      * The view for drawing JME.
      */
-    private final ImageView imageView;
+    private final Canvas canvas;
 
     /**
      * The container of this scene.
@@ -67,7 +67,7 @@ public class EditorFXScene extends Scene {
     public EditorFXScene(final Group root) {
         super(root);
 
-        this.imageView = new ImageView();
+        this.canvas = new Canvas();
         this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
@@ -78,11 +78,11 @@ public class EditorFXScene extends Scene {
         this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
-        root.getChildren().addAll(hideLayer, imageView, container, loadingLayer);
+        root.getChildren().addAll(hideLayer, canvas, container, loadingLayer);
 
-        imageView.setPickOnBounds(true);
-        imageView.fitHeightProperty().bind(heightProperty());
-        imageView.fitWidthProperty().bind(widthProperty());
+        canvas.setPickOnBounds(true);
+        canvas.heightProperty().bind(heightProperty());
+        canvas.widthProperty().bind(widthProperty());
 
         FXUtils.bindFixedWidth(hideLayer, widthProperty());
         FXUtils.bindFixedHeight(hideLayer, heightProperty());
@@ -96,8 +96,8 @@ public class EditorFXScene extends Scene {
      * @return the view for drawing JME.
      */
     @NotNull
-    public ImageView getImageView() {
-        return imageView;
+    public Canvas getCanvas() {
+        return canvas;
     }
 
     /**

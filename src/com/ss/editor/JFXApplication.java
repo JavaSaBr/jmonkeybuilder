@@ -180,7 +180,7 @@ public class JFXApplication extends Application {
 
         final Editor editor = Editor.getInstance();
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
-        executor.addToExecute(() -> bind(editor, scene.getImageView(), editor.getViewPort()));
+        executor.addToExecute(() -> bind(editor, scene.getCanvas(), editor.getViewPort()));
 
         JMEFilePreviewManager.getInstance();
 

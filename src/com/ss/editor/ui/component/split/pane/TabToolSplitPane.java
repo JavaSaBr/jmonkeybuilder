@@ -123,7 +123,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
         saveCollapsed(collapsed);
 
         if (!isCollapsed()) {
-            this.width = newValue.intValue();
+            int abs = Math.abs(width - newValue.intValue());
+            width = abs > 2 ? newValue.intValue() : width;
             saveWidth(width);
         }
 

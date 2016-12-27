@@ -17,7 +17,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.image.ImageView;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import rlib.ui.util.FXUtils;
@@ -79,11 +79,11 @@ public class EditorFXSceneBuilder {
 
     private static void build(final EditorFXScene scene, final StackPane container, final Stage stage) {
 
-        final ImageView imageView = scene.getImageView();
+        final Canvas canvas = scene.getCanvas();
         final EditorBarComponent barComponent = new EditorBarComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 
-        new EventRedirector(editorAreaComponent, imageView, stage);
+        new EventRedirector(editorAreaComponent, canvas, stage);
 
         final GlobalToolSplitPane splitContainer = new GlobalToolSplitPane(scene);
         splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);

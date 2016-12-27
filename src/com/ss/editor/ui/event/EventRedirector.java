@@ -5,7 +5,7 @@ import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 
 import javafx.event.Event;
 import javafx.event.EventTarget;
-import javafx.scene.image.ImageView;
+import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -25,9 +25,9 @@ public class EventRedirector {
     private final EditorAreaComponent editorAreaComponent;
 
     /**
-     * The image view for showing 3D.
+     * The view for showing 3D.
      */
-    private final ImageView imageView;
+    private final Node destination;
 
     /**
      * The stage.
@@ -49,9 +49,9 @@ public class EventRedirector {
      */
     private double sceneY;
 
-    public EventRedirector(final EditorAreaComponent editorAreaComponent, final ImageView imageView, final Stage stage) {
+    public EventRedirector(final EditorAreaComponent editorAreaComponent, final Node destination, final Stage stage) {
         this.editorAreaComponent = editorAreaComponent;
-        this.imageView = imageView;
+        this.destination = destination;
         this.stage = stage;
         this.mousePressed = new boolean[MouseButton.values().length];
         init();
@@ -64,7 +64,7 @@ public class EventRedirector {
         stage.addEventFilter(MouseEvent.MOUSE_RELEASED, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null) return;
@@ -75,13 +75,13 @@ public class EventRedirector {
 
             setMousePressed(event.getButton(), false);
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
         stage.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
@@ -90,13 +90,13 @@ public class EventRedirector {
 
             setMousePressed(event.getButton(), true);
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
         stage.addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             updateCoords(event);
 
@@ -105,13 +105,13 @@ public class EventRedirector {
                 return;
             }
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
         stage.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             updateCoords(event);
 
@@ -122,46 +122,46 @@ public class EventRedirector {
                 return;
             }
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
         stage.addEventHandler(ScrollEvent.ANY, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
                 return;
             }
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
         stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null || !currentEditor.isInside(getSceneX(), getSceneY())) {
                 return;
             }
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
         stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
 
             final EventTarget target = event.getTarget();
-            if (target == imageView) return;
+            if (target == destination) return;
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null || !currentEditor.isInside(getSceneX(), getSceneY())) {
                 return;
             }
 
-            Event.fireEvent(imageView, event.copyFor(event.getSource(), imageView));
+            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
     }
 
