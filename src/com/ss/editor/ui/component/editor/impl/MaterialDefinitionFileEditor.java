@@ -1,6 +1,5 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 
 import com.ss.editor.FileExtensions;
@@ -44,11 +43,11 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL_DEFINITION);
     }
 
-    private static final String[] KEYWORDS = new String[]{
+    private static final String[] KEYWORDS = {
             "MaterialDef", "MaterialParameters", "Technique", "WorldParameters", "Defines"
     };
 
-    private static final String[] VALUE_TYPES = new String[]{
+    private static final String[] VALUE_TYPES = {
             "Texture2D", "Float", "Boolean", "Int", "Color", "Vector3", "TextureCubeMap", "Matrix4", "Vector4", "Vector2",
             "VertexShader", "FragmentShader", "LightMode", "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
             "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
@@ -57,7 +56,7 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
             "Matrix3Array", "Matrix4Array", "TextureBuffer", "Texture3D", "TextureArray"
     };
 
-    private static final String[] VALUE_VALUES = new String[]{
+    private static final String[] VALUE_VALUES = {
             "true", "false", "Off", "On", "True", "False", "Disable", "SinglePass", "MultiPass",
             "SinglePassAndImageBased", "FixedPipeline", "StaticPass", "InPass", "PostPass", "World", "View",
             "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150"
@@ -136,7 +135,7 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
             lastKwEnd = matcher.end();
         }
 
-        spansBuilder.add(emptyList(), text.length() - lastKwEnd);
+        spansBuilder.add(singleton("plain-code"), text.length() - lastKwEnd);
 
         return spansBuilder.create();
     }
@@ -164,7 +163,6 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
         codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
         codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
-        codeArea.setStyle("-fx-stroke: white;");
         codeArea.prefHeightProperty().bind(root.heightProperty());
         codeArea.prefWidthProperty().bind(root.widthProperty());
 

@@ -123,4 +123,6 @@ public interface CSSIds {
 
     String GENERATE_TANGENTS_DIALOG_LABEL = "GenerateTangentsDialogLabel";
     String GENERATE_TANGENTS_DIALOG_COMBO_BOX = "GenerateTangentsDialogComboBox";
+
+    String LOG_VIEW = "LogView";
 }

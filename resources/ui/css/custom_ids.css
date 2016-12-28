@@ -116,6 +116,7 @@
 
 #TextEditorTextArea {
     -fx-background-color: -fx-background-background;
+    -fx-stroke: white;
 }
 
 #TextEditorTextArea .caret {
@@ -707,4 +708,20 @@
 }
 
 #JmePreviewManagerImageView {
+}
+
+#LogView {
+    -fx-background-color: -fx-background-background;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+#LogView .caret {
+    -fx-stroke: white;
+}
+
+#LogView .content {
+    -fx-background-color: -fx-background-background;
+    -fx-fill: white;
+    -fx-text-fill: white;
 }

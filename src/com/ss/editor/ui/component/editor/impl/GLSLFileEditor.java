@@ -1,6 +1,5 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 
 import com.ss.editor.FileExtensions;
@@ -45,7 +44,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
     }
 
-    private static final String[] KEYWORDS = new String[]{
+    private static final String[] KEYWORDS = {
             "define", "undef", "if", "ifdef", "ifndef",
             "else", "elif", "endif", "error", "pragma",
             "extension", "version", "line", "attribute", "const",
@@ -56,7 +55,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
             "void", "true", "false", "invariant", "discard", "return", "struct"
     };
 
-    private static final String[] VALUE_TYPES = new String[]{
+    private static final String[] VALUE_TYPES = {
             "float", "double", "int", "bool", "mat2", "mat3", "mat4", "uint", "uvec2", "uvec3", "uvec4",
             "sampler1D", "sampler2D", "sampler3D", "samplerCube", "vec2", "vec3", "vec4"
     };
@@ -128,7 +127,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
             lastKwEnd = matcher.end();
         }
 
-        spansBuilder.add(emptyList(), text.length() - lastKwEnd);
+        spansBuilder.add(singleton("plain-code"), text.length() - lastKwEnd);
 
         return spansBuilder.create();
     }
@@ -156,10 +155,8 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
         codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
-        codeArea.setStyle("-fx-stroke: white;");
         codeArea.prefHeightProperty().bind(root.heightProperty());
         codeArea.prefWidthProperty().bind(root.widthProperty());
-        //codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
         FXUtils.addToPane(codeArea, root);
         FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);

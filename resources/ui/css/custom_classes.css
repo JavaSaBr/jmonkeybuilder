@@ -342,3 +342,15 @@
 .paragraph-box:has-caret {
     -fx-background-color: #f2f9fc;
 }
+
+.log-severity {
+    -fx-fill: #f92670;
+}
+
+.log-framework {
+    -fx-fill: #ddb03f;
+}
+
+.log-class {
+    -fx-fill: #62c59f;
+}
