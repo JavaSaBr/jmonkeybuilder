@@ -25,24 +25,24 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class BlendToJ3oFileConverter extends AbstractFileConverter {
+public class FBXToJ3oFileConverter extends AbstractFileConverter {
 
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        EXTENSIONS.add(FileExtensions.BLENDER);
+        EXTENSIONS.add(FileExtensions.FBX);
         EXTENSIONS.asUnsafe().trimToSize();
     }
 
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
 
     static {
-        DESCRIPTION.setDescription(Messages.BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION);
-        DESCRIPTION.setConstructor(BlendToJ3oFileConverter::new);
+        DESCRIPTION.setDescription(Messages.FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION);
+        DESCRIPTION.setConstructor(FBXToJ3oFileConverter::new);
         DESCRIPTION.setExtensions(EXTENSIONS);
     }
 
-    private BlendToJ3oFileConverter() {
+    private FBXToJ3oFileConverter() {
     }
 
     @Override

@@ -30,4 +30,5 @@ public interface FileExtensions {
     String GLSL_FRAGMENT = "frag";
 
     String BLENDER = "blend";
+    String FBX = "fbx";
 }

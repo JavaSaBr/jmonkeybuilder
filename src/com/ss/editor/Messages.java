@@ -105,6 +105,7 @@ public class Messages {
     public static final String OTHER_SETTINGS_DIALOG_BUTTON_CANCEL;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
+    public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
     public static final String MODEL_FILE_EDITOR_NAME;
     public static final String MODEL_FILE_EDITOR_TOOL_OBJECTS;
@@ -396,6 +397,7 @@ public class Messages {
         OTHER_SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("OtherSettingsDialogButtonCancel");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
+        FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("FBXToJ3oFileConverterDescription");
 
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
         MODEL_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("ModelFileEditorToolObjects");

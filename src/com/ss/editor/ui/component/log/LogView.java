@@ -85,11 +85,6 @@ public class LogView extends CodeArea {
     }
 
     /**
-     * The stream out wrapper.
-     */
-    private final OutputStreamWrapper streamOutWrapper;
-
-    /**
      * The stream err wrapper.
      */
     private final OutputStreamWrapper streamErrWrapper;
@@ -99,10 +94,8 @@ public class LogView extends CodeArea {
         setWrapText(true);
         richChanges().subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
 
-        this.streamOutWrapper = new OutputStreamWrapper(System.out, externalAppendText());
         this.streamErrWrapper = new OutputStreamWrapper(System.err, externalAppendText());
 
-        System.setOut(streamOutWrapper);
         System.setErr(streamErrWrapper);
 
         FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
