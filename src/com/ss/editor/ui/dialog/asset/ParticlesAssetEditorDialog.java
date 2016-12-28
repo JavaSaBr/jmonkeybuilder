@@ -17,6 +17,7 @@ import com.ss.editor.ui.css.CSSIds;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -37,8 +38,7 @@ import rlib.ui.util.FXUtils;
 import tonegod.emitter.material.ParticlesMaterial;
 
 /**
- * The implementation of the {@link AssetEditorDialog} for choosing the {@link ParticlesMaterial}
- * from asset.
+ * The implementation of the {@link AssetEditorDialog} for choosing the {@link ParticlesMaterial} from asset.
  *
  * @author JavaSaBr
  */
@@ -101,11 +101,11 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         FXUtils.addToPane(imageView, previewContainer);
         FXUtils.addToPane(textView, previewContainer);
 
-        FXUtils.addClassTo(textView, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(textureParamNameLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(applyLightingTransformLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(textureParamNameComboBox, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(applyLightingTransformCheckBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(textView, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(textureParamNameLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(applyLightingTransformLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(textureParamNameComboBox, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(applyLightingTransformCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         settingsContainer.add(textureParamNameLabel, 0, 0);
         settingsContainer.add(textureParamNameComboBox, 1, 0);
@@ -173,7 +173,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
         final Path file = element == null ? null : element.getFile();
 
-        if (file != null) {
+        if (file != null && !Files.isDirectory(file)) {
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Path assetFile = getAssetFile(file);
@@ -181,6 +181,8 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
             if (assetFile == null) {
                 throw new RuntimeException("AssetFile can't be null.");
             }
+
+            assetManager.clearCache();
 
             final Material material = assetManager.loadAsset(new MaterialKey(toAssetPath(assetFile)));
             final MaterialDef materialDef = material.getMaterialDef();
