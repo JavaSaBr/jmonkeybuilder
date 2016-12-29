@@ -21,7 +21,8 @@ public abstract class AbstractBooleanModelPropertyControl<T> extends ModelProper
      */
     private CheckBox checkBox;
 
-    public AbstractBooleanModelPropertyControl(@NotNull final Boolean element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public AbstractBooleanModelPropertyControl(@NotNull final Boolean element, @NotNull final String paramName,
+                                               @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

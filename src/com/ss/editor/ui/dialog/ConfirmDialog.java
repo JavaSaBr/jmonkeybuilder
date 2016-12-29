@@ -30,7 +30,7 @@ public class ConfirmDialog extends EditorDialog {
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
-    private static final Point DIALOG_SIZE = new Point(600, 120);
+    private static final Point DIALOG_SIZE = new Point(600, 110);
 
     /**
      * The handler pf an answer.

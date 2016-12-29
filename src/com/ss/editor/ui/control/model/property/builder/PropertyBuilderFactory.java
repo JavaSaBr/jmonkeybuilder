@@ -6,6 +6,7 @@ import com.ss.editor.ui.control.model.property.builder.impl.LightPropertyBuilder
 import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.ParticlesPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.SpatialPropertyBuilder;
+import com.ss.editor.ui.control.model.property.builder.impl.generic.GenericPropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(GeometryPropertyBuilder.getInstance());
         BUILDERS.add(LightPropertyBuilder.getInstance());
         BUILDERS.add(SpatialPropertyBuilder.getInstance());
+        BUILDERS.add(GenericPropertyBuilder.getInstance());
     }
 
     /**
@@ -39,7 +41,9 @@ public class PropertyBuilderFactory {
      * @param container           the container for containing these controls.
      * @param modelChangeConsumer the consumer for working between controls and editor.
      */
-    public static void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public static void buildFor(@NotNull final Object object, @Nullable final Object parent,
+                                @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+
         for (final PropertyBuilder builder : BUILDERS) {
             builder.buildFor(object, parent, container, modelChangeConsumer);
         }

@@ -39,6 +39,8 @@ public class DeleteFileAction extends MenuItem {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) return;
+
         final Path file = element.getFile();
 
         if (currentAsset.equals(file)) {

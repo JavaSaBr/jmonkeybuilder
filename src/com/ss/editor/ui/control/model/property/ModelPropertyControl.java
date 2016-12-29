@@ -77,7 +77,8 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
      */
     private boolean ignoreListener;
 
-    public ModelPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public ModelPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
+                                @NotNull final ModelChangeConsumer modelChangeConsumer) {
         this.propertyValue = propertyValue;
         this.propertyName = propertyName;
         this.modelChangeConsumer = modelChangeConsumer;

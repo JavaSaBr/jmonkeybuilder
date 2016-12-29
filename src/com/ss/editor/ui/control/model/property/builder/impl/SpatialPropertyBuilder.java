@@ -22,8 +22,7 @@ import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link
- * Spatial} objects.
+ * The implementation of the {@link PropertyBuilder} for building property controls for {@link Spatial} objects.
  *
  * @author JavaSaBr
  */
@@ -40,7 +39,9 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+
         if (!(object instanceof Spatial)) return;
 
         final Spatial spatial = (Spatial) object;
