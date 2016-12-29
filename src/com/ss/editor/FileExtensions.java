@@ -31,4 +31,7 @@ public interface FileExtensions {
 
     String BLENDER = "blend";
     String FBX = "fbx";
+    String OBJ = "obj";
+    String SCENE = "scene";
+    String MESH_XML = "mesh.xml";
 }

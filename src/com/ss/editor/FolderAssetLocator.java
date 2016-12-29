@@ -7,11 +7,17 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetLocator;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.StreamAssetInfo;
+import com.jme3.asset.plugins.UrlAssetInfo;
 import com.ss.editor.config.EditorConfig;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import rlib.util.FileUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of {@link AssetLocator} for loading the data from asset folder.
@@ -19,6 +25,12 @@ import java.nio.file.Path;
  * @author JavaSaBr
  */
 public class FolderAssetLocator implements AssetLocator {
+
+    private static final Array<String> URL_EXTENSIONS = ArrayFactory.newArray(String.class);
+
+    static {
+        URL_EXTENSIONS.add(FileExtensions.SCENE);
+    }
 
     @Override
     public void setRootPath(String rootPath) {
@@ -34,6 +46,17 @@ public class FolderAssetLocator implements AssetLocator {
         final String name = key.getName();
         final Path resolve = currentAsset.resolve(name);
         if (!Files.exists(resolve)) return null;
+
+        final String extension = FileUtils.getExtension(resolve);
+
+        if (URL_EXTENSIONS.contains(extension)) {
+            try {
+                final URL url = resolve.toUri().toURL();
+                return UrlAssetInfo.create(manager, key, url);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         try {
             return new StreamAssetInfo(manager, key, newInputStream(resolve));
