@@ -182,9 +182,10 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
                 throw new RuntimeException("AssetFile can't be null.");
             }
 
-            assetManager.clearCache();
+            final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
+            assetManager.deleteFromCache(materialKey);
 
-            final Material material = assetManager.loadAsset(new MaterialKey(toAssetPath(assetFile)));
+            final Material material = assetManager.loadAsset(materialKey);
             final MaterialDef materialDef = material.getMaterialDef();
 
             final Collection<MatParam> materialParams = materialDef.getMaterialParams();

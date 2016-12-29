@@ -2,7 +2,9 @@ package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.math.Vector3f;
@@ -218,10 +220,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final Material currentMaterial = getCurrentMaterial();
         if (!MaterialUtils.containsShader(currentMaterial, file)) return;
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
+        final MaterialKey materialKey = new MaterialKey(currentMaterial.getAssetName());
 
-        final Material newMaterial = assetManager.loadMaterial(currentMaterial.getAssetName());
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.deleteFromCache(materialKey);
+
+        final Material newMaterial = assetManager.loadAsset(materialKey);
 
         MaterialUtils.updateTo(newMaterial, currentMaterial);
 
@@ -393,12 +397,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         Objects.requireNonNull(assetFile, "Asset file can't be null.");
 
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
+        assetManager.deleteFromCache(materialKey);
 
-        final Material material = assetManager.loadMaterial(assetPath);
+        final Material material = assetManager.loadAsset(materialKey);
 
         final MaterialEditorAppState editorState = getEditorAppState();
         editorState.changeMode(ModelType.BOX);
@@ -618,8 +622,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     private void processChangeTypeImpl(final String newType) {
 
+        final AssetKey<MaterialDef> materialDefKey = new AssetKey<>(newType);
+
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
+        assetManager.deleteFromCache(materialDefKey);
 
         final Material newMaterial = new Material(assetManager, newType);
 

@@ -30,8 +30,7 @@ import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link
- * Geometry} objects.
+ * The implementation of the {@link PropertyBuilder} for building property controls for {@link Geometry} objects.
  *
  * @author JavaSaBr
  */
@@ -50,7 +49,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         } else {
 
-            assetManager.clearCache();
+            assetManager.deleteFromCache(materialKey);
 
             final Material material = assetManager.loadAsset(materialKey);
             geometry.setMaterial(material);

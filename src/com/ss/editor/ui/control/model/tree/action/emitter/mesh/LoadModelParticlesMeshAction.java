@@ -1,6 +1,9 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.mesh;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
@@ -20,6 +23,7 @@ import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -28,8 +32,7 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
 import tonegod.emitter.particle.ParticleDataTemplateMesh;
 
 /**
- * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link
- * ParticleDataTemplateMesh}.
+ * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link ParticleDataTemplateMesh}.
  *
  * @author JavaSaBr
  */
@@ -62,17 +65,20 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction {
     /**
      * The process of opening file.
      */
-    protected void processOpen(final Path file) {
+    protected void processOpen(@NotNull final Path file) {
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
-        final Spatial loadedModel = assetManager.loadModel(assetPath);
+        final ModelKey modelKey = new ModelKey(assetPath);
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.deleteFromCache(modelKey);
+
+        final Spatial loadedModel = assetManager.loadModel(modelKey);
         final Geometry geometry = NodeUtils.findGeometry(loadedModel);
 
         if (geometry == null) {
