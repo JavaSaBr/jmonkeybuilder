@@ -23,7 +23,9 @@ public class EnumParticleInfluencerEmitterPropertyControl<T extends ParticleInfl
     @NotNull
     private Object parent;
 
-    public EnumParticleInfluencerEmitterPropertyControl(@NotNull final E element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final E[] availableValues, final @NotNull Object parent) {
+    public EnumParticleInfluencerEmitterPropertyControl(@NotNull final E element, @NotNull final String paramName,
+                                                        @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                                        @NotNull final E[] availableValues, final @NotNull Object parent) {
         super(element, paramName, modelChangeConsumer, availableValues);
         this.parent = parent;
     }
@@ -32,7 +34,10 @@ public class EnumParticleInfluencerEmitterPropertyControl<T extends ParticleInfl
     protected void changed(@Nullable final E newValue, @Nullable final E oldValue) {
 
         final T editObject = getEditObject();
-        final ParticleInfluencerPropertyOperation<T, E> operation = new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
+        final ParticleInfluencerPropertyOperation<T, E> operation =
+                new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();

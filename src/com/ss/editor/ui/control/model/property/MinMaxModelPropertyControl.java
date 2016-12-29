@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MinMaxModelPropertyControl<T extends Spatial> extends Vector2fModelPropertyControl<T> {
 
-    public MinMaxModelPropertyControl(final Vector2f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public MinMaxModelPropertyControl(@NotNull final Vector2f element, @NotNull final String paramName,
+                                      @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

@@ -1,7 +1,12 @@
 package com.ss.editor.ui.control.model.tree.node;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
+import com.jme3.animation.AudioTrack;
+import com.jme3.animation.BoneTrack;
+import com.jme3.animation.EffectTrack;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
@@ -13,7 +18,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
+import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationAudioTrackModelNode;
+import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationBoneTrackModelNode;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationEffectTrackModelNode;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.AmbientLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.DirectionalLightModelNode;
@@ -40,8 +48,6 @@ import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.node.ParticleNode;
 
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
  * The factory for creating the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
  *
@@ -61,6 +67,12 @@ public class ModelNodeFactory {
 
         if (element instanceof Animation) {
             return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof BoneTrack) {
+            return unsafeCast(new AnimationBoneTrackModelNode((BoneTrack) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof EffectTrack) {
+            return unsafeCast(new AnimationEffectTrackModelNode((EffectTrack) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof AudioTrack) {
+            return unsafeCast(new AnimationAudioTrackModelNode((AudioTrack) element, ID_GENERATOR.incrementAndGet()));
         }
 
         if (element instanceof AnimControl) {

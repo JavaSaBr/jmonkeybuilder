@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder.impl.generic;
 
+import com.ss.editor.control.scene.ControlEditableGenericObjectFactory;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link PropertyBuilder} for building property controls for editable objects.
@@ -22,6 +24,12 @@ import rlib.util.array.Array;
  * @author JavaSaBr
  */
 public class GenericPropertyBuilder extends AbstractPropertyBuilder {
+
+    private static final Array<EditableGenericObjectFactory> FACTORIES = ArrayFactory.newArray(EditableGenericObjectFactory.class);
+
+    static {
+        FACTORIES.add(ControlEditableGenericObjectFactory.getInstance());
+    }
 
     private static final PropertyBuilder INSTANCE = new GenericPropertyBuilder();
 
@@ -33,9 +41,18 @@ public class GenericPropertyBuilder extends AbstractPropertyBuilder {
     public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                          @NotNull final ModelChangeConsumer modelChangeConsumer) {
 
-        if (!(object instanceof EditableGenericObject)) return;
+        EditableGenericObject genericObject = object instanceof EditableGenericObject ?
+                (EditableGenericObject) object : null;
 
-        final EditableGenericObject genericObject = (EditableGenericObject) object;
+        if (genericObject == null) {
+            for (final EditableGenericObjectFactory factory : FACTORIES) {
+                genericObject = factory.make(object);
+                if (genericObject != null) break;
+            }
+        }
+
+        if (genericObject == null) return;
+
         final Array<EditableProperty<?, ?>> editableProperties = genericObject.getEditableProperties();
         if (editableProperties.isEmpty()) return;
 

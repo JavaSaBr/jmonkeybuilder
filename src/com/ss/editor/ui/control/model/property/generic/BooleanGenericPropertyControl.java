@@ -4,6 +4,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.AbstractBooleanModelPropertyControl;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.impl.generic.EditableProperty;
+import com.ss.editor.ui.control.model.property.operation.EditablePropertyPropertyOperation;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,10 +25,13 @@ public class BooleanGenericPropertyControl extends AbstractBooleanModelPropertyC
     protected void changed(@Nullable final Boolean newValue, @Nullable final Boolean oldValue) {
 
         final EditableProperty<Boolean, ?> editObject = getEditObject();
-        //final ParticleInfluencerPropertyOperation<T, Boolean> operation = new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
-        //operation.setApplyHandler(getApplyHandler());
+
+        final EditablePropertyPropertyOperation<Boolean> operation =
+                new EditablePropertyPropertyOperation<>(editObject, newValue, oldValue);
+
+        operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
-        //modelChangeConsumer.execute(operation);
+        modelChangeConsumer.execute(operation);
     }
 }

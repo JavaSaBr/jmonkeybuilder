@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractIntArrayModelPropertyControl} for editing int array
- * values in the {@link ParticleInfluencer}.
+ * The implementation of the {@link AbstractIntArrayModelPropertyControl} for editing int array values in the {@link
+ * ParticleInfluencer}.
  *
  * @author JavaSaBr
  */
@@ -23,7 +23,9 @@ public class IntArrayParticleInfluencerPropertyControl<T extends ParticleInfluen
     @NotNull
     private Object parent;
 
-    public IntArrayParticleInfluencerPropertyControl(@Nullable final int[] element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final Object parent) {
+    public IntArrayParticleInfluencerPropertyControl(@Nullable final int[] element, @NotNull final String paramName,
+                                                     @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                                     @NotNull final Object parent) {
         super(element, paramName, modelChangeConsumer);
         this.parent = parent;
     }
@@ -32,7 +34,10 @@ public class IntArrayParticleInfluencerPropertyControl<T extends ParticleInfluen
     protected void changed(@Nullable final int[] newValue, @Nullable final int[] oldValue) {
 
         final T editObject = getEditObject();
-        final ParticleInfluencerPropertyOperation<T, int[]> operation = new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
+        final ParticleInfluencerPropertyOperation<T, int[]> operation =
+                new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
