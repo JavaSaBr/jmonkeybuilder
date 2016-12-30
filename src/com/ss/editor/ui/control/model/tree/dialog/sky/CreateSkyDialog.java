@@ -59,7 +59,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
     private static final Insets CHECK_BOX_OFFSET = new Insets(FIELD_OFFSET.getTop(), 0, 0, 200);
     private static final Insets SETTINGS_OFFSET = new Insets(0, 0, 10, 0);
 
-    private static final Point DIALOG_SIZE = new Point(580, 390);
+    private static final Point DIALOG_SIZE = new Point(580, 385);
 
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
@@ -301,12 +301,12 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(bottomTextureControl, bottomTextureContainer);
         FXUtils.addToPane(bottomTextureContainer, multipleTextureSettings);
 
-        FXUtils.addClassTo(northTextureLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(southTextureLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(eastTextureLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(westTextureLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(topTextureContainer, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(bottomTextureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(northTextureLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(southTextureLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(eastTextureLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(westTextureLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(topTextureContainer, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(bottomTextureLabel, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(bottomTextureContainer, FIELD_OFFSET);
         VBox.setMargin(eastTextureContainer, FIELD_OFFSET);
@@ -349,9 +349,9 @@ public class CreateSkyDialog extends AbstractNodeDialog {
 
         FXUtils.addToPane(flipYCheckBox, singleTextureSettings);
 
-        FXUtils.addClassTo(singleTextureLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(envMapTypeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(flipYCheckBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(singleTextureLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(envMapTypeLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(flipYCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(singleTextureContainer, FIELD_OFFSET);
         VBox.setMargin(envMapTypeContainer, FIELD_OFFSET);
@@ -398,10 +398,10 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(normalScaleZSpinner, normalScaleContainer);
         FXUtils.addToPane(normalScaleContainer, root);
 
-        FXUtils.addClassTo(normalScaleLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(normalScaleXSpinner, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(normalScaleYSpinner, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(normalScaleZSpinner, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(normalScaleLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(normalScaleXSpinner, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(normalScaleYSpinner, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(normalScaleZSpinner, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(normalScaleContainer, FIELD_OFFSET);
     }
@@ -421,8 +421,8 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         FXUtils.addToPane(skyTypeComboBox, skyTypeContainer);
         FXUtils.addToPane(skyTypeContainer, root);
 
-        FXUtils.addClassTo(skyTypeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(skyTypeComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(skyTypeLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(skyTypeComboBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(skyTypeContainer, SKY_TYPE_OFFSET);
     }

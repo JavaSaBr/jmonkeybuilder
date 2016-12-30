@@ -142,6 +142,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_POINT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_SPOT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
@@ -245,6 +247,11 @@ public class Messages {
     public static final String RENAME_DIALOG_BUTTON_OK;
     public static final String RENAME_DIALOG_BUTTON_CANCEL;
 
+    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_TITLE;
+    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE;
+    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_SPEED;
+    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK;
+
     public static final String QUESTION_DIALOG_TITLE;
     public static final String QUESTION_DIALOG_BUTTON_OK;
     public static final String QUESTION_DIALOG_BUTTON_CANCEL;
@@ -286,7 +293,6 @@ public class Messages {
     public static final String GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL;
     public static final String GENERATE_TANGENTS_DIALOG_TITLE;
     public static final String GENERATE_TANGENTS_DIALOG_BUTTON_OK;
-    public static final String GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL;
 
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
@@ -437,6 +443,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_POINT_LIGHT = bundle.getString("ModelNodeTreeActionPointLight");
         MODEL_NODE_TREE_ACTION_SPOT_LIGHT = bundle.getString("ModelNodeTreeActionSpotLight");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
+        MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
+        MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
@@ -540,6 +548,11 @@ public class Messages {
         RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
         RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
 
+        PLAY_ANIMATION_SETTINDS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
+        PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE = bundle.getString("PlayAnimationSettingsDialogLoopMode");
+        PLAY_ANIMATION_SETTINDS_DIALOG_SPEED = bundle.getString("PlayAnimationSettingsDialogSpeed");
+        PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
+
         QUESTION_DIALOG_TITLE = bundle.getString("QuestionDialogTitle");
         QUESTION_DIALOG_BUTTON_OK = bundle.getString("QuestionDialogButtonOk");
         QUESTION_DIALOG_BUTTON_CANCEL = bundle.getString("QuestionDialogButtonCancel");
@@ -581,7 +594,6 @@ public class Messages {
         GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL = bundle.getString("GenerateTangentsDialogAlgorithmLabel");
         GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED = bundle.getString("GenerateTangentsDialogSplitMirrored");
         GENERATE_TANGENTS_DIALOG_BUTTON_OK = bundle.getString("GenerateTangentsDialogButtonOk");
-        GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL = bundle.getString("GenerateTangentsDialogButtonCancel");
 
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME = bundle.getString("BoundingVolumeModelPropertyControlName");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");

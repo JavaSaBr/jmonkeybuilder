@@ -72,7 +72,6 @@ public class ModelNodeTree extends VBox {
         treeView.setFocusTraversable(true);
         treeView.prefHeightProperty().bind(heightProperty());
         treeView.prefWidthProperty().bind(widthProperty());
-        treeView.setContextMenu(new ContextMenu());
 
         final MultipleSelectionModel<TreeItem<ModelNode<?>>> selectionModel = treeView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
@@ -179,12 +178,9 @@ public class ModelNodeTree extends VBox {
      */
     public ContextMenu getContextMenu(@NotNull final ModelNode<?> modelNode) {
 
-        final ContextMenu contextMenu = treeView.getContextMenu();
+        final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
-        items.clear();
-
         modelNode.fillContextMenu(this, items);
-
         if (items.isEmpty()) return null;
 
         return contextMenu;

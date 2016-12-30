@@ -1,4 +1,4 @@
-package com.ss.editor.ui.dialog.model;
+package com.ss.editor.ui.control.model.tree.dialog;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
@@ -12,7 +12,6 @@ import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,6 @@ import java.awt.Point;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -38,17 +36,15 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class GenerateTangentsDialog extends EditorDialog {
+public class GenerateTangentsDialog extends AbstractNodeDialog {
 
     private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
 
-    private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-    private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-
     private static final Point DIALOG_SIZE = new Point(530, 154);
 
-    private static final Insets FIELD_OFFSET = new Insets(6, 20, 0, 0);
-    private static final Insets BUTTONS_OFFSET = new Insets(20, 0, 0, 0);
+    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(),
+            CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     public enum AlgorithmType {
         STANDARD,
@@ -75,11 +71,6 @@ public class GenerateTangentsDialog extends EditorDialog {
      * The check box about spliting morrored.
      */
     private CheckBox splitMirroredCheckBox;
-
-    /**
-     * The ok button.
-     */
-    private Button okButton;
 
     public GenerateTangentsDialog(final ModelNodeTree nodeTree, final ModelNode<?> node) {
         this.nodeTree = nodeTree;
@@ -147,7 +138,7 @@ public class GenerateTangentsDialog extends EditorDialog {
         FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(algorithmTypeContainer, FIELD_OFFSET);
-        VBox.setMargin(splitMirroredContainer, FIELD_OFFSET);
+        VBox.setMargin(splitMirroredContainer, LAST_FIELD_OFFSET);
     }
 
     @Override
@@ -156,34 +147,6 @@ public class GenerateTangentsDialog extends EditorDialog {
         if (event.getCode() == KeyCode.ENTER) {
             processOk();
         }
-    }
-
-    @Override
-    protected void createActions(@NotNull final VBox root) {
-        super.createActions(root);
-
-        final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
-
-        okButton = new Button(Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK);
-        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
-        okButton.setOnAction(event -> processOk());
-
-        final Button cancelButton = new Button(Messages.GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setOnAction(event -> hide());
-
-        FXUtils.addToPane(okButton, container);
-        FXUtils.addToPane(cancelButton, container);
-        FXUtils.addToPane(container, root);
-
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
-
-        VBox.setMargin(container, BUTTONS_OFFSET);
     }
 
     /**
@@ -200,10 +163,8 @@ public class GenerateTangentsDialog extends EditorDialog {
         return algorithmTypeComboBox;
     }
 
-    /**
-     * Handle generating.
-     */
-    private void processOk() {
+    @Override
+    protected void processOk() {
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
@@ -228,6 +189,11 @@ public class GenerateTangentsDialog extends EditorDialog {
         modelChangeConsumer.execute(new ChangeMeshOperation(newMesh, oldMesh, index));
 
         hide();
+    }
+
+    @Override
+    protected String getButtonOkLabel() {
+        return Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK;
     }
 
     @Override

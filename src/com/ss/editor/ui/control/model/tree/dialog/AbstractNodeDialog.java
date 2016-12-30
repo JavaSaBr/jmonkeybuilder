@@ -55,7 +55,7 @@ public abstract class AbstractNodeDialog extends EditorDialog {
         final HBox container = new HBox();
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
-        okButton = new Button(Messages.NODE_DIALOG_BUTTON_OK);
+        okButton = new Button(getButtonOkLabel());
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
 
@@ -72,6 +72,10 @@ public abstract class AbstractNodeDialog extends EditorDialog {
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
+    }
+
+    protected String getButtonOkLabel() {
+        return Messages.NODE_DIALOG_BUTTON_OK;
     }
 
     protected void processOk() {

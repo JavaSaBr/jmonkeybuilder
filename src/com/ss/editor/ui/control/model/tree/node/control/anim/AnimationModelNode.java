@@ -6,6 +6,7 @@ import com.jme3.animation.Track;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.animation.PlayAnimationAction;
 import com.ss.editor.ui.control.model.tree.action.animation.RemoveAnimationAction;
 import com.ss.editor.ui.control.model.tree.action.animation.StopAnimationAction;
@@ -20,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import rlib.util.ArrayUtils;
+import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -56,6 +58,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
         if (getChannel() < 0) {
             items.add(new PlayAnimationAction(nodeTree, this));
             items.add(new RemoveAnimationAction(nodeTree, this));
+            items.add(new RenameNodeAction(nodeTree, this));
         } else {
             items.add(new StopAnimationAction(nodeTree, this));
         }
@@ -88,6 +91,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
 
     @Override
     public void changeName(@NotNull final ModelNodeTree nodeTree, @NotNull final String newName) {
+        if (StringUtils.equals(getName(), newName)) return;
+        super.changeName(nodeTree, newName);
 
         final AnimControl control = getControl();
         final RenameAnimationNodeOperation operation = new RenameAnimationNodeOperation(getName(), newName, control);

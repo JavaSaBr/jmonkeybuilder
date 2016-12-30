@@ -1,15 +1,14 @@
-package com.ss.editor.ui.dialog.model.animation;
+package com.ss.editor.ui.control.model.tree.dialog.animation;
 
 import static javafx.collections.FXCollections.observableArrayList;
 
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.EditorDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +17,6 @@ import java.awt.Point;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
@@ -34,15 +32,13 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class PlayParametersDialog extends EditorDialog {
+public class PlayParametersDialog extends AbstractNodeDialog {
 
-    private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-    private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+    private static final Point DIALOG_SIZE = new Point(450, 154);
 
-    private static final Point DIALOG_SIZE = new Point(500, 150);
-
-    private static final Insets FIELD_OFFSET = new Insets(2, 20, 0, 0);
-    private static final Insets BUTTONS_OFFSET = new Insets(25, 0, 0, 0);
+    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(),
+            CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     private static final ObservableList<LoopMode> LOOP_MODES = observableArrayList(LoopMode.values());
 
@@ -65,11 +61,6 @@ public class PlayParametersDialog extends EditorDialog {
      * The field with a value of speed.
      */
     private TextField speedField;
-
-    /**
-     * The ok button.
-     */
-    private Button okButton;
 
     public PlayParametersDialog(final ModelNodeTree nodeTree, final AnimationControlModelNode node) {
         this.nodeTree = nodeTree;
@@ -98,7 +89,7 @@ public class PlayParametersDialog extends EditorDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return "Settings";
+        return Messages.PLAY_ANIMATION_SETTINDS_DIALOG_TITLE;
     }
 
     @Override
@@ -109,7 +100,7 @@ public class PlayParametersDialog extends EditorDialog {
 
         final HBox loopModeContainer = new HBox();
 
-        final Label loopModeLabel = new Label("Loop mode:");
+        final Label loopModeLabel = new Label(Messages.PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE + ":");
         loopModeLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         loopModeComboBox = new ComboBox<>(LOOP_MODES);
@@ -124,7 +115,7 @@ public class PlayParametersDialog extends EditorDialog {
 
         final HBox speedContainer = new HBox();
 
-        final Label speedLabel = new Label("Speed:");
+        final Label speedLabel = new Label(Messages.PLAY_ANIMATION_SETTINDS_DIALOG_SPEED + ":");
         speedLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         speedField = new TextField();
@@ -141,7 +132,7 @@ public class PlayParametersDialog extends EditorDialog {
         FXUtils.addClassTo(speedField, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(loopModeContainer, FIELD_OFFSET);
-        VBox.setMargin(speedContainer, FIELD_OFFSET);
+        VBox.setMargin(speedContainer, LAST_FIELD_OFFSET);
     }
 
     @Override
@@ -150,34 +141,6 @@ public class PlayParametersDialog extends EditorDialog {
         if (event.getCode() == KeyCode.ENTER) {
             processOk();
         }
-    }
-
-    @Override
-    protected void createActions(@NotNull final VBox root) {
-        super.createActions(root);
-
-        final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
-
-        okButton = new Button(Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK);
-        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
-        okButton.setOnAction(event -> processOk());
-
-        final Button cancelButton = new Button(Messages.GENERATE_TANGENTS_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setOnAction(event -> hide());
-
-        FXUtils.addToPane(okButton, container);
-        FXUtils.addToPane(cancelButton, container);
-        FXUtils.addToPane(container, root);
-
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
-
-        VBox.setMargin(container, BUTTONS_OFFSET);
     }
 
     /**
@@ -194,24 +157,30 @@ public class PlayParametersDialog extends EditorDialog {
         return loopModeComboBox;
     }
 
-    /**
-     * Handle changing.
-     */
-    private void processOk() {
-
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+    @Override
+    protected void processOk() {
 
         final ComboBox<LoopMode> loopModeComboBox = getLoopModeComboBox();
         final SingleSelectionModel<LoopMode> selectionModel = loopModeComboBox.getSelectionModel();
 
         final TextField speedField = getSpeedField();
-        final float speed = Float.parseFloat(speedField.getText());
+
+        float speed;
+        try {
+            speed = Float.parseFloat(speedField.getText());
+        } catch (final NumberFormatException e) {
+            speed = 1F;
+        }
 
         final AnimationControlModelNode node = getNode();
         node.updateSettings(selectionModel.getSelectedItem(), speed);
 
         hide();
+    }
+
+    @Override
+    protected String getButtonOkLabel() {
+        return Messages.PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK;
     }
 
     @Override

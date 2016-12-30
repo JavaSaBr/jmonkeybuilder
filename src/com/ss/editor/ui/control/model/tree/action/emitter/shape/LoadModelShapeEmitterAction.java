@@ -10,6 +10,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeEmitterShapeOperation;
@@ -22,10 +23,12 @@ import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.Objects;
 
+import javafx.scene.image.Image;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.ParticleEmitterNode;
@@ -41,6 +44,12 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction {
 
     static {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.ADD_18;
     }
 
     public LoadModelShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {

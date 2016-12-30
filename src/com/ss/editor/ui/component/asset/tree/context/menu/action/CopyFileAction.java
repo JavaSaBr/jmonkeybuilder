@@ -1,26 +1,28 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import static java.util.Collections.singletonList;
+
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 
-import static java.util.Collections.singletonList;
-
 /**
- * Реализация действия по копированию файла.
+ * The action to copy a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class CopyFileAction extends MenuItem {
 
     /**
-     * Элемент действия.
+     * The action element.
      */
     private final ResourceElement element;
 
@@ -28,10 +30,11 @@ public class CopyFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE);
         setOnAction(event -> processCopy());
+        setGraphic(new ImageView(Icons.COPY_16));
     }
 
     /**
-     * Процесс копирования файла.
+     * Process of copying.
      */
     private void processCopy() {
 

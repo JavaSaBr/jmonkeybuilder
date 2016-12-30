@@ -40,6 +40,12 @@ public interface Icons {
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/bone.png");
     Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/audio.png");
     Image SETTINGS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/settings.png");
+    Image PASTE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/paste.png");
+    Image VIEW_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/view.png");
+    Image NEW_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/new_file.png");
+    Image CUT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cut.png");
+    Image COPY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/copy.png");
+    Image TRANSFORMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/transformation.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);

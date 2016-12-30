@@ -17,12 +17,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link SpatialModelNode} for representing the {@link Geometry} in the
- * editor.
+ * The implementation of the {@link SpatialModelNode} for representing the {@link Geometry} in the editor.
  *
  * @author JavaSaBr
  */
@@ -56,7 +56,7 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
+        final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this));
 
         items.add(toolActions);

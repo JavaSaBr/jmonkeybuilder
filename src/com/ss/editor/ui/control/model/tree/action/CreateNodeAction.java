@@ -3,15 +3,19 @@ package com.ss.editor.ui.control.model.tree.action;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javafx.scene.image.Image;
 
 /**
- * Действие по созданию нового узла.
+ * The action to create a node.
  *
  * @author Ronn
  */
@@ -19,6 +23,12 @@ public class CreateNodeAction extends AbstractNodeAction {
 
     public CreateNodeAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.ADD_18;
     }
 
     @NotNull

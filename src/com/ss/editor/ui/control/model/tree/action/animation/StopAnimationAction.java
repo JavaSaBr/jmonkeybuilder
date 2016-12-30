@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.animation;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -28,7 +29,7 @@ public class StopAnimationAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Stop";
+        return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     }
 
     @Nullable

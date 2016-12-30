@@ -1,6 +1,9 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
@@ -13,6 +16,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import rlib.logging.Logger;
@@ -21,12 +25,10 @@ import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
- * Реализация действия по вставке файла.
+ * The action to paste a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class PasteFileAction extends MenuItem {
 
@@ -35,7 +37,7 @@ public class PasteFileAction extends MenuItem {
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * Элемент действия.
+     * The action element.
      */
     private final ResourceElement element;
 
@@ -43,10 +45,11 @@ public class PasteFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE);
         setOnAction(event -> processCopy());
+        setGraphic(new ImageView(Icons.PASTE_16));
     }
 
     /**
-     * Процесс вставки файла.
+     * Process of copying.
      */
     private void processCopy() {
 
@@ -83,7 +86,7 @@ public class PasteFileAction extends MenuItem {
     }
 
     /**
-     * Процесс перемещения файлов.
+     * Process of moving.
      */
     private void processMove(final Clipboard clipboard, final Path targetFolder, final Path file) {
 
@@ -104,7 +107,7 @@ public class PasteFileAction extends MenuItem {
     }
 
     /**
-     * Процесс копирования файлов.
+     * Process of copying.
      */
     private void processCopy(final Clipboard clipboard, final Path targetFolder, final Path file) {
 
@@ -130,7 +133,7 @@ public class PasteFileAction extends MenuItem {
     }
 
     /**
-     * Процесс копирования файлов.
+     * Process of copying.
      */
     private void processCopy(final Path file, final Array<Path> toCopy, final Array<Path> copied, final Path newFile) throws IOException {
 

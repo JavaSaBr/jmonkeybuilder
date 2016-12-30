@@ -1,10 +1,11 @@
 package com.ss.editor.ui.control.model.tree.action.animation;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.model.tree.dialog.animation.PlayParametersDialog;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
-import com.ss.editor.ui.dialog.model.animation.PlayParametersDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class PlaySettingsAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Play settings";
+        return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     }
 
     @Nullable

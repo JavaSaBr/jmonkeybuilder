@@ -10,6 +10,7 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
@@ -24,6 +25,8 @@ import org.jetbrains.annotations.NotNull;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -56,7 +59,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
     @NotNull
     protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
-        return new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
+        return new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
     }
 
     @NotNull
@@ -78,6 +81,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
     @Override
     public void changeName(@NotNull final ModelNodeTree nodeTree, @NotNull final String newName) {
+        if (StringUtils.equals(getName(), newName)) return;
         super.changeName(nodeTree, newName);
 
         final Spatial spatial = getElement();
