@@ -9,7 +9,7 @@
 * -Migrated from the ReflectionAllocator to the JEmallocAllocator
 * -Added actions to convert .scene/.mesh.xml/.fbx/.obj to .j3o
 * -Updated context menus in the AssetTree and ModelNodeTree
-* -Added showing animation transks in the ModelNodeTree
+* -Added showing animation tracks in the ModelNodeTree
 * -Added some actions to animation nodes in the ModelEditor
 * -Bugfixes
 
