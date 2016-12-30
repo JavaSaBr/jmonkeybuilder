@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The action for generating tangents.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class TangentGeneratorAction extends AbstractNodeAction {
 

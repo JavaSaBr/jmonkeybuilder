@@ -10,24 +10,24 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по изменению сетки части модели.
+ * The operation to change a mesh of a model.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Новая сетка геометрии.
+     * The new mesh.
      */
     private final Mesh newMesh;
 
     /**
-     * Старая сетка геометрии.
+     * The previous mesh.
      */
     private final Mesh oldMesh;
 
     /**
-     * Индекс геометрии.
+     * The index of geometry.
      */
     private final int index;
 

@@ -3,9 +3,13 @@ package com.ss.editor.ui.control.model.tree.node.control.anim;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.Track;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.PlayAnimationAction;
+import com.ss.editor.ui.control.model.tree.action.animation.PlayAnimationAction;
+import com.ss.editor.ui.control.model.tree.action.animation.RemoveAnimationAction;
+import com.ss.editor.ui.control.model.tree.action.animation.StopAnimationAction;
+import com.ss.editor.ui.control.model.tree.action.operation.animation.RenameAnimationNodeOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 
@@ -27,6 +31,11 @@ import rlib.util.array.ArrayFactory;
 public class AnimationModelNode extends ModelNode<Animation> {
 
     /**
+     * The node of an animation control.
+     */
+    private AnimationControlModelNode controlModelNode;
+
+    /**
      * The animation control.
      */
     private AnimControl control;
@@ -43,7 +52,14 @@ public class AnimationModelNode extends ModelNode<Animation> {
 
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
-        if (getChannel() < 0) items.add(new PlayAnimationAction(nodeTree, this));
+
+        if (getChannel() < 0) {
+            items.add(new PlayAnimationAction(nodeTree, this));
+            items.add(new RemoveAnimationAction(nodeTree, this));
+        } else {
+            items.add(new StopAnimationAction(nodeTree, this));
+        }
+
         super.fillContextMenu(nodeTree, items);
     }
 
@@ -66,6 +82,21 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     @Override
+    public boolean canEditName() {
+        return true;
+    }
+
+    @Override
+    public void changeName(@NotNull final ModelNodeTree nodeTree, @NotNull final String newName) {
+
+        final AnimControl control = getControl();
+        final RenameAnimationNodeOperation operation = new RenameAnimationNodeOperation(getName(), newName, control);
+
+        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        modelChangeConsumer.execute(operation);
+    }
+
+    @Override
     public boolean hasChildren() {
         final Animation element = getElement();
         final Track[] tracks = element.getTracks();
@@ -84,6 +115,20 @@ public class AnimationModelNode extends ModelNode<Animation> {
      */
     public AnimControl getControl() {
         return control;
+    }
+
+    /**
+     * @param controlModelNode the node of an animation control.
+     */
+    public void setControlModelNode(@NotNull final AnimationControlModelNode controlModelNode) {
+        this.controlModelNode = controlModelNode;
+    }
+
+    /**
+     * @return the node of an animation control.
+     */
+    public AnimationControlModelNode getControlModelNode() {
+        return controlModelNode;
     }
 
     @NotNull

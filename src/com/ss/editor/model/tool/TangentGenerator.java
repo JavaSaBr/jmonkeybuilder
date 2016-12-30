@@ -5,21 +5,21 @@ import com.jme3.util.TangentBinormalGenerator;
 import com.jme3.util.mikktspace.MikktspaceTangentGenerator;
 
 /**
- * Реализация генератора тангентов для геометрии.
+ * Tangent generators.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class TangentGenerator {
 
     /**
-     * Генерация тангетсов используя стандартный алгоритм.
+     * Generate tangents using a standard algorithm.
      */
     public static void useStandardGenerator(final Spatial spatial, final boolean splitMirrored) {
         TangentBinormalGenerator.generate(spatial, splitMirrored);
     }
 
     /**
-     * Генерация тангетсов используя новый алгоритм.
+     * Generate tangents using a Mikktspace algorithm.
      */
     public static void useMikktspaceGenerator(final Spatial spatial) {
         MikktspaceTangentGenerator.generate(spatial);

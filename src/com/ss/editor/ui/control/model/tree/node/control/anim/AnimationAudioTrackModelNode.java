@@ -21,7 +21,7 @@ public class AnimationAudioTrackModelNode extends AnimationTrackModelNode<AudioT
 
     @NotNull
     @Override
-    public String getName() {
+    protected String computeName() {
         final AudioTrack audioTrack = getElement();
         return "AudioTrack : " + audioTrack.getAudio().getName();
     }

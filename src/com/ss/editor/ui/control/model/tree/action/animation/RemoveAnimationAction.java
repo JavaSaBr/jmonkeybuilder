@@ -1,12 +1,13 @@
-package com.ss.editor.ui.control.model.tree.action;
+package com.ss.editor.ui.control.model.tree.action.animation;
 
-import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
+import com.jme3.animation.AnimControl;
+import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
+import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.model.tree.action.operation.animation.RemoveAnimationNodeOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
@@ -16,13 +17,13 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.image.Image;
 
 /**
- * The implementation of the {@link AbstractNodeAction} for removing control from the {@link Spatial}.
+ * The implementation of the {@link AbstractNodeAction} to remove an animation from the {@link AnimControl}.
  *
  * @author JavaSaBr
  */
-public class RemoveControlAction extends AbstractNodeAction {
+public class RemoveAnimationAction extends AbstractNodeAction {
 
-    public RemoveControlAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public RemoveAnimationAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -44,8 +45,8 @@ public class RemoveControlAction extends AbstractNodeAction {
         final ModelNode<?> node = getNode();
         final Object element = node.getElement();
 
-        if (!(element instanceof Control)) return;
-        final Control control = (Control) element;
+        if (!(element instanceof Animation)) return;
+        final Animation animation = (Animation) element;
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelNode<?> parentNode = nodeTree.findParent(node);
@@ -55,11 +56,11 @@ public class RemoveControlAction extends AbstractNodeAction {
             return;
         }
 
-        final Object parent = parentNode.getElement();
+        final AnimControl parent = (AnimControl) parentNode.getElement();
 
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), parent);
 
-        modelChangeConsumer.execute(new RemoveControlOperation(control, index));
+        modelChangeConsumer.execute(new RemoveAnimationNodeOperation(animation, parent));
     }
 }

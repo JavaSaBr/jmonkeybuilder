@@ -39,6 +39,7 @@ public interface Icons {
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/bone.png");
     Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/audio.png");
+    Image SETTINGS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/settings.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);

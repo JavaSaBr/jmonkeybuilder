@@ -24,7 +24,7 @@ public class AnimationBoneTrackModelNode extends AnimationTrackModelNode<BoneTra
 
     @NotNull
     @Override
-    public String getName() {
+    protected String computeName() {
         final BoneTrack boneTrack = getElement();
         final AnimControl control = getControl();
         final Skeleton skeleton = control.getSkeleton();

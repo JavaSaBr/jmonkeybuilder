@@ -21,7 +21,7 @@ public class AnimationEffectTrackModelNode extends AnimationTrackModelNode<Effec
 
     @NotNull
     @Override
-    public String getName() {
+    protected String computeName() {
         final EffectTrack effectTrack = getElement();
         return "EffectTrack : " + effectTrack.getEmitter().getName();
     }

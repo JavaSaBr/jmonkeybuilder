@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -39,13 +40,15 @@ import rlib.ui.util.FXUtils;
  */
 public class GenerateTangentsDialog extends EditorDialog {
 
+    private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
+
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
-    private static final Point DIALOG_SIZE = new Point(500, 160);
+    private static final Point DIALOG_SIZE = new Point(530, 154);
 
-    private static final Insets ALGORITHM_OFFSET = new Insets(15, 0, 0, 0);
-    private static final Insets SPLIT_OFFSET = new Insets(8, 0, 10, 150);
+    private static final Insets FIELD_OFFSET = new Insets(6, 20, 0, 0);
+    private static final Insets BUTTONS_OFFSET = new Insets(20, 0, 0, 0);
 
     public enum AlgorithmType {
         STANDARD,
@@ -112,10 +115,11 @@ public class GenerateTangentsDialog extends EditorDialog {
         final HBox algorithmTypeContainer = new HBox();
 
         final Label algorithmTypeLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL + ":");
-        algorithmTypeLabel.setId(CSSIds.GENERATE_TANGENTS_DIALOG_LABEL);
+        algorithmTypeLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
-        algorithmTypeComboBox = new ComboBox<>(observableArrayList(AlgorithmType.VALUES));
-        algorithmTypeComboBox.setId(CSSIds.GENERATE_TANGENTS_DIALOG_COMBO_BOX);
+        algorithmTypeComboBox = new ComboBox<>(GenerateTangentsDialog.ALGORITHM_TYPES);
+        algorithmTypeComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        algorithmTypeComboBox.prefWidthProperty().bind(root.widthProperty());
 
         final SingleSelectionModel<AlgorithmType> selectionModel = algorithmTypeComboBox.getSelectionModel();
         selectionModel.select(AlgorithmType.STANDARD);
@@ -124,18 +128,26 @@ public class GenerateTangentsDialog extends EditorDialog {
         FXUtils.addToPane(algorithmTypeComboBox, algorithmTypeContainer);
         FXUtils.addToPane(algorithmTypeContainer, root);
 
-        splitMirroredCheckBox = new CheckBox(Messages.GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED);
-        splitMirroredCheckBox.setId(CSSIds.GENERATE_TANGENTS_DIALOG_COMBO_BOX);
+        final HBox splitMirroredContainer = new HBox();
+
+        final Label splitMirroredLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED + ":");
+        splitMirroredLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        splitMirroredCheckBox = new CheckBox();
+        splitMirroredCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         splitMirroredCheckBox.disableProperty().bind(selectionModel.selectedItemProperty().isNotEqualTo(AlgorithmType.STANDARD));
 
-        FXUtils.addToPane(splitMirroredCheckBox, root);
+        FXUtils.addToPane(splitMirroredLabel, splitMirroredContainer);
+        FXUtils.addToPane(splitMirroredCheckBox, splitMirroredContainer);
+        FXUtils.addToPane(splitMirroredContainer, root);
 
-        FXUtils.addClassTo(algorithmTypeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(algorithmTypeLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(algorithmTypeComboBox, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(splitMirroredLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_14);
 
-        VBox.setMargin(algorithmTypeContainer, ALGORITHM_OFFSET);
-        VBox.setMargin(splitMirroredCheckBox, SPLIT_OFFSET);
+        VBox.setMargin(algorithmTypeContainer, FIELD_OFFSET);
+        VBox.setMargin(splitMirroredContainer, FIELD_OFFSET);
     }
 
     @Override
@@ -170,10 +182,12 @@ public class GenerateTangentsDialog extends EditorDialog {
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
+
+        VBox.setMargin(container, BUTTONS_OFFSET);
     }
 
     /**
-     * @return the check box about spliting morrored.
+     * @return the check box about spliting mirrored.
      */
     private CheckBox getSplitMirroredCheckBox() {
         return splitMirroredCheckBox;
