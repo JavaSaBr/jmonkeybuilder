@@ -5,6 +5,8 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.8.8 ##
+* -Implemented drawing jME application inside JavaFX Canvas.
+* -Migrated from the ReflectionAllocator to the JEmallocAllocator
 * -Added actions to convert .scene/.mesh.xml/.fbx/.obj to .j3o
 * -Updated context menus in the AssetTree and ModelNodeTree
 * -Added showing animation transks in the ModelNodeTree
