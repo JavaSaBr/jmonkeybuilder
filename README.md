@@ -1,8 +1,15 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.8.7 #
+# jMonkeyEngine 3 SpaceShift Editor 0.8.8 #
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.8.8 ##
+* -Added actions to convert .scene/.mesh.xml/.fbx/.obj to .j3o
+* -Updated context menus in the AssetTree and ModelNodeTree
+* -Added showing animation transks in the ModelNodeTree
+* -Added some actions to animation nodes in the ModelEditor
+* -Bugfixes
 
 ## ver. 0.8.7 ##
 * -Implemented saving/loading particle emitter nodes.
