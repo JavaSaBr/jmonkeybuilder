@@ -1,20 +1,30 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javafx.scene.image.Image;
 
 /**
- * Реализация действия по переименовыванию узла.
+ * The action to rename a model node.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RenameNodeAction extends AbstractNodeAction {
 
     public RenameNodeAction(final ModelNodeTree nodeTree, ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.EDIT_16;
     }
 
     @NotNull

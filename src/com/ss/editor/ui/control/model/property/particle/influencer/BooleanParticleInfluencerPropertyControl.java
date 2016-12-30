@@ -11,8 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractFloatModelPropertyControl} for editing boolean values in
- * the {@link ParticleInfluencer}.
+ * The implementation of the {@link AbstractFloatModelPropertyControl} for editing boolean values in the {@link
+ * ParticleInfluencer}.
  *
  * @author JavaSaBr
  */
@@ -24,7 +24,9 @@ public class BooleanParticleInfluencerPropertyControl<T extends ParticleInfluenc
     @NotNull
     private Object parent;
 
-    public BooleanParticleInfluencerPropertyControl(@NotNull final Boolean element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final Object parent) {
+    public BooleanParticleInfluencerPropertyControl(@NotNull final Boolean element, @NotNull final String paramName,
+                                                    @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                                    @NotNull final Object parent) {
         super(element, paramName, modelChangeConsumer);
         this.parent = parent;
     }
@@ -33,7 +35,10 @@ public class BooleanParticleInfluencerPropertyControl<T extends ParticleInfluenc
     protected void changed(@Nullable final Boolean newValue, @Nullable final Boolean oldValue) {
 
         final T editObject = getEditObject();
-        final ParticleInfluencerPropertyOperation<T, Boolean> operation = new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
+        final ParticleInfluencerPropertyOperation<T, Boolean> operation =
+                new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();

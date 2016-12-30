@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractFloatModelPropertyControl} for editing vector3f values
- * in the {@link ParticleInfluencer}.
+ * The implementation of the {@link AbstractFloatModelPropertyControl} for editing vector3f values in the {@link
+ * ParticleInfluencer}.
  *
  * @author JavaSaBr
  */
@@ -25,7 +25,9 @@ public class Vector3fParticleInfluencerPropertyControl<T extends ParticleInfluen
     @NotNull
     private Object parent;
 
-    public Vector3fParticleInfluencerPropertyControl(@Nullable final Vector3f element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final Object parent) {
+    public Vector3fParticleInfluencerPropertyControl(@Nullable final Vector3f element, @NotNull final String paramName,
+                                                     @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                                     @NotNull final Object parent) {
         super(element, paramName, modelChangeConsumer);
         this.parent = parent;
     }
@@ -34,7 +36,10 @@ public class Vector3fParticleInfluencerPropertyControl<T extends ParticleInfluen
     protected void changed(@Nullable final Vector3f newValue, @Nullable final Vector3f oldValue) {
 
         final T editObject = getEditObject();
-        final ParticleInfluencerPropertyOperation<T, Vector3f> operation = new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
+        final ParticleInfluencerPropertyOperation<T, Vector3f> operation =
+                new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();

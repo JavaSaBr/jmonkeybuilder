@@ -37,6 +37,11 @@ public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
         super.validate(warningLabel, element);
 
+        if (element == null) {
+            LOGGER.warning(this, "The element is null.");
+            return;
+        }
+
         final Function<Path, String> validator = getValidator();
         String message = validator == null ? null : validator.apply(element.getFile());
 

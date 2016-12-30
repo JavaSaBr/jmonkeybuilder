@@ -35,6 +35,7 @@ public class WorkspaceManager {
     /**
      * The table of workspaces.
      */
+    @NotNull
     private final ObjectDictionary<Path, Workspace> workspaces;
 
     public WorkspaceManager() {

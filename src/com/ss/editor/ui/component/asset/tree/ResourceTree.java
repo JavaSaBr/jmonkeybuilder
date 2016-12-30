@@ -2,7 +2,6 @@ package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.ui.component.asset.tree.ResourceTreeCell.CELL_FACTORY;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-import static com.ss.editor.ui.css.CSSClasses.MAIN_FONT_13;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 import com.ss.editor.config.EditorConfig;
@@ -218,17 +217,16 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
-     * Update the context menu for the element.
+     * @return the context menu for the element.
      */
-    public void updateContextMenu(final ResourceElement element) {
-        if (isReadOnly()) return;
+    public ContextMenu getContextMenu(final ResourceElement element) {
+        if (isReadOnly()) return null;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
 
-        final ContextMenu contextMenu = getContextMenu();
+        final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
-        items.clear();
 
         final Path file = element.getFile();
 
@@ -256,11 +254,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
             items.add(new DeleteFileAction(element));
         }
 
-        final Array<MenuItem> allItems = ArrayFactory.newArray(MenuItem.class);
-        items.forEach(subItem -> UIUtils.getAllItems(allItems, subItem));
-        allItems.forEach(menuItem -> FXUtils.addClassTo(menuItem, MAIN_FONT_13));
+        if (items.isEmpty()) return null;
 
-        setContextMenu(contextMenu);
+        return contextMenu;
     }
 
     /**

@@ -1,6 +1,10 @@
 package com.ss.editor.file.converter;
 
 import com.ss.editor.file.converter.impl.BlendToJ3oFileConverter;
+import com.ss.editor.file.converter.impl.FBXToJ3oFileConverter;
+import com.ss.editor.file.converter.impl.MeshXmlToJ3oFileConverter;
+import com.ss.editor.file.converter.impl.ObjToJ3oFileConverter;
+import com.ss.editor.file.converter.impl.SceneToJ3oFileConverter;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -34,6 +38,10 @@ public class FileConverterRegistry {
     public FileConverterRegistry() {
         this.descriptions = ArrayFactory.newArray(FileConverterDescription.class);
         addDescription(BlendToJ3oFileConverter.DESCRIPTION);
+        addDescription(FBXToJ3oFileConverter.DESCRIPTION);
+        addDescription(ObjToJ3oFileConverter.DESCRIPTION);
+        addDescription(SceneToJ3oFileConverter.DESCRIPTION);
+        addDescription(MeshXmlToJ3oFileConverter.DESCRIPTION);
     }
 
     /**

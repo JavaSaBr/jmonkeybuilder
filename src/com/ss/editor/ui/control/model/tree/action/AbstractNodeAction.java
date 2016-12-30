@@ -7,8 +7,11 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
@@ -40,6 +43,11 @@ public abstract class AbstractNodeAction extends MenuItem {
         this.node = node;
         setOnAction(event -> process());
         setText(getName());
+
+        final Image icon = getIcon();
+        if (icon != null) {
+            setGraphic(new ImageView(icon));
+        }
     }
 
     /**
@@ -52,6 +60,16 @@ public abstract class AbstractNodeAction extends MenuItem {
      * Execute this action.
      */
     protected abstract void process();
+
+    /**
+     * The icon of this action.
+     *
+     * @return he icon or null.
+     */
+    @Nullable
+    protected Image getIcon() {
+        return null;
+    }
 
     /**
      * @return the component of the model three.

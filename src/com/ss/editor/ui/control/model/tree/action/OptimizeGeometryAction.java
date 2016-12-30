@@ -3,24 +3,33 @@ package com.ss.editor.ui.control.model.tree.action;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.OptimizeGeometryOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javafx.scene.image.Image;
 import jme3tools.optimize.GeometryBatchFactory;
 
 /**
- * Реализация действия по реструктуризации геометрии.
+ * The action to optimize a geometry.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class OptimizeGeometryAction extends AbstractNodeAction {
 
     public OptimizeGeometryAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.INFLUENCER_16;
     }
 
     @NotNull

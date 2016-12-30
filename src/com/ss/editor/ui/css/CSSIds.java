@@ -121,6 +121,5 @@ public interface CSSIds {
     String CREATE_SKY_DIALOG_SPINNER = "CreateSkyDialogSpinner";
     String CREATE_SKY_DIALOG_BUTTON = "CreateSkyDialogButton";
 
-    String GENERATE_TANGENTS_DIALOG_LABEL = "GenerateTangentsDialogLabel";
-    String GENERATE_TANGENTS_DIALOG_COMBO_BOX = "GenerateTangentsDialogComboBox";
+    String LOG_VIEW = "LogView";
 }

@@ -25,13 +25,13 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencers} in
- * the editor.
+ * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencers} in the editor.
  *
  * @author JavaSaBr
  */
@@ -56,7 +56,7 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE);
+        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
         final ObservableList<MenuItem> createItems = createMenu.getItems();
         createItems.add(new CreateAlphaParticleInfluencerAction(nodeTree, this));
         createItems.add(new CreateColorParticleInfluencerAction(nodeTree, this));

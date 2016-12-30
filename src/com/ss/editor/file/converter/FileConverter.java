@@ -1,32 +1,35 @@
 package com.ss.editor.file.converter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 /**
- * Интерфейс для реализации конвертера файлов.
+ * Interface for implementing a file converter.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface FileConverter {
 
     /**
-     * Конвертация указанного файла.
+     * Convert a source file.
      *
-     * @param source исходный файл для конвертации.
+     * @param source the source file.
      */
-    public void convert(Path source);
+    public void convert(@NotNull Path source);
 
     /**
-     * Конвертация указанного файла и запись в другой указанный файл.
+     * Convert a source file to destination file.
      *
-     * @param source      исходный файл для конвертации.
-     * @param destination файл для записи результата.
+     * @param source      the source file.
+     * @param destination the destination file.
      */
-    public void convert(Path source, Path destination);
+    public void convert(@NotNull Path source, @NotNull Path destination);
 
 
     /**
-     * @return итоговый формат.
+     * @return the result file format name.
      */
+    @NotNull
     public String getTargetExtension();
 }

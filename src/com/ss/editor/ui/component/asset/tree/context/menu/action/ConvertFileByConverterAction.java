@@ -1,28 +1,30 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.file.converter.FileConverterDescription;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 /**
- * Реализация действия по конвертированию файла.
+ * The action to transformation a file by a transformer.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ConvertFileByConverterAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * Элемент действия.
+     * The action element.
      */
     private final ResourceElement element;
 
     /**
-     * Описание конвертера.
+     * The transformer description.
      */
     private final FileConverterDescription description;
 
@@ -31,10 +33,11 @@ public class ConvertFileByConverterAction extends MenuItem {
         this.description = description;
         setText(description.getDescription());
         setOnAction(event -> processConvert());
+        setGraphic(new ImageView(Icons.TRANSFORMATION_16));
     }
 
     /**
-     * Процесс конвертирования файла.
+     * Process of transformation.
      */
     private void processConvert() {
 

@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.emitter.shape;
 
 import com.jme3.scene.Mesh;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeEmitterShapeOperation;
@@ -9,7 +10,9 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javafx.scene.image.Image;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
@@ -21,6 +24,12 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
 
     public AbstractCreateShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.GEOMETRY_16;
     }
 
     @Override

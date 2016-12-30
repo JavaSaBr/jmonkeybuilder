@@ -5,6 +5,7 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
@@ -14,10 +15,11 @@ import com.ss.editor.util.GeomUtils;
 
 import java.util.Set;
 
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Control;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -30,6 +32,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
@@ -40,6 +43,8 @@ import rlib.util.StringUtils;
  * @author JavaSaBr
  */
 public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
+
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final DataFormat DATA_FORMAT = new DataFormat("SSEditor.modelNodeTree.modelNode");
 
@@ -96,8 +101,15 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         super.startEdit();
 
-        final TextField textField = (TextField) getGraphic();
-        textField.setMinHeight(getMinHeight());
+        final javafx.scene.Node graphic = getGraphic();
+
+        if (graphic instanceof HBox) {
+            final HBox hbox = (HBox) graphic;
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            hbox.setMinHeight(getMinHeight());
+        } else if (graphic instanceof Control) {
+            ((Control) graphic).setMinHeight(getMinHeight());
+        }
     }
 
     /**
@@ -114,16 +126,20 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         final ImageView imageView = getImageView();
 
         if (item == null) {
+            final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+            if (treeItem != null) treeItem.setGraphic(null);
             setText(StringUtils.EMPTY);
-            setGraphic(null);
+            setEditable(false);
             return;
         }
 
         imageView.setImage(item.getIcon());
 
+        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        if (treeItem != null) treeItem.setGraphic(imageView);
+
         setText(item.getName());
         setEditable(item.canEditName());
-        setGraphic(imageView);
     }
 
     /**
@@ -148,7 +164,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         final ContextMenu contextMenu = nodeTree.getContextMenu(item);
         if (contextMenu == null) return;
 
-        contextMenu.show(this, Side.BOTTOM, 0, 0);
+        EXECUTOR_MANAGER.addFXTask(() -> contextMenu.show(this, Side.BOTTOM, 0, 0));
     }
 
     /**

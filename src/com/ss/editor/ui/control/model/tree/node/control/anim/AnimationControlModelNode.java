@@ -1,8 +1,11 @@
 package com.ss.editor.ui.control.model.tree.node.control.anim;
 
 import com.jme3.animation.AnimControl;
+import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.animation.PlaySettingsAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
@@ -12,19 +15,66 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+import javafx.collections.ObservableList;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реализация узла для отображения контрола анимации модели.
+ * The implementation of node for showing {@link AnimControl}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
 
+    /**
+     * The loop mode.
+     */
+    @NotNull
+    private LoopMode loopMode;
+
+    /**
+     * The animation speed.
+     */
+    private float speed;
+
     public AnimationControlModelNode(final AnimControl element, final long objectId) {
         super(element, objectId);
+        this.loopMode = LoopMode.Loop;
+        this.speed = 1.0F;
+    }
+
+    @Override
+    public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
+        items.add(new PlaySettingsAction(nodeTree, this));
+        super.fillContextMenu(nodeTree, items);
+    }
+
+    /**
+     * Update settings.
+     *
+     * @param loopMode the loop mode.
+     * @param speed    the animation speed.
+     */
+    public void updateSettings(@NotNull LoopMode loopMode, final float speed) {
+        this.loopMode = loopMode;
+        this.speed = speed;
+    }
+
+    /**
+     * @return the animation speed.
+     */
+    public float getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @return the loop mode.
+     */
+    @NotNull
+    public LoopMode getLoopMode() {
+        return loopMode;
     }
 
     @NotNull
@@ -55,6 +105,7 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
         animationNames.forEach(name -> {
             final AnimationModelNode modelNode = ModelNodeFactory.createFor(element.getAnim(name));
             modelNode.setControl(getElement());
+            modelNode.setControlModelNode(this);
             result.add(modelNode);
         });
 

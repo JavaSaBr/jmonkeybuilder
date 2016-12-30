@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node.spatial;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
@@ -29,14 +31,12 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
-
 /**
- * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the
- * editor.
+ * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the editor.
  *
  * @author JavaSaBr
  */
@@ -49,7 +49,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS);
+        final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
 
         final Menu createMenu = createCreationMenu(nodeTree);
@@ -65,10 +65,10 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     @Override
     protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
 
-        final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
+        final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE, new ImageView(Icons.ADD_18));
         createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
 
-        final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT);
+        final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT, new ImageView(Icons.ADD_18));
         addLightMenu.getItems().addAll(new CreateSpotLightAction(nodeTree, this), new CreatePointLightAction(nodeTree, this), new CreateAmbientLightAction(nodeTree, this), new CreateDirectionLightAction(nodeTree, this));
 
         final Menu menu = super.createCreationMenu(nodeTree);

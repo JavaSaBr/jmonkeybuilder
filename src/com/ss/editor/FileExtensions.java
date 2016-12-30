@@ -30,4 +30,8 @@ public interface FileExtensions {
     String GLSL_FRAGMENT = "frag";
 
     String BLENDER = "blend";
+    String FBX = "fbx";
+    String OBJ = "obj";
+    String SCENE = "scene";
+    String MESH_XML = "mesh.xml";
 }

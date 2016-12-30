@@ -1,5 +1,6 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
@@ -24,6 +25,8 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -34,6 +37,7 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.List;
+import java.util.Objects;
 
 import rlib.classpath.ClassPathScanner;
 import rlib.classpath.ClassPathScannerFactory;
@@ -60,6 +64,7 @@ public class ResourceManager extends EditorThread {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
+    @NotNull
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
 
     private static final WatchService WATCH_SERVICE;
@@ -81,28 +86,33 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Список дополнительных класс лоадеров.
+     * The list of an additional classpath.
      */
+    @NotNull
     private final Array<URLClassLoader> classLoaders;
 
     /**
-     * Список ресурсов в classpath.
+     * The list of resources in the classpath.
      */
+    @NotNull
     private final Array<String> resourcesInClasspath;
 
     /**
-     * Список доступных типов материалов из classpath.
+     * The list of material definitions in the classpath.
      */
+    @NotNull
     private final Array<String> materialDefinitionsInClasspath;
 
     /**
-     * Список доступных типов материалов.
+     * The list of available material definitions in the classpath.
      */
+    @NotNull
     private final Array<String> materialDefinitions;
 
     /**
-     * Ключи для слежения за изменением папок.
+     * The list of keys for watching to folders.
      */
+    @NotNull
     private final Array<WatchKey> watchKeys;
 
     public ResourceManager() {
@@ -147,19 +157,21 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Обработка переименования файла.
+     * Handle a renamed file.
      */
-    private synchronized void processEvent(final RenamedFileEvent event) {
+    private synchronized void processEvent(@NotNull final RenamedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final Path newFile = event.getNewFile();
 
         final String extension = FileUtils.getExtension(prevFile);
 
-        final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
-        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
+        final Path prevAssetFile = Objects.requireNonNull(getAssetFile(prevFile),
+                "Not found asset file for " + prevFile);
+        final Path newAssetFile = Objects.requireNonNull(getAssetFile(newFile),
+                "Not found asset file for " + newFile);
 
-        final Path newAssetFile = EditorUtil.getAssetFile(newFile);
+        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
         final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
@@ -170,9 +182,9 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Процесс замены класс лоадера.
+     * Handle changed classpath file.
      */
-    private void replaceCL(final Path prevAssetFile, final Path newAssetFile) {
+    private void replaceCL(@NotNull final Path prevAssetFile, @NotNull final Path newAssetFile) {
 
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
@@ -194,7 +206,7 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Обработка перемещения файла.
+     * Handle a moved file.
      */
     private synchronized void processEvent(final MovedFileEvent event) {
 
@@ -203,10 +215,12 @@ public class ResourceManager extends EditorThread {
 
         final String extension = FileUtils.getExtension(prevFile);
 
-        final Path prevAssetFile = EditorUtil.getAssetFile(prevFile);
-        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
+        final Path prevAssetFile = Objects.requireNonNull(getAssetFile(prevFile),
+                "Not found asset file for " + prevFile);
+        final Path newAssetFile = Objects.requireNonNull(getAssetFile(newFile),
+                "Not found asset file for " + newFile);
 
-        final Path newAssetFile = EditorUtil.getAssetFile(newFile);
+        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
         final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
@@ -217,24 +231,24 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Процесс замены определения материала.
+     * Handle a changed material definition file.
      */
-    private void replaceMD(final String prevAssetPath, final String newAssetPath) {
+    private void replaceMD(@NotNull final String prevAssetPath, @NotNull final String newAssetPath) {
         final Array<String> materialDefinitions = getMaterialDefinitions();
         materialDefinitions.fastRemove(prevAssetPath);
         materialDefinitions.add(newAssetPath);
     }
 
     /**
-     * Обработка удаления файла из Asset.
+     * Handle a removed file.
      */
-    private synchronized void processEvent(final DeletedFileEvent event) {
+    private synchronized void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
 
         final String extension = FileUtils.getExtension(file);
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
@@ -258,15 +272,15 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Обработка созадния файла в Asset.
+     * Handle a created file.
      */
-    private synchronized void processEvent(final CreatedFileEvent event) {
+    private synchronized void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
 
         final String extension = FileUtils.getExtension(file);
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
@@ -291,21 +305,23 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * @return список доступных типов материалов из classpath.
+     * @return the list of material definitions in the classpath.
      */
+    @NotNull
     private Array<String> getMaterialDefinitionsInClasspath() {
         return materialDefinitionsInClasspath;
     }
 
     /**
-     * @return список ресурсов в classpath.
+     * @return the list of resources in the classpath.
      */
+    @NotNull
     private Array<String> getResourcesInClasspath() {
         return resourcesInClasspath;
     }
 
     /**
-     * Подготовка перечня ресурсов в classpath.
+     * Prepare classpath resources.
      */
     private void prepareClasspathResources() {
         final Array<String> materialDefinitionsInClasspath = getMaterialDefinitionsInClasspath();
@@ -318,22 +334,25 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * @return список доступных типов материалов.
+     * @return the list of available material definitions in the classpath.
      */
+    @NotNull
     private Array<String> getMaterialDefinitions() {
         return materialDefinitions;
     }
 
     /**
-     * @return список класс лоадеров.
+     * @return the list of an additional classpath.
      */
+    @NotNull
     private Array<URLClassLoader> getClassLoaders() {
         return classLoaders;
     }
 
     /**
-     * @return список доступных типов материалов.
+     * @return the list of all available material definitions.
      */
+    @NotNull
     public synchronized Array<String> getAvailableMaterialDefinitions() {
 
         final Array<String> result = ArrayFactory.newArray(String.class);
@@ -351,7 +370,7 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Перезагрузка доступных ресурсов.
+     * Reload available resources.
      */
     private synchronized void reload() {
 
@@ -394,7 +413,7 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Обработка файла в папаке asset.
+     * Hadle a file event in an asset folder.
      */
     private void handleFile(final Path file) {
         if (Files.isDirectory(file)) return;
@@ -402,7 +421,7 @@ public class ResourceManager extends EditorThread {
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-            final Path assetFile = EditorUtil.getAssetFile(file);
+            final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
             final Array<String> materialDefinitions = getMaterialDefinitions();
             materialDefinitions.add(toAssetPath(assetFile));
         } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
@@ -414,7 +433,6 @@ public class ResourceManager extends EditorThread {
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
             final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
-
             if (oldLoader != null) return;
 
             final URLClassLoader newLoader = new URLClassLoader(toArray(url), getClass().getClassLoader());
@@ -427,7 +445,7 @@ public class ResourceManager extends EditorThread {
     public void run() {
         super.run();
 
-        for (; ; ) {
+        while (true) {
             ThreadUtils.sleep(200);
 
             final Array<WatchKey> watchKeys = getWatchKeys();
@@ -496,22 +514,23 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Обработка обновления Asset.
+     * Handle refreshing asset folder.
      */
     private void processRefreshAsset() {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
     }
 
     /**
-     * Обработка смены Asset.
+     * Handle changing asset folder.
      */
     private void processChangeAsset() {
         EXECUTOR_MANAGER.addBackgroundTask(this::reload);
     }
 
     /**
-     * @return ключи для слежения за изменением папок.
+     * @return the list of keys for watching to folders.
      */
+    @NotNull
     private Array<WatchKey> getWatchKeys() {
         return watchKeys;
     }

@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.property.operation;
 
+import static com.ss.editor.util.GeomUtils.getObjectByIndex;
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -12,12 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import static com.ss.editor.util.GeomUtils.getObjectByIndex;
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
- * The implementation of the {@link AbstractEditorOperation} for editing models in the {@link
- * ModelFileEditor}.
+ * The implementation of the {@link AbstractEditorOperation} for editing models in the {@link ModelFileEditor}.
  *
  * @author JavaSaBr
  */
@@ -53,7 +52,8 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
      */
     private BiConsumer<D, T> applyHandler;
 
-    public ModelPropertyOperation(final int index, @NotNull final String propertyName, @Nullable final T newValue, @Nullable final T oldValue) {
+    public ModelPropertyOperation(final int index, @NotNull final String propertyName, @Nullable final T newValue,
+                                  @Nullable final T oldValue) {
         this.newValue = newValue;
         this.oldValue = oldValue;
         this.index = index;

@@ -16,11 +16,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import tonegod.emitter.geometry.ParticleGeometry;
 
 /**
- * The implementation of the {@link GeometryModelNode} for representing the {@link ParticleGeometry}
- * in the editor.
+ * The implementation of the {@link GeometryModelNode} for representing the {@link ParticleGeometry} in the editor.
  *
  * @author JavaSaBr
  */
@@ -39,7 +39,7 @@ public class ParticleGeometryModelNode extends GeometryModelNode<ParticleGeometr
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH);
+        final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH, new ImageView(Icons.MESH_16));
         final ObservableList<MenuItem> subItems = changeMeshMenu.getItems();
         subItems.add(new CreateQuadParticleMeshAction(nodeTree, this));
         subItems.add(new CreatePointParticleMeshAction(nodeTree, this));

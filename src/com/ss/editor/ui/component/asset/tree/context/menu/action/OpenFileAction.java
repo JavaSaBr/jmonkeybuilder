@@ -1,23 +1,25 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 /**
- * Реализация действия по открытию файла.
+ * The action to open a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class OpenFileAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * Элемент действия.
+     * The action element.
      */
     private final ResourceElement element;
 
@@ -25,10 +27,11 @@ public class OpenFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE);
         setOnAction(event -> processOpen());
+        setGraphic(new ImageView(Icons.VIEW_16));
     }
 
     /**
-     * Процесс открытия файла.
+     * Process of opening.
      */
     private void processOpen() {
 

@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -10,6 +11,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import java.nio.file.Path;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import rlib.util.FileUtils;
 
 /**
@@ -30,6 +32,7 @@ public class DeleteFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
         setOnAction(event -> processDelete());
+        setGraphic(new ImageView(Icons.REMOVE_18));
     }
 
     /**
@@ -39,6 +42,8 @@ public class DeleteFileAction extends MenuItem {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
+        if (currentAsset == null) return;
+
         final Path file = element.getFile();
 
         if (currentAsset.equals(file)) {

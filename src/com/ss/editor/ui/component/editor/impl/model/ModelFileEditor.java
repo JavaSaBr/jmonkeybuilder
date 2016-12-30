@@ -1,6 +1,9 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
@@ -231,10 +234,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     private void updateMaterial(@NotNull final Path file) {
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
-        if (assetFile == null) return;
-
+        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = EditorUtil.toAssetPath(assetFile);
+
         final Spatial currentModel = getCurrentModel();
 
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
@@ -243,8 +245,10 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         if (geometries.isEmpty()) return;
 
+        final MaterialKey materialKey = new MaterialKey(assetPath);
+
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
+        assetManager.deleteFromCache(materialKey);
 
         final Material material = assetManager.loadMaterial(assetPath);
 
@@ -307,14 +311,14 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = getAssetFile(file);
 
         Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
 
         final ModelKey modelKey = new ModelKey(EditorUtil.toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
+        assetManager.deleteFromCache(modelKey);
 
         final Spatial model = assetManager.loadAsset(modelKey);
 

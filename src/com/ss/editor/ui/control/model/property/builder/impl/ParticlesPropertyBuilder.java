@@ -31,12 +31,15 @@ import tonegod.emitter.material.ParticlesMaterial;
 import tonegod.emitter.node.ParticleNode;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link
- * ParticleEmitterNode} objects.
+ * The implementation of the {@link PropertyBuilder} for building property controls for {@link ParticleEmitterNode}
+ * objects.
  *
  * @author JavaSaBr
  */
 public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
+
+    public static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
+    public static final ParticleEmissionPoint[] PARTICLE_EMISSION_POINTS = ParticleEmissionPoint.values();
 
     private static final PropertyBuilder INSTANCE = new ParticlesPropertyBuilder();
 
@@ -45,7 +48,8 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
 
         if (object instanceof ParticleEmitterNode) {
             createEmissionControls(container, modelChangeConsumer, (ParticleEmitterNode) object);
@@ -54,7 +58,8 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         }
     }
 
-    private void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer, @NotNull final ParticleNode particleGeometry) {
+    private void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer,
+                                         @NotNull final ParticleNode particleGeometry) {
 
         final ParticleEmitterNode emitterNode = findParent(particleGeometry, spatial -> spatial instanceof ParticleEmitterNode);
 
@@ -143,7 +148,8 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
-    private void createEmissionControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final ParticleEmitterNode emitterNode) {
+    private void createEmissionControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                        @NotNull final ParticleEmitterNode emitterNode) {
 
         final boolean enabledTestEmitter = emitterNode.isEnabledTestEmitter();
         final boolean enabled = emitterNode.isEnabled();
@@ -189,13 +195,13 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         skipPatternControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, DirectionType> directionTypeControl =
-                new EnumModelPropertyControl<>(directionType, Messages.PARTICLE_EMITTER_DIRECTION_TYPE, modelChangeConsumer, DirectionType.values());
+                new EnumModelPropertyControl<>(directionType, Messages.PARTICLE_EMITTER_DIRECTION_TYPE, modelChangeConsumer, DIRECTION_TYPES);
         directionTypeControl.setApplyHandler(ParticleEmitterNode::setDirectionType);
         directionTypeControl.setSyncHandler(ParticleEmitterNode::getDirectionType);
         directionTypeControl.setEditObject(emitterNode);
 
         final ModelPropertyControl<ParticleEmitterNode, ParticleEmissionPoint> emissionPointControl =
-                new EnumModelPropertyControl<>(emissionPoint, Messages.PARTICLE_EMITTER_EMISSION_POINT, modelChangeConsumer, ParticleEmissionPoint.values());
+                new EnumModelPropertyControl<>(emissionPoint, Messages.PARTICLE_EMITTER_EMISSION_POINT, modelChangeConsumer, PARTICLE_EMISSION_POINTS);
         emissionPointControl.setApplyHandler(ParticleEmitterNode::setParticleEmissionPoint);
         emissionPointControl.setSyncHandler(ParticleEmitterNode::getParticleEmissionPoint);
         emissionPointControl.setEditObject(emitterNode);

@@ -1,11 +1,13 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 /**
  * The action for creating a new file.
@@ -31,6 +33,7 @@ public class NewFileByCreatorAction extends MenuItem {
         this.description = description;
         setText(description.getFileDescription());
         setOnAction(event -> processCreate());
+        setGraphic(new ImageView(Icons.NEW_FILE_16));
     }
 
     /**

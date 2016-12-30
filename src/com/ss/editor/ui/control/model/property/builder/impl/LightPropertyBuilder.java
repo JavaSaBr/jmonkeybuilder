@@ -26,8 +26,7 @@ import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link
- * Light} objects.
+ * The implementation of the {@link PropertyBuilder} for building property controls for {@link Light} objects.
  *
  * @author JavaSaBr
  */
@@ -60,7 +59,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         if (object instanceof DirectionalLight) {
             buildForDirectionLight((DirectionalLight) object, container, modelChangeConsumer);
         } else if (object instanceof SpotLight) {
@@ -74,7 +74,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
         }
     }
 
-    private void buildForDirectionLight(@NotNull final DirectionalLight light, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    private void buildForDirectionLight(@NotNull final DirectionalLight light, @NotNull final VBox container,
+                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
 
         final Vector3f direction = light.getDirection().clone();
 
@@ -92,7 +93,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
         VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
-    private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer) {
+    private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,
+                                    final @NotNull ModelChangeConsumer modelChangeConsumer) {
 
         final Vector3f position = light.getPosition().clone();
         final float radius = light.getRadius();
@@ -119,7 +121,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
         VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
-    private void buildForSpotLight(@NotNull final SpotLight light, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    private void buildForSpotLight(@NotNull final SpotLight light, @NotNull final VBox container,
+                                   @NotNull final ModelChangeConsumer modelChangeConsumer) {
 
         final Vector3f direction = light.getDirection().clone();
         final Vector3f position = light.getPosition().clone();
@@ -171,7 +174,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
         VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
-    private void buildForLight(@NotNull final Light object, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    private void buildForLight(@NotNull final Light object, @NotNull final VBox container,
+                               @NotNull final ModelChangeConsumer modelChangeConsumer) {
 
         final ColorRGBA color = object.getColor();
 

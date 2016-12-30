@@ -346,6 +346,7 @@ public class ModelEditorAppState extends AbstractEditorAppState<ModelFileEditor>
         final CollisionResults results = new CollisionResults();
 
         final Node modelNode = getModelNode();
+        modelNode.updateModelBound();
         modelNode.collideWith(ray, results);
 
         final ModelFileEditor editor = getFileEditor();

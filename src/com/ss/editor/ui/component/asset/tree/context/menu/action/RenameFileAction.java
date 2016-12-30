@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
 import com.ss.editor.ui.event.FXEventManager;
@@ -14,13 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 
 /**
- * The action for renaming a file.
+ * The action to rename a file.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class RenameFileAction extends MenuItem {
 
@@ -36,6 +38,7 @@ public class RenameFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE);
         setOnAction(event -> processRename());
+        setGraphic(new ImageView(Icons.EDIT_16));
     }
 
     /**

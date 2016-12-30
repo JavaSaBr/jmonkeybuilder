@@ -30,8 +30,7 @@ import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link
- * Geometry} objects.
+ * The implementation of the {@link PropertyBuilder} for building property controls for {@link Geometry} objects.
  *
  * @author JavaSaBr
  */
@@ -50,7 +49,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         } else {
 
-            assetManager.clearCache();
+            assetManager.deleteFromCache(materialKey);
 
             final Material material = assetManager.loadAsset(materialKey);
             geometry.setMaterial(material);
@@ -66,7 +65,8 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         if (boundingVolume instanceof BoundingSphere) {
             final BoundingSphere boundingSphere = (BoundingSphere) boundingVolume;
-            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE + ": [" + Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
+            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE + ": [" +
+                    Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS + "=" + boundingSphere.getRadius() + "]";
         } else if (boundingVolume instanceof BoundingBox) {
 
             final BoundingBox boundingBox = (BoundingBox) boundingVolume;
@@ -75,7 +75,8 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
             final float yExtent = clipNumber(boundingBox.getYExtent(), 100);
             final float zExtent = clipNumber(boundingBox.getZExtent(), 100);
 
-            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX + ": [x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
+            return Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX +
+                    ": [x=" + xExtent + ", y=" + yExtent + ", z=" + zExtent + "]";
         }
 
         return StringUtils.EMPTY;
@@ -88,7 +89,9 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
     }
 
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+
         if (!(object instanceof Geometry)) return;
 
         final Geometry geometry = (Geometry) object;

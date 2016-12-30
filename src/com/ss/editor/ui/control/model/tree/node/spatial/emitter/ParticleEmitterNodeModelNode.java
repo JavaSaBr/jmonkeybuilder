@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node.spatial.emitter;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
@@ -26,16 +28,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
 
-import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
-
 /**
- * The implementation of the {@link NodeModelNode} for representing the {@link ParticleEmitterNode}
- * in the editor.
+ * The implementation of the {@link NodeModelNode} for representing the {@link ParticleEmitterNode} in the editor.
  *
  * @author JavaSaBr
  */
@@ -54,7 +54,7 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu jmePrimitivesMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE);
+        final Menu jmePrimitivesMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE, new ImageView(Icons.ADD_18));
         final ObservableList<MenuItem> primitivesItems = jmePrimitivesMenu.getItems();
         primitivesItems.add(new CreateBoxShapeEmitterAction(nodeTree, this));
         primitivesItems.add(new CreateCylinderShapeEmitterAction(nodeTree, this));
@@ -63,7 +63,7 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
         primitivesItems.add(new CreateSphereShapeEmitterAction(nodeTree, this));
         primitivesItems.add(new CreateTorusShapeEmitterAction(nodeTree, this));
 
-        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE);
+        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.GEOMETRY_16));
         changeShapeMenu.getItems().addAll(new CreateTriangleShapeEmitterAction(nodeTree, this), jmePrimitivesMenu, new LoadModelShapeEmitterAction(nodeTree, this));
 
         items.add(changeShapeMenu);

@@ -93,6 +93,11 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     protected Label warningLabel;
 
+    /**
+     * The OK buttton.
+     */
+    protected Button okButton;
+
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
         this(consumer, null);
     }
@@ -160,7 +165,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     private void processKeyEvent(final KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
+        if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
             processSelect();
         }
     }
@@ -298,7 +303,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
-        final Button okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
+        okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processSelect());
         okButton.disableProperty().bind(buildDisableCondition());

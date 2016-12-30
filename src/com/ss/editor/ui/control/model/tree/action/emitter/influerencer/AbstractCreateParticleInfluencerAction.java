@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.emitter.influerencer;
 
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddParticleInfluencerOperation;
@@ -9,7 +10,9 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javafx.scene.image.Image;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
@@ -22,6 +25,12 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
 
     public AbstractCreateParticleInfluencerAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.INFLUENCER_16;
     }
 
     @Override

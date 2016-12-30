@@ -105,13 +105,8 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         if (event.getButton() == MouseButton.SECONDARY) {
 
-            treeView.updateContextMenu(item);
-
-            final ContextMenu contextMenu = treeView.getContextMenu();
-
-            if (contextMenu == null) {
-                return;
-            }
+            final ContextMenu contextMenu = treeView.getContextMenu(item);
+            if (contextMenu == null) return;
 
             contextMenu.show(this, Side.BOTTOM, 0, 0);
 

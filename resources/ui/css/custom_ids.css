@@ -116,6 +116,7 @@
 
 #TextEditorTextArea {
     -fx-background-color: -fx-background-background;
+    -fx-stroke: white;
 }
 
 #TextEditorTextArea .caret {
@@ -411,7 +412,7 @@
 
 #SettingsDialogLabel {
     -fx-alignment: center-right;
-    -fx-min-width: 240;
+    -fx-min-width: 250;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-min-height: 25;
@@ -687,24 +688,21 @@
     -fx-max-width: -fx-min-width;
 }
 
-#GenerateTangentsDialogLabel {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 200;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-}
-
-#GenerateTangentsDialogComboBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 250;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
 #JmePreviewManagerImageView {
+}
+
+#LogView {
+    -fx-background-color: -fx-background-background;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+#LogView .caret {
+    -fx-stroke: white;
+}
+
+#LogView .content {
+    -fx-background-color: -fx-background-background;
+    -fx-fill: white;
+    -fx-text-fill: white;
 }

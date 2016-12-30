@@ -10,8 +10,8 @@ import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractFloatModelPropertyControl} for editing float values in
- * the {@link ParticleInfluencer}.
+ * The implementation of the {@link AbstractFloatModelPropertyControl} for editing float values in the {@link
+ * ParticleInfluencer}.
  *
  * @author JavaSaBr
  */
@@ -23,7 +23,9 @@ public class FloatParticleInfluencerPropertyControl<T extends ParticleInfluencer
     @NotNull
     private Object parent;
 
-    public FloatParticleInfluencerPropertyControl(@Nullable final Float element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final Object parent) {
+    public FloatParticleInfluencerPropertyControl(@Nullable final Float element, @NotNull final String paramName,
+                                                  @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                                  @NotNull final Object parent) {
         super(element, paramName, modelChangeConsumer);
         this.parent = parent;
     }
@@ -32,7 +34,10 @@ public class FloatParticleInfluencerPropertyControl<T extends ParticleInfluencer
     protected void changed(@Nullable final Float newValue, @Nullable final Float oldValue) {
 
         final T editObject = getEditObject();
-        final ParticleInfluencerPropertyOperation<T, Float> operation = new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
+        final ParticleInfluencerPropertyOperation<T, Float> operation =
+                new ParticleInfluencerPropertyOperation<>(editObject, parent, getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();

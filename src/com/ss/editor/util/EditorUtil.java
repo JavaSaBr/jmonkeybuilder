@@ -332,7 +332,7 @@ public abstract class EditorUtil {
 
         try {
             processBuilder.start();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             handleException(LOGGER, null, e);
         }
     }

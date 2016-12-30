@@ -278,8 +278,8 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         FXUtils.addToPane(fileNameField, fileNameContainer);
         FXUtils.addToPane(fileNameContainer, root);
 
-        FXUtils.addClassTo(fileNameLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(fileNameField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(fileNameLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(fileNameField, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(fileNameContainer, FILE_NAME_CONTAINER_OFFSET);
     }

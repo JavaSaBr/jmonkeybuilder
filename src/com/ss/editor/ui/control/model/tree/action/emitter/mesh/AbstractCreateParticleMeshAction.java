@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.mesh;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeParticleMeshOperation;
@@ -8,7 +9,9 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javafx.scene.image.Image;
 import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
 
@@ -21,6 +24,12 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
 
     public AbstractCreateParticleMeshAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.MESH_16;
     }
 
     @Override

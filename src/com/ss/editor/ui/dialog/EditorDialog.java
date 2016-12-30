@@ -30,6 +30,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.ui.hanlder.WindowDragHandler;
 import rlib.ui.util.FXUtils;
 import rlib.ui.window.popup.dialog.AbstractPopupDialog;
@@ -40,6 +42,8 @@ import rlib.ui.window.popup.dialog.AbstractPopupDialog;
  * @author JavaSaBr
  */
 public class EditorDialog extends AbstractPopupDialog {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
