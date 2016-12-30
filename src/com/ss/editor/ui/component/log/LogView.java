@@ -2,8 +2,6 @@ package com.ss.editor.ui.component.log;
 
 import static java.util.Collections.singleton;
 
-import com.jme3.material.Material;
-import com.jme3.scene.plugins.fbx.misc.FbxGlobalSettings;
 import com.jme3x.jfx.util.JFXPlatform;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -13,6 +11,7 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.BufferOverflowException;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -35,11 +34,18 @@ public class LogView extends CodeArea {
 
     private static final String[] FRAMEWORKS = {
             "log4j",
+            "com.jme3.util.",
+            "com.jme3.material.",
+            "com.ss.editor.ui.",
+            "com.ss.editor.model.",
     };
 
     private static final String[] CLASSES = {
-            Material.class.getName(),
-            FbxGlobalSettings.class.getName(),
+            BufferOverflowException.class.getName(),
+            NullPointerException.class.getName(),
+
+            BufferOverflowException.class.getSimpleName(),
+            NullPointerException.class.getSimpleName(),
     };
 
     private static final String[] SEVERITIES = {
