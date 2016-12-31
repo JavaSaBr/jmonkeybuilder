@@ -83,6 +83,12 @@ public class Messages {
     public static final String MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL;
     public static final String MATERIAL_FILE_CREATOR_FILE_DESCRIPTION;
 
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
+
     public static final String POST_FILTER_VIEW_FILE_CREATOR_TITLE;
     public static final String POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
 
@@ -391,6 +397,12 @@ public class Messages {
         MATERIAL_FILE_CREATOR_TITLE = bundle.getString("MaterialFileCreatorTitle");
         MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileCreatorMaterialTypeLabel");
         MATERIAL_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("MaterialFileCreatorFileDescription");
+
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE = bundle.getString("SingleColorTextureFileCreatorTitle");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH = bundle.getString("SingleColorTextureFileCreatorWidth");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT = bundle.getString("SingleColorTextureFileCreatorHeight");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR = bundle.getString("SingleColorTextureFileCreatorColor");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION = bundle.getString("SingleColorTextureFileCreatorDescription");
 
         POST_FILTER_VIEW_FILE_CREATOR_TITLE = bundle.getString("PostFilterViewFileCreatorTitle");
         POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("PostFilterViewFileCreatorFileDescription");

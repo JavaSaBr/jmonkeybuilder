@@ -41,6 +41,9 @@ public class MaterialFileCreator extends AbstractFileCreator {
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
     public static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
+    public static final String PBR_MAT_DEF = "Common/MatDefs/Light/PBRLighting.j3md";
+    public static final String LIGHTING_MAT_DEF = "Common/MatDefs/Light/Lighting.j3md";
+
     static {
         DESCRIPTION.setFileDescription(Messages.MATERIAL_FILE_CREATOR_FILE_DESCRIPTION);
         DESCRIPTION.setConstructor(MaterialFileCreator::new);
@@ -57,6 +60,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
     private ComboBox<String> materialTypeComboBox;
 
     public MaterialFileCreator() {
+        super();
     }
 
     @NotNull
@@ -102,10 +106,10 @@ public class MaterialFileCreator extends AbstractFileCreator {
 
         final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
 
-        if (definitions.contains("Common/MatDefs/Light/PBRLighting.j3md")) {
-            selectionModel.select("Common/MatDefs/Light/PBRLighting.j3md");
-        } else if (definitions.contains("Common/MatDefs/Light/Lighting.j3md")) {
-            selectionModel.select("Common/MatDefs/Light/Lighting.j3md");
+        if (definitions.contains(PBR_MAT_DEF)) {
+            selectionModel.select(PBR_MAT_DEF);
+        } else if (definitions.contains(LIGHTING_MAT_DEF)) {
+            selectionModel.select(LIGHTING_MAT_DEF);
         } else {
             selectionModel.select(definitions.first());
         }
@@ -117,8 +121,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
         FXUtils.addToPane(materialTypeContainer, root);
 
         FXUtils.addClassTo(materialTypeComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
-        FXUtils.addClassTo(materialTypeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(materialTypeComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(materialTypeLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(materialTypeComboBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(materialTypeContainer, FILE_NAME_CONTAINER_OFFSET);
     }

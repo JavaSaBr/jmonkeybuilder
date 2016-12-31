@@ -1,50 +1,55 @@
 package com.ss.editor.ui.component.creator;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /**
- * Класс для описания создателя файлов.
+ * The description of a file creator.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FileCreatorDescription {
 
     /**
-     * Описание создаваемого файла.
+     * The file description.
      */
     private String fileDescription;
 
     /**
-     * Конструктор создателя файлов.
+     * The constructor of a file creator.
      */
     private Callable<FileCreator> constructor;
 
     /**
-     * @param constructor конструктор создателя файлов.
+     * @param constructor the constructor of a file creator.
      */
-    public void setConstructor(final Callable<FileCreator> constructor) {
+    public void setConstructor(@NotNull final Callable<FileCreator> constructor) {
         this.constructor = constructor;
     }
 
     /**
-     * @param fileDescription описание создаваемого файла.
+     * @param fileDescription the file description.
      */
-    public void setFileDescription(final String fileDescription) {
+    public void setFileDescription(@NotNull final String fileDescription) {
         this.fileDescription = fileDescription;
     }
 
     /**
-     * @return конструктор создателя файлов.
+     * @return the constructor of a file creator.
      */
+    @NotNull
     public Callable<FileCreator> getConstructor() {
-        return constructor;
+        return Objects.requireNonNull(constructor);
     }
 
     /**
-     * @return описание создаваемого файла.
+     * @return the file description.
      */
+    @NotNull
     public String getFileDescription() {
-        return fileDescription;
+        return Objects.requireNonNull(fileDescription);
     }
 
     @Override

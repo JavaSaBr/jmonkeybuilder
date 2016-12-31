@@ -57,8 +57,6 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         root.setAlignment(Pos.CENTER);
 
         imageView = new ImageView();
-        imageView.setFitHeight(IMAGE_SIZE);
-        imageView.setFitWidth(IMAGE_SIZE);
 
         FXUtils.addToPane(imageView, root);
     }

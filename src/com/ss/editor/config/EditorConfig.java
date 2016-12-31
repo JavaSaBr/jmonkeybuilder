@@ -426,7 +426,7 @@ public final class EditorConfig implements AssetEventListener {
             LOGGER.warning(e);
         }
 
-        JmeToJFXIntegrator.prepareSettings(settings, displayMode.getRefreshRate());
+        JmeToJFXIntegrator.prepareSettings(settings, 10);
 
         return settings;
     }

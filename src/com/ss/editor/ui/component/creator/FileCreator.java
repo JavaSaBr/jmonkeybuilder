@@ -1,16 +1,20 @@
 package com.ss.editor.ui.component.creator;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 /**
- * Интерфейс для реализации создателя файлов.
+ * The interface to implement a some file creator.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface FileCreator {
 
     /**
-     * Запуск создателя для указанного файла.
+     * Start creating near the file.
+     *
+     * @param file the file.
      */
-    public void start(final Path file);
+    void start(@NotNull final Path file);
 }
