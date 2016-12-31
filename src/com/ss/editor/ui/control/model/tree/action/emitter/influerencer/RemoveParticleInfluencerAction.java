@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.influerencer;
 
 import com.ss.editor.Messages;
+import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -8,10 +9,13 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveParticleInfluencerOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencersModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import javafx.scene.image.Image;
 import tonegod.emitter.ParticleEmitterNode;
@@ -44,8 +48,11 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction {
     protected void process() {
 
         final ParticleInfluencerModelNode node = (ParticleInfluencerModelNode) getNode();
+        final ParticleInfluencersModelNode parent = (ParticleInfluencersModelNode) Objects.requireNonNull(node.getParent());
+        final ParticleInfluencers particleInfluencers = Objects.requireNonNull(parent.getElement());
+
         final ParticleInfluencer influencer = node.getElement();
-        final ParticleEmitterNode emitterNode = node.getEmitterNode();
+        final ParticleEmitterNode emitterNode = particleInfluencers.getEmitterNode();
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();

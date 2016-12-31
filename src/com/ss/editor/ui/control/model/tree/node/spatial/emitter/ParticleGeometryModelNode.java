@@ -26,7 +26,7 @@ import tonegod.emitter.geometry.ParticleGeometry;
  */
 public class ParticleGeometryModelNode extends GeometryModelNode<ParticleGeometry> {
 
-    public ParticleGeometryModelNode(final ParticleGeometry element, final long objectId) {
+    public ParticleGeometryModelNode(@NotNull final ParticleGeometry element, final long objectId) {
         super(element, objectId);
     }
 

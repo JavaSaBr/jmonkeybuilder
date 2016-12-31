@@ -1,4 +1,5 @@
 # jMonkeyEngine 3 SpaceShift Editor 0.8.8 #
+## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 

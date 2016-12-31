@@ -5,9 +5,11 @@ import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
@@ -375,5 +377,23 @@ public abstract class EditorUtil {
      */
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
+    }
+
+    /**
+     * Increment the loading counter.
+     */
+    public static void incrementLoading() {
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final EditorFXScene scene = jfxApplication.getScene();
+        scene.incrementLoading();
+    }
+
+    /**
+     * Decrement the loading counter.
+     */
+    public static void decrementLoading() {
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final EditorFXScene scene = jfxApplication.getScene();
+        scene.decrementLoading();
     }
 }

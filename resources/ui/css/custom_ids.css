@@ -207,6 +207,17 @@
     -fx-max-width: -fx-min-width;
 }
 
+#EditorDialogShortLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 6 0 0;
+}
+
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
     -fx-padding: 0 0 20 0;

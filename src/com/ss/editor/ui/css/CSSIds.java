@@ -48,6 +48,7 @@ public interface CSSIds {
     String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
     String EDITOR_DIALOG_BUTTON_CANCEL = "EditorDialogButtonCancel";
     String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
+    String EDITOR_DIALOG_SHORT_LABEL = "EditorDialogShortLabel";
 
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     String ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER = "AssetEditorDialogResourcesContainer";

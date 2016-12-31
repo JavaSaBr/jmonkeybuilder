@@ -80,7 +80,7 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final ParticleInfluencers element = getElement();
         final Array<ParticleInfluencer> influencers = element.getInfluencers();
-        influencers.forEach(result, element, (influencer, toStore, el) -> toStore.add(createFor(influencer, el)));
+        influencers.forEach(result, (influencer, toStore) -> toStore.add(createFor(influencer)));
         return result;
     }
 

@@ -46,15 +46,14 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
     protected void process() {
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
-        if (modelNode.getChannel() >= 0) return;
+        final AnimationControlModelNode controlModelNode = modelNode.getControlModelNode();
+        if (controlModelNode == null || modelNode.getChannel() >= 0) return;
 
         final Animation element = modelNode.getElement();
         final AnimControl control = modelNode.getControl();
-        if (control.getNumChannels() > 0) return;
+        if (control == null || control.getNumChannels() > 0) return;
 
         modelNode.setChannel(control.getNumChannels());
-
-        final AnimationControlModelNode controlModelNode = modelNode.getControlModelNode();
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             control.addListener(this);
@@ -75,7 +74,6 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
         final Animation element = modelNode.getElement();
-
         if (!StringUtils.equals(element.getName(), animName)) return;
 
         modelNode.setChannel(-1);

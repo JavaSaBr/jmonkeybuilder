@@ -34,6 +34,11 @@ public abstract class ModelNode<T> implements UObject {
      */
     private final T element;
 
+    /**
+     * The parent.
+     */
+    private ModelNode<?> parent;
+
     public ModelNode(@NotNull final T element, final long objectId) {
         this.element = element;
         this.objectId = objectId;
@@ -75,7 +80,14 @@ public abstract class ModelNode<T> implements UObject {
      */
     @Nullable
     public ModelNode<?> getParent() {
-        return null;
+        return parent;
+    }
+
+    /**
+     * @param parent the parent.
+     */
+    protected void setParent(final ModelNode<?> parent) {
+        this.parent = parent;
     }
 
     /**
@@ -172,5 +184,39 @@ public abstract class ModelNode<T> implements UObject {
     @Override
     public int hashCode() {
         return element.hashCode();
+    }
+
+    /**
+     * Notify about that a model node was added to children of this node.
+     *
+     * @param modelNode the model node.
+     */
+    public void notifyChildAdded(@NotNull final ModelNode<?> modelNode) {
+    }
+
+    /**
+     * Notify about that a model node was removed from children of this node.
+     *
+     * @param modelNode the model node.
+     */
+    public void notifyChildRemoved(@NotNull final ModelNode<?> modelNode) {
+        modelNode.setParent(null);
+    }
+
+    /**
+     * Notify about that a model node will add to children of this node.
+     *
+     * @param modelNode the model node.
+     */
+    public void notifyChildPreAdd(@NotNull final ModelNode<?> modelNode) {
+        modelNode.setParent(this);
+    }
+
+    /**
+     * Notify about that a model node will remove from children of this node.
+     *
+     * @param modelNode the model node.
+     */
+    public void notifyChildPreRemove(@NotNull final ModelNode<?> modelNode) {
     }
 }

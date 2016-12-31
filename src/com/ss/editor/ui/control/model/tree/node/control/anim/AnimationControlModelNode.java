@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node.control.anim;
 
+import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
@@ -7,7 +9,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.animation.PlaySettingsAction;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
 import com.ss.editor.ui.control.model.tree.node.control.ControlModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -102,15 +103,20 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
 
         final AnimControl element = getElement();
         final Collection<String> animationNames = element.getAnimationNames();
-        animationNames.forEach(name -> {
-            final AnimationModelNode modelNode = ModelNodeFactory.createFor(element.getAnim(name));
-            modelNode.setControl(getElement());
-            modelNode.setControlModelNode(this);
-            result.add(modelNode);
-        });
+        animationNames.forEach(name -> result.add(createFor(element.getAnim(name))));
 
         result.addAll(super.getChildren());
 
         return result;
+    }
+
+    @Override
+    public void notifyChildPreAdd(@NotNull final ModelNode<?> modelNode) {
+
+        final AnimationModelNode animationModelNode = (AnimationModelNode) modelNode;
+        animationModelNode.setControl(getElement());
+        animationModelNode.setControlModelNode(this);
+
+        super.notifyChildPreAdd(modelNode);
     }
 }

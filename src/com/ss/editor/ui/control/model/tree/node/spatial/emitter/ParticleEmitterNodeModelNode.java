@@ -41,7 +41,7 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterNode> {
 
-    public ParticleEmitterNodeModelNode(final ParticleEmitterNode element, final long objectId) {
+    public ParticleEmitterNodeModelNode(@NotNull final ParticleEmitterNode element, final long objectId) {
         super(element, objectId);
     }
 
