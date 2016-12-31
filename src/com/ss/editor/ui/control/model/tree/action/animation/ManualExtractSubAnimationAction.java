@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.animation;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -27,13 +28,13 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Manual extract sub animation";
+        return Messages.MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
     }
 
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.PLAY_16;
+        return Icons.EXTRACT_16;
     }
 
     @Override

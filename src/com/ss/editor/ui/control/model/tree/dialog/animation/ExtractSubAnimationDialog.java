@@ -39,7 +39,7 @@ import rlib.ui.util.FXUtils;
  */
 public class ExtractSubAnimationDialog extends AbstractNodeDialog {
 
-    private static final Point DIALOG_SIZE = new Point(350, 184);
+    private static final Point DIALOG_SIZE = new Point(390, 184);
 
     private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
     private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(),
@@ -81,7 +81,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
         final int frameCount = AnimationUtils.getFrameCount(animation);
 
         final TextField nameField = getNameField();
-        nameField.setText(AnimationUtils.findFreeName(control, "New Animation"));
+        nameField.setText(AnimationUtils.findFreeName(control, Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE));
 
         final IntegerTextField startFrameField = getStartFrameField();
         startFrameField.setMinMax(0, frameCount - 2);
@@ -109,7 +109,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return Messages.PLAY_ANIMATION_SETTINDS_DIALOG_TITLE;
+        return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE;
     }
 
     @Override
@@ -120,7 +120,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
 
         final HBox nameContainer = new HBox();
 
-        final Label nameLabel = new Label("Name" + ":");
+        final Label nameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_NAME + ":");
         nameLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         nameField = new TextField();
@@ -133,7 +133,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
 
         final HBox startFrameContainer = new HBox();
 
-        final Label startFrameLabel = new Label("Start frame" + ":");
+        final Label startFrameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME + ":");
         startFrameLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         startFrameField = new IntegerTextField();
@@ -146,7 +146,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
 
         final HBox endFrameContainer = new HBox();
 
-        final Label endFrameLabel = new Label("End frame" + ":");
+        final Label endFrameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME + ":");
         endFrameLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         endFrameField = new IntegerTextField();
@@ -211,7 +211,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
     protected void processExtract() {
 
         final AnimationModelNode node = getNode();
-        final AnimControl control = node.getControl();
+        final AnimControl control = Objects.requireNonNull(node.getControl());
         final Animation animation = node.getElement();
 
         final TextField nameField = getNameField();
@@ -236,7 +236,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
 
     @Override
     protected String getButtonOkLabel() {
-        return "Create";
+        return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
     }
 
     @Override

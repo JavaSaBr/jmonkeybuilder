@@ -177,7 +177,7 @@ public class AnimationUtils {
 
         int i = 1;
 
-        while (control.getAnim(base + "_" + i) == null) {
+        while (control.getAnim(base + "_" + i) != null) {
             i++;
         }
 

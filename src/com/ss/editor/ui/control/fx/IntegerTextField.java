@@ -63,7 +63,6 @@ public final class IntegerTextField extends TextField {
 
         final TextFormatter<?> textFormatter = getTextFormatter();
         final StringConverter<?> valueConverter = textFormatter.getValueConverter();
-
         try {
             valueConverter.fromString(stringValue);
         } catch (final RuntimeException e) {

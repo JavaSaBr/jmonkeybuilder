@@ -144,6 +144,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
@@ -247,10 +248,17 @@ public class Messages {
     public static final String RENAME_DIALOG_BUTTON_OK;
     public static final String RENAME_DIALOG_BUTTON_CANCEL;
 
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_TITLE;
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE;
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_SPEED;
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_TITLE;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_SPEED;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK;
+
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_NAME;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
 
     public static final String QUESTION_DIALOG_TITLE;
     public static final String QUESTION_DIALOG_BUTTON_OK;
@@ -445,6 +453,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
+        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
@@ -548,10 +557,17 @@ public class Messages {
         RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
         RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
 
-        PLAY_ANIMATION_SETTINDS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
-        PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE = bundle.getString("PlayAnimationSettingsDialogLoopMode");
-        PLAY_ANIMATION_SETTINDS_DIALOG_SPEED = bundle.getString("PlayAnimationSettingsDialogSpeed");
-        PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
+        PLAY_ANIMATION_SETTINGS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
+        PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE = bundle.getString("PlayAnimationSettingsDialogLoopMode");
+        PLAY_ANIMATION_SETTINGS_DIALOG_SPEED = bundle.getString("PlayAnimationSettingsDialogSpeed");
+        PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
+
+        MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE = bundle.getString("ManualExtractAnimationDialogTitle");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_NAME = bundle.getString("ManualExtractAnimationDialogName");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE = bundle.getString("ManualExtractAnimationDialogNameExample");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME = bundle.getString("ManualExtractAnimationDialogStartFrame");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME = bundle.getString("ManualExtractAnimationDialogEndFrame");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK = bundle.getString("ManualExtractAnimationDialogButtonOk");
 
         QUESTION_DIALOG_TITLE = bundle.getString("QuestionDialogTitle");
         QUESTION_DIALOG_BUTTON_OK = bundle.getString("QuestionDialogButtonOk");

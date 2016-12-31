@@ -89,7 +89,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return Messages.PLAY_ANIMATION_SETTINDS_DIALOG_TITLE;
+        return Messages.PLAY_ANIMATION_SETTINGS_DIALOG_TITLE;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
 
         final HBox loopModeContainer = new HBox();
 
-        final Label loopModeLabel = new Label(Messages.PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE + ":");
+        final Label loopModeLabel = new Label(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE + ":");
         loopModeLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         loopModeComboBox = new ComboBox<>(LOOP_MODES);
@@ -115,7 +115,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
 
         final HBox speedContainer = new HBox();
 
-        final Label speedLabel = new Label(Messages.PLAY_ANIMATION_SETTINDS_DIALOG_SPEED + ":");
+        final Label speedLabel = new Label(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_SPEED + ":");
         speedLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         speedField = new TextField();
@@ -180,7 +180,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
 
     @Override
     protected String getButtonOkLabel() {
-        return Messages.PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK;
+        return Messages.PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK;
     }
 
     @Override

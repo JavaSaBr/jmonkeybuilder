@@ -65,16 +65,16 @@ public class AnimationModelNode extends ModelNode<Animation> {
         final Animation animation = getElement();
         final int frameCount = AnimationUtils.getFrameCount(animation);
 
-        if (getChannel() < 0 && frameCount > 0) {
-            items.add(new ManualExtractSubAnimationAction(nodeTree, this));
-        }
-
         if (getChannel() < 0) {
             items.add(new PlayAnimationAction(nodeTree, this));
             items.add(new RemoveAnimationAction(nodeTree, this));
             items.add(new RenameNodeAction(nodeTree, this));
         } else {
             items.add(new StopAnimationAction(nodeTree, this));
+        }
+
+        if (getChannel() < 0 && frameCount > 0) {
+            items.add(new ManualExtractSubAnimationAction(nodeTree, this));
         }
 
         super.fillContextMenu(nodeTree, items);

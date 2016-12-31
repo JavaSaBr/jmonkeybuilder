@@ -46,6 +46,7 @@ public interface Icons {
     Image CUT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cut.png");
     Image COPY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/copy.png");
     Image TRANSFORMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/transformation.png");
+    Image EXTRACT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/extract.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
