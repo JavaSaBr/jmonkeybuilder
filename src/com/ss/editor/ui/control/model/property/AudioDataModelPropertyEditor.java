@@ -1,11 +1,10 @@
 package com.ss.editor.ui.control.model.property;
 
-import com.jme3.material.Material;
+import com.jme3.audio.AudioData;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
-import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
@@ -14,8 +13,6 @@ import com.ss.editor.ui.event.FXEventManager;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -27,13 +24,13 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing the {@link Material}.
+ * The implementation of the {@link ModelPropertyControl} for editing the {@link AudioData}.
  *
  * @author JavaSaBr
  */
-public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelPropertyControl<T, V> {
+public class AudioDataModelPropertyEditor<T extends Spatial, V> extends ModelPropertyControl<T, V> {
 
-    public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    public static final String NO_AUDIO = "No audio";
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -47,22 +44,22 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
     }
 
     /**
-     * The label with name of the material.
+     * The label with name of the audio data.
      */
-    private Label materialLabel;
+    private Label audioLabel;
 
     /**
-     * The button for choosing other material.
+     * The button for choosing other audio data.
      */
     private Button changeButton;
 
     /**
-     * The button for editing the material.
+     * The button for opening the audio.
      */
-    private Button editButton;
+    private Button openButton;
 
-    public MaterialModelPropertyEditor(@Nullable final V element, @NotNull final String paramName,
-                                       @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public AudioDataModelPropertyEditor(@Nullable final V element, @NotNull final String paramName,
+                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 
@@ -70,37 +67,37 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
-        materialLabel = new Label(NO_MATERIAL);
-        materialLabel.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_LABEL);
+        audioLabel = new Label(NO_AUDIO);
+        audioLabel.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_LABEL);
 
         changeButton = new Button();
         changeButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_24));
         changeButton.setOnAction(event -> processChange());
 
-        editButton = new Button();
-        editButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
-        editButton.setGraphic(new ImageView(Icons.EDIT_16));
-        editButton.disableProperty().bind(materialLabel.textProperty().isEqualTo(NO_MATERIAL));
-        editButton.setOnAction(event -> processEdit());
+        openButton = new Button();
+        openButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
+        openButton.setGraphic(new ImageView(Icons.EDIT_16));
+        openButton.disableProperty().bind(audioLabel.textProperty().isEqualTo(NO_AUDIO));
+        openButton.setOnAction(event -> processEdit());
 
-        materialLabel.prefWidthProperty().bind(widthProperty()
+        audioLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(changeButton.widthProperty())
-                .subtract(editButton.widthProperty())
+                .subtract(openButton.widthProperty())
                 .subtract(BUTTON_OFFSET.getLeft() * 2));
 
-        FXUtils.addToPane(materialLabel, container);
+        FXUtils.addToPane(audioLabel, container);
         FXUtils.addToPane(changeButton, container);
-        FXUtils.addToPane(editButton, container);
+        FXUtils.addToPane(openButton, container);
 
         HBox.setMargin(changeButton, BUTTON_OFFSET);
-        HBox.setMargin(editButton, BUTTON_OFFSET);
+        HBox.setMargin(openButton, BUTTON_OFFSET);
 
-        FXUtils.addClassTo(materialLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(audioLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(changeButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(openButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(openButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 
     /**
@@ -118,8 +115,7 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
     /**
      * @return the label with name of the material.
      */
-    @NotNull
-    protected Label getMaterialLabel() {
-        return Objects.requireNonNull(materialLabel);
+    protected Label getAudioLabel() {
+        return audioLabel;
     }
 }

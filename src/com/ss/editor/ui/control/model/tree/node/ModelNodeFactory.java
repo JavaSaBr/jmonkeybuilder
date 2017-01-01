@@ -7,6 +7,7 @@ import com.jme3.animation.Animation;
 import com.jme3.animation.AudioTrack;
 import com.jme3.animation.BoneTrack;
 import com.jme3.animation.EffectTrack;
+import com.jme3.audio.AudioNode;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
@@ -28,6 +29,7 @@ import com.ss.editor.ui.control.model.tree.node.light.DirectionalLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.LightProbeModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.PointLightModelNode;
 import com.ss.editor.ui.control.model.tree.node.light.SpotLightModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.AudioModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.ParticleNodeModelNode;
@@ -38,7 +40,6 @@ import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluenc
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencersModelNode;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -59,11 +60,6 @@ public class ModelNodeFactory {
 
     @NotNull
     public static <T, V extends ModelNode<T>> V createFor(@NotNull final T element) {
-        return createFor(element, null);
-    }
-
-    @NotNull
-    public static <T, V extends ModelNode<T>> V createFor(@NotNull final T element, @Nullable Object parent) {
 
         if (element instanceof Animation) {
             return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
@@ -109,6 +105,8 @@ public class ModelNodeFactory {
             return unsafeCast(new MeshModelNode((Mesh) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Geometry) {
             return unsafeCast(new GeometryModelNode<>((Geometry) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof AudioNode) {
+            return unsafeCast(new AudioModelNode((AudioNode) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof Node) {
             return unsafeCast(new NodeModelNode<>((Node) element, ID_GENERATOR.incrementAndGet()));
         }

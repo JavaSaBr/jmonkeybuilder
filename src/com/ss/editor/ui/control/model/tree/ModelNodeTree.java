@@ -229,7 +229,7 @@ public class ModelNodeTree extends VBox {
      * Notify about changing the element.
      */
     public void notifyChanged(@Nullable Object parent, @NotNull final Object object) {
-        notifyChanged(createFor(object, parent));
+        notifyChanged(createFor(object));
     }
 
     /**
@@ -305,7 +305,7 @@ public class ModelNodeTree extends VBox {
      * Notify about adding the element.
      */
     public void notifyAdded(@NotNull final Object parent, @NotNull final Object child, final int index) {
-        notifyAdded(createFor(parent), createFor(child, parent), index);
+        notifyAdded(createFor(parent), createFor(child), index);
     }
 
     /**
@@ -336,7 +336,7 @@ public class ModelNodeTree extends VBox {
      * Notify about removing the element.
      */
     public void notifyRemoved(@NotNull final Object parent, @NotNull final Object child) {
-        notifyRemoved(createFor(child, parent));
+        notifyRemoved(createFor(child));
     }
 
     /**

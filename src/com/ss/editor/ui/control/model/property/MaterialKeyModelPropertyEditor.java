@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.getRealFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 
 import com.jme3.asset.MaterialKey;
@@ -10,7 +11,6 @@ import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import javafx.scene.control.Label;
 import rlib.util.StringUtils;
@@ -48,7 +49,7 @@ public class MaterialKeyModelPropertyEditor<T extends Spatial> extends MaterialM
      */
     private void addMaterial(@NotNull final Path file) {
 
-        final Path assetFile = getAssetFile(file);
+        final Path assetFile = Objects.requireNonNull(getAssetFile(file));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
         changed(materialKey, getPropertyValue());
@@ -70,7 +71,7 @@ public class MaterialKeyModelPropertyEditor<T extends Spatial> extends MaterialM
         if (StringUtils.isEmpty(assetPath)) return;
 
         final Path assetFile = Paths.get(assetPath);
-        final Path realFile = EditorUtil.getRealFile(assetFile);
+        final Path realFile = Objects.requireNonNull(getRealFile(assetFile));
         if (!Files.exists(realFile)) return;
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();

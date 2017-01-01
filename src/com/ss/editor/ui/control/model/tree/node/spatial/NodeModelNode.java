@@ -11,6 +11,7 @@ import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
+import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.CreateTEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
@@ -66,13 +67,22 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
 
         final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE, new ImageView(Icons.ADD_18));
-        createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this), new CreateQuadAction(nodeTree, this));
+        createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this),
+                new CreateSphereAction(nodeTree, this),
+                new CreateQuadAction(nodeTree, this));
 
         final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT, new ImageView(Icons.ADD_18));
-        addLightMenu.getItems().addAll(new CreateSpotLightAction(nodeTree, this), new CreatePointLightAction(nodeTree, this), new CreateAmbientLightAction(nodeTree, this), new CreateDirectionLightAction(nodeTree, this));
+        addLightMenu.getItems().addAll(new CreateSpotLightAction(nodeTree, this),
+                new CreatePointLightAction(nodeTree, this),
+                new CreateAmbientLightAction(nodeTree, this),
+                new CreateDirectionLightAction(nodeTree, this));
 
         final Menu menu = super.createCreationMenu(nodeTree);
-        menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new CreateSkyAction(nodeTree, this), new CreateTEmitterAction(nodeTree, this), createPrimitiveMenu, addLightMenu);
+        menu.getItems().addAll(new CreateNodeAction(nodeTree, this),
+                new CreateSkyAction(nodeTree, this),
+                new CreateTEmitterAction(nodeTree, this),
+                new CreateAudioNodeAction(nodeTree, this),
+                createPrimitiveMenu, addLightMenu);
 
         return menu;
     }
@@ -87,10 +97,8 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     public Array<ModelNode<?>> getChildren() {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
-
         final List<Spatial> children = getSpatials();
         children.forEach(spatial -> result.add(createFor(spatial)));
-
         result.addAll(super.getChildren());
 
         return result;

@@ -31,11 +31,13 @@ public abstract class AbstractNodeAction extends MenuItem {
     /**
      * The component of the model three.
      */
+    @NotNull
     private final ModelNodeTree nodeTree;
 
     /**
      * The node of the model.
      */
+    @NotNull
     private final ModelNode<?> node;
 
     public AbstractNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {

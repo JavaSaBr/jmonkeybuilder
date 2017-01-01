@@ -1,74 +1,92 @@
 package com.ss.editor.model.undo;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
+
+import org.jetbrains.annotations.NotNull;
 
 import javafx.application.Platform;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реалищация контролеера операций в редактораз.
+ * The implementation of controller to support undo/redo operations.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EditorOperationControl {
 
     public static final int HISTORY_SIZE = 20;
 
     /**
-     * Список операций.
+     * The list of operations.
      */
+    @NotNull
     private final Array<EditorOperation> operations;
 
     /**
-     * Список откаченных операций.
+     * The list of operations to redo.
      */
+    @NotNull
     private final Array<EditorOperation> toRedo;
 
     /**
-     * Редактор с поддержкой отменяемости.
+     * The editor with supporting endo/redo.
      */
+    @NotNull
     private final UndoableEditor editor;
 
-    public EditorOperationControl(final UndoableEditor editor) {
+    public EditorOperationControl(@NotNull final UndoableEditor editor) {
         this.editor = editor;
         this.operations = ArrayFactory.newArray(EditorOperation.class);
         this.toRedo = ArrayFactory.newArray(EditorOperation.class);
     }
 
     /**
-     * @return список операций.
+     * @return the list of operations.
      */
+    @NotNull
     private Array<EditorOperation> getOperations() {
         return operations;
     }
 
     /**
-     * @return список откаченных операций.
+     * @return the list of operations to redo.
      */
+    @NotNull
     private Array<EditorOperation> getToRedo() {
         return toRedo;
     }
 
     /**
-     * @return редактор с поддержкой отменяемости.
+     * @return the editor with supporting endo/redo.
      */
+    @NotNull
     private UndoableEditor getEditor() {
         return editor;
     }
 
     /**
-     * Выполнение новой операции.
+     * Execute an operation.
+     *
+     * @param operation the operation.
      */
-    public synchronized void execute(final EditorOperation operation) {
-        final ExecutorManager executorManager = ExecutorManager.getInstance();
-        executorManager.addFXTask(() -> executeImpl(operation));
+    @FromAnyThread
+    public void execute(@NotNull final EditorOperation operation) {
+        if (Platform.isFxApplicationThread()) {
+            executeImpl(operation);
+        } else {
+            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            executorManager.addFXTask(() -> executeImpl(operation));
+        }
     }
 
     /**
-     * Выполнение новой операции.
+     * Executing an operation.
+     *
+     * @param operation the operation.
      */
-    private void executeImpl(final EditorOperation operation) {
+    private void executeImpl(@NotNull final EditorOperation operation) {
 
         final UndoableEditor editor = getEditor();
         operation.redo(editor);
@@ -84,8 +102,9 @@ public class EditorOperationControl {
     }
 
     /**
-     * Отмена последней операции.
+     * Undo the last operation.
      */
+    @FromAnyThread
     public void undo() {
         if (Platform.isFxApplicationThread()) {
             undoImpl();
@@ -96,7 +115,7 @@ public class EditorOperationControl {
     }
 
     /**
-     * Отмена последней операции.
+     * Undo the last operation.
      */
     private synchronized void undoImpl() {
 
@@ -113,9 +132,10 @@ public class EditorOperationControl {
     }
 
     /**
-     * Отмена отмены последнего изменения.
+     * Redo the last undo operation.
      */
-    public synchronized void redo() {
+    @FromAnyThread
+    public void redo() {
         if (Platform.isFxApplicationThread()) {
             redoImpl();
         } else {
@@ -125,9 +145,9 @@ public class EditorOperationControl {
     }
 
     /**
-     * Отмена последней операции.
+     * Redo the last undo operation.
      */
-    private synchronized void redoImpl() {
+    private void redoImpl() {
 
         final Array<EditorOperation> toRedo = getToRedo();
         final EditorOperation operation = toRedo.pop();
@@ -143,14 +163,36 @@ public class EditorOperationControl {
     }
 
     /**
-     * Очистка истории.
+     * Clear operation history.
      */
-    public synchronized void clear() {
+    @FromAnyThread
+    public void clear() {
+        if (Platform.isFxApplicationThread()) {
+            clearImpl();
+        } else {
+            final ExecutorManager executorManager = ExecutorManager.getInstance();
+            executorManager.addFXTask(this::clearImpl);
+        }
+    }
+
+    /**
+     * Clear operation history.
+     */
+    private void clearImpl() {
 
         final Array<EditorOperation> operations = getOperations();
         operations.clear();
 
         final Array<EditorOperation> toRedo = getToRedo();
         toRedo.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "EditorOperationControl{" +
+                "operations=" + operations +
+                ", toRedo=" + toRedo +
+                ", editor=" + editor +
+                '}';
     }
 }
