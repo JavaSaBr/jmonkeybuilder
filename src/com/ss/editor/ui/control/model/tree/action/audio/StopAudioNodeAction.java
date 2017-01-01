@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.audio;
 
 import com.jme3.audio.AudioNode;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -32,7 +33,7 @@ public class StopAudioNodeAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Stop";
+        return Messages.MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     }
 
     @Override

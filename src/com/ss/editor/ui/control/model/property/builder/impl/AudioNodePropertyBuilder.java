@@ -5,6 +5,7 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.AudioKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.BooleanModelPropertyControl;
@@ -75,64 +76,86 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder {
         final boolean directional = audioNode.isDirectional();
         final boolean positional = audioNode.isPositional();
 
-        final BooleanModelPropertyControl<AudioNode> loopControl = new BooleanModelPropertyControl<>(looping, "Looping", modelChangeConsumer);
+        final BooleanModelPropertyControl<AudioNode> loopControl = new BooleanModelPropertyControl<>(looping,
+                Messages.MODEL_PROPERTY_LOOPING, modelChangeConsumer);
+
         loopControl.setApplyHandler(AudioNode::setLooping);
         loopControl.setSyncHandler(AudioNode::isLooping);
         loopControl.setEditObject(audioNode);
 
-        final BooleanModelPropertyControl<AudioNode> reverbControl = new BooleanModelPropertyControl<>(reverbEnabled, "Reverb", modelChangeConsumer);
+        final BooleanModelPropertyControl<AudioNode> reverbControl = new BooleanModelPropertyControl<>(reverbEnabled,
+                Messages.MODEL_PROPERTY_REVERB, modelChangeConsumer);
+
         reverbControl.setApplyHandler(AudioNode::setReverbEnabled);
         reverbControl.setSyncHandler(AudioNode::isReverbEnabled);
         reverbControl.setEditObject(audioNode);
 
-        final BooleanModelPropertyControl<AudioNode> directionalControl = new BooleanModelPropertyControl<>(directional, "Directional", modelChangeConsumer);
+        final BooleanModelPropertyControl<AudioNode> directionalControl = new BooleanModelPropertyControl<>(directional,
+                Messages.MODEL_PROPERTY_DIRECTIONAL, modelChangeConsumer);
+
         directionalControl.setApplyHandler(AudioNode::setDirectional);
         directionalControl.setSyncHandler(AudioNode::isDirectional);
         directionalControl.setEditObject(audioNode);
 
-        final BooleanModelPropertyControl<AudioNode> positionalControl = new BooleanModelPropertyControl<>(positional, "Positional", modelChangeConsumer);
+        final BooleanModelPropertyControl<AudioNode> positionalControl = new BooleanModelPropertyControl<>(positional,
+                Messages.MODEL_PROPERTY_POSITIONAL, modelChangeConsumer);
+
         positionalControl.setApplyHandler(AudioNode::setPositional);
         positionalControl.setSyncHandler(AudioNode::isPositional);
         positionalControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> pitchControl = new FloatModelPropertyControl<>(pitch, "Pitch", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> pitchControl = new FloatModelPropertyControl<>(pitch,
+                Messages.MODEL_PROPERTY_AUDIO_PITCH, modelChangeConsumer);
+
         pitchControl.setApplyHandler(AudioNode::setPitch);
         pitchControl.setSyncHandler(AudioNode::getPitch);
         pitchControl.setMinMax(0.5F, 2.0F);
         pitchControl.setScrollPower(2F);
         pitchControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> volumeControl = new FloatModelPropertyControl<>(volume, "Volume", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> volumeControl = new FloatModelPropertyControl<>(volume,
+                Messages.MODEL_PROPERTY_AUDIO_VOLUME, modelChangeConsumer);
+
         volumeControl.setApplyHandler(AudioNode::setVolume);
         volumeControl.setSyncHandler(AudioNode::getVolume);
         volumeControl.setMinMax(0F, Float.MAX_VALUE);
         volumeControl.setScrollPower(5F);
         volumeControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> timeOffsetControl = new FloatModelPropertyControl<>(timeOffset, "Time offset", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> timeOffsetControl = new FloatModelPropertyControl<>(timeOffset,
+                Messages.MODEL_PROPERTY_TIME_OFFSET, modelChangeConsumer);
+
         timeOffsetControl.setApplyHandler(AudioNode::setTimeOffset);
         timeOffsetControl.setSyncHandler(AudioNode::getTimeOffset);
         timeOffsetControl.setMinMax(0F, Float.MAX_VALUE);
         timeOffsetControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> maxDistanceControl = new FloatModelPropertyControl<>(maxDistance, "Max distance", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> maxDistanceControl = new FloatModelPropertyControl<>(maxDistance,
+                Messages.MODEL_PROPERTY_MAX_DISTANCE, modelChangeConsumer);
+
         maxDistanceControl.setApplyHandler(AudioNode::setMaxDistance);
         maxDistanceControl.setSyncHandler(AudioNode::getMaxDistance);
         maxDistanceControl.setMinMax(0F, Float.MAX_VALUE);
         maxDistanceControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> refDistanceControl = new FloatModelPropertyControl<>(refDistance, "Ref distance", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> refDistanceControl = new FloatModelPropertyControl<>(refDistance,
+                Messages.MODEL_PROPERTY_REF_DISTANCE, modelChangeConsumer);
+
         refDistanceControl.setApplyHandler(AudioNode::setRefDistance);
         refDistanceControl.setSyncHandler(AudioNode::getRefDistance);
         refDistanceControl.setMinMax(0F, Float.MAX_VALUE);
         refDistanceControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> innerAngleControl = new FloatModelPropertyControl<>(innerAngle, "Inner angle", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> innerAngleControl = new FloatModelPropertyControl<>(innerAngle,
+                Messages.MODEL_PROPERTY_INNER_ANGLE, modelChangeConsumer);
+
         innerAngleControl.setApplyHandler(AudioNode::setInnerAngle);
         innerAngleControl.setSyncHandler(AudioNode::getInnerAngle);
         innerAngleControl.setEditObject(audioNode);
 
-        final FloatModelPropertyControl<AudioNode> outerAngleControl = new FloatModelPropertyControl<>(outerAngle, "Outer angle", modelChangeConsumer);
+        final FloatModelPropertyControl<AudioNode> outerAngleControl = new FloatModelPropertyControl<>(outerAngle,
+                Messages.MODEL_PROPERTY_OUTER_ANGLE, modelChangeConsumer);
+
         outerAngleControl.setApplyHandler(AudioNode::setOuterAngle);
         outerAngleControl.setSyncHandler(AudioNode::getOuterAngle);
         outerAngleControl.setEditObject(audioNode);
@@ -151,17 +174,23 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder {
 
         addSplitLine(container);
 
-        final AudioKeyModelPropertyEditor audioKeyControl = new AudioKeyModelPropertyEditor(key, "Audio data", modelChangeConsumer);
+        final AudioKeyModelPropertyEditor audioKeyControl = new AudioKeyModelPropertyEditor(key,
+                Messages.MODEL_PROPERTY_AUDIO_DATA, modelChangeConsumer);
+
         audioKeyControl.setApplyHandler(AUDIO_APPLY_HANDLER);
         audioKeyControl.setSyncHandler(AudioNodeUtils::getAudioKey);
         audioKeyControl.setEditObject(audioNode);
 
-        final Vector3fModelPropertyControl<AudioNode> velocityControl = new Vector3fModelPropertyControl<>(velocity, "Velocity", modelChangeConsumer);
+        final Vector3fModelPropertyControl<AudioNode> velocityControl = new Vector3fModelPropertyControl<>(velocity,
+                Messages.MODEL_PROPERTY_VELOCITY, modelChangeConsumer);
+
         velocityControl.setApplyHandler(AudioNode::setVelocity);
         velocityControl.setSyncHandler(AudioNode::getVelocity);
         velocityControl.setEditObject(audioNode);
 
-        final Vector3fModelPropertyControl<AudioNode> directionControl = new Vector3fModelPropertyControl<>(direction, "Direction", modelChangeConsumer);
+        final Vector3fModelPropertyControl<AudioNode> directionControl = new Vector3fModelPropertyControl<>(direction,
+                Messages.MODEL_PROPERTY_DIRECTIONAL, modelChangeConsumer);
+
         directionControl.setApplyHandler(AudioNode::setDirection);
         directionControl.setSyncHandler(AudioNode::getDirection);
         directionControl.setEditObject(audioNode);

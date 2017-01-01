@@ -151,6 +151,9 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
+    public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
+    public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
@@ -192,6 +195,17 @@ public class Messages {
     public static final String MODEL_PROPERTY_OUTER_ANGLE;
     public static final String MODEL_PROPERTY_MIN;
     public static final String MODEL_PROPERTY_MAX;
+    public static final String MODEL_PROPERTY_LOOPING;
+    public static final String MODEL_PROPERTY_REVERB;
+    public static final String MODEL_PROPERTY_DIRECTIONAL;
+    public static final String MODEL_PROPERTY_POSITIONAL;
+    public static final String MODEL_PROPERTY_AUDIO_PITCH;
+    public static final String MODEL_PROPERTY_AUDIO_VOLUME;
+    public static final String MODEL_PROPERTY_TIME_OFFSET;
+    public static final String MODEL_PROPERTY_MAX_DISTANCE;
+    public static final String MODEL_PROPERTY_REF_DISTANCE;
+    public static final String MODEL_PROPERTY_AUDIO_DATA;
+    public static final String MODEL_PROPERTY_VELOCITY;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -473,6 +487,9 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
         MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
+        MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
+        MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
+        MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
@@ -514,6 +531,17 @@ public class Messages {
         MODEL_PROPERTY_OUTER_ANGLE = bundle.getString("ModelPropertyOuterAngle");
         MODEL_PROPERTY_MIN = bundle.getString("ModelPropertyMin");
         MODEL_PROPERTY_MAX = bundle.getString("ModelPropertyMax");
+        MODEL_PROPERTY_LOOPING = bundle.getString("ModelPropertyLooping");
+        MODEL_PROPERTY_REVERB = bundle.getString("ModelPropertyReverb");
+        MODEL_PROPERTY_DIRECTIONAL = bundle.getString("ModelPropertyDirectional");
+        MODEL_PROPERTY_POSITIONAL = bundle.getString("ModelPropertyPositional");
+        MODEL_PROPERTY_AUDIO_PITCH = bundle.getString("ModelPropertyAudioPitch");
+        MODEL_PROPERTY_AUDIO_VOLUME = bundle.getString("ModelPropertyAudioVolume");
+        MODEL_PROPERTY_TIME_OFFSET = bundle.getString("ModelPropertyTimeOffset");
+        MODEL_PROPERTY_MAX_DISTANCE = bundle.getString("ModelPropertyMaxDistance");
+        MODEL_PROPERTY_REF_DISTANCE = bundle.getString("ModelPropertyRefDistance");
+        MODEL_PROPERTY_AUDIO_DATA = bundle.getString("ModelPropertyAudioData");
+        MODEL_PROPERTY_VELOCITY = bundle.getString("ModelPropertyVelocity");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");

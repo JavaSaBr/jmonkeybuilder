@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.audio;
 
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -35,7 +36,7 @@ public class CreateAudioNodeAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Audio node";
+        return Messages.MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
     }
 
     @Override

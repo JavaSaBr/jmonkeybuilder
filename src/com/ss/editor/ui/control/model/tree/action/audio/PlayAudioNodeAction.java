@@ -4,6 +4,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -36,7 +37,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Play";
+        return Messages.MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     }
 
     @Override
