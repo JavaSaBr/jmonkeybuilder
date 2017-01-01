@@ -23,7 +23,7 @@ import com.jme3.util.SkyFactory;
 import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.state.editor.impl.AbstractEditorAppState;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ import rlib.geom.util.AngleUtils;
  *
  * @author JavaSaBr
  */
-public class MaterialEditorAppState extends AbstractEditorAppState<MaterialFileEditor> {
+public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<MaterialFileEditor> {
 
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
@@ -247,6 +247,7 @@ public class MaterialEditorAppState extends AbstractEditorAppState<MaterialFileE
         stateNode.detachChild(modelNode);
     }
 
+    @NotNull
     @Override
     protected Node getNodeForCamera() {
         if (modelNode == null) modelNode = new Node("ModelNode");

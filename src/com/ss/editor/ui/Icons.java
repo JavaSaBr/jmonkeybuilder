@@ -69,5 +69,9 @@ public interface Icons {
     Image FROM_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/from_fullscreen.png", 24);
     Image TO_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/to_fullscreen.png", 24);
 
+    Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/play.png", 128);
+    Image PAUSE_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/pause.png", 128);
+    Image STOP_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/stop.png", 128);
+
     Image IMAGE_512 = ICON_MANAGER.getImage("/ui/icons/512/image.png", 512);
 }

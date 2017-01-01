@@ -363,7 +363,7 @@ public class Editor extends JmeToJFXApplication {
 
             super.update();
 
-        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
+        } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
             LOGGER.warning(e);
             GAnalytics.sendException(e, true);
             GAnalytics.waitForSend();

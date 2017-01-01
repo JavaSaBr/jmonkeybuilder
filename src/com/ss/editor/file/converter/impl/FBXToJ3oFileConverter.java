@@ -19,7 +19,7 @@ public class FBXToJ3oFileConverter extends AbstractFileConverter {
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        EXTENSIONS.add(FileExtensions.FBX);
+        EXTENSIONS.add(FileExtensions.MODEL_FBX);
         EXTENSIONS.asUnsafe().trimToSize();
     }
 

@@ -14,7 +14,6 @@ public interface FileExtensions {
     String JAVA_LIBRARY = "jar";
 
     String POST_FILTER_VIEW = "pfv";
-    String PARTICLE_EMITTER_VIEW = "pev";
 
     String IMAGE_PNG = "png";
     String IMAGE_JPG = "jpg";
@@ -26,12 +25,17 @@ public interface FileExtensions {
     String IMAGE_DDS = "dds";
     String IMAGE_HDR = "hdr";
 
+    String AUDIO_MP3 = "mp3";
+    String AUDIO_OGG = "ogg";
+    String AUDIO_WAV = "wav";
+
     String GLSL_VERTEX = "vert";
     String GLSL_FRAGMENT = "frag";
+    String GLSL_LIB = "glsllib";
 
-    String BLENDER = "blend";
-    String FBX = "fbx";
-    String OBJ = "obj";
-    String SCENE = "scene";
-    String MESH_XML = "mesh.xml";
+    String MODEL_BLENDER = "blend";
+    String MODEL_FBX = "fbx";
+    String MODEL_OBJ = "obj";
+    String MODEL_SCENE = "scene";
+    String MODEL_MESH_XML = "mesh.xml";
 }

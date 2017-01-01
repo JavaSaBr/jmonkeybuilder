@@ -19,7 +19,7 @@ public class SceneToJ3oFileConverter extends AbstractFileConverter {
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        EXTENSIONS.add(FileExtensions.SCENE);
+        EXTENSIONS.add(FileExtensions.MODEL_SCENE);
         EXTENSIONS.asUnsafe().trimToSize();
     }
 

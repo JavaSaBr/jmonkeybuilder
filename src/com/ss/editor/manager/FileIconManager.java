@@ -73,6 +73,7 @@ public class FileIconManager {
 
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_FRAGMENT, "gnome-mime-text-x-csharp");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_VERTEX, "gnome-mime-text-x-csharp");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_LIB, "gnome-mime-text-x-csharp");
     }
 
     private static FileIconManager instance;

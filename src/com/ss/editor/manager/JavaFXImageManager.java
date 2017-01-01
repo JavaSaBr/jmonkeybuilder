@@ -105,6 +105,7 @@ public class JavaFXImageManager {
         final Path appFolder = Config.getAppFolderInUserHome();
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
         this.iioMetadatas = DictionaryFactory.newObjectDictionary();
+        if (Files.exists(cacheFolder)) FileUtils.delete(cacheFolder);
         FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
     }
 

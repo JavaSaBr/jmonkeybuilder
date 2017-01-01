@@ -19,7 +19,7 @@ public class BlendToJ3oFileConverter extends AbstractFileConverter {
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        EXTENSIONS.add(FileExtensions.BLENDER);
+        EXTENSIONS.add(FileExtensions.MODEL_BLENDER);
         EXTENSIONS.asUnsafe().trimToSize();
     }
 
