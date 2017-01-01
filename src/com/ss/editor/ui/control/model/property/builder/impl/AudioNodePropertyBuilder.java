@@ -189,7 +189,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder {
         velocityControl.setEditObject(audioNode);
 
         final Vector3fModelPropertyControl<AudioNode> directionControl = new Vector3fModelPropertyControl<>(direction,
-                Messages.MODEL_PROPERTY_DIRECTIONAL, modelChangeConsumer);
+                Messages.MODEL_PROPERTY_DIRECTION, modelChangeConsumer);
 
         directionControl.setApplyHandler(AudioNode::setDirection);
         directionControl.setSyncHandler(AudioNode::getDirection);
@@ -198,5 +198,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(audioKeyControl, container);
         FXUtils.addToPane(velocityControl, container);
         FXUtils.addToPane(directionControl, container);
+
+        addSplitLine(container);
     }
 }
