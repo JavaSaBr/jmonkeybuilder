@@ -30,7 +30,8 @@ import rlib.util.StringUtils;
  */
 public class MaterialKeyModelPropertyEditor<T extends Spatial> extends MaterialModelPropertyEditor<T, MaterialKey> {
 
-    public MaterialKeyModelPropertyEditor(@Nullable final MaterialKey element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public MaterialKeyModelPropertyEditor(@Nullable final MaterialKey element, @NotNull final String paramName,
+                                          @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

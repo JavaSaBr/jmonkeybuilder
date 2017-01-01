@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,5 +23,7 @@ public interface PropertyBuilder {
      * @param container           the container for containing these controls.
      * @param modelChangeConsumer the consumer for working between controls and editor.
      */
-    void buildFor(@NotNull Object object, @Nullable Object parent, @NotNull VBox container, @NotNull ModelChangeConsumer modelChangeConsumer);
+    @FXThread
+    void buildFor(@NotNull Object object, @Nullable Object parent, @NotNull VBox container,
+                  @NotNull ModelChangeConsumer modelChangeConsumer);
 }

@@ -6,6 +6,7 @@ import com.jme3.animation.BoneTrack;
 import com.jme3.animation.Track;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.ss.editor.annotation.FromAnyThread;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +54,7 @@ public class AnimationUtils {
      * @return the new sub animation.
      */
     @NotNull
+    @FromAnyThread
     public static Animation extractAnimation(@NotNull final Animation source, @NotNull final String newName,
                                              final int startFrame, final int endFrame) {
 
@@ -118,6 +120,7 @@ public class AnimationUtils {
      * @param oldName   the old name.
      * @param newName   the new name.
      */
+    @FromAnyThread
     public static void changeName(@NotNull final AnimControl control, @NotNull final Animation animation,
                                   @NotNull final String oldName, @NotNull final String newName) {
         try {
@@ -150,6 +153,7 @@ public class AnimationUtils {
      * @param animation the animation.
      * @return the frame count or -1.
      */
+    @FromAnyThread
     public static int getFrameCount(@NotNull final Animation animation) {
 
         int min = Integer.MAX_VALUE;
@@ -172,6 +176,7 @@ public class AnimationUtils {
      * @return the free name.
      */
     @NotNull
+    @FromAnyThread
     public static String findFreeName(@NotNull final AnimControl control, @NotNull final String base) {
         if (control.getAnim(base) == null) return base;
 

@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import tonegod.emitter.EmitterMesh.DirectionType;
 import tonegod.emitter.ParticleEmitterNode;
@@ -131,9 +130,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
         spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
         spriteCountControl.setEditObject(emitterNode);
-
-        final Line splitLine = createSplitLine(container);
-
+        ;
         FXUtils.addToPane(testParticlesModeControl, container);
         FXUtils.addToPane(particlesFollowEmitControl, container);
         FXUtils.addToPane(particlesStretchingControl, container);
@@ -143,9 +140,8 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(spriteCountControl, container);
         FXUtils.addToPane(forceMinMaxControl, container);
         FXUtils.addToPane(lifeMinMaxControl, container);
-        FXUtils.addToPane(splitLine, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        addSplitLine(container);
     }
 
     private void createEmissionControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer,
@@ -224,8 +220,6 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         particlesPerEmissionControl.setSyncHandler(ParticleEmitterNode::getParticlesPerEmission);
         particlesPerEmissionControl.setEditObject(emitterNode);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(testEmitterModeControl, container);
         FXUtils.addToPane(enableControl, container);
         FXUtils.addToPane(randomPointControl, container);
@@ -236,8 +230,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(maxParticlesControl, container);
         FXUtils.addToPane(emissionPerSecControl, container);
         FXUtils.addToPane(particlesPerEmissionControl, container);
-        FXUtils.addToPane(splitLine, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        addSplitLine(container);
     }
 }

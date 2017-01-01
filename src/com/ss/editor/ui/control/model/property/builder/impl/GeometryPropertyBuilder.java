@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
@@ -95,29 +94,35 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         if (!(object instanceof Geometry)) return;
 
         final Geometry geometry = (Geometry) object;
-        final Material material = geometry.getMaterial();
-        final MaterialKey materialKey = (MaterialKey) material.getKey();
         final BoundingVolume modelBound = geometry.getModelBound();
 
-        final ModelPropertyControl<Geometry, MaterialKey> materialControl =
-                new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
-        materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
-        materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
-        materialControl.setEditObject(geometry);
-
         final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
-                new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+                new DefaultModelPropertyControl<>(modelBound,
+                        Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);
 
-        final Line splitLine = createSplitLine(container);
+        if (canEditMaterial(geometry)) {
 
-        if (canEditMaterial(geometry)) FXUtils.addToPane(materialControl, container);
+            final Material material = geometry.getMaterial();
+            final MaterialKey materialKey = (MaterialKey) material.getKey();
+
+            final ModelPropertyControl<Geometry, MaterialKey> materialControl =
+                    new MaterialKeyModelPropertyEditor<>(materialKey,
+                            Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+
+            materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
+            materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
+            materialControl.setEditObject(geometry);
+
+            FXUtils.addToPane(materialControl, container);
+        }
+
         FXUtils.addToPane(boundingVolumeControl, container);
-        FXUtils.addToPane(splitLine, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        addSplitLine(container);
     }
 
     protected boolean canEditMaterial(final Geometry geometry) {

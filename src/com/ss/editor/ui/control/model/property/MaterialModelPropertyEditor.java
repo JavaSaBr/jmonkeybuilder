@@ -51,16 +51,6 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
      */
     private Label materialLabel;
 
-    /**
-     * The button for choosing other material.
-     */
-    private Button changeButton;
-
-    /**
-     * The button for editing the material.
-     */
-    private Button editButton;
-
     public MaterialModelPropertyEditor(@Nullable final V element, @NotNull final String paramName,
                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
@@ -73,12 +63,12 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
         materialLabel = new Label(NO_MATERIAL);
         materialLabel.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_LABEL);
 
-        changeButton = new Button();
+        final Button changeButton = new Button();
         changeButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_24));
         changeButton.setOnAction(event -> processChange());
 
-        editButton = new Button();
+        final Button editButton = new Button();
         editButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
         editButton.setGraphic(new ImageView(Icons.EDIT_16));
         editButton.disableProperty().bind(materialLabel.textProperty().isEqualTo(NO_MATERIAL));
