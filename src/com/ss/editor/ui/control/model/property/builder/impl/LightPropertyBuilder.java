@@ -110,7 +110,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
         radiusControl.setApplyHandler(POINT_LIGHT_RADIUS_APPLY_HANDLER);
         radiusControl.setSyncHandler(PointLight::getRadius);
         radiusControl.setEditObject(light);
-        radiusControl.setScrollIncrement(10F);
+        radiusControl.setScrollPower(10F);
 
         final Line splitLine = createSplitLine(container);
 
@@ -147,7 +147,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
                 new FloatLightPropertyControl<>(range, Messages.MODEL_PROPERTY_RADIUS, modelChangeConsumer);
         rangeControl.setApplyHandler(SPOT_LIGHT_RANGE_APPLY_HANDLER);
         rangeControl.setSyncHandler(SpotLight::getSpotRange);
-        rangeControl.setScrollIncrement(10F);
+        rangeControl.setScrollPower(10F);
         rangeControl.setEditObject(light);
 
         final ModelPropertyControl<SpotLight, Float> innerAngleControl =

@@ -15,16 +15,16 @@ public class LimitedIntegerStringConverter extends StringConverter<Integer> {
     /**
      * The min value.
      */
-    private final int minValue;
+    private int minValue;
 
     /**
      * The max value.
      */
-    private final int maxValue;
+    private int maxValue;
 
-    public LimitedIntegerStringConverter(final int minValue, final int maxValue) {
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    public LimitedIntegerStringConverter() {
+        this.maxValue = Integer.MAX_VALUE;
+        this.minValue = Integer.MIN_VALUE;
     }
 
     @Nullable
@@ -35,12 +35,40 @@ public class LimitedIntegerStringConverter extends StringConverter<Integer> {
         final Integer result = Integer.valueOf(value);
 
         if (result < minValue) {
-            throw new RuntimeException("The value " + value + " is less than min value " + minValue);
+            return minValue;
         } else if (result > maxValue) {
-            throw new RuntimeException("The value " + value + " is great than max value " + maxValue);
+            return maxValue;
         }
 
         return result;
+    }
+
+    /**
+     * @return the max value.
+     */
+    public int getMaxValue() {
+        return maxValue;
+    }
+
+    /**
+     * @param maxValue the max value.
+     */
+    public void setMaxValue(final int maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    /**
+     * @return the min value.
+     */
+    public int getMinValue() {
+        return minValue;
+    }
+
+    /**
+     * @param minValue the min value.
+     */
+    public void setMinValue(final int minValue) {
+        this.minValue = minValue;
     }
 
     @Nullable

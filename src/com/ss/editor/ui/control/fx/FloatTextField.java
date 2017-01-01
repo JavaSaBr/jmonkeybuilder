@@ -2,15 +2,16 @@ package com.ss.editor.ui.control.fx;
 
 import static rlib.util.ClassUtils.unsafeCast;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.util.converter.LimitedFloatStringConverter;
 
 import org.jetbrains.annotations.NotNull;
 
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ScrollEvent;
 import javafx.util.StringConverter;
-import javafx.util.converter.FloatStringConverter;
 
 /**
  * The implementation of a control for editing float values.
@@ -19,15 +20,13 @@ import javafx.util.converter.FloatStringConverter;
  */
 public final class FloatTextField extends TextField {
 
-    public static final FloatStringConverter STRING_CONVERTER = new FloatStringConverter();
-
     /**
      * The scroll power.
      */
     private float scrollPower;
 
     public FloatTextField() {
-        setTextFormatter(new TextFormatter<>(STRING_CONVERTER));
+        setTextFormatter(new TextFormatter<>(new LimitedFloatStringConverter()));
         setOnScroll(this::processScroll);
         setScrollPower(30);
     }
@@ -50,8 +49,12 @@ public final class FloatTextField extends TextField {
         return scrollPower;
     }
 
+    /**
+     * Process of scrolling.
+     */
     private void processScroll(final ScrollEvent event) {
         if (!event.isControlDown()) return;
+        event.consume();
 
         final float value = getValue();
 
@@ -74,13 +77,31 @@ public final class FloatTextField extends TextField {
     }
 
     /**
+     * Add a new change listener.
+     *
+     * @param listener the change listener.
+     */
+    @FXThread
+    public void addChangeListener(@NotNull final ChangeListener<Float> listener) {
+        final TextFormatter<Float> textFormatter = unsafeCast(getTextFormatter());
+        textFormatter.valueProperty().addListener(listener);
+    }
+
+    /**
      * Set value limits for this field.
      *
      * @param min the min value.
-     * @param max thr max value.
+     * @param max the max value.
      */
+    @FXThread
     public void setMinMax(final float min, final float max) {
-        setTextFormatter(new TextFormatter<>(new LimitedFloatStringConverter(min, max)));
+        final TextFormatter<Float> textFormatter = unsafeCast(getTextFormatter());
+        final StringConverter<Float> valueConverter = textFormatter.getValueConverter();
+        if (valueConverter instanceof LimitedFloatStringConverter) {
+            final LimitedFloatStringConverter converter = (LimitedFloatStringConverter) valueConverter;
+            converter.setMaxValue(max);
+            converter.setMinValue(min);
+        }
     }
 
     /**
@@ -88,9 +109,11 @@ public final class FloatTextField extends TextField {
      *
      * @return the current value.
      */
+    @FXThread
     public float getValue() {
         final TextFormatter<Float> textFormatter = unsafeCast(getTextFormatter());
-        return textFormatter.getValue();
+        final Float value = textFormatter.getValue();
+        return value == null ? 0F : value;
     }
 
     /**
@@ -98,6 +121,7 @@ public final class FloatTextField extends TextField {
      *
      * @param value the new value.
      */
+    @FXThread
     public void setValue(final float value) {
         setText(String.valueOf(value));
     }

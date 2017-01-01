@@ -466,7 +466,7 @@
 
 #ModelParamControlContainer {
     -fx-alignment: top-center;
-    -fx-padding: 2 10 0 4;
+    -fx-padding: 2 10 4 4;
 }
 
 #ModelParamControlSplitLine {

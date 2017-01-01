@@ -9,12 +9,17 @@ import com.ss.editor.model.undo.UndoableEditor;
 
 import org.jetbrains.annotations.NotNull;
 
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+
 /**
  * The base implementation of the {@link EditorOperation} for supporting the generic type of an editor.
  *
  * @author JavaSabr
  */
 public abstract class AbstractEditorOperation<E> implements EditorOperation {
+
+    protected static final Logger LOGGER = LoggerManager.getLogger(EditorOperation.class);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();

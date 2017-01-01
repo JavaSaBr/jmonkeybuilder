@@ -8,6 +8,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
+import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,7 +87,11 @@ public class ModelPropertyOperation<D, T> extends AbstractEditorOperation<ModelC
      * Apply new value of the property to the model.
      */
     protected void apply(@NotNull final D spatial, @Nullable final T value) {
-        applyHandler.accept(spatial, value);
+        try {
+            applyHandler.accept(spatial, value);
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
+        }
     }
 
     @Override

@@ -2,15 +2,16 @@ package com.ss.editor.ui.control.fx;
 
 import static rlib.util.ClassUtils.unsafeCast;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.util.converter.LimitedIntegerStringConverter;
 
 import org.jetbrains.annotations.NotNull;
 
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.ScrollEvent;
 import javafx.util.StringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
 /**
  * The implementation of a control for editing integer values.
@@ -19,15 +20,13 @@ import javafx.util.converter.IntegerStringConverter;
  */
 public final class IntegerTextField extends TextField {
 
-    public static final IntegerStringConverter STRING_CONVERTER = new IntegerStringConverter();
-
     /**
      * The scroll power.
      */
     private int scrollPower;
 
     public IntegerTextField() {
-        setTextFormatter(new TextFormatter<>(STRING_CONVERTER));
+        setTextFormatter(new TextFormatter<>(new LimitedIntegerStringConverter()));
         setOnScroll(this::processScroll);
         setScrollPower(30);
     }
@@ -50,6 +49,9 @@ public final class IntegerTextField extends TextField {
         return scrollPower;
     }
 
+    /**
+     * Process of scrolling.
+     */
     private void processScroll(final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
@@ -75,13 +77,30 @@ public final class IntegerTextField extends TextField {
     }
 
     /**
+     * Add a new change listener.
+     *
+     * @param listener the change listener.
+     */
+    @FXThread
+    public void addChangeListener(@NotNull final ChangeListener<Integer> listener) {
+        final TextFormatter<Integer> textFormatter = unsafeCast(getTextFormatter());
+        textFormatter.valueProperty().addListener(listener);
+    }
+
+    /**
      * Set value limits for this field.
      *
      * @param min the min value.
      * @param max thr max value.
      */
     public void setMinMax(final int min, final int max) {
-        setTextFormatter(new TextFormatter<>(new LimitedIntegerStringConverter(min, max)));
+        final TextFormatter<Integer> textFormatter = unsafeCast(getTextFormatter());
+        final StringConverter<Integer> valueConverter = textFormatter.getValueConverter();
+        if (valueConverter instanceof LimitedIntegerStringConverter) {
+            final LimitedIntegerStringConverter converter = (LimitedIntegerStringConverter) valueConverter;
+            converter.setMaxValue(max);
+            converter.setMinValue(min);
+        }
     }
 
     /**
@@ -90,8 +109,16 @@ public final class IntegerTextField extends TextField {
      * @return the current value.
      */
     public int getValue() {
+
         final TextFormatter<Integer> textFormatter = unsafeCast(getTextFormatter());
-        return textFormatter.getValue();
+        final StringConverter<Integer> valueConverter = textFormatter.getValueConverter();
+        final Integer value = textFormatter.getValue();
+
+        if (value == null && valueConverter instanceof LimitedIntegerStringConverter) {
+            return ((LimitedIntegerStringConverter) valueConverter).getMinValue();
+        }
+
+        return value == null ? 0 : value;
     }
 
     /**

@@ -15,16 +15,16 @@ public class LimitedFloatStringConverter extends StringConverter<Float> {
     /**
      * The min value.
      */
-    private final float minValue;
+    private float minValue;
 
     /**
      * The max value.
      */
-    private final float maxValue;
+    private float maxValue;
 
-    public LimitedFloatStringConverter(final float minValue, final float maxValue) {
-        this.minValue = minValue;
-        this.maxValue = maxValue;
+    public LimitedFloatStringConverter() {
+        this.maxValue = Integer.MAX_VALUE;
+        this.minValue = Integer.MIN_VALUE;
     }
 
     @Nullable
@@ -35,12 +35,40 @@ public class LimitedFloatStringConverter extends StringConverter<Float> {
         final Float result = Float.valueOf(value);
 
         if (result < minValue) {
-            throw new RuntimeException("The value " + value + " is less than min value " + minValue);
+            return minValue;
         } else if (result > maxValue) {
-            throw new RuntimeException("The value " + value + " is great than max value " + maxValue);
+            return maxValue;
         }
 
         return result;
+    }
+
+    /**
+     * @return the max value.
+     */
+    public float getMaxValue() {
+        return maxValue;
+    }
+
+    /**
+     * @param maxValue the max value.
+     */
+    public void setMaxValue(final float maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    /**
+     * @return the min value.
+     */
+    public float getMinValue() {
+        return minValue;
+    }
+
+    /**
+     * @param minValue the min value.
+     */
+    public void setMinValue(final float minValue) {
+        this.minValue = minValue;
     }
 
     @Nullable

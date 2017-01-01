@@ -12,7 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BooleanModelPropertyControl<T extends Spatial> extends AbstractBooleanModelPropertyControl<T> {
 
-    public BooleanModelPropertyControl(@NotNull final Boolean element, @NotNull final String paramName, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public BooleanModelPropertyControl(@NotNull final Boolean element, @NotNull final String paramName,
+                                       @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 }
