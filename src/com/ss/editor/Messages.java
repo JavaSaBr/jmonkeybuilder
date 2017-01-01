@@ -279,6 +279,13 @@ public class Messages {
 
     public static final String IMAGE_VIEWER_EDITOR_NAME;
 
+    public static final String AUDIO_VIEWER_EDITOR_NAME;
+    public static final String AUDIO_VIEWER_EDITOR_DURATION_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_CHANNELS_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL;
+
     public static final String CREATE_SKY_DIALOG_TITLE;
     public static final String CREATE_SKY_DIALOG_SKY_TYPE_SINGLE;
     public static final String CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE;
@@ -593,6 +600,13 @@ public class Messages {
         EMPTY_FILE_CREATOR_TITLE = bundle.getString("EmptyFileCreatorTitle");
 
         IMAGE_VIEWER_EDITOR_NAME = bundle.getString("ImageViewerEditorName");
+
+        AUDIO_VIEWER_EDITOR_NAME = bundle.getString("AudioViewerEditorName");
+        AUDIO_VIEWER_EDITOR_DURATION_LABEL = bundle.getString("AudioViewerEditorDurationLabel");
+        AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL = bundle.getString("AudioViewerEditorBitsPerSampleLabel");
+        AUDIO_VIEWER_EDITOR_CHANNELS_LABEL = bundle.getString("AudioViewerEditorChannelsLabel");
+        AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL = bundle.getString("AudioViewerEditorDataTypeLabel");
+        AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL = bundle.getString("AudioViewerEditorSampleRateLabel");
 
         CREATE_SKY_DIALOG_TITLE = bundle.getString("CreateSkyDialogTitle");
         CREATE_SKY_DIALOG_SKY_TYPE_SINGLE = bundle.getString("CreateSkyDialogSkyTypeSingle");

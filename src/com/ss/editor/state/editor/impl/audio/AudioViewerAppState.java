@@ -12,6 +12,8 @@ import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * The implementation of an editor app state for the {@link AudioViewerEditor}.
  *
@@ -207,7 +209,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      */
     @NotNull
     private AudioData getAudioData() {
-        return audioData;
+        return Objects.requireNonNull(audioData);
     }
 
     /**
@@ -222,7 +224,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      */
     @NotNull
     private AudioKey getAudioKey() {
-        return audioKey;
+        return Objects.requireNonNull(audioKey);
     }
 
     /**

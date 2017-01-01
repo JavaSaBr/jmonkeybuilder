@@ -8,6 +8,7 @@ import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioSource;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.state.editor.impl.audio.AudioViewerAppState;
@@ -43,7 +44,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
 
     static {
         DESCRIPTION.setConstructor(AudioViewerEditor::new);
-        DESCRIPTION.setEditorName("Audio View");
+        DESCRIPTION.setEditorName(Messages.AUDIO_VIEWER_EDITOR_NAME);
         DESCRIPTION.setEditorId(AudioViewerEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.AUDIO_MP3);
         DESCRIPTION.addExtension(FileExtensions.AUDIO_OGG);
@@ -106,19 +107,19 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     protected void createContent(@NotNull final VBox root) {
         root.setAlignment(Pos.CENTER);
 
-        final Label durationLabel = new Label("Duration" + ":");
+        final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
         durationLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
 
-        final Label bitsPerSampleLabel = new Label("Bits per sample" + ":");
+        final Label bitsPerSampleLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL + ":");
         bitsPerSampleLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
 
-        final Label channelsLabel = new Label("Channels" + ":");
+        final Label channelsLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_CHANNELS_LABEL + ":");
         channelsLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
 
-        final Label dataTypeLabel = new Label("Data type" + ":");
+        final Label dataTypeLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL + ":");
         dataTypeLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
 
-        final Label sampleRateLabel = new Label("Sample rate" + ":");
+        final Label sampleRateLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL + ":");
         sampleRateLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
 
         durationField = new TextField();

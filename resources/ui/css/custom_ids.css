@@ -738,7 +738,7 @@
 
 #AudioViewerEditorParamLabel {
     -fx-alignment: center-right;
-    -fx-min-width: 150px;
+    -fx-min-width: 200px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-min-height: 26;
