@@ -35,9 +35,9 @@ public class LimitedFloatStringConverter extends StringConverter<Float> {
         final Float result = Float.valueOf(value);
 
         if (result < minValue) {
-            return minValue;
+            throw new IllegalArgumentException();
         } else if (result > maxValue) {
-            return maxValue;
+            throw new IllegalArgumentException();
         }
 
         return result;

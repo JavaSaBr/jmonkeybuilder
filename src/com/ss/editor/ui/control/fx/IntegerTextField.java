@@ -71,7 +71,6 @@ public final class IntegerTextField extends TextField {
             return;
         }
 
-
         setText(stringValue);
         positionCaret(stringValue.length());
     }

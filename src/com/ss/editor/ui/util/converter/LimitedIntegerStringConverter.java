@@ -35,9 +35,9 @@ public class LimitedIntegerStringConverter extends StringConverter<Integer> {
         final Integer result = Integer.valueOf(value);
 
         if (result < minValue) {
-            return minValue;
+            throw new IllegalArgumentException();
         } else if (result > maxValue) {
-            return maxValue;
+            throw new IllegalArgumentException();
         }
 
         return result;

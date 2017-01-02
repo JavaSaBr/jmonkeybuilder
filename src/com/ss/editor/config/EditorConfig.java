@@ -9,6 +9,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.ss.editor.Editor;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +55,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_SCREEN_DECORATED = SCREEN_ALIAS + "." + "decorated";
 
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
+    public static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
     public static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
     public static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
@@ -93,9 +95,24 @@ public final class EditorConfig implements AssetEventListener {
     private volatile Vector3f toneMapFilterWhitePoint;
 
     /**
+     * The current asset folder.
+     */
+    private volatile Path currentAsset;
+
+    /**
+     * The path to the folder with additional classpath.
+     */
+    private volatile Path additionalClasspath;
+
+    /**
      * The current level of the anisotropy.
      */
     private volatile int anisotropy;
+
+    /**
+     * The current frameRate.
+     */
+    private volatile int frameRate;
 
     /**
      * The width of this screen.
@@ -147,16 +164,6 @@ public final class EditorConfig implements AssetEventListener {
      */
     private volatile boolean analytics;
 
-    /**
-     * The current asset folder.
-     */
-    private volatile Path currentAsset;
-
-    /**
-     * The path to the folder with additional classpath.
-     */
-    private volatile Path additionalClasspath;
-
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
     }
@@ -165,14 +172,16 @@ public final class EditorConfig implements AssetEventListener {
      * @return The list of last opened asset folders.
      */
     @NotNull
-    public List<String> getLastOpenedAssets() {
+    @FromAnyThread
+    public synchronized List<String> getLastOpenedAssets() {
         return lastOpenedAssets;
     }
 
     /**
      * Add the new last opened asset folder.
      */
-    public void addOpenedAsset(@NotNull final Path currentAsset) {
+    @FromAnyThread
+    public synchronized void addOpenedAsset(@NotNull final Path currentAsset) {
 
         final String filePath = currentAsset.toString();
 
@@ -201,6 +210,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param anisotropy the new level of the anisotropy.
      */
+    @FromAnyThread
     public void setAnisotropy(final int anisotropy) {
         this.anisotropy = anisotropy;
     }
@@ -208,6 +218,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return the current level of the anisotropy.
      */
+    @FromAnyThread
     public int getAnisotropy() {
         return anisotropy;
     }
@@ -215,6 +226,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param fxaa flag is for enabling the FXAA.
      */
+    @FromAnyThread
     public void setFXAA(final boolean fxaa) {
         this.fxaa = fxaa;
     }
@@ -222,6 +234,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return flag is for enabling the FXAA.
      */
+    @FromAnyThread
     public boolean isFXAA() {
         return fxaa;
     }
@@ -230,6 +243,7 @@ public final class EditorConfig implements AssetEventListener {
      * @return the current asset folder.
      */
     @Nullable
+    @FromAnyThread
     public Path getCurrentAsset() {
         return currentAsset;
     }
@@ -237,6 +251,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param currentAsset the new current asset folder.
      */
+    @FromAnyThread
     public void setCurrentAsset(@Nullable final Path currentAsset) {
         this.currentAsset = currentAsset;
     }
@@ -245,6 +260,7 @@ public final class EditorConfig implements AssetEventListener {
      * @return путь к папке с дополнительным classpath.
      */
     @Nullable
+    @FromAnyThread
     public Path getAdditionalClasspath() {
         return additionalClasspath;
     }
@@ -252,6 +268,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param additionalClasspath путь к папке с дополнительным classpath.
      */
+    @FromAnyThread
     public void setAdditionalClasspath(@Nullable final Path additionalClasspath) {
         this.additionalClasspath = additionalClasspath;
     }
@@ -259,6 +276,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return flag is for enabling the gamma correction.
      */
+    @FromAnyThread
     public boolean isGammaCorrection() {
         return gammaCorrection;
     }
@@ -266,6 +284,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param gammaCorrection flag is for enabling the gamma correction.
      */
+    @FromAnyThread
     public void setGammaCorrection(final boolean gammaCorrection) {
         this.gammaCorrection = gammaCorrection;
     }
@@ -273,6 +292,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return flag is for enabling the tone map filter.
      */
+    @FromAnyThread
     public boolean isToneMapFilter() {
         return toneMapFilter;
     }
@@ -280,6 +300,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param toneMapFilter flag is for enabling the tone map filter.
      */
+    @FromAnyThread
     public void setToneMapFilter(final boolean toneMapFilter) {
         this.toneMapFilter = toneMapFilter;
     }
@@ -288,6 +309,7 @@ public final class EditorConfig implements AssetEventListener {
      * @return the current white point for the tone map filter.
      */
     @NotNull
+    @FromAnyThread
     public Vector3f getToneMapFilterWhitePoint() {
         return toneMapFilterWhitePoint;
     }
@@ -295,6 +317,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param toneMapFilterWhitePoint the new white point for the tone map filter.
      */
+    @FromAnyThread
     public void setToneMapFilterWhitePoint(@NotNull final Vector3f toneMapFilterWhitePoint) {
         this.toneMapFilterWhitePoint = toneMapFilterWhitePoint;
     }
@@ -302,6 +325,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param screenHeight the height of this screen.
      */
+    @FromAnyThread
     public void setScreenHeight(final int screenHeight) {
         this.screenHeight = screenHeight;
     }
@@ -309,6 +333,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param screenWidth the width of this screen.
      */
+    @FromAnyThread
     public void setScreenWidth(final int screenWidth) {
         this.screenWidth = screenWidth;
     }
@@ -316,6 +341,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return the height of this screen.
      */
+    @FromAnyThread
     public int getScreenHeight() {
         return screenHeight;
     }
@@ -323,6 +349,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return the width of this screen.
      */
+    @FromAnyThread
     public int getScreenWidth() {
         return screenWidth;
     }
@@ -330,6 +357,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return true is a window is maximized.
      */
+    @FromAnyThread
     public boolean isMaximized() {
         return maximized;
     }
@@ -337,6 +365,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param maximized flag is for maximizing a window.
      */
+    @FromAnyThread
     public void setMaximized(final boolean maximized) {
         this.maximized = maximized;
     }
@@ -344,6 +373,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return true if this windows needs to decorate.
      */
+    @FromAnyThread
     public boolean isDecorated() {
         return decorated;
     }
@@ -351,6 +381,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param decorated flag is for decorating a window.
      */
+    @FromAnyThread
     public void setDecorated(final boolean decorated) {
         this.decorated = decorated;
     }
@@ -358,6 +389,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return the global tool width.
      */
+    @FromAnyThread
     public int getGlobalToolWidth() {
         return globalToolWidth;
     }
@@ -365,6 +397,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param globalToolWidth the global tool width.
      */
+    @FromAnyThread
     public void setGlobalToolWidth(final int globalToolWidth) {
         this.globalToolWidth = globalToolWidth;
     }
@@ -372,6 +405,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param globalToolCollapsed flag is for collapsing the global tool.
      */
+    @FromAnyThread
     public void setGlobalToolCollapsed(final boolean globalToolCollapsed) {
         this.globalToolCollapsed = globalToolCollapsed;
     }
@@ -379,6 +413,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return true if the global tool is collapsed.
      */
+    @FromAnyThread
     public boolean isGlobalToolCollapsed() {
         return globalToolCollapsed;
     }
@@ -386,6 +421,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @param analytics true if you want to enable analytics.
      */
+    @FromAnyThread
     public void setAnalytics(final boolean analytics) {
         this.analytics = analytics;
     }
@@ -393,13 +429,31 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * @return true if analytics is enabled.
      */
+    @FromAnyThread
     public boolean isAnalytics() {
         return analytics;
     }
 
     /**
+     * @return the current frameRate.
+     */
+    @FromAnyThread
+    public int getFrameRate() {
+        return frameRate;
+    }
+
+    /**
+     * @param frameRate the current frameRate.
+     */
+    @FromAnyThread
+    public void setFrameRate(final int frameRate) {
+        this.frameRate = frameRate;
+    }
+
+    /**
      * @return the settings for JME.
      */
+    @FromAnyThread
     public AppSettings getSettings() {
 
         final GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -422,11 +476,12 @@ public final class EditorConfig implements AssetEventListener {
             icons[4] = ImageIO.read(EditorUtil.getInputStream("/ui/icons/app/SSEd16.png"));
 
             settings.setIcons(icons);
+
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
 
-        JmeToJFXIntegrator.prepareSettings(settings, 10);
+        JmeToJFXIntegrator.prepareSettings(settings, getFrameRate());
 
         return settings;
     }
@@ -449,6 +504,7 @@ public final class EditorConfig implements AssetEventListener {
         this.globalToolCollapsed = prefs.getBoolean(PREF_GLOBAL_TOOL_COLLAPSED, false);
         this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
         this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
+        this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -491,7 +547,8 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * Save these settings.
      */
-    public void save() {
+    @FromAnyThread
+    public synchronized void save() {
 
         final Preferences prefs = Preferences.userNodeForPackage(Editor.class);
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
@@ -505,6 +562,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_GLOBAL_TOOL_COLLAPSED, isGlobalToolCollapsed());
         prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
         prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
+        prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
