@@ -14,6 +14,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.jme3.util.SkyFactory;
+import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
@@ -99,6 +100,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FAST_SKY_LIST.add(NO_FAST_SKY);
         FAST_SKY_LIST.add("graphics/textures/sky/path.hdr");
         FAST_SKY_LIST.add("graphics/textures/sky/studio.hdr");
+        FAST_SKY_LIST.add("graphics/textures/sky/inside.tga");
+        FAST_SKY_LIST.add("graphics/textures/sky/outside.tga");
     }
 
     /**
@@ -892,7 +895,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Spatial newFastSky = SkyFactory.createSky(assetManager, newSky, SkyFactory.EnvMapType.EquirectMap);
+        final Spatial newFastSky = SkyFactory.createSky(assetManager, newSky, EnvMapType.EquirectMap);
 
         editorAppState.changeFastSky(newFastSky);
 
