@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.property;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -28,7 +29,7 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
     private class LodLevelCell extends ListCell<Integer> {
 
         @Override
-        protected void updateItem(final Integer level, final boolean empty) {
+        protected void updateItem(@Nullable final Integer level, final boolean empty) {
             super.updateItem(level, empty);
 
             final Geometry geometry = getEditObject();
@@ -48,7 +49,8 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
                 elements = mesh.getTriangleCount();
             }
 
-            setText("Level: " + level + " (" + elements + " triangles)");
+            setText(Messages.MODEL_PROPERTY_LEVEL + ": " + level + " (" + elements + " " +
+                    Messages.MODEL_PROPERTY_TRIANGLE_COUNT + ")");
         }
     }
 
@@ -71,10 +73,9 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
         levelComboBox.setCellFactory(param -> new LodLevelCell());
         levelComboBox.setButtonCell(new LodLevelCell());
         levelComboBox.setEditable(false);
-        levelComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        levelComboBox.prefWidthProperty().bind(widthProperty());
         levelComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
-
 
         FXUtils.addToPane(levelComboBox, container);
         FXUtils.addClassTo(levelComboBox, CSSClasses.SPECIAL_FONT_13);
@@ -90,11 +91,6 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
     public Integer getPropertyValue() {
         final Integer value = super.getPropertyValue();
         return value == null ? 0 : value;
-    }
-
-    @Override
-    protected boolean isSingleRow() {
-        return true;
     }
 
     /**

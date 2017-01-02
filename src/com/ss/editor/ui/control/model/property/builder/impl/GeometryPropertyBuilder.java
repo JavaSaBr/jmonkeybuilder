@@ -107,7 +107,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         boundingVolumeControl.setEditObject(geometry);
 
         final LodLevelModelPropertyEditor lodLevelControl = new LodLevelModelPropertyEditor(lodLevel,
-                "Lod level", modelChangeConsumer);
+                Messages.MODEL_PROPERTY_LOD, modelChangeConsumer);
 
         lodLevelControl.setApplyHandler(Geometry::setLodLevel);
         lodLevelControl.setSyncHandler(Geometry::getLodLevel);

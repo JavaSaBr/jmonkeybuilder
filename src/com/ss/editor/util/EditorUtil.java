@@ -7,6 +7,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -395,6 +396,7 @@ public abstract class EditorUtil {
     /**
      * Increment the loading counter.
      */
+    @FXThread
     public static void incrementLoading() {
         final JFXApplication jfxApplication = JFXApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();
@@ -404,6 +406,7 @@ public abstract class EditorUtil {
     /**
      * Decrement the loading counter.
      */
+    @FXThread
     public static void decrementLoading() {
         final JFXApplication jfxApplication = JFXApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();

@@ -144,6 +144,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
     public static final String MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
+    public static final String MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
     public static final String MODEL_NODE_TREE_ACTION_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT;
@@ -208,6 +209,9 @@ public class Messages {
     public static final String MODEL_PROPERTY_REF_DISTANCE;
     public static final String MODEL_PROPERTY_AUDIO_DATA;
     public static final String MODEL_PROPERTY_VELOCITY;
+    public static final String MODEL_PROPERTY_LOD;
+    public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
+    public static final String MODEL_PROPERTY_LEVEL;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -330,6 +334,10 @@ public class Messages {
     public static final String GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL;
     public static final String GENERATE_TANGENTS_DIALOG_TITLE;
     public static final String GENERATE_TANGENTS_DIALOG_BUTTON_OK;
+
+    public static final String GENERATE_LOD_DIALOG_TITLE;
+    public static final String GENERATE_LOD_DIALOG_METHOD;
+    public static final String GENERATE_LOD_DIALOG_BUTTON_GENERATE;
 
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
@@ -482,6 +490,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
+        MODEL_NODE_TREE_ACTION_LOD_GENERATOR = bundle.getString("ModelNodeTreeActionLoDGenerator");
         MODEL_NODE_TREE_ACTION_LIGHT = bundle.getString("ModelNodeTreeActionLight");
         MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT = bundle.getString("ModelNodeTreeActionAmbientLight");
         MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT = bundle.getString("ModelNodeTreeActionDirectionLight");
@@ -546,6 +555,9 @@ public class Messages {
         MODEL_PROPERTY_REF_DISTANCE = bundle.getString("ModelPropertyRefDistance");
         MODEL_PROPERTY_AUDIO_DATA = bundle.getString("ModelPropertyAudioData");
         MODEL_PROPERTY_VELOCITY = bundle.getString("ModelPropertyVelocity");
+        MODEL_PROPERTY_LOD = bundle.getString("ModelPropertyLoD");
+        MODEL_PROPERTY_TRIANGLE_COUNT = bundle.getString("ModelPropertyTriangleCount");
+        MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -668,6 +680,10 @@ public class Messages {
         GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL = bundle.getString("GenerateTangentsDialogAlgorithmLabel");
         GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED = bundle.getString("GenerateTangentsDialogSplitMirrored");
         GENERATE_TANGENTS_DIALOG_BUTTON_OK = bundle.getString("GenerateTangentsDialogButtonOk");
+
+        GENERATE_LOD_DIALOG_TITLE = bundle.getString("GenerateLoDDialogTitle");
+        GENERATE_LOD_DIALOG_METHOD = bundle.getString("GenerateLoDDialogMethod");
+        GENERATE_LOD_DIALOG_BUTTON_GENERATE = bundle.getString("GenerateLoDDialogButtonGenerate");
 
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME = bundle.getString("BoundingVolumeModelPropertyControlName");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");

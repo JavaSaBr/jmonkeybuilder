@@ -142,7 +142,7 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return "LOD";
+        return Messages.GENERATE_LOD_DIALOG_TITLE;
     }
 
     @Override
@@ -153,7 +153,7 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
 
         final HBox reductionMethodContainer = new HBox();
 
-        final Label reductionMethodLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL + ":");
+        final Label reductionMethodLabel = new Label(Messages.GENERATE_LOD_DIALOG_METHOD + ":");
         reductionMethodLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         reductionMethodComboBox = new ComboBox<>(GenerateLodLevelsDialog.METHOD_TYPES);
@@ -271,6 +271,9 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
         hide();
     }
 
+    /**
+     * Process of generating.
+     */
     private void processGenerate() {
 
         final Geometry geometry = getGeometry();
@@ -306,7 +309,7 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
             final int index = GeomUtils.getIndex(consumer.getCurrentModel(), geometry);
 
             final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(index,
-                    "Level of Details", newLodLevels, prevLodLevels);
+                    Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
             operation.setApplyHandler((geom, buffers) -> geom.getMesh().setLodLevels(buffers));
 
             consumer.execute(operation);
@@ -317,7 +320,7 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
 
     @Override
     protected String getButtonOkLabel() {
-        return "Generate";
+        return Messages.GENERATE_LOD_DIALOG_BUTTON_GENERATE;
     }
 
     @Override

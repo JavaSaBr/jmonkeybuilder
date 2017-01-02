@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.geometry;
 
 import com.jme3.scene.Geometry;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -35,7 +36,7 @@ public class GenerateLoDAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Generate LoD";
+        return Messages.MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
     }
 
     @Override
