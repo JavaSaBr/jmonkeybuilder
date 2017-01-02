@@ -753,3 +753,15 @@
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20px;
 }
+
+#GenerateLoDDialogListView {
+    -fx-min-height: 160px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#GenerateLoDDialogListViewCell {
+    -fx-min-height: 30px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}

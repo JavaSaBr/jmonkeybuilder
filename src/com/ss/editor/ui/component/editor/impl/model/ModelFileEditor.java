@@ -98,10 +98,13 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
     static {
         FAST_SKY_LIST.add(NO_FAST_SKY);
-        FAST_SKY_LIST.add("graphics/textures/sky/path.hdr");
         FAST_SKY_LIST.add("graphics/textures/sky/studio.hdr");
-        FAST_SKY_LIST.add("graphics/textures/sky/inside.tga");
-        FAST_SKY_LIST.add("graphics/textures/sky/outside.tga");
+        FAST_SKY_LIST.add("graphics/textures/sky/env1.hdr");
+        FAST_SKY_LIST.add("graphics/textures/sky/env2.hdr");
+        FAST_SKY_LIST.add("graphics/textures/sky/env3.hdr");
+        FAST_SKY_LIST.add("graphics/textures/sky/env4.hdr");
+        FAST_SKY_LIST.add("graphics/textures/sky/outside.hdr");
+        FAST_SKY_LIST.add("graphics/textures/sky/inside.hdr");
     }
 
     /**
@@ -891,6 +894,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         if (NO_FAST_SKY.equals(newSky)) {
             editorAppState.changeFastSky(null);
+            final ModelFileEditorState editorState = getEditorState();
+            if (editorState != null) editorState.setSkyType(0);
             return;
         }
 

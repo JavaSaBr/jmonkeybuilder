@@ -104,6 +104,22 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     }
 
     /**
+     * @param editObject the edit object.
+     * @param needReload the true if need to reload.
+     */
+    @FXThread
+    public void setEditObject(@NotNull final D editObject, final boolean needReload) {
+        setEditObject(editObject);
+        if (!needReload) return;
+        setIgnoreListener(true);
+        try {
+            reload();
+        } finally {
+            setIgnoreListener(false);
+        }
+    }
+
+    /**
      * @param applyHandler the handler for handling new value.
      */
     @FXThread
@@ -130,6 +146,7 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     /**
      * @return the edit object.
      */
+    @Nullable
     protected D getEditObject() {
         return editObject;
     }

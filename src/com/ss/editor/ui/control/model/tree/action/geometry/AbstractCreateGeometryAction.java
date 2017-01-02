@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateGeometryAction extends AbstractNodeAction {
 
-    public AbstractCreateGeometryAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public AbstractCreateGeometryAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

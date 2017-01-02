@@ -253,13 +253,26 @@ public abstract class EditorUtil {
 
             GAnalytics.sendException(e, false);
 
-            final StringWriter writer = new StringWriter();
-            final PrintWriter printWriter = new PrintWriter(writer);
+            StringWriter writer = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(writer);
 
             e.printStackTrace(printWriter);
 
             final String localizedMessage = e.getLocalizedMessage();
-            final String stackTrace = writer.toString();
+
+            String stackTrace = writer.toString();
+
+            int level = 0;
+
+            for (Throwable cause = e.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
+
+                writer = new StringWriter();
+                printWriter = new PrintWriter(writer);
+
+                cause.printStackTrace(printWriter);
+
+                stackTrace += "\n caused by " + writer.toString();
+            }
 
             final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();

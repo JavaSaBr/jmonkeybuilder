@@ -13,6 +13,7 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.DefaultModelPropertyControl;
+import com.ss.editor.ui.control.model.property.LodLevelModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.MaterialKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
@@ -95,6 +96,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
 
         final Geometry geometry = (Geometry) object;
         final BoundingVolume modelBound = geometry.getModelBound();
+        final int lodLevel = geometry.getLodLevel();
 
         final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
                 new DefaultModelPropertyControl<>(modelBound,
@@ -103,6 +105,13 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);
+
+        final LodLevelModelPropertyEditor lodLevelControl = new LodLevelModelPropertyEditor(lodLevel,
+                "Lod level", modelChangeConsumer);
+
+        lodLevelControl.setApplyHandler(Geometry::setLodLevel);
+        lodLevelControl.setSyncHandler(Geometry::getLodLevel);
+        lodLevelControl.setEditObject(geometry, true);
 
         if (canEditMaterial(geometry)) {
 
@@ -120,6 +129,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
             FXUtils.addToPane(materialControl, container);
         }
 
+        FXUtils.addToPane(lodLevelControl, container);
         FXUtils.addToPane(boundingVolumeControl, container);
 
         addSplitLine(container);

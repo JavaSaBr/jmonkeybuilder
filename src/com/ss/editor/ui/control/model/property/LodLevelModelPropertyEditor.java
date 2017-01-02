@@ -1,90 +1,134 @@
 package com.ss.editor.ui.control.model.property;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.getRealFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-
-import com.jme3.asset.MaterialKey;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
+import com.jme3.scene.VertexBuffer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 
-import javafx.scene.control.Label;
-import rlib.util.StringUtils;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.layout.HBox;
+import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing the {@link MaterialKey}.
+ * The implementation of the {@link ModelPropertyControl} for editing the LOD levels.
  *
  * @author JavaSaBr
  */
-public class LodLevelModelPropertyEditor<T extends Spatial> extends MaterialModelPropertyEditor<T, MaterialKey> {
+public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, Integer> {
 
-    public LodLevelModelPropertyEditor(@Nullable final MaterialKey element, @NotNull final String paramName,
+    private class LodLevelCell extends ListCell<Integer> {
+
+        @Override
+        protected void updateItem(final Integer level, final boolean empty) {
+            super.updateItem(level, empty);
+
+            final Geometry geometry = getEditObject();
+            final Mesh mesh = geometry == null ? null : geometry.getMesh();
+
+            if (level == null || mesh == null) {
+                setText("None");
+                return;
+            }
+
+            int elements;
+
+            if (level < mesh.getNumLodLevels()) {
+                final VertexBuffer lodLevel = mesh.getLodLevel(level);
+                elements = lodLevel.getNumElements();
+            } else {
+                elements = mesh.getTriangleCount();
+            }
+
+            setText("Level: " + level + " (" + elements + " triangles)");
+        }
+    }
+
+    /**
+     * The lod level combobox.
+     */
+    private ComboBox<Integer> levelComboBox;
+
+    public LodLevelModelPropertyEditor(@Nullable final Integer element, @NotNull final String paramName,
                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 
     @Override
-    protected void processChange() {
+    protected void createComponents(@NotNull final HBox container) {
+        super.createComponents(container);
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        levelComboBox = new ComboBox<>();
+        levelComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
+        levelComboBox.setCellFactory(param -> new LodLevelCell());
+        levelComboBox.setButtonCell(new LodLevelCell());
+        levelComboBox.setEditable(false);
+        levelComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        levelComboBox.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
 
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addMaterial);
-        dialog.setExtensionFilter(MATERIAL_EXTENSIONS);
-        dialog.show(scene.getWindow());
+
+        FXUtils.addToPane(levelComboBox, container);
+        FXUtils.addClassTo(levelComboBox, CSSClasses.SPECIAL_FONT_13);
     }
 
-    /**
-     * Add the mew material.
-     */
-    private void addMaterial(@NotNull final Path file) {
+    private void updateLevel(@Nullable final Integer newValue) {
+        if (isIgnoreListener()) return;
+        changed(newValue == null ? 0 : newValue, getPropertyValue());
+    }
 
-        final Path assetFile = Objects.requireNonNull(getAssetFile(file));
-        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
-
-        changed(materialKey, getPropertyValue());
-        setIgnoreListener(true);
-        try {
-            reload();
-        } finally {
-            setIgnoreListener(false);
-        }
+    @NotNull
+    @Override
+    public Integer getPropertyValue() {
+        final Integer value = super.getPropertyValue();
+        return value == null ? 0 : value;
     }
 
     @Override
-    protected void processEdit() {
+    protected boolean isSingleRow() {
+        return true;
+    }
 
-        final MaterialKey element = getPropertyValue();
-        if (element == null) return;
-
-        final String assetPath = element.getName();
-        if (StringUtils.isEmpty(assetPath)) return;
-
-        final Path assetFile = Paths.get(assetPath);
-        final Path realFile = Objects.requireNonNull(getRealFile(assetFile));
-        if (!Files.exists(realFile)) return;
-
-        final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
-        event.setFile(realFile);
-
-        FX_EVENT_MANAGER.notify(event);
+    /**
+     * @return The lod level combobox.
+     */
+    @NotNull
+    public ComboBox<Integer> getLevelComboBox() {
+        return Objects.requireNonNull(levelComboBox);
     }
 
     @Override
     protected void reload() {
-        final MaterialKey element = getPropertyValue();
-        final Label materialLabel = getMaterialLabel();
-        materialLabel.setText(element == null || StringUtils.isEmpty(element.getName()) ? NO_MATERIAL : element.getName());
+
+        final Geometry geometry = getEditObject();
+        if (geometry == null) return;
+
+        final Mesh mesh = geometry.getMesh();
+        if (mesh == null) return;
+
+        final Integer element = getPropertyValue() == null ? 0 : getPropertyValue();
+        final ComboBox<Integer> levelComboBox = getLevelComboBox();
+        final ObservableList<Integer> items = levelComboBox.getItems();
+        items.clear();
+
+        final int numLodLevels = mesh.getNumLodLevels();
+
+        for (int i = 0; i < numLodLevels; i++) {
+            items.add(i);
+        }
+
+        if (items.isEmpty()) {
+            items.add(0);
+        }
+
+        levelComboBox.getSelectionModel().select(element);
     }
 }

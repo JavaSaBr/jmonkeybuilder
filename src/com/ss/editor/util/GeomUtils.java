@@ -2,6 +2,7 @@ package com.ss.editor.util;
 
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
@@ -76,11 +77,13 @@ public class GeomUtils {
     /**
      * Get the index of the object in the model.
      */
-    private static boolean getIndex(@NotNull final Spatial model, @NotNull final Object object, @NotNull final AtomicInteger counter) {
+    private static boolean getIndex(@NotNull final Object model, @NotNull final Object object, @NotNull final AtomicInteger counter) {
         counter.incrementAndGet();
 
         if (Objects.equals(model, object)) {
             return true;
+        } else if (model instanceof Geometry) {
+            return getIndex(((Geometry) model).getMesh(), object, counter);
         } else if (!(model instanceof Node)) {
             return false;
         }
@@ -133,10 +136,12 @@ public class GeomUtils {
      * Find the object by the index in the model.
      */
     @Nullable
-    private static Object getObjectByIndex(@NotNull final Spatial model, final int index, @NotNull final AtomicInteger counter) {
+    private static Object getObjectByIndex(@NotNull final Object model, final int index, @NotNull final AtomicInteger counter) {
 
         if (counter.incrementAndGet() == index) {
             return model;
+        } else if (model instanceof Geometry) {
+            return getObjectByIndex(((Geometry) model).getMesh(), index, counter);
         } else if (!(model instanceof Node)) {
             return null;
         }

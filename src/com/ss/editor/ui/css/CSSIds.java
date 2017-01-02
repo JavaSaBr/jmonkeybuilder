@@ -128,5 +128,8 @@ public interface CSSIds {
     String AUDIO_VIEWER_EDITOR_PARAM_LABEL = "AudioViewerEditorParamLabel";
     String AUDIO_VIEWER_EDITOR_PARAM_VALUE = "AudioViewerEditorParamValue";
 
+    String GENERATE_LOD_DIALOG_LIST_VIEW = "GenerateLoDDialogListView";
+    String GENERATE_LOD_DIALOG_LIST_VIEW_CELL = "GenerateLoDDialogListViewCell";
+
     String LOG_VIEW = "LogView";
 }
