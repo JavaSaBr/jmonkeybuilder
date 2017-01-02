@@ -26,7 +26,7 @@ public class XBufToJ3oFileConverter extends AbstractFileConverter {
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
 
     static {
-        DESCRIPTION.setDescription(Messages.OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION);
+        DESCRIPTION.setDescription(Messages.XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION);
         DESCRIPTION.setConstructor(XBufToJ3oFileConverter::new);
         DESCRIPTION.setExtensions(EXTENSIONS);
     }
