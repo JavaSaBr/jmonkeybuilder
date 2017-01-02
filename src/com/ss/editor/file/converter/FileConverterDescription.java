@@ -1,70 +1,83 @@
 package com.ss.editor.file.converter;
 
+import com.ss.editor.annotation.FXThread;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import rlib.util.array.Array;
 
 /**
- * Класс для описания конвертера файлов.
+ * The description of a file converter.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FileConverterDescription {
 
     /**
-     * Описание конвертера.
+     * The description.
      */
     private String description;
 
     /**
-     * Конструктор конвертера.
+     * The constructor.
      */
     private Supplier<FileConverter> constructor;
 
     /**
-     * Список поддерживаемых расширений.
+     * The list of extensions.
      */
     private Array<String> extensions;
 
     /**
-     * @return список поддерживаемых расширений.
+     * @return the list of extensions.
      */
+    @NotNull
+    @FXThread
     public Array<String> getExtensions() {
-        return extensions;
+        return Objects.requireNonNull(extensions);
     }
 
     /**
-     * @param extensions список поддерживаемых расширений.
+     * @param extensions the list of extensions.
      */
-    public void setExtensions(final Array<String> extensions) {
+    @FXThread
+    public void setExtensions(@NotNull final Array<String> extensions) {
         this.extensions = extensions;
     }
 
     /**
-     * @return конструктор конвертера.
+     * @return the constructor.
      */
+    @NotNull
+    @FXThread
     public Supplier<FileConverter> getConstructor() {
-        return constructor;
+        return Objects.requireNonNull(constructor);
     }
 
     /**
-     * @param constructor конструктор конвертера.
+     * @param constructor the constructor.
      */
-    public void setConstructor(final Supplier<FileConverter> constructor) {
+    @FXThread
+    public void setConstructor(@NotNull final Supplier<FileConverter> constructor) {
         this.constructor = constructor;
     }
 
     /**
-     * @return описание конвертера.
+     * @return the description.
      */
+    @FXThread
     public String getDescription() {
         return description;
     }
 
     /**
-     * @param description описание конвертера.
+     * @param description the description.
      */
-    public void setDescription(final String description) {
+    @FXThread
+    public void setDescription(@NotNull final String description) {
         this.description = description;
     }
 

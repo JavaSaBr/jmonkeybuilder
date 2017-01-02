@@ -113,6 +113,7 @@ public class Messages {
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION;
+    public static final String XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
@@ -451,6 +452,7 @@ public class Messages {
         OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("ObjToJ3oFileConverterDescription");
         SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("SceneToJ3oFileConverterDescription");
         MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("MeshXmlToJ3oFileConverterDescription");
+        XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("XBufToJ3oFileConverterDescription");
 
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
         MODEL_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("ModelFileEditorToolObjects");

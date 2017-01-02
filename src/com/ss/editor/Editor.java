@@ -46,6 +46,7 @@ import java.nio.file.Path;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Level;
 
+import jme3_ext_xbuf.XbufLoader;
 import rlib.logging.Logger;
 import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
@@ -226,6 +227,8 @@ public class Editor extends JmeToJFXApplication {
     public void simpleInitApp() {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(5);
+
+        assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OperatingSystem system = new OperatingSystem();

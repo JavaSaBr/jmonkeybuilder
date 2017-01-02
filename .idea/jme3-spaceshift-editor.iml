@@ -27,6 +27,19 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/extensions" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/extensions" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="file://$MODULE_DIR$/libs/jME" />
         </CLASSES>
         <JAVADOC />

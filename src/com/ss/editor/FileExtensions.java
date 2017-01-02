@@ -38,4 +38,5 @@ public interface FileExtensions {
     String MODEL_OBJ = "obj";
     String MODEL_SCENE = "scene";
     String MODEL_MESH_XML = "mesh.xml";
+    String MODEL_XBUF = "xbuf";
 }
