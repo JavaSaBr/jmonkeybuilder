@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import rlib.ui.util.FXUtils;
 
 /**
  * The base implementation of the {@link PropertyBuilder}.
@@ -33,5 +34,14 @@ public abstract class AbstractPropertyBuilder implements PropertyBuilder {
         line.endXProperty().bind(container.widthProperty().subtract(50));
 
         return line;
+    }
+
+    /**
+     * Create a new line for splitting properties and add this to the container.
+     */
+    protected void addSplitLine(final @NotNull VBox container) {
+        final Line splitLine = createSplitLine(container);
+        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        FXUtils.addToPane(splitLine, container);
     }
 }

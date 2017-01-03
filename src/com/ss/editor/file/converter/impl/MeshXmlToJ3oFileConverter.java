@@ -22,7 +22,7 @@ public class MeshXmlToJ3oFileConverter extends AbstractFileConverter {
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        EXTENSIONS.add(FileExtensions.MESH_XML);
+        EXTENSIONS.add(FileExtensions.MODEL_MESH_XML);
         EXTENSIONS.asUnsafe().trimToSize();
     }
 

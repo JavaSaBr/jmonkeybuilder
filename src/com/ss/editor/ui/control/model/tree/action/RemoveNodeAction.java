@@ -21,7 +21,7 @@ import javafx.scene.image.Image;
  */
 public class RemoveNodeAction extends AbstractNodeAction {
 
-    public RemoveNodeAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public RemoveNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

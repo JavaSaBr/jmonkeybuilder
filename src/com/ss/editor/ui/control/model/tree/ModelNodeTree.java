@@ -136,7 +136,11 @@ public class ModelNodeTree extends VBox {
         final ObservableList<TreeItem<ModelNode<?>>> items = treeItem.getChildren();
 
         final Array<ModelNode<?>> children = element.getChildren();
-        children.forEach(child -> items.add(new TreeItem<>(child)));
+        children.forEach(child -> {
+            element.notifyChildPreAdd(child);
+            items.add(new TreeItem<>(child));
+            element.notifyChildAdded(child);
+        });
 
         items.forEach(item -> fill(item, expanded));
     }
@@ -196,7 +200,8 @@ public class ModelNodeTree extends VBox {
     /**
      * Notify about moving the element.
      */
-    public void notifyMoved(@NotNull final ModelNode<?> prevParent, @NotNull final ModelNode<?> newParent, @NotNull final ModelNode<?> node, final int index) {
+    public void notifyMoved(@NotNull final ModelNode<?> prevParent, @NotNull final ModelNode<?> newParent,
+                            @NotNull final ModelNode<?> node, final int index) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> prevParentItem = findItemForValue(treeView, prevParent);
@@ -207,8 +212,15 @@ public class ModelNodeTree extends VBox {
             return;
         }
 
+        final ModelNode<?> prevParenModelNode = prevParentItem.getValue();
+        prevParenModelNode.notifyChildPreRemove(node);
         prevParentItem.getChildren().remove(nodeItem);
+        prevParenModelNode.notifyChildRemoved(node);
+
+        final ModelNode<?> newParentModelNode = newParentItem.getValue();
+        newParentModelNode.notifyChildAdded(node);
         newParentItem.getChildren().add(index, nodeItem);
+        newParentModelNode.notifyChildAdded(node);
 
         EXECUTOR_MANAGER.addFXTask(() -> select(node.getElement()));
     }
@@ -217,7 +229,7 @@ public class ModelNodeTree extends VBox {
      * Notify about changing the element.
      */
     public void notifyChanged(@Nullable Object parent, @NotNull final Object object) {
-        notifyChanged(createFor(object, parent));
+        notifyChanged(createFor(object));
     }
 
     /**
@@ -268,9 +280,11 @@ public class ModelNodeTree extends VBox {
         final boolean needSelect = selectedItem == oldChildItem;
 
         if (oldChildItem != null) {
+            parent.notifyChildPreRemove(oldChild);
             index = children.indexOf(oldChildItem);
             needExpand = oldChildItem.isExpanded();
             children.remove(oldChildItem);
+            parent.notifyChildRemoved(oldChild);
         }
 
         if (newChild == null) return;
@@ -280,7 +294,10 @@ public class ModelNodeTree extends VBox {
 
         fill(childItem, true);
 
+        parent.notifyChildPreAdd(newChild);
         children.add(index, childItem);
+        parent.notifyChildAdded(newChild);
+
         if (needSelect) selectionModel.select(childItem);
     }
 
@@ -288,7 +305,7 @@ public class ModelNodeTree extends VBox {
      * Notify about adding the element.
      */
     public void notifyAdded(@NotNull final Object parent, @NotNull final Object child, final int index) {
-        notifyAdded(createFor(parent), createFor(child, parent), index);
+        notifyAdded(createFor(parent), createFor(child), index);
     }
 
     /**
@@ -300,6 +317,9 @@ public class ModelNodeTree extends VBox {
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
         if (parentItem == null) return;
 
+        final ModelNode<?> parentNode = parentItem.getValue();
+        parent.notifyChildPreAdd(child);
+
         final TreeItem<ModelNode<?>> childItem = new TreeItem<>(child);
 
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
@@ -307,6 +327,7 @@ public class ModelNodeTree extends VBox {
         else children.add(index, childItem);
 
         parentItem.setExpanded(true);
+        parent.notifyChildAdded(child);
 
         fill(childItem, true);
     }
@@ -315,7 +336,7 @@ public class ModelNodeTree extends VBox {
      * Notify about removing the element.
      */
     public void notifyRemoved(@NotNull final Object parent, @NotNull final Object child) {
-        notifyRemoved(createFor(child, parent));
+        notifyRemoved(createFor(child));
     }
 
     /**
@@ -327,8 +348,12 @@ public class ModelNodeTree extends VBox {
         if (treeItem == null) return;
 
         final TreeItem<ModelNode<?>> parentItem = treeItem.getParent();
+        final ModelNode<?> parentModelNode = parentItem.getValue();
+
         final ObservableList<TreeItem<ModelNode<?>>> children = parentItem.getChildren();
+        parentModelNode.notifyChildPreRemove(modelNode);
         children.remove(treeItem);
+        parentModelNode.notifyChildRemoved(modelNode);
 
         if (parentItem.isExpanded() && children.isEmpty()) {
             parentItem.setExpanded(false);

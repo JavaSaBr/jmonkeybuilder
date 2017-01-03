@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -89,16 +88,15 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         rotationControl.setSyncHandler(Spatial::getLocalRotation);
         rotationControl.setEditObject(spatial);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(cullHintControl, container);
         FXUtils.addToPane(shadowModeControl, container);
         FXUtils.addToPane(queueBucketControl, container);
-        FXUtils.addToPane(splitLine, container);
+
+        addSplitLine(container);
+
         FXUtils.addToPane(locationControl, container);
         FXUtils.addToPane(scaleControl, container);
         FXUtils.addToPane(rotationControl, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 }

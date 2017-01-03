@@ -10,11 +10,13 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Point;
 import java.io.File;
@@ -56,7 +58,7 @@ public class SettingsDialog extends EditorDialog {
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 370);
+    private static final Point DIALOG_SIZE = new Point(600, 396);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -83,32 +85,32 @@ public class SettingsDialog extends EditorDialog {
     private ComboBox<Integer> anisotropyComboBox;
 
     /**
-     * Координата белой точки экспозиции.
+     * The white point X.
      */
     private Spinner<Double> toneMapFilterWhitePointX;
 
     /**
-     * Координата белой точки экспозиции.
+     * The white point Y.
      */
     private Spinner<Double> toneMapFilterWhitePointY;
 
     /**
-     * Координата белой точки экспозиции.
+     * The white point Z.
      */
     private Spinner<Double> toneMapFilterWhitePointZ;
 
     /**
-     * Включение/выключение режима гамма коррекции.
+     * The gamma correction checkbox.
      */
     private CheckBox gammaCorrectionCheckBox;
 
     /**
-     * Включение/выключение фиьтра для коррекции экспозиции.
+     * The tone map filter checkbox.
      */
     private CheckBox toneMapFilterCheckBox;
 
     /**
-     * Включение/выключение FXAA.
+     * The FXAA checkbox.
      */
     private CheckBox fxaaFilterCheckBox;
 
@@ -123,17 +125,22 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox googleAnalyticsCheckBox;
 
     /**
-     * Поле для отображения выбранной папки дополнительного classpath.
+     * The additional classpath field.
      */
     private TextField additionalClasspathField;
 
     /**
-     * Выбранная папка для расширения classpath.
+     * The frame rate field.
+     */
+    private IntegerTextField frameRateTextField;
+
+    /**
+     * The additional classpath folder.
      */
     private Path additionalClasspathFolder;
 
     /**
-     * Игнорировать ли слушателей.
+     * The flag of ignoring listeners.
      */
     private boolean ignoreListeners;
 
@@ -149,14 +156,14 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @param ignoreListeners Игнорировать ли слушателей.
+     * @param ignoreListeners the flag of ignoring listeners.
      */
-    private void setIgnoreListeners(boolean ignoreListeners) {
+    private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @return Игнорировать ли слушателей.
+     * @return true of the listeners are ignored.
      */
     private boolean isIgnoreListeners() {
         return ignoreListeners;
@@ -177,6 +184,7 @@ public class SettingsDialog extends EditorDialog {
 
         createAnisotropyControl(root);
         createGammaCorrectionControl(root);
+        createFrameRateControl(root);
         createFXAAControl(root);
         createGoogleAnalyticsControl(root);
         createDecoratedControl(root);
@@ -186,9 +194,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание настройки для выбора папки для расширения classpath.
+     * Create the additional classpath control.
      */
-    private void createAdditionalClasspathControl(final VBox root) {
+    private void createAdditionalClasspathControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
@@ -228,7 +236,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Процесс удаления дополнительного classpath.
+     * Process of removing the additional classpath.
      */
     private void processRemoveCF() {
         setAdditionalClasspathFolder(null);
@@ -238,14 +246,14 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return поле для отображения выбранной папки дополнительного classpath.
+     * @return the additional classpath field.
      */
     private TextField getAdditionalClasspathField() {
         return additionalClasspathField;
     }
 
     /**
-     * Процесс указания папки для расширения classpath.
+     * Process of adding the additional classpath.
      */
     private void processAddCF() {
 
@@ -270,9 +278,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание контрола для активации гамма коррекции.
+     * Create gamma correction control.
      */
-    private void createGammaCorrectionControl(final VBox root) {
+    private void createGammaCorrectionControl(@NotNull final VBox root) {
 
         final HBox gammaCorrectionContainer = new HBox();
         gammaCorrectionContainer.setAlignment(Pos.CENTER_LEFT);
@@ -295,9 +303,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание настройки для активации фильтра экспозиции.
+     * Create tonemap filter control.
      */
-    private void createToneMapFilterControl(final VBox root) {
+    private void createToneMapFilterControl(@NotNull final VBox root) {
 
         final HBox toneMapFilterContainer = new HBox();
         toneMapFilterContainer.setAlignment(Pos.CENTER_LEFT);
@@ -320,9 +328,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание настройки белой точки фильтра экспозиции.
+     * Create white point control.
      */
-    private void createToneMapFilterWhitePointControl(final VBox root) {
+    private void createToneMapFilterWhitePointControl(@NotNull final VBox root) {
 
         final HBox toneMapFilterWhitePointContainer = new HBox();
         toneMapFilterWhitePointContainer.setAlignment(Pos.CENTER_LEFT);
@@ -389,9 +397,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Процесс скролирования значения.
+     * The process of scrolling.
      */
-    private void processScroll(final Spinner<Double> spinner, final ScrollEvent event) {
+    private void processScroll(@NotNull final Spinner<Double> spinner, @NotNull final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
         final double deltaY = event.getDeltaY();
@@ -404,9 +412,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание настройки для активации FXAA.
+     * Create FXAA control.
      */
-    private void createFXAAControl(final VBox root) {
+    private void createFXAAControl(@NotNull final VBox root) {
 
         final HBox fxaaContainer = new HBox();
         fxaaContainer.setAlignment(Pos.CENTER_LEFT);
@@ -431,7 +439,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the checkbox for configuring decorated windows.
      */
-    private void createDecoratedControl(final VBox root) {
+    private void createDecoratedControl(@NotNull final VBox root) {
 
         final HBox decoratedContainer = new HBox();
         decoratedContainer.setAlignment(Pos.CENTER_LEFT);
@@ -456,7 +464,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Create the checkbox for configuring decorated windows.
      */
-    private void createGoogleAnalyticsControl(final VBox root) {
+    private void createGoogleAnalyticsControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
@@ -479,9 +487,9 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Создание настройкид ля выбора анизатроной фильтрации.
+     * Create the anisotropy control
      */
-    private void createAnisotropyControl(final VBox root) {
+    private void createAnisotropyControl(@NotNull final VBox root) {
 
         final HBox anisotropyContainer = new HBox();
         anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
@@ -509,57 +517,99 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return включение/выключение режима гамма коррекции.
+     * Create the frame rate control
      */
+    private void createFrameRateControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_FRAME_RATE + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        frameRateTextField = new IntegerTextField();
+        frameRateTextField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        frameRateTextField.prefWidthProperty().bind(root.widthProperty());
+        frameRateTextField.setMinMax(5, 100);
+        frameRateTextField.addChangeListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(frameRateTextField, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(frameRateTextField, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * @return the gamma correction checkbox.
+     */
+    @NotNull
     private CheckBox getGammaCorrectionCheckBox() {
         return gammaCorrectionCheckBox;
     }
 
     /**
-     * @return включение/выключение фиьтра для коррекции экспозиции.
+     * @return the tone map filter checkbox.
      */
+    @NotNull
     private CheckBox getToneMapFilterCheckBox() {
         return toneMapFilterCheckBox;
     }
 
     /**
-     * @return координата белой точки экспозиции.
+     * @return the white point X.
      */
+    @NotNull
     private Spinner<Double> getToneMapFilterWhitePointX() {
         return toneMapFilterWhitePointX;
     }
 
     /**
-     * @return координата белой точки экспозиции.
+     * @return the white point Y.
      */
+    @NotNull
     private Spinner<Double> getToneMapFilterWhitePointY() {
         return toneMapFilterWhitePointY;
     }
 
     /**
-     * @return координата белой точки экспозиции.
+     * @return the white point Z.
      */
+    @NotNull
     private Spinner<Double> getToneMapFilterWhitePointZ() {
         return toneMapFilterWhitePointZ;
     }
 
     /**
-     * @return включение/выключение FXAA.
+     * @return the FXAA checkbox.
      */
+    @NotNull
     private CheckBox getFXAAFilterCheckBox() {
         return fxaaFilterCheckBox;
     }
 
     /**
-     * @return комбобокс с выбором анизатропного фильтра.
+     * @return the list with anisotropy levels.
      */
+    @NotNull
     private ComboBox<Integer> getAnisotropyComboBox() {
         return anisotropyComboBox;
     }
 
     /**
+     * @return The frame rate field.
+     */
+    private IntegerTextField getFrameRateTextField() {
+        return frameRateTextField;
+    }
+
+    /**
      * @return the checkbox for enabling decorating.
      */
+    @NotNull
     private CheckBox getDecoratedCheckBox() {
         return decoratedCheckBox;
     }
@@ -567,13 +617,15 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the checkbox for enabling google analytics.
      */
+    @NotNull
     private CheckBox getGoogleAnalyticsCheckBox() {
         return googleAnalyticsCheckBox;
     }
 
     /**
-     * @return надпись с сообщением.
+     * @return the message label.
      */
+    @NotNull
     public Label getMessageLabel() {
         return messageLabel;
     }
@@ -618,7 +670,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Загрузка текущих параметров.
+     * Load current settings.
      */
     private void load() {
 
@@ -654,6 +706,9 @@ public class SettingsDialog extends EditorDialog {
         final Spinner<Double> toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ();
         toneMapFilterWhitePointZ.getValueFactory().setValue((double) toneMapFilterWhitePoint.getZ());
 
+        final IntegerTextField frameRateTextField = getFrameRateTextField();
+        frameRateTextField.setValue(editorConfig.getFrameRate());
+
         final Path additionalClasspath = editorConfig.getAdditionalClasspath();
 
         final TextField additionalClasspathField = getAdditionalClasspathField();
@@ -666,16 +721,17 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return выбранная папка для расширения classpath.
+     * @return the additional classpath folder.
      */
+    @Nullable
     private Path getAdditionalClasspathFolder() {
         return additionalClasspathFolder;
     }
 
     /**
-     * @param additionalClasspathFolder выбранная папка для расширения classpath.
+     * @param additionalClasspathFolder the additional classpath folder.
      */
-    private void setAdditionalClasspathFolder(final Path additionalClasspathFolder) {
+    private void setAdditionalClasspathFolder(@Nullable final Path additionalClasspathFolder) {
         this.additionalClasspathFolder = additionalClasspathFolder;
     }
 
@@ -706,7 +762,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Процесс сохранения и приминения изменений.
+     * Save new settings.
      */
     private void processOk() {
 
@@ -716,6 +772,7 @@ public class SettingsDialog extends EditorDialog {
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
         final boolean currentDecorated = editorConfig.isDecorated();
+        final int currentFrameRate = editorConfig.getFrameRate();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -739,6 +796,9 @@ public class SettingsDialog extends EditorDialog {
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
 
+        final IntegerTextField frameRateTextField = getFrameRateTextField();
+        final int frameRate = frameRateTextField.getValue();
+
         final Vector3f toneMapFilterWhitePoint = new Vector3f(toneMapFilterWhitePointX, toneMapFilterWhitePointY, toneMapFilterWhitePointZ);
 
         if (currentAnisotropy != anisotropy) {
@@ -746,6 +806,8 @@ public class SettingsDialog extends EditorDialog {
         } else if (currentGammaCorrection != gammaCorrection) {
             needRestart++;
         } else if (currentDecorated != decorated) {
+            needRestart++;
+        } else if (frameRate != currentFrameRate) {
             needRestart++;
         }
 
@@ -760,6 +822,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
         editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
+        editorConfig.setFrameRate(frameRate);
         editorConfig.save();
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {

@@ -10,14 +10,13 @@ import javafx.scene.image.Image;
 import tonegod.emitter.EmitterMesh;
 
 /**
- * The implementation of the {@link ModelNode} for representing the {@link EmitterMesh} in the
- * editor.
+ * The implementation of the {@link ModelNode} for representing the {@link EmitterMesh} in the editor.
  *
  * @author JavaSaBr
  */
 public class ParticleEmitterMeshModelNode extends ModelNode<EmitterMesh> {
 
-    public ParticleEmitterMeshModelNode(final EmitterMesh element, final long objectId) {
+    public ParticleEmitterMeshModelNode(@NotNull final EmitterMesh element, final long objectId) {
         super(element, objectId);
     }
 

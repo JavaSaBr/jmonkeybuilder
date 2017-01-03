@@ -19,7 +19,7 @@ import javafx.scene.image.Image;
  */
 public class CreateBoxAction extends AbstractCreateGeometryAction {
 
-    public CreateBoxAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public CreateBoxAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

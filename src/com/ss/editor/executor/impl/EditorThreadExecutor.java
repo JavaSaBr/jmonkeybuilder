@@ -1,17 +1,28 @@
 package com.ss.editor.executor.impl;
 
+import com.ss.editor.annotation.EditorThread;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.util.EditorUtil;
+
+import org.jetbrains.annotations.NotNull;
+
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 import rlib.util.ArrayUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.array.ConcurrentArray;
 
 /**
- * Реализация исполнителя задач в основном потооке.
+ * The executor to execute tasks in the editor thread.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EditorThreadExecutor {
 
+    private static final Logger LOGGER = LoggerManager.getLogger(EditorThreadExecutor.class);
+
+    @NotNull
     private static final EditorThreadExecutor INSTANCE = new EditorThreadExecutor();
 
     public static EditorThreadExecutor getInstance() {
@@ -19,13 +30,15 @@ public class EditorThreadExecutor {
     }
 
     /**
-     * Ожидающие исполнения задачи.
+     * The list of waited tasks.
      */
+    @NotNull
     private final ConcurrentArray<Runnable> waitTasks;
 
     /**
-     * Задачи которые должны сейчас выполнится.
+     * The list with tasks to execute.
      */
+    @NotNull
     private final Array<Runnable> execute;
 
     public EditorThreadExecutor() {
@@ -34,26 +47,36 @@ public class EditorThreadExecutor {
     }
 
     /**
-     * Добавление задачи на выполнение.
+     * Add a task to execute.
      *
-     * @param task задача на выполнение.
+     * @param task the task.
      */
-    public void addToExecute(final Runnable task) {
+    @FromAnyThread
+    public void addToExecute(@NotNull final Runnable task) {
         ArrayUtils.runInWriteLock(waitTasks, task, Array::add);
     }
 
     /**
-     * Выполнить ожидающие задачи.
+     * Execute waited tasks.
      */
+    @EditorThread
     public void execute() {
         if (waitTasks.isEmpty()) return;
 
         ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
 
         try {
-            execute.forEach(Runnable::run);
+            execute.forEach(EditorThreadExecutor::execute);
         } finally {
             execute.clear();
+        }
+    }
+
+    private static void execute(@NotNull final Runnable runnable) {
+        try {
+            runnable.run();
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, getInstance(), e);
         }
     }
 }

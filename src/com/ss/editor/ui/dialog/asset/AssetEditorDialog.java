@@ -14,6 +14,7 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
+import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -219,7 +220,12 @@ public class AssetEditorDialog<C> extends EditorDialog {
         final Path file = element == null ? null : element.getFile();
 
         validate(getWarningLabel(), element);
-        updatePreview(file);
+
+        try {
+            updatePreview(file);
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
+        }
     }
 
     /**
@@ -258,6 +264,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
             textView.setVisible(false);
             imageView.setVisible(true);
 
+        } else if (JMEFilePreviewManager.isAudioFile(file)) {
         } else if (file != null && !Files.isDirectory(file)) {
 
             imageView.imageProperty().unbind();

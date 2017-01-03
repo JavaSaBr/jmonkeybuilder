@@ -10,7 +10,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.util.SkyFactory;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.impl.AbstractEditorAppState;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ import rlib.util.dictionary.DictionaryFactory;
  *
  * @author Ronn
  */
-public class PostFilterEditorAppState extends AbstractEditorAppState<PostFilterEditor> {
+public class PostFilterEditorAppState extends AdvancedAbstractEditorAppState<PostFilterEditor> {
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 

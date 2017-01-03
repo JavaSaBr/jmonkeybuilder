@@ -39,7 +39,7 @@ import com.ss.editor.control.transform.ScaleToolControl;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
-import com.ss.editor.state.editor.impl.AbstractEditorAppState;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.GeomUtils;
@@ -58,11 +58,11 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * The implementation of the {@link AbstractEditorAppState} for the {@link ModelFileEditor}.
+ * The implementation of the {@link AdvancedAbstractEditorAppState} for the {@link ModelFileEditor}.
  *
  * @author JavaSaBr
  */
-public class ModelEditorAppState extends AbstractEditorAppState<ModelFileEditor> implements SceneEditorControl {
+public class ModelEditorAppState extends AdvancedAbstractEditorAppState<ModelFileEditor> implements SceneEditorControl {
 
     public static final String USER_DATA_IS_LIGHT = ModelEditorAppState.class.getName() + ".isLight";
 

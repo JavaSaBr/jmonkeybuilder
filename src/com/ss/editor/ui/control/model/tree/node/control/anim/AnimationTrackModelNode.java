@@ -23,7 +23,7 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
      */
     private String cachedName;
 
-    public AnimationTrackModelNode(final T element, final long objectId) {
+    public AnimationTrackModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 

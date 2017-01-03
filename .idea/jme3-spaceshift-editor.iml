@@ -27,6 +27,45 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/extensions" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/extensions" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/extensions/toneg0d" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/extensions/toneg0d" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/toneg0d" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/toneg0d" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/extensions/xbuf" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/extensions/xbuf" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/xbuf" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/xbuf" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="file://$MODULE_DIR$/libs/jME" />
         </CLASSES>
         <JAVADOC />
@@ -79,6 +118,23 @@
         <JAVADOC />
         <SOURCES />
         <jarDirectory url="file://$MODULE_DIR$/libs/http" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/extensions/toneg0d" />
+          <root url="file://$MODULE_DIR$/libs/extensions/xbuf" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/extensions/toneg0d" />
+          <root url="file://$MODULE_DIR$/libs/extensions/xbuf" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/toneg0d" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/xbuf" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/toneg0d" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/xbuf" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

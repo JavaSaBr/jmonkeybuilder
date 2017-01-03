@@ -1,5 +1,8 @@
 package com.ss.editor.ui.component.editor;
 
+import static rlib.util.array.ArrayFactory.newArray;
+
+import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
 import com.ss.editor.ui.component.editor.impl.GLSLFileEditor;
 import com.ss.editor.ui.component.editor.impl.ImageViewerEditor;
 import com.ss.editor.ui.component.editor.impl.MaterialDefinitionFileEditor;
@@ -13,13 +16,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
@@ -68,6 +71,7 @@ public class EditorRegistry {
         addDescription(ImageViewerEditor.DESCRIPTION);
         addDescription(GLSLFileEditor.DESCRIPTION);
         addDescription(MaterialDefinitionFileEditor.DESCRIPTION);
+        addDescription(AudioViewerEditor.DESCRIPTION);
     }
 
     /**
@@ -94,13 +98,17 @@ public class EditorRegistry {
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
 
         final Array<String> extensions = description.getExtensions();
-        extensions.forEach(extension -> {
-            final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> ArrayFactory.newArray(EditorDescription.class));
-            descriptions.add(description);
-        });
+        extensions.forEach(extension -> addDescription(description, extension, editorDescriptions));
 
         final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
         editorIdToDescription.put(description.getEditorId(), description);
+    }
+
+    private void addDescription(@NotNull final EditorDescription description, @NotNull final String extension,
+                                @NotNull final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions) {
+        final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> newArray(EditorDescription.class));
+        Objects.requireNonNull(descriptions);
+        descriptions.add(description);
     }
 
     /**
@@ -138,7 +146,6 @@ public class EditorRegistry {
         if (description == null) return null;
 
         final Callable<FileEditor> constructor = description.getConstructor();
-
         try {
             return constructor.call();
         } catch (Exception e) {
@@ -152,7 +159,7 @@ public class EditorRegistry {
      * Create an editor for the file.
      *
      * @param description the editor description.
-     * @param file        the editred file.
+     * @param file        the edited file.
      * @return the editor or null.
      */
     @Nullable
@@ -175,7 +182,7 @@ public class EditorRegistry {
     @NotNull
     public Array<EditorDescription> getAvailableEditorsFor(@NotNull final Path file) {
 
-        final Array<EditorDescription> result = ArrayFactory.newArray(EditorDescription.class);
+        final Array<EditorDescription> result = newArray(EditorDescription.class);
         final String extension = FileUtils.getExtension(file);
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
@@ -185,7 +192,11 @@ public class EditorRegistry {
             result.addAll(descriptions);
         }
 
-        result.addAll(editorDescriptions.get(ALL_FORMATS));
+        final Array<EditorDescription> universal = editorDescriptions.get(ALL_FORMATS);
+
+        if (universal != null) {
+            result.addAll(universal);
+        }
 
         return result;
     }

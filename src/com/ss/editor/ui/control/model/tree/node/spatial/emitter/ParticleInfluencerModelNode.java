@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.tree.node.spatial.emitter;
 
-import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.RemoveParticleInfluencerAction;
@@ -12,28 +11,17 @@ import org.jetbrains.annotations.Nullable;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
-import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
-
 /**
- * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencer} in
- * the editor.
+ * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencer} in the editor.
  *
  * @author JavaSaBr
  */
 public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
 
-    /**
-     * The emitter node.
-     */
-    @NotNull
-    private final ParticleEmitterNode emitterNode;
-
-    public ParticleInfluencerModelNode(@NotNull ParticleInfluencers influencers, @NotNull final ParticleInfluencer element, final long objectId) {
+    public ParticleInfluencerModelNode(@NotNull final ParticleInfluencer element, final long objectId) {
         super(element, objectId);
-        this.emitterNode = influencers.getEmitterNode();
     }
 
     @Nullable
@@ -42,24 +30,10 @@ public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
         return Icons.INFLUENCER_16;
     }
 
-    @Nullable
-    @Override
-    public ModelNode<?> getParent() {
-        return createFor(new ParticleInfluencers(getEmitterNode()), getEmitterNode());
-    }
-
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveParticleInfluencerAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
-    }
-
-    /**
-     * @return thr emitter node.
-     */
-    @NotNull
-    public ParticleEmitterNode getEmitterNode() {
-        return emitterNode;
     }
 
     @NotNull

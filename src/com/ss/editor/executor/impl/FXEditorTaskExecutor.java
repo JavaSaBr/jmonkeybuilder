@@ -1,15 +1,19 @@
 package com.ss.editor.executor.impl;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.util.EditorUtil;
 import com.sun.javafx.application.PlatformImpl;
+
+import org.jetbrains.annotations.NotNull;
 
 import rlib.concurrent.util.ConcurrentUtils;
 import rlib.concurrent.util.ThreadUtils;
 import rlib.util.array.Array;
 
 /**
- * The implementation of the {@link EditorThreadExecutor} for executing task in the FX UI Thread.
+ * The executor to execute tasks in the FX UI Thread.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
 
@@ -18,6 +22,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     /**
      * The task for executing editor tasks in the FX UI Thread.
      */
+    @NotNull
     private final Runnable fxTask = () -> doExecute(execute, executed);
 
     public FXEditorTaskExecutor() {
@@ -27,7 +32,8 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     }
 
     @Override
-    protected void doExecute(final Array<Runnable> execute, final Array<Runnable> executed) {
+    @FXThread
+    protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
 
         final Runnable[] array = execute.array();
 
@@ -37,7 +43,11 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
                 for (int count = 0, limit = EXECUTE_LIMIT; count < limit && i < length; count++, i++) {
 
                     final Runnable task = array[i];
-                    task.run();
+                    try {
+                        task.run();
+                    } catch (final Exception e) {
+                        EditorUtil.handleException(LOGGER, this, e);
+                    }
 
                     executed.add(task);
                 }

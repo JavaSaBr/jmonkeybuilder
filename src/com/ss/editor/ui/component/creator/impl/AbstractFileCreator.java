@@ -87,7 +87,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     private Path initFile;
 
     @Override
-    public void start(final Path file) {
+    public void start(@NotNull final Path file) {
         setInitFile(file);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();

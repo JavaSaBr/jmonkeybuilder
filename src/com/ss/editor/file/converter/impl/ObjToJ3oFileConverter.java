@@ -19,7 +19,7 @@ public class ObjToJ3oFileConverter extends AbstractFileConverter {
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        EXTENSIONS.add(FileExtensions.OBJ);
+        EXTENSIONS.add(FileExtensions.MODEL_OBJ);
         EXTENSIONS.asUnsafe().trimToSize();
     }
 

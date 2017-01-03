@@ -207,9 +207,20 @@
     -fx-max-width: -fx-min-width;
 }
 
+#EditorDialogShortLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 6 0 0;
+}
+
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
-    -fx-padding: 0 0 20 0;
+    -fx-padding: 0 0 10 0;
 }
 
 #AssetEditorDialogResourcesContainer {
@@ -455,7 +466,7 @@
 
 #ModelParamControlContainer {
     -fx-alignment: top-center;
-    -fx-padding: 2 10 0 4;
+    -fx-padding: 2 10 4 4;
 }
 
 #ModelParamControlSplitLine {
@@ -705,4 +716,52 @@
     -fx-background-color: -fx-background-background;
     -fx-fill: white;
     -fx-text-fill: white;
+}
+
+#AudioViewerEditorButtonContainer {
+    -fx-alignment: center;
+}
+
+#AudioViewerEditorButton {
+    -fx-min-height: 142px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 142px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#AudioViewerEditorParamContainer {
+    -fx-alignment: center;
+    -fx-padding: 20px;
+}
+
+#AudioViewerEditorParamLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 6px 0 0;
+}
+
+#AudioViewerEditorParamValue {
+    -fx-min-height: 26px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20px;
+}
+
+#GenerateLoDDialogListView {
+    -fx-min-height: 160px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#GenerateLoDDialogListViewCell {
+    -fx-min-height: 30px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
 }

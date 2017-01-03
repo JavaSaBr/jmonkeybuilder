@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
@@ -97,13 +98,31 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     /**
      * @param editObject the edit object.
      */
+    @FXThread
     public void setEditObject(@NotNull final D editObject) {
         this.editObject = editObject;
     }
 
     /**
+     * @param editObject the edit object.
+     * @param needReload the true if need to reload.
+     */
+    @FXThread
+    public void setEditObject(@NotNull final D editObject, final boolean needReload) {
+        setEditObject(editObject);
+        if (!needReload) return;
+        setIgnoreListener(true);
+        try {
+            reload();
+        } finally {
+            setIgnoreListener(false);
+        }
+    }
+
+    /**
      * @param applyHandler the handler for handling new value.
      */
+    @FXThread
     public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
         this.applyHandler = applyHandler;
     }
@@ -119,6 +138,7 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     /**
      * @param syncHandler the handler for getting actual value.
      */
+    @FXThread
     public void setSyncHandler(@Nullable final Function<D, T> syncHandler) {
         this.syncHandler = syncHandler;
     }
@@ -126,6 +146,7 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     /**
      * @return the edit object.
      */
+    @Nullable
     protected D getEditObject() {
         return editObject;
     }
@@ -140,6 +161,7 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
      * Synchronize value from the edit object.
      */
     @Override
+    @FXThread
     public void sync() {
         setIgnoreListener(true);
         try {
@@ -227,6 +249,7 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
      * @return the value of the property.
      */
     @Nullable
+    @FXThread
     public T getPropertyValue() {
         return propertyValue;
     }
@@ -249,14 +272,14 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     /**
      * @param ignoreListener the flag for ignoring listeners.
      */
-    public void setIgnoreListener(final boolean ignoreListener) {
+    protected void setIgnoreListener(final boolean ignoreListener) {
         this.ignoreListener = ignoreListener;
     }
 
     /**
      * @return true if need to ignore listeners.
      */
-    public boolean isIgnoreListener() {
+    protected boolean isIgnoreListener() {
         return ignoreListener;
     }
 

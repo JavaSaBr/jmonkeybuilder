@@ -54,10 +54,14 @@ public class JMEFilePreviewManager extends AbstractControl {
     private static final Quaternion CAMERA_ROTATION = new Quaternion(0.9159756F, 0.04995022F, -0.37940952F, 0.12059049F);
 
     private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> AUDIO_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
         JME_FORMATS.add(FileExtensions.JME_MATERIAL);
         JME_FORMATS.add(FileExtensions.JME_OBJECT);
+        AUDIO_FORMATS.add(FileExtensions.AUDIO_OGG);
+        AUDIO_FORMATS.add(FileExtensions.AUDIO_MP3);
+        AUDIO_FORMATS.add(FileExtensions.AUDIO_WAV);
     }
 
     private static final EditorThreadExecutor EDITOR_THREAD_EXECUTOR = EditorThreadExecutor.getInstance();
@@ -85,6 +89,15 @@ public class JMEFilePreviewManager extends AbstractControl {
         if (file == null) return false;
         final String extension = FileUtils.getExtension(file);
         return JME_FORMATS.contains(extension);
+    }
+
+    /**
+     * @return true is the file is a JME file.
+     */
+    public static boolean isAudioFile(@Nullable final Path file) {
+        if (file == null) return false;
+        final String extension = FileUtils.getExtension(file);
+        return AUDIO_FORMATS.contains(extension);
     }
 
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {

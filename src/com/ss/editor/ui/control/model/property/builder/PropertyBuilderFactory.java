@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.property.builder;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.property.builder.impl.AudioNodePropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.LightPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
@@ -25,6 +26,7 @@ public class PropertyBuilderFactory {
     private static final Array<PropertyBuilder> BUILDERS = ArrayFactory.newArray(PropertyBuilder.class);
 
     static {
+        BUILDERS.add(AudioNodePropertyBuilder.getInstance());
         BUILDERS.add(ParticleInfluencerPropertyBuilder.getInstance());
         BUILDERS.add(ParticlesPropertyBuilder.getInstance());
         BUILDERS.add(GeometryPropertyBuilder.getInstance());

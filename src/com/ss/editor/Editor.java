@@ -46,6 +46,7 @@ import java.nio.file.Path;
 import java.util.concurrent.locks.StampedLock;
 import java.util.logging.Level;
 
+import jme3_ext_xbuf.XbufLoader;
 import rlib.logging.Logger;
 import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
@@ -227,6 +228,8 @@ public class Editor extends JmeToJFXApplication {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(5);
 
+        assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
+
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OperatingSystem system = new OperatingSystem();
 
@@ -363,7 +366,7 @@ public class Editor extends JmeToJFXApplication {
 
             super.update();
 
-        } catch (final AssetNotFoundException | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
+        } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
             LOGGER.warning(e);
             GAnalytics.sendException(e, true);
             GAnalytics.waitForSend();

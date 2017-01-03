@@ -83,12 +83,19 @@ public class Messages {
     public static final String MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL;
     public static final String MATERIAL_FILE_CREATOR_FILE_DESCRIPTION;
 
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR;
+    public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
+
     public static final String POST_FILTER_VIEW_FILE_CREATOR_TITLE;
     public static final String POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
 
     public static final String SETTINGS_DIALOG_TITLE;
     public static final String SETTINGS_DIALOG_FXAA;
     public static final String SETTINGS_DIALOG_DECORATED;
+    public static final String SETTINGS_DIALOG_FRAME_RATE;
     public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT;
@@ -107,6 +114,7 @@ public class Messages {
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION;
+    public static final String XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
@@ -136,6 +144,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
     public static final String MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
+    public static final String MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
     public static final String MODEL_NODE_TREE_ACTION_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT;
     public static final String MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT;
@@ -144,6 +153,10 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS;
     public static final String MODEL_NODE_TREE_ACTION_ANIMATION_STOP;
+    public static final String MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE;
+    public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
+    public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
@@ -185,6 +198,20 @@ public class Messages {
     public static final String MODEL_PROPERTY_OUTER_ANGLE;
     public static final String MODEL_PROPERTY_MIN;
     public static final String MODEL_PROPERTY_MAX;
+    public static final String MODEL_PROPERTY_LOOPING;
+    public static final String MODEL_PROPERTY_REVERB;
+    public static final String MODEL_PROPERTY_DIRECTIONAL;
+    public static final String MODEL_PROPERTY_POSITIONAL;
+    public static final String MODEL_PROPERTY_AUDIO_PITCH;
+    public static final String MODEL_PROPERTY_AUDIO_VOLUME;
+    public static final String MODEL_PROPERTY_TIME_OFFSET;
+    public static final String MODEL_PROPERTY_MAX_DISTANCE;
+    public static final String MODEL_PROPERTY_REF_DISTANCE;
+    public static final String MODEL_PROPERTY_AUDIO_DATA;
+    public static final String MODEL_PROPERTY_VELOCITY;
+    public static final String MODEL_PROPERTY_LOD;
+    public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
+    public static final String MODEL_PROPERTY_LEVEL;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -247,10 +274,17 @@ public class Messages {
     public static final String RENAME_DIALOG_BUTTON_OK;
     public static final String RENAME_DIALOG_BUTTON_CANCEL;
 
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_TITLE;
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE;
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_SPEED;
-    public static final String PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_TITLE;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_SPEED;
+    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK;
+
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_NAME;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME;
+    public static final String MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
 
     public static final String QUESTION_DIALOG_TITLE;
     public static final String QUESTION_DIALOG_BUTTON_OK;
@@ -264,6 +298,13 @@ public class Messages {
     public static final String EMPTY_FILE_CREATOR_TITLE;
 
     public static final String IMAGE_VIEWER_EDITOR_NAME;
+
+    public static final String AUDIO_VIEWER_EDITOR_NAME;
+    public static final String AUDIO_VIEWER_EDITOR_DURATION_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_CHANNELS_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL;
+    public static final String AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL;
 
     public static final String CREATE_SKY_DIALOG_TITLE;
     public static final String CREATE_SKY_DIALOG_SKY_TYPE_SINGLE;
@@ -293,6 +334,10 @@ public class Messages {
     public static final String GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL;
     public static final String GENERATE_TANGENTS_DIALOG_TITLE;
     public static final String GENERATE_TANGENTS_DIALOG_BUTTON_OK;
+
+    public static final String GENERATE_LOD_DIALOG_TITLE;
+    public static final String GENERATE_LOD_DIALOG_METHOD;
+    public static final String GENERATE_LOD_DIALOG_BUTTON_GENERATE;
 
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
@@ -384,12 +429,19 @@ public class Messages {
         MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileCreatorMaterialTypeLabel");
         MATERIAL_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("MaterialFileCreatorFileDescription");
 
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE = bundle.getString("SingleColorTextureFileCreatorTitle");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH = bundle.getString("SingleColorTextureFileCreatorWidth");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT = bundle.getString("SingleColorTextureFileCreatorHeight");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR = bundle.getString("SingleColorTextureFileCreatorColor");
+        SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION = bundle.getString("SingleColorTextureFileCreatorDescription");
+
         POST_FILTER_VIEW_FILE_CREATOR_TITLE = bundle.getString("PostFilterViewFileCreatorTitle");
         POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("PostFilterViewFileCreatorFileDescription");
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
         SETTINGS_DIALOG_DECORATED = bundle.getString("SettingsDialogDecorated");
+        SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
         SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
         SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
@@ -410,6 +462,7 @@ public class Messages {
         OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("ObjToJ3oFileConverterDescription");
         SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("SceneToJ3oFileConverterDescription");
         MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("MeshXmlToJ3oFileConverterDescription");
+        XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("XBufToJ3oFileConverterDescription");
 
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
         MODEL_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("ModelFileEditorToolObjects");
@@ -437,6 +490,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
+        MODEL_NODE_TREE_ACTION_LOD_GENERATOR = bundle.getString("ModelNodeTreeActionLoDGenerator");
         MODEL_NODE_TREE_ACTION_LIGHT = bundle.getString("ModelNodeTreeActionLight");
         MODEL_NODE_TREE_ACTION_AMBIENT_LIGHT = bundle.getString("ModelNodeTreeActionAmbientLight");
         MODEL_NODE_TREE_ACTION_DIRECTION_LIGHT = bundle.getString("ModelNodeTreeActionDirectionLight");
@@ -445,6 +499,10 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
+        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
+        MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
+        MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
+        MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
@@ -486,6 +544,20 @@ public class Messages {
         MODEL_PROPERTY_OUTER_ANGLE = bundle.getString("ModelPropertyOuterAngle");
         MODEL_PROPERTY_MIN = bundle.getString("ModelPropertyMin");
         MODEL_PROPERTY_MAX = bundle.getString("ModelPropertyMax");
+        MODEL_PROPERTY_LOOPING = bundle.getString("ModelPropertyLooping");
+        MODEL_PROPERTY_REVERB = bundle.getString("ModelPropertyReverb");
+        MODEL_PROPERTY_DIRECTIONAL = bundle.getString("ModelPropertyDirectional");
+        MODEL_PROPERTY_POSITIONAL = bundle.getString("ModelPropertyPositional");
+        MODEL_PROPERTY_AUDIO_PITCH = bundle.getString("ModelPropertyAudioPitch");
+        MODEL_PROPERTY_AUDIO_VOLUME = bundle.getString("ModelPropertyAudioVolume");
+        MODEL_PROPERTY_TIME_OFFSET = bundle.getString("ModelPropertyTimeOffset");
+        MODEL_PROPERTY_MAX_DISTANCE = bundle.getString("ModelPropertyMaxDistance");
+        MODEL_PROPERTY_REF_DISTANCE = bundle.getString("ModelPropertyRefDistance");
+        MODEL_PROPERTY_AUDIO_DATA = bundle.getString("ModelPropertyAudioData");
+        MODEL_PROPERTY_VELOCITY = bundle.getString("ModelPropertyVelocity");
+        MODEL_PROPERTY_LOD = bundle.getString("ModelPropertyLoD");
+        MODEL_PROPERTY_TRIANGLE_COUNT = bundle.getString("ModelPropertyTriangleCount");
+        MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -548,10 +620,17 @@ public class Messages {
         RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
         RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
 
-        PLAY_ANIMATION_SETTINDS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
-        PLAY_ANIMATION_SETTINDS_DIALOG_LOOP_MODE = bundle.getString("PlayAnimationSettingsDialogLoopMode");
-        PLAY_ANIMATION_SETTINDS_DIALOG_SPEED = bundle.getString("PlayAnimationSettingsDialogSpeed");
-        PLAY_ANIMATION_SETTINDS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
+        PLAY_ANIMATION_SETTINGS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
+        PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE = bundle.getString("PlayAnimationSettingsDialogLoopMode");
+        PLAY_ANIMATION_SETTINGS_DIALOG_SPEED = bundle.getString("PlayAnimationSettingsDialogSpeed");
+        PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
+
+        MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE = bundle.getString("ManualExtractAnimationDialogTitle");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_NAME = bundle.getString("ManualExtractAnimationDialogName");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_NAME_EXAMPLE = bundle.getString("ManualExtractAnimationDialogNameExample");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME = bundle.getString("ManualExtractAnimationDialogStartFrame");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME = bundle.getString("ManualExtractAnimationDialogEndFrame");
+        MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK = bundle.getString("ManualExtractAnimationDialogButtonOk");
 
         QUESTION_DIALOG_TITLE = bundle.getString("QuestionDialogTitle");
         QUESTION_DIALOG_BUTTON_OK = bundle.getString("QuestionDialogButtonOk");
@@ -565,6 +644,13 @@ public class Messages {
         EMPTY_FILE_CREATOR_TITLE = bundle.getString("EmptyFileCreatorTitle");
 
         IMAGE_VIEWER_EDITOR_NAME = bundle.getString("ImageViewerEditorName");
+
+        AUDIO_VIEWER_EDITOR_NAME = bundle.getString("AudioViewerEditorName");
+        AUDIO_VIEWER_EDITOR_DURATION_LABEL = bundle.getString("AudioViewerEditorDurationLabel");
+        AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL = bundle.getString("AudioViewerEditorBitsPerSampleLabel");
+        AUDIO_VIEWER_EDITOR_CHANNELS_LABEL = bundle.getString("AudioViewerEditorChannelsLabel");
+        AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL = bundle.getString("AudioViewerEditorDataTypeLabel");
+        AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL = bundle.getString("AudioViewerEditorSampleRateLabel");
 
         CREATE_SKY_DIALOG_TITLE = bundle.getString("CreateSkyDialogTitle");
         CREATE_SKY_DIALOG_SKY_TYPE_SINGLE = bundle.getString("CreateSkyDialogSkyTypeSingle");
@@ -594,6 +680,10 @@ public class Messages {
         GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL = bundle.getString("GenerateTangentsDialogAlgorithmLabel");
         GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED = bundle.getString("GenerateTangentsDialogSplitMirrored");
         GENERATE_TANGENTS_DIALOG_BUTTON_OK = bundle.getString("GenerateTangentsDialogButtonOk");
+
+        GENERATE_LOD_DIALOG_TITLE = bundle.getString("GenerateLoDDialogTitle");
+        GENERATE_LOD_DIALOG_METHOD = bundle.getString("GenerateLoDDialogMethod");
+        GENERATE_LOD_DIALOG_BUTTON_GENERATE = bundle.getString("GenerateLoDDialogButtonGenerate");
 
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME = bundle.getString("BoundingVolumeModelPropertyControlName");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");

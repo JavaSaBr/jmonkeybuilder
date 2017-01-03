@@ -17,11 +17,11 @@ import javafx.scene.image.Image;
 /**
  * The action to create a node.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class CreateNodeAction extends AbstractNodeAction {
 
-    public CreateNodeAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public CreateNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

@@ -42,6 +42,7 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
         DESCRIPTION.setEditorId(GLSLFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.GLSL_FRAGMENT);
         DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
+        DESCRIPTION.addExtension(FileExtensions.GLSL_LIB);
     }
 
     private static final String[] KEYWORDS = {

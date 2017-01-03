@@ -1,10 +1,14 @@
 package com.ss.editor.file.converter;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.file.converter.impl.BlendToJ3oFileConverter;
 import com.ss.editor.file.converter.impl.FBXToJ3oFileConverter;
 import com.ss.editor.file.converter.impl.MeshXmlToJ3oFileConverter;
 import com.ss.editor.file.converter.impl.ObjToJ3oFileConverter;
 import com.ss.editor.file.converter.impl.SceneToJ3oFileConverter;
+import com.ss.editor.file.converter.impl.XBufToJ3oFileConverter;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -16,14 +20,15 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Реестр конвертеров файлов.
+ * The registry of file converters.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FileConverterRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(FileConverterRegistry.class);
 
+    @NotNull
     private static final FileConverterRegistry INSTANCE = new FileConverterRegistry();
 
     public static FileConverterRegistry getInstance() {
@@ -31,8 +36,9 @@ public class FileConverterRegistry {
     }
 
     /**
-     * Список описаний конвертеров файлов.
+     * The list of converters.
      */
+    @NotNull
     private final Array<FileConverterDescription> descriptions;
 
     public FileConverterRegistry() {
@@ -42,26 +48,34 @@ public class FileConverterRegistry {
         addDescription(ObjToJ3oFileConverter.DESCRIPTION);
         addDescription(SceneToJ3oFileConverter.DESCRIPTION);
         addDescription(MeshXmlToJ3oFileConverter.DESCRIPTION);
+        addDescription(XBufToJ3oFileConverter.DESCRIPTION);
     }
 
     /**
-     * Добавление нового описания конвертера.
+     * Add a new file converter descriptor.
+     *
+     * @param description the new descriptor.
      */
-    private void addDescription(final FileConverterDescription description) {
+    private void addDescription(@NotNull final FileConverterDescription description) {
         this.descriptions.add(description);
     }
 
     /**
-     * @return список описаний конвертеров файлов.
+     * @return the list of converters.
      */
+    @NotNull
+    @FromAnyThread
     public Array<FileConverterDescription> getDescriptions() {
         return descriptions;
     }
 
     /**
-     * @return список описаний конвертеров файлов подходящих под этот.
+     * Get the list of available converters for a file.
+     *
+     * @return the list of available converters.
      */
-    public Array<FileConverterDescription> getDescriptions(final Path path) {
+    @FromAnyThread
+    public Array<FileConverterDescription> getDescriptions(@NotNull final Path path) {
 
         final Array<FileConverterDescription> result = ArrayFactory.newArray(FileConverterDescription.class);
         final Array<FileConverterDescription> descriptions = getDescriptions();
@@ -78,12 +92,13 @@ public class FileConverterRegistry {
     }
 
     /**
-     * Создание нового конвертера файлов по указанному описанию.
+     * Create a file converter using a converter description.
      *
-     * @param description описание конвертера файлов.
-     * @param file        файл который надо конвертировать.
-     * @return новый конвертер.
+     * @param description the converter description.
+     * @param file        the file.
+     * @return the new converter.
      */
+    @FromAnyThread
     public FileConverter newCreator(final FileConverterDescription description, final Path file) {
         final Supplier<FileConverter> constructor = description.getConstructor();
         return constructor.get();

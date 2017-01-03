@@ -48,6 +48,7 @@ public interface CSSIds {
     String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
     String EDITOR_DIALOG_BUTTON_CANCEL = "EditorDialogButtonCancel";
     String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
+    String EDITOR_DIALOG_SHORT_LABEL = "EditorDialogShortLabel";
 
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     String ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER = "AssetEditorDialogResourcesContainer";
@@ -120,6 +121,15 @@ public interface CSSIds {
     String CREATE_SKY_DIALOG_COMBO_BOX = "CreateSkyDialogComboBox";
     String CREATE_SKY_DIALOG_SPINNER = "CreateSkyDialogSpinner";
     String CREATE_SKY_DIALOG_BUTTON = "CreateSkyDialogButton";
+
+    String AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER = "AudioViewerEditorButtonContainer";
+    String AUDIO_VIEWER_EDITOR_BUTTON = "AudioViewerEditorButton";
+    String AUDIO_VIEWER_EDITOR_PARAM_CONTAINER = "AudioViewerEditorParamContainer";
+    String AUDIO_VIEWER_EDITOR_PARAM_LABEL = "AudioViewerEditorParamLabel";
+    String AUDIO_VIEWER_EDITOR_PARAM_VALUE = "AudioViewerEditorParamValue";
+
+    String GENERATE_LOD_DIALOG_LIST_VIEW = "GenerateLoDDialogListView";
+    String GENERATE_LOD_DIALOG_LIST_VIEW_CELL = "GenerateLoDDialogListViewCell";
 
     String LOG_VIEW = "LogView";
 }

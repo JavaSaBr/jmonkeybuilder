@@ -13,6 +13,7 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.DefaultModelPropertyControl;
+import com.ss.editor.ui.control.model.property.LodLevelModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.MaterialKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
@@ -24,7 +25,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
@@ -95,29 +95,44 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         if (!(object instanceof Geometry)) return;
 
         final Geometry geometry = (Geometry) object;
-        final Material material = geometry.getMaterial();
-        final MaterialKey materialKey = (MaterialKey) material.getKey();
         final BoundingVolume modelBound = geometry.getModelBound();
-
-        final ModelPropertyControl<Geometry, MaterialKey> materialControl =
-                new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
-        materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
-        materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
-        materialControl.setEditObject(geometry);
+        final int lodLevel = geometry.getLodLevel();
 
         final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
-                new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+                new DefaultModelPropertyControl<>(modelBound,
+                        Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);
 
-        final Line splitLine = createSplitLine(container);
+        final LodLevelModelPropertyEditor lodLevelControl = new LodLevelModelPropertyEditor(lodLevel,
+                Messages.MODEL_PROPERTY_LOD, modelChangeConsumer);
 
-        if (canEditMaterial(geometry)) FXUtils.addToPane(materialControl, container);
+        lodLevelControl.setApplyHandler(Geometry::setLodLevel);
+        lodLevelControl.setSyncHandler(Geometry::getLodLevel);
+        lodLevelControl.setEditObject(geometry, true);
+
+        if (canEditMaterial(geometry)) {
+
+            final Material material = geometry.getMaterial();
+            final MaterialKey materialKey = (MaterialKey) material.getKey();
+
+            final ModelPropertyControl<Geometry, MaterialKey> materialControl =
+                    new MaterialKeyModelPropertyEditor<>(materialKey,
+                            Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+
+            materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
+            materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);
+            materialControl.setEditObject(geometry);
+
+            FXUtils.addToPane(materialControl, container);
+        }
+
+        FXUtils.addToPane(lodLevelControl, container);
         FXUtils.addToPane(boundingVolumeControl, container);
-        FXUtils.addToPane(splitLine, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        addSplitLine(container);
     }
 
     protected boolean canEditMaterial(final Geometry geometry) {

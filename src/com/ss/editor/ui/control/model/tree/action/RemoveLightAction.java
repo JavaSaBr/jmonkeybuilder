@@ -18,7 +18,7 @@ import javafx.scene.image.Image;
 /**
  * The action to remove a light.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RemoveLightAction extends AbstractNodeAction {
 

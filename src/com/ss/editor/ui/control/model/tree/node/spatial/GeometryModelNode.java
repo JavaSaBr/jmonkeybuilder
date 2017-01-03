@@ -6,6 +6,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
+import com.ss.editor.ui.control.model.tree.action.geometry.GenerateLoDAction;
 import com.ss.editor.ui.control.model.tree.node.MeshModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNodeFactory;
@@ -57,7 +58,7 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
         final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
-        toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this));
+        toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this), new GenerateLoDAction(nodeTree, this));
 
         items.add(toolActions);
 

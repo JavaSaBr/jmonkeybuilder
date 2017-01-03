@@ -5,9 +5,12 @@ import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
@@ -251,13 +254,26 @@ public abstract class EditorUtil {
 
             GAnalytics.sendException(e, false);
 
-            final StringWriter writer = new StringWriter();
-            final PrintWriter printWriter = new PrintWriter(writer);
+            StringWriter writer = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(writer);
 
             e.printStackTrace(printWriter);
 
             final String localizedMessage = e.getLocalizedMessage();
-            final String stackTrace = writer.toString();
+
+            String stackTrace = writer.toString();
+
+            int level = 0;
+
+            for (Throwable cause = e.getCause(); cause != null && level < 6; cause = cause.getCause(), level++) {
+
+                writer = new StringWriter();
+                printWriter = new PrintWriter(writer);
+
+                cause.printStackTrace(printWriter);
+
+                stackTrace += "\n caused by " + writer.toString();
+            }
 
             final Alert alert = createErrorAlert(e, localizedMessage, stackTrace);
             alert.show();
@@ -375,5 +391,25 @@ public abstract class EditorUtil {
      */
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
+    }
+
+    /**
+     * Increment the loading counter.
+     */
+    @FXThread
+    public static void incrementLoading() {
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final EditorFXScene scene = jfxApplication.getScene();
+        scene.incrementLoading();
+    }
+
+    /**
+     * Decrement the loading counter.
+     */
+    @FXThread
+    public static void decrementLoading() {
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final EditorFXScene scene = jfxApplication.getScene();
+        scene.decrementLoading();
     }
 }

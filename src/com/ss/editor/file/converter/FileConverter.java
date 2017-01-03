@@ -1,5 +1,7 @@
 package com.ss.editor.file.converter;
 
+import com.ss.editor.annotation.FXThread;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -16,7 +18,8 @@ public interface FileConverter {
      *
      * @param source the source file.
      */
-    public void convert(@NotNull Path source);
+    @FXThread
+    void convert(@NotNull Path source);
 
     /**
      * Convert a source file to destination file.
@@ -24,12 +27,14 @@ public interface FileConverter {
      * @param source      the source file.
      * @param destination the destination file.
      */
-    public void convert(@NotNull Path source, @NotNull Path destination);
+    @FXThread
+    void convert(@NotNull Path source, @NotNull Path destination);
 
 
     /**
      * @return the result file format name.
      */
     @NotNull
-    public String getTargetExtension();
+    @FXThread
+    String getTargetExtension();
 }

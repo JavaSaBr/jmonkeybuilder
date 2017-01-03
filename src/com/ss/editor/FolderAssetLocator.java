@@ -29,7 +29,7 @@ public class FolderAssetLocator implements AssetLocator {
     private static final Array<String> URL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
-        URL_EXTENSIONS.add(FileExtensions.SCENE);
+        URL_EXTENSIONS.add(FileExtensions.MODEL_SCENE);
     }
 
     @Override
