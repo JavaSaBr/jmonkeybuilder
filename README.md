@@ -14,7 +14,7 @@
 * -Updated the list of embedded environment textures.
 * -Implemented a LoD Generator.
 * -Added a frame rate setting to settings dialog.
-* -Updated a style of a ColorPicket control.
+* -Updated a style of a ColorPicker control.
 * -Updated an ImageViewer.
 * -Added an action to extract sub-animations.
 
