@@ -5,7 +5,7 @@
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
-## ver. 0.8.9 ##* 
+## ver. 0.8.9 ##
 * [Video](https://www.youtube.com/watch?v=xCSUIia-jh4&feature=youtu.be)
 * -Added the Apache License.
 * -Added an action to create a single color texture.
