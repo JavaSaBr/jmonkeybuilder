@@ -1,18 +1,31 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.8.8 #
+# jMonkeyEngine 3 SpaceShift Editor 0.8.9 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
+## ver. 0.8.9 ##
+[Video](https://www.youtube.com/watch?v=xCSUIia-jh4&feature=youtu.be)
+* -Added the Apache License.
+* -Added an action to create a single color texture.
+* -Added an AudioViewer and implement supporting AudioNode in the ModelEditor.
+* -Added an action to convert a .xbuf model to .j3o.
+* -Updated the list of embedded environment textures.
+* -Implemented a LoD Generator.
+* -Added a frame rate setting to settings dialog.
+* -Updated a style of a ColorPicket control.
+* -Updated an ImageViewer.
+* -Added an action to extract sub-animations.
+
 ## ver. 0.8.8 ##
 * -Implemented drawing jME application inside JavaFX Canvas.
-* -Migrated from the ReflectionAllocator to the JEmallocAllocator
-* -Added actions to convert .scene/.mesh.xml/.fbx/.obj to .j3o
-* -Updated context menus in the AssetTree and ModelNodeTree
-* -Added showing animation tracks in the ModelNodeTree
-* -Added some actions to animation nodes in the ModelEditor
-* -Bugfixes
+* -Migrated from the ReflectionAllocator to the JEmallocAllocator.
+* -Added actions to convert .scene/.mesh.xml/.fbx/.obj to .j3o.
+* -Updated context menus in the AssetTree and ModelNodeTree.
+* -Added showing animation tracks in the ModelNodeTree.
+* -Added some actions to animation nodes in the ModelEditor.
+* -Bugfixes.
 
 ## ver. 0.8.7 ##
 * -Implemented saving/loading particle emitter nodes.
