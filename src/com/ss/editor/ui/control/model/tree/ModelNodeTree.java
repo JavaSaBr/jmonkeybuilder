@@ -241,8 +241,16 @@ public class ModelNodeTree extends VBox {
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
         if (treeItem == null) return;
 
+        final TreeItem<ModelNode<?>> parentItem = treeItem.getParent();
+        final ModelNode<?> parent = parentItem.getValue();
+        final ModelNode<?> old = treeItem.getValue();
+
+        parent.notifyChildPreRemove(old);
         treeItem.setValue(null);
+        parent.notifyChildRemoved(old);
+        parent.notifyChildPreAdd(modelNode);
         treeItem.setValue(modelNode);
+        parent.notifyChildAdded(modelNode);
     }
 
     /**
