@@ -5,6 +5,7 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
+import com.jme3.asset.TextureKey;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
@@ -13,6 +14,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
@@ -902,7 +904,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Spatial newFastSky = SkyFactory.createSky(assetManager, newSky, EnvMapType.EquirectMap);
+
+        final TextureKey key = new TextureKey(newSky, true);
+        key.setGenerateMips(false);
+
+        final Texture texture = assetManager.loadTexture(key);
+        final Spatial newFastSky = SkyFactory.createSky(assetManager, texture, EnvMapType.EquirectMap);
 
         editorAppState.changeFastSky(newFastSky);
 

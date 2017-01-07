@@ -77,8 +77,8 @@ public class RenameDialog extends EditorDialog {
         FXUtils.addToPane(nameField, nameContainer);
         FXUtils.addToPane(nameContainer, root);
 
-        FXUtils.addClassTo(nameLabel, CSSClasses.MAIN_FONT_13);
-        FXUtils.addClassTo(nameField, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(nameContainer, NAME_OFFSET);
     }

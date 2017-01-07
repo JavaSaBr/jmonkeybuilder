@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 
@@ -22,7 +23,7 @@ public class CreateTonegodSoftEmitterAction extends CreateTonegodEmitterAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Soft";
+        return Messages.MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER;
     }
 
     @NotNull
