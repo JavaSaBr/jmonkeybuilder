@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.model.tree.node.spatial.emitter;
 
 import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+import static rlib.util.ClassUtils.getConstructor;
+import static rlib.util.ClassUtils.newInstance;
 
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
@@ -21,6 +23,8 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -28,7 +32,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.ObjectDictionary;
+import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
+import tonegod.emitter.influencers.impl.AlphaInfluencer;
+import tonegod.emitter.influencers.impl.ColorInfluencer;
+import tonegod.emitter.influencers.impl.DestinationInfluencer;
+import tonegod.emitter.influencers.impl.GravityInfluencer;
+import tonegod.emitter.influencers.impl.ImpulseInfluencer;
+import tonegod.emitter.influencers.impl.PhysicsInfluencer;
+import tonegod.emitter.influencers.impl.RadialVelocityInfluencer;
+import tonegod.emitter.influencers.impl.RotationInfluencer;
+import tonegod.emitter.influencers.impl.SizeInfluencer;
+import tonegod.emitter.influencers.impl.SpriteInfluencer;
 
 /**
  * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencers} in the editor.
@@ -36,6 +53,23 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  * @author JavaSaBr
  */
 public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers> {
+
+    @NotNull
+    private static final ObjectDictionary<Class<? extends ParticleInfluencer>, Constructor<? extends MenuItem>> CONSTRUCTORS =
+            DictionaryFactory.newObjectDictionary();
+
+    static {
+        CONSTRUCTORS.put(AlphaInfluencer.class, getConstructor(CreateAlphaParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(ColorInfluencer.class, getConstructor(CreateColorParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(DestinationInfluencer.class, getConstructor(CreateDestinationParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(GravityInfluencer.class, getConstructor(CreateGravityParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(ImpulseInfluencer.class, getConstructor(CreateImpulseParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(PhysicsInfluencer.class, getConstructor(CreatePhysicsParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(RadialVelocityInfluencer.class, getConstructor(CreateRadialVelocityParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(RotationInfluencer.class, getConstructor(CreateRotationParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(SizeInfluencer.class, getConstructor(CreateSizeParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(SpriteInfluencer.class, getConstructor(CreateSpriteParticleInfluencerAction.class, ModelNodeTree.class, ModelNode.class));
+    }
 
     public ParticleInfluencersModelNode(@NotNull final ParticleInfluencers element, final long objectId) {
         super(element, objectId);
@@ -56,18 +90,16 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
+        final ParticleInfluencers element = getElement();
+        final ParticleEmitterNode emitterNode = element.getEmitterNode();
+
         final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
         final ObservableList<MenuItem> createItems = createMenu.getItems();
-        createItems.add(new CreateAlphaParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateColorParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateDestinationParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateGravityParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateImpulseParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreatePhysicsParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateRadialVelocityParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateRotationParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateSizeParticleInfluencerAction(nodeTree, this));
-        createItems.add(new CreateSpriteParticleInfluencerAction(nodeTree, this));
+
+        CONSTRUCTORS.forEach((type, constructor) -> {
+            if (emitterNode.getInfluencer(type) != null) return;
+            createItems.add(newInstance(constructor, nodeTree, this));
+        });
 
         items.add(createMenu);
 
