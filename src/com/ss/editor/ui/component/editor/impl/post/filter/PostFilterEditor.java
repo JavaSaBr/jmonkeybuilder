@@ -35,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -168,7 +169,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         super.openFile(file);
 
         final PostFilterViewFile currentFile = PostFilterViewSerializer.deserialize(file);
-        final byte[] content = Util.safeGet(file, Files::readAllBytes);
+        final byte[] content = Objects.requireNonNull(Util.get(file, Files::readAllBytes));
 
         setOriginalContent(new String(content));
         setCurrentFile(currentFile);

@@ -128,7 +128,7 @@ public class JavaFXImageManager {
         if (file == null || !Files.exists(file)) return Icons.IMAGE_512;
 
         final String absolutePath = file.toAbsolutePath().toString();
-        final String fileHash = StringUtils.passwordToHash(absolutePath) + ".png";
+        final String fileHash = StringUtils.toMD5(absolutePath) + ".png";
 
         final Path cacheFolder = getCacheFolder();
         final Path imageFolder = cacheFolder.resolve(String.valueOf(width)).resolve(String.valueOf(height));
@@ -194,7 +194,7 @@ public class JavaFXImageManager {
 
             try {
 
-                final byte[] content = Util.safeGet(file, Files::readAllBytes);
+                final byte[] content = Util.get(file, Files::readAllBytes);
                 final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
                 if (awtImage == null) return Icons.IMAGE_512;
 

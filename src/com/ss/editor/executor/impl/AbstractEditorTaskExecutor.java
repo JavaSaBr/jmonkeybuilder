@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 
 import rlib.concurrent.lock.LockFactory;
+import rlib.concurrent.lock.Lockable;
 import rlib.concurrent.util.ConcurrentUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
-import rlib.util.Lockable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 

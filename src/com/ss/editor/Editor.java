@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import static java.nio.file.Files.createDirectories;
+import static rlib.util.Util.run;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
@@ -52,7 +53,7 @@ import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
 import rlib.logging.impl.FolderFileListener;
 import rlib.manager.InitializeManager;
-import rlib.util.Util;
+import tonegod.emitter.filter.TTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link com.jme3.app.Application} of this Editor.
@@ -118,7 +119,7 @@ public class Editor extends JmeToJFXApplication {
         final Path logFolder = Config.getFolderForLog();
 
         if (!Files.exists(logFolder)) {
-            Util.safeExecute(() -> createDirectories(logFolder));
+            run(() -> createDirectories(logFolder));
         }
 
         LoggerManager.addListener(new FolderFileListener(logFolder));
@@ -178,6 +179,11 @@ public class Editor extends JmeToJFXApplication {
      * The filter of color correction.
      */
     private ToneMapFilter toneMapFilter;
+
+    /**
+     * The translucent bucket filter.
+     */
+    private TTranslucentBucketFilter translucentBucketFilter;
 
     private Editor() {
         this.lock = new StampedLock();
@@ -274,8 +280,11 @@ public class Editor extends JmeToJFXApplication {
         toneMapFilter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
 
+        translucentBucketFilter = new TTranslucentBucketFilter(true);
+
         postProcessor.addFilter(fxaaFilter);
         postProcessor.addFilter(toneMapFilter);
+        postProcessor.addFilter(translucentBucketFilter);
 
         viewPort.addProcessor(postProcessor);
 
@@ -514,5 +523,12 @@ public class Editor extends JmeToJFXApplication {
      */
     public FXAAFilter getFXAAFilter() {
         return fxaaFilter;
+    }
+
+    /**
+     * @return the translucent bucket filter.
+     */
+    public TTranslucentBucketFilter getTranslucentBucketFilter() {
+        return translucentBucketFilter;
     }
 }

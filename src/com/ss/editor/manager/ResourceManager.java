@@ -6,7 +6,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
-import static rlib.util.Util.safeGet;
+import static rlib.util.Util.get;
 import static rlib.util.array.ArrayFactory.toArray;
 
 import com.jme3.asset.AssetManager;
@@ -127,7 +127,7 @@ public class ResourceManager extends EditorThread {
         final ClassPathScanner scanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
         scanner.scanning(path -> {
 
-            if (!(path.contains("jme3-core") || path.contains("jme3-effects"))) {
+            if (!(path.contains("jme3-core") || path.contains("jme3-effects") || path.contains("tonegod"))) {
                 return false;
             } else if (path.contains("natives")) {
                 return false;
@@ -189,8 +189,8 @@ public class ResourceManager extends EditorThread {
         final Editor editor = Editor.getInstance();
         final AssetManager assetManager = editor.getAssetManager();
 
-        final URL prevURL = safeGet(prevAssetFile, file -> file.toUri().toURL());
-        final URL newURL = safeGet(newAssetFile, file -> file.toUri().toURL());
+        final URL prevURL = get(prevAssetFile, file -> file.toUri().toURL());
+        final URL newURL = get(newAssetFile, file -> file.toUri().toURL());
 
         final Array<URLClassLoader> classLoaders = getClassLoaders();
         final URLClassLoader oldLoader = classLoaders.search(prevURL, (loader, url) -> contains(loader.getURLs(), url));
@@ -259,7 +259,7 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = safeGet(file, toUri -> toUri.toUri().toURL());
+            final URL url = get(file, toUri -> toUri.toUri().toURL());
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
             final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
@@ -291,7 +291,7 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = safeGet(file, FileUtils::toUrl);
+            final URL url = get(file, FileUtils::toUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
             final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
@@ -407,7 +407,7 @@ public class ResourceManager extends EditorThread {
     }
 
     private static void registerFolder(final Array<WatchKey> watchKeys, final Path file) {
-        watchKeys.add(Util.safeGet(file, first -> {
+        watchKeys.add(Util.get(file, first -> {
             return first.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE);
         }));
     }
@@ -429,7 +429,7 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = safeGet(file, FileUtils::toUrl);
+            final URL url = get(file, FileUtils::toUrl);
 
             final Array<URLClassLoader> classLoaders = getClassLoaders();
             final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
@@ -510,7 +510,7 @@ public class ResourceManager extends EditorThread {
     }
 
     private synchronized void registerWatchKey(final Path dir) {
-        Util.safeExecute(() -> getWatchKeys().add(dir.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE)));
+        Util.run(() -> getWatchKeys().add(dir.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE)));
     }
 
     /**

@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
-import rlib.util.Util;
+import rlib.util.FileUtils;
 
 /**
  * The implementation of editor for editing material definition files.
@@ -199,9 +199,7 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final byte[] content = Util.safeGet(file, Files::readAllBytes);
-
-        setOriginalContent(new String(content));
+        setOriginalContent(FileUtils.read(file));
 
         final CodeArea codeArea = getCodeArea();
         codeArea.appendText(getOriginalContent());

@@ -258,7 +258,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         final Material material = assetManager.loadMaterial(assetPath);
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> geometries.forEach(geometry -> geometry.setMaterial(material)));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> geometries.forEach(geometry -> {
+            geometry.setMaterial(material);
+        }));
     }
 
     /**

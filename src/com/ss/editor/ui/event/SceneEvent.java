@@ -1,16 +1,19 @@
 package com.ss.editor.ui.event;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javafx.event.Event;
 import javafx.event.EventType;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
-import static rlib.util.ClassUtils.unsafeCast;
-
 /**
- * Базавая реализация события сцены javaFX UI.
+ * The base implementation of an event in the javaFX UI.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class SceneEvent extends Event {
 
@@ -19,37 +22,40 @@ public class SceneEvent extends Event {
     public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
 
     /**
-     * Таблица с параметрами события.
+     * The parameters.
      */
     private ObjectDictionary<Object, Object> values;
 
-    public SceneEvent(final Object source, final EventType<? extends Event> eventType) {
+    public SceneEvent(@Nullable final Object source, @NotNull final EventType<? extends Event> eventType) {
         super(source, null, eventType);
     }
 
-    public SceneEvent(final EventType<? extends Event> eventType) {
+    public SceneEvent(@NotNull final EventType<? extends Event> eventType) {
         super(eventType);
     }
 
     /**
-     * Вставка параметра для события.
+     * Put a new parameter.
      *
-     * @param key   ключ параметра.
-     * @param value значение параметра.
+     * @param key   the key.
+     * @param value the value.
      */
-    public void set(final Object key, final Object value) {
+    public void set(@NotNull final Object key, @NotNull final Object value) {
         if (values == null) values = DictionaryFactory.newObjectDictionary();
         values.put(key, value);
     }
 
     /**
-     * Получение параметра события.
+     * Get a value by a key.
      *
-     * @param key ключ параметра.
-     * @return значение параметра или null.
+     * @param key the key.
+     * @return the value or null.
      */
-    public <T> T get(final Object key) {
+    @Nullable
+    public <T> T get(@NotNull final Object key) {
         if (values == null) return null;
-        return unsafeCast(values.get(key));
+        final Object object = values.get(key);
+        if (object == null) return null;
+        return unsafeCast(object);
     }
 }

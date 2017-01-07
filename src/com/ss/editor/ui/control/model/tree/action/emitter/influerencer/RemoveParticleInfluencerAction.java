@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 import javafx.scene.image.Image;
+import rlib.util.array.Array;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
@@ -53,12 +54,13 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction {
 
         final ParticleInfluencer influencer = node.getElement();
         final ParticleEmitterNode emitterNode = particleInfluencers.getEmitterNode();
+        final Array<ParticleInfluencer> influencers = emitterNode.getInfluencers();
 
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
 
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), emitterNode);
-        final int childIndex = emitterNode.indexOfInfluencer(influencer);
+        final int childIndex = influencers.indexOf(influencer);
 
         modelChangeConsumer.execute(new RemoveParticleInfluencerOperation(influencer, index, childIndex));
     }
