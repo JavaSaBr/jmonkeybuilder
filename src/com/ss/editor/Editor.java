@@ -53,7 +53,7 @@ import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
 import rlib.logging.impl.FolderFileListener;
 import rlib.manager.InitializeManager;
-import tonegod.emitter.filter.TTranslucentBucketFilter;
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link com.jme3.app.Application} of this Editor.
@@ -183,7 +183,7 @@ public class Editor extends JmeToJFXApplication {
     /**
      * The translucent bucket filter.
      */
-    private TTranslucentBucketFilter translucentBucketFilter;
+    private TonegodTranslucentBucketFilter translucentBucketFilter;
 
     private Editor() {
         this.lock = new StampedLock();
@@ -280,7 +280,7 @@ public class Editor extends JmeToJFXApplication {
         toneMapFilter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
 
-        translucentBucketFilter = new TTranslucentBucketFilter(true);
+        translucentBucketFilter = new TonegodTranslucentBucketFilter(true);
 
         postProcessor.addFilter(fxaaFilter);
         postProcessor.addFilter(toneMapFilter);
@@ -528,7 +528,7 @@ public class Editor extends JmeToJFXApplication {
     /**
      * @return the translucent bucket filter.
      */
-    public TTranslucentBucketFilter getTranslucentBucketFilter() {
+    public TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
         return translucentBucketFilter;
     }
 }

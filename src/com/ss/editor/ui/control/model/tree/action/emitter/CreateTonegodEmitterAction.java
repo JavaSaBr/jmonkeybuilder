@@ -24,9 +24,9 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  *
  * @author JavaSaBr
  */
-public class CreateTEmitterAction extends AbstractNodeAction {
+public class CreateTonegodEmitterAction extends AbstractNodeAction {
 
-    public CreateTEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateTonegodEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -48,7 +48,7 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         final ModelNodeTree nodeTree = getNodeTree();
         final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
 
-        final ParticleEmitterNode emitter = new ParticleEmitterNode(EDITOR.getAssetManager());
+        final ParticleEmitterNode emitter = createEmitterNode();
         emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer());
         emitter.setEnabled(true);
 
@@ -65,5 +65,10 @@ public class CreateTEmitterAction extends AbstractNodeAction {
         final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
 
         modelChangeConsumer.execute(new AddChildOperation(emitter, index));
+    }
+
+    @NotNull
+    protected ParticleEmitterNode createEmitterNode() {
+        return new ParticleEmitterNode(EDITOR.getAssetManager());
     }
 }

@@ -28,7 +28,7 @@ import rlib.function.BooleanFloatConsumer;
 import rlib.function.FloatFloatConsumer;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
-//import tonegod.emitter.filter.TTranslucentBucketFilter;
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
@@ -438,8 +438,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         final Node rootNode = EDITOR.getRootNode();
         rootNode.attachChild(getStateNode());
 
-       // final TTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
-       // translucentBucketFilter.setEnabled(true);
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        translucentBucketFilter.setEnabled(true);
 
         final EditorCamera editorCamera = getEditorCamera();
         final InputManager inputManager = EDITOR.getInputManager();
@@ -492,7 +492,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     public void cleanup() {
         super.cleanup();
 
-        final TTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
         translucentBucketFilter.setEnabled(false);
 
         final Node rootNode = EDITOR.getRootNode();
