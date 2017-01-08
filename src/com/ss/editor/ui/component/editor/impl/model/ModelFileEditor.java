@@ -276,7 +276,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
             }
         });
 
-        if(needRefresh.get() < 1) {
+        if (needRefresh.get() < 1) {
             return;
         }
 
