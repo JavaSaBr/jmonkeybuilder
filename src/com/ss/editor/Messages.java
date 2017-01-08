@@ -268,6 +268,8 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED;
     public static final String PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X;
     public static final String PARTICLE_EMITTER_INFLUENCER_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
+    public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
@@ -345,6 +347,11 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
+
+    public static final String NODE_SELECTOR_DIALOG_TITLE;
+    public static final String NODE_SELECTOR_DIALOG_BUTTON;
+
+    public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
 
     public static final String LOG_VIEW_TITLE;
 
@@ -616,6 +623,8 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED = bundle.getString("ParticleEmitterInfluencerRandomSpeed");
         PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X = bundle.getString("ParticleEmitterInfluencerStartRandomRotationX");
         PARTICLE_EMITTER_INFLUENCER_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST = bundle.getString("ParticleEmitterInfluencerGeometryList");
+        PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 
@@ -693,6 +702,11 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS = bundle.getString("BoundingVolumeModelPropertyControlSphereRadius");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
+
+        NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");
+        NODE_SELECTOR_DIALOG_BUTTON = bundle.getString("NodeSelectorDialogButton");
+
+        GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
 
         LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
     }

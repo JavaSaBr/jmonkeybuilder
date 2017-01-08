@@ -84,6 +84,8 @@ public interface CSSIds {
     String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
     String MODEL_NODE_TREE_CONTAINER = "ModelNodeTreeContainer";
+    String MODEL_NODE_TREE_TRANSPARENT_CONTAINER = "ModelNodeTreeTransparentContainer";
+
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
     String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
     String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";

@@ -191,6 +191,7 @@ public class GenerateTangentsDialog extends AbstractNodeDialog {
         hide();
     }
 
+    @NotNull
     @Override
     protected String getButtonOkLabel() {
         return Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK;

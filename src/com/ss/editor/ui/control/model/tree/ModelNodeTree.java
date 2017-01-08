@@ -32,8 +32,10 @@ import rlib.util.array.Array;
  */
 public class ModelNodeTree extends VBox {
 
+    @NotNull
     public static final String USER_DATA_IS_SKY = ModelNodeTree.class.getName() + ".isSky";
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -45,7 +47,7 @@ public class ModelNodeTree extends VBox {
     /**
      * The consumer of changes of the model.
      */
-    @NotNull
+    @Nullable
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
@@ -53,7 +55,7 @@ public class ModelNodeTree extends VBox {
      */
     private TreeView<ModelNode<?>> treeView;
 
-    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer modelChangeConsumer) {
         setId(CSSIds.MODEL_NODE_TREE_CONTAINER);
         this.selectionHandler = selectionHandler;
         this.modelChangeConsumer = modelChangeConsumer;
@@ -182,6 +184,9 @@ public class ModelNodeTree extends VBox {
      */
     public ContextMenu getContextMenu(@NotNull final ModelNode<?> modelNode) {
 
+        final ModelChangeConsumer changeConsumer = getModelChangeConsumer();
+        if (changeConsumer == null) return null;
+
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
         modelNode.fillContextMenu(this, items);
@@ -242,6 +247,8 @@ public class ModelNodeTree extends VBox {
         if (treeItem == null) return;
 
         final TreeItem<ModelNode<?>> parentItem = treeItem.getParent();
+        if (parentItem == null) return;
+
         final ModelNode<?> parent = parentItem.getValue();
         final ModelNode<?> old = treeItem.getValue();
 
@@ -422,7 +429,7 @@ public class ModelNodeTree extends VBox {
     /**
      * @return the consumer of changes of the model.
      */
-    @NotNull
+    @Nullable
     public ModelChangeConsumer getModelChangeConsumer() {
         return modelChangeConsumer;
     }

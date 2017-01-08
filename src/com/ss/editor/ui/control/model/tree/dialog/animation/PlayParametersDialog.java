@@ -45,11 +45,13 @@ public class PlayParametersDialog extends AbstractNodeDialog {
     /**
      * The model tree component.
      */
+    @NotNull
     private final ModelNodeTree nodeTree;
 
     /**
      * The animation control node.
      */
+    @NotNull
     private final AnimationControlModelNode node;
 
     /**
@@ -62,7 +64,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
      */
     private FloatTextField speedField;
 
-    public PlayParametersDialog(final ModelNodeTree nodeTree, final AnimationControlModelNode node) {
+    public PlayParametersDialog(@NotNull final ModelNodeTree nodeTree, @NotNull final AnimationControlModelNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
@@ -75,6 +77,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
     /**
      * @return the model tree component.
      */
+    @NotNull
     protected ModelNodeTree getNodeTree() {
         return nodeTree;
     }
@@ -82,6 +85,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
     /**
      * @return the animation control node.
      */
+    @NotNull
     protected AnimationControlModelNode getNode() {
         return node;
     }
@@ -148,6 +152,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
     /**
      * @return the field with a value of speed.
      */
+    @NotNull
     private FloatTextField getSpeedField() {
         return speedField;
     }
@@ -155,6 +160,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
     /**
      * @return the list of loop modes.
      */
+    @NotNull
     private ComboBox<LoopMode> getLoopModeComboBox() {
         return loopModeComboBox;
     }
@@ -174,6 +180,7 @@ public class PlayParametersDialog extends AbstractNodeDialog {
         hide();
     }
 
+    @NotNull
     @Override
     protected String getButtonOkLabel() {
         return Messages.PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK;

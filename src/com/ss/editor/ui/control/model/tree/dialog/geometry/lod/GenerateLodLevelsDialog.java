@@ -318,6 +318,7 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
         });
     }
 
+    @NotNull
     @Override
     protected String getButtonOkLabel() {
         return Messages.GENERATE_LOD_DIALOG_BUTTON_GENERATE;

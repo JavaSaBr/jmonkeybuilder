@@ -8,6 +8,7 @@ import com.ss.editor.ui.control.model.property.particle.influencer.BooleanPartic
 import com.ss.editor.ui.control.model.property.particle.influencer.EnumParticleInfluencerEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.FloatParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.IntArrayParticleInfluencerPropertyControl;
+import com.ss.editor.ui.control.model.property.particle.influencer.PhysicsNodeListControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.Vector3fParticleInfluencerPropertyControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.AlphaInfluencerControl;
 import com.ss.editor.ui.control.model.property.particle.influencer.interpolation.control.ColorInfluencerControl;
@@ -320,6 +321,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         final CollisionReaction collisionReaction = influencer.getCollisionReaction();
         final float restitution = influencer.getRestitution();
 
+        final PhysicsNodeListControl nodeListControl = new PhysicsNodeListControl(modelChangeConsumer, influencer, parent);
+        nodeListControl.reload();
+
         final EnumParticleInfluencerEmitterPropertyControl<PhysicsInfluencer, CollisionReaction> reactionControl =
                 new EnumParticleInfluencerEmitterPropertyControl<>(collisionReaction,
                         Messages.PARTICLE_EMITTER_INFLUENCER_REACTION, modelChangeConsumer, COLLISION_REACTIONS, parent);
@@ -336,6 +340,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder {
         restitutionControl.setApplyHandler(PhysicsInfluencer::setRestitution);
         restitutionControl.setEditObject(influencer);
 
+        FXUtils.addToPane(nodeListControl, container);
         FXUtils.addToPane(reactionControl, container);
         FXUtils.addToPane(restitutionControl, container);
     }
