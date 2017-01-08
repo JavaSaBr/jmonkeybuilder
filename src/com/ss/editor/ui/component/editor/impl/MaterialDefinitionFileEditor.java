@@ -240,7 +240,6 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
 
         setOriginalContent(newContent);
         updateDirty(newContent);
-        notifyFileChanged();
     }
 
     @NotNull

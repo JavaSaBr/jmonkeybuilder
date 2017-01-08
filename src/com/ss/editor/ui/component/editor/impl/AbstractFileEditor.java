@@ -13,7 +13,6 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.FileChangedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -265,17 +264,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return editorStates;
     }
 
-    /**
-     * Notify about changing the file.
-     */
-    protected void notifyFileChanged() {
-
-        final FileChangedEvent event = new FileChangedEvent();
-        event.setFile(getEditFile());
-
-        FX_EVENT_MANAGER.notify(event);
-    }
-
     @Override
     public void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
@@ -295,7 +283,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    public void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
+    public void notifyMoved(@NotNull final Path prevFile, final @NotNull Path newFile) {
 
         final Path editFile = getEditFile();
 

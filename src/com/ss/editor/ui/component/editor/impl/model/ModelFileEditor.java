@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -39,7 +41,6 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 
@@ -233,7 +234,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            updateMaterial(file);
+            EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterial(file));
+        } else if (MaterialUtils.isShaderFile(file) || MaterialUtils.isTextureFile(file)) {
+            EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterials(file));
         }
     }
 
@@ -243,14 +246,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void updateMaterial(@NotNull final Path file) {
 
         final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final String assetPath = toAssetPath(assetFile);
 
         final Spatial currentModel = getCurrentModel();
 
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
-
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
-
         if (geometries.isEmpty()) return;
 
         final MaterialKey materialKey = new MaterialKey(assetPath);
@@ -259,10 +260,21 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         assetManager.deleteFromCache(materialKey);
 
         final Material material = assetManager.loadMaterial(assetPath);
+        geometries.forEach(geometry -> geometry.setMaterial(material));
+    }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> geometries.forEach(geometry -> {
-            geometry.setMaterial(material);
-        }));
+    /**
+     * Updating materials.
+     */
+    private void updateMaterials(@NotNull final Path file) {
+
+        final Spatial currentModel = getCurrentModel();
+
+        NodeUtils.visitGeometry(currentModel, geometry -> {
+            final Material material = geometry.getMaterial();
+            final Material newMaterial = updateMaterialIdNeed(file, material);
+            if (newMaterial != null) geometry.setMaterial(newMaterial);
+        });
     }
 
     /**
@@ -325,7 +337,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
 
-        final ModelKey modelKey = new ModelKey(EditorUtil.toAssetPath(assetFile));
+        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.deleteFromCache(modelKey);
@@ -642,7 +654,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         setDirty(false);
-        notifyFileChanged();
     }
 
     @Override

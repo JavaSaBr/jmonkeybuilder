@@ -250,7 +250,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         setOriginalContent(newContent);
         setDirty(false);
-        notifyFileChanged();
     }
 
     /**

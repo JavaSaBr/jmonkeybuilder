@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
+import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
@@ -214,24 +215,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     private void processChangedFile(final FileChangedEvent event) {
 
-        final Path file = event.getFile();
-        if (!MaterialUtils.isShaderFile(file)) return;
-
         final Material currentMaterial = getCurrentMaterial();
-        if (!MaterialUtils.containsShader(currentMaterial, file)) return;
+        final Path file = event.getFile();
 
-        final MaterialKey materialKey = new MaterialKey(currentMaterial.getAssetName());
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(materialKey);
-
-        final Material newMaterial = assetManager.loadAsset(materialKey);
-
-        MaterialUtils.updateTo(newMaterial, currentMaterial);
+        final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
+        if (newMaterial == null) return;
 
         reload(newMaterial);
-
-        notifyFileChanged();
     }
 
     /**
@@ -277,7 +267,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         }
 
         setDirty(false);
-        notifyFileChanged();
     }
 
     @NotNull

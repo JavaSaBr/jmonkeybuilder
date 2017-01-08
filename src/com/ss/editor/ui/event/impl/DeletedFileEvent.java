@@ -2,36 +2,66 @@ package com.ss.editor.ui.event.impl;
 
 import com.ss.editor.ui.event.SceneEvent;
 
-import java.nio.file.Path;
+import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
+import java.util.Objects;
+
+import javafx.event.Event;
 import javafx.event.EventType;
 
 /**
- * Событие об удалении файла в Asset.
+ * The event about deleting a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class DeletedFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, DeletedFileEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, DeletedFileEvent.class.getSimpleName());
+        }
+    }
+
+    @NotNull
     public static final String FILE = "file";
+
+    @NotNull
+    public static final String IS_DIRECTORY = "isDirectory";
 
     public DeletedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * @return удаленный файл.
+     * @return the file.
      */
+    @NotNull
     public Path getFile() {
-        return get(FILE);
+        return Objects.requireNonNull(get(FILE), "Can't find a file");
     }
 
     /**
-     * @param file удаленный файл.
+     * @return true if the file is directory.
      */
-    public void setFile(final Path file) {
+    public boolean isDirectory() {
+        return get(IS_DIRECTORY) == Boolean.TRUE;
+    }
+
+    /**
+     * @param file the file.
+     */
+    public void setFile(@NotNull final Path file) {
         set(FILE, file);
+    }
+
+    /**
+     * @param directory the directory.
+     */
+    public void setDirectory(final boolean directory) {
+        set(IS_DIRECTORY, directory);
     }
 }

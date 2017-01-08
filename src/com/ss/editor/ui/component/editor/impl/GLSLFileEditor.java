@@ -233,7 +233,6 @@ public class GLSLFileEditor extends AbstractFileEditor<VBox> {
 
         setOriginalContent(newContent);
         updateDirty(newContent);
-        notifyFileChanged();
     }
 
     @NotNull

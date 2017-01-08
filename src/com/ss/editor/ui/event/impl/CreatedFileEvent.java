@@ -2,51 +2,83 @@ package com.ss.editor.ui.event.impl;
 
 import com.ss.editor.ui.event.SceneEvent;
 
-import java.nio.file.Path;
+import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
+import java.util.Objects;
+
+import javafx.event.Event;
 import javafx.event.EventType;
 
 /**
- * Событие об создании нового файла в Asset.
+ * The event about a created file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class CreatedFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, CreatedFileEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, CreatedFileEvent.class.getSimpleName());
+        }
+    }
+
+    @NotNull
     public static final String FILE = "file";
+
+    @NotNull
     public static final String NEED_SELECT = "need_select";
+
+    @NotNull
+    public static final String IS_DIRECTORY = "isDirectory";
 
     public CreatedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * @param needSelect нужно ли выбрать этот файл.
+     * @param needSelect true if need to select a file.
      */
-    public void setNeedSelect(boolean needSelect) {
+    public void setNeedSelect(final boolean needSelect) {
         set(NEED_SELECT, needSelect);
     }
 
     /**
-     * @return нужно ли выбрать этот файл.
+     * @return true if need to select a file.
      */
     public boolean isNeedSelect() {
         return get(NEED_SELECT) == Boolean.TRUE;
     }
 
     /**
-     * @return новый файл.
+     * @return true if the file is directory.
      */
-    public Path getFile() {
-        return get(FILE);
+    public boolean isDirectory() {
+        return get(IS_DIRECTORY) == Boolean.TRUE;
     }
 
     /**
-     * @param file новый файл.
+     * @return the new file.
      */
-    public void setFile(final Path file) {
+    @NotNull
+    public Path getFile() {
+        return Objects.requireNonNull(get(FILE), "Can't find a file");
+    }
+
+    /**
+     * @param file the new file.
+     */
+    public void setFile(@NotNull final Path file) {
         set(FILE, file);
+    }
+
+    /**
+     * @param directory the directory.
+     */
+    public void setDirectory(final boolean directory) {
+        set(IS_DIRECTORY, directory);
     }
 }

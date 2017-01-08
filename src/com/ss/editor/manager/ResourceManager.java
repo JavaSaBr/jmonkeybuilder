@@ -4,8 +4,10 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
+import static rlib.util.FileUtils.toUrl;
 import static rlib.util.Util.get;
 import static rlib.util.array.ArrayFactory.toArray;
 
@@ -18,10 +20,8 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
-import com.ss.editor.ui.event.impl.MovedFileEvent;
-import com.ss.editor.ui.event.impl.RenamedFileEvent;
+import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
-import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
 
@@ -67,6 +67,7 @@ public class ResourceManager extends EditorThread {
     @NotNull
     private static final ArrayComparator<String> STRING_ARRAY_COMPARATOR = StringUtils::compareIgnoreCase;
 
+    @NotNull
     private static final WatchService WATCH_SERVICE;
 
     static {
@@ -80,6 +81,7 @@ public class ResourceManager extends EditorThread {
 
     private static ResourceManager instance;
 
+    @NotNull
     public static ResourceManager getInstance() {
         if (instance == null) instance = new ResourceManager();
         return instance;
@@ -148,37 +150,10 @@ public class ResourceManager extends EditorThread {
             fxEventManager.addEventHandler(RequestedRefreshAssetEvent.EVENT_TYPE, event -> processRefreshAsset());
             fxEventManager.addEventHandler(CreatedFileEvent.EVENT_TYPE, event -> processEvent((CreatedFileEvent) event));
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
-            fxEventManager.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
-            fxEventManager.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
         });
 
         reload();
         start();
-    }
-
-    /**
-     * Handle a renamed file.
-     */
-    private synchronized void processEvent(@NotNull final RenamedFileEvent event) {
-
-        final Path prevFile = event.getPrevFile();
-        final Path newFile = event.getNewFile();
-
-        final String extension = FileUtils.getExtension(prevFile);
-
-        final Path prevAssetFile = Objects.requireNonNull(getAssetFile(prevFile),
-                "Not found asset file for " + prevFile);
-        final Path newAssetFile = Objects.requireNonNull(getAssetFile(newFile),
-                "Not found asset file for " + newFile);
-
-        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
-        final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
-
-        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-            replaceMD(prevAssetPath, newAssetPath);
-        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
-            replaceCL(prevFile, newFile);
-        }
     }
 
     /**
@@ -206,31 +181,6 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Handle a moved file.
-     */
-    private synchronized void processEvent(final MovedFileEvent event) {
-
-        final Path prevFile = event.getPrevFile();
-        final Path newFile = event.getNewFile();
-
-        final String extension = FileUtils.getExtension(prevFile);
-
-        final Path prevAssetFile = Objects.requireNonNull(getAssetFile(prevFile),
-                "Not found asset file for " + prevFile);
-        final Path newAssetFile = Objects.requireNonNull(getAssetFile(newFile),
-                "Not found asset file for " + newFile);
-
-        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
-        final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
-
-        if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-            replaceMD(prevAssetPath, newAssetPath);
-        } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {
-            replaceCL(prevFile, newFile);
-        }
-    }
-
-    /**
      * Handle a changed material definition file.
      */
     private void replaceMD(@NotNull final String prevAssetPath, @NotNull final String newAssetPath) {
@@ -243,9 +193,9 @@ public class ResourceManager extends EditorThread {
      * Handle a removed file.
      */
     private synchronized void processEvent(@NotNull final DeletedFileEvent event) {
+        if (event.isDirectory()) return;
 
         final Path file = event.getFile();
-
         final String extension = FileUtils.getExtension(file);
 
         final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
@@ -259,10 +209,11 @@ public class ResourceManager extends EditorThread {
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
 
-            final URL url = get(file, toUri -> toUri.toUri().toURL());
-
+            final URL url = toUrl(file);
             final Array<URLClassLoader> classLoaders = getClassLoaders();
-            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) -> contains(loader.getURLs(), toCheck));
+
+            final URLClassLoader oldLoader = classLoaders.search(url, (loader, toCheck) ->
+                    contains(loader.getURLs(), toCheck));
 
             if (oldLoader != null) {
                 classLoaders.fastRemove(oldLoader);
@@ -275,9 +226,9 @@ public class ResourceManager extends EditorThread {
      * Handle a created file.
      */
     private synchronized void processEvent(@NotNull final CreatedFileEvent event) {
+        if (event.isDirectory()) return;
 
         final Path file = event.getFile();
-
         final String extension = FileUtils.getExtension(file);
 
         final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
@@ -399,23 +350,21 @@ public class ResourceManager extends EditorThread {
         }
 
         try {
-            watchKeys.add(currentAsset.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE));
-            Files.walkFileTree(currentAsset, (SimpleFolderVisitor) (file, attrs) -> registerFolder(watchKeys, file));
-        } catch (IOException e) {
+            watchKeys.add(currentAsset.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY));
+            Files.walkFileTree(currentAsset, (SimpleFolderVisitor) (file, attrs) -> registerFiles(watchKeys, file));
+        } catch (final IOException e) {
             LOGGER.warning(e);
         }
     }
 
-    private static void registerFolder(final Array<WatchKey> watchKeys, final Path file) {
-        watchKeys.add(Util.get(file, first -> {
-            return first.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE);
-        }));
+    private static void registerFiles(@NotNull final Array<WatchKey> watchKeys, @NotNull final Path file) {
+        watchKeys.add(get(file, toRegister -> toRegister.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
     }
 
     /**
      * Hadle a file event in an asset folder.
      */
-    private void handleFile(final Path file) {
+    private void handleFile(@NotNull final Path file) {
         if (Files.isDirectory(file)) return;
 
         final String extension = FileUtils.getExtension(file);
@@ -471,11 +420,14 @@ public class ResourceManager extends EditorThread {
 
                 if (watchEvent.kind() == ENTRY_CREATE) {
 
+                    final boolean directory = Files.isDirectory(realFile);
+
                     final CreatedFileEvent event = new CreatedFileEvent();
                     event.setFile(realFile);
                     event.setNeedSelect(false);
+                    event.setDirectory(directory);
 
-                    if (Files.isDirectory(realFile)) {
+                    if (directory) {
                         registerWatchKey(realFile);
                     }
 
@@ -483,10 +435,20 @@ public class ResourceManager extends EditorThread {
 
                 } else if (watchEvent.kind() == ENTRY_DELETE) {
 
+                    final boolean directory = Files.isDirectory(realFile);
+
                     final DeletedFileEvent event = new DeletedFileEvent();
                     event.setFile(realFile);
+                    event.setDirectory(directory);
 
                     removeWatchKeyFor(realFile);
+
+                    FX_EVENT_MANAGER.notify(event);
+
+                } else if (watchEvent.kind() == ENTRY_MODIFY) {
+
+                    final FileChangedEvent event = new FileChangedEvent();
+                    event.setFile(realFile);
 
                     FX_EVENT_MANAGER.notify(event);
                 }
@@ -494,12 +456,12 @@ public class ResourceManager extends EditorThread {
         }
     }
 
-    private synchronized WatchKey findWatchKey(final Path path) {
+    private synchronized WatchKey findWatchKey(@NotNull final Path path) {
         final Array<WatchKey> watchKeys = getWatchKeys();
         return watchKeys.search(path, (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
     }
 
-    private synchronized void removeWatchKeyFor(final Path path) {
+    private synchronized void removeWatchKeyFor(@NotNull final Path path) {
 
         final WatchKey watchKey = findWatchKey(path);
 
@@ -509,8 +471,8 @@ public class ResourceManager extends EditorThread {
         }
     }
 
-    private synchronized void registerWatchKey(final Path dir) {
-        Util.run(() -> getWatchKeys().add(dir.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE)));
+    private synchronized void registerWatchKey(@NotNull final Path dir) {
+        Util.run(() -> getWatchKeys().add(dir.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
     }
 
     /**

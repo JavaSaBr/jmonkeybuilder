@@ -2,19 +2,31 @@ package com.ss.editor.ui.event.impl;
 
 import com.ss.editor.ui.event.SceneEvent;
 
-import java.nio.file.Path;
+import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
+import java.util.Objects;
+
+import javafx.event.Event;
 import javafx.event.EventType;
 
 /**
- * Событие об изменении файла в Asset.
+ * The event about changing a file.
  *
- * @author Ronn
+ * @author JavaSaBr.
  */
 public class FileChangedEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, FileChangedEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, FileChangedEvent.class.getSimpleName());
+        }
+    }
+
+    @NotNull
     public static final String FILE = "file";
 
     public FileChangedEvent() {
@@ -22,16 +34,17 @@ public class FileChangedEvent extends SceneEvent {
     }
 
     /**
-     * @return файл.
+     * @return the file.
      */
+    @NotNull
     public Path getFile() {
-        return get(FILE);
+        return Objects.requireNonNull(get(FILE), "Can't find a file");
     }
 
     /**
-     * @param file файл.
+     * @param file the file.
      */
-    public void setFile(final Path file) {
+    public void setFile(@NotNull final Path file) {
         set(FILE, file);
     }
 }

@@ -13,6 +13,7 @@ import com.jme3.scene.Spatial;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import rlib.util.StringUtils;
@@ -103,6 +104,25 @@ public class NodeUtils {
 
         for (final Spatial children : node.getChildren()) {
             addSpatialWithAssetPath(children, container, assetPath);
+        }
+    }
+
+    /**
+     * Visit all geometries.
+     */
+    public static void visitGeometry(@NotNull final Spatial spatial, @NotNull final Consumer<Geometry> consumer) {
+
+        if (spatial instanceof Geometry) {
+            consumer.accept((Geometry) spatial);
+            return;
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            visitGeometry(children, consumer);
         }
     }
 
