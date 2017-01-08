@@ -73,6 +73,7 @@ import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link AbstractFileEditor} for working with {@link Spatial}.
@@ -251,6 +252,9 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
+
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        translucentBucketFilter.refresh();
     }
 
     /**
@@ -259,12 +263,25 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void updateMaterials(@NotNull final Path file) {
 
         final Spatial currentModel = getCurrentModel();
+        final AtomicInteger needRefresh = new AtomicInteger();
 
         NodeUtils.visitGeometry(currentModel, geometry -> {
+
             final Material material = geometry.getMaterial();
             final Material newMaterial = updateMaterialIdNeed(file, material);
-            if (newMaterial != null) geometry.setMaterial(newMaterial);
+
+            if (newMaterial != null) {
+                geometry.setMaterial(newMaterial);
+                needRefresh.incrementAndGet();
+            }
         });
+
+        if(needRefresh.get() < 1) {
+            return;
+        }
+
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        translucentBucketFilter.refresh();
     }
 
     @NotNull
