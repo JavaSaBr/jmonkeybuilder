@@ -130,7 +130,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
         spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
         spriteCountControl.setEditObject(emitterNode);
-        ;
+
         FXUtils.addToPane(testParticlesModeControl, container);
         FXUtils.addToPane(particlesFollowEmitControl, container);
         FXUtils.addToPane(particlesStretchingControl, container);
@@ -156,6 +156,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         final int maxParticles = emitterNode.getMaxParticles();
         final int emissionsPerSecond = emitterNode.getEmissionsPerSecond();
         final int particlesPerEmission = emitterNode.getParticlesPerEmission();
+        final float emitterLife = emitterNode.getEmitterLife();
 
         final DirectionType directionType = emitterNode.getDirectionType();
         final EmissionPoint emissionPoint = emitterNode.getEmissionPoint();
@@ -220,6 +221,12 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         particlesPerEmissionControl.setSyncHandler(ParticleEmitterNode::getParticlesPerEmission);
         particlesPerEmissionControl.setEditObject(emitterNode);
 
+        final FloatModelPropertyControl<ParticleEmitterNode> emitterLifeControl =
+                new FloatModelPropertyControl<>(emitterLife, Messages.PARTICLE_EMITTER_EMITTER_LIFE, modelChangeConsumer);
+        emitterLifeControl.setApplyHandler(ParticleEmitterNode::setEmitterLife);
+        emitterLifeControl.setSyncHandler(ParticleEmitterNode::getEmitterLife);
+        emitterLifeControl.setEditObject(emitterNode);
+
         FXUtils.addToPane(testEmitterModeControl, container);
         FXUtils.addToPane(enableControl, container);
         FXUtils.addToPane(randomPointControl, container);
@@ -229,6 +236,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(emissionPointControl, container);
         FXUtils.addToPane(maxParticlesControl, container);
         FXUtils.addToPane(emissionPerSecControl, container);
+        FXUtils.addToPane(emitterLifeControl, container);
         FXUtils.addToPane(particlesPerEmissionControl, container);
 
         addSplitLine(container);

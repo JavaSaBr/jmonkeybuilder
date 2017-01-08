@@ -224,6 +224,7 @@ public class Messages {
     public static final String PARTICLE_EMITTER_MAX_PARTICLES;
     public static final String PARTICLE_EMITTER_EMISSION_PER_SECOND;
     public static final String PARTICLE_EMITTER_PARTICLES_PER_SECOND;
+    public static final String PARTICLE_EMITTER_EMITTER_LIFE;
     public static final String PARTICLE_EMITTER_TEST_PARTICLES;
     public static final String PARTICLE_EMITTER_FOLLOW_EMITTER;
     public static final String PARTICLE_EMITTER_STRETCHING;
@@ -571,6 +572,7 @@ public class Messages {
         PARTICLE_EMITTER_MAX_PARTICLES = bundle.getString("ParticleEmitterMaxParticles");
         PARTICLE_EMITTER_EMISSION_PER_SECOND = bundle.getString("ParticleEmitterEmissionPerSecond");
         PARTICLE_EMITTER_PARTICLES_PER_SECOND = bundle.getString("ParticleEmitterParticlesPerSecond");
+        PARTICLE_EMITTER_EMITTER_LIFE = bundle.getString("ParticleEmitterEmitterLife");
         PARTICLE_EMITTER_TEST_PARTICLES = bundle.getString("ParticleEmitterTestParticles");
         PARTICLE_EMITTER_FOLLOW_EMITTER = bundle.getString("ParticleEmitterFollowEmitter");
         PARTICLE_EMITTER_STRETCHING = bundle.getString("ParticleEmitterStretching");
