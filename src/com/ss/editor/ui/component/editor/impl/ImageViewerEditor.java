@@ -5,6 +5,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.event.impl.FileChangedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -69,13 +70,22 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    public void openFile(@NotNull final Path file) {
-        super.openFile(file);
+    protected void processChangedFile(@NotNull final FileChangedEvent event) {
+        final Path file = event.getFile();
+        if (!getEditFile().equals(file)) return;
+        showImage(file);
+    }
 
+    private void showImage(@NotNull final Path file) {
         final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, IMAGE_SIZE, IMAGE_SIZE);
-
         final ImageView imageView = getImageView();
         imageView.setImage(preview);
+    }
+
+    @Override
+    public void openFile(@NotNull final Path file) {
+        super.openFile(file);
+        showImage(file);
     }
 
     @NotNull

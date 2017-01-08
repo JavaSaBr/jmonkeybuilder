@@ -56,8 +56,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
@@ -109,11 +107,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FAST_SKY_LIST.add("graphics/textures/sky/outside.hdr");
         FAST_SKY_LIST.add("graphics/textures/sky/inside.hdr");
     }
-
-    /**
-     * The file changes listener.
-     */
-    private final EventHandler<Event> fileChangedHandler;
 
     /**
      * The 3D part of this editor.
@@ -207,7 +200,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
     public ModelFileEditor() {
         this.editorAppState = new ModelEditorAppState(this);
-        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         addEditorState(editorAppState);
@@ -225,10 +217,8 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         setDirty(result != 0);
     }
 
-    /**
-     * Handle a changed file.
-     */
-    private void processChangedFile(@NotNull final FileChangedEvent event) {
+    @Override
+    protected void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
@@ -275,14 +265,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
             final Material newMaterial = updateMaterialIdNeed(file, material);
             if (newMaterial != null) geometry.setMaterial(newMaterial);
         });
-    }
-
-    /**
-     * @return the file changes listener.
-     */
-    @NotNull
-    private EventHandler<Event> getFileChangedHandler() {
-        return fileChangedHandler;
     }
 
     @NotNull
@@ -365,7 +347,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
             setIgnoreListeners(false);
         }
 
-        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
         EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
@@ -482,11 +463,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public void undo() {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.undo();
-    }
-
-    @Override
-    public void notifyClosed() {
-        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     @NotNull

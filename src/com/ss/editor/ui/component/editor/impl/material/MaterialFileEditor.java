@@ -46,8 +46,6 @@ import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
@@ -84,11 +82,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
     private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
-
-    /**
-     * The handler of file changing.
-     */
-    private final EventHandler<Event> fileChangedHandler;
 
     /**
      * 3D part of this editor.
@@ -192,7 +185,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     public MaterialFileEditor() {
         this.editorAppState = new MaterialEditorAppState(this);
-        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         addEditorState(editorAppState);
@@ -210,10 +202,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         setDirty(result != 0);
     }
 
-    /**
-     * Handle changed file.
-     */
-    private void processChangedFile(final FileChangedEvent event) {
+    @NotNull
+    protected void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Material currentMaterial = getCurrentMaterial();
         final Path file = event.getFile();
@@ -371,13 +361,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         return materialRenderParamsComponent;
     }
 
-    /**
-     * @return the handler of file changing.
-     */
-    private EventHandler<Event> getFileChangedHandler() {
-        return fileChangedHandler;
-    }
-
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
@@ -398,7 +381,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         reload(material);
 
-        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
         EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
@@ -500,11 +482,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         } finally {
             setIgnoreListeners(false);
         }
-    }
-
-    @Override
-    public void notifyClosed() {
-        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     /**

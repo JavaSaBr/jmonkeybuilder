@@ -38,8 +38,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -86,11 +84,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
     }
 
     /**
-     * The listener changed files events.
-     */
-    private final EventHandler<Event> fileChangedHandler;
-
-    /**
      * The 3D part of this editor.
      */
     private final PostFilterEditorAppState editorState;
@@ -122,7 +115,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
     public PostFilterEditor() {
         this.editorState = new PostFilterEditorAppState(this);
-        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         addEditorState(editorState);
     }
 
@@ -180,26 +172,10 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         } finally {
             setIgnoreListeners(false);
         }
-
-        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     @Override
-    public void notifyClosed() {
-        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
-    }
-
-    /**
-     * @return the listener changed files events.
-     */
-    private EventHandler<Event> getFileChangedHandler() {
-        return fileChangedHandler;
-    }
-
-    /**
-     * Handle the event of changing a file.
-     */
-    private void processChangedFile(final FileChangedEvent event) {
+    protected void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);

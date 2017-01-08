@@ -68,12 +68,17 @@ public class MaterialUtils {
             needToReload = true;
         }
 
+        final AssetManager assetManager = EDITOR.getAssetManager();
         final String assetName = material.getAssetName();
-        if (!needToReload || StringUtils.isEmpty(assetName)) return null;
+
+        // try to refresh texture directly
+        if (assetName == null && textureKey != null) {
+            assetManager.clearCache();
+            refreshTextures(material, textureKey);
+            return null;
+        } else if (!needToReload || StringUtils.isEmpty(assetName)) return null;
 
         final MaterialKey materialKey = new MaterialKey(assetName);
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.deleteFromCache(materialKey);
 
         if (textureKey != null) {
@@ -179,6 +184,35 @@ public class MaterialUtils {
                 FileExtensions.IMAGE_HDR.equals(extension) || FileExtensions.IMAGE_JPEG.equals(extension) ||
                 FileExtensions.IMAGE_JPG.equals(extension) || FileExtensions.IMAGE_PNG.equals(extension) ||
                 FileExtensions.IMAGE_TGA.equals(extension) || FileExtensions.IMAGE_TIFF.equals(extension);
+
+    }
+
+    /**
+     * Refresh textures in a material.
+     *
+     * @param material   the material.
+     * @param textureKey the texture key.
+     */
+    public static void refreshTextures(@NotNull final Material material, @NotNull final String textureKey) {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        final Collection<MatParam> params = material.getParams();
+        params.forEach(matParam -> {
+
+            final VarType varType = matParam.getVarType();
+            final Object value = matParam.getValue();
+
+            if (varType != VarType.Texture2D || value == null) return;
+
+            final Texture texture = (Texture) value;
+            final TextureKey key = (TextureKey) texture.getKey();
+
+            if (key != null && StringUtils.equals(key.getName(), textureKey)) {
+                final Texture newTexture = assetManager.loadAsset(key);
+                matParam.setValue(newTexture);
+            }
+        });
 
     }
 
