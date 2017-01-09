@@ -7,14 +7,14 @@
 
 ## ver. 0.9.0 ##
 * [Video](https://www.youtube.com/watch?v=LNrDesrg7zc&feature=youtu.be)
-* -Implemented soft particles emitter
-* -Fixed gamma correction and updated fast envs in the ModelEditor
-* -Fixed some problems with standard shaders
-* -Fixed the some bugs with editing influencers
-* -Implemented auto-refreshing files which was edited from external editors
-* -Implemented memory optimizations of the toneg0d emitters
+* -Implemented soft particles emitter.
+* -Fixed gamma correction and updated fast envs in the ModelEditor.
+* -Fixed some problems with standard shaders.
+* -Fixed the some bugs with editing influencers.
+* -Implemented auto-refreshing files which was edited from external editors.
+* -Implemented memory optimizations of the toneg0d emitters.
 * -Added lifetime of an emitter node.
-* -Added control to edit geometry list of a physics influencer
+* -Added control to edit geometry list of a physics influencer.
 
 ## ver. 0.8.9 ##
 * [Video](https://www.youtube.com/watch?v=xCSUIia-jh4&feature=youtu.be)
