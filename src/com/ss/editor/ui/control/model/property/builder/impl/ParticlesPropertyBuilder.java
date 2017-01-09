@@ -236,8 +236,8 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(emissionPointControl, container);
         FXUtils.addToPane(maxParticlesControl, container);
         FXUtils.addToPane(emissionPerSecControl, container);
-        FXUtils.addToPane(emitterLifeControl, container);
         FXUtils.addToPane(particlesPerEmissionControl, container);
+        FXUtils.addToPane(emitterLifeControl, container);
 
         addSplitLine(container);
     }
