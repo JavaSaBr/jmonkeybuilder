@@ -1,9 +1,19 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.8.9 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.0 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.0 ##
+* -Implemented soft particles emitter
+* -Fixed gamma correction and updated fast envs in the ModelEditor
+* -Fixed some problems with standard shaders
+* -Fixed the some bugs with editing influencers
+* -Implemented auto-refreshing files which was edited from external editors
+* -Implemented memory optimizations of the toneg0d emitters
+* -Added lifetime of an emitter node.
+* -Added control to edit geometry list of a physics influencer
 
 ## ver. 0.8.9 ##
 * [Video](https://www.youtube.com/watch?v=xCSUIia-jh4&feature=youtu.be)
