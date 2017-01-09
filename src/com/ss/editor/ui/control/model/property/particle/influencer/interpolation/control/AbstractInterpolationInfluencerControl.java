@@ -41,7 +41,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
-     * The color influencer.
+     * The influencer.
      */
     private final I influencer;
 
@@ -110,7 +110,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
-     * @return the color influencer.
+     * @return the influencer.
      */
     @NotNull
     public I getInfluencer() {

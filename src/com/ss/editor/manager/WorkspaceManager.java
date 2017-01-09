@@ -1,5 +1,8 @@
 package com.ss.editor.manager;
 
+import static java.util.Objects.requireNonNull;
+import static rlib.util.Util.get;
+
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.util.EditorUtil;
@@ -11,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import rlib.manager.InitializeManager;
-import rlib.util.Util;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
@@ -93,7 +95,7 @@ public class WorkspaceManager {
         Workspace workspace;
 
         try {
-            workspace = EditorUtil.deserialize(Util.safeGet(workspaceFile, Files::readAllBytes));
+            workspace = EditorUtil.deserialize(requireNonNull(get(workspaceFile, Files::readAllBytes)));
         } catch (final RuntimeException e) {
             workspace = new Workspace();
         }

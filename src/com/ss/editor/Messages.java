@@ -158,6 +158,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE;
@@ -223,6 +224,7 @@ public class Messages {
     public static final String PARTICLE_EMITTER_MAX_PARTICLES;
     public static final String PARTICLE_EMITTER_EMISSION_PER_SECOND;
     public static final String PARTICLE_EMITTER_PARTICLES_PER_SECOND;
+    public static final String PARTICLE_EMITTER_EMITTER_LIFE;
     public static final String PARTICLE_EMITTER_TEST_PARTICLES;
     public static final String PARTICLE_EMITTER_FOLLOW_EMITTER;
     public static final String PARTICLE_EMITTER_STRETCHING;
@@ -266,6 +268,8 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED;
     public static final String PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X;
     public static final String PARTICLE_EMITTER_INFLUENCER_INTERPOLATION;
+    public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
+    public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
@@ -343,6 +347,11 @@ public class Messages {
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS;
     public static final String BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX;
+
+    public static final String NODE_SELECTOR_DIALOG_TITLE;
+    public static final String NODE_SELECTOR_DIALOG_BUTTON;
+
+    public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
 
     public static final String LOG_VIEW_TITLE;
 
@@ -504,6 +513,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
+        MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER = bundle.getString("ModelNodeTreeActionCreateSoftTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePrimitiveShape");
@@ -569,6 +579,7 @@ public class Messages {
         PARTICLE_EMITTER_MAX_PARTICLES = bundle.getString("ParticleEmitterMaxParticles");
         PARTICLE_EMITTER_EMISSION_PER_SECOND = bundle.getString("ParticleEmitterEmissionPerSecond");
         PARTICLE_EMITTER_PARTICLES_PER_SECOND = bundle.getString("ParticleEmitterParticlesPerSecond");
+        PARTICLE_EMITTER_EMITTER_LIFE = bundle.getString("ParticleEmitterEmitterLife");
         PARTICLE_EMITTER_TEST_PARTICLES = bundle.getString("ParticleEmitterTestParticles");
         PARTICLE_EMITTER_FOLLOW_EMITTER = bundle.getString("ParticleEmitterFollowEmitter");
         PARTICLE_EMITTER_STRETCHING = bundle.getString("ParticleEmitterStretching");
@@ -612,6 +623,8 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED = bundle.getString("ParticleEmitterInfluencerRandomSpeed");
         PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X = bundle.getString("ParticleEmitterInfluencerStartRandomRotationX");
         PARTICLE_EMITTER_INFLUENCER_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST = bundle.getString("ParticleEmitterInfluencerGeometryList");
+        PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 
@@ -689,6 +702,11 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS = bundle.getString("BoundingVolumeModelPropertyControlSphereRadius");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
+
+        NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");
+        NODE_SELECTOR_DIALOG_BUTTON = bundle.getString("NodeSelectorDialogButton");
+
+        GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
 
         LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
     }

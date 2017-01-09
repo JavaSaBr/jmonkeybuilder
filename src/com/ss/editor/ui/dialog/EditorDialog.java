@@ -13,6 +13,7 @@ import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -71,6 +72,7 @@ public class EditorDialog extends AbstractPopupDialog {
     /**
      * The last focus owner.
      */
+    @Nullable
     private Node focusOwner;
 
     public EditorDialog() {

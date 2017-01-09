@@ -12,7 +12,8 @@ import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
 import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
 import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateTEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateTonegodEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateTonegodSoftEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateSphereAction;
@@ -80,7 +81,8 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         final Menu menu = super.createCreationMenu(nodeTree);
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this),
                 new CreateSkyAction(nodeTree, this),
-                new CreateTEmitterAction(nodeTree, this),
+                new CreateTonegodEmitterAction(nodeTree, this),
+                new CreateTonegodSoftEmitterAction(nodeTree, this),
                 new CreateAudioNodeAction(nodeTree, this),
                 createPrimitiveMenu, addLightMenu);
 

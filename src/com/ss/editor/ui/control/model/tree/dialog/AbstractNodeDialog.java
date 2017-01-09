@@ -44,6 +44,7 @@ public abstract class AbstractNodeDialog extends EditorDialog {
     /**
      * @return the ok button.
      */
+    @NotNull
     protected Button getOkButton() {
         return okButton;
     }
@@ -74,6 +75,7 @@ public abstract class AbstractNodeDialog extends EditorDialog {
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
+    @NotNull
     protected String getButtonOkLabel() {
         return Messages.NODE_DIALOG_BUTTON_OK;
     }

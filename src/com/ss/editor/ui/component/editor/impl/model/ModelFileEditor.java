@@ -1,10 +1,13 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
+import com.jme3.asset.TextureKey;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
@@ -13,6 +16,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
@@ -37,7 +41,6 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 
@@ -53,8 +56,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
@@ -72,6 +73,7 @@ import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link AbstractFileEditor} for working with {@link Spatial}.
@@ -106,11 +108,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         FAST_SKY_LIST.add("graphics/textures/sky/outside.hdr");
         FAST_SKY_LIST.add("graphics/textures/sky/inside.hdr");
     }
-
-    /**
-     * The file changes listener.
-     */
-    private final EventHandler<Event> fileChangedHandler;
 
     /**
      * The 3D part of this editor.
@@ -204,7 +201,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
     public ModelFileEditor() {
         this.editorAppState = new ModelEditorAppState(this);
-        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         addEditorState(editorAppState);
@@ -222,16 +218,16 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         setDirty(result != 0);
     }
 
-    /**
-     * Handle a changed file.
-     */
-    private void processChangedFile(@NotNull final FileChangedEvent event) {
+    @Override
+    protected void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            updateMaterial(file);
+            EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterial(file));
+        } else if (MaterialUtils.isShaderFile(file) || MaterialUtils.isTextureFile(file)) {
+            EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterials(file));
         }
     }
 
@@ -241,14 +237,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     private void updateMaterial(@NotNull final Path file) {
 
         final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final String assetPath = toAssetPath(assetFile);
 
         final Spatial currentModel = getCurrentModel();
 
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
-
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
-
         if (geometries.isEmpty()) return;
 
         final MaterialKey materialKey = new MaterialKey(assetPath);
@@ -257,16 +251,37 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         assetManager.deleteFromCache(materialKey);
 
         final Material material = assetManager.loadMaterial(assetPath);
+        geometries.forEach(geometry -> geometry.setMaterial(material));
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> geometries.forEach(geometry -> geometry.setMaterial(material)));
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        translucentBucketFilter.refresh();
     }
 
     /**
-     * @return the file changes listener.
+     * Updating materials.
      */
-    @NotNull
-    private EventHandler<Event> getFileChangedHandler() {
-        return fileChangedHandler;
+    private void updateMaterials(@NotNull final Path file) {
+
+        final Spatial currentModel = getCurrentModel();
+        final AtomicInteger needRefresh = new AtomicInteger();
+
+        NodeUtils.visitGeometry(currentModel, geometry -> {
+
+            final Material material = geometry.getMaterial();
+            final Material newMaterial = updateMaterialIdNeed(file, material);
+
+            if (newMaterial != null) {
+                geometry.setMaterial(newMaterial);
+                needRefresh.incrementAndGet();
+            }
+        });
+
+        if (needRefresh.get() < 1) {
+            return;
+        }
+
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        translucentBucketFilter.refresh();
     }
 
     @NotNull
@@ -321,7 +336,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
 
         Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
 
-        final ModelKey modelKey = new ModelKey(EditorUtil.toAssetPath(assetFile));
+        final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         assetManager.deleteFromCache(modelKey);
@@ -349,7 +364,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
             setIgnoreListeners(false);
         }
 
-        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
         EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
@@ -466,11 +480,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public void undo() {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.undo();
-    }
-
-    @Override
-    public void notifyClosed() {
-        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
     }
 
     @NotNull
@@ -638,7 +647,6 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         setDirty(false);
-        notifyFileChanged();
     }
 
     @Override
@@ -900,7 +908,12 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Spatial newFastSky = SkyFactory.createSky(assetManager, newSky, EnvMapType.EquirectMap);
+
+        final TextureKey key = new TextureKey(newSky, true);
+        key.setGenerateMips(false);
+
+        final Texture texture = assetManager.loadTexture(key);
+        final Spatial newFastSky = SkyFactory.createSky(assetManager, texture, EnvMapType.EquirectMap);
 
         editorAppState.changeFastSky(newFastSky);
 

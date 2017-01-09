@@ -2,7 +2,7 @@
   <configuration default="false" name="Editor" type="Application" factoryName="Application">
     <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
     <option name="MAIN_CLASS_NAME" value="com.ss.editor.JFXApplication" />
-    <option name="VM_PARAMETERS" value="-Xms512m -Xmx1024m -XX:+AggressiveOpts -XX:+UseParallelGC -XX:+UseTLAB -Djfx.background.render=LWJGL-OpenGL3 -Duser.language=ru -Duser.region=RU -Dprism.verbose=false -Dprism.lcdtext=false -Dprism.text=t2k -Dquantum.verbose=false" />
+    <option name="VM_PARAMETERS" value="-Xms512m -Xmx1024m -XX:+AggressiveOpts -XX:+UseParallelGC -XX:+UseTLAB -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -Djfx.background.render=LWJGL-OpenGL3 -Duser.language=ru -Duser.region=RU -Dprism.verbose=false -Dprism.lcdtext=false -Dprism.text=t2k -Dquantum.verbose=false" />
     <option name="PROGRAM_PARAMETERS" value="-v -d" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />

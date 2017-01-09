@@ -1,6 +1,6 @@
 package com.ss.editor.config;
 
-import static rlib.util.Util.safeGet;
+import static rlib.util.Util.get;
 
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
@@ -509,13 +509,13 @@ public final class EditorConfig implements AssetEventListener {
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
         if (currentAssetURI != null) {
-            this.currentAsset = safeGet(currentAssetURI, uri -> Paths.get(new URI(uri)));
+            this.currentAsset = get(currentAssetURI, uri -> Paths.get(new URI(uri)));
         }
 
         final String classpathURI = prefs.get(PREF_ADDITIONAL_CLASSPATH, null);
 
         if (classpathURI != null) {
-            this.additionalClasspath = safeGet(classpathURI, uri -> Paths.get(new URI(uri)));
+            this.additionalClasspath = get(classpathURI, uri -> Paths.get(new URI(uri)));
         }
 
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);

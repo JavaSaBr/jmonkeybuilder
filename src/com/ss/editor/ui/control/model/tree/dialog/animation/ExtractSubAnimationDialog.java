@@ -234,6 +234,7 @@ public class ExtractSubAnimationDialog extends AbstractNodeDialog {
         EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
     }
 
+    @NotNull
     @Override
     protected String getButtonOkLabel() {
         return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;

@@ -62,7 +62,7 @@ public class ClasspathManager {
         if (path == null) return;
 
         final Array<Path> jars = FileUtils.getFiles(path, false, EXTENSIONS);
-        final URL[] urls = jars.stream().map(jar -> Util.safeGet(jar, FileUtils::toUrl)).toArray(URL[]::new);
+        final URL[] urls = jars.stream().map(jar -> Util.get(jar, FileUtils::toUrl)).toArray(URL[]::new);
         final URLClassLoader newCL = new URLClassLoader(urls, getClass().getClassLoader());
 
         ASSET_MANAGER.addClassLoader(newCL);

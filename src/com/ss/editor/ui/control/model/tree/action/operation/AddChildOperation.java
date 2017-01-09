@@ -8,9 +8,10 @@ import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
+
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a new {@link Spatial} to a
- * {@link Node}.
+ * The implementation of the {@link AbstractEditorOperation} for adding a new {@link Spatial} to a {@link Node}.
  *
  * @author JavaSaBr.
  */
@@ -42,6 +43,9 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
 
             final Node node = (Node) parent;
             node.attachChildAt(newChild, 0);
+
+            final TonegodTranslucentBucketFilter filter = EDITOR.getTranslucentBucketFilter();
+            filter.refresh();
 
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, newChild, 0));
         });

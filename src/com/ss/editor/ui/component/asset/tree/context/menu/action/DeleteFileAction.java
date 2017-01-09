@@ -8,6 +8,8 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 import javafx.scene.control.MenuItem;
@@ -26,9 +28,10 @@ public class DeleteFileAction extends MenuItem {
     /**
      * The node in the tree.
      */
+    @NotNull
     private final ResourceElement element;
 
-    public DeleteFileAction(final ResourceElement element) {
+    public DeleteFileAction(@NotNull final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
         setOnAction(event -> processDelete());
@@ -62,7 +65,7 @@ public class DeleteFileAction extends MenuItem {
     /**
      * Handle the answer.
      */
-    private void handle(final Path file, final Boolean result) {
+    private void handle(@NotNull final Path file, @NotNull final Boolean result) {
         if (!result) return;
         FileUtils.delete(file);
     }

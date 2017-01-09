@@ -23,6 +23,8 @@ import java.time.LocalTime;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -58,6 +60,12 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private final Array<EditorAppState> editorStates;
 
     /**
+     * The file changes listener.
+     */
+    @NotNull
+    private final EventHandler<Event> fileChangedHandler;
+
+    /**
      * The dirty property.
      */
     @NotNull
@@ -83,6 +91,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.showedTime = LocalTime.now();
         this.editorStates = ArrayFactory.newArray(EditorAppState.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
+        this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         createContent();
     }
 
@@ -230,6 +239,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     public void openFile(@NotNull final Path file) {
+        FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
+
         this.file = file;
         this.showedTime = LocalTime.now();
 
@@ -265,17 +276,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return editorStates;
     }
 
-    /**
-     * Notify about changing the file.
-     */
-    protected void notifyFileChanged() {
-
-        final FileChangedEvent event = new FileChangedEvent();
-        event.setFile(getEditFile());
-
-        FX_EVENT_MANAGER.notify(event);
-    }
-
     @Override
     public void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
@@ -295,7 +295,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     @Override
-    public void notifyMoved(@NotNull Path prevFile, @NotNull Path newFile) {
+    public void notifyMoved(@NotNull final Path prevFile, final @NotNull Path newFile) {
 
         final Path editFile = getEditFile();
 
@@ -341,6 +341,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     public void notifyClosed() {
+        FX_EVENT_MANAGER.removeEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
 
         final Duration duration = Duration.between(showedTime, LocalTime.now());
         final int seconds = (int) duration.getSeconds();
@@ -352,6 +353,20 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         GAnalytics.sendTiming(GAEvent.Category.EDITOR, GAEvent.Label.WORKING_ON_AN_EDITOR,
                 seconds, description.getEditorId());
+    }
+
+    /**
+     * Handle a changed file.
+     */
+    protected void processChangedFile(@NotNull final FileChangedEvent event) {
+    }
+
+    /**
+     * @return the file changes listener.
+     */
+    @NotNull
+    protected EventHandler<Event> getFileChangedHandler() {
+        return fileChangedHandler;
     }
 
     @Override

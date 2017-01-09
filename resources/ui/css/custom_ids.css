@@ -444,6 +444,11 @@
     -fx-padding: 4 2 0 0;
 }
 
+#ModelNodeTreeTransparentContainer {
+    -fx-background-color: transparent;
+    -fx-padding: 4 2 0 0;
+}
+
 #ModelNodeTreeCell {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;

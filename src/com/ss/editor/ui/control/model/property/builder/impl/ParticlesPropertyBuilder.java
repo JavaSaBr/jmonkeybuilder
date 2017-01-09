@@ -22,10 +22,10 @@ import java.util.Objects;
 
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import tonegod.emitter.BillboardMode;
+import tonegod.emitter.EmissionPoint;
 import tonegod.emitter.EmitterMesh.DirectionType;
 import tonegod.emitter.ParticleEmitterNode;
-import tonegod.emitter.ParticleEmitterNode.BillboardMode;
-import tonegod.emitter.ParticleEmitterNode.ParticleEmissionPoint;
 import tonegod.emitter.material.ParticlesMaterial;
 import tonegod.emitter.node.ParticleNode;
 
@@ -38,7 +38,7 @@ import tonegod.emitter.node.ParticleNode;
 public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
 
     public static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
-    public static final ParticleEmissionPoint[] PARTICLE_EMISSION_POINTS = ParticleEmissionPoint.values();
+    public static final EmissionPoint[] PARTICLE_EMISSION_POINTS = EmissionPoint.values();
 
     private static final PropertyBuilder INSTANCE = new ParticlesPropertyBuilder();
 
@@ -130,7 +130,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
         spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
         spriteCountControl.setEditObject(emitterNode);
-        ;
+
         FXUtils.addToPane(testParticlesModeControl, container);
         FXUtils.addToPane(particlesFollowEmitControl, container);
         FXUtils.addToPane(particlesStretchingControl, container);
@@ -156,9 +156,10 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         final int maxParticles = emitterNode.getMaxParticles();
         final int emissionsPerSecond = emitterNode.getEmissionsPerSecond();
         final int particlesPerEmission = emitterNode.getParticlesPerEmission();
+        final float emitterLife = emitterNode.getEmitterLife();
 
         final DirectionType directionType = emitterNode.getDirectionType();
-        final ParticleEmissionPoint emissionPoint = emitterNode.getParticleEmissionPoint();
+        final EmissionPoint emissionPoint = emitterNode.getEmissionPoint();
 
         final ModelPropertyControl<ParticleEmitterNode, Boolean> testEmitterModeControl =
                 new BooleanModelPropertyControl<>(enabledTestEmitter, Messages.PARTICLE_EMITTER_TEST_MODE, modelChangeConsumer);
@@ -196,10 +197,10 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         directionTypeControl.setSyncHandler(ParticleEmitterNode::getDirectionType);
         directionTypeControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, ParticleEmissionPoint> emissionPointControl =
+        final ModelPropertyControl<ParticleEmitterNode, EmissionPoint> emissionPointControl =
                 new EnumModelPropertyControl<>(emissionPoint, Messages.PARTICLE_EMITTER_EMISSION_POINT, modelChangeConsumer, PARTICLE_EMISSION_POINTS);
-        emissionPointControl.setApplyHandler(ParticleEmitterNode::setParticleEmissionPoint);
-        emissionPointControl.setSyncHandler(ParticleEmitterNode::getParticleEmissionPoint);
+        emissionPointControl.setApplyHandler(ParticleEmitterNode::setEmissionPoint);
+        emissionPointControl.setSyncHandler(ParticleEmitterNode::getEmissionPoint);
         emissionPointControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> maxParticlesControl =
@@ -220,6 +221,12 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         particlesPerEmissionControl.setSyncHandler(ParticleEmitterNode::getParticlesPerEmission);
         particlesPerEmissionControl.setEditObject(emitterNode);
 
+        final FloatModelPropertyControl<ParticleEmitterNode> emitterLifeControl =
+                new FloatModelPropertyControl<>(emitterLife, Messages.PARTICLE_EMITTER_EMITTER_LIFE, modelChangeConsumer);
+        emitterLifeControl.setApplyHandler(ParticleEmitterNode::setEmitterLife);
+        emitterLifeControl.setSyncHandler(ParticleEmitterNode::getEmitterLife);
+        emitterLifeControl.setEditObject(emitterNode);
+
         FXUtils.addToPane(testEmitterModeControl, container);
         FXUtils.addToPane(enableControl, container);
         FXUtils.addToPane(randomPointControl, container);
@@ -230,6 +237,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(maxParticlesControl, container);
         FXUtils.addToPane(emissionPerSecControl, container);
         FXUtils.addToPane(particlesPerEmissionControl, container);
+        FXUtils.addToPane(emitterLifeControl, container);
 
         addSplitLine(container);
     }

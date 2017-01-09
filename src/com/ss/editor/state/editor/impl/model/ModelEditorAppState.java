@@ -56,6 +56,7 @@ import rlib.util.array.ArrayFactory;
 import rlib.util.array.ArrayIterator;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The implementation of the {@link AdvancedAbstractEditorAppState} for the {@link ModelFileEditor}.
@@ -577,6 +578,9 @@ public class ModelEditorAppState extends AdvancedAbstractEditorAppState<ModelFil
 
         final Node customSkyNode = getCustomSkyNode();
         customSkyNode.detachAllChildren();
+
+        final TonegodTranslucentBucketFilter translucentBucketFilter = EDITOR.getTranslucentBucketFilter();
+        translucentBucketFilter.refresh();
     }
 
     /**
