@@ -6,6 +6,7 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.9.0 ##
+* [Video](https://www.youtube.com/watch?v=LNrDesrg7zc&feature=youtu.be)
 * -Implemented soft particles emitter
 * -Fixed gamma correction and updated fast envs in the ModelEditor
 * -Fixed some problems with standard shaders
