@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -9,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.layout.HBox;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
 /**

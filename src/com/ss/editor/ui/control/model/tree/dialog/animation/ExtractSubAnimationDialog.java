@@ -7,7 +7,6 @@ import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
@@ -30,6 +29,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
 /**

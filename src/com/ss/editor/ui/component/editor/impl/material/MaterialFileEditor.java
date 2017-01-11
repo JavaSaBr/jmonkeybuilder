@@ -202,16 +202,18 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         setDirty(result != 0);
     }
 
-    @NotNull
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Material currentMaterial = getCurrentMaterial();
         final Path file = event.getFile();
 
-        final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
-        if (newMaterial == null) return;
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-        reload(newMaterial);
+            final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
+            if (newMaterial == null) return;
+
+            EXECUTOR_MANAGER.addFXTask(() -> reload(newMaterial));
+        });
     }
 
     /**

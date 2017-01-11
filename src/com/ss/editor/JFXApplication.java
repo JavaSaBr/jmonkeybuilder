@@ -4,8 +4,11 @@ import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static java.nio.file.Files.newOutputStream;
 
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
+import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
@@ -14,12 +17,16 @@ import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.sun.istack.internal.NotNull;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -38,11 +45,19 @@ public class JFXApplication extends Application {
 
     private static JFXApplication instance;
 
+    @FromAnyThread
     public static JFXApplication getInstance() {
         return instance;
     }
 
+    /**
+     * Get the current stage of JavaFX.
+     *
+     * @return the current stage.
+     */
+    @FromAnyThread
     public static Stage getStage() {
+        final JFXApplication instance = JFXApplication.instance;
         return instance == null ? null : instance.stage;
     }
 
@@ -80,6 +95,7 @@ public class JFXApplication extends Application {
         new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
     }
 
+    @FromAnyThread
     public static void start() {
         launch();
     }
@@ -100,11 +116,19 @@ public class JFXApplication extends Application {
     /**
      * The JavaFX scene.
      */
+    @Nullable
     private volatile EditorFXScene scene;
+
+    /**
+     * The scene processor.
+     */
+    @Nullable
+    private volatile FrameTransferSceneProcessor sceneProcessor;
 
     /**
      * The stage.
      */
+    @Nullable
     private Stage stage;
 
     @Override
@@ -154,6 +178,7 @@ public class JFXApplication extends Application {
         buildScene();
     }
 
+    @FXThread
     public void onExit() {
 
         GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
@@ -174,13 +199,16 @@ public class JFXApplication extends Application {
     /**
      * Build the scene.
      */
+    @FXThread
     public void buildScene() {
         this.scene = EditorFXSceneBuilder.build(stage);
-        this.scene.notifyFinishBuild();
+
+        final EditorFXScene scene = getScene();
+        scene.notifyFinishBuild();
 
         final Editor editor = Editor.getInstance();
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
-        executor.addToExecute(() -> bind(editor, scene.getCanvas(), editor.getViewPort()));
+        executor.addToExecute(() -> sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort()));
 
         JMEFilePreviewManager.getInstance();
 
@@ -189,9 +217,24 @@ public class JFXApplication extends Application {
     }
 
     /**
+     * Get the current JavaFX scene.
+     *
      * @return the JavaFX scene.
      */
+    @NotNull
+    @FromAnyThread
     public EditorFXScene getScene() {
-        return scene;
+        return Objects.requireNonNull(scene, "Scene can't be null.");
+    }
+
+    /**
+     * Get the current scene processor of this application.
+     *
+     * @return the scene processor.
+     */
+    @NotNull
+    @FromAnyThread
+    public FrameTransferSceneProcessor getSceneProcessor() {
+        return Objects.requireNonNull(sceneProcessor, "Scene processor can't be null.");
     }
 }

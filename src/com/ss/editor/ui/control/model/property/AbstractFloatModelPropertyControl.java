@@ -2,13 +2,13 @@ package com.ss.editor.ui.control.model.property;
 
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.fx.FloatTextField;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
 
 import javafx.scene.layout.HBox;
+import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
 
 /**

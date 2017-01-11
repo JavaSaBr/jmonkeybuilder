@@ -56,6 +56,7 @@ public final class EditorConfig implements AssetEventListener {
 
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     public static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
+    public static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
     public static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
     public static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
@@ -110,9 +111,14 @@ public final class EditorConfig implements AssetEventListener {
     private volatile int anisotropy;
 
     /**
-     * The current frameRate.
+     * The current frame rate.
      */
     private volatile int frameRate;
+
+    /**
+     * The current camera angle.
+     */
+    private volatile int cameraAngle;
 
     /**
      * The width of this screen.
@@ -451,6 +457,22 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @param cameraAngle the camera angle.
+     */
+    @FromAnyThread
+    public void setCameraAngle(final int cameraAngle) {
+        this.cameraAngle = cameraAngle;
+    }
+
+    /**
+     * @return the camera angle.
+     */
+    @FromAnyThread
+    public int getCameraAngle() {
+        return cameraAngle;
+    }
+
+    /**
      * @return the settings for JME.
      */
     @FromAnyThread
@@ -505,6 +527,7 @@ public final class EditorConfig implements AssetEventListener {
         this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
         this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
+        this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -542,6 +565,8 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final RuntimeException e) {
             LOGGER.warning(e);
         }
+
+        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(getCameraAngle()));
     }
 
     /**
@@ -563,6 +588,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
         prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
+        prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
@@ -593,5 +619,7 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final BackingStoreException e) {
             throw new RuntimeException(e);
         }
+
+        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(getCameraAngle()));
     }
 }

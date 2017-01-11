@@ -4,7 +4,6 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
-import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
@@ -28,6 +27,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
 /**

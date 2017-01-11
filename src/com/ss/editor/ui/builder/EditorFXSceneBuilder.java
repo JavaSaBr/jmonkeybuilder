@@ -4,6 +4,7 @@ import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
@@ -13,6 +14,7 @@ import com.ss.editor.ui.component.tab.GlobalToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.sun.istack.internal.NotNull;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -51,7 +53,9 @@ public class EditorFXSceneBuilder {
      */
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
-    public static EditorFXScene build(final Stage stage) {
+    @NotNull
+    @FXThread
+    public static EditorFXScene build(@NotNull final Stage stage) {
 
         final Group root = new Group();
         //root.getTransforms().add(new Scale(1.5, 1.5));
@@ -70,6 +74,8 @@ public class EditorFXSceneBuilder {
         container.setAlignment(TOP_CENTER);
 
         build(scene, container, stage);
+
+        //TODO implement scalling
         //bindFixedSize(container, scene.widthProperty().divide(1.5), scene.heightProperty().divide(1.5));
 
         stage.setScene(scene);
@@ -77,7 +83,7 @@ public class EditorFXSceneBuilder {
         return scene;
     }
 
-    private static void build(final EditorFXScene scene, final StackPane container, final Stage stage) {
+    private static void build(@NotNull final EditorFXScene scene, @NotNull final StackPane container, @NotNull final Stage stage) {
 
         final Canvas canvas = scene.getCanvas();
         final EditorBarComponent barComponent = new EditorBarComponent();

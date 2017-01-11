@@ -3,6 +3,7 @@ package com.ss.editor.ui.dialog;
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
+import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
@@ -10,7 +11,6 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -39,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
@@ -58,7 +59,7 @@ public class SettingsDialog extends EditorDialog {
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 396);
+    private static final Point DIALOG_SIZE = new Point(600, 426);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -132,7 +133,12 @@ public class SettingsDialog extends EditorDialog {
     /**
      * The frame rate field.
      */
-    private IntegerTextField frameRateTextField;
+    private IntegerTextField frameRateField;
+
+    /**
+     * The camera angle field.
+     */
+    private IntegerTextField cameraAngleField;
 
     /**
      * The additional classpath folder.
@@ -185,6 +191,7 @@ public class SettingsDialog extends EditorDialog {
         createAnisotropyControl(root);
         createGammaCorrectionControl(root);
         createFrameRateControl(root);
+        createCameraAngleControl(root);
         createFXAAControl(root);
         createGoogleAnalyticsControl(root);
         createDecoratedControl(root);
@@ -263,12 +270,10 @@ public class SettingsDialog extends EditorDialog {
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAdditionalCP = config.getAdditionalClasspath();
         final File currentFolder = currentAdditionalCP == null ? null : currentAdditionalCP.toFile();
-
         if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
-
         if (folder == null) return;
 
         setAdditionalClasspathFolder(folder.toPath());
@@ -517,7 +522,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the frame rate control
+     * Create the frame rate control.
      */
     private void createFrameRateControl(@NotNull final VBox root) {
 
@@ -527,18 +532,45 @@ public class SettingsDialog extends EditorDialog {
         final Label label = new Label(Messages.SETTINGS_DIALOG_FRAME_RATE + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
-        frameRateTextField = new IntegerTextField();
-        frameRateTextField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        frameRateTextField.prefWidthProperty().bind(root.widthProperty());
-        frameRateTextField.setMinMax(5, 100);
-        frameRateTextField.addChangeListener((observable, oldValue, newValue) -> validate());
+        frameRateField = new IntegerTextField();
+        frameRateField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        frameRateField.prefWidthProperty().bind(root.widthProperty());
+        frameRateField.setMinMax(5, 100);
+        frameRateField.addChangeListener((observable, oldValue, newValue) -> validate());
 
         FXUtils.addToPane(label, container);
-        FXUtils.addToPane(frameRateTextField, container);
+        FXUtils.addToPane(frameRateField, container);
         FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(frameRateTextField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(frameRateField, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the camera angle control.
+     */
+    private void createCameraAngleControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_CAMERA_ANGLE + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        cameraAngleField = new IntegerTextField();
+        cameraAngleField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        cameraAngleField.prefWidthProperty().bind(root.widthProperty());
+        cameraAngleField.setMinMax(30, 160);
+        cameraAngleField.addChangeListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(cameraAngleField, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(cameraAngleField, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(container, FIELD_OFFSET);
     }
@@ -602,8 +634,15 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return The frame rate field.
      */
-    private IntegerTextField getFrameRateTextField() {
-        return frameRateTextField;
+    private IntegerTextField getFrameRateField() {
+        return frameRateField;
+    }
+
+    /**
+     * @return the camera angle field.
+     */
+    private IntegerTextField getCameraAngleField() {
+        return cameraAngleField;
     }
 
     /**
@@ -706,8 +745,11 @@ public class SettingsDialog extends EditorDialog {
         final Spinner<Double> toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ();
         toneMapFilterWhitePointZ.getValueFactory().setValue((double) toneMapFilterWhitePoint.getZ());
 
-        final IntegerTextField frameRateTextField = getFrameRateTextField();
+        final IntegerTextField frameRateTextField = getFrameRateField();
         frameRateTextField.setValue(editorConfig.getFrameRate());
+
+        final IntegerTextField cameraAngleField = getCameraAngleField();
+        cameraAngleField.setValue(editorConfig.getCameraAngle());
 
         final Path additionalClasspath = editorConfig.getAdditionalClasspath();
 
@@ -769,10 +811,13 @@ public class SettingsDialog extends EditorDialog {
         int needRestart = 0;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
+
         final int currentAnisotropy = editorConfig.getAnisotropy();
+        final int currentFrameRate = editorConfig.getFrameRate();
+        final int currentCameraAngle = editorConfig.getCameraAngle();
+
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
         final boolean currentDecorated = editorConfig.isDecorated();
-        final int currentFrameRate = editorConfig.getFrameRate();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -796,8 +841,11 @@ public class SettingsDialog extends EditorDialog {
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
 
-        final IntegerTextField frameRateTextField = getFrameRateTextField();
+        final IntegerTextField frameRateTextField = getFrameRateField();
         final int frameRate = frameRateTextField.getValue();
+
+        final IntegerTextField cameraAngleField = getCameraAngleField();
+        final int cameraAngle = cameraAngleField.getValue();
 
         final Vector3f toneMapFilterWhitePoint = new Vector3f(toneMapFilterWhitePointX, toneMapFilterWhitePointY, toneMapFilterWhitePointZ);
 
@@ -823,7 +871,13 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
         editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
         editorConfig.setFrameRate(frameRate);
+        editorConfig.setCameraAngle(cameraAngle);
         editorConfig.save();
+
+        if (cameraAngle != currentCameraAngle) {
+            final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+            sceneProcessor.reshape();
+        }
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
