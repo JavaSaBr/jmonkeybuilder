@@ -38,7 +38,7 @@ public class ModelFileEditorState extends AbstractEditorState {
 
     public ModelFileEditorState() {
         this.skyType = 0;
-        this.enableLight = true;
+        this.enableLight = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
         this.enableGrid = true;
         this.enableSelection = true;
     }
@@ -56,6 +56,7 @@ public class ModelFileEditorState extends AbstractEditorState {
     public void setSkyType(final int skyType) {
         final boolean changed = getSkyType() != skyType;
         this.skyType = skyType;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -67,6 +68,7 @@ public class ModelFileEditorState extends AbstractEditorState {
     public void setEnableLight(final boolean enableLight) {
         final boolean changed = isEnableLight() != enableLight;
         this.enableLight = enableLight;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -85,6 +87,7 @@ public class ModelFileEditorState extends AbstractEditorState {
     public void setEnableGrid(final boolean enableGrid) {
         final boolean changed = isEnableGrid() != enableGrid;
         this.enableGrid = enableGrid;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -103,6 +106,7 @@ public class ModelFileEditorState extends AbstractEditorState {
     public void setEnableSelection(final boolean enableSelection) {
         final boolean changed = isEnableSelection() != enableSelection;
         this.enableSelection = enableSelection;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -128,6 +132,7 @@ public class ModelFileEditorState extends AbstractEditorState {
     public void setTransformationType(final int transformationType) {
         final boolean changed = getTransformationType() != transformationType;
         this.transformationType = transformationType;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }

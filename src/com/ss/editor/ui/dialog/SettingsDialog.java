@@ -133,6 +133,16 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox autoTangentGeneratingCheckBox;
 
     /**
+     * The checkbox for enabling use flip texture by default.
+     */
+    private CheckBox defaultUseFlippedTextureCheckBox;
+
+    /**
+     * The checkbox for enabling camera lamp by default.
+     */
+    private CheckBox defaultCameraLampEnabledCheckBox;
+
+    /**
      * The additional classpath field.
      */
     private TextField additionalClasspathField;
@@ -192,11 +202,11 @@ public class SettingsDialog extends EditorDialog {
         final VBox graphicsRoot = new VBox();
         final VBox otherRoot = new VBox();
 
-        final Tab graphicsSettings = new Tab("Graphics");
+        final Tab graphicsSettings = new Tab(Messages.SETTINGS_DIALOG_TAB_GRAPHICS);
         graphicsSettings.setClosable(false);
         graphicsSettings.setContent(graphicsRoot);
 
-        final Tab otherSettings = new Tab("Other");
+        final Tab otherSettings = new Tab(Messages.SETTINGS_DIALOG_TAB_OTHER);
         otherSettings.setClosable(false);
         otherSettings.setContent(otherRoot);
 
@@ -217,6 +227,8 @@ public class SettingsDialog extends EditorDialog {
         createGoogleAnalyticsControl(otherRoot);
         createDecoratedControl(otherRoot);
         createAutoTangentGeneratingControl(otherRoot);
+        createUseFlippedTextureDefaultControl(otherRoot);
+        createDefaultCameraLampEnabledControl(otherRoot);
 
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty().multiply(0.8));
 
@@ -498,7 +510,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the checkbox for configuring decorated windows.
+     * Create the checkbox for configuring enabling google analytics.
      */
     private void createGoogleAnalyticsControl(@NotNull final VBox root) {
 
@@ -523,14 +535,14 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the checkbox for configuring decorated windows.
+     * Create the checkbox for configuring auto tangent generating.
      */
     private void createAutoTangentGeneratingControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
 
-        final Label label = new Label("Auto tangent generating" + ":");
+        final Label label = new Label(Messages.SETTINGS_DIALOG_AUTO_TANGENT_GENERATING + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         autoTangentGeneratingCheckBox = new CheckBox();
@@ -543,6 +555,56 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(autoTangentGeneratingCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the checkbox for configuring using flip textures by default.
+     */
+    private void createUseFlippedTextureDefaultControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        defaultUseFlippedTextureCheckBox = new CheckBox();
+        defaultUseFlippedTextureCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        defaultUseFlippedTextureCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(defaultUseFlippedTextureCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(defaultUseFlippedTextureCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the checkbox for configuring enabling camera lamp by default.
+     */
+    private void createDefaultCameraLampEnabledControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        defaultCameraLampEnabledCheckBox = new CheckBox();
+        defaultCameraLampEnabledCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        defaultCameraLampEnabledCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(defaultCameraLampEnabledCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(defaultCameraLampEnabledCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(container, FIELD_OFFSET);
     }
@@ -718,6 +780,22 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * @return the checkbox for enabling camera lamp by default.
+     */
+    @NotNull
+    private CheckBox getDefaultCameraLampEnabledCheckBox() {
+        return defaultCameraLampEnabledCheckBox;
+    }
+
+    /**
+     * @return the checkbox for enabling use flip texture by default.
+     */
+    @NotNull
+    private CheckBox getDefaultUseFlippedTextureCheckBox() {
+        return defaultUseFlippedTextureCheckBox;
+    }
+
+    /**
      * @return the checkbox for enabling google analytics.
      */
     @NotNull
@@ -800,6 +878,12 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox autoTangentGeneratingCheckBox = getAutoTangentGeneratingCheckBox();
         autoTangentGeneratingCheckBox.setSelected(editorConfig.isAutoTangentGenerating());
+
+        final CheckBox defaultCameraLampEnabledCheckBox = getDefaultCameraLampEnabledCheckBox();
+        defaultCameraLampEnabledCheckBox.setSelected(editorConfig.isDefaultEditorCameraEnabled());
+
+        final CheckBox defaultUseFlippedTextureCheckBox = getDefaultUseFlippedTextureCheckBox();
+        defaultUseFlippedTextureCheckBox.setSelected(editorConfig.isDefaultUseFlippedTexture());
 
         final Vector3f toneMapFilterWhitePoint = editorConfig.getToneMapFilterWhitePoint();
 
@@ -907,6 +991,12 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox autoTangentGeneratingCheckBox = getAutoTangentGeneratingCheckBox();
         final boolean autoTangentGenerating = autoTangentGeneratingCheckBox.isSelected();
 
+        final CheckBox defaultCameraLampEnabledCheckBox = getDefaultCameraLampEnabledCheckBox();
+        final boolean cameraLampEnabled = defaultCameraLampEnabledCheckBox.isSelected();
+
+        final CheckBox defaultUseFlippedTextureCheckBox = getDefaultUseFlippedTextureCheckBox();
+        final boolean useFlippedTextures = defaultUseFlippedTextureCheckBox.isSelected();
+
         final float toneMapFilterWhitePointX = getToneMapFilterWhitePointX().getValue().floatValue();
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
@@ -943,6 +1033,8 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setFrameRate(frameRate);
         editorConfig.setCameraAngle(cameraAngle);
         editorConfig.setAutoTangentGenerating(autoTangentGenerating);
+        editorConfig.setDefaultUseFlippedTexture(useFlippedTextures);
+        editorConfig.setDefaultEditorCameraEnabled(cameraLampEnabled);
         editorConfig.save();
 
         if (cameraAngle != currentCameraAngle) {

@@ -146,8 +146,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Constructs the chase camera if you use this constructor you have to attach the camera later
-     * to a spatial doing spatial.addControl(chaseCamera);
+     * Constructs the chase camera if you use this constructor you have to attach the camera later to a spatial doing
+     * spatial.addControl(chaseCamera);
      *
      * @param camera the application camera
      */
@@ -645,9 +645,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Sets the chasing sensitivity, the lower the value the slower the camera will follow the
-     * target when it moves default is 5 Only has an effect if smoothMotion is set to true and
-     * trailing is enabled
+     * Sets the chasing sensitivity, the lower the value the slower the camera will follow the target when it moves
+     * default is 5 Only has an effect if smoothMotion is set to true and trailing is enabled
      */
     public void setChasingSensitivity(float chasingSensitivity) {
         this.chasingSensitivity = chasingSensitivity;
@@ -661,10 +660,9 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Sets the rotation sensitivity, the lower the value the slower the camera will rotates around
-     * the target when draging with the mouse default is 5, values over 5 should have no effect. If
-     * you want a significant slow down try values below 1. Only has an effect if smoothMotion is
-     * set to true
+     * Sets the rotation sensitivity, the lower the value the slower the camera will rotates around the target when
+     * draging with the mouse default is 5, values over 5 should have no effect. If you want a significant slow down try
+     * values below 1. Only has an effect if smoothMotion is set to true
      */
     public void setRotationSensitivity(float rotationSensitivity) {
         this.rotationSensitivity = rotationSensitivity;
@@ -678,8 +676,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Enable the camera trailing : The camera smoothly go in the targets trail when it moves. Only
-     * has an effect if smoothMotion is set to true
+     * Enable the camera trailing : The camera smoothly go in the targets trail when it moves. Only has an effect if
+     * smoothMotion is set to true
      */
     public void setTrailingEnabled(boolean trailingEnabled) {
         this.trailingEnabled = trailingEnabled;
@@ -693,9 +691,9 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Sets the trailing rotation inertia : default is 0.1. This prevent the camera to roughtly stop
-     * when the target stops moving before the camera reached the trail position. Only has an effect
-     * if smoothMotion is set to true and trailing is enabled
+     * Sets the trailing rotation inertia : default is 0.1. This prevent the camera to roughtly stop when the target
+     * stops moving before the camera reached the trail position. Only has an effect if smoothMotion is set to true and
+     * trailing is enabled
      */
     public void setTrailingRotationInertia(float trailingRotationInertia) {
         this.trailingRotationInertia = trailingRotationInertia;
@@ -709,9 +707,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Only has an effect if smoothMotion is set to true and trailing is enabled Sets the trailing
-     * sensitivity, the lower the value, the slower the camera will go in the target trail when it
-     * moves. default is 0.5;
+     * Only has an effect if smoothMotion is set to true and trailing is enabled Sets the trailing sensitivity, the
+     * lower the value, the slower the camera will go in the target trail when it moves. default is 0.5;
      */
     public void setTrailingSensitivity(float trailingSensitivity) {
         this.trailingSensitivity = trailingSensitivity;
@@ -725,8 +722,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Sets the zoom sensitivity, the lower the value, the slower the camera will zoom in and out.
-     * default is 2.
+     * Sets the zoom sensitivity, the lower the value, the slower the camera will zoom in and out. default is 2.
      */
     public void setZoomSensitivity(float zoomSensitivity) {
         this.zoomSensitivity = zoomSensitivity;
@@ -742,8 +738,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Sets the rotate amount when user moves his mouse, the lower the value, the slower the camera
-     * will rotate. default is 1.
+     * Sets the rotate amount when user moves his mouse, the lower the value, the slower the camera will rotate. default
+     * is 1.
      *
      * @param rotationSpeed Rotation speed on mouse movement, default is 1.
      */
@@ -784,10 +780,10 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * @param dragToRotate When true, the user must hold the mouse button and drag over the screen
-     *                     to rotate the camera, and the cursor is visible until dragged. Otherwise,
-     *                     the cursor is invisible at all times and holding the mouse button is not
-     *                     needed to rotate the camera. This feature is disabled by default.
+     * @param dragToRotate When true, the user must hold the mouse button and drag over the screen to rotate the camera,
+     *                     and the cursor is visible until dragged. Otherwise, the cursor is invisible at all times and
+     *                     holding the mouse button is not needed to rotate the camera. This feature is disabled by
+     *                     default.
      */
     public void setDragToRotate(boolean dragToRotate) {
         this.dragToRotate = dragToRotate;

@@ -41,7 +41,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
         modelType = MaterialEditorAppState.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
         openedTool = 0;
-        lightEnable = true;
+        lightEnable = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
     }
 
     /**
@@ -57,6 +57,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
     public void setBucketType(@NotNull final RenderQueue.Bucket bucketType) {
         final boolean changed = getBucketTypeId() != bucketType.ordinal();
         this.bucketTypeId = bucketType.ordinal();
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -82,6 +83,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
     public void setOpenedTool(final int openedTool) {
         final boolean changed = getOpenedTool() != openedTool;
         this.openedTool = openedTool;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -100,6 +102,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
     public void setModelType(@NotNull final MaterialEditorAppState.ModelType modelType) {
         final boolean changed = getModelType() != modelType.ordinal();
         this.modelType = modelType.ordinal();
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -118,6 +121,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
     public void setLightEnable(final boolean lightEnable) {
         final boolean changed = isLightEnable() != lightEnable;
         this.lightEnable = lightEnable;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }

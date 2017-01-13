@@ -4,10 +4,12 @@ import static java.lang.Math.abs;
 
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.EditorToolConfig;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,14 +22,18 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
 
     public static final long serialVersionUID = 2;
 
+    protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
     /**
      * The change handler.
      */
+    @Nullable
     protected transient volatile Runnable changeHandler;
 
     /**
      * The camera location.
      */
+    @Nullable
     protected volatile Vector3f cameraLocation;
 
     /**
@@ -65,14 +71,15 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     @Override
-    public void setChangeHandler(final Runnable changeHandler) {
+    public void setChangeHandler(@Nullable final Runnable changeHandler) {
         this.changeHandler = changeHandler;
     }
 
     /**
      * @return the change handler.
      */
-    private Runnable getChangeHandler() {
+    @Nullable
+    protected Runnable getChangeHandler() {
         return changeHandler;
     }
 
@@ -85,6 +92,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setToolWidth(final int toolWidth) {
         final boolean changed = abs(getToolWidth() - toolWidth) > 3;
         this.toolWidth = toolWidth;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -99,6 +107,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setToolCollapsed(final boolean toolCollapsed) {
         final boolean changed = isToolCollapsed() != toolCollapsed;
         this.toolCollapsed = toolCollapsed;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -110,6 +119,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraHRotation(final float cameraHRotation) {
         final boolean changed = getCameraHRotation() != cameraHRotation;
         this.cameraHRotation = cameraHRotation;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -128,6 +138,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraLocation(@NotNull final Vector3f cameraLocation) {
         final boolean changed = Objects.equals(getCameraLocation(), cameraLocation);
         getCameraLocation().set(cameraLocation);
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -139,7 +150,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     @NotNull
     public Vector3f getCameraLocation() {
         if (cameraLocation == null) cameraLocation = new Vector3f();
-        return cameraLocation;
+        return Objects.requireNonNull(cameraLocation);
     }
 
     /**
@@ -148,6 +159,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraTDistance(final float cameraTDistance) {
         final boolean changed = getCameraTDistance() != cameraTDistance;
         this.cameraTDistance = cameraTDistance;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
@@ -166,6 +178,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraVRotation(final float cameraVRotation) {
         final boolean changed = getCameraVRotation() != cameraVRotation;
         this.cameraVRotation = cameraVRotation;
+        final Runnable changeHandler = getChangeHandler();
         if (changed && changeHandler != null) {
             changeHandler.run();
         }

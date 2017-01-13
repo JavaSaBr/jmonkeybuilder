@@ -46,11 +46,11 @@ public class UIUtils {
     }
 
     public static void unbind(final Node node) {
-        if(node instanceof Control) {
+        if (node instanceof Control) {
             final Control control = (Control) node;
             control.prefWidthProperty().unbind();
             control.prefHeightProperty().unbind();
-        } else if(node instanceof Pane) {
+        } else if (node instanceof Pane) {
             final Pane pane = (Pane) node;
             pane.prefHeightProperty().unbind();
             pane.prefWidthProperty().unbind();

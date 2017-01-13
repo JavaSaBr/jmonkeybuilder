@@ -105,6 +105,11 @@ public class Messages {
     public static final String SETTINGS_DIALOG_MESSAGE;
     public static final String SETTINGS_DIALOG_GOOGLE_ANALYTICS;
     public static final String SETTINGS_DIALOG_CAMERA_ANGLE;
+    public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
+    public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
+    public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
+    public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
+    public static final String SETTINGS_DIALOG_TAB_OTHER;
 
     public static final String OTHER_SETTINGS_DIALOG_TITLE;
     public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
@@ -461,6 +466,11 @@ public class Messages {
         SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
         SETTINGS_DIALOG_GOOGLE_ANALYTICS = bundle.getString("SettingsDialogAnalytics");
         SETTINGS_DIALOG_CAMERA_ANGLE = bundle.getString("SettingsDialogCameraAngle");
+        SETTINGS_DIALOG_AUTO_TANGENT_GENERATING = bundle.getString("SettingsDialogAutoTangentGenerating");
+        SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE = bundle.getString("SettingsDialogUseFlipTexture");
+        SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
+        SETTINGS_DIALOG_TAB_GRAPHICS = bundle.getString("SettingsDialogTabGraphics");
+        SETTINGS_DIALOG_TAB_OTHER = bundle.getString("SettingsDialogTabOther");
 
         OTHER_SETTINGS_DIALOG_TITLE = bundle.getString("OtherSettingsDialogTitle");
         OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("OtherSettingsDialogClasspathFolderLabel");

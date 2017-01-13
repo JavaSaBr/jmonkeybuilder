@@ -48,6 +48,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String SCREEN_ALIAS = "Screen";
     public static final String ASSET_ALIAS = "ASSET";
     public static final String ASSET_OTHER = "Other";
+    public static final String ASSET_EDITING = "Editing";
 
     public static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
     public static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
@@ -69,7 +70,9 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
     public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
     public static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
-    public static final String PREF_AUTO_TANGENT_GENERATING = ASSET_OTHER + "." + "autoTangentGenerating";
+    public static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
+    public static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
+    public static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
 
     private static volatile EditorConfig instance;
 
@@ -175,6 +178,17 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is of enabling auto tangent generating.
      */
     private volatile boolean autoTangentGenerating;
+
+    /**
+     * Flag is of enabling using flip textures by default.
+     */
+    private volatile boolean defaultUseFlippedTexture;
+
+    /**
+     * Flag is of enabling camera lamp in editors by default.
+     */
+    private volatile boolean defaultEditorCameraEnabled;
+
 
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
@@ -463,6 +477,34 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return true if use flip textures by default.
+     */
+    public boolean isDefaultUseFlippedTexture() {
+        return defaultUseFlippedTexture;
+    }
+
+    /**
+     * @param defaultUseFlippedTexture flag is of enabling using flip textures by default.
+     */
+    public void setDefaultUseFlippedTexture(final boolean defaultUseFlippedTexture) {
+        this.defaultUseFlippedTexture = defaultUseFlippedTexture;
+    }
+
+    /**
+     * @return true if enable camera lamp by default.
+     */
+    public boolean isDefaultEditorCameraEnabled() {
+        return defaultEditorCameraEnabled;
+    }
+
+    /**
+     * @param defaultEditorCameraEnabled Flag is of enabling camera lamp in editors by default.
+     */
+    public void setDefaultEditorCameraEnabled(final boolean defaultEditorCameraEnabled) {
+        this.defaultEditorCameraEnabled = defaultEditorCameraEnabled;
+    }
+
+    /**
      * @return the current frameRate.
      */
     @FromAnyThread
@@ -551,6 +593,8 @@ public final class EditorConfig implements AssetEventListener {
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
         this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
         this.autoTangentGenerating = prefs.getBoolean(PREF_AUTO_TANGENT_GENERATING, false);
+        this.defaultUseFlippedTexture = prefs.getBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, true);
+        this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_CAMERA_LAMP_ENABLED, true);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -613,6 +657,8 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
         prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
         prefs.putBoolean(PREF_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
+        prefs.putBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
+        prefs.putBoolean(PREF_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
