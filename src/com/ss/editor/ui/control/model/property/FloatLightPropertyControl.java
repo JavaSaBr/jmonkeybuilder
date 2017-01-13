@@ -4,17 +4,18 @@ import com.jme3.light.Light;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing a number property of the
- * {@link Light}.
+ * The implementation of the {@link ModelPropertyControl} for editing a number property of the {@link Light}.
  *
  * @author JavaSaBr
  */
 public class FloatLightPropertyControl<T extends Light> extends AbstractFloatModelPropertyControl<T> {
 
-    public FloatLightPropertyControl(final Float element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public FloatLightPropertyControl(@NotNull final Float element, @NotNull final String paramName,
+                                     @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

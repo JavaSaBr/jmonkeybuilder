@@ -25,7 +25,7 @@ public class Vector3fParticleInfluencerPropertyControl<T extends ParticleInfluen
     @NotNull
     private Object parent;
 
-    public Vector3fParticleInfluencerPropertyControl(@Nullable final Vector3f element, @NotNull final String paramName,
+    public Vector3fParticleInfluencerPropertyControl(@NotNull final Vector3f element, @NotNull final String paramName,
                                                      @NotNull final ModelChangeConsumer modelChangeConsumer,
                                                      @NotNull final Object parent) {
         super(element, paramName, modelChangeConsumer);

@@ -14,6 +14,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
@@ -146,9 +147,16 @@ public class ModelPropertyControl<D, T> extends VBox implements UpdatableControl
     /**
      * @return the edit object.
      */
-    @Nullable
+    @NotNull
     protected D getEditObject() {
-        return editObject;
+        return Objects.requireNonNull(editObject);
+    }
+
+    /**
+     * @return true if this control has an edit object.
+     */
+    protected boolean hasEditObject() {
+        return editObject != null;
     }
 
     /**

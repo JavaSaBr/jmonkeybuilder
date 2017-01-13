@@ -31,6 +31,7 @@ public class MaterialParamControl extends HBox {
     public static final double CONTROL_PERCENT_WIDTH = 0.6;
     public static final double CONTROL_PERCENT_WIDTH2 = 0.4;
 
+    @NotNull
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     /**

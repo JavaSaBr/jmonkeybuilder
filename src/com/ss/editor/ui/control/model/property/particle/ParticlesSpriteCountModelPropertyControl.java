@@ -10,22 +10,18 @@ import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The implementation of the {@link Vector2fModelPropertyControl} for editing sprite count of the
- * {@link ParticleEmitterNode}.
+ * The implementation of the {@link Vector2fModelPropertyControl} for editing sprite count of the {@link
+ * ParticleEmitterNode}.
  *
  * @author JavaSaBr.
  */
 public class ParticlesSpriteCountModelPropertyControl extends Vector2fModelPropertyControl<ParticleEmitterNode> {
 
-    public ParticlesSpriteCountModelPropertyControl(final Vector2f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public ParticlesSpriteCountModelPropertyControl(@NotNull final Vector2f element, @NotNull final String paramName,
+                                                    @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
-        setScrollIncrement(30F);
-    }
-
-    @Override
-    protected float checkResultValue(final float original) {
-        final int integer = (int) original;
-        return Math.max(integer, 1);
+        getXField().setMinMax(1, Integer.MAX_VALUE);
+        getYField().setMinMax(1, Integer.MAX_VALUE);
     }
 
     @NotNull

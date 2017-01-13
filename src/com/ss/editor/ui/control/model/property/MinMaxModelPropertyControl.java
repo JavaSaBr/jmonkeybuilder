@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.property;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
@@ -17,11 +20,18 @@ public class MinMaxModelPropertyControl<T extends Spatial> extends Vector2fModel
     public MinMaxModelPropertyControl(@NotNull final Vector2f element, @NotNull final String paramName,
                                       @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
+        getXField().setMinMax(0, Integer.MAX_VALUE);
+        getYField().setMinMax(0, Integer.MAX_VALUE);
     }
 
     @Override
-    protected float checkResultValue(final float original) {
-        return Math.max(original, 0);
+    protected float checkResultXValue(final float x, final float y) {
+        return min(x, y);
+    }
+
+    @Override
+    protected float checkResultYValue(final float x, final float y) {
+        return max(x, y);
     }
 
     @NotNull

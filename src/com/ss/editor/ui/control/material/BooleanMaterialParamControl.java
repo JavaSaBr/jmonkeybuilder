@@ -7,6 +7,8 @@ import com.ss.editor.ui.control.material.operation.BooleanMaterialParamOperation
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Consumer;
 
 import javafx.scene.control.CheckBox;
@@ -24,7 +26,9 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox checkBox;
 
-    public BooleanMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
+    public BooleanMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
+                                       @NotNull final Material material,
+                                       @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -49,7 +53,7 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
     /**
      * Update a value.
      */
-    private void processChange(final Boolean newValue) {
+    private void processChange(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();

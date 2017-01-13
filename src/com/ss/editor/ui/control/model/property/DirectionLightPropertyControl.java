@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.property;
 
-import static java.lang.Float.parseFloat;
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.light.Light;
@@ -12,14 +11,13 @@ import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import rlib.ui.control.input.FloatTextField;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing direction's vector of the
- * {@link Light}.
+ * The implementation of the {@link ModelPropertyControl} for editing direction's vector of the {@link Light}.
  *
  * @author JavaSaBr
  */
@@ -30,33 +28,16 @@ public class DirectionLightPropertyControl<T extends Light> extends AbstractVect
     }
 
     @Override
-    protected void updateVector(final KeyEvent event) {
+    protected void updateVector(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
-        final TextField xField = getXField();
-        final TextField yFiled = getYFiled();
-        final TextField zField = getZField();
+        final FloatTextField xField = getXField();
+        final FloatTextField yFiled = getYFiled();
+        final FloatTextField zField = getZField();
 
-        float x;
-        try {
-            x = parseFloat(xField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        float y;
-        try {
-            y = parseFloat(yFiled.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        float z;
-        try {
-            z = parseFloat(zField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
+        final float x = xField.getValue();
+        final float y = yFiled.getValue();
+        final float z = zField.getValue();
 
         final Quaternion rotation = new Quaternion();
         rotation.fromAngles(ArrayFactory.toFloatArray(x, y, z));
@@ -73,7 +54,9 @@ public class DirectionLightPropertyControl<T extends Light> extends AbstractVect
 
         final T editObject = getEditObject();
 
-        final LightPropertyOperation<T, Vector3f> operation = new LightPropertyOperation<>(editObject, getPropertyName(), newValue, oldValue);
+        final LightPropertyOperation<T, Vector3f> operation =
+                new LightPropertyOperation<>(editObject, getPropertyName(), newValue, oldValue);
+
         operation.setApplyHandler(getApplyHandler());
 
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();

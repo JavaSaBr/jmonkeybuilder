@@ -33,7 +33,7 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
             super.updateItem(level, empty);
 
             final Geometry geometry = getEditObject();
-            final Mesh mesh = geometry == null ? null : geometry.getMesh();
+            final Mesh mesh = geometry.getMesh();
 
             if (level == null || mesh == null) {
                 setText("None");
@@ -103,10 +103,9 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
 
     @Override
     protected void reload() {
+        if (!hasEditObject()) return;
 
         final Geometry geometry = getEditObject();
-        if (geometry == null) return;
-
         final Mesh mesh = geometry.getMesh();
         if (mesh == null) return;
 

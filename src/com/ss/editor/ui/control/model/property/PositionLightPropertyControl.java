@@ -5,17 +5,18 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.LightPropertyOperation;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing position's vector of the
- * {@link Light}.
+ * The implementation of the {@link ModelPropertyControl} for editing position's vector of the {@link Light}.
  *
  * @author JavaSaBr
  */
 public class PositionLightPropertyControl<T extends Light> extends AbstractVector3fModelPropertyControl<T> {
 
-    public PositionLightPropertyControl(final Vector3f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public PositionLightPropertyControl(@NotNull final Vector3f element, @NotNull final String paramName,
+                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

@@ -85,12 +85,9 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder {
         directionControl.setSyncHandler(DirectionalLight::getDirection);
         directionControl.setEditObject(light);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(directionControl, container);
-        FXUtils.addToPane(splitLine, container);
 
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
+        addSplitLine(container);
     }
 
     private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,

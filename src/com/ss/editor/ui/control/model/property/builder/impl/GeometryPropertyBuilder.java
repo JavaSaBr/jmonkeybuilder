@@ -99,8 +99,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         final int lodLevel = geometry.getLodLevel();
 
         final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
-                new DefaultModelPropertyControl<>(modelBound,
-                        Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+                new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
 
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
@@ -119,8 +118,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
             final MaterialKey materialKey = (MaterialKey) material.getKey();
 
             final ModelPropertyControl<Geometry, MaterialKey> materialControl =
-                    new MaterialKeyModelPropertyEditor<>(materialKey,
-                            Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+                    new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
 
             materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
             materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);

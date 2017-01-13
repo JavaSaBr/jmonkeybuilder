@@ -97,6 +97,5 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         FXUtils.addToPane(locationControl, container);
         FXUtils.addToPane(scaleControl, container);
         FXUtils.addToPane(rotationControl, container);
-
     }
 }

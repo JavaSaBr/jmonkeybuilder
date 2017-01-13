@@ -7,12 +7,14 @@ import com.ss.editor.ui.control.material.operation.FloatMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Consumer;
 
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
-import javafx.scene.input.ScrollEvent;
+import javafx.geometry.Insets;
+import javafx.scene.layout.HBox;
+import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -22,12 +24,16 @@ import rlib.ui.util.FXUtils;
  */
 public class FloatMaterialParamControl extends MaterialParamControl {
 
-    /**
-     * The float spinner.
-     */
-    private Spinner<Double> spinner;
+    public static final Insets FIELD_OFFSET = new Insets(0, 6, 0, 0);
 
-    public FloatMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
+    /**
+     * The float field.
+     */
+    private FloatTextField floatField;
+
+    public FloatMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
+                                     @NotNull final Material material,
+                                     @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -35,18 +41,16 @@ public class FloatMaterialParamControl extends MaterialParamControl {
     protected void createComponents() {
         super.createComponents();
 
-        final SpinnerValueFactory<Double> valueFactory = new DoubleSpinnerValueFactory(-500, 500, 0, 0.01);
+        floatField = new FloatTextField();
+        floatField.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
+        floatField.addChangeListener((observable, oldValue, newValue) -> processChange(newValue));
+        floatField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
+        floatField.setScrollPower(5F);
 
-        spinner = new Spinner<>();
-        spinner.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
-        spinner.setValueFactory(valueFactory);
-        spinner.setEditable(true);
-        spinner.setOnScroll(this::processScroll);
-        spinner.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
-        spinner.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
+        FXUtils.addToPane(floatField, this);
+        FXUtils.addClassTo(floatField, CSSClasses.SPECIAL_FONT_13);
 
-        FXUtils.addToPane(spinner, this);
-        FXUtils.addClassTo(spinner, CSSClasses.SPECIAL_FONT_13);
+        HBox.setMargin(floatField, FIELD_OFFSET);
     }
 
     @Override
@@ -55,27 +59,12 @@ public class FloatMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * The process of scrolling value.
-     */
-    private void processScroll(final ScrollEvent event) {
-        if (!event.isControlDown()) return;
-
-        final double deltaY = event.getDeltaY();
-
-        if (deltaY > 0) {
-            spinner.increment(10);
-        } else {
-            spinner.decrement(10);
-        }
-    }
-
-    /**
      * Update a value.
      */
-    private void processChange(final Double newValue) {
+    private void processChange(@Nullable final Float newValue) {
         if (isIgnoreListeners()) return;
 
-        final Float newFValue = newValue == null ? null : newValue.floatValue();
+        final Float newFValue = newValue == null ? null : newValue;
         final String parameterName = getParameterName();
         final Material material = getMaterial();
         final MatParam param = material.getParam(parameterName);
@@ -90,14 +79,13 @@ public class FloatMaterialParamControl extends MaterialParamControl {
 
         final Material material = getMaterial();
         final MatParam param = material.getParam(getParameterName());
-        final SpinnerValueFactory<Double> valueFactory = spinner.getValueFactory();
 
         if (param == null) {
-            valueFactory.setValue(0D);
+            floatField.setValue(0F);
             return;
         }
 
-        final Float value = (Float) param.getValue();
-        valueFactory.setValue(value.doubleValue());
+        floatField.setValue((Float) param.getValue());
+        floatField.positionCaret(floatField.getText().length());
     }
 }

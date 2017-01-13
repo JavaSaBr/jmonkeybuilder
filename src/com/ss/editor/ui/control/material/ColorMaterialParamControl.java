@@ -13,6 +13,9 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
@@ -38,7 +41,9 @@ public class ColorMaterialParamControl extends MaterialParamControl {
      */
     private ColorPicker colorPicker;
 
-    public ColorMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
+    public ColorMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
+                                     @NotNull final Material material,
+                                     @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -71,7 +76,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
     /**
      * Update a color.
      */
-    private void processChange(final Color newValue) {
+    private void processChange(@Nullable final Color newValue) {
 
         if (isIgnoreListeners()) {
             return;

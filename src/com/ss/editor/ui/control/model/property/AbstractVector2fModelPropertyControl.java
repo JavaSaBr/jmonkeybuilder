@@ -8,13 +8,13 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
+import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -27,35 +27,16 @@ public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPrope
     /**
      * The field X.
      */
-    private TextField xField;
+    private FloatTextField xField;
 
     /**
      * The field Y.
      */
-    private TextField yFiled;
+    private FloatTextField yField;
 
-    /**
-     * The power of scrolling.
-     */
-    private float scrollIncrement;
-
-    public AbstractVector2fModelPropertyControl(final Vector2f element, final String paramName, final ModelChangeConsumer modelChangeConsumer) {
+    public AbstractVector2fModelPropertyControl(@NotNull final Vector2f element, @NotNull final String paramName,
+                                                @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
-        this.scrollIncrement = 10F;
-    }
-
-    /**
-     * @param scrollIncrement the power of scrolling.
-     */
-    public void setScrollIncrement(final float scrollIncrement) {
-        this.scrollIncrement = scrollIncrement;
-    }
-
-    /**
-     * @return the power of scrolling.
-     */
-    private float getScrollIncrement() {
-        return scrollIncrement;
     }
 
     @Override
@@ -65,30 +46,32 @@ public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPrope
         final Label xLabel = new Label(getXLabelText());
         xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL2F);
 
-        xField = new TextField();
+        xField = new FloatTextField();
         xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
-        xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::updateVector);
+        xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         xField.prefWidthProperty().bind(widthProperty().divide(2));
+        xField.setScrollPower(10F);
 
         final Label yLabel = new Label(getYLabelText());
         yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL2F);
 
-        yFiled = new TextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
-        yFiled.setOnScroll(this::processScroll);
-        yFiled.setOnKeyReleased(this::updateVector);
-        yFiled.prefWidthProperty().bind(widthProperty().divide(2));
+        yField = new FloatTextField();
+        yField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
+        yField.setOnKeyReleased(this::updateVector);
+        yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
+        yField.prefWidthProperty().bind(widthProperty().divide(2));
+        yField.setScrollPower(10F);
 
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
         FXUtils.addToPane(yLabel, container);
-        FXUtils.addToPane(yFiled, container);
+        FXUtils.addToPane(yField, container);
 
         FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yFiled, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_13);
     }
 
     @NotNull
@@ -101,50 +84,26 @@ public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPrope
         return "x:";
     }
 
-    /**
-     * The process of scrolling.
-     */
-    protected void processScroll(final ScrollEvent event) {
-        if (!event.isControlDown()) return;
-
-        final TextField source = (TextField) event.getSource();
-        final String text = source.getText();
-
-        float value;
-        try {
-            value = Float.parseFloat(text);
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        long longValue = (long) (value * 1000);
-        longValue += event.getDeltaY() * getScrollIncrement();
-
-        final float resultValue = checkResultValue(longValue / 1000F);
-
-        final String result = String.valueOf(resultValue);
-        source.setText(result);
-        source.positionCaret(result.length());
-
-        updateVector(null);
+    protected float checkResultXValue(final float x, final float y) {
+        return x;
     }
 
-    protected float checkResultValue(final float original) {
-        return original;
+    protected float checkResultYValue(final float x, final float y) {
+        return y;
     }
 
     /**
      * @return the field X.
      */
-    private TextField getXField() {
+    protected FloatTextField getXField() {
         return xField;
     }
 
     /**
      * @return the field Y.
      */
-    private TextField getYFiled() {
-        return yFiled;
+    protected FloatTextField getYField() {
+        return yField;
     }
 
     @Override
@@ -152,40 +111,30 @@ public abstract class AbstractVector2fModelPropertyControl<T> extends ModelPrope
 
         final Vector2f element = requireNonNull(getPropertyValue(), "The property value can't be null.");
 
-        final TextField xField = getXField();
-        xField.setText(String.valueOf(element.getX()));
+        final FloatTextField xField = getXField();
+        xField.setValue(element.getX());
         xField.positionCaret(xField.getText().length());
 
-        final TextField yFiled = getYFiled();
-        yFiled.setText(String.valueOf(element.getY()));
-        yFiled.positionCaret(xField.getText().length());
+        final FloatTextField yField = getYField();
+        yField.setValue(element.getY());
+        yField.positionCaret(xField.getText().length());
     }
 
     /**
      * Update the vector.
      */
-    protected void updateVector(final KeyEvent event) {
+    protected void updateVector(@Nullable final KeyEvent event) {
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
-        final TextField xField = getXField();
-        float x;
-        try {
-            x = Float.parseFloat(xField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
+        final FloatTextField xField = getXField();
+        final float x = xField.getValue();
 
-        final TextField yFiled = getYFiled();
-        float y;
-        try {
-            y = Float.parseFloat(yFiled.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
+        final FloatTextField yField = getYField();
+        final float y = yField.getValue();
 
         final Vector2f oldValue = requireNonNull(getPropertyValue(), "The property value can't be null.");
         final Vector2f newValue = new Vector2f();
-        newValue.set(checkResultValue(x), checkResultValue(y));
+        newValue.set(checkResultXValue(x, y), checkResultYValue(x, y));
 
         changed(newValue, oldValue == null ? null : oldValue.clone());
     }
