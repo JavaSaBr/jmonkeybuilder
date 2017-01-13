@@ -10,6 +10,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -61,7 +62,7 @@ public class SettingsDialog extends EditorDialog {
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 370);
+    private static final Point DIALOG_SIZE = new Point(600, 380);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -148,6 +149,11 @@ public class SettingsDialog extends EditorDialog {
     private TextField additionalClasspathField;
 
     /**
+     * The additional envs field.
+     */
+    private TextField additionalEnvsField;
+
+    /**
      * The frame rate field.
      */
     private IntegerTextField frameRateField;
@@ -161,6 +167,11 @@ public class SettingsDialog extends EditorDialog {
      * The additional classpath folder.
      */
     private Path additionalClasspathFolder;
+
+    /**
+     * The additional envs folder.
+     */
+    private Path additionalEnvsFolder;
 
     /**
      * The flag of ignoring listeners.
@@ -200,7 +211,10 @@ public class SettingsDialog extends EditorDialog {
         messageLabel.setId(CSSIds.SETTINGS_DIALOG_MESSAGE_LABEL);
 
         final VBox graphicsRoot = new VBox();
+        graphicsRoot.prefHeightProperty().bind(root.heightProperty());
+
         final VBox otherRoot = new VBox();
+        otherRoot.prefHeightProperty().bind(root.heightProperty());
 
         final Tab graphicsSettings = new Tab(Messages.SETTINGS_DIALOG_TAB_GRAPHICS);
         graphicsSettings.setClosable(false);
@@ -214,6 +228,7 @@ public class SettingsDialog extends EditorDialog {
         tabPane.setId(CSSIds.SETTINGS_DIALOG_TAB_PANE);
         tabPane.getTabs().addAll(graphicsSettings, otherSettings);
         tabPane.prefWidthProperty().bind(widthProperty());
+        tabPane.prefHeightProperty().bind(root.heightProperty());
 
         createAnisotropyControl(graphicsRoot);
         createGammaCorrectionControl(graphicsRoot);
@@ -224,6 +239,7 @@ public class SettingsDialog extends EditorDialog {
         createToneMapFilterWhitePointControl(graphicsRoot);
 
         createAdditionalClasspathControl(otherRoot);
+        createAdditionalEnvsControl(otherRoot);
         createGoogleAnalyticsControl(otherRoot);
         createDecoratedControl(otherRoot);
         createAutoTangentGeneratingControl(otherRoot);
@@ -251,7 +267,7 @@ public class SettingsDialog extends EditorDialog {
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
 
-        final Label label = new Label(Messages.OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
+        final Label label = new Label(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         additionalClasspathField = new TextField();
@@ -260,12 +276,10 @@ public class SettingsDialog extends EditorDialog {
         additionalClasspathField.prefWidthProperty().bind(root.widthProperty());
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_18));
         addButton.setOnAction(event -> processAddCF());
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
         removeButton.setOnAction(event -> processRemoveCF());
 
@@ -286,12 +300,62 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * Create the additional envs control.
+     */
+    private void createAdditionalEnvsControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_ENVS_FOLDER_LABEL + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        additionalEnvsField = new TextField();
+        additionalEnvsField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        additionalEnvsField.setEditable(false);
+        additionalEnvsField.prefWidthProperty().bind(root.widthProperty());
+
+        final Button addButton = new Button();
+        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setOnAction(event -> processAddEF());
+
+        final Button removeButton = new Button();
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setOnAction(event -> processRemoveEF());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(additionalEnvsField, container);
+        FXUtils.addToPane(addButton, container);
+        FXUtils.addToPane(removeButton, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(additionalEnvsField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+
+        HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
+        HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
      * Process of removing the additional classpath.
      */
     private void processRemoveCF() {
         setAdditionalClasspathFolder(null);
 
         final TextField textField = getAdditionalClasspathField();
+        textField.setText(StringUtils.EMPTY);
+    }
+
+    /**
+     * Process of removing the additional envs.
+     */
+    private void processRemoveEF() {
+        setAdditionalEnvsFolder(null);
+
+        final TextField textField = getAdditionalEnvsField();
         textField.setText(StringUtils.EMPTY);
     }
 
@@ -303,12 +367,19 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * @return the additional envs field.
+     */
+    private TextField getAdditionalEnvsField() {
+        return additionalEnvsField;
+    }
+
+    /**
      * Process of adding the additional classpath.
      */
     private void processAddCF() {
 
         final DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(Messages.OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
+        chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAdditionalCP = config.getAdditionalClasspath();
@@ -322,6 +393,29 @@ public class SettingsDialog extends EditorDialog {
         setAdditionalClasspathFolder(folder.toPath());
 
         final TextField textField = getAdditionalClasspathField();
+        textField.setText(folder.toString());
+    }
+
+    /**
+     * Process of adding the additional envs.
+     */
+    private void processAddEF() {
+
+        final DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(Messages.SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE);
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final Path currentAdditionalEnvs = config.getAdditionalEnvs();
+        final File currentFolder = currentAdditionalEnvs == null ? null : currentAdditionalEnvs.toFile();
+        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final File folder = chooser.showDialog(scene.getWindow());
+        if (folder == null) return;
+
+        setAdditionalEnvsFolder(folder.toPath());
+
+        final TextField textField = getAdditionalEnvsField();
         textField.setText(folder.toString());
     }
 
@@ -903,14 +997,21 @@ public class SettingsDialog extends EditorDialog {
         cameraAngleField.setValue(editorConfig.getCameraAngle());
 
         final Path additionalClasspath = editorConfig.getAdditionalClasspath();
+        final Path additionalEnvs = editorConfig.getAdditionalEnvs();
 
         final TextField additionalClasspathField = getAdditionalClasspathField();
+        final TextField additionalEnvsField = getAdditionalEnvsField();
 
         if (additionalClasspath != null) {
             additionalClasspathField.setText(additionalClasspath.toString());
         }
 
+        if (additionalEnvs != null) {
+            additionalEnvsField.setText(additionalEnvs.toString());
+        }
+
         setAdditionalClasspathFolder(additionalClasspath);
+        setAdditionalEnvsFolder(additionalEnvs);
     }
 
     /**
@@ -926,6 +1027,21 @@ public class SettingsDialog extends EditorDialog {
      */
     private void setAdditionalClasspathFolder(@Nullable final Path additionalClasspathFolder) {
         this.additionalClasspathFolder = additionalClasspathFolder;
+    }
+
+    /**
+     * @param additionalEnvsFolder the additional envs folder.
+     */
+    public void setAdditionalEnvsFolder(@Nullable final Path additionalEnvsFolder) {
+        this.additionalEnvsFolder = additionalEnvsFolder;
+    }
+
+    /**
+     * @return the additional envs folder.
+     */
+    @Nullable
+    public Path getAdditionalEnvsFolder() {
+        return additionalEnvsFolder;
     }
 
     @Override
@@ -1022,6 +1138,9 @@ public class SettingsDialog extends EditorDialog {
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
         classpathManager.updateAdditionalCL();
 
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        resourceManager.updateAdditionalEnvs();
+
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
         editorConfig.setDecorated(decorated);
@@ -1030,6 +1149,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
         editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
+        editorConfig.setAdditionalEnvs(getAdditionalEnvsFolder());
         editorConfig.setFrameRate(frameRate);
         editorConfig.setCameraAngle(cameraAngle);
         editorConfig.setAutoTangentGenerating(autoTangentGenerating);

@@ -22,6 +22,7 @@ import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
@@ -781,6 +782,10 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
         final ObservableList<String> skyItems = fastSkyComboBox.getItems();
 
         FAST_SKY_LIST.forEach(skyItems::add);
+
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        final Array<Path> additionalEnvs = resourceManager.getAdditionalEnvs();
+        additionalEnvs.forEach(path -> skyItems.add(path.toString()));
 
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);

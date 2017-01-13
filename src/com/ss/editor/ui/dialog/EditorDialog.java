@@ -53,14 +53,22 @@ public class EditorDialog extends AbstractPopupDialog {
      */
     private final EventHandler<? super Event> hideEventHandler = event -> {
         final WindowChangeFocusEvent focusEvent = (WindowChangeFocusEvent) event;
-        if (!focusEvent.isFocused()) hide();
+        if (!focusEvent.isFocused()) {
+            super.hide();
+        } else {
+            show();
+        }
     };
 
     /**
      * The handler for handling changing a focus of the window from JavaFX.
      */
     private final ChangeListener<Boolean> hideListener = (observable, oldValue, newValue) -> {
-        if (newValue == Boolean.FALSE) hide();
+        if (newValue == Boolean.FALSE) {
+            super.hide();
+        } else {
+            show();
+        }
     };
 
     /**

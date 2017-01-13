@@ -110,12 +110,10 @@ public class Messages {
     public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
     public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
     public static final String SETTINGS_DIALOG_TAB_OTHER;
-
-    public static final String OTHER_SETTINGS_DIALOG_TITLE;
-    public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
-    public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
-    public static final String OTHER_SETTINGS_DIALOG_BUTTON_OK;
-    public static final String OTHER_SETTINGS_DIALOG_BUTTON_CANCEL;
+    public static final String SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
+    public static final String SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
+    public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
+    public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
@@ -471,12 +469,10 @@ public class Messages {
         SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
         SETTINGS_DIALOG_TAB_GRAPHICS = bundle.getString("SettingsDialogTabGraphics");
         SETTINGS_DIALOG_TAB_OTHER = bundle.getString("SettingsDialogTabOther");
-
-        OTHER_SETTINGS_DIALOG_TITLE = bundle.getString("OtherSettingsDialogTitle");
-        OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("OtherSettingsDialogClasspathFolderLabel");
-        OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("OtherSettingsDialogClasspathFolderChooserTitle");
-        OTHER_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("OtherSettingsDialogButtonOk");
-        OTHER_SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("OtherSettingsDialogButtonCancel");
+        SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("SettingsDialogClasspathFolderLabel");
+        SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClasspathFolderChooserTitle");
+        SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
+        SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
         FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("FBXToJ3oFileConverterDescription");

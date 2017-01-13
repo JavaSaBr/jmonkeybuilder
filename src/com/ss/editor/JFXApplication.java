@@ -17,10 +17,10 @@ import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.sun.istack.internal.NotNull;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;

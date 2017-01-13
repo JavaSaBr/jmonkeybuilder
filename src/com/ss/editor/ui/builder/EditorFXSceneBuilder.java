@@ -14,7 +14,8 @@ import com.ss.editor.ui.component.tab.GlobalToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.sun.istack.internal.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;

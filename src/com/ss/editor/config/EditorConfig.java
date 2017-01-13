@@ -67,6 +67,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
     public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
+    public static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
     public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
     public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
     public static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
@@ -108,6 +109,11 @@ public final class EditorConfig implements AssetEventListener {
      * The path to the folder with additional classpath.
      */
     private volatile Path additionalClasspath;
+
+    /**
+     * The path to the folder with additional envs.
+     */
+    private volatile Path additionalEnvs;
 
     /**
      * The current level of the anisotropy.
@@ -297,6 +303,23 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public void setAdditionalClasspath(@Nullable final Path additionalClasspath) {
         this.additionalClasspath = additionalClasspath;
+    }
+
+    /**
+     * @return the path to the folder with additional envs.
+     */
+    @Nullable
+    @FromAnyThread
+    public Path getAdditionalEnvs() {
+        return additionalEnvs;
+    }
+
+    /**
+     * @param additionalEnvs the path to the folder with additional envs.
+     */
+    @FromAnyThread
+    public void setAdditionalEnvs(@Nullable final Path additionalEnvs) {
+        this.additionalEnvs = additionalEnvs;
     }
 
     /**
@@ -608,6 +631,12 @@ public final class EditorConfig implements AssetEventListener {
             this.additionalClasspath = get(classpathURI, uri -> Paths.get(new URI(uri)));
         }
 
+        final String envsURI = prefs.get(PREF_ADDITIONAL_ENVS, null);
+
+        if (envsURI != null) {
+            this.additionalEnvs = get(envsURI, uri -> Paths.get(new URI(uri)));
+        }
+
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
 
         final String whitePoint = prefs.get(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, null);
@@ -678,6 +707,12 @@ public final class EditorConfig implements AssetEventListener {
             prefs.put(PREF_ADDITIONAL_CLASSPATH, additionalClasspath.toUri().toString());
         } else {
             prefs.remove(PREF_ADDITIONAL_CLASSPATH);
+        }
+
+        if (additionalEnvs != null) {
+            prefs.put(PREF_ADDITIONAL_ENVS, additionalEnvs.toUri().toString());
+        } else {
+            prefs.remove(PREF_ADDITIONAL_ENVS);
         }
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
