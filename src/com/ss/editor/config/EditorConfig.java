@@ -69,6 +69,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
     public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
     public static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
+    public static final String PREF_AUTO_TANGENT_GENERATING = ASSET_OTHER + "." + "autoTangentGenerating";
 
     private static volatile EditorConfig instance;
 
@@ -169,6 +170,11 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is of enabling analytics.
      */
     private volatile boolean analytics;
+
+    /**
+     * Flag is of enabling auto tangent generating.
+     */
+    private volatile boolean autoTangentGenerating;
 
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
@@ -441,6 +447,22 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return true if enabled auto tangent generating.
+     */
+    @FromAnyThread
+    public boolean isAutoTangentGenerating() {
+        return autoTangentGenerating;
+    }
+
+    /**
+     * @param autoTangentGenerating flag is of enabling auto tangent generating.
+     */
+    @FromAnyThread
+    public void setAutoTangentGenerating(final boolean autoTangentGenerating) {
+        this.autoTangentGenerating = autoTangentGenerating;
+    }
+
+    /**
      * @return the current frameRate.
      */
     @FromAnyThread
@@ -528,6 +550,7 @@ public final class EditorConfig implements AssetEventListener {
         this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
         this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
+        this.autoTangentGenerating = prefs.getBoolean(PREF_AUTO_TANGENT_GENERATING, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -589,6 +612,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
         prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
+        prefs.putBoolean(PREF_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 

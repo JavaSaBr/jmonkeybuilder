@@ -72,8 +72,10 @@ public class Editor extends JmeToJFXApplication {
         }
     };
 
+    @NotNull
     private static final Editor EDITOR = new Editor();
 
+    @NotNull
     public static Editor getInstance() {
         return EDITOR;
     }

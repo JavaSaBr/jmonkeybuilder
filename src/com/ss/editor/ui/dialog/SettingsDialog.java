@@ -32,6 +32,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
@@ -54,12 +56,12 @@ public class SettingsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-    private static final Insets MESSAGE_OFFSET = new Insets(5, 0, 5, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(5, 20, 10, 0);
+    private static final Insets TAB_OFFSET = new Insets(5, 0, 5, 0);
+    private static final Insets MESSAGE_OFFSET = new Insets(5, 20, 10, 0);
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 426);
+    private static final Point DIALOG_SIZE = new Point(600, 370);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -126,6 +128,11 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox googleAnalyticsCheckBox;
 
     /**
+     * The checkbox for enabling auto tangent generating.
+     */
+    private CheckBox autoTangentGeneratingCheckBox;
+
+    /**
      * The additional classpath field.
      */
     private TextField additionalClasspathField;
@@ -182,22 +189,46 @@ public class SettingsDialog extends EditorDialog {
         messageLabel = new Label();
         messageLabel.setId(CSSIds.SETTINGS_DIALOG_MESSAGE_LABEL);
 
+        final VBox graphicsRoot = new VBox();
+        final VBox otherRoot = new VBox();
+
+        final Tab graphicsSettings = new Tab("Graphics");
+        graphicsSettings.setClosable(false);
+        graphicsSettings.setContent(graphicsRoot);
+
+        final Tab otherSettings = new Tab("Other");
+        otherSettings.setClosable(false);
+        otherSettings.setContent(otherRoot);
+
+        final TabPane tabPane = new TabPane();
+        tabPane.setId(CSSIds.SETTINGS_DIALOG_TAB_PANE);
+        tabPane.getTabs().addAll(graphicsSettings, otherSettings);
+        tabPane.prefWidthProperty().bind(widthProperty());
+
+        createAnisotropyControl(graphicsRoot);
+        createGammaCorrectionControl(graphicsRoot);
+        createFrameRateControl(graphicsRoot);
+        createCameraAngleControl(graphicsRoot);
+        createFXAAControl(graphicsRoot);
+        createToneMapFilterControl(graphicsRoot);
+        createToneMapFilterWhitePointControl(graphicsRoot);
+
+        createAdditionalClasspathControl(otherRoot);
+        createGoogleAnalyticsControl(otherRoot);
+        createDecoratedControl(otherRoot);
+        createAutoTangentGeneratingControl(otherRoot);
+
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty().multiply(0.8));
+
         FXUtils.addClassTo(messageLabel, CSSClasses.SPECIAL_FONT_15);
+        FXUtils.addClassTo(graphicsSettings, CSSClasses.SPECIAL_FONT_15);
+        FXUtils.addClassTo(otherSettings, CSSClasses.SPECIAL_FONT_15);
+
+        FXUtils.addToPane(tabPane, root);
         FXUtils.addToPane(messageLabel, root);
 
+        VBox.setMargin(tabPane, TAB_OFFSET);
         VBox.setMargin(messageLabel, MESSAGE_OFFSET);
-
-        createAnisotropyControl(root);
-        createGammaCorrectionControl(root);
-        createFrameRateControl(root);
-        createCameraAngleControl(root);
-        createFXAAControl(root);
-        createGoogleAnalyticsControl(root);
-        createDecoratedControl(root);
-        createToneMapFilterControl(root);
-        createToneMapFilterWhitePointControl(root);
-        createAdditionalClasspathControl(root);
     }
 
     /**
@@ -239,7 +270,7 @@ public class SettingsDialog extends EditorDialog {
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
         HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
-        VBox.setMargin(container, LAST_FIELD_OFFSET);
+        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -492,6 +523,31 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * Create the checkbox for configuring decorated windows.
+     */
+    private void createAutoTangentGeneratingControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label("Auto tangent generating" + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        autoTangentGeneratingCheckBox = new CheckBox();
+        autoTangentGeneratingCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        autoTangentGeneratingCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(autoTangentGeneratingCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(autoTangentGeneratingCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
      * Create the anisotropy control
      */
     private void createAnisotropyControl(@NotNull final VBox root) {
@@ -654,6 +710,14 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * @return the checkbox for enabling auto tangent generating.
+     */
+    @NotNull
+    private CheckBox getAutoTangentGeneratingCheckBox() {
+        return autoTangentGeneratingCheckBox;
+    }
+
+    /**
      * @return the checkbox for enabling google analytics.
      */
     @NotNull
@@ -733,6 +797,9 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
         googleAnalyticsCheckBox.setSelected(editorConfig.isAnalytics());
+
+        final CheckBox autoTangentGeneratingCheckBox = getAutoTangentGeneratingCheckBox();
+        autoTangentGeneratingCheckBox.setSelected(editorConfig.isAutoTangentGenerating());
 
         final Vector3f toneMapFilterWhitePoint = editorConfig.getToneMapFilterWhitePoint();
 
@@ -837,6 +904,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
         final boolean analytics = googleAnalyticsCheckBox.isSelected();
 
+        final CheckBox autoTangentGeneratingCheckBox = getAutoTangentGeneratingCheckBox();
+        final boolean autoTangentGenerating = autoTangentGeneratingCheckBox.isSelected();
+
         final float toneMapFilterWhitePointX = getToneMapFilterWhitePointX().getValue().floatValue();
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
@@ -872,6 +942,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
         editorConfig.setFrameRate(frameRate);
         editorConfig.setCameraAngle(cameraAngle);
+        editorConfig.setAutoTangentGenerating(autoTangentGenerating);
         editorConfig.save();
 
         if (cameraAngle != currentCameraAngle) {

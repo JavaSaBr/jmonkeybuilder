@@ -421,6 +421,13 @@
     -fx-wrap-text: true;
 }
 
+#SettingsDialogTabPane {
+}
+
+#SettingsDialogTabPane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}
+
 #SettingsDialogLabel {
     -fx-alignment: center-right;
     -fx-min-width: 250;
