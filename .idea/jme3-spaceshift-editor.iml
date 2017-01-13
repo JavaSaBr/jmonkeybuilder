@@ -32,6 +32,7 @@
         <JAVADOC />
         <SOURCES>
           <root url="file://$MODULE_DIR$/libs/extensions" />
+          <root url="file://$MODULE_DIR$/jme3-spaceshift-extension/src" />
         </SOURCES>
         <jarDirectory url="file://$MODULE_DIR$/libs/extensions" recursive="false" />
         <jarDirectory url="file://$MODULE_DIR$/libs/extensions" recursive="false" type="SOURCES" />

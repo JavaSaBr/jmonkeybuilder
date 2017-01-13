@@ -6,10 +6,13 @@ import static java.lang.String.valueOf;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import javafx.scene.image.Image;
 import rlib.logging.Logger;
@@ -20,7 +23,7 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * Менеджер по работе с иконками файлов.
+ * The file icon manager.
  *
  * @author Ronn
  */
@@ -30,6 +33,7 @@ public class FileIconManager {
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
+    @NotNull
     private static final ObjectDictionary<String, String> EXTENSION_TO_CONTENT_TYPE = DictionaryFactory.newObjectDictionary();
 
     static {
@@ -59,6 +63,7 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put("java", "application-x-java");
 
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_OBJECT, "jme3");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "sse");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "gnome-mime-text");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "gnome-mime-text");
 
@@ -85,8 +90,9 @@ public class FileIconManager {
     }
 
     /**
-     * Кеш для хранения загруженных иконок.
+     * The image cache.
      */
+    @NotNull
     private final ObjectDictionary<String, Image> imageCache;
 
     public FileIconManager() {
@@ -95,13 +101,14 @@ public class FileIconManager {
     }
 
     /**
-     * Получение иконки для указанного файла.
+     * Get an icon to a file.
      *
-     * @param path файл для которого надо получить иконку.
-     * @param size размер иконки.
-     * @return найденная иконка.
+     * @param path the file.
+     * @param size the icon size.
+     * @return the icon.
      */
-    public Image getIcon(final Path path, int size) {
+    @NotNull
+    public Image getIcon(@NotNull final Path path, int size) {
 
         final String extension = FileUtils.getExtension(path);
         String contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
@@ -149,16 +156,26 @@ public class FileIconManager {
     }
 
     /**
-     * Получение картинки по адрессу.
+     * Get an image by an URL.
+     *
+     * @param url the url.
+     * @return the image.
      */
-    public Image getImage(final String url) {
+    @NotNull
+    public Image getImage(@NotNull final String url) {
         return getImage(url, 16);
     }
 
     /**
-     * Получение картинки по адрессу.
+     * Get an image by an URL.
+     *
+     * @param url  the url.
+     * @param size the size.
+     * @return the image.
      */
-    public Image getImage(final String url, final int size) {
-        return imageCache.get(url, () -> new Image(url, size, size, false, true));
+    @NotNull
+    public Image getImage(@NotNull final String url, final int size) {
+        final Image image = imageCache.get(url, () -> new Image(url, size, size, false, true));
+        return Objects.requireNonNull(image);
     }
 }

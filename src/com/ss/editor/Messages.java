@@ -335,6 +335,9 @@ public class Messages {
     public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
     public static final String EMPTY_MODEL_CREATOR_TITLE;
 
+    public static final String EMPTY_SCENE_CREATOR_DESCRIPTION;
+    public static final String EMPTY_SCENE_CREATOR_TITLE;
+
     public static final String GLSL_FILE_EDITOR_NAME;
     public static final String MATERIAL_DEFINITION_FILE_EDITOR_NAME;
 
@@ -693,6 +696,9 @@ public class Messages {
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
+
+        EMPTY_SCENE_CREATOR_DESCRIPTION = bundle.getString("EmptySceneCreatorDescription");
+        EMPTY_SCENE_CREATOR_TITLE = bundle.getString("EmptySceneCreatorTitle");
 
         GLSL_FILE_EDITOR_NAME = bundle.getString("GLSLFileEditorName");
         MATERIAL_DEFINITION_FILE_EDITOR_NAME = bundle.getString("MaterialDefinitionFileEditorName");

@@ -39,6 +39,7 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.extension.loader.SceneLoader;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -235,6 +236,8 @@ public class Editor extends JmeToJFXApplication {
     public void simpleInitApp() {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(5);
+
+        SceneLoader.install(getAssetManager());
 
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
