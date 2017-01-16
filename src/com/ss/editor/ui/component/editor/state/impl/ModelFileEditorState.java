@@ -7,9 +7,9 @@ import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditorState extends AbstractEditorState {
+public class ModelFileEditorState extends AbstractModelFileEditorState {
 
-    public static final long serialVersionUID = 2;
+    public static final long serialVersionUID = 3;
 
     /**
      * The sky type.
@@ -17,30 +17,13 @@ public class ModelFileEditorState extends AbstractEditorState {
     private volatile int skyType;
 
     /**
-     * The transformation type.
-     */
-    private volatile int transformationType;
-
-    /**
      * Is enabled light.
      */
     private volatile boolean enableLight;
 
-    /**
-     * Is enabled grid.
-     */
-    private volatile boolean enableGrid;
-
-    /**
-     * Is enabled selection.
-     */
-    private volatile boolean enableSelection;
-
     public ModelFileEditorState() {
         this.skyType = 0;
         this.enableLight = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
-        this.enableGrid = true;
-        this.enableSelection = true;
     }
 
     /**
@@ -81,71 +64,11 @@ public class ModelFileEditorState extends AbstractEditorState {
         return enableLight;
     }
 
-    /**
-     * @param enableGrid true is the grid is enabled.
-     */
-    public void setEnableGrid(final boolean enableGrid) {
-        final boolean changed = isEnableGrid() != enableGrid;
-        this.enableGrid = enableGrid;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
-    }
-
-    /**
-     * @return true is the grid is enabled.
-     */
-    public boolean isEnableGrid() {
-        return enableGrid;
-    }
-
-    /**
-     * @param enableSelection true if the selection is enabled.
-     */
-    public void setEnableSelection(final boolean enableSelection) {
-        final boolean changed = isEnableSelection() != enableSelection;
-        this.enableSelection = enableSelection;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
-    }
-
-    /**
-     * @return true if the selection is enabled.
-     */
-    public boolean isEnableSelection() {
-        return enableSelection;
-    }
-
-    /**
-     * @return the transformation type.
-     */
-    public int getTransformationType() {
-        return transformationType;
-    }
-
-    /**
-     * @param transformationType the transformation type.
-     */
-    public void setTransformationType(final int transformationType) {
-        final boolean changed = getTransformationType() != transformationType;
-        this.transformationType = transformationType;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
-    }
-
     @Override
     public String toString() {
         return "ModelFileEditorState{" +
                 "skyType=" + skyType +
-                ", transformationType=" + transformationType +
                 ", enableLight=" + enableLight +
-                ", enableGrid=" + enableGrid +
-                ", enableSelection=" + enableSelection +
                 "} " + super.toString();
     }
 }

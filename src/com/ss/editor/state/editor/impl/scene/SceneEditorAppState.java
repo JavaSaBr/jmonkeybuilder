@@ -16,7 +16,6 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     public SceneEditorAppState(@NotNull final SceneFileEditor fileEditor) {
         super(fileEditor);
     }
-    
 
     @Override
     public void notifyTransformed(@NotNull final Spatial spatial) {
