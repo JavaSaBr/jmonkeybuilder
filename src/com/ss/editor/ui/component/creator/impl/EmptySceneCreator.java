@@ -4,6 +4,7 @@ import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,10 @@ public class EmptySceneCreator extends AbstractFileCreator {
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
         final SceneNode newNode = new SceneNode();
+        newNode.addLayer(new SceneLayer("Default", true));
+        newNode.addLayer(new SceneLayer("TransparentFX", true));
+        newNode.addLayer(new SceneLayer("Ignore Raycast", true));
+        newNode.addLayer(new SceneLayer("Water", true));
 
         try (final OutputStream out = Files.newOutputStream(fileToCreate)) {
             exporter.save(newNode, out);
