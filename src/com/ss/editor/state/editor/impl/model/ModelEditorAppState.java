@@ -13,17 +13,13 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.control.light.EditorLightControl;
-import com.ss.editor.model.EditorCamera;
-import com.ss.editor.state.editor.impl.AbstractSceneEditorAppState;
+import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
-import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
@@ -35,12 +31,9 @@ import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
  *
  * @author JavaSaBr
  */
-public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEditor> {
+public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEditor, Spatial> {
 
     public static final String USER_DATA_IS_LIGHT = ModelEditorAppState.class.getName() + ".isLight";
-
-    private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
-    private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
 
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
@@ -92,11 +85,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
     private final Node customSkyNode;
 
     /**
-     * The node on which the camera is looking.
-     */
-    private Node cameraNode;
-
-    /**
      * The current fast sky.
      */
     private Spatial currentFastSky;
@@ -119,12 +107,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
         this.editorLightControls = ArrayFactory.newArray(EditorLightControl.class);
 
         final Node stateNode = getStateNode();
-        stateNode.attachChild(getCameraNode());
         stateNode.attachChild(getCustomSkyNode());
-
-        final EditorCamera editorCamera = Objects.requireNonNull(getEditorCamera());
-        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
-        editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
         setLightEnabled(true);
     }
@@ -161,26 +144,10 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
         return customSky;
     }
 
-
     @Override
     public void notifyTransformed(@NotNull final Spatial spatial) {
         final ModelFileEditor fileEditor = getFileEditor();
         fileEditor.notifyTransformed(spatial);
-    }
-
-    @Override
-    @NotNull
-    protected Node getNodeForCamera() {
-        if (cameraNode == null) cameraNode = new Node("CameraNode");
-        return cameraNode;
-    }
-
-    /**
-     * @return the node on which the camera is looking.
-     */
-    @NotNull
-    private Node getCameraNode() {
-        return cameraNode;
     }
 
     /**
@@ -260,23 +227,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
         }
 
         frame++;
-    }
-
-    @Override
-    protected void undo() {
-        final ModelFileEditor fileEditor = getFileEditor();
-        fileEditor.undo();
-    }
-
-    @Override
-    protected void redo() {
-        final ModelFileEditor fileEditor = getFileEditor();
-        fileEditor.redo();
-    }
-
-    @Override
-    protected boolean needEditorCamera() {
-        return true;
     }
 
     @Override

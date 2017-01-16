@@ -10,7 +10,6 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
-import com.ss.editor.ui.component.editor.impl.model.AbstractModelFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -27,7 +26,8 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class SceneFileEditor extends AbstractModelFileEditor<SceneFileEditor, SceneEditorAppState, SceneFileEditorState, SceneNode> {
+public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, SceneNode,
+        SceneEditorAppState, SceneFileEditorState> {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 

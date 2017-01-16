@@ -22,6 +22,7 @@ import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -55,7 +56,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractModelFileEditor<ModelFileEditor, ModelEditorAppState, ModelFileEditorState, Spatial> {
+public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditorAppState, ModelFileEditorState> {
 
     public static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
@@ -125,8 +126,8 @@ public class ModelFileEditor extends AbstractModelFileEditor<ModelFileEditor, Mo
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditorAppState editorState = getEditorAppState();
-        editorState.openModel(model);
+        final ModelEditorAppState editorAppState = getEditorAppState();
+        editorAppState.openModel(model);
 
         handleObjects(model);
 

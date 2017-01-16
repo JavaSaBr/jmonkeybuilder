@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editor.impl.model;
+package com.ss.editor.ui.component.editor.impl.scene;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -26,7 +26,7 @@ import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
-import com.ss.editor.state.editor.impl.AbstractSceneEditorAppState;
+import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
@@ -70,8 +70,8 @@ import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractModelFileEditor<IM extends AbstractModelFileEditor,
-        MA extends AbstractSceneEditorAppState<IM>, ES extends AbstractModelFileEditorState, M extends Spatial>
+public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
+        MA extends AbstractSceneEditorAppState<IM, M>, ES extends AbstractModelFileEditorState>
         extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer {
 
     /**
@@ -154,7 +154,7 @@ public abstract class AbstractModelFileEditor<IM extends AbstractModelFileEditor
      */
     private boolean ignoreListeners;
 
-    public AbstractModelFileEditor() {
+    public AbstractSceneFileEditor() {
         this.editorAppState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
@@ -446,7 +446,7 @@ public abstract class AbstractModelFileEditor<IM extends AbstractModelFileEditor
 
         if (currentModel == oldChild) {
             setCurrentModel(unsafeCast(newChild));
-            editorAppState.openModel(newChild);
+            editorAppState.openModel(unsafeCast(newChild));
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();

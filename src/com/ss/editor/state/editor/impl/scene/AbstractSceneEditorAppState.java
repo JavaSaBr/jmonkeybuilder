@@ -1,4 +1,4 @@
-package com.ss.editor.state.editor.impl;
+package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 
@@ -33,6 +33,7 @@ import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.GeomUtils;
@@ -40,6 +41,9 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
+import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.array.ArrayIterator;
@@ -51,7 +55,11 @@ import rlib.util.dictionary.ObjectDictionary;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelChangeConsumer> extends AdvancedAbstractEditorAppState<T> implements SceneEditorControl {
+public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelChangeConsumer, M extends Spatial>
+        extends AdvancedAbstractEditorAppState<T> implements SceneEditorControl {
+
+    private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
+    private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
 
     /**
      * The selection models of selected models.
@@ -106,7 +114,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     /**
      * Current display model.
      */
-    private Spatial currentModel;
+    private M currentModel;
 
     /**
      * Material for selection.
@@ -132,6 +140,11 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      * The plane for calculation transforms.
      */
     private Node collisionPlane;
+
+    /**
+     * The node on which the camera is looking.
+     */
+    private Node cameraNode;
 
     /**
      * Grid of the scene.
@@ -162,12 +175,39 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         this.toolNode = new Node("ToolNode");
         this.transformToolNode = new Node("TransformToolNode");
 
+        final EditorCamera editorCamera = Objects.requireNonNull(getEditorCamera());
+        editorCamera.setDefaultHorizontalRotation(H_ROTATION);
+        editorCamera.setDefaultVerticalRotation(V_ROTATION);
+
+        final Node stateNode = getStateNode();
+        stateNode.attachChild(getCameraNode());
+
         createCollisionPlane();
         createToolElements();
         createManipulators();
         setShowSelection(true);
         setShowGrid(true);
         setTransformType(TransformType.MOVE_TOOL);
+    }
+
+    @Override
+    @NotNull
+    protected Node getNodeForCamera() {
+        if (cameraNode == null) cameraNode = new Node("CameraNode");
+        return cameraNode;
+    }
+
+    /**
+     * @return the node on which the camera is looking.
+     */
+    @NotNull
+    protected Node getCameraNode() {
+        return cameraNode;
+    }
+
+    @Override
+    protected boolean needEditorCamera() {
+        return true;
     }
 
     /**
@@ -896,17 +936,17 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     /**
      * Show the model in the scene.
      */
-    public void openModel(@NotNull final Spatial model) {
+    public void openModel(@NotNull final M model) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> openModelImpl(model));
     }
 
     /**
      * The process of showing the model in the scene.
      */
-    private void openModelImpl(@NotNull final Spatial model) {
+    private void openModelImpl(@NotNull final M model) {
 
         final Node modelNode = getModelNode();
-        final Spatial currentModel = getCurrentModel();
+        final M currentModel = getCurrentModel();
         if (currentModel != null) modelNode.detachChild(currentModel);
 
         modelNode.attachChild(model);
@@ -917,7 +957,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     /**
      * @param currentModel current display model.
      */
-    private void setCurrentModel(@Nullable final Spatial currentModel) {
+    private void setCurrentModel(@Nullable final M currentModel) {
         this.currentModel = currentModel;
     }
 
@@ -925,7 +965,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      * @return current display model.
      */
     @Nullable
-    public Spatial getCurrentModel() {
+    public M getCurrentModel() {
         return currentModel;
     }
 }

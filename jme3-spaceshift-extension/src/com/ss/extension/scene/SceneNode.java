@@ -9,4 +9,7 @@ import com.jme3.scene.Node;
  */
 public class SceneNode extends Node {
 
+    public SceneNode() {
+        super("Empty scene");
+    }
 }

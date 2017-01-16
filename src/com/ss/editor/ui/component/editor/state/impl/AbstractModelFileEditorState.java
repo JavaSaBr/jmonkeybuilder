@@ -1,9 +1,9 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
-import com.ss.editor.ui.component.editor.impl.model.AbstractModelFileEditor;
+import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 
 /**
- * The base implementation of a state container for the {@link AbstractModelFileEditor}.
+ * The base implementation of a state container for the {@link AbstractSceneFileEditor}.
  *
  * @author JavaSaBr
  */
