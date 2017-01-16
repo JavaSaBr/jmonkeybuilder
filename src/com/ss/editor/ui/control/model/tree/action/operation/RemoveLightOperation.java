@@ -10,8 +10,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for removing a {@link Light} from the
- * {@link Spatial}.
+ * The implementation of the {@link AbstractEditorOperation} for removing a {@link Light} from the {@link Spatial}.
  *
  * @author JavaSaBr.
  */

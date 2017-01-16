@@ -10,8 +10,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a {@link Light} to a {@link
- * Node}.
+ * The implementation of the {@link AbstractEditorOperation} for adding a {@link Light} to a {@link Node}.
  *
  * @author JavaSaBr
  */

@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.impl.model;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -52,7 +53,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -237,7 +237,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
      */
     private void updateMaterial(@NotNull final Path file) {
 
-        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final Spatial currentModel = getCurrentModel();
@@ -333,10 +333,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = getAssetFile(file);
-
-        Objects.requireNonNull(assetFile, "Asset file for " + file + " can't be null.");
-
+        final Path assetFile = requireNonNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -374,7 +371,7 @@ public class ModelFileEditor extends AbstractFileEditor<StackPane> implements Un
     protected void loadState() {
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
+        final Workspace currentWorkspace = requireNonNull(workspaceManager.getCurrentWorkspace(),
                 "Current workspace can't be null.");
 
         editorState = currentWorkspace.getEditorState(getEditFile(), ModelFileEditorState::new);

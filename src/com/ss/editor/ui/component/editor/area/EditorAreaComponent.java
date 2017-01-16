@@ -33,6 +33,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -82,6 +83,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * The tale of opened editors.
      */
+    @NotNull
     private final ConcurrentObjectDictionary<Path, Tab> openedEditors;
 
     /**
@@ -137,7 +139,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle changing the current asset folder.
      */
-    private void processEvent(final ChangedCurrentAssetFolderEvent event) {
+    private void processEvent(@NotNull final ChangedCurrentAssetFolderEvent event) {
         setIgnoreOpenedFiles(true);
         try {
 
@@ -168,7 +170,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle renaming a file.
      */
-    private void processEvent(final RenamedFileEvent event) {
+    private void processEvent(@NotNull final RenamedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final Path newFile = event.getNewFile();
@@ -204,7 +206,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle moving a file.
      */
-    private void processEvent(final MovedFileEvent event) {
+    private void processEvent(@NotNull final MovedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final Path newFile = event.getNewFile();
@@ -231,7 +233,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request for converting a file.
      */
-    private void processConvertFile(final RequestedConvertFileEvent event) {
+    private void processConvertFile(@NotNull final RequestedConvertFileEvent event) {
 
         final Path file = event.getFile();
         final FileConverterDescription description = event.getDescription();
@@ -253,7 +255,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request for creating a file.
      */
-    private void processCreateFile(final RequestedCreateFileEvent event) {
+    private void processCreateFile(@NotNull final RequestedCreateFileEvent event) {
 
         final Path file = event.getFile();
         final FileCreatorDescription description = event.getDescription();
@@ -267,7 +269,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request for closing an Editor..
      */
-    private void processChangeTabs(final ListChangeListener.Change<? extends Tab> change) {
+    private void processChangeTabs(@NotNull final ListChangeListener.Change<? extends Tab> change) {
         if (!change.next()) return;
 
         final List<? extends Tab> removed = change.getRemoved();
@@ -295,6 +297,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      *
      * @return the current editor.
      */
+    @Nullable
     public FileEditor getCurrentEditor() {
         final Tab selectedTab = getSelectionModel().getSelectedItem();
         if (selectedTab == null) return null;
@@ -308,7 +311,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * @param prevTab the previous editor.
      * @param newTab  the new editor.
      */
-    private void processShowEditor(final Tab prevTab, final Tab newTab) {
+    private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
         final AppStateManager stateManager = EDITOR.getStateManager();
 
@@ -333,7 +336,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Handle the request for opening a file.
      */
-    private void processOpenFile(final RequestedOpenFileEvent event) {
+    private void processOpenFile(@NotNull final RequestedOpenFileEvent event) {
 
         final Path file = event.getFile();
 
@@ -352,7 +355,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
     }
 
-    private void processOpenFileImpl(final RequestedOpenFileEvent event, final Path file) {
+    private void processOpenFileImpl(@NotNull final RequestedOpenFileEvent event, @NotNull final Path file) {
 
         final EditorDescription description = event.getDescription();
         final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
@@ -378,7 +381,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     /**
      * Add and open new editor.
      */
-    public void addEditor(final FileEditor editor, final boolean needShow) {
+    public void addEditor(@NotNull final FileEditor editor, final boolean needShow) {
 
         final Path editFile = editor.getEditFile();
 
