@@ -38,6 +38,10 @@ import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleEmitterN
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleGeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencerModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencersModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.scene.SceneLayerModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.scene.SceneNodeModelNode;
+import com.ss.extension.scene.SceneLayer;
+import com.ss.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -89,7 +93,11 @@ public class ModelNodeFactory {
             return unsafeCast(new PointLightModelNode((PointLight) element, ID_GENERATOR.incrementAndGet()));
         }
 
-        if (element instanceof ParticleEmitterNode) {
+        if (element instanceof SceneNode) {
+            return unsafeCast(new SceneNodeModelNode((SceneNode) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof SceneLayer) {
+            return unsafeCast(new SceneLayerModelNode((SceneLayer) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new ParticleEmitterNodeModelNode((ParticleEmitterNode) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleInfluencers) {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, ID_GENERATOR.incrementAndGet()));
