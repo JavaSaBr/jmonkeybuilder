@@ -71,4 +71,19 @@ public class SceneNodeModelNode extends NodeModelNode<SceneNode> {
 
         return result;
     }
+
+    @Override
+    public boolean canMove() {
+        return false;
+    }
+
+    @Override
+    public boolean canAccept(@NotNull final ModelNode<?> child) {
+        return false;
+    }
+
+    @Override
+    public boolean canCopy() {
+        return false;
+    }
 }

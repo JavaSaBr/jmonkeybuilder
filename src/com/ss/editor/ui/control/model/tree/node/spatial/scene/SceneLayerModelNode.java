@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.node.spatial.scene;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
+import com.ss.editor.ui.control.model.tree.node.Hideable;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 import com.ss.extension.scene.SceneLayer;
 
@@ -19,7 +20,7 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class SceneLayerModelNode extends NodeModelNode<SceneLayer> {
+public class SceneLayerModelNode extends NodeModelNode<SceneLayer> implements Hideable {
 
     public SceneLayerModelNode(@NotNull final SceneLayer element, final long objectId) {
         super(element, objectId);
@@ -52,9 +53,34 @@ public class SceneLayerModelNode extends NodeModelNode<SceneLayer> {
         return false;
     }
 
+    @Override
+    public boolean canMove() {
+        return false;
+    }
+
+    @Override
+    public boolean canCopy() {
+        return false;
+    }
+
     @Nullable
     @Override
     public Image getIcon() {
         return Icons.LAYERS_16;
+    }
+
+    @Override
+    public boolean isHided() {
+        return !getElement().isShowed();
+    }
+
+    @Override
+    public void show() {
+        getElement().show();
+    }
+
+    @Override
+    public void hide() {
+        getElement().hide();
     }
 }

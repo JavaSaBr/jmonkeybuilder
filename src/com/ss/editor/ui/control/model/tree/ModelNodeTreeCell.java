@@ -7,19 +7,26 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
+import com.ss.editor.ui.control.model.tree.node.Hideable;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.GeomUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Set;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -48,6 +55,8 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
     private static final DataFormat DATA_FORMAT = new DataFormat("SSEditor.modelNodeTree.modelNode");
 
+    private static final Insets VISIBLE_ICON_OFFSET = new Insets(0, 0, 0, 2);
+
     public final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
 
         @Override
@@ -70,16 +79,45 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     /**
      * The tree.
      */
+    @NotNull
     private final ModelNodeTree nodeTree;
 
     /**
      * The icon of node.
      */
-    private final ImageView imageView;
+    @NotNull
+    private final ImageView icon;
 
-    public ModelNodeTreeCell(final ModelNodeTree nodeTree) {
+    /**
+     * The content box.
+     */
+    @NotNull
+    private final HBox content;
+
+    /**
+     * The label of this cell.
+     */
+    @NotNull
+    private final Label text;
+
+    /**
+     * The visible icon.
+     */
+    @NotNull
+    private final ImageView visibleIcon;
+
+    /**
+     * The flag of ignoring updates.
+     */
+    private boolean ignoreUpdate;
+
+    public ModelNodeTreeCell(@NotNull final ModelNodeTree nodeTree) {
         this.nodeTree = nodeTree;
-        this.imageView = new ImageView();
+        this.icon = new ImageView();
+        this.content = new HBox();
+        this.text = new Label();
+        this.visibleIcon = new ImageView();
+        visibleIcon.setOnMouseClicked(this::processHide);
 
         setId(CSSIds.MODEL_NODE_TREE_CELL);
         setOnMouseClicked(this::processClick);
@@ -91,15 +129,49 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
         FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(text, CSSClasses.SPECIAL_FONT_13);
+
+        FXUtils.addToPane(icon, content);
+        FXUtils.addToPane(text, content);
+        FXUtils.addToPane(visibleIcon, content);
+
+        HBox.setMargin(visibleIcon, VISIBLE_ICON_OFFSET);
 
         setConverter(stringConverter);
+    }
+
+    /**
+     * Update hide status.
+     */
+    private void processHide(@NotNull final MouseEvent event) {
+
+        final ModelNode<?> item = getItem();
+        if (!(item instanceof Hideable)) return;
+
+        final Hideable hideable = (Hideable) item;
+
+        if (hideable.isHided()) {
+            hideable.show();
+        } else {
+            hideable.hide();
+        }
+
+        event.consume();
     }
 
     @Override
     public void startEdit() {
         if (!isEditable()) return;
 
-        super.startEdit();
+        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        if (treeItem != null) treeItem.setGraphic(null);
+
+        setIgnoreUpdate(true);
+        try {
+            super.startEdit();
+        } finally {
+            setIgnoreUpdate(false);
+        }
 
         final javafx.scene.Node graphic = getGraphic();
 
@@ -113,17 +185,47 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
     }
 
     /**
-     * @return the icon of node.
+     * @return true if need to ignore update.
      */
-    private ImageView getImageView() {
-        return imageView;
+    public boolean isIgnoreUpdate() {
+        return ignoreUpdate;
+    }
+
+    /**
+     * @param ignoreUpdate the flag of ignoring updates.
+     */
+    public void setIgnoreUpdate(final boolean ignoreUpdate) {
+        this.ignoreUpdate = ignoreUpdate;
     }
 
     @Override
-    public void updateItem(final ModelNode<?> item, final boolean empty) {
-        super.updateItem(item, empty);
+    public void cancelEdit() {
+        super.cancelEdit();
+        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        if (treeItem != null) treeItem.setGraphic(content);
+    }
 
-        final ImageView imageView = getImageView();
+    @Override
+    public void commitEdit(final ModelNode<?> newValue) {
+        super.commitEdit(newValue);
+        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        if (treeItem != null) treeItem.setGraphic(content);
+    }
+
+    /**
+     * @return the icon of node.
+     */
+    @NotNull
+    private ImageView getIcon() {
+        return icon;
+    }
+
+    @Override
+    public void updateItem(@Nullable final ModelNode<?> item, final boolean empty) {
+        super.updateItem(item, empty);
+        if (isIgnoreUpdate()) return;
+
+        final ImageView icon = getIcon();
 
         if (item == null) {
             final TreeItem<ModelNode<?>> treeItem = getTreeItem();
@@ -133,18 +235,37 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
             return;
         }
 
-        imageView.setImage(item.getIcon());
+        icon.setImage(item.getIcon());
 
         final TreeItem<ModelNode<?>> treeItem = getTreeItem();
-        if (treeItem != null) treeItem.setGraphic(imageView);
+        if (treeItem != null) treeItem.setGraphic(content);
 
-        setText(item.getName());
+        Hideable hideable = null;
+
+        if (item instanceof Hideable) {
+            hideable = (Hideable) item;
+        }
+
+        if (hideable != null) {
+            visibleIcon.setVisible(true);
+            visibleIcon.setManaged(true);
+            visibleIcon.setImage(hideable.isHided() ? Icons.INVISIBLE_16 : Icons.VISIBLE_16);
+            visibleIcon.setOpacity(hideable.isHided() ? 0.5D : 1D);
+        } else {
+            visibleIcon.setVisible(false);
+            visibleIcon.setManaged(false);
+        }
+
+        text.setText(item.getName());
+
+        setText(StringUtils.EMPTY);
         setEditable(item.canEditName());
     }
 
     /**
      * @return the tree.
      */
+    @NotNull
     private ModelNodeTree getNodeTree() {
         return nodeTree;
     }
@@ -200,6 +321,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
 
         setId(CSSIds.MODEL_NODE_TREE_CELL_DRAGGED);
         setCursor(Cursor.MOVE);
+
         mouseEvent.consume();
     }
 

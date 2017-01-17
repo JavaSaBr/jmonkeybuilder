@@ -91,8 +91,8 @@
      * -fx-text-inner-color for text on top of -fx-control-inner-color
      * -fx-selection-bar-text for text on top of -fx-selection-bar
      */
-    -fx-dark-text-color: black;
-    -fx-mid-text-color: #333;
+    -fx-dark-text-color: white;
+    -fx-mid-text-color: white;
     -fx-light-text-color: white;
 
     /* A bright blue for highlighting/accenting objects.  For example: selected

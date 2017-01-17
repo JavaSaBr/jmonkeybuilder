@@ -54,6 +54,8 @@ public interface Icons {
     Image BACKGROUND_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/background.png");
     Image EMITTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/emitter.png");
     Image SKY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sky.png");
+    Image INVISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/invisible.png");
+    Image VISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/visible.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
