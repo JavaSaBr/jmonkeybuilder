@@ -5,6 +5,7 @@ import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.scene.Node;
+import com.jme3.util.clone.Cloner;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -121,5 +122,12 @@ public class SceneLayer extends Node {
         final InputCapsule capsule = importer.getCapsule(this);
         setShowed(capsule.readBoolean("showed", false));
         setBuiltIn(capsule.readBoolean("builtIn", false));
+    }
+
+    @Override
+    public void cloneFields(@NotNull final Cloner cloner, @NotNull final Object original) {
+        super.cloneFields(cloner, original);
+
+        sceneNode = cloner.clone(sceneNode);
     }
 }

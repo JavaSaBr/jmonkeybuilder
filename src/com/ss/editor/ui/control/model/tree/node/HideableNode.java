@@ -1,11 +1,15 @@
 package com.ss.editor.ui.control.model.tree.node;
 
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The interface-marker that an object can be hide.
  *
  * @author JavaSaBr
  */
-public interface Hideable {
+public interface HideableNode {
 
     /**
      * @return true if this object is hided.
@@ -15,10 +19,10 @@ public interface Hideable {
     /**
      * Show the object.
      */
-    void show();
+    void show(@NotNull ModelNodeTree nodeTree);
 
     /**
      * Hide the object.
      */
-    void hide();
+    void hide(@NotNull ModelNodeTree nodeTree);
 }

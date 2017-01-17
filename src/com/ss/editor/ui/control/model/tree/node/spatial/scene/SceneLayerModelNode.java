@@ -1,14 +1,18 @@
 package com.ss.editor.ui.control.model.tree.node.spatial.scene;
 
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
 import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
-import com.ss.editor.ui.control.model.tree.node.Hideable;
+import com.ss.editor.ui.control.model.tree.node.HideableNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.NodeModelNode;
 import com.ss.extension.scene.SceneLayer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
@@ -20,7 +24,7 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class SceneLayerModelNode extends NodeModelNode<SceneLayer> implements Hideable {
+public class SceneLayerModelNode extends NodeModelNode<SceneLayer> implements HideableNode {
 
     public SceneLayerModelNode(@NotNull final SceneLayer element, final long objectId) {
         super(element, objectId);
@@ -75,12 +79,14 @@ public class SceneLayerModelNode extends NodeModelNode<SceneLayer> implements Hi
     }
 
     @Override
-    public void show() {
-        getElement().show();
+    public void show(@NotNull final ModelNodeTree nodeTree) {
+        final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
+        consumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), true));
     }
 
     @Override
-    public void hide() {
-        getElement().hide();
+    public void hide(@NotNull ModelNodeTree nodeTree) {
+        final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
+        consumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), false));
     }
 }

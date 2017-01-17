@@ -13,6 +13,8 @@ import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.QuaternionModelPropertyControl;
 import com.ss.editor.ui.control.model.property.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
+import com.ss.extension.scene.SceneLayer;
+import com.ss.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,10 +49,6 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         final CullHint cullHint = spatial.getLocalCullHint();
         final ShadowMode shadowMode = spatial.getLocalShadowMode();
         final Bucket queueBucket = spatial.getLocalQueueBucket();
-        final Vector3f location = spatial.getLocalTranslation().clone();
-        final Vector3f scale = spatial.getLocalScale().clone();
-
-        final Quaternion rotation = spatial.getLocalRotation().clone();
 
         final ModelPropertyControl<Spatial, CullHint> cullHintControl =
                 new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer, CULL_HINTS);
@@ -70,6 +68,16 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         queueBucketControl.setSyncHandler(Spatial::getLocalQueueBucket);
         queueBucketControl.setEditObject(spatial);
 
+        FXUtils.addToPane(cullHintControl, container);
+        FXUtils.addToPane(shadowModeControl, container);
+        FXUtils.addToPane(queueBucketControl, container);
+
+        if (!canEditTransformation(spatial)) return;
+
+        final Vector3f location = spatial.getLocalTranslation().clone();
+        final Vector3f scale = spatial.getLocalScale().clone();
+        final Quaternion rotation = spatial.getLocalRotation().clone();
+
         final ModelPropertyControl<Spatial, Vector3f> locationControl =
                 new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
         locationControl.setApplyHandler(Spatial::setLocalTranslation);
@@ -88,14 +96,14 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         rotationControl.setSyncHandler(Spatial::getLocalRotation);
         rotationControl.setEditObject(spatial);
 
-        FXUtils.addToPane(cullHintControl, container);
-        FXUtils.addToPane(shadowModeControl, container);
-        FXUtils.addToPane(queueBucketControl, container);
-
         addSplitLine(container);
 
         FXUtils.addToPane(locationControl, container);
         FXUtils.addToPane(scaleControl, container);
         FXUtils.addToPane(rotationControl, container);
+    }
+
+    private boolean canEditTransformation(@NotNull final Spatial spatial) {
+        return !(spatial instanceof SceneNode || spatial instanceof SceneLayer);
     }
 }

@@ -6,6 +6,7 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.scene.Node;
+import com.jme3.util.clone.Cloner;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,20 +28,30 @@ public class SceneNode extends Node {
      * The scene layers.
      */
     @NotNull
-    private final Array<SceneLayer> layers;
+    private Array<SceneLayer> layers;
 
     public SceneNode() {
         super("Empty scene");
         this.layers = ArrayFactory.newArray(SceneLayer.class);
     }
 
+    /**
+     * Add a new layer.
+     *
+     * @param layer the layer.
+     */
     public void addLayer(@NotNull final SceneLayer layer) {
         layer.setSceneNode(this);
         layers.add(layer);
     }
 
+    /**
+     * Remove a new layer.
+     *
+     * @param layer the layer.
+     */
     public void removeLayer(@NotNull final SceneLayer layer) {
-        if(layer.getSceneNode() == this) {
+        if (layer.getSceneNode() == this) {
             layer.setSceneNode(null);
         }
         layers.slowRemove(layer);
@@ -86,6 +97,17 @@ public class SceneNode extends Node {
             layer.setSceneNode(this);
             layers.add(layer);
             if (layer.isShowed()) attachChild(layer);
+        }
+    }
+
+    @Override
+    public void cloneFields(final Cloner cloner, final Object original) {
+        super.cloneFields(cloner, original);
+
+        layers = cloner.clone(layers);
+
+        for (int i = 0; i < layers.size(); i++) {
+            layers.set(i, cloner.clone(layers.get(i)));
         }
     }
 }

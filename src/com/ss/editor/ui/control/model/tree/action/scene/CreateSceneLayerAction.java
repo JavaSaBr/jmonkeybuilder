@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.scene;
 
 import static java.util.Objects.requireNonNull;
 
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -37,7 +38,7 @@ public class CreateSceneLayerAction extends AbstractNodeAction {
     @NotNull
     @Override
     protected String getName() {
-        return "New layer";
+        return Messages.MODEL_NODE_TREE_ACTION_CREATE_LAYER;
     }
 
     @Override

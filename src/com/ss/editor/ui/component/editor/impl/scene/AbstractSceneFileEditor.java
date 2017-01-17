@@ -480,14 +480,25 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             parent = spatial.getParent();
         }
 
-        final Array<Spatial> spatials = ArrayFactory.newArray(Spatial.class);
-        if (spatial != null) spatials.add(spatial);
-
-        final MA editorState = getEditorAppState();
-        editorState.updateSelection(spatials);
+        updateSelection(spatial);
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
+    }
+
+    /**
+     * Update selection to 3D state.
+     *
+     * @param spatial the new selected object.
+     */
+    protected void updateSelection(@Nullable final Spatial spatial) {
+
+        //FIXME
+        final Array<Spatial> selection = ArrayFactory.newArray(Spatial.class);
+        if (spatial != null) selection.add(spatial);
+
+        final MA editorAppState = getEditorAppState();
+        editorAppState.updateSelection(selection);
     }
 
     @Override

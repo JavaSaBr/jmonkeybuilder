@@ -6,14 +6,15 @@ import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
+import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.Messages;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
@@ -35,7 +36,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
-        DESCRIPTION.setEditorName("Scene editor");
+        DESCRIPTION.setEditorName(Messages.SCENE_FILE_EDITOR_NAME);
         DESCRIPTION.setConstructor(SceneFileEditor::new);
         DESCRIPTION.setEditorId(SceneFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.JME_SCENE);
@@ -94,20 +95,13 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     }
 
     @Override
-    public void processSelectFromTree(@Nullable Object object) {
+    protected void updateSelection(@Nullable Spatial spatial) {
 
-        Object element = null;
-
-        if (object instanceof ModelNode<?>) {
-            final ModelNode modelNode = (ModelNode) object;
-            element = modelNode.getElement();
+        if (spatial instanceof SceneNode || spatial instanceof SceneLayer) {
+            spatial = null;
         }
 
-        if (element instanceof SceneNode || element instanceof SceneLayer) {
-            object = null;
-        }
-
-        super.processSelectFromTree(object);
+        super.updateSelection(spatial);
     }
 
     @Override

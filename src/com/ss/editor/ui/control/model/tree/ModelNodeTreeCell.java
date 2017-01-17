@@ -9,7 +9,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
-import com.ss.editor.ui.control.model.tree.node.Hideable;
+import com.ss.editor.ui.control.model.tree.node.HideableNode;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -117,7 +117,9 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         this.content = new HBox();
         this.text = new Label();
         this.visibleIcon = new ImageView();
-        visibleIcon.setOnMouseClicked(this::processHide);
+        this.visibleIcon.addEventFilter(MouseEvent.MOUSE_RELEASED, this::processHide);
+        this.visibleIcon.setOnMouseReleased(this::processHide);
+        this.visibleIcon.setPickOnBounds(true);
 
         setId(CSSIds.MODEL_NODE_TREE_CELL);
         setOnMouseClicked(this::processClick);
@@ -132,8 +134,8 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         FXUtils.addClassTo(text, CSSClasses.SPECIAL_FONT_13);
 
         FXUtils.addToPane(icon, content);
-        FXUtils.addToPane(text, content);
         FXUtils.addToPane(visibleIcon, content);
+        FXUtils.addToPane(text, content);
 
         HBox.setMargin(visibleIcon, VISIBLE_ICON_OFFSET);
 
@@ -144,19 +146,22 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
      * Update hide status.
      */
     private void processHide(@NotNull final MouseEvent event) {
+        event.consume();
 
-        final ModelNode<?> item = getItem();
-        if (!(item instanceof Hideable)) return;
-
-        final Hideable hideable = (Hideable) item;
-
-        if (hideable.isHided()) {
-            hideable.show();
-        } else {
-            hideable.hide();
+        if (event.getButton() != MouseButton.PRIMARY) {
+            return;
         }
 
-        event.consume();
+        final ModelNode<?> item = getItem();
+        if (!(item instanceof HideableNode)) return;
+
+        final HideableNode hideable = (HideableNode) item;
+
+        if (hideable.isHided()) {
+            hideable.show(getNodeTree());
+        } else {
+            hideable.hide(getNodeTree());
+        }
     }
 
     @Override
@@ -203,6 +208,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         super.cancelEdit();
         final TreeItem<ModelNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
+        setText(StringUtils.EMPTY);
     }
 
     @Override
@@ -210,6 +216,7 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         super.commitEdit(newValue);
         final TreeItem<ModelNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
+        setText(StringUtils.EMPTY);
     }
 
     /**
@@ -240,10 +247,10 @@ public class ModelNodeTreeCell extends TextFieldTreeCell<ModelNode<?>> {
         final TreeItem<ModelNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
 
-        Hideable hideable = null;
+        HideableNode hideable = null;
 
-        if (item instanceof Hideable) {
-            hideable = (Hideable) item;
+        if (item instanceof HideableNode) {
+            hideable = (HideableNode) item;
         }
 
         if (hideable != null) {

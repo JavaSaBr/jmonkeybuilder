@@ -135,6 +135,8 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
 
+    public static final String SCENE_FILE_EDITOR_NAME;
+
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
     public static final String MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
@@ -188,6 +190,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_LAYER;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -497,6 +500,8 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
         MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
 
+        SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
+
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
         MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY = bundle.getString("ModelNodeTreeActionOptimizeGeometry");
@@ -550,6 +555,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRotation");
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSize");
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
+        MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

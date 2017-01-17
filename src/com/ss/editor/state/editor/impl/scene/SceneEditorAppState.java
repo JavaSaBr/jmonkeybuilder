@@ -9,6 +9,7 @@ import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of the {@link AbstractSceneEditorAppState} for the {@link SceneFileEditor}.
@@ -33,10 +34,15 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     @NotNull
     @Override
     protected Geometry createGrid() {
-        final Geometry grid = new Geometry("grid", new Grid(200, 200, 1.0f));
+        final Geometry grid = new Geometry("grid", new Grid(2000, 2000, 1.0f));
         grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
-        grid.setLocalTranslation(-100, 0, -100);
+        grid.setLocalTranslation(-1000, 0, -1000);
         return grid;
+    }
+
+    @Override
+    protected void notifySelected(@Nullable final Object object) {
+        getFileEditor().notifySelected(object);
     }
 
     @Override
