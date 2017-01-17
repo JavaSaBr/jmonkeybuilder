@@ -55,10 +55,10 @@ public class ModelNodeTree extends VBox {
      */
     private TreeView<ModelNode<?>> treeView;
 
-    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer modelChangeConsumer) {
+    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer consumer) {
         setId(CSSIds.MODEL_NODE_TREE_CONTAINER);
         this.selectionHandler = selectionHandler;
-        this.modelChangeConsumer = modelChangeConsumer;
+        this.modelChangeConsumer = consumer;
         createComponents();
     }
 

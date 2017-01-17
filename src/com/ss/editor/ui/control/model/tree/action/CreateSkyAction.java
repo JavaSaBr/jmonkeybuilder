@@ -19,14 +19,14 @@ import javafx.scene.image.Image;
  */
 public class CreateSkyAction extends AbstractNodeAction {
 
-    public CreateSkyAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public CreateSkyAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.ADD_18;
+        return Icons.SKY_16;
     }
 
     @NotNull

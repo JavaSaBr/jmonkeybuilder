@@ -13,10 +13,13 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.util.MaterialUtils;
+import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -91,15 +94,20 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     }
 
     @Override
-    public void incrementChange() {
-        final int result = changeCounter.incrementAndGet();
-        setDirty(result != 0);
-    }
+    public void processSelectFromTree(@Nullable Object object) {
 
-    @Override
-    public void decrementChange() {
-        final int result = changeCounter.decrementAndGet();
-        setDirty(result != 0);
+        Object element = null;
+
+        if (object instanceof ModelNode<?>) {
+            final ModelNode modelNode = (ModelNode) object;
+            element = modelNode.getElement();
+        }
+
+        if (element instanceof SceneNode || element instanceof SceneLayer) {
+            object = null;
+        }
+
+        super.processSelectFromTree(object);
     }
 
     @Override

@@ -48,6 +48,12 @@ public interface Icons {
     Image TRANSFORMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/transformation.png");
     Image EXTRACT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/extract.png");
     Image GENERATE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/generate_16.png");
+    Image SCENE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scene.png");
+    Image LAYERS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/layers.png");
+    Image OPEN_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/open-file.png");
+    Image BACKGROUND_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/background.png");
+    Image EMITTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/emitter.png");
+    Image SKY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sky.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);

@@ -1,6 +1,9 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -22,7 +25,7 @@ import jme3tools.optimize.GeometryBatchFactory;
  */
 public class OptimizeGeometryAction extends AbstractNodeAction {
 
-    public OptimizeGeometryAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public OptimizeGeometryAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -42,7 +45,8 @@ public class OptimizeGeometryAction extends AbstractNodeAction {
     protected void process() {
 
         final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final ModelChangeConsumer modelChangeConsumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final Spatial currentModel = modelChangeConsumer.getCurrentModel();
 
         final ModelNode<?> node = getNode();
         final Node oldElement = (Node) node.getElement();
@@ -50,7 +54,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction {
 
         GeometryBatchFactory.optimize(newElement);
 
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), oldElement.getParent());
+        final int index = GeomUtils.getIndex(currentModel, oldElement.getParent());
 
         modelChangeConsumer.execute(new OptimizeGeometryOperation(newElement, oldElement, index));
     }

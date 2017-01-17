@@ -8,13 +8,12 @@ import static rlib.util.ClassUtils.unsafeCast;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
-import com.jme3.light.Light;
+import com.jme3.export.binary.BinaryExporter;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -45,6 +44,9 @@ import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -391,49 +393,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyAddedChild(@NotNull final Node parent, @NotNull final Spatial added, final int index) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyAdded(parent, added, index);
-    }
-
-    @Override
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);
     }
 
     @Override
-    public void notifyAddedControl(@NotNull final Spatial spatial, @NotNull final Control control, final int index) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyAdded(spatial, control, index);
-    }
-
-    @Override
-    public void notifyRemovedControl(@NotNull final Spatial spatial, @NotNull final Control control) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(spatial, control);
-    }
-
-    @Override
-    public void notifyAddedLight(@NotNull final Node parent, @NotNull final Light added, final int index) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyAdded(parent, added, index);
-    }
-
-    @Override
-    public void notifyRemovedChild(@NotNull final Node parent, @NotNull final Spatial removed) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(parent, removed);
-    }
-
-    @Override
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyRemoved(parent, removed);
-    }
-
-    @Override
-    public void notifyRemovedLight(@NotNull final Node parent, @NotNull final Light removed) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
     }
@@ -528,6 +494,23 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     public boolean isInside(final double sceneX, final double sceneY) {
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
         return editorAreaPane.contains(point2D);
+    }
+
+    @Override
+    public void doSave() {
+
+        final Path editFile = getEditFile();
+        final M currentModel = getCurrentModel();
+
+        final BinaryExporter exporter = BinaryExporter.getInstance();
+
+        try (final OutputStream out = Files.newOutputStream(editFile)) {
+            exporter.save(currentModel, out);
+        } catch (final IOException e) {
+            LOGGER.warning(this, e);
+        }
+
+        setDirty(false);
     }
 
     @Override

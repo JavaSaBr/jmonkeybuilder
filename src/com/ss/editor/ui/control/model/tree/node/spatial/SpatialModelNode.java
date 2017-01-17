@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.node.spatial;
 
 import static com.ss.editor.ui.control.model.tree.node.ModelNodeFactory.createFor;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
@@ -8,8 +9,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
@@ -21,6 +22,7 @@ import com.ss.editor.ui.control.model.tree.node.light.LightModelNode;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
@@ -43,7 +45,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
-        items.add(new RenameNodeAction(nodeTree, this));
+        if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
         if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
@@ -53,11 +55,11 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
      * @return true if you can remove this node.
      */
     protected boolean canRemove() {
-        Node parent = getElement().getParent();
-        return parent != null && parent.getUserData(ModelEditorAppState.class.getName()) != Boolean.TRUE;
+        final Node parent = getElement().getParent();
+        return parent != null && parent.getUserData(SceneEditorControl.class.getName()) != Boolean.TRUE;
     }
 
-    @NotNull
+    @Nullable
     protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
         return new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
     }
@@ -82,14 +84,16 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     @Override
     public void changeName(@NotNull final ModelNodeTree nodeTree, @NotNull final String newName) {
         if (StringUtils.equals(getName(), newName)) return;
+
         super.changeName(nodeTree, newName);
 
         final Spatial spatial = getElement();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final Spatial currentModel = consumer.getCurrentModel();
 
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), spatial);
+        final int index = GeomUtils.getIndex(currentModel, spatial);
 
-        modelChangeConsumer.execute(new RenameNodeOperation(spatial.getName(), newName, index));
+        consumer.execute(new RenameNodeOperation(spatial.getName(), newName, index));
     }
 
     @NotNull

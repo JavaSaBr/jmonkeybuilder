@@ -1,5 +1,8 @@
 package com.ss.editor.ui.control.model.tree.dialog.sky;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
 
 import com.jme3.asset.AssetManager;
@@ -21,8 +24,6 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -217,8 +218,6 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         selectionModel.select(SkyType.SINGLE_TEXTURE);
 
         VBox.setMargin(container, SETTINGS_OFFSET);
-
-        validate();
     }
 
     private void createMultipleTextureSettings() {
@@ -351,6 +350,7 @@ public class CreateSkyDialog extends AbstractNodeDialog {
 
         FXUtils.addClassTo(singleTextureLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(envMapTypeLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(envMapTypeComboBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(flipYCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(singleTextureContainer, FIELD_OFFSET);
@@ -521,11 +521,6 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         final SkyType selectedItem = selectionModel.getSelectedItem();
 
         final Button okButton = getOkButton();
-
-        if (okButton == null) {
-            return;
-        }
-
         okButton.setDisable(true);
 
         if (selectedItem == SkyType.SINGLE_TEXTURE) {
@@ -679,31 +674,31 @@ public class CreateSkyDialog extends AbstractNodeDialog {
         final ChooseTextureControl bottomTextureControl = getBottomTextureControl();
         final Path bottomTextureFile = bottomTextureControl.getTextureFile();
 
-        final Path northTextureAssetFile = EditorUtil.getAssetFile(northTextureFile);
-        final Path southTextureAssetFile = EditorUtil.getAssetFile(southTextureFile);
-        final Path eastTextureAssetFile = EditorUtil.getAssetFile(eastTextureFile);
-        final Path westTextureAssetFile = EditorUtil.getAssetFile(westTextureFile);
-        final Path topTextureAssetFile = EditorUtil.getAssetFile(topTextureFile);
-        final Path bottomTextureAssetFile = EditorUtil.getAssetFile(bottomTextureFile);
+        final Path northTextureAssetFile = requireNonNull(getAssetFile(northTextureFile));
+        final Path southTextureAssetFile = requireNonNull(getAssetFile(southTextureFile));
+        final Path eastTextureAssetFile = requireNonNull(getAssetFile(eastTextureFile));
+        final Path westTextureAssetFile = requireNonNull(getAssetFile(westTextureFile));
+        final Path topTextureAssetFile = requireNonNull(getAssetFile(topTextureFile));
+        final Path bottomTextureAssetFile = requireNonNull(getAssetFile(bottomTextureFile));
 
-        final Texture northTexture = assetManager.loadTexture(EditorUtil.toAssetPath(northTextureAssetFile));
-        final Texture southTexture = assetManager.loadTexture(EditorUtil.toAssetPath(southTextureAssetFile));
-        final Texture eastTexture = assetManager.loadTexture(EditorUtil.toAssetPath(eastTextureAssetFile));
-        final Texture westTexture = assetManager.loadTexture(EditorUtil.toAssetPath(westTextureAssetFile));
-        final Texture topTexture = assetManager.loadTexture(EditorUtil.toAssetPath(topTextureAssetFile));
-        final Texture bottomTexture = assetManager.loadTexture(EditorUtil.toAssetPath(bottomTextureAssetFile));
+        final Texture northTexture = assetManager.loadTexture(toAssetPath(northTextureAssetFile));
+        final Texture southTexture = assetManager.loadTexture(toAssetPath(southTextureAssetFile));
+        final Texture eastTexture = assetManager.loadTexture(toAssetPath(eastTextureAssetFile));
+        final Texture westTexture = assetManager.loadTexture(toAssetPath(westTextureAssetFile));
+        final Texture topTexture = assetManager.loadTexture(toAssetPath(topTextureAssetFile));
+        final Texture bottomTexture = assetManager.loadTexture(toAssetPath(bottomTextureAssetFile));
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial sky = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture, topTexture, bottomTexture, scale);
-            sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
+            final Spatial skyModel = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture,
+                    southTexture, topTexture, bottomTexture, scale);
+
+            skyModel.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
 
             final ModelNode<?> parentNode = getParentNode();
-            final Node element = (Node) parentNode.getElement();
+            final Node parent = (Node) parentNode.getElement();
 
-            final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-            modelChangeConsumer.execute(new AddChildOperation(sky, index));
+            modelChangeConsumer.execute(new AddChildOperation(skyModel, parent));
         });
     }
 
@@ -720,9 +715,8 @@ public class CreateSkyDialog extends AbstractNodeDialog {
 
         final ChooseTextureControl singleTextureControl = getSingleTextureControl();
         final Path textureFile = singleTextureControl.getTextureFile();
-        final Path assetFile = EditorUtil.getAssetFile(textureFile);
-
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = requireNonNull(getAssetFile(textureFile));
+        final String assetPath = toAssetPath(assetFile);
 
         final TextureKey textureKey = new TextureKey(assetPath, flipY);
         textureKey.setGenerateMips(true);
@@ -739,11 +733,9 @@ public class CreateSkyDialog extends AbstractNodeDialog {
             sky.setUserData(ModelNodeTree.USER_DATA_IS_SKY, Boolean.TRUE);
 
             final ModelNode<?> parentNode = getParentNode();
-            final Node element = (Node) parentNode.getElement();
+            final Node parent = (Node) parentNode.getElement();
 
-            final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-            modelChangeConsumer.execute(new AddChildOperation(sky, index));
+            modelChangeConsumer.execute(new AddChildOperation(sky, parent));
         });
     }
 

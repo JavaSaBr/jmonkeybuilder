@@ -7,10 +7,8 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
-import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
@@ -33,9 +31,6 @@ import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Supplier;
 
@@ -196,23 +191,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    public void doSave() {
-
-        final Path editFile = getEditFile();
-        final Spatial currentModel = getCurrentModel();
-
-        final BinaryExporter exporter = BinaryExporter.getInstance();
-
-        try (final OutputStream out = Files.newOutputStream(editFile)) {
-            exporter.save(currentModel, out);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
-        }
-
-        setDirty(false);
-    }
-
-    @Override
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
 
@@ -292,44 +270,47 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    public void notifyAddedChild(@NotNull final Node parent, @NotNull final Spatial added, final int index) {
+    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         super.notifyAddedChild(parent, added, index);
 
         final ModelEditorAppState editorAppState = getEditorAppState();
-        final boolean isSky = added.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
 
-        if (isSky) {
-            editorAppState.addCustomSky(added);
-            editorAppState.updateLightProbe();
+        if (added instanceof Spatial) {
+
+            final Spatial spatial = (Spatial) added;
+
+            final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+
+            if (isSky) {
+                editorAppState.addCustomSky(spatial);
+                editorAppState.updateLightProbe();
+            }
+
+        } else if (added instanceof Light) {
+            editorAppState.addLight((Light) added);
         }
     }
 
     @Override
-    public void notifyAddedLight(@NotNull final Node parent, @NotNull final Light added, final int index) {
-        super.notifyAddedLight(parent, added, index);
-
-        final ModelEditorAppState editorAppState = getEditorAppState();
-        editorAppState.addLight(added);
-    }
-
-    @Override
-    public void notifyRemovedChild(@NotNull final Node parent, @NotNull final Spatial removed) {
+    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         super.notifyRemovedChild(parent, removed);
 
         final ModelEditorAppState editorAppState = getEditorAppState();
-        final boolean isSky = removed.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
 
-        if (isSky) {
-            editorAppState.removeCustomSky(removed);
-            editorAppState.updateLightProbe();
+        if (removed instanceof Spatial) {
+
+            final Spatial spatial = (Spatial) removed;
+
+            final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+
+            if (isSky) {
+                editorAppState.removeCustomSky(spatial);
+                editorAppState.updateLightProbe();
+            }
+
+        } else if (removed instanceof Light) {
+            editorAppState.removeLight((Light) removed);
         }
-    }
-
-    @Override
-    public void notifyRemovedLight(@NotNull final Node parent, @NotNull final Light removed) {
-        super.notifyRemovedLight(parent, removed);
-        final ModelEditorAppState editorState = getEditorAppState();
-        editorState.removeLight(removed);
     }
 
     @Override

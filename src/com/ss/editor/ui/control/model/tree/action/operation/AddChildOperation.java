@@ -4,7 +4,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,45 +23,33 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     private final Spatial newChild;
 
     /**
-     * The index of parent position.
+     * The parent.
      */
-    private final int index;
+    @NotNull
+    private final Node parent;
 
-    public AddChildOperation(@NotNull final Spatial newChild, final int index) {
+    public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent) {
         this.newChild = newChild;
-        this.index = index;
+        this.parent = parent;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.attachChildAt(newChild, 0);
+            parent.attachChildAt(newChild, 0);
 
             final TonegodTranslucentBucketFilter filter = EDITOR.getTranslucentBucketFilter();
             filter.refresh();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, newChild, 0));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(parent, newChild, 0));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.detachChild(newChild);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, newChild));
+            parent.detachChild(newChild);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(parent, newChild));
         });
     }
 }

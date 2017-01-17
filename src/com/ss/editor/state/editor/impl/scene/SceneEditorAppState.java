@@ -1,7 +1,10 @@
 package com.ss.editor.state.editor.impl.scene;
 
+import com.jme3.math.ColorRGBA;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.debug.Grid;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.extension.scene.SceneNode;
 
@@ -25,6 +28,15 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     @Override
     public void notifyTransformed(@NotNull final Spatial spatial) {
         getFileEditor().notifyTransformed(spatial);
+    }
+
+    @NotNull
+    @Override
+    protected Geometry createGrid() {
+        final Geometry grid = new Geometry("grid", new Grid(200, 200, 1.0f));
+        grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
+        grid.setLocalTranslation(-100, 0, -100);
+        return grid;
     }
 
     @Override

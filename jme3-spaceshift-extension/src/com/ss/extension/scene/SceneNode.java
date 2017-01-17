@@ -36,7 +36,14 @@ public class SceneNode extends Node {
 
     public void addLayer(@NotNull final SceneLayer layer) {
         layer.setSceneNode(this);
-        this.layers.add(layer);
+        layers.add(layer);
+    }
+
+    public void removeLayer(@NotNull final SceneLayer layer) {
+        if(layer.getSceneNode() == this) {
+            layer.setSceneNode(null);
+        }
+        layers.slowRemove(layer);
     }
 
     @NotNull

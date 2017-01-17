@@ -10,7 +10,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for removing a control from a node.
+ * The implementation of the {@link AbstractEditorOperation} to remove a control from a node.
  *
  * @author JavaSaBr
  */
@@ -19,6 +19,7 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
     /**
      * The control.
      */
+    @NotNull
     private final Control control;
 
     /**
@@ -42,7 +43,7 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
             final Node node = (Node) parent;
             node.removeControl(control);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedControl(node, control));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, control));
         });
     }
 
@@ -57,7 +58,7 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
             final Node node = (Node) parent;
             node.addControl(control);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedControl(node, control, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, control, -1));
         });
     }
 }

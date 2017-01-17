@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.geometry;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
@@ -9,7 +11,6 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,18 +29,16 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction {
     protected void process() {
 
         final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         final Geometry geometry = createGeometry();
         geometry.setMaterial(new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md"));
 
         final ModelNode<?> modelNode = getNode();
-        final Node element = (Node) modelNode.getElement();
+        final Node parent = (Node) modelNode.getElement();
 
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-        modelChangeConsumer.execute(new AddChildOperation(geometry, index));
+        consumer.execute(new AddChildOperation(geometry, parent));
     }
 
     @NotNull

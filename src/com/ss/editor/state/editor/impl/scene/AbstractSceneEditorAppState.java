@@ -238,13 +238,18 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     private void createToolElements() {
 
         selectionMaterial = createColorMaterial(new ColorRGBA(1F, 170 / 255F, 64 / 255F, 1F));
-
-        grid = new Geometry("grid", new Grid(20, 20, 1.0f));
-        grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
-        grid.setLocalTranslation(-10, 0, -10);
+        grid = createGrid();
 
         final Node toolNode = getToolNode();
         toolNode.attachChild(grid);
+    }
+
+    @NotNull
+    protected Geometry createGrid() {
+        final Geometry grid = new Geometry("grid", new Grid(20, 20, 1.0f));
+        grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
+        grid.setLocalTranslation(-10, 0, -10);
+        return grid;
     }
 
     /**
@@ -306,7 +311,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     /**
      * Create the material for presentation of selected models.
      */
-    private Material createColorMaterial(@NotNull final ColorRGBA color) {
+    protected Material createColorMaterial(@NotNull final ColorRGBA color) {
         final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
         material.getAdditionalRenderState().setWireframe(true);
         material.setColor("Color", color);

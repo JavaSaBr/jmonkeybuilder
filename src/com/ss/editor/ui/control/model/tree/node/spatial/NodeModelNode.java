@@ -51,21 +51,35 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     @Override
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
-        toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
-
+        final Menu toolMenu = createToolMenu(nodeTree);
         final Menu createMenu = createCreationMenu(nodeTree);
 
-        items.add(toolMenu);
-        items.add(createMenu);
+        if (toolMenu != null) {
+            items.add(toolMenu);
+        }
+
+        if (createMenu != null) {
+            items.add(createMenu);
+        }
+
         items.add(new LoadModelAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
     }
 
-    @NotNull
+    @Nullable
+    protected Menu createToolMenu(final @NotNull ModelNodeTree nodeTree) {
+        final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
+        toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
+        return toolMenu;
+    }
+
+    @Nullable
     @Override
     protected Menu createCreationMenu(@NotNull final ModelNodeTree nodeTree) {
+
+        final Menu menu = super.createCreationMenu(nodeTree);
+        if (menu == null) return null;
 
         final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE, new ImageView(Icons.ADD_18));
         createPrimitiveMenu.getItems().addAll(new CreateBoxAction(nodeTree, this),
@@ -78,7 +92,6 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
                 new CreateAmbientLightAction(nodeTree, this),
                 new CreateDirectionLightAction(nodeTree, this));
 
-        final Menu menu = super.createCreationMenu(nodeTree);
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this),
                 new CreateSkyAction(nodeTree, this),
                 new CreateTonegodEmitterAction(nodeTree, this),

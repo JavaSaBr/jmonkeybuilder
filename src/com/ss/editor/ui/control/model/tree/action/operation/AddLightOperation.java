@@ -10,7 +10,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a {@link Light} to a {@link Node}.
+ * The implementation of the {@link AbstractEditorOperation} to add a {@link Light} to a {@link Node}.
  *
  * @author JavaSaBr
  */
@@ -19,6 +19,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
     /**
      * The new light.
      */
+    @NotNull
     private final Light light;
 
     /**
@@ -26,7 +27,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
      */
     private final int index;
 
-    public AddLightOperation(final Light light, final int index) {
+    public AddLightOperation(@NotNull final Light light, final int index) {
         this.light = light;
         this.index = index;
     }
@@ -42,7 +43,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
             final Node node = (Node) parent;
             node.addLight(light);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedLight(node, light, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, light, -1));
         });
     }
 
@@ -57,7 +58,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
             final Node node = (Node) parent;
             node.removeLight(light);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedLight(node, light));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, light));
         });
     }
 }

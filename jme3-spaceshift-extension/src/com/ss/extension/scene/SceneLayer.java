@@ -7,8 +7,10 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.scene.Node;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The implementation of a scene layer.
@@ -20,6 +22,7 @@ public class SceneLayer extends Node {
     /**
      * The parent scene node.
      */
+    @Nullable
     private SceneNode sceneNode;
 
     /**
@@ -72,7 +75,7 @@ public class SceneLayer extends Node {
     /**
      * @param sceneNode The parent scene node.
      */
-    public void setSceneNode(@NotNull final SceneNode sceneNode) {
+    public void setSceneNode(@Nullable final SceneNode sceneNode) {
         this.sceneNode = sceneNode;
     }
 
@@ -81,7 +84,7 @@ public class SceneLayer extends Node {
      */
     @NotNull
     public SceneNode getSceneNode() {
-        return sceneNode;
+        return Objects.requireNonNull(sceneNode);
     }
 
     /**
