@@ -136,4 +136,8 @@ public interface CSSIds {
     String LOG_VIEW = "LogView";
 
     String SCENE_APP_STATE_CONTAINER = "SceneAppStateContainer";
+    String SCENE_APP_STATE_LIST_CELL = "SceneAppStateListCell";
+
+    String CREATE_SCENE_APP_STATE_DIALOG_LABEL = "CreateSceneAppStateDialogLabel";
+    String CREATE_SCENE_APP_STATE_DIALOG_CONTROL = "CreateSceneAppStateDialogControl";
 }

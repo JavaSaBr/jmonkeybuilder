@@ -365,6 +365,11 @@ public class Messages {
 
     public static final String LOG_VIEW_TITLE;
 
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_TITLE;
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN;
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX;
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -729,5 +734,10 @@ public class Messages {
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
 
         LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
+
+        CREATE_SCENE_APP_STATE_DIALOG_TITLE = bundle.getString("CreateSceneAppStateDialogTitle");
+        CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN = bundle.getString("CreateSceneAppStateDialogBuiltIn");
+        CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX = bundle.getString("CreateSceneAppStateDialogCustomBox");
+        CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneAppStateDialogCustomField");
     }
 }

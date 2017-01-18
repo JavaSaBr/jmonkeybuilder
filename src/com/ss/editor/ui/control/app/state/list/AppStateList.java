@@ -1,15 +1,16 @@
 package com.ss.editor.ui.control.app.state.list;
 
+import com.ss.editor.JFXApplication;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
+import com.ss.editor.ui.control.app.state.dialog.CreateSceneAppStateDialog;
 import com.ss.editor.ui.control.app.state.operation.RemoveAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
-import com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,8 @@ import rlib.util.array.Array;
  * @author JavaSaBr
  */
 public class AppStateList extends VBox {
+
+    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * The selection handler.
@@ -65,7 +68,7 @@ public class AppStateList extends VBox {
 
         listView = new ListView<>();
         listView.setCellFactory(param -> new AppStateListCell(this));
-        listView.setEditable(true);
+        listView.setEditable(false);
         listView.setFocusTraversable(true);
         listView.prefHeightProperty().bind(heightProperty());
         listView.prefWidthProperty().bind(widthProperty());
@@ -96,6 +99,9 @@ public class AppStateList extends VBox {
      */
     public void fill(@NotNull final SceneNode sceneNode) {
 
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
+        final EditableSceneAppState selected = selectionModel.getSelectedItem();
+
         final ObservableList<EditableSceneAppState> items = listView.getItems();
         items.clear();
 
@@ -103,15 +109,17 @@ public class AppStateList extends VBox {
         appStates.stream().filter(appState -> appState instanceof EditableSceneAppState)
                 .map(editableState -> (EditableSceneAppState) editableState)
                 .forEach(items::add);
+
+        selectionModel.select(selected);
     }
 
     /**
      * Handle adding a new app state.
      */
     private void addAppState() {
-        final SceneNode sceneNode = changeConsumer.getCurrentModel();
-        final EditableLightingSceneAppState appState = new EditableLightingSceneAppState();
-        changeConsumer.execute(new AddAppStateOperation(appState, sceneNode));
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final CreateSceneAppStateDialog dialog = new CreateSceneAppStateDialog(changeConsumer);
+        dialog.show(scene.getWindow());
     }
 
     /**
@@ -124,5 +132,13 @@ public class AppStateList extends VBox {
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
 
         changeConsumer.execute(new RemoveAppStateOperation(appState, sceneNode));
+    }
+
+    /**
+     * @return the changes consumer.
+     */
+    @NotNull
+    public SceneChangeConsumer getChangeConsumer() {
+        return changeConsumer;
     }
 }

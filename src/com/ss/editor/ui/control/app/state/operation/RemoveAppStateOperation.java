@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class RemoveAppStateOperation extends AbstractEditorOperation<SceneChangeConsumer> {
 
     /**
-     * The new a scene app state.
+     * The new scene app state.
      */
     @NotNull
     private final SceneAppState newState;

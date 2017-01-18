@@ -14,16 +14,22 @@ import org.jetbrains.annotations.NotNull;
 public interface SceneChangeConsumer extends ModelChangeConsumer {
 
     /**
-     * Notify about added app state.
+     * Notify about added an app state.
      */
     @FXThread
     void notifyAddedAppState(@NotNull SceneAppState appState);
 
     /**
-     * Notify about removed app state.
+     * Notify about removed an app state.
      */
     @FXThread
     void notifyRemovedAppState(@NotNull SceneAppState appState);
+
+    /**
+     * Notify about changed an app state.
+     */
+    @FXThread
+    void notifyChangedAppState(@NotNull SceneAppState appState);
 
     @NotNull
     @Override

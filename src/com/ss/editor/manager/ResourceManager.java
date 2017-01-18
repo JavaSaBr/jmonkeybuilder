@@ -301,7 +301,7 @@ public class ResourceManager extends EditorThread {
      * @return the list of an additional classpath.
      */
     @NotNull
-    private Array<URLClassLoader> getClassLoaders() {
+    public Array<URLClassLoader> getClassLoaders() {
         return classLoaders;
     }
 
@@ -367,7 +367,7 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Hadle a file event in an asset folder.
+     * Handle a file event in an asset folder.
      */
     private void handleFile(@NotNull final Path file) {
         if (Files.isDirectory(file)) return;

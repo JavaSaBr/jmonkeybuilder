@@ -17,6 +17,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
+import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -68,7 +69,7 @@ public class GenerateTangentsDialog extends AbstractNodeDialog {
     private ComboBox<AlgorithmType> algorithmTypeComboBox;
 
     /**
-     * The check box about spliting morrored.
+     * The check box about spliting mirrored.
      */
     private CheckBox splitMirroredCheckBox;
 
@@ -167,7 +168,7 @@ public class GenerateTangentsDialog extends AbstractNodeDialog {
     protected void processOk() {
 
         final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
 
         final ModelNode<?> node = getNode();
         final Geometry geometry = (Geometry) node.getElement();
@@ -184,9 +185,9 @@ public class GenerateTangentsDialog extends AbstractNodeDialog {
             TangentGenerator.useMikktspaceGenerator(geometry);
         }
 
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), geometry);
+        final int index = GeomUtils.getIndex(consumer.getCurrentModel(), geometry);
 
-        modelChangeConsumer.execute(new ChangeMeshOperation(newMesh, oldMesh, index));
+        consumer.execute(new ChangeMeshOperation(newMesh, oldMesh, index));
 
         hide();
     }

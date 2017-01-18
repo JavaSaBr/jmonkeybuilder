@@ -177,4 +177,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         getEditorAppState().removedAppState(appState);
         getAppStateList().fill(getCurrentModel());
     }
+
+    @Override
+    public void notifyChangedAppState(@NotNull final SceneAppState appState) {
+        getAppStateList().fill(getCurrentModel());
+    }
 }
