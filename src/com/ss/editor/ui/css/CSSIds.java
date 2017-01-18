@@ -82,7 +82,6 @@ public interface CSSIds {
     String SETTINGS_DIALOG_TAB_PANE = "SettingsDialogTabPane";
     String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
     String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
-    String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
     String MODEL_NODE_TREE_CONTAINER = "ModelNodeTreeContainer";
     String MODEL_NODE_TREE_TRANSPARENT_CONTAINER = "ModelNodeTreeTransparentContainer";
@@ -135,4 +134,6 @@ public interface CSSIds {
     String GENERATE_LOD_DIALOG_LIST_VIEW_CELL = "GenerateLoDDialogListViewCell";
 
     String LOG_VIEW = "LogView";
+
+    String SCENE_APP_STATE_CONTAINER = "SceneAppStateContainer";
 }

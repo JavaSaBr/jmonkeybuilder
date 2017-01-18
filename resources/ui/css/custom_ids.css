@@ -777,3 +777,8 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
+
+#SceneAppStateContainer {
+    -fx-background-color: -fx-background-background;
+    -fx-padding: 4 2 0 0;
+}

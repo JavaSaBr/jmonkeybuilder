@@ -6,7 +6,10 @@ import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -21,19 +24,22 @@ public class NewFileByCreatorAction extends MenuItem {
     /**
      * The node element.
      */
+    @NotNull
     private final ResourceElement element;
 
     /**
      * The creator description.
      */
+    @NotNull
     private final FileCreatorDescription description;
 
-    public NewFileByCreatorAction(final ResourceElement element, final FileCreatorDescription description) {
+    public NewFileByCreatorAction(@NotNull final ResourceElement element, @NotNull final FileCreatorDescription description) {
         this.element = element;
         this.description = description;
+        final Image icon = description.getIcon();
         setText(description.getFileDescription());
         setOnAction(event -> processCreate());
-        setGraphic(new ImageView(Icons.NEW_FILE_16));
+        setGraphic(new ImageView(icon == null ? Icons.NEW_FILE_16 : icon));
     }
 
     /**

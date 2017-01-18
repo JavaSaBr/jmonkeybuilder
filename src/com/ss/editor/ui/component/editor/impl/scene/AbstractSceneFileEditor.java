@@ -99,7 +99,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * The selection handler.
      */
-    protected Consumer<Object> selectionHandler;
+    protected Consumer<Object> selectionNodeHandler;
 
     /**
      * The model tree.
@@ -120,6 +120,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The main split container.
      */
     protected EditorToolSplitPane mainSplitContainer;
+
+    /**
+     * The editor tool component.
+     */
+    protected EditorToolComponent editorToolComponent;
 
     /**
      * The pane of editor area.
@@ -461,7 +466,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Handle the selected object from the Tree.
      */
     @FXThread
-    public void processSelectFromTree(@Nullable final Object object) {
+    public void selectNodeFromTree(@Nullable final Object object) {
 
         Object parent = null;
         Object element = null;
@@ -651,33 +656,34 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     protected void createContent(@NotNull final StackPane root) {
-        this.selectionHandler = this::processSelectFromTree;
+        this.selectionNodeHandler = this::selectNodeFromTree;
 
         editorAreaPane = new Pane();
 
-        modelNodeTree = new ModelNodeTree(selectionHandler, this);
+        modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
         modelPropertyEditor = new ModelPropertyEditor(this);
 
-        final SplitPane parameterSplitContainer = new SplitPane(modelNodeTree, modelPropertyEditor);
-        parameterSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
-        parameterSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        parameterSplitContainer.prefWidthProperty().bind(root.widthProperty());
+        final SplitPane modelSplitContainer = new SplitPane(modelNodeTree, modelPropertyEditor);
+        modelSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        modelSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        modelSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
         mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
-        final EditorToolComponent editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
+        editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
-        editorToolComponent.addComponent(parameterSplitContainer, Messages.MODEL_FILE_EDITOR_TOOL_OBJECTS);
+        editorToolComponent.addComponent(modelSplitContainer, Messages.MODEL_FILE_EDITOR_TOOL_OBJECTS);
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
 
-        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(parameterSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+                calcVSplitSize(modelSplitContainer));
     }
 
-    private static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
+    protected static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
         splitContainer.setDividerPosition(0, 0.3);
     }
 

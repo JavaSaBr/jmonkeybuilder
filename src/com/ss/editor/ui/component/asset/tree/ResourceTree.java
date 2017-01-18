@@ -140,6 +140,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_FUNCTION, readOnly);
+        this.extensionFilter = ArrayFactory.newArray(String.class, 0);
     }
 
     public ResourceTree(final Consumer<ResourceElement> openFunction, final boolean readOnly) {
@@ -191,6 +192,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the list of filtered extensions.
      */
+    @NotNull
     private Array<String> getExtensionFilter() {
         return extensionFilter;
     }
@@ -219,7 +221,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the context menu for the element.
      */
-    public ContextMenu getContextMenu(final ResourceElement element) {
+    public ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -377,7 +379,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         fill(newRoot);
 
         final Array<String> extensionFilter = getExtensionFilter();
-        if (extensionFilter != null) cleanup(newRoot);
+        if (!extensionFilter.isEmpty()) cleanup(newRoot);
 
         EXECUTOR_MANAGER.addFXTask(() -> {
             setRoot(newRoot);

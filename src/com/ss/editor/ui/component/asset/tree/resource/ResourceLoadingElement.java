@@ -1,9 +1,9 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
 /**
- * Реализация элемента для отображения загрузки.
+ * The implementing of resource element to show loading process.
  *
- * @author Ronn.
+ * @author JavaSaBr
  */
 public class ResourceLoadingElement extends ResourceElement {
 
@@ -16,5 +16,4 @@ public class ResourceLoadingElement extends ResourceElement {
     public ResourceLoadingElement() {
         super(null);
     }
-
 }

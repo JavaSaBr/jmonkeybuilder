@@ -9,21 +9,29 @@ import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
+import com.ss.editor.ui.control.app.state.list.AppStateList;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
+import com.ss.extension.state.EditableSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.StackPane;
 
 /**
  * The implementation of the {@link AbstractFileEditor} for working with {@link SceneNode}.
@@ -41,6 +49,16 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         DESCRIPTION.setEditorId(SceneFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.JME_SCENE);
     }
+
+    /**
+     * The selection handler.
+     */
+    private Consumer<EditableSceneAppState> selectionAppStateHandler;
+
+    /**
+     * The list with app states.
+     */
+    private AppStateList appStateList;
 
     public SceneFileEditor() {
     }
@@ -80,6 +98,33 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         }
 
         EXECUTOR_MANAGER.addFXTask(this::loadState);
+    }
+
+    @Override
+    protected void createContent(@NotNull final StackPane root) {
+        this.selectionAppStateHandler = this::selectAppStateFromList;
+
+        super.createContent(root);
+
+        appStateList = new AppStateList(selectionAppStateHandler);
+
+        final SplitPane appStateSplitContainer = new SplitPane(appStateList);
+        appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
+
+        editorToolComponent.addComponent(appStateSplitContainer, "App states");
+
+        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+                calcVSplitSize(appStateSplitContainer));
+    }
+
+    /**
+     * Handle the selected app state from the list.
+     */
+    @FXThread
+    public void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
+        //TODO
     }
 
     @NotNull
