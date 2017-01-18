@@ -80,7 +80,6 @@ public class SceneNode extends Node {
      * @param appState the scene app state.
      */
     public void addAppState(@NotNull final SceneAppState appState) {
-        appState.initFor(this);
         appStates.add(appState);
     }
 
@@ -91,7 +90,6 @@ public class SceneNode extends Node {
      */
     public void removeAppState(@NotNull final SceneAppState appState) {
         appStates.slowRemove(appState);
-        appState.cleanupFor(this);
     }
 
     /**
@@ -144,9 +142,7 @@ public class SceneNode extends Node {
         final Savable[] importedAppStates = capsule.readSavableArray("appStates", EMPTY_STATES);
 
         for (final Savable savable : importedAppStates) {
-            final SceneAppState sceneAppState = (SceneAppState) savable;
-            sceneAppState.initFor(this);
-            appStates.add(sceneAppState);
+            appStates.add((SceneAppState) savable);
         }
     }
 

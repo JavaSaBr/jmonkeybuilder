@@ -7,7 +7,6 @@ import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.renderer.RenderManager;
 import com.jme3.util.clone.Cloner;
-import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
@@ -103,14 +102,6 @@ public abstract class AbstractEditableWrappedSceneAppState<T extends AppState> i
         final T newAppState = createNewStateInstance();
         cloneFields(appState, newAppState, cloner);
         appState = newAppState;
-    }
-
-    @Override
-    public void initFor(@NotNull final SceneNode sceneNode) {
-    }
-
-    @Override
-    public void cleanupFor(@NotNull final SceneNode sceneNode) {
     }
 
     @NotNull

@@ -2,16 +2,20 @@ package com.ss.editor.ui.control.app.state.list;
 
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
+import com.ss.editor.ui.control.app.state.operation.RemoveAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
+import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -20,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.array.Array;
 
 /**
  * The component to show and to edit app states.
@@ -71,10 +76,11 @@ public class AppStateList extends VBox {
 
         final Button addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_18));
-        addButton.setOnAction(event -> processAddAppState());
+        addButton.setOnAction(event -> addAppState());
 
         final Button removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setOnAction(event -> removeAppState());
         removeButton.disableProperty().bind(selectionModel.selectedItemProperty().isNull());
 
         final HBox buttonContainer = new HBox(addButton, removeButton);
@@ -85,11 +91,38 @@ public class AppStateList extends VBox {
         FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
     }
 
-    private void processAddAppState() {
+    /**
+     * Fill a list of app states.
+     */
+    public void fill(@NotNull final SceneNode sceneNode) {
+
+        final ObservableList<EditableSceneAppState> items = listView.getItems();
+        items.clear();
+
+        final Array<SceneAppState> appStates = sceneNode.getAppStates();
+        appStates.stream().filter(appState -> appState instanceof EditableSceneAppState)
+                .map(editableState -> (EditableSceneAppState) editableState)
+                .forEach(items::add);
+    }
+
+    /**
+     * Handle adding a new app state.
+     */
+    private void addAppState() {
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
         final EditableLightingSceneAppState appState = new EditableLightingSceneAppState();
-        sceneNode.addAppState(appState);
-        changeConsumer.notifyAddedAppState(appState);
-        listView.getItems().add(appState);
+        changeConsumer.execute(new AddAppStateOperation(appState, sceneNode));
+    }
+
+    /**
+     * Handle removing an old app state.
+     */
+    private void removeAppState() {
+
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
+        final EditableSceneAppState appState = selectionModel.getSelectedItem();
+        final SceneNode sceneNode = changeConsumer.getCurrentModel();
+
+        changeConsumer.execute(new RemoveAppStateOperation(appState, sceneNode));
     }
 }

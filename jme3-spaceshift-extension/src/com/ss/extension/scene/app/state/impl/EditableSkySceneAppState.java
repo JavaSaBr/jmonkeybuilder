@@ -2,7 +2,6 @@ package com.ss.extension.scene.app.state.impl;
 
 import com.jme3.util.clone.Cloner;
 import com.simsilica.fx.sky.SkyState;
-import com.ss.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -20,18 +19,6 @@ public class EditableSkySceneAppState extends AbstractEditableWrappedSceneAppSta
     @Override
     protected SkyState createNewStateInstance() {
         return new SkyState();
-    }
-
-    @Override
-    public void initFor(@NotNull final SceneNode sceneNode) {
-        super.initFor(sceneNode);
-        appState.setSkyParent(sceneNode);
-    }
-
-    @Override
-    public void cleanupFor(@NotNull final SceneNode sceneNode) {
-        super.cleanupFor(sceneNode);
-        appState.setSkyParent(null);
     }
 
     @Override

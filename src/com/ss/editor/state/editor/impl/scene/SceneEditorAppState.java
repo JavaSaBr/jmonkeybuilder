@@ -1,5 +1,7 @@
 package com.ss.editor.state.editor.impl.scene;
 
+import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -12,6 +14,8 @@ import com.ss.extension.scene.app.state.SceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import rlib.util.array.Array;
 
 /**
  * The implementation of the {@link AbstractSceneEditorAppState} for the {@link SceneFileEditor}.
@@ -59,12 +63,57 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
         fileEditor.redo();
     }
 
-    @FromAnyThread
-    public void notifyAddedAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> notifyAddedAppStateImpl(appState));
+    @Override
+    public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
+        super.initialize(stateManager, application);
+
+        final SceneNode currentModel = getCurrentModel();
+
+        if (currentModel != null) {
+            final Array<SceneAppState> appStates = currentModel.getAppStates();
+            appStates.forEach(stateManager, (state, manager) -> manager.attach(state));
+        }
     }
 
-    private void notifyAddedAppStateImpl(@NotNull final SceneAppState appState) {
-        EDITOR.getStateManager().attach(appState);
+    @Override
+    public void cleanup() {
+        super.cleanup();
+
+        final SceneNode currentModel = getCurrentModel();
+
+        if (currentModel != null) {
+            final Array<SceneAppState> appStates = currentModel.getAppStates();
+            appStates.forEach(stateManager, (state, manager) -> manager.detach(state));
+        }
+    }
+
+    /**
+     * Add a scene app state.
+     *
+     * @param appState the scene app state.
+     */
+    @FromAnyThread
+    public void addAppState(@NotNull final SceneAppState appState) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addedAppStateImpl(appState));
+    }
+
+    private void addedAppStateImpl(@NotNull final SceneAppState appState) {
+        final AppStateManager stateManager = EDITOR.getStateManager();
+        stateManager.attach(appState);
+    }
+
+    /**
+     * Remove a scene app state.
+     *
+     * @param appState the scene app state.
+     */
+    @FromAnyThread
+    public void removedAppState(@NotNull final SceneAppState appState) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removedAppStateImpl(appState));
+    }
+
+    private void removedAppStateImpl(@NotNull final SceneAppState appState) {
+        final AppStateManager stateManager = EDITOR.getStateManager();
+        stateManager.detach(appState);
     }
 }

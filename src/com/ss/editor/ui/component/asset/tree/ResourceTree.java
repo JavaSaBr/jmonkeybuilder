@@ -126,6 +126,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * The list of filtered extensions.
      */
+    @NotNull
     private Array<String> extensionFilter;
 
     /**
@@ -148,6 +149,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         this.readOnly = readOnly;
         this.expandedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
         this.selectedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
+        this.extensionFilter = ArrayFactory.newArray(String.class, 0);
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
 
@@ -185,7 +187,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @param extensionFilter the list of filtered extensions.
      */
-    public void setExtensionFilter(final Array<String> extensionFilter) {
+    public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
         this.extensionFilter = extensionFilter;
     }
 

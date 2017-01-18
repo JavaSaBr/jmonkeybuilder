@@ -9,7 +9,6 @@ import com.jme3.math.FastMath;
 import com.jme3.util.clone.Cloner;
 import com.simsilica.fx.LightingState;
 import com.simsilica.lemur.core.VersionedHolder;
-import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,20 +22,14 @@ import java.io.IOException;
  */
 public class EditableLightingSceneAppState extends LightingState implements EditableSceneAppState {
 
+    public EditableLightingSceneAppState() {
+        setEnabled(true);
+    }
+
     @NotNull
     @Override
     public String getName() {
         return "Lighting State";
-    }
-
-    @Override
-    public void initFor(@NotNull final SceneNode sceneNode) {
-        setRootNode(sceneNode);
-    }
-
-    @Override
-    public void cleanupFor(@NotNull final SceneNode sceneNode) {
-        setRootNode(null);
     }
 
     @NotNull
@@ -54,9 +47,7 @@ public class EditableLightingSceneAppState extends LightingState implements Edit
         lightDir = new VersionedHolder<>();
         rootNode = cloner.clone(rootNode);
         ambient = cloner.clone(ambient);
-        ambientColor = cloner.clone(ambientColor);
         sun = cloner.clone(sun);
-        sunColor = cloner.clone(sunColor);
         resetLightDir();
     }
 

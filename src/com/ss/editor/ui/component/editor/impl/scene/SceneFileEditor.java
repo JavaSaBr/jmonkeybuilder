@@ -95,11 +95,21 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
             final ModelNodeTree modelNodeTree = getModelNodeTree();
             modelNodeTree.fill(model);
 
+            final AppStateList appStateList = getAppStateList();
+            appStateList.fill(model);
+
         } finally {
             setIgnoreListeners(false);
         }
 
         EXECUTOR_MANAGER.addFXTask(this::loadState);
+    }
+
+    /**
+     * @return the list with app states.
+     */
+    private AppStateList getAppStateList() {
+        return appStateList;
     }
 
     @Override
@@ -158,11 +168,13 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
 
     @Override
     public void notifyAddedAppState(@NotNull final SceneAppState appState) {
-        getEditorAppState().notifyAddedAppState(appState);
+        getEditorAppState().addAppState(appState);
+        getAppStateList().fill(getCurrentModel());
     }
 
     @Override
     public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
-
+        getEditorAppState().removedAppState(appState);
+        getAppStateList().fill(getCurrentModel());
     }
 }
