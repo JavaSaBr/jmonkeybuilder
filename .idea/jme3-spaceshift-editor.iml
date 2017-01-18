@@ -41,6 +41,19 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="file://$MODULE_DIR$/libs/extensions/simsilica" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/libs/extensions/simsilica" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/simsilica" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/libs/extensions/simsilica" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="file://$MODULE_DIR$/libs/extensions/toneg0d" />
         </CLASSES>
         <JAVADOC />
