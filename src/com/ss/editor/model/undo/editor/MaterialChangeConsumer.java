@@ -1,26 +1,33 @@
 package com.ss.editor.model.undo.editor;
 
 import com.jme3.material.Material;
+import com.ss.editor.annotation.FXThread;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Интерфейс для взаимодействия операциям с асбтрактным редактором материала.
+ * The interface to notify about any changes of materials.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface MaterialChangeConsumer {
 
     /**
-     * @return текущий материал редактора.
+     * @return the current material.
      */
-    public Material getCurrentMaterial();
+    @NotNull
+    @FXThread
+    Material getCurrentMaterial();
 
     /**
-     * Уведомление об изменении параметра материала.
+     * Notify about a changed parameter.
      */
-    public void notifyChangeParam(final String paramName);
+    @FXThread
+    void notifyChangeParam(@NotNull final String paramName);
 
     /**
-     * Уведомление об изминении настроек рендера.
+     * Notify about changed render state.
      */
-    public void notifyChangedRenderState();
+    @FXThread
+    void notifyChangedRenderState();
 }

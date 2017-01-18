@@ -10,6 +10,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -21,7 +22,8 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
-import com.ss.extension.state.EditableSceneAppState;
+import com.ss.extension.scene.app.state.EditableSceneAppState;
+import com.ss.extension.scene.app.state.SceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +41,7 @@ import javafx.scene.layout.StackPane;
  * @author JavaSaBr
  */
 public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, SceneNode,
-        SceneEditorAppState, SceneFileEditorState> {
+        SceneEditorAppState, SceneFileEditorState> implements SceneChangeConsumer {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -106,7 +108,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
 
         super.createContent(root);
 
-        appStateList = new AppStateList(selectionAppStateHandler);
+        appStateList = new AppStateList(selectionAppStateHandler, this);
 
         final SplitPane appStateSplitContainer = new SplitPane(appStateList);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
@@ -152,5 +154,15 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     @Override
     public String toString() {
         return "SceneFileEditor{} " + super.toString();
+    }
+
+    @Override
+    public void notifyAddedAppState(@NotNull final SceneAppState appState) {
+        getEditorAppState().notifyAddedAppState(appState);
+    }
+
+    @Override
+    public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
+
     }
 }

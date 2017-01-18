@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The interface for notifying with model editor.
+ * The interface to notify about any changes of models.
  *
  * @author JavaSaBr
  */

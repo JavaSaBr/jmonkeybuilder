@@ -670,13 +670,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         if (editorState != null) editorState.setModelType(modelType);
     }
 
+    @NotNull
     @Override
     public Material getCurrentMaterial() {
         return currentMaterial;
     }
 
     @Override
-    public void notifyChangeParam(final String paramName) {
+    public void notifyChangeParam(@NotNull final String paramName) {
 
         final MaterialOtherParamsComponent otherParamsComponent = getMaterialOtherParamsComponent();
         otherParamsComponent.updateParam(paramName);

@@ -23,13 +23,27 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../libs/extensions/annotations-10.0.2.jar!/" />
-          <root url="jar://$MODULE_DIR$/../libs/extensions/rlib-5.0.0.jar!/" />
+          <root url="file://$MODULE_DIR$/../libs/extensions/simsilica" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/../libs/extensions/rlib-sources-5.0.0.jar!/" />
+          <root url="file://$MODULE_DIR$/../libs/extensions/simsilica" />
         </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/../libs/extensions/simsilica" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/../libs/extensions/simsilica" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../libs/extensions" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../libs/extensions" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/../libs/extensions" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/../libs/extensions" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

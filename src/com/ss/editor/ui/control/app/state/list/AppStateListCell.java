@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.app.state.list;
 
-import com.ss.extension.state.EditableSceneAppState;
+import com.ss.extension.scene.app.state.EditableSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 

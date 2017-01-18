@@ -7,6 +7,7 @@ import com.jme3.export.OutputCapsule;
 import com.jme3.export.Savable;
 import com.jme3.scene.Node;
 import com.jme3.util.clone.Cloner;
+import com.ss.extension.scene.app.state.SceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,7 @@ import rlib.util.array.ArrayFactory;
 public class SceneNode extends Node {
 
     public static final SceneLayer[] EMPTY_LAYERS = new SceneLayer[0];
+    public static final SceneAppState[] EMPTY_STATES = new SceneAppState[0];
 
     /**
      * The scene layers.
@@ -30,9 +32,16 @@ public class SceneNode extends Node {
     @NotNull
     private Array<SceneLayer> layers;
 
+    /**
+     * The scene app states.
+     */
+    @NotNull
+    private Array<SceneAppState> appStates;
+
     public SceneNode() {
         super("Empty scene");
         this.layers = ArrayFactory.newArray(SceneLayer.class);
+        this.appStates = ArrayFactory.newArray(SceneAppState.class);
     }
 
     /**
@@ -46,7 +55,7 @@ public class SceneNode extends Node {
     }
 
     /**
-     * Remove a new layer.
+     * Remove an old layer.
      *
      * @param layer the layer.
      */
@@ -57,9 +66,40 @@ public class SceneNode extends Node {
         layers.slowRemove(layer);
     }
 
+    /**
+     * @return the scene layers.
+     */
     @NotNull
     public Array<SceneLayer> getLayers() {
         return layers;
+    }
+
+    /**
+     * Add a new scene app state.
+     *
+     * @param appState the scene app state.
+     */
+    public void addAppState(@NotNull final SceneAppState appState) {
+        appState.initFor(this);
+        appStates.add(appState);
+    }
+
+    /**
+     * Remove an old scene app state.
+     *
+     * @param appState the scene app state.
+     */
+    public void removeAppState(@NotNull final SceneAppState appState) {
+        appStates.slowRemove(appState);
+        appState.cleanupFor(this);
+    }
+
+    /**
+     * @return the scene app states.
+     */
+    @NotNull
+    public Array<SceneAppState> getAppStates() {
+        return appStates;
     }
 
     @Override
@@ -67,6 +107,7 @@ public class SceneNode extends Node {
 
         final OutputCapsule capsule = exporter.getCapsule(this);
         final SceneLayer[] layers = getLayers().toArray(SceneLayer.class);
+        final SceneAppState[] appStates = getAppStates().toArray(SceneAppState.class);
 
         for (final SceneLayer layer : layers) {
             if (!layer.isShowed()) continue;
@@ -81,6 +122,7 @@ public class SceneNode extends Node {
         }
 
         capsule.write(layers, "layers", EMPTY_LAYERS);
+        capsule.write(appStates, "appStates", EMPTY_STATES);
     }
 
     @Override
@@ -98,6 +140,14 @@ public class SceneNode extends Node {
             layers.add(layer);
             if (layer.isShowed()) attachChild(layer);
         }
+
+        final Savable[] importedAppStates = capsule.readSavableArray("appStates", EMPTY_STATES);
+
+        for (final Savable savable : importedAppStates) {
+            final SceneAppState sceneAppState = (SceneAppState) savable;
+            sceneAppState.initFor(this);
+            appStates.add(sceneAppState);
+        }
     }
 
     @Override
@@ -108,6 +158,12 @@ public class SceneNode extends Node {
 
         for (int i = 0; i < layers.size(); i++) {
             layers.set(i, cloner.clone(layers.get(i)));
+        }
+
+        appStates = cloner.clone(appStates);
+
+        for (int i = 0; i < appStates.size(); i++) {
+            appStates.set(i, cloner.clone(appStates.get(i)));
         }
     }
 }
