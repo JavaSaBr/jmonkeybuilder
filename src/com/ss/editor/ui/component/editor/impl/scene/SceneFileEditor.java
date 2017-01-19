@@ -17,6 +17,7 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
 import com.ss.editor.ui.control.app.state.list.AppStateList;
+import com.ss.editor.ui.control.app.state.property.AppStatePropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
@@ -61,6 +62,11 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
      * The list with app states.
      */
     private AppStateList appStateList;
+
+    /**
+     * The property editor of app states.
+     */
+    private AppStatePropertyEditor appStatePropertyEditor;
 
     public SceneFileEditor() {
     }
@@ -119,8 +125,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         super.createContent(root);
 
         appStateList = new AppStateList(selectionAppStateHandler, this);
+        appStatePropertyEditor = new AppStatePropertyEditor(this);
 
-        final SplitPane appStateSplitContainer = new SplitPane(appStateList);
+        final SplitPane appStateSplitContainer = new SplitPane(appStateList, appStatePropertyEditor);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
         appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
@@ -136,7 +143,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
      */
     @FXThread
     public void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
-        //TODO
+        appStatePropertyEditor.buildFor(appState, null);
     }
 
     @NotNull

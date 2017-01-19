@@ -11,7 +11,8 @@ public enum EditablePropertyType {
     FLOAT,
     VECTOR_2F,
     VECTOR_3F,
-    QUATERNION;
+    QUATERNION,
+    COLOR,;
 
     private static final EditablePropertyType[] TYPES = values();
 

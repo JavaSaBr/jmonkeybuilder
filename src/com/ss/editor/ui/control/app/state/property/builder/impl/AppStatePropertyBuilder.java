@@ -1,6 +1,8 @@
 package com.ss.editor.ui.control.app.state.property.builder.impl;
 
+import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.control.app.state.property.control.ColorAppStatePropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
@@ -35,7 +37,9 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
     }
 
     @Override
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final SceneChangeConsumer changeConsumer) {
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                                @NotNull final SceneChangeConsumer changeConsumer) {
+
         if (!(object instanceof EditableSceneAppState)) return;
 
         final EditableSceneAppState appState = (EditableSceneAppState) object;
@@ -59,6 +63,17 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     // addControl(container, property, propertyControl);
                     break;
                 }
+                case COLOR: {
+
+                    final EditableProperty<ColorRGBA, ?> property = cast(editableProperty);
+                    final ColorRGBA color = Objects.requireNonNull(property.getValue(), "Color value can't be null.");
+
+                    final ColorAppStatePropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
+                            new ColorAppStatePropertyControl<>(color, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
                 default:
                     break;
             }
@@ -75,7 +90,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
         FXUtils.addToPane(propertyControl, container);
     }
 
-    private <T> EditableProperty<T, ?> cast(final EditableProperty<?, ?> property) {
+    private <T> EditableProperty<T, ?> cast(@NotNull final EditableProperty<?, ?> property) {
         return ClassUtils.unsafeCast(property);
     }
 }

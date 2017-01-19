@@ -17,7 +17,7 @@ import rlib.function.SixObjectConsumer;
  *
  * @author JavaSaBr
  */
-public class SceneAppStatePropertyControl<D, T> extends AbstractPropertyControl<SceneChangeConsumer, D, T> {
+public class AppStatePropertyControl<D, T> extends AbstractPropertyControl<SceneChangeConsumer, D, T> {
 
     @NotNull
     public static <D, T> SixObjectConsumer<SceneChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler() {
@@ -30,8 +30,8 @@ public class SceneAppStatePropertyControl<D, T> extends AbstractPropertyControl<
         };
     }
 
-    public SceneAppStatePropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
-                                        @NotNull final SceneChangeConsumer changeConsumer) {
+    public AppStatePropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
+                                   @NotNull final SceneChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());
     }
 }

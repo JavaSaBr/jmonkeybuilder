@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.property.builder;
 
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.control.app.state.property.builder.impl.AppStatePropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.AudioNodePropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GenericPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
@@ -33,6 +34,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(LightPropertyBuilder.getInstance());
         BUILDERS.add(SpatialPropertyBuilder.getInstance());
         BUILDERS.add(GenericPropertyBuilder.getInstance());
+        BUILDERS.add(AppStatePropertyBuilder.getInstance());
     }
 
     /**

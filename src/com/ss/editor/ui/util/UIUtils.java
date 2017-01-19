@@ -263,7 +263,8 @@ public class UIUtils {
      * Поиск элемента дерева, содержашего указанное значение.
      */
     @Nullable
-    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @NotNull final Object object) {
+    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
+        if (object == null) return null;
 
         final TreeItem<T> root = treeView.getRoot();
         if (root.getValue().equals(object)) return root;
