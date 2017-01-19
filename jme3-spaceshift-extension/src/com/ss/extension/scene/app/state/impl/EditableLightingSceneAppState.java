@@ -6,6 +6,7 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import com.jme3.util.clone.Cloner;
 import com.simsilica.fx.LightingState;
 import com.simsilica.lemur.core.VersionedHolder;
@@ -54,12 +55,12 @@ public class EditableLightingSceneAppState extends LightingState implements Edit
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.COLOR, "Ambient color", this,
-                LightingState::getAmbient, LightingState::setAmbient));
+                LightingState::getAmbientColor, LightingState::setAmbientColor));
         result.add(new SimpleProperty<>(EditablePropertyType.COLOR, "Sun color", this,
                 LightingState::getSunColor, LightingState::setSunColor));
-        result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Time of day", this,
+        result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, 0.1F, "Time of day", this,
                 LightingState::getTimeOfDay, LightingState::setTimeOfDay));
-        result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Orientation", this,
+        result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, 0.1F, "Orientation", this,
                 LightingState::getOrientation, LightingState::setOrientation));
 
         return result;
@@ -67,7 +68,9 @@ public class EditableLightingSceneAppState extends LightingState implements Edit
 
     @Override
     public void cloneFields(@NotNull final Cloner cloner, @NotNull final Object original) {
-        lightDir = new VersionedHolder<>();
+        lightDir = new VersionedHolder<>(new Vector3f());
+        temp1 = cloner.clone(temp1);
+        temp2 = cloner.clone(temp2);
         rootNode = cloner.clone(rootNode);
         ambient = cloner.clone(ambient);
         sun = cloner.clone(sun);
@@ -78,7 +81,7 @@ public class EditableLightingSceneAppState extends LightingState implements Edit
     public void write(@NotNull final JmeExporter exporter) throws IOException {
         final OutputCapsule capsule = exporter.getCapsule(this);
         capsule.write(isEnabled(), "enabled", false);
-        capsule.write(getAmbient(), "ambient", ColorRGBA.White);
+        capsule.write(getAmbientColor(), "ambient", ColorRGBA.White);
         capsule.write(getSunColor(), "sun", ColorRGBA.White);
         capsule.write(getTimeOfDay(), "timeOfDay", FastMath.atan2(1, 0.3f) / FastMath.PI);
         capsule.write(getOrientation(), "orientation", 0);
@@ -88,7 +91,7 @@ public class EditableLightingSceneAppState extends LightingState implements Edit
     public void read(@NotNull final JmeImporter importer) throws IOException {
         final InputCapsule capsule = importer.getCapsule(this);
         setEnabled(capsule.readBoolean("enabled", false));
-        setAmbient((ColorRGBA) capsule.readSavable("ambient", ColorRGBA.White));
+        setAmbientColor((ColorRGBA) capsule.readSavable("ambient", ColorRGBA.White));
         setSunColor((ColorRGBA) capsule.readSavable("sun", ColorRGBA.White));
         setTimeOfDay(capsule.readFloat("timeOfDay", FastMath.atan2(1, 0.3f) / FastMath.PI));
         setOrientation(capsule.readFloat("orientation", 0F));

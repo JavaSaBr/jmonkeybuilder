@@ -78,6 +78,11 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final FloatAppStatePropertyControl<EditableProperty<Float, ?>> propertyControl =
                             new FloatAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
+                    final float scrollPower = propertyControl.getScrollPower();
+                    final float mod = property.getScrollPower();
+
+                    propertyControl.setScrollPower(scrollPower * mod);
+
                     addControl(container, property, propertyControl);
                     break;
                 }

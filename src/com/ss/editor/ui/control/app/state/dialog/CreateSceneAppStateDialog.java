@@ -14,6 +14,7 @@ import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState;
+import com.ss.extension.scene.app.state.impl.EditableSkySceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,6 +53,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
     static {
         register(new EditableLightingSceneAppState());
+        register(new EditableSkySceneAppState());
     }
 
     private static void register(@NotNull final EditableSceneAppState appState) {
@@ -140,6 +142,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     protected void processOk() {
 
         final SceneNode currentModel = changeConsumer.getCurrentModel();
+        final Array<SceneAppState> appStates = currentModel.getAppStates();
 
         if (customCheckBox.isSelected()) {
 
@@ -164,6 +167,10 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
                 throw new RuntimeException("Can't create a state of the class " + stateNameField.getText());
             }
 
+            if (newExample instanceof EditableSceneAppState && !((EditableSceneAppState) newExample).canCreate(appStates)) {
+                throw new RuntimeException("Can't create " + newExample.getName() + " app state.");
+            }
+
             changeConsumer.execute(new AddAppStateOperation(newExample, currentModel));
 
         } else {
@@ -174,10 +181,14 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
             final EditableSceneAppState example = requireNonNull(BUILT_IN.get(name));
             final SceneAppState newExample = ClassUtils.newInstance(example.getClass());
 
+            if (newExample instanceof EditableSceneAppState && !((EditableSceneAppState) newExample).canCreate(appStates)) {
+                throw new RuntimeException("Can't create " + newExample.getName() + " app state.");
+            }
+
             changeConsumer.execute(new AddAppStateOperation(newExample, currentModel));
         }
 
-        hide();
+        super.processOk();
     }
 
     @Override

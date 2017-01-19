@@ -42,7 +42,18 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
     @NotNull
     private final O object;
 
+    /**
+     * The scroll power.
+     */
+    private float scrollPower;
+
     public SimpleProperty(@NotNull final EditablePropertyType type, @NotNull final String name,
+                          @NotNull final O object, @NotNull final Function<O, T> getter,
+                          @NotNull final BiConsumer<O, T> setter) {
+        this(type, 1F, name, object, getter, setter);
+    }
+
+    public SimpleProperty(@NotNull final EditablePropertyType type, final float scrollPower, @NotNull final String name,
                           @NotNull final O object, @NotNull final Function<O, T> getter,
                           @NotNull final BiConsumer<O, T> setter) {
         this.type = type;
@@ -50,6 +61,12 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
         this.object = object;
         this.getter = getter;
         this.setter = setter;
+        this.scrollPower = scrollPower;
+    }
+
+    @Override
+    public float getScrollPower() {
+        return scrollPower;
     }
 
     @NotNull

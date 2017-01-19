@@ -57,6 +57,14 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
     }
 
     /**
+     * @return the scroll power.
+     */
+    @FXThread
+    public float getScrollPower() {
+        return valueField.getScrollPower();
+    }
+
+    /**
      * Set value limits for this field.
      *
      * @param min the min value.

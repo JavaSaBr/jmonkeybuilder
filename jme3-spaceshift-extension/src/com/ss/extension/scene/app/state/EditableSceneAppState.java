@@ -25,5 +25,15 @@ public interface EditableSceneAppState extends SceneAppState {
     default Array<EditableProperty<?, ?>> getEditableProperties() {
         return EMPTY_PROPERTIES;
     }
+
+    /**
+     * Check state dependencies.
+     *
+     * @param exists the current exists states.
+     * @return can create this state.
+     */
+    default boolean canCreate(@NotNull final Array<SceneAppState> exists) {
+        return true;
+    }
 }
 

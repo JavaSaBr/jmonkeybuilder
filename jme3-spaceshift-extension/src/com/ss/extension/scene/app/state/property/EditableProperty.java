@@ -35,6 +35,13 @@ public interface EditableProperty<T, O> {
     EditablePropertyType getType();
 
     /**
+     * @return scroll power.
+     */
+    default float getScrollPower() {
+        return 1F;
+    }
+
+    /**
      * Get an edited object.
      *
      * @return the edited object.
