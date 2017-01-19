@@ -2,13 +2,14 @@ package com.ss.editor.ui.control.model.property.builder.impl;
 
 import com.ss.editor.control.scene.ControlEditableGenericObjectFactory;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.model.property.control.generic.BooleanGenericPropertyControl;
 import com.ss.editor.ui.control.model.property.generic.EditableGenericObject;
 import com.ss.editor.ui.control.model.property.generic.EditableGenericObjectFactory;
 import com.ss.editor.ui.control.model.property.generic.EditableProperty;
 import com.ss.editor.ui.control.model.property.generic.EditablePropertyType;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
+import com.ss.editor.ui.control.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +27,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class GenericPropertyBuilder extends AbstractPropertyBuilder {
+public class GenericPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     private static final Array<EditableGenericObjectFactory> FACTORIES = ArrayFactory.newArray(EditableGenericObjectFactory.class);
 
@@ -40,9 +41,13 @@ public class GenericPropertyBuilder extends AbstractPropertyBuilder {
         return INSTANCE;
     }
 
+    public GenericPropertyBuilder() {
+        super(ModelChangeConsumer.class);
+    }
+
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                                @NotNull final ModelChangeConsumer changeConsumer) {
 
         EditableGenericObject genericObject = object instanceof EditableGenericObject ?
                 (EditableGenericObject) object : null;
@@ -70,7 +75,7 @@ public class GenericPropertyBuilder extends AbstractPropertyBuilder {
                     final Boolean value = Objects.requireNonNull(property.getValue(), "Boolean value can't be null.");
 
                     final BooleanGenericPropertyControl propertyControl =
-                            new BooleanGenericPropertyControl(value, property.getName(), modelChangeConsumer);
+                            new BooleanGenericPropertyControl(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

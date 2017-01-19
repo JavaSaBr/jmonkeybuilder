@@ -65,7 +65,7 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, T
         super.createComponents(container);
 
         propertyValueLabel = new Label();
-        propertyValueLabel.setId(CSSIds.MODEL_PARAM_CONTROL_LABEL_VALUE);
+        propertyValueLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_LABEL_VALUE);
 
         FXUtils.addClassTo(propertyValueLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(propertyValueLabel, container);

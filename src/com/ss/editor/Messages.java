@@ -332,8 +332,8 @@ public class Messages {
     public static final String CREATE_SKY_DIALOG_TOP_LABEL;
     public static final String CREATE_SKY_DIALOG_BOTTOM_LABEL;
 
-    public static final String NODE_DIALOG_BUTTON_OK;
-    public static final String NODE_DIALOG_BUTTON_CANCEL;
+    public static final String SIMPLE_DIALOG_BUTTON_OK;
+    public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
 
     public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
     public static final String EMPTY_MODEL_CREATOR_TITLE;
@@ -702,8 +702,8 @@ public class Messages {
         CREATE_SKY_DIALOG_TOP_LABEL = bundle.getString("CreateSkyDialogTopLabel");
         CREATE_SKY_DIALOG_BOTTOM_LABEL = bundle.getString("CreateSkyDialogBottomLabel");
 
-        NODE_DIALOG_BUTTON_OK = bundle.getString("NodeDialogButtonOk");
-        NODE_DIALOG_BUTTON_CANCEL = bundle.getString("NodeDialogButtonCancel");
+        SIMPLE_DIALOG_BUTTON_OK = bundle.getString("SimpleDialogButtonOk");
+        SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");

@@ -43,7 +43,7 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
         super.createComponents(container);
 
         valueField = new TextField();
-        valueField.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
+        valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         valueField.setOnKeyReleased(this::updateValue);
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

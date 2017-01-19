@@ -38,7 +38,7 @@ public abstract class AbstractBooleanPropertyControl<C extends ChangeConsumer, T
         super.createComponents(container);
 
         checkBox = new CheckBox();
-        checkBox.setId(CSSIds.MODEL_PARAM_CONTROL_CHECK_BOX);
+        checkBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateValue());
         checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

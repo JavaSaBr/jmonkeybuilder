@@ -12,6 +12,7 @@ import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +38,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class GenerateTangentsDialog extends AbstractNodeDialog {
+public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
 
     private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
 

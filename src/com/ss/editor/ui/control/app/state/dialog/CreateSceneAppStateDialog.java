@@ -7,9 +7,9 @@ import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
@@ -39,7 +39,7 @@ import rlib.util.dictionary.ObjectDictionary;
  *
  * @author JavaSaBr
  */
-public class CreateSceneAppStateDialog extends AbstractNodeDialog {
+public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(415, 184);
 

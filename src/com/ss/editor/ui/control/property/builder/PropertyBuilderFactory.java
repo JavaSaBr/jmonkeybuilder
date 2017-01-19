@@ -1,6 +1,6 @@
-package com.ss.editor.ui.control.model.property.builder;
+package com.ss.editor.ui.control.property.builder;
 
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.impl.AudioNodePropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GenericPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
@@ -17,7 +17,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The builder for building controls of settings for different nodes of a model.
+ * The builder to build controls to edit properties of objects.
  *
  * @author JavaSaBr
  */
@@ -38,16 +38,16 @@ public class PropertyBuilderFactory {
     /**
      * Build properties controls for the object to the container.
      *
-     * @param object              the object for building property controls.
-     * @param parent              the parent of the object.
-     * @param container           the container for containing these controls.
-     * @param modelChangeConsumer the consumer for working between controls and editor.
+     * @param object         the object to build property controls.
+     * @param parent         the parent of the object.
+     * @param container      the container for containing these controls.
+     * @param changeConsumer the consumer to work between controls and editor.
      */
     public static void buildFor(@NotNull final Object object, @Nullable final Object parent,
-                                @NotNull final VBox container, @NotNull final ModelChangeConsumer modelChangeConsumer) {
+                                @NotNull final VBox container, @NotNull final ChangeConsumer changeConsumer) {
 
         for (final PropertyBuilder builder : BUILDERS) {
-            builder.buildFor(object, parent, container, modelChangeConsumer);
+            builder.buildFor(object, parent, container, changeConsumer);
         }
     }
 }

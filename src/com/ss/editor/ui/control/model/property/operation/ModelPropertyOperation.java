@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.property.operation;
 
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
@@ -16,8 +15,6 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class ModelPropertyOperation<D, T> extends AbstractPropertyOperation<ModelChangeConsumer, D, T> {
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     public ModelPropertyOperation(@NotNull final D target, @NotNull final String propertyName, @Nullable final T newValue,
                                   @Nullable final T oldValue) {

@@ -43,7 +43,7 @@ public abstract class AbstractColorPropertyControl<C extends ChangeConsumer, T> 
         super.createComponents(container);
 
         colorPicker = new ColorPicker();
-        colorPicker.setId(CSSIds.MODEL_PARAM_CONTROL_COLOR_PICKER);
+        colorPicker.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> updateValue());
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

@@ -52,26 +52,26 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
     protected Parent createEditableControl() {
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        zLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new TextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::processChange);
 
         yField = new TextField();
-        yField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         yField.setOnScroll(this::processScroll);
         yField.setOnKeyReleased(this::processChange);
 
         zField = new TextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        zField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
         zField.setOnKeyReleased(this::processChange);
 

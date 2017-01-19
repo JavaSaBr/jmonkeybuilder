@@ -55,34 +55,34 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
     protected Parent createEditableControl() {
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        zLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         final Label weightLabel = new Label("w:");
-        weightLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        weightLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new TextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::processDestinationChange);
 
         yField = new TextField();
-        yField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         yField.setOnScroll(this::processScroll);
         yField.setOnKeyReleased(this::processDestinationChange);
 
         zField = new TextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        zField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
         zField.setOnKeyReleased(this::processDestinationChange);
 
         weightField = new TextField();
-        weightField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        weightField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         weightField.setOnScroll(this::processScroll);
         weightField.setOnKeyReleased(this::processDestinationChange);
 

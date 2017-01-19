@@ -11,9 +11,9 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class GenerateLodLevelsDialog extends AbstractNodeDialog {
+public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
     private static final ObservableList<ReductionMethod> METHOD_TYPES = observableArrayList(ReductionMethod.VALUES);
 

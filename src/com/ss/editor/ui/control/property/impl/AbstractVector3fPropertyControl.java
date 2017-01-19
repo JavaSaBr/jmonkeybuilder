@@ -55,30 +55,30 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
         super.createComponents(container);
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new FloatTextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnKeyReleased(this::updateVector);
         xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         xField.prefWidthProperty().bind(widthProperty().divide(3));
         xField.setScrollPower(getScrollPower());
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         yField = new FloatTextField();
-        yField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         yField.setOnKeyReleased(this::updateVector);
         yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         yField.prefWidthProperty().bind(widthProperty().divide(3));
         yField.setScrollPower(getScrollPower());
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        zLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         zField = new FloatTextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        zField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnKeyReleased(this::updateVector);
         zField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         zField.prefWidthProperty().bind(widthProperty().divide(3));

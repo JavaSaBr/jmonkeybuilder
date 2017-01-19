@@ -1,9 +1,9 @@
-package com.ss.editor.ui.control.model.tree.dialog;
+package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.EditorDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,21 +16,23 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * The base implementation of the dialog for working with node elements.
+ * The simple implementation of the dialog.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractNodeDialog extends EditorDialog {
+public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The ok button.
      */
     private Button okButton;
 
-    public AbstractNodeDialog() {
+    public AbstractSimpleEditorDialog() {
     }
 
     @Override
@@ -60,9 +62,9 @@ public abstract class AbstractNodeDialog extends EditorDialog {
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
 
-        final Button cancelButton = new Button(Messages.NODE_DIALOG_BUTTON_CANCEL);
+        final Button cancelButton = new Button(getButtonCancelLabel());
         cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setOnAction(event -> hide());
+        cancelButton.setOnAction(event -> processCancel());
 
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);
@@ -76,10 +78,26 @@ public abstract class AbstractNodeDialog extends EditorDialog {
     }
 
     @NotNull
-    protected String getButtonOkLabel() {
-        return Messages.NODE_DIALOG_BUTTON_OK;
+    protected String getButtonCancelLabel() {
+        return Messages.SIMPLE_DIALOG_BUTTON_CANCEL;
     }
 
+    @NotNull
+    protected String getButtonOkLabel() {
+        return Messages.SIMPLE_DIALOG_BUTTON_OK;
+    }
+
+    /**
+     * Handle ok button.
+     */
     protected void processOk() {
+        hide();
+    }
+
+    /**
+     * Handle cancel button.
+     */
+    protected void processCancel() {
+        hide();
     }
 }

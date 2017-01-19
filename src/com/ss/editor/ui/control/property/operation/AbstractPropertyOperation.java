@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  */
 public abstract class AbstractPropertyOperation<C extends ChangeConsumer, D, T> extends AbstractEditorOperation<C> {
 
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The property name.

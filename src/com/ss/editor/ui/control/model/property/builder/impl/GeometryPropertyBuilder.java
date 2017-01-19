@@ -12,11 +12,12 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.model.property.control.DefaultModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.LodLevelModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.control.MaterialKeyModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
+import com.ss.editor.ui.control.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +35,7 @@ import tonegod.emitter.geometry.ParticleGeometry;
  *
  * @author JavaSaBr
  */
-public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
+public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
@@ -88,9 +89,13 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         return INSTANCE;
     }
 
+    public GeometryPropertyBuilder() {
+        super(ModelChangeConsumer.class);
+    }
+
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                                @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (!(object instanceof Geometry)) return;
 
@@ -99,14 +104,14 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
         final int lodLevel = geometry.getLodLevel();
 
         final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
-                new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, modelChangeConsumer);
+                new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, changeConsumer);
 
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);
 
         final LodLevelModelPropertyEditor lodLevelControl = new LodLevelModelPropertyEditor(lodLevel,
-                Messages.MODEL_PROPERTY_LOD, modelChangeConsumer);
+                Messages.MODEL_PROPERTY_LOD, changeConsumer);
 
         lodLevelControl.setApplyHandler(Geometry::setLodLevel);
         lodLevelControl.setSyncHandler(Geometry::getLodLevel);
@@ -118,7 +123,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder {
             final MaterialKey materialKey = (MaterialKey) material.getKey();
 
             final ModelPropertyControl<Geometry, MaterialKey> materialControl =
-                    new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+                    new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
 
             materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
             materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);

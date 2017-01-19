@@ -8,10 +8,11 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.QuaternionModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
+import com.ss.editor.ui.control.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 
@@ -26,7 +27,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
+public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     private static final CullHint[] CULL_HINTS = CullHint.values();
     private static final ShadowMode[] SHADOW_MODES = ShadowMode.values();
@@ -38,9 +39,13 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         return INSTANCE;
     }
 
+    public SpatialPropertyBuilder() {
+        super(ModelChangeConsumer.class);
+    }
+
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                                @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (!(object instanceof Spatial)) return;
 
@@ -50,19 +55,19 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         final Bucket queueBucket = spatial.getLocalQueueBucket();
 
         final EnumModelPropertyControl<Spatial, CullHint> cullHintControl =
-                new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, modelChangeConsumer, CULL_HINTS);
+                new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, changeConsumer, CULL_HINTS);
         cullHintControl.setApplyHandler(Spatial::setCullHint);
         cullHintControl.setSyncHandler(Spatial::getLocalCullHint);
         cullHintControl.setEditObject(spatial);
 
         final EnumModelPropertyControl<Spatial, ShadowMode> shadowModeControl =
-                new EnumModelPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, modelChangeConsumer, SHADOW_MODES);
+                new EnumModelPropertyControl<>(shadowMode, Messages.MODEL_PROPERTY_SHADOW_MODE, changeConsumer, SHADOW_MODES);
         shadowModeControl.setApplyHandler(Spatial::setShadowMode);
         shadowModeControl.setSyncHandler(Spatial::getLocalShadowMode);
         shadowModeControl.setEditObject(spatial);
 
         final EnumModelPropertyControl<Spatial, Bucket> queueBucketControl =
-                new EnumModelPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, modelChangeConsumer, BUCKETS);
+                new EnumModelPropertyControl<>(queueBucket, Messages.MODEL_PROPERTY_QUEUE_BUCKET, changeConsumer, BUCKETS);
         queueBucketControl.setApplyHandler(Spatial::setQueueBucket);
         queueBucketControl.setSyncHandler(Spatial::getLocalQueueBucket);
         queueBucketControl.setEditObject(spatial);
@@ -78,19 +83,19 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder {
         final Quaternion rotation = spatial.getLocalRotation().clone();
 
         final Vector3fModelPropertyControl<Spatial> locationControl =
-                new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, modelChangeConsumer);
+                new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         locationControl.setApplyHandler(Spatial::setLocalTranslation);
         locationControl.setSyncHandler(Spatial::getLocalTranslation);
         locationControl.setEditObject(spatial);
 
         final Vector3fModelPropertyControl<Spatial> scaleControl =
-                new Vector3fModelPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, modelChangeConsumer);
+                new Vector3fModelPropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, changeConsumer);
         scaleControl.setApplyHandler(Spatial::setLocalScale);
         scaleControl.setSyncHandler(Spatial::getLocalScale);
         scaleControl.setEditObject(spatial);
 
         final QuaternionModelPropertyControl rotationControl =
-                new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, modelChangeConsumer);
+                new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
         rotationControl.setApplyHandler(Spatial::setLocalRotation);
         rotationControl.setSyncHandler(Spatial::getLocalRotation);
         rotationControl.setEditObject(spatial);

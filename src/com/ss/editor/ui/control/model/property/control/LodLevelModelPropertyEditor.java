@@ -69,7 +69,7 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
         super.createComponents(container);
 
         levelComboBox = new ComboBox<>();
-        levelComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
+        levelComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         levelComboBox.setCellFactory(param -> new LodLevelCell());
         levelComboBox.setButtonCell(new LodLevelCell());
         levelComboBox.setEditable(false);

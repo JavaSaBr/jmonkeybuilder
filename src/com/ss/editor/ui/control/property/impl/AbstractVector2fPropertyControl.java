@@ -50,20 +50,20 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         super.createComponents(container);
 
         final Label xLabel = new Label(getXLabelText());
-        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL2F);
+        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F);
 
         xField = new FloatTextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
+        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
         xField.setOnKeyReleased(this::updateVector);
         xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         xField.prefWidthProperty().bind(widthProperty().divide(2));
         xField.setScrollPower(10F);
 
         final Label yLabel = new Label(getYLabelText());
-        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL2F);
+        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F);
 
         yField = new FloatTextField();
-        yField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
+        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
         yField.setOnKeyReleased(this::updateVector);
         yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         yField.prefWidthProperty().bind(widthProperty().divide(2));

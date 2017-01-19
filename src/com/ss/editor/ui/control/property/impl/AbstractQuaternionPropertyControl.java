@@ -59,28 +59,28 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
         super.createComponents(container);
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new FloatTextField();
-        xField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnKeyReleased(this::updateRotation);
         xField.addChangeListener((observable, oldValue, newValue) -> updateRotation(null));
         xField.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         yFiled = new FloatTextField();
-        yFiled.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        yFiled.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         yFiled.setOnKeyReleased(this::updateRotation);
         yFiled.addChangeListener((observable, oldValue, newValue) -> updateRotation(null));
         yFiled.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.MODEL_PARAM_CONTROL_NUMBER_LABEL);
+        zLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         zField = new FloatTextField();
-        zField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR3F_FIELD);
+        zField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnKeyReleased(this::updateRotation);
         zField.addChangeListener((observable, oldValue, newValue) -> updateRotation(null));
         zField.prefWidthProperty().bind(widthProperty().divide(3));

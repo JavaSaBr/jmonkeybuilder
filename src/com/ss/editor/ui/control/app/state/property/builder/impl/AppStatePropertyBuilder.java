@@ -1,12 +1,14 @@
-package com.ss.editor.ui.control.app.state.property.builder;
+package com.ss.editor.ui.control.app.state.property.builder.impl;
 
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
+import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.property.EditableProperty;
 import com.ss.extension.scene.app.state.property.EditablePropertyType;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,16 +22,23 @@ import rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
-public class PropertyBuilder {
+public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChangeConsumer> {
 
-    private static final PropertyBuilder INSTANCE = new PropertyBuilder();
+    private static final AppStatePropertyBuilder INSTANCE = new AppStatePropertyBuilder();
 
-    public static PropertyBuilder getInstance() {
+    public static AppStatePropertyBuilder getInstance() {
         return INSTANCE;
     }
 
-    public void buildFor(@NotNull final EditableSceneAppState appState, @NotNull final VBox container,
-                         @NotNull final SceneChangeConsumer changeConsumer) {
+    protected AppStatePropertyBuilder() {
+        super(SceneChangeConsumer.class);
+    }
+
+    @Override
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container, @NotNull final SceneChangeConsumer changeConsumer) {
+        if (!(object instanceof EditableSceneAppState)) return;
+
+        final EditableSceneAppState appState = (EditableSceneAppState) object;
 
         final Array<EditableProperty<?, ?>> editableProperties = appState.getEditableProperties();
         if (editableProperties.isEmpty()) return;

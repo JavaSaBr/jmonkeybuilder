@@ -5,10 +5,10 @@ import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class PlayParametersDialog extends AbstractNodeDialog {
+public class PlayParametersDialog extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(400, 154);
 

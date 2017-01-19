@@ -39,7 +39,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
 
         final TextField textField = new TextField();
         textField.setOnScroll(this::processScroll);
-        textField.setId(CSSIds.MODEL_PARAM_CONTROL_VECTOR2F_FIELD);
+        textField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
         textField.prefWidthProperty().bind(widthProperty().multiply(0.35));
         textField.setOnKeyReleased(this::processChange);
 

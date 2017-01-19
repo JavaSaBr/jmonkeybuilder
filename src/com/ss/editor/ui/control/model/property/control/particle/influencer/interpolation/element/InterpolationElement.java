@@ -104,7 +104,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 
         interpolationComboBox = new ComboBox<>();
-        interpolationComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
+        interpolationComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         interpolationComboBox.setEditable(false);
         interpolationComboBox.prefWidthProperty().bind(widthProperty().multiply(0.35));
         interpolationComboBox.setConverter(STRING_CONVERTER);

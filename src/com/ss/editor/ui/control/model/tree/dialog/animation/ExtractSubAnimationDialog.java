@@ -9,10 +9,10 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.editor.util.EditorUtil;
 
@@ -37,7 +37,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class ExtractSubAnimationDialog extends AbstractNodeDialog {
+public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(390, 184);
 

@@ -43,7 +43,7 @@ public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E
         super.createComponents(container);
 
         enumComboBox = new ComboBox<>();
-        enumComboBox.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
+        enumComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
         enumComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

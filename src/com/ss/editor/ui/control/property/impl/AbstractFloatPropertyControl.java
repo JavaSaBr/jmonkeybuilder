@@ -40,7 +40,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
         super.createComponents(container);
 
         valueField = new FloatTextField();
-        valueField.setId(CSSIds.MODEL_PARAM_CONTROL_COMBO_BOX);
+        valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
