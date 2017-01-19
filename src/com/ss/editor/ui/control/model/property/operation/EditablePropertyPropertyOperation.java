@@ -4,7 +4,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
-import com.ss.editor.ui.control.model.property.builder.impl.generic.EditableProperty;
+import com.ss.editor.ui.control.model.property.generic.EditableProperty;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

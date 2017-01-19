@@ -92,8 +92,6 @@ public interface CSSIds {
 
     String MODEL_PARAM_CONTROL_CONTAINER = "ModelParamControlContainer";
     String MODEL_PARAM_CONTROL_SPLIT_LINE = "ModelParamControlSplitLine";
-    String MODEL_PARAM_CONTROL_PARAM_NAME = "ModelParamControlParamName";
-    String MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "ModelParamControlParamNameSingleRow";
     String MODEL_PARAM_CONTROL_LABEL_VALUE = "ModelParamControlLabelValue";
     String MODEL_PARAM_CONTROL_NUMBER_LABEL = "ModelParamControlNumberLabel";
     String MODEL_PARAM_CONTROL_NUMBER_LABEL2F = "ModelParamControlNumberLabel2F";
@@ -140,4 +138,7 @@ public interface CSSIds {
 
     String CREATE_SCENE_APP_STATE_DIALOG_LABEL = "CreateSceneAppStateDialogLabel";
     String CREATE_SCENE_APP_STATE_DIALOG_CONTROL = "CreateSceneAppStateDialogControl";
+
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "AbstractParamControlParamNameSingleRow";
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "AbstractParamControlParamName";
 }

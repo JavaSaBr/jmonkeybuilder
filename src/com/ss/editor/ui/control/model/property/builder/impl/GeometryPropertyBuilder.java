@@ -12,11 +12,11 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.DefaultModelPropertyControl;
-import com.ss.editor.ui.control.model.property.LodLevelModelPropertyEditor;
-import com.ss.editor.ui.control.model.property.MaterialKeyModelPropertyEditor;
-import com.ss.editor.ui.control.model.property.ModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.model.property.control.DefaultModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.LodLevelModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.control.MaterialKeyModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

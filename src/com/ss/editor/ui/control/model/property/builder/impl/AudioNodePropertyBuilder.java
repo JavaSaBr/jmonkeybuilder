@@ -7,11 +7,11 @@ import com.jme3.audio.AudioNode;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.AudioKeyModelPropertyEditor;
-import com.ss.editor.ui.control.model.property.BooleanModelPropertyControl;
-import com.ss.editor.ui.control.model.property.FloatModelPropertyControl;
-import com.ss.editor.ui.control.model.property.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.model.property.control.AudioKeyModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
 import com.ss.editor.util.AudioNodeUtils;
 
 import org.jetbrains.annotations.NotNull;

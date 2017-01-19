@@ -13,8 +13,8 @@ import java.util.function.BiConsumer;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for editing {@link ParticleInfluencer}
- * in the {@link ModelFileEditor}.
+ * The implementation of the {@link AbstractEditorOperation} for editing {@link ParticleInfluencer} in the {@link
+ * ModelFileEditor}.
  *
  * @author JavaSaBr
  */
@@ -56,7 +56,9 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
      */
     private BiConsumer<D, T> applyHandler;
 
-    public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent, @NotNull final String propertyName, @Nullable final T newValue, @Nullable final T oldValue) {
+    public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent,
+                                               @NotNull final String propertyName, @Nullable final T newValue,
+                                               @Nullable final T oldValue) {
         this.parent = parent;
         this.newValue = newValue;
         this.oldValue = oldValue;

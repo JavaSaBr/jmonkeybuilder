@@ -2,12 +2,12 @@ package com.ss.editor.ui.control.model.property.builder;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.builder.impl.AudioNodePropertyBuilder;
+import com.ss.editor.ui.control.model.property.builder.impl.GenericPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.LightPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.ParticlesPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.SpatialPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.generic.GenericPropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

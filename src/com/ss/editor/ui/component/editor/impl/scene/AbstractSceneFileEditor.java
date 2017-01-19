@@ -79,16 +79,19 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * The 3D part of this editor.
      */
+    @NotNull
     protected final MA editorAppState;
 
     /**
      * The operation control.
      */
+    @NotNull
     protected final EditorOperationControl operationControl;
 
     /**
      * The changes counter.
      */
+    @NotNull
     protected final AtomicInteger changeCounter;
 
     /**

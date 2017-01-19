@@ -7,6 +7,7 @@ import com.ss.editor.ui.control.model.property.builder.PropertyBuilderFactory;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.NodeUtils;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.collections.ObservableList;
@@ -26,6 +27,7 @@ public class ModelPropertyEditor extends ScrollPane {
     /**
      * The consumer of changes.
      */
+    @NotNull
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
@@ -38,7 +40,7 @@ public class ModelPropertyEditor extends ScrollPane {
      */
     private Object currentObject;
 
-    public ModelPropertyEditor(final ModelChangeConsumer modelChangeConsumer) {
+    public ModelPropertyEditor(@NotNull final ModelChangeConsumer modelChangeConsumer) {
         this.modelChangeConsumer = modelChangeConsumer;
         createComponents();
     }
@@ -80,7 +82,7 @@ public class ModelPropertyEditor extends ScrollPane {
     /**
      * Sync all properties with controls.
      */
-    public void syncFor(final Object object) {
+    public void syncFor(@Nullable final Object object) {
         if (!isNeedUpdate(object)) return;
 
         final VBox container = getContainer();
@@ -92,7 +94,7 @@ public class ModelPropertyEditor extends ScrollPane {
         });
     }
 
-    protected boolean isNeedUpdate(final Object object) {
+    protected boolean isNeedUpdate(@Nullable final Object object) {
 
         final Object currentObject = getCurrentObject();
         if (currentObject == object) return true;
@@ -108,13 +110,14 @@ public class ModelPropertyEditor extends ScrollPane {
     /**
      * @param currentObject the current editable object.
      */
-    private void setCurrentObject(final Object currentObject) {
+    private void setCurrentObject(@Nullable final Object currentObject) {
         this.currentObject = currentObject;
     }
 
     /**
      * @return the current editable object.
      */
+    @Nullable
     private Object getCurrentObject() {
         return currentObject;
     }

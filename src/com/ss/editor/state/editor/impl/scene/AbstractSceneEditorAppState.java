@@ -36,7 +36,6 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -864,9 +863,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
-        final int index = GeomUtils.getIndex(currentModel, toTransform);
-
-        final ModelPropertyOperation<Spatial, Transform> operation = new ModelPropertyOperation<>(index, "transform", newValue, oldValue);
+        final ModelPropertyOperation<Spatial, Transform> operation = new ModelPropertyOperation<>(toTransform, "transform", newValue, oldValue);
         operation.setApplyHandler(Spatial::setLocalTransform);
 
         final T fileEditor = getFileEditor();

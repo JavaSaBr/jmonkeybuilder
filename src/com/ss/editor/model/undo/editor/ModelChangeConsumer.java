@@ -3,8 +3,6 @@ package com.ss.editor.model.undo.editor;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FXThread;
-import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.model.undo.EditorOperation;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public interface ModelChangeConsumer {
+public interface ModelChangeConsumer extends ChangeConsumer {
 
     /**
      * @return the current model of the editor.
@@ -58,10 +56,4 @@ public interface ModelChangeConsumer {
      */
     @FXThread
     void notifyMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index);
-
-    /**
-     * Execute the operation.
-     */
-    @FromAnyThread
-    void execute(@NotNull EditorOperation operation);
 }
