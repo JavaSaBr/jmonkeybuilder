@@ -1,8 +1,15 @@
 package com.ss.editor.ui.control.app.state.property.builder.impl;
 
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.control.app.state.property.control.BooleanAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.ColorAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.FloatAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.IntegerAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.Vector2fAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.Vector3fAppStatePropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
@@ -57,10 +64,21 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<Boolean, ?> property = cast(editableProperty);
                     final Boolean value = Objects.requireNonNull(property.getValue(), "Boolean value can't be null.");
 
-                    //  final BooleanGenericPropertyControl propertyControl =
-                    //         new BooleanGenericPropertyControl(value, property.getName(), changeConsumer);
+                    final BooleanAppStatePropertyControl<EditableProperty<Boolean, ?>> propertyControl =
+                            new BooleanAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
-                    // addControl(container, property, propertyControl);
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case FLOAT: {
+
+                    final EditableProperty<Float, ?> property = cast(editableProperty);
+                    final Float value = Objects.requireNonNull(property.getValue(), "Float value can't be null.");
+
+                    final FloatAppStatePropertyControl<EditableProperty<Float, ?>> propertyControl =
+                            new FloatAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
                     break;
                 }
                 case COLOR: {
@@ -74,8 +92,42 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     addControl(container, property, propertyControl);
                     break;
                 }
-                default:
+                case INTEGER: {
+
+                    final EditableProperty<Integer, ?> property = cast(editableProperty);
+                    final Integer value = Objects.requireNonNull(property.getValue(), "Integer value can't be null.");
+
+                    final IntegerAppStatePropertyControl<EditableProperty<Integer, ?>> propertyControl =
+                            new IntegerAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
                     break;
+                }
+                case VECTOR_2F: {
+
+                    final EditableProperty<Vector2f, ?> property = cast(editableProperty);
+                    final Vector2f value = Objects.requireNonNull(property.getValue(), "Vector2f value can't be null.");
+
+                    final Vector2fAppStatePropertyControl<EditableProperty<Vector2f, ?>> propertyControl =
+                            new Vector2fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case VECTOR_3F: {
+
+                    final EditableProperty<Vector3f, ?> property = cast(editableProperty);
+                    final Vector3f value = Objects.requireNonNull(property.getValue(), "Vector3f value can't be null.");
+
+                    final Vector3fAppStatePropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
+                            new Vector3fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
     }
