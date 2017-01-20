@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Objects;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -105,7 +104,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
 
     @Override
     protected void createContent(@NotNull final VBox root) {
-        root.setAlignment(Pos.CENTER);
+        root.setId(CSSIds.AUDIO_VIEW_EDITOR_CONTAINER);
 
         final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
         durationLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);

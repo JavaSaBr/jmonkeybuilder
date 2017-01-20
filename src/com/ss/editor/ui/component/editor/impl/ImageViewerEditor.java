@@ -5,13 +5,13 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
+import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -55,7 +55,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
     @Override
     protected void createContent(@NotNull final VBox root) {
-        root.setAlignment(Pos.CENTER);
+        root.setId(CSSIds.IMAGE_VIEW_EDITOR_CONTAINER);
 
         imageView = new ImageView();
 

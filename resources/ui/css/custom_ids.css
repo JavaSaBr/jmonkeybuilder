@@ -825,3 +825,13 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
+
+#ImageViewEditorContainer {
+    -fx-alignment: center;
+    -fx-background-color: -fx-background-background;
+}
+
+#AudioViewEditorContainer {
+    -fx-alignment: center;
+    -fx-background-color: -fx-background-background;
+}

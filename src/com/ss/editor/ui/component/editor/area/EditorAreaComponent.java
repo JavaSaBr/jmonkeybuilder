@@ -49,6 +49,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import rlib.concurrent.util.ThreadUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
@@ -317,7 +318,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final AppStateManager stateManager = EDITOR.getStateManager();
         final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
 
-        EXECUTOR_MANAGER.addFXTask(() -> sceneProcessor.setEnabled(false));
+        boolean enabled = false;
 
         if (prevTab != null) {
 
@@ -328,15 +329,24 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             states.forEach(stateManager::detach);
         }
 
-        if (newTab == null) return;
+        if (newTab != null) {
 
-        final ObservableMap<Object, Object> properties = newTab.getProperties();
-        final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            final ObservableMap<Object, Object> properties = newTab.getProperties();
+            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-        final Array<EditorAppState> states = fileEditor.getStates();
-        states.forEach(stateManager::attach);
+            final Array<EditorAppState> states = fileEditor.getStates();
+            states.forEach(stateManager::attach);
 
-        EXECUTOR_MANAGER.addFXTask(() -> sceneProcessor.setEnabled(!states.isEmpty()));
+            enabled = states.size() > 0;
+        }
+
+        if (sceneProcessor.isEnabled() != enabled) {
+            final boolean result = enabled;
+            EXECUTOR_MANAGER.addFXTask(() -> {
+                ThreadUtils.sleep(100);
+                sceneProcessor.setEnabled(result);
+            });
+        }
     }
 
     /**
@@ -449,7 +459,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
 
-        EXECUTOR_MANAGER.addFXTask(() -> sceneProcessor.setEnabled(false));
+        EXECUTOR_MANAGER.addFXTask(() -> {
+            ThreadUtils.sleep(200);
+            sceneProcessor.setEnabled(false);
+        });
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
         if (workspace == null) return;

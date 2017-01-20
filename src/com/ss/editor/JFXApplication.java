@@ -206,7 +206,6 @@ public class JFXApplication extends Application {
         this.scene = EditorFXSceneBuilder.build(requireNonNull(stage));
 
         final EditorFXScene scene = getScene();
-        scene.notifyFinishBuild();
 
         final Editor editor = Editor.getInstance();
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
@@ -240,6 +239,7 @@ public class JFXApplication extends Application {
         this.sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
         final Stage stage = getStage();
         stage.focusedProperty().addListener((observable, oldValue, newValue) -> editor.setPaused(!newValue));
+        Platform.runLater(scene::notifyFinishBuild);
     }
 
     /**
