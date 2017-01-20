@@ -237,7 +237,7 @@ public class Editor extends JmeToJFXApplication {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(5);
 
-        SceneLoader.install(getAssetManager());
+        SceneLoader.install(this);
 
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 

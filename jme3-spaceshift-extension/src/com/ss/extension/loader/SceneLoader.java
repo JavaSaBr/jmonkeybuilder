@@ -1,5 +1,6 @@
 package com.ss.extension.loader;
 
+import com.jme3.app.Application;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetManager;
 import com.jme3.export.InputCapsule;
@@ -19,11 +20,17 @@ import java.io.IOException;
 public class SceneLoader implements JmeImporter {
 
     /**
+     * The application.
+     */
+    private static Application application;
+
+    /**
      * Install a scene loader to the asset manager.
      *
-     * @param assetManager the asset manager.
+     * @param application the application.
      */
-    public static void install(@NotNull final AssetManager assetManager) {
+    public static void install(@NotNull final Application application) {
+        final AssetManager assetManager = application.getAssetManager();
         assetManager.unregisterLoader(BinaryImporter.class);
         assetManager.registerLoader(SceneLoader.class, "j3o", "j3f", "j3s");
     }
@@ -31,8 +38,15 @@ public class SceneLoader implements JmeImporter {
     @NotNull
     private final BinaryImporter importer;
 
+    /**
+     * The application.
+     */
+    @NotNull
+    private final Application app;
+
     public SceneLoader() {
         importer = new BinaryImporter();
+        app = SceneLoader.application;
     }
 
     @Override
