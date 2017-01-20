@@ -103,7 +103,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         final BoundingVolume modelBound = geometry.getModelBound();
         final int lodLevel = geometry.getLodLevel();
 
-        final DefaultModelPropertyControl<BoundingVolume> boundingVolumeControl =
+        final DefaultModelPropertyControl<Geometry, BoundingVolume> boundingVolumeControl =
                 new DefaultModelPropertyControl<>(modelBound, Messages.BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME, changeConsumer);
 
         boundingVolumeControl.setToStringFunction(BOUNDING_VOLUME_TO_STRING);

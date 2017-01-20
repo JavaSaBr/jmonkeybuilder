@@ -28,6 +28,12 @@ public interface ModelChangeConsumer extends ChangeConsumer {
     void notifyChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName);
 
     /**
+     * Notify about changed property count.
+     */
+    @FXThread
+    void notifyChangePropertyCount(@Nullable Object parent, @NotNull Object object);
+
+    /**
      * Notify about added child.
      */
     @FXThread

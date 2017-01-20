@@ -21,7 +21,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, T> extends AbstractPropertyControl<C, Object, T> {
+public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D, T> extends AbstractPropertyControl<C, D, T> {
 
     /**
      * The label with value of the property.
@@ -35,7 +35,7 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, T
 
     public AbstractDefaultPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                           @NotNull final C changeConsumer,
-                                          @NotNull final SixObjectConsumer<C, Object, String, T, T, BiConsumer<Object, T>> changeHandler) {
+                                          @NotNull final SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 

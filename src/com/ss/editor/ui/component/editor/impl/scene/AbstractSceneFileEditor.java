@@ -401,6 +401,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
+    public void notifyChangePropertyCount(@Nullable final Object parent, @NotNull final Object object) {
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.rebuildFor(object, parent);
+    }
+
+    @Override
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);

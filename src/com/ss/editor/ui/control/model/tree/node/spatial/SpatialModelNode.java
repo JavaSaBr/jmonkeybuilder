@@ -13,6 +13,7 @@ import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
@@ -47,6 +48,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     public void fillContextMenu(@NotNull final ModelNodeTree nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
         if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
+
+        items.add(new AddUserDataAction(nodeTree, this));
 
         super.fillContextMenu(nodeTree, items);
     }

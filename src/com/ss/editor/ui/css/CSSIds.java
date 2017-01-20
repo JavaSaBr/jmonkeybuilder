@@ -142,4 +142,7 @@ public interface CSSIds {
     String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "AbstractParamControlVector3fField";
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F = "AbstractParamControlNumberLabel2F";
     String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "AbstractParamControlVector2fField";
+
+    String ADD_USER_DATA_DIALOG_LABEL = "AddUserDataDialogLabel";
+    String ADD_USER_DATA_FIELD = "AddUserDataDialogField";
 }

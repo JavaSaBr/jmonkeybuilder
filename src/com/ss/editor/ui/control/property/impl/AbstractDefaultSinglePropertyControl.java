@@ -15,11 +15,11 @@ import rlib.function.SixObjectConsumer;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractDefaultSinglePropertyControl<C extends ChangeConsumer, T> extends AbstractDefaultPropertyControl<C, T> {
+public abstract class AbstractDefaultSinglePropertyControl<C extends ChangeConsumer, D, T> extends AbstractDefaultPropertyControl<C, D, T> {
 
     public AbstractDefaultSinglePropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                                 @NotNull final C changeConsumer,
-                                                @NotNull final SixObjectConsumer<C, Object, String, T, T, BiConsumer<Object, T>> changeHandler) {
+                                                @NotNull final SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 

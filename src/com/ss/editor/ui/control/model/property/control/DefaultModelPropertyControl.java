@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class DefaultModelPropertyControl<T> extends AbstractDefaultPropertyControl<ModelChangeConsumer, T> {
+public class DefaultModelPropertyControl<D, T> extends AbstractDefaultPropertyControl<ModelChangeConsumer, D, T> {
 
     public DefaultModelPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                        @NotNull final ModelChangeConsumer changeConsumer) {

@@ -94,6 +94,21 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
         });
     }
 
+    /**
+     * Re-build property controls for the object.
+     */
+    public void rebuildFor(@Nullable final Object object, @Nullable final Object parent) {
+        if (getCurrentObject() != object) return;
+
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.clear();
+
+        if (object != null) {
+            PropertyBuilderFactory.buildFor(object, parent, container, changeConsumer);
+        }
+    }
+
     protected boolean isNeedUpdate(@Nullable final Object object) {
 
         final Object currentObject = getCurrentObject();
