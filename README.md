@@ -1,9 +1,21 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.0 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.1 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.1 ##
+* -Add some settings to setting dialog.
+* -Added shift+ctrl value scrolling.
+* -Added environments folder to settings dialog.
+* -Started implementing a scene editor.
+* -Updated jME libraries.
+* -Implemented layers in a scene editor.
+* -Implemented scene states editing and provided API to support custom states.
+* -Integrated lighting and sky states from SimFX library.
+* -Implemented user data editing.
+* -Added some performance optimizations with jME render inside JavaFX.
 
 ## ver. 0.9.0 ##
 * [Video](https://www.youtube.com/watch?v=LNrDesrg7zc&feature=youtu.be)
