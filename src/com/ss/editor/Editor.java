@@ -376,8 +376,6 @@ public class Editor extends JmeToJFXApplication {
             //System.out.println(cam.getRotation());
             //System.out.println(cam.getLocation());
 
-            if (paused) return;
-
             super.update();
 
         } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
@@ -534,5 +532,12 @@ public class Editor extends JmeToJFXApplication {
      */
     public TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
         return translucentBucketFilter;
+    }
+
+    /**
+     * @param paused true if this app is paused.
+     */
+    public void setPaused(final boolean paused) {
+        this.paused = paused;
     }
 }

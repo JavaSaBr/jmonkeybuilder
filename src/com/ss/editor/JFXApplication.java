@@ -2,6 +2,7 @@ package com.ss.editor;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static java.nio.file.Files.newOutputStream;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
@@ -16,6 +17,7 @@ import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.manager.JMEFilePreviewManager;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
+import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
@@ -26,11 +28,11 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -201,19 +203,43 @@ public class JFXApplication extends Application {
      */
     @FXThread
     public void buildScene() {
-        this.scene = EditorFXSceneBuilder.build(stage);
+        this.scene = EditorFXSceneBuilder.build(requireNonNull(stage));
 
         final EditorFXScene scene = getScene();
         scene.notifyFinishBuild();
 
         final Editor editor = Editor.getInstance();
         final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
-        executor.addToExecute(() -> sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort()));
+        executor.addToExecute(() -> createSceneProcessor(scene, editor));
 
         JMEFilePreviewManager.getInstance();
 
         GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        if (editorConfig.isAnalyticsQuestion()) return;
+
+        editorConfig.setAnalytics(false);
+        editorConfig.save();
+
+        Platform.runLater(() -> {
+
+            final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
+
+                editorConfig.setAnalyticsQuestion(true);
+                editorConfig.setAnalytics(result);
+                editorConfig.save();
+
+            }, Messages.ANALYTICS_CONFIRM_DIALOG_MESSAGE);
+            confirmDialog.show(getStage());
+        });
+    }
+
+    private void createSceneProcessor(@NotNull final EditorFXScene scene, @NotNull final Editor editor) {
+        this.sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
+        final Stage stage = getStage();
+        stage.focusedProperty().addListener((observable, oldValue, newValue) -> editor.setPaused(!newValue));
     }
 
     /**
@@ -224,7 +250,7 @@ public class JFXApplication extends Application {
     @NotNull
     @FromAnyThread
     public EditorFXScene getScene() {
-        return Objects.requireNonNull(scene, "Scene can't be null.");
+        return requireNonNull(scene, "Scene can't be null.");
     }
 
     /**
@@ -235,6 +261,6 @@ public class JFXApplication extends Application {
     @NotNull
     @FromAnyThread
     public FrameTransferSceneProcessor getSceneProcessor() {
-        return Objects.requireNonNull(sceneProcessor, "Scene processor can't be null.");
+        return requireNonNull(sceneProcessor, "Scene processor can't be null.");
     }
 }

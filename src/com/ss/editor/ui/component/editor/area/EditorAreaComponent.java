@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.area;
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 
 import com.jme3.app.state.AppStateManager;
+import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.file.converter.FileConverter;
@@ -314,6 +315,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
         final AppStateManager stateManager = EDITOR.getStateManager();
+        final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+
+        EXECUTOR_MANAGER.addFXTask(() -> sceneProcessor.setEnabled(false));
 
         if (prevTab != null) {
 
@@ -331,6 +335,8 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final Array<EditorAppState> states = fileEditor.getStates();
         states.forEach(stateManager::attach);
+
+        EXECUTOR_MANAGER.addFXTask(() -> sceneProcessor.setEnabled(!states.isEmpty()));
     }
 
     /**
@@ -429,15 +435,21 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     @Override
     public void notifyFinishBuild() {
-        setIgnoreOpenedFiles(true);
-        try {
-            loadOpenedFiles();
-        } finally {
-            setIgnoreOpenedFiles(false);
-        }
+        EXECUTOR_MANAGER.addFXTask(() -> {
+            setIgnoreOpenedFiles(true);
+            try {
+                loadOpenedFiles();
+            } finally {
+                setIgnoreOpenedFiles(false);
+            }
+        });
     }
 
     private void loadOpenedFiles() {
+
+        final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+
+        EXECUTOR_MANAGER.addFXTask(() -> sceneProcessor.setEnabled(false));
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
         if (workspace == null) return;

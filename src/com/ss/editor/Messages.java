@@ -377,6 +377,8 @@ public class Messages {
     public static final String ADD_USER_DATA_DIALOG_DATA_TYPE;
     public static final String ADD_USER_DATA_DIALOG_BUTTON_OK;
 
+    public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -753,5 +755,7 @@ public class Messages {
         ADD_USER_DATA_DIALOG_NAME = bundle.getString("AddUserDataDialogName");
         ADD_USER_DATA_DIALOG_DATA_TYPE = bundle.getString("AddUserDataDialogDataType");
         ADD_USER_DATA_DIALOG_BUTTON_OK = bundle.getString("AddUserDataDialogButtonOk");
+
+        ANALYTICS_CONFIRM_DIALOG_MESSAGE = bundle.getString("AnalyticsConfirmDialogMessage");
     }
 }

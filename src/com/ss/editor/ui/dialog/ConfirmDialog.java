@@ -25,7 +25,7 @@ import rlib.ui.util.FXUtils;
 public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     private static final Insets QUESTION_PADDING = new Insets(10, 0, 10, 0);
-    private static final Point DIALOG_SIZE = new Point(600, 110);
+    private static final Point DIALOG_SIZE = new Point(600, 130);
 
     /**
      * The handler pf an answer.
@@ -58,6 +58,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         questionLabel.setWrapText(true);
         questionLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.9));
         questionLabel.setPadding(QUESTION_PADDING);
+        questionLabel.prefHeightProperty().bind(root.heightProperty());
 
         FXUtils.addToPane(questionLabel, root);
         FXUtils.addClassTo(questionLabel, CSSClasses.SPECIAL_FONT_15);

@@ -74,6 +74,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
     public static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
     public static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
+    public static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion";
 
     private static volatile EditorConfig instance;
 
@@ -195,6 +196,10 @@ public final class EditorConfig implements AssetEventListener {
      */
     private volatile boolean defaultEditorCameraEnabled;
 
+    /**
+     * Flag is of showing analytics question.
+     */
+    private volatile boolean analyticsQuestion;
 
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
@@ -560,6 +565,20 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return true if the question was showed.
+     */
+    public boolean isAnalyticsQuestion() {
+        return analyticsQuestion;
+    }
+
+    /**
+     * @param analyticsQuestion true if the question was showed.
+     */
+    public void setAnalyticsQuestion(final boolean analyticsQuestion) {
+        this.analyticsQuestion = analyticsQuestion;
+    }
+
+    /**
      * @return the settings for JME.
      */
     @FromAnyThread
@@ -618,6 +637,7 @@ public final class EditorConfig implements AssetEventListener {
         this.autoTangentGenerating = prefs.getBoolean(PREF_AUTO_TANGENT_GENERATING, false);
         this.defaultUseFlippedTexture = prefs.getBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, true);
         this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_CAMERA_LAMP_ENABLED, true);
+        this.analyticsQuestion = prefs.getBoolean(PREF_ANALYTICS_QUESTION, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -688,6 +708,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
         prefs.putBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
         prefs.putBoolean(PREF_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
+        prefs.putBoolean(PREF_ANALYTICS_QUESTION, isAnalyticsQuestion());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
