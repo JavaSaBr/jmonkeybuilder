@@ -309,8 +309,8 @@ public class Workspace implements Serializable {
     /**
      * Save this workspace.
      */
-    public void save() {
-        if (changes.get() == 0) return;
+    public void save(final boolean force) {
+        if (!force && changes.get() == 0) return;
 
         final Path assetFolder = getAssetFolder();
         final Path workspaceFile = assetFolder.resolve(WorkspaceManager.FOLDER_EDITOR).resolve(WorkspaceManager.FILE_WORKSPACE);

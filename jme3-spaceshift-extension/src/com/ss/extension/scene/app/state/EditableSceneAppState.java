@@ -3,6 +3,7 @@ package com.ss.extension.scene.app.state;
 import com.ss.extension.scene.app.state.property.EditableProperty;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -30,10 +31,11 @@ public interface EditableSceneAppState extends SceneAppState {
      * Check state dependencies.
      *
      * @param exists the current exists states.
-     * @return can create this state.
+     * @return null of can create or message with description.
      */
-    default boolean canCreate(@NotNull final Array<SceneAppState> exists) {
-        return true;
+    @Nullable
+    default String canCreate(@NotNull final Array<SceneAppState> exists) {
+        return null;
     }
 }
 

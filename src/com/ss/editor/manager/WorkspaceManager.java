@@ -113,7 +113,7 @@ public class WorkspaceManager {
     public synchronized void clear() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         workspaces.forEach(Workspace::clear);
-        workspaces.forEach(Workspace::save);
+        workspaces.forEach((path, workspace) -> workspace.save(true));
     }
 
     /**
@@ -121,6 +121,6 @@ public class WorkspaceManager {
      */
     public synchronized void save() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
-        workspaces.forEach(Workspace::save);
+        workspaces.forEach((path, workspace) -> workspace.save(true));
     }
 }

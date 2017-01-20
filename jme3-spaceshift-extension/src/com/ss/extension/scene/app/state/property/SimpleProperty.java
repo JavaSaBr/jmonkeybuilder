@@ -47,26 +47,52 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
      */
     private float scrollPower;
 
-    public SimpleProperty(@NotNull final EditablePropertyType type, @NotNull final String name,
-                          @NotNull final O object, @NotNull final Function<O, T> getter,
-                          @NotNull final BiConsumer<O, T> setter) {
-        this(type, 1F, name, object, getter, setter);
+    /**
+     * The min value.
+     */
+    private float minValue;
+
+    /**
+     * The max value.
+     */
+    private float maxValue;
+
+    public SimpleProperty(@NotNull final EditablePropertyType type, @NotNull final String name, @NotNull final O object,
+                          @NotNull final Function<O, T> getter, @NotNull final BiConsumer<O, T> setter) {
+        this(type, name, 1F, Integer.MIN_VALUE, Integer.MAX_VALUE, object, getter, setter);
     }
 
-    public SimpleProperty(@NotNull final EditablePropertyType type, final float scrollPower, @NotNull final String name,
-                          @NotNull final O object, @NotNull final Function<O, T> getter,
-                          @NotNull final BiConsumer<O, T> setter) {
+    public SimpleProperty(@NotNull final EditablePropertyType type, @NotNull final String name, final float scrollPower,
+                          @NotNull final O object, @NotNull final Function<O, T> getter, @NotNull final BiConsumer<O, T> setter) {
+        this(type, name, scrollPower, Integer.MIN_VALUE, Integer.MAX_VALUE, object, getter, setter);
+    }
+
+    public SimpleProperty(@NotNull final EditablePropertyType type, @NotNull final String name, final float scrollPower,
+                          final float minValue, final float maxValue, @NotNull final O object,
+                          @NotNull final Function<O, T> getter, @NotNull final BiConsumer<O, T> setter) {
         this.type = type;
         this.name = name;
         this.object = object;
         this.getter = getter;
         this.setter = setter;
         this.scrollPower = scrollPower;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
     }
 
     @Override
     public float getScrollPower() {
         return scrollPower;
+    }
+
+    @Override
+    public float getMaxValue() {
+        return maxValue;
+    }
+
+    @Override
+    public float getMinValue() {
+        return minValue;
     }
 
     @NotNull
@@ -106,6 +132,9 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
                 ", getter=" + getter +
                 ", setter=" + setter +
                 ", object=" + object +
+                ", scrollPower=" + scrollPower +
+                ", minValue=" + minValue +
+                ", maxValue=" + maxValue +
                 '}';
     }
 }

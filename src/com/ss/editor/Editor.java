@@ -385,7 +385,7 @@ public class Editor extends JmeToJFXApplication {
             GAnalytics.sendException(e, true);
             GAnalytics.waitForSend();
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-            workspaceManager.save();
+            workspaceManager.clear();
             System.exit(1);
         } catch (final RendererException | IllegalStateException e) {
             LOGGER.warning(e);
@@ -393,8 +393,7 @@ public class Editor extends JmeToJFXApplication {
             GAnalytics.waitForSend();
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.clear();
-            workspaceManager.save();
-            System.exit(1);
+            System.exit(2);
         } finally {
             syncUnlock(stamp);
         }

@@ -4,6 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,7 +61,13 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
         okButton = new Button(getButtonOkLabel());
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
-        okButton.setOnAction(event -> processOk());
+        okButton.setOnAction(event -> {
+            try {
+                processOk();
+            } catch (final Exception e) {
+                EditorUtil.handleException(LOGGER, this, e);
+            }
+        });
 
         final Button cancelButton = new Button(getButtonCancelLabel());
         cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);

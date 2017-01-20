@@ -110,7 +110,9 @@ public class AppStateList extends VBox {
                 .map(editableState -> (EditableSceneAppState) editableState)
                 .forEach(items::add);
 
-        selectionModel.select(selected);
+        if (selected != null && appStates.contains(selected)) {
+            selectionModel.select(selected);
+        }
     }
 
     /**

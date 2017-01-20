@@ -42,6 +42,20 @@ public interface EditableProperty<T, O> {
     }
 
     /**
+     * @return the min value.
+     */
+    default float getMinValue() {
+        return Integer.MIN_VALUE;
+    }
+
+    /**
+     * @return the max value.
+     */
+    default float getMaxValue() {
+        return Integer.MAX_VALUE;
+    }
+
+    /**
      * Get an edited object.
      *
      * @return the edited object.

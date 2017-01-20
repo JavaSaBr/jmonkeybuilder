@@ -167,8 +167,14 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
                 throw new RuntimeException("Can't create a state of the class " + stateNameField.getText());
             }
 
-            if (newExample instanceof EditableSceneAppState && !((EditableSceneAppState) newExample).canCreate(appStates)) {
-                throw new RuntimeException("Can't create " + newExample.getName() + " app state.");
+            if (newExample instanceof EditableSceneAppState) {
+
+                final EditableSceneAppState editableSceneAppState = (EditableSceneAppState) newExample;
+                final String message = editableSceneAppState.canCreate(appStates);
+
+                if (message != null) {
+                    throw new RuntimeException(message);
+                }
             }
 
             changeConsumer.execute(new AddAppStateOperation(newExample, currentModel));
@@ -181,8 +187,14 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
             final EditableSceneAppState example = requireNonNull(BUILT_IN.get(name));
             final SceneAppState newExample = ClassUtils.newInstance(example.getClass());
 
-            if (newExample instanceof EditableSceneAppState && !((EditableSceneAppState) newExample).canCreate(appStates)) {
-                throw new RuntimeException("Can't create " + newExample.getName() + " app state.");
+            if (newExample instanceof EditableSceneAppState) {
+
+                final EditableSceneAppState editableSceneAppState = (EditableSceneAppState) newExample;
+                final String message = editableSceneAppState.canCreate(appStates);
+
+                if (message != null) {
+                    throw new RuntimeException(message);
+                }
             }
 
             changeConsumer.execute(new AddAppStateOperation(newExample, currentModel));

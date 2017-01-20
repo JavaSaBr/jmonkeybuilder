@@ -82,6 +82,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final float mod = property.getScrollPower();
 
                     propertyControl.setScrollPower(scrollPower * mod);
+                    propertyControl.setMinMax(property.getMinValue(), property.getMaxValue());
 
                     addControl(container, property, propertyControl);
                     break;
