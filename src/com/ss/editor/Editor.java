@@ -39,6 +39,7 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.extension.loader.SceneLoader;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -72,8 +73,10 @@ public class Editor extends JmeToJFXApplication {
         }
     };
 
+    @NotNull
     private static final Editor EDITOR = new Editor();
 
+    @NotNull
     public static Editor getInstance() {
         return EDITOR;
     }
@@ -234,6 +237,8 @@ public class Editor extends JmeToJFXApplication {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(5);
 
+        SceneLoader.install(this);
+
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -371,8 +376,6 @@ public class Editor extends JmeToJFXApplication {
             //System.out.println(cam.getRotation());
             //System.out.println(cam.getLocation());
 
-            if (paused) return;
-
             super.update();
 
         } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
@@ -380,7 +383,7 @@ public class Editor extends JmeToJFXApplication {
             GAnalytics.sendException(e, true);
             GAnalytics.waitForSend();
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-            workspaceManager.save();
+            workspaceManager.clear();
             System.exit(1);
         } catch (final RendererException | IllegalStateException e) {
             LOGGER.warning(e);
@@ -388,8 +391,7 @@ public class Editor extends JmeToJFXApplication {
             GAnalytics.waitForSend();
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.clear();
-            workspaceManager.save();
-            System.exit(1);
+            System.exit(2);
         } finally {
             syncUnlock(stamp);
         }
@@ -530,5 +532,12 @@ public class Editor extends JmeToJFXApplication {
      */
     public TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
         return translucentBucketFilter;
+    }
+
+    /**
+     * @param paused true if this app is paused.
+     */
+    public void setPaused(final boolean paused) {
+        this.paused = paused;
     }
 }

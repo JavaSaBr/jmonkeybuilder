@@ -421,6 +421,13 @@
     -fx-wrap-text: true;
 }
 
+#SettingsDialogTabPane {
+}
+
+#SettingsDialogTabPane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}
+
 #SettingsDialogLabel {
     -fx-alignment: center-right;
     -fx-min-width: 250;
@@ -469,112 +476,11 @@
     -fx-background: -fx-color-A200;
 }
 
-#ModelParamControlContainer {
-    -fx-alignment: top-center;
-    -fx-padding: 2 10 4 4;
-}
-
-#ModelParamControlSplitLine {
-    -fx-stroke: -fx-color-600;
-    -fx-stroke-width: 2;
-}
-
-#ModelParamControlParamName {
-    -fx-min-height: 16;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-}
-
-#ModelParamControlParamNameSingleRow {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-right;
-    -fx-padding: 0 3 0 2;
-}
-
-#ModelParamControlLabelValue {
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-}
-
-#ModelParamControlNumberLabel {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-}
-
-#ModelParamControlNumberLabel2F {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-    -fx-min-width: 60;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-    -fx-text-alignment: right;
-}
-
-#ModelParamControlVector2fField {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-}
-
-#ModelParamControlVector3fField {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-}
-
 #ModelParamControlVector4fField {
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 50;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#ModelParamControlComboBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#ModelParamControlColorPicker {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#ModelParamControlCheckbox {
-    -fx-alignment: center;
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#ModelParamControlCheckbox > .box {
-    -fx-min-height: 16;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 16;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#ModelParamControlCheckbox > .box > .mark {
-    -fx-min-height: 12;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 12;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -767,6 +673,155 @@
 
 #GenerateLoDDialogListViewCell {
     -fx-min-height: 30px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#SceneAppStateContainer {
+    -fx-background-color: -fx-background-background;
+    -fx-padding: 4 2 0 0;
+}
+
+#SceneAppStateListCell {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#CreateSceneAppStateDialogLabel {
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+}
+
+#CreateSceneAppStateDialogControl {
+    -fx-min-height: 30;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 250;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-padding: 2px;
+}
+
+#AbstractParamControlParamName {
+    -fx-min-height: 16;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+#AbstractParamControlParamNameSingleRow {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center-right;
+    -fx-padding: 0 3 0 2;
+}
+
+#AbstractParamControlCheckbox {
+    -fx-alignment: center;
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#AbstractParamControlCheckbox > .box {
+    -fx-min-height: 16;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 16;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#AbstractParamControlCheckbox > .box > .mark {
+    -fx-min-height: 12;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 12;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#AbstractParamControlColorPicker {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#AbstractParamControlLabelValue {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+#AbstractParamControlComboBox {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#AbstractParamControlNumberLabel {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 2 0 2;
+}
+
+#AbstractParamControlVector3fField {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 2 0 2;
+}
+
+#AbstractParamControlNumberLabel2F {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 2 0 2;
+    -fx-min-width: 60;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+}
+
+#AbstractParamControlVector2fField {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 2 0 2;
+}
+
+#AbstractParamControlContainer {
+    -fx-alignment: top-center;
+    -fx-padding: 2 10 4 4;
+}
+
+#AbstractParamControlSplitLine {
+    -fx-stroke: -fx-color-600;
+    -fx-stroke-width: 2;
+}
+
+#AddUserDataDialogLabel {
+    -fx-alignment: center-right;
+    -fx-min-width: 120;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+#AddUserDataDialogField {
+    -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }

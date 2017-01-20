@@ -2,7 +2,7 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="0.9.0" />
+    <property name="editor.version" value="0.9.1" />
 
     <target name="init-fx-tasks">
         <path id="fxant">
@@ -41,6 +41,13 @@
 
         <copy todir="externalLibs/extensions/xbuf">
             <fileset dir="../libs/extensions/xbuf" >
+                <include name="**/*sources*"/>
+                <include name="**/*javadoc*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="externalLibs/extensions/simsilica">
+            <fileset dir="../libs/extensions/simsilica" >
                 <include name="**/*sources*"/>
                 <include name="**/*javadoc*"/>
             </fileset>
@@ -111,6 +118,9 @@
                 <fileset dir="build/libs/extensions/toneg0d">
                     <include name="*"/>
                 </fileset>
+                <fileset dir="build/libs/extensions/simsilica">
+                    <include name="*"/>
+                </fileset>
             </classpath>
         </javac>
 
@@ -171,6 +181,12 @@
 
         <copy todir="dist/libs/extensions/toneg0d">
             <fileset dir="externalLibs/extensions/toneg0d">
+                <include name="*"/>
+            </fileset>
+        </copy>
+
+        <copy todir="dist/libs/extensions/simsilica">
+            <fileset dir="externalLibs/extensions/simsilica">
                 <include name="*"/>
             </fileset>
         </copy>

@@ -10,8 +10,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for removing a {@link Light} from the
- * {@link Spatial}.
+ * The implementation of the {@link AbstractEditorOperation} to remove a {@link Light} from the {@link Spatial}.
  *
  * @author JavaSaBr.
  */
@@ -20,6 +19,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     /**
      * The light to remove.
      */
+    @NotNull
     private final Light light;
 
     /**
@@ -27,7 +27,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
      */
     private final int index;
 
-    public RemoveLightOperation(final Light light, final int index) {
+    public RemoveLightOperation(@NotNull final Light light, final int index) {
         this.light = light;
         this.index = index;
     }
@@ -43,7 +43,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
             final Node node = (Node) parent;
             node.removeLight(light);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedLight(node, light));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, light));
         });
     }
 
@@ -58,7 +58,7 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
             final Node node = (Node) parent;
             node.addLight(light);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedLight(node, light, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, light, -1));
         });
     }
 }

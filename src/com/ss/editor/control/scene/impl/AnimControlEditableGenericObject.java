@@ -1,7 +1,7 @@
 package com.ss.editor.control.scene.impl;
 
 import com.jme3.animation.AnimControl;
-import com.ss.editor.ui.control.model.property.builder.impl.generic.EditableProperty;
+import com.ss.editor.ui.control.model.property.generic.EditableProperty;
 
 import org.jetbrains.annotations.NotNull;
 

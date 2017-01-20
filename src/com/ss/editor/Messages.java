@@ -104,12 +104,16 @@ public class Messages {
     public static final String SETTINGS_DIALOG_BUTTON_CANCEL;
     public static final String SETTINGS_DIALOG_MESSAGE;
     public static final String SETTINGS_DIALOG_GOOGLE_ANALYTICS;
-
-    public static final String OTHER_SETTINGS_DIALOG_TITLE;
-    public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
-    public static final String OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
-    public static final String OTHER_SETTINGS_DIALOG_BUTTON_OK;
-    public static final String OTHER_SETTINGS_DIALOG_BUTTON_CANCEL;
+    public static final String SETTINGS_DIALOG_CAMERA_ANGLE;
+    public static final String SETTINGS_DIALOG_AUTO_TANGENT_GENERATING;
+    public static final String SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE;
+    public static final String SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED;
+    public static final String SETTINGS_DIALOG_TAB_GRAPHICS;
+    public static final String SETTINGS_DIALOG_TAB_OTHER;
+    public static final String SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL;
+    public static final String SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE;
+    public static final String SETTINGS_DIALOG_ENVS_FOLDER_LABEL;
+    public static final String SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE;
 
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
@@ -119,7 +123,6 @@ public class Messages {
     public static final String MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
     public static final String MODEL_FILE_EDITOR_NAME;
-    public static final String MODEL_FILE_EDITOR_TOOL_OBJECTS;
     public static final String MODEL_FILE_EDITOR_NO_SKY;
     public static final String MODEL_FILE_EDITOR_FAST_SKY;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
@@ -130,6 +133,10 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
+
+    public static final String SCENE_FILE_EDITOR_NAME;
+    public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
+    public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -184,6 +191,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_LAYER;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -325,11 +334,14 @@ public class Messages {
     public static final String CREATE_SKY_DIALOG_TOP_LABEL;
     public static final String CREATE_SKY_DIALOG_BOTTOM_LABEL;
 
-    public static final String NODE_DIALOG_BUTTON_OK;
-    public static final String NODE_DIALOG_BUTTON_CANCEL;
+    public static final String SIMPLE_DIALOG_BUTTON_OK;
+    public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
 
     public static final String EMPTY_MODEL_CREATOR_DESCRIPTION;
     public static final String EMPTY_MODEL_CREATOR_TITLE;
+
+    public static final String EMPTY_SCENE_CREATOR_DESCRIPTION;
+    public static final String EMPTY_SCENE_CREATOR_TITLE;
 
     public static final String GLSL_FILE_EDITOR_NAME;
     public static final String MATERIAL_DEFINITION_FILE_EDITOR_NAME;
@@ -354,6 +366,18 @@ public class Messages {
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
 
     public static final String LOG_VIEW_TITLE;
+
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_TITLE;
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN;
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX;
+    public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD;
+
+    public static final String ADD_USER_DATA_DIALOG_TITLE;
+    public static final String ADD_USER_DATA_DIALOG_NAME;
+    public static final String ADD_USER_DATA_DIALOG_DATA_TYPE;
+    public static final String ADD_USER_DATA_DIALOG_BUTTON_OK;
+
+    public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
 
     static {
 
@@ -459,12 +483,16 @@ public class Messages {
         SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("SettingsDialogButtonCancel");
         SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
         SETTINGS_DIALOG_GOOGLE_ANALYTICS = bundle.getString("SettingsDialogAnalytics");
-
-        OTHER_SETTINGS_DIALOG_TITLE = bundle.getString("OtherSettingsDialogTitle");
-        OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("OtherSettingsDialogClasspathFolderLabel");
-        OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("OtherSettingsDialogClasspathFolderChooserTitle");
-        OTHER_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("OtherSettingsDialogButtonOk");
-        OTHER_SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("OtherSettingsDialogButtonCancel");
+        SETTINGS_DIALOG_CAMERA_ANGLE = bundle.getString("SettingsDialogCameraAngle");
+        SETTINGS_DIALOG_AUTO_TANGENT_GENERATING = bundle.getString("SettingsDialogAutoTangentGenerating");
+        SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE = bundle.getString("SettingsDialogUseFlipTexture");
+        SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED = bundle.getString("SettingsDialogEditorCameraLampEnabled");
+        SETTINGS_DIALOG_TAB_GRAPHICS = bundle.getString("SettingsDialogTabGraphics");
+        SETTINGS_DIALOG_TAB_OTHER = bundle.getString("SettingsDialogTabOther");
+        SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL = bundle.getString("SettingsDialogClasspathFolderLabel");
+        SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogClasspathFolderChooserTitle");
+        SETTINGS_DIALOG_ENVS_FOLDER_LABEL = bundle.getString("SettingsDialogEnvsFolderLabel");
+        SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
         FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("FBXToJ3oFileConverterDescription");
@@ -474,7 +502,6 @@ public class Messages {
         XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("XBufToJ3oFileConverterDescription");
 
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
-        MODEL_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("ModelFileEditorToolObjects");
         MODEL_FILE_EDITOR_NO_SKY = bundle.getString("ModelFileEditorNoSky");
         MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
@@ -485,6 +512,10 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
         MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
+
+        SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
+        SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
+        SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
@@ -539,6 +570,8 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRotation");
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSize");
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
+        MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
+        MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -680,11 +713,14 @@ public class Messages {
         CREATE_SKY_DIALOG_TOP_LABEL = bundle.getString("CreateSkyDialogTopLabel");
         CREATE_SKY_DIALOG_BOTTOM_LABEL = bundle.getString("CreateSkyDialogBottomLabel");
 
-        NODE_DIALOG_BUTTON_OK = bundle.getString("NodeDialogButtonOk");
-        NODE_DIALOG_BUTTON_CANCEL = bundle.getString("NodeDialogButtonCancel");
+        SIMPLE_DIALOG_BUTTON_OK = bundle.getString("SimpleDialogButtonOk");
+        SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
+
+        EMPTY_SCENE_CREATOR_DESCRIPTION = bundle.getString("EmptySceneCreatorDescription");
+        EMPTY_SCENE_CREATOR_TITLE = bundle.getString("EmptySceneCreatorTitle");
 
         GLSL_FILE_EDITOR_NAME = bundle.getString("GLSLFileEditorName");
         MATERIAL_DEFINITION_FILE_EDITOR_NAME = bundle.getString("MaterialDefinitionFileEditorName");
@@ -709,5 +745,17 @@ public class Messages {
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
 
         LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
+
+        CREATE_SCENE_APP_STATE_DIALOG_TITLE = bundle.getString("CreateSceneAppStateDialogTitle");
+        CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN = bundle.getString("CreateSceneAppStateDialogBuiltIn");
+        CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX = bundle.getString("CreateSceneAppStateDialogCustomBox");
+        CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneAppStateDialogCustomField");
+
+        ADD_USER_DATA_DIALOG_TITLE = bundle.getString("AddUserDataDialogTitle");
+        ADD_USER_DATA_DIALOG_NAME = bundle.getString("AddUserDataDialogName");
+        ADD_USER_DATA_DIALOG_DATA_TYPE = bundle.getString("AddUserDataDialogDataType");
+        ADD_USER_DATA_DIALOG_BUTTON_OK = bundle.getString("AddUserDataDialogButtonOk");
+
+        ANALYTICS_CONFIRM_DIALOG_MESSAGE = bundle.getString("AnalyticsConfirmDialogMessage");
     }
 }

@@ -48,6 +48,7 @@ public final class EditorConfig implements AssetEventListener {
     public static final String SCREEN_ALIAS = "Screen";
     public static final String ASSET_ALIAS = "ASSET";
     public static final String ASSET_OTHER = "Other";
+    public static final String ASSET_EDITING = "Editing";
 
     public static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
     public static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
@@ -56,6 +57,7 @@ public final class EditorConfig implements AssetEventListener {
 
     public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     public static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
+    public static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
     public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
     public static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
     public static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
@@ -65,9 +67,14 @@ public final class EditorConfig implements AssetEventListener {
     public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
     public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
+    public static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
     public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
     public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
     public static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
+    public static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
+    public static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
+    public static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
+    public static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion";
 
     private static volatile EditorConfig instance;
 
@@ -105,14 +112,24 @@ public final class EditorConfig implements AssetEventListener {
     private volatile Path additionalClasspath;
 
     /**
+     * The path to the folder with additional envs.
+     */
+    private volatile Path additionalEnvs;
+
+    /**
      * The current level of the anisotropy.
      */
     private volatile int anisotropy;
 
     /**
-     * The current frameRate.
+     * The current frame rate.
      */
     private volatile int frameRate;
+
+    /**
+     * The current camera angle.
+     */
+    private volatile int cameraAngle;
 
     /**
      * The width of this screen.
@@ -163,6 +180,26 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is of enabling analytics.
      */
     private volatile boolean analytics;
+
+    /**
+     * Flag is of enabling auto tangent generating.
+     */
+    private volatile boolean autoTangentGenerating;
+
+    /**
+     * Flag is of enabling using flip textures by default.
+     */
+    private volatile boolean defaultUseFlippedTexture;
+
+    /**
+     * Flag is of enabling camera lamp in editors by default.
+     */
+    private volatile boolean defaultEditorCameraEnabled;
+
+    /**
+     * Flag is of showing analytics question.
+     */
+    private volatile boolean analyticsQuestion;
 
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
@@ -271,6 +308,23 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public void setAdditionalClasspath(@Nullable final Path additionalClasspath) {
         this.additionalClasspath = additionalClasspath;
+    }
+
+    /**
+     * @return the path to the folder with additional envs.
+     */
+    @Nullable
+    @FromAnyThread
+    public Path getAdditionalEnvs() {
+        return additionalEnvs;
+    }
+
+    /**
+     * @param additionalEnvs the path to the folder with additional envs.
+     */
+    @FromAnyThread
+    public void setAdditionalEnvs(@Nullable final Path additionalEnvs) {
+        this.additionalEnvs = additionalEnvs;
     }
 
     /**
@@ -435,6 +489,50 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return true if enabled auto tangent generating.
+     */
+    @FromAnyThread
+    public boolean isAutoTangentGenerating() {
+        return autoTangentGenerating;
+    }
+
+    /**
+     * @param autoTangentGenerating flag is of enabling auto tangent generating.
+     */
+    @FromAnyThread
+    public void setAutoTangentGenerating(final boolean autoTangentGenerating) {
+        this.autoTangentGenerating = autoTangentGenerating;
+    }
+
+    /**
+     * @return true if use flip textures by default.
+     */
+    public boolean isDefaultUseFlippedTexture() {
+        return defaultUseFlippedTexture;
+    }
+
+    /**
+     * @param defaultUseFlippedTexture flag is of enabling using flip textures by default.
+     */
+    public void setDefaultUseFlippedTexture(final boolean defaultUseFlippedTexture) {
+        this.defaultUseFlippedTexture = defaultUseFlippedTexture;
+    }
+
+    /**
+     * @return true if enable camera lamp by default.
+     */
+    public boolean isDefaultEditorCameraEnabled() {
+        return defaultEditorCameraEnabled;
+    }
+
+    /**
+     * @param defaultEditorCameraEnabled Flag is of enabling camera lamp in editors by default.
+     */
+    public void setDefaultEditorCameraEnabled(final boolean defaultEditorCameraEnabled) {
+        this.defaultEditorCameraEnabled = defaultEditorCameraEnabled;
+    }
+
+    /**
      * @return the current frameRate.
      */
     @FromAnyThread
@@ -448,6 +546,36 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public void setFrameRate(final int frameRate) {
         this.frameRate = frameRate;
+    }
+
+    /**
+     * @param cameraAngle the camera angle.
+     */
+    @FromAnyThread
+    public void setCameraAngle(final int cameraAngle) {
+        this.cameraAngle = cameraAngle;
+    }
+
+    /**
+     * @return the camera angle.
+     */
+    @FromAnyThread
+    public int getCameraAngle() {
+        return cameraAngle;
+    }
+
+    /**
+     * @return true if the question was showed.
+     */
+    public boolean isAnalyticsQuestion() {
+        return analyticsQuestion;
+    }
+
+    /**
+     * @param analyticsQuestion true if the question was showed.
+     */
+    public void setAnalyticsQuestion(final boolean analyticsQuestion) {
+        this.analyticsQuestion = analyticsQuestion;
     }
 
     /**
@@ -505,6 +633,11 @@ public final class EditorConfig implements AssetEventListener {
         this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
         this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
+        this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
+        this.autoTangentGenerating = prefs.getBoolean(PREF_AUTO_TANGENT_GENERATING, false);
+        this.defaultUseFlippedTexture = prefs.getBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, true);
+        this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_CAMERA_LAMP_ENABLED, true);
+        this.analyticsQuestion = prefs.getBoolean(PREF_ANALYTICS_QUESTION, false);
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -516,6 +649,12 @@ public final class EditorConfig implements AssetEventListener {
 
         if (classpathURI != null) {
             this.additionalClasspath = get(classpathURI, uri -> Paths.get(new URI(uri)));
+        }
+
+        final String envsURI = prefs.get(PREF_ADDITIONAL_ENVS, null);
+
+        if (envsURI != null) {
+            this.additionalEnvs = get(envsURI, uri -> Paths.get(new URI(uri)));
         }
 
         this.toneMapFilterWhitePoint = new Vector3f(11, 11, 11);
@@ -542,6 +681,8 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final RuntimeException e) {
             LOGGER.warning(e);
         }
+
+        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(getCameraAngle()));
     }
 
     /**
@@ -563,6 +704,11 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
         prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
+        prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
+        prefs.putBoolean(PREF_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
+        prefs.putBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
+        prefs.putBoolean(PREF_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
+        prefs.putBoolean(PREF_ANALYTICS_QUESTION, isAnalyticsQuestion());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
@@ -584,6 +730,12 @@ public final class EditorConfig implements AssetEventListener {
             prefs.remove(PREF_ADDITIONAL_CLASSPATH);
         }
 
+        if (additionalEnvs != null) {
+            prefs.put(PREF_ADDITIONAL_ENVS, additionalEnvs.toUri().toString());
+        } else {
+            prefs.remove(PREF_ADDITIONAL_ENVS);
+        }
+
         final List<String> lastOpenedAssets = getLastOpenedAssets();
 
         prefs.putByteArray(PREF_LAST_OPENED_ASSETS, EditorUtil.serialize((Serializable) lastOpenedAssets));
@@ -593,5 +745,7 @@ public final class EditorConfig implements AssetEventListener {
         } catch (final BackingStoreException e) {
             throw new RuntimeException(e);
         }
+
+        System.setProperty("jfx.frame.transfer.camera.angle", String.valueOf(getCameraAngle()));
     }
 }

@@ -91,8 +91,8 @@
      * -fx-text-inner-color for text on top of -fx-control-inner-color
      * -fx-selection-bar-text for text on top of -fx-selection-bar
      */
-    -fx-dark-text-color: black;
-    -fx-mid-text-color: #333;
+    -fx-dark-text-color: white;
+    -fx-mid-text-color: white;
     -fx-light-text-color: white;
 
     /* A bright blue for highlighting/accenting objects.  For example: selected
@@ -869,10 +869,8 @@
 }
 
 .menu-item > .label {
-    -fx-font-family: "Roboto Condensed";
-    -fx-font-size: 15;
-    -fx-font-smoothing-type: lcd;
-    -fx-font-style: italic;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14;
     -fx-padding: 0em 0.5em 0em 0em;
     -fx-text-fill: -fx-text-base-color;
 }

@@ -3,14 +3,15 @@ package com.ss.editor.ui.dialog;
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
+import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -32,6 +33,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
@@ -39,6 +42,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
@@ -53,12 +57,12 @@ public class SettingsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-    private static final Insets MESSAGE_OFFSET = new Insets(5, 0, 5, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(5, 20, 10, 0);
+    private static final Insets TAB_OFFSET = new Insets(5, 0, 5, 0);
+    private static final Insets MESSAGE_OFFSET = new Insets(5, 20, 10, 0);
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 396);
+    private static final Point DIALOG_SIZE = new Point(600, 380);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -125,19 +129,49 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox googleAnalyticsCheckBox;
 
     /**
+     * The checkbox for enabling auto tangent generating.
+     */
+    private CheckBox autoTangentGeneratingCheckBox;
+
+    /**
+     * The checkbox for enabling use flip texture by default.
+     */
+    private CheckBox defaultUseFlippedTextureCheckBox;
+
+    /**
+     * The checkbox for enabling camera lamp by default.
+     */
+    private CheckBox defaultCameraLampEnabledCheckBox;
+
+    /**
      * The additional classpath field.
      */
     private TextField additionalClasspathField;
 
     /**
+     * The additional envs field.
+     */
+    private TextField additionalEnvsField;
+
+    /**
      * The frame rate field.
      */
-    private IntegerTextField frameRateTextField;
+    private IntegerTextField frameRateField;
+
+    /**
+     * The camera angle field.
+     */
+    private IntegerTextField cameraAngleField;
 
     /**
      * The additional classpath folder.
      */
     private Path additionalClasspathFolder;
+
+    /**
+     * The additional envs folder.
+     */
+    private Path additionalEnvsFolder;
 
     /**
      * The flag of ignoring listeners.
@@ -176,21 +210,53 @@ public class SettingsDialog extends EditorDialog {
         messageLabel = new Label();
         messageLabel.setId(CSSIds.SETTINGS_DIALOG_MESSAGE_LABEL);
 
+        final VBox graphicsRoot = new VBox();
+        graphicsRoot.prefHeightProperty().bind(root.heightProperty());
+
+        final VBox otherRoot = new VBox();
+        otherRoot.prefHeightProperty().bind(root.heightProperty());
+
+        final Tab graphicsSettings = new Tab(Messages.SETTINGS_DIALOG_TAB_GRAPHICS);
+        graphicsSettings.setClosable(false);
+        graphicsSettings.setContent(graphicsRoot);
+
+        final Tab otherSettings = new Tab(Messages.SETTINGS_DIALOG_TAB_OTHER);
+        otherSettings.setClosable(false);
+        otherSettings.setContent(otherRoot);
+
+        final TabPane tabPane = new TabPane();
+        tabPane.setId(CSSIds.SETTINGS_DIALOG_TAB_PANE);
+        tabPane.getTabs().addAll(graphicsSettings, otherSettings);
+        tabPane.prefWidthProperty().bind(widthProperty());
+        tabPane.prefHeightProperty().bind(root.heightProperty());
+
+        createAnisotropyControl(graphicsRoot);
+        createGammaCorrectionControl(graphicsRoot);
+        createFrameRateControl(graphicsRoot);
+        createCameraAngleControl(graphicsRoot);
+        createFXAAControl(graphicsRoot);
+        createToneMapFilterControl(graphicsRoot);
+        createToneMapFilterWhitePointControl(graphicsRoot);
+
+        createAdditionalClasspathControl(otherRoot);
+        createAdditionalEnvsControl(otherRoot);
+        createGoogleAnalyticsControl(otherRoot);
+        createDecoratedControl(otherRoot);
+        createAutoTangentGeneratingControl(otherRoot);
+        createUseFlippedTextureDefaultControl(otherRoot);
+        createDefaultCameraLampEnabledControl(otherRoot);
+
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty().multiply(0.8));
+
         FXUtils.addClassTo(messageLabel, CSSClasses.SPECIAL_FONT_15);
+        FXUtils.addClassTo(graphicsSettings, CSSClasses.SPECIAL_FONT_15);
+        FXUtils.addClassTo(otherSettings, CSSClasses.SPECIAL_FONT_15);
+
+        FXUtils.addToPane(tabPane, root);
         FXUtils.addToPane(messageLabel, root);
 
+        VBox.setMargin(tabPane, TAB_OFFSET);
         VBox.setMargin(messageLabel, MESSAGE_OFFSET);
-
-        createAnisotropyControl(root);
-        createGammaCorrectionControl(root);
-        createFrameRateControl(root);
-        createFXAAControl(root);
-        createGoogleAnalyticsControl(root);
-        createDecoratedControl(root);
-        createToneMapFilterControl(root);
-        createToneMapFilterWhitePointControl(root);
-        createAdditionalClasspathControl(root);
     }
 
     /**
@@ -201,7 +267,7 @@ public class SettingsDialog extends EditorDialog {
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
 
-        final Label label = new Label(Messages.OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
+        final Label label = new Label(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
         additionalClasspathField = new TextField();
@@ -210,12 +276,10 @@ public class SettingsDialog extends EditorDialog {
         additionalClasspathField.prefWidthProperty().bind(root.widthProperty());
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_18));
         addButton.setOnAction(event -> processAddCF());
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
         removeButton.setOnAction(event -> processRemoveCF());
 
@@ -232,7 +296,47 @@ public class SettingsDialog extends EditorDialog {
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
         HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
-        VBox.setMargin(container, LAST_FIELD_OFFSET);
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the additional envs control.
+     */
+    private void createAdditionalEnvsControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_ENVS_FOLDER_LABEL + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        additionalEnvsField = new TextField();
+        additionalEnvsField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        additionalEnvsField.setEditable(false);
+        additionalEnvsField.prefWidthProperty().bind(root.widthProperty());
+
+        final Button addButton = new Button();
+        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setOnAction(event -> processAddEF());
+
+        final Button removeButton = new Button();
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setOnAction(event -> processRemoveEF());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(additionalEnvsField, container);
+        FXUtils.addToPane(addButton, container);
+        FXUtils.addToPane(removeButton, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(additionalEnvsField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+
+        HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
+        HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
+        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -246,10 +350,27 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * Process of removing the additional envs.
+     */
+    private void processRemoveEF() {
+        setAdditionalEnvsFolder(null);
+
+        final TextField textField = getAdditionalEnvsField();
+        textField.setText(StringUtils.EMPTY);
+    }
+
+    /**
      * @return the additional classpath field.
      */
     private TextField getAdditionalClasspathField() {
         return additionalClasspathField;
+    }
+
+    /**
+     * @return the additional envs field.
+     */
+    private TextField getAdditionalEnvsField() {
+        return additionalEnvsField;
     }
 
     /**
@@ -258,22 +379,43 @@ public class SettingsDialog extends EditorDialog {
     private void processAddCF() {
 
         final DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(Messages.OTHER_SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
+        chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAdditionalCP = config.getAdditionalClasspath();
         final File currentFolder = currentAdditionalCP == null ? null : currentAdditionalCP.toFile();
-
         if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final File folder = chooser.showDialog(scene.getWindow());
-
         if (folder == null) return;
 
         setAdditionalClasspathFolder(folder.toPath());
 
         final TextField textField = getAdditionalClasspathField();
+        textField.setText(folder.toString());
+    }
+
+    /**
+     * Process of adding the additional envs.
+     */
+    private void processAddEF() {
+
+        final DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(Messages.SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE);
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final Path currentAdditionalEnvs = config.getAdditionalEnvs();
+        final File currentFolder = currentAdditionalEnvs == null ? null : currentAdditionalEnvs.toFile();
+        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final File folder = chooser.showDialog(scene.getWindow());
+        if (folder == null) return;
+
+        setAdditionalEnvsFolder(folder.toPath());
+
+        final TextField textField = getAdditionalEnvsField();
         textField.setText(folder.toString());
     }
 
@@ -462,7 +604,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the checkbox for configuring decorated windows.
+     * Create the checkbox for configuring enabling google analytics.
      */
     private void createGoogleAnalyticsControl(@NotNull final VBox root) {
 
@@ -482,6 +624,81 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(googleAnalyticsCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the checkbox for configuring auto tangent generating.
+     */
+    private void createAutoTangentGeneratingControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_AUTO_TANGENT_GENERATING + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        autoTangentGeneratingCheckBox = new CheckBox();
+        autoTangentGeneratingCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        autoTangentGeneratingCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(autoTangentGeneratingCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(autoTangentGeneratingCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the checkbox for configuring using flip textures by default.
+     */
+    private void createUseFlippedTextureDefaultControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_DEFAULT_FLIPPED_TEXTURE + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        defaultUseFlippedTextureCheckBox = new CheckBox();
+        defaultUseFlippedTextureCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        defaultUseFlippedTextureCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(defaultUseFlippedTextureCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(defaultUseFlippedTextureCheckBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the checkbox for configuring enabling camera lamp by default.
+     */
+    private void createDefaultCameraLampEnabledControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_DEFAULT_EDITOR_CAMERA_LAMP_ENABLED + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        defaultCameraLampEnabledCheckBox = new CheckBox();
+        defaultCameraLampEnabledCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        defaultCameraLampEnabledCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(defaultCameraLampEnabledCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(defaultCameraLampEnabledCheckBox, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(container, FIELD_OFFSET);
     }
@@ -517,7 +734,7 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the frame rate control
+     * Create the frame rate control.
      */
     private void createFrameRateControl(@NotNull final VBox root) {
 
@@ -527,18 +744,45 @@ public class SettingsDialog extends EditorDialog {
         final Label label = new Label(Messages.SETTINGS_DIALOG_FRAME_RATE + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
-        frameRateTextField = new IntegerTextField();
-        frameRateTextField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        frameRateTextField.prefWidthProperty().bind(root.widthProperty());
-        frameRateTextField.setMinMax(5, 100);
-        frameRateTextField.addChangeListener((observable, oldValue, newValue) -> validate());
+        frameRateField = new IntegerTextField();
+        frameRateField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        frameRateField.prefWidthProperty().bind(root.widthProperty());
+        frameRateField.setMinMax(5, 100);
+        frameRateField.addChangeListener((observable, oldValue, newValue) -> validate());
 
         FXUtils.addToPane(label, container);
-        FXUtils.addToPane(frameRateTextField, container);
+        FXUtils.addToPane(frameRateField, container);
         FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(frameRateTextField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(frameRateField, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(container, FIELD_OFFSET);
+    }
+
+    /**
+     * Create the camera angle control.
+     */
+    private void createCameraAngleControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_CAMERA_ANGLE + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        cameraAngleField = new IntegerTextField();
+        cameraAngleField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        cameraAngleField.prefWidthProperty().bind(root.widthProperty());
+        cameraAngleField.setMinMax(30, 160);
+        cameraAngleField.addChangeListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(cameraAngleField, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(cameraAngleField, CSSClasses.SPECIAL_FONT_14);
 
         VBox.setMargin(container, FIELD_OFFSET);
     }
@@ -602,8 +846,15 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return The frame rate field.
      */
-    private IntegerTextField getFrameRateTextField() {
-        return frameRateTextField;
+    private IntegerTextField getFrameRateField() {
+        return frameRateField;
+    }
+
+    /**
+     * @return the camera angle field.
+     */
+    private IntegerTextField getCameraAngleField() {
+        return cameraAngleField;
     }
 
     /**
@@ -612,6 +863,30 @@ public class SettingsDialog extends EditorDialog {
     @NotNull
     private CheckBox getDecoratedCheckBox() {
         return decoratedCheckBox;
+    }
+
+    /**
+     * @return the checkbox for enabling auto tangent generating.
+     */
+    @NotNull
+    private CheckBox getAutoTangentGeneratingCheckBox() {
+        return autoTangentGeneratingCheckBox;
+    }
+
+    /**
+     * @return the checkbox for enabling camera lamp by default.
+     */
+    @NotNull
+    private CheckBox getDefaultCameraLampEnabledCheckBox() {
+        return defaultCameraLampEnabledCheckBox;
+    }
+
+    /**
+     * @return the checkbox for enabling use flip texture by default.
+     */
+    @NotNull
+    private CheckBox getDefaultUseFlippedTextureCheckBox() {
+        return defaultUseFlippedTextureCheckBox;
     }
 
     /**
@@ -695,6 +970,15 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
         googleAnalyticsCheckBox.setSelected(editorConfig.isAnalytics());
 
+        final CheckBox autoTangentGeneratingCheckBox = getAutoTangentGeneratingCheckBox();
+        autoTangentGeneratingCheckBox.setSelected(editorConfig.isAutoTangentGenerating());
+
+        final CheckBox defaultCameraLampEnabledCheckBox = getDefaultCameraLampEnabledCheckBox();
+        defaultCameraLampEnabledCheckBox.setSelected(editorConfig.isDefaultEditorCameraEnabled());
+
+        final CheckBox defaultUseFlippedTextureCheckBox = getDefaultUseFlippedTextureCheckBox();
+        defaultUseFlippedTextureCheckBox.setSelected(editorConfig.isDefaultUseFlippedTexture());
+
         final Vector3f toneMapFilterWhitePoint = editorConfig.getToneMapFilterWhitePoint();
 
         final Spinner<Double> toneMapFilterWhitePointX = getToneMapFilterWhitePointX();
@@ -706,18 +990,28 @@ public class SettingsDialog extends EditorDialog {
         final Spinner<Double> toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ();
         toneMapFilterWhitePointZ.getValueFactory().setValue((double) toneMapFilterWhitePoint.getZ());
 
-        final IntegerTextField frameRateTextField = getFrameRateTextField();
+        final IntegerTextField frameRateTextField = getFrameRateField();
         frameRateTextField.setValue(editorConfig.getFrameRate());
 
+        final IntegerTextField cameraAngleField = getCameraAngleField();
+        cameraAngleField.setValue(editorConfig.getCameraAngle());
+
         final Path additionalClasspath = editorConfig.getAdditionalClasspath();
+        final Path additionalEnvs = editorConfig.getAdditionalEnvs();
 
         final TextField additionalClasspathField = getAdditionalClasspathField();
+        final TextField additionalEnvsField = getAdditionalEnvsField();
 
         if (additionalClasspath != null) {
             additionalClasspathField.setText(additionalClasspath.toString());
         }
 
+        if (additionalEnvs != null) {
+            additionalEnvsField.setText(additionalEnvs.toString());
+        }
+
         setAdditionalClasspathFolder(additionalClasspath);
+        setAdditionalEnvsFolder(additionalEnvs);
     }
 
     /**
@@ -733,6 +1027,21 @@ public class SettingsDialog extends EditorDialog {
      */
     private void setAdditionalClasspathFolder(@Nullable final Path additionalClasspathFolder) {
         this.additionalClasspathFolder = additionalClasspathFolder;
+    }
+
+    /**
+     * @param additionalEnvsFolder the additional envs folder.
+     */
+    public void setAdditionalEnvsFolder(@Nullable final Path additionalEnvsFolder) {
+        this.additionalEnvsFolder = additionalEnvsFolder;
+    }
+
+    /**
+     * @return the additional envs folder.
+     */
+    @Nullable
+    public Path getAdditionalEnvsFolder() {
+        return additionalEnvsFolder;
     }
 
     @Override
@@ -769,10 +1078,13 @@ public class SettingsDialog extends EditorDialog {
         int needRestart = 0;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
+
         final int currentAnisotropy = editorConfig.getAnisotropy();
+        final int currentFrameRate = editorConfig.getFrameRate();
+        final int currentCameraAngle = editorConfig.getCameraAngle();
+
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
         final boolean currentDecorated = editorConfig.isDecorated();
-        final int currentFrameRate = editorConfig.getFrameRate();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -792,12 +1104,24 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
         final boolean analytics = googleAnalyticsCheckBox.isSelected();
 
+        final CheckBox autoTangentGeneratingCheckBox = getAutoTangentGeneratingCheckBox();
+        final boolean autoTangentGenerating = autoTangentGeneratingCheckBox.isSelected();
+
+        final CheckBox defaultCameraLampEnabledCheckBox = getDefaultCameraLampEnabledCheckBox();
+        final boolean cameraLampEnabled = defaultCameraLampEnabledCheckBox.isSelected();
+
+        final CheckBox defaultUseFlippedTextureCheckBox = getDefaultUseFlippedTextureCheckBox();
+        final boolean useFlippedTextures = defaultUseFlippedTextureCheckBox.isSelected();
+
         final float toneMapFilterWhitePointX = getToneMapFilterWhitePointX().getValue().floatValue();
         final float toneMapFilterWhitePointY = getToneMapFilterWhitePointY().getValue().floatValue();
         final float toneMapFilterWhitePointZ = getToneMapFilterWhitePointZ().getValue().floatValue();
 
-        final IntegerTextField frameRateTextField = getFrameRateTextField();
+        final IntegerTextField frameRateTextField = getFrameRateField();
         final int frameRate = frameRateTextField.getValue();
+
+        final IntegerTextField cameraAngleField = getCameraAngleField();
+        final int cameraAngle = cameraAngleField.getValue();
 
         final Vector3f toneMapFilterWhitePoint = new Vector3f(toneMapFilterWhitePointX, toneMapFilterWhitePointY, toneMapFilterWhitePointZ);
 
@@ -814,6 +1138,9 @@ public class SettingsDialog extends EditorDialog {
         final ClasspathManager classpathManager = ClasspathManager.getInstance();
         classpathManager.updateAdditionalCL();
 
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        resourceManager.updateAdditionalEnvs();
+
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
         editorConfig.setDecorated(decorated);
@@ -822,8 +1149,18 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
         editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
+        editorConfig.setAdditionalEnvs(getAdditionalEnvsFolder());
         editorConfig.setFrameRate(frameRate);
+        editorConfig.setCameraAngle(cameraAngle);
+        editorConfig.setAutoTangentGenerating(autoTangentGenerating);
+        editorConfig.setDefaultUseFlippedTexture(useFlippedTextures);
+        editorConfig.setDefaultEditorCameraEnabled(cameraLampEnabled);
         editorConfig.save();
+
+        if (cameraAngle != currentCameraAngle) {
+            final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
+            sceneProcessor.reshape();
+        }
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 

@@ -3,9 +3,9 @@ package com.ss.editor.ui.control.model.tree.dialog.geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class NodeSelectorDialog<T> extends AbstractNodeDialog {
+public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(600, 450);
 

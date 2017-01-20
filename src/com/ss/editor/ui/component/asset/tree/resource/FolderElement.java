@@ -1,5 +1,9 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -9,20 +13,18 @@ import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
-import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-
 /**
- * Реализация элемента для папки.
+ * The folder presentation.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FolderElement extends ResourceElement {
 
-    public FolderElement(final Path file) {
+    public FolderElement(@NotNull final Path file) {
         super(file);
     }
 
-    public Array<ResourceElement> getChildren(final Array<String> extensionFilter) {
+    public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter) {
         if (!Files.isDirectory(file)) return null;
 
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
@@ -34,19 +36,19 @@ public class FolderElement extends ResourceElement {
 
                 if (fileName.startsWith(".")) {
                     return;
-                } else if (Files.isDirectory(child) || extensionFilter == null) {
+                } else if (Files.isDirectory(child)) {
                     elements.add(createFor(child));
                     return;
                 }
 
                 final String extension = FileUtils.getExtension(child);
 
-                if (extensionFilter.contains(extension)) {
+                if (extensionFilter.isEmpty() || extensionFilter.contains(extension)) {
                     elements.add(createFor(child));
                 }
             });
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
 
@@ -54,7 +56,7 @@ public class FolderElement extends ResourceElement {
     }
 
     @Override
-    public boolean hasChildren(Array<String> extensionFilter) {
+    public boolean hasChildren(@NotNull final Array<String> extensionFilter) {
         return true;
     }
 }

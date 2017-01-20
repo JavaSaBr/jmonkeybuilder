@@ -231,7 +231,6 @@ public class JMEFilePreviewManager extends AbstractControl {
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.detachChild(modelNode);
         if (processor != null) processor.setEnabled(false);
-
     }
 
     public ImageView getImageView() {
@@ -254,6 +253,8 @@ public class JMEFilePreviewManager extends AbstractControl {
         rootNode.attachChild(modelNode);
 
         processor = bind(EDITOR, imageView, imageView, EDITOR.getPreviewViewPort(), false);
+        processor.setEnabled(false);
+
         return processor;
     }
 }

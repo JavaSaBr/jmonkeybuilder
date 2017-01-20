@@ -38,8 +38,12 @@ import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleEmitterN
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleGeometryModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencerModelNode;
 import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencersModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.scene.SceneLayerModelNode;
+import com.ss.editor.ui.control.model.tree.node.spatial.scene.SceneNodeModelNode;
+import com.ss.extension.scene.SceneLayer;
+import com.ss.extension.scene.SceneNode;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -58,8 +62,8 @@ public class ModelNodeFactory {
 
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
-    @NotNull
-    public static <T, V extends ModelNode<T>> V createFor(@NotNull final T element) {
+    @Nullable
+    public static <T, V extends ModelNode<T>> V createFor(@Nullable final T element) {
 
         if (element instanceof Animation) {
             return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
@@ -89,7 +93,11 @@ public class ModelNodeFactory {
             return unsafeCast(new PointLightModelNode((PointLight) element, ID_GENERATOR.incrementAndGet()));
         }
 
-        if (element instanceof ParticleEmitterNode) {
+        if (element instanceof SceneNode) {
+            return unsafeCast(new SceneNodeModelNode((SceneNode) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof SceneLayer) {
+            return unsafeCast(new SceneLayerModelNode((SceneLayer) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new ParticleEmitterNodeModelNode((ParticleEmitterNode) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof ParticleInfluencers) {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, ID_GENERATOR.incrementAndGet()));
@@ -111,6 +119,6 @@ public class ModelNodeFactory {
             return unsafeCast(new NodeModelNode<>((Node) element, ID_GENERATOR.incrementAndGet()));
         }
 
-        throw new IllegalArgumentException("unknown " + element);
+        return null;
     }
 }

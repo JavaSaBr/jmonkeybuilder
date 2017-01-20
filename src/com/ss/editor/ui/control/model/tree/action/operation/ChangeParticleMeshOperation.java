@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
+import static com.ss.editor.util.NodeUtils.findParent;
+
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -12,11 +14,9 @@ import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
 
-import static com.ss.editor.util.NodeUtils.findParent;
-
 /**
- * The implementation of the {@link AbstractEditorOperation} for changing a particle mesh in the
- * {@link ParticleGeometry}.
+ * The implementation of the {@link AbstractEditorOperation} for changing a particle mesh in the {@link
+ * ParticleGeometry}.
  *
  * @author JavaSaBr.
  */

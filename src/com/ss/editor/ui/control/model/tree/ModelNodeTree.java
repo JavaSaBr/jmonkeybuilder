@@ -55,10 +55,10 @@ public class ModelNodeTree extends VBox {
      */
     private TreeView<ModelNode<?>> treeView;
 
-    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer modelChangeConsumer) {
+    public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer consumer) {
         setId(CSSIds.MODEL_NODE_TREE_CONTAINER);
         this.selectionHandler = selectionHandler;
-        this.modelChangeConsumer = modelChangeConsumer;
+        this.modelChangeConsumer = consumer;
         createComponents();
     }
 
@@ -205,8 +205,8 @@ public class ModelNodeTree extends VBox {
     /**
      * Notify about moving the element.
      */
-    public void notifyMoved(@NotNull final ModelNode<?> prevParent, @NotNull final ModelNode<?> newParent,
-                            @NotNull final ModelNode<?> node, final int index) {
+    public void notifyMoved(@Nullable final ModelNode<?> prevParent, @Nullable final ModelNode<?> newParent,
+                            @Nullable final ModelNode<?> node, final int index) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> prevParentItem = findItemForValue(treeView, prevParent);
@@ -240,7 +240,8 @@ public class ModelNodeTree extends VBox {
     /**
      * Notify about changed the element.
      */
-    public void notifyChanged(@NotNull final ModelNode<?> modelNode) {
+    public void notifyChanged(@Nullable final ModelNode<?> modelNode) {
+        if (modelNode == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, modelNode);
@@ -263,14 +264,15 @@ public class ModelNodeTree extends VBox {
     /**
      * Notify about replacing the element.
      */
-    public void notifyReplace(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
+    public void notifyReplace(@Nullable final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
         notifyReplace(createFor(parent), oldChild == null ? null : createFor(oldChild), newChild == null ? null : createFor(newChild));
     }
 
     /**
      * Notify about replacing the element.
      */
-    public void notifyReplace(@NotNull final ModelNode<?> parent, @Nullable final ModelNode<?> oldChild, @Nullable final ModelNode<?> newChild) {
+    public void notifyReplace(@Nullable final ModelNode<?> parent, @Nullable final ModelNode<?> oldChild,
+                              @Nullable final ModelNode<?> newChild) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
@@ -319,20 +321,20 @@ public class ModelNodeTree extends VBox {
     /**
      * Notify about adding the element.
      */
-    public void notifyAdded(@NotNull final Object parent, @NotNull final Object child, final int index) {
+    public void notifyAdded(@Nullable final Object parent, @Nullable final Object child, final int index) {
         notifyAdded(createFor(parent), createFor(child), index);
     }
 
     /**
      * Notify about adding the element.
      */
-    public void notifyAdded(@NotNull final ModelNode<?> parent, @NotNull final ModelNode<?> child, final int index) {
+    public void notifyAdded(@Nullable final ModelNode<?> parent, @Nullable final ModelNode<?> child, final int index) {
+        if (child == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
         if (parentItem == null) return;
 
-        final ModelNode<?> parentNode = parentItem.getValue();
         parent.notifyChildPreAdd(child);
 
         final TreeItem<ModelNode<?>> childItem = new TreeItem<>(child);
@@ -357,7 +359,8 @@ public class ModelNodeTree extends VBox {
     /**
      * Notify about removing the element.
      */
-    public void notifyRemoved(@NotNull final ModelNode<?> modelNode) {
+    public void notifyRemoved(@Nullable final ModelNode<?> modelNode) {
+        if (modelNode == null) return;
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);
         if (treeItem == null) return;

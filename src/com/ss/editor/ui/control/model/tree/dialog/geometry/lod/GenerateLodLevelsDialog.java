@@ -11,11 +11,10 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +44,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class GenerateLodLevelsDialog extends AbstractNodeDialog {
+public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
     private static final ObservableList<ReductionMethod> METHOD_TYPES = observableArrayList(ReductionMethod.VALUES);
 
@@ -304,11 +303,9 @@ public class GenerateLodLevelsDialog extends AbstractNodeDialog {
         EXECUTOR_MANAGER.addFXTask(() -> {
 
             final ModelNodeTree nodeTree = getNodeTree();
-            final ModelChangeConsumer consumer = nodeTree.getModelChangeConsumer();
+            final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
 
-            final int index = GeomUtils.getIndex(consumer.getCurrentModel(), geometry);
-
-            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(index,
+            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(geometry,
                     Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
             operation.setApplyHandler((geom, buffers) -> geom.getMesh().setLodLevels(buffers));
 

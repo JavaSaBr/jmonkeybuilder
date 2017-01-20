@@ -79,9 +79,9 @@ public interface CSSIds {
     String FILE_CREATOR_TEXT_FIELD = "FileCreatorTextField";
 
     String SETTINGS_DIALOG_MESSAGE_LABEL = "SettingsDialogMessageLabel";
+    String SETTINGS_DIALOG_TAB_PANE = "SettingsDialogTabPane";
     String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
     String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
-    String GRAPHICS_DIALOG_SPINNER = "GraphicsDialogSpinner";
 
     String MODEL_NODE_TREE_CONTAINER = "ModelNodeTreeContainer";
     String MODEL_NODE_TREE_TRANSPARENT_CONTAINER = "ModelNodeTreeTransparentContainer";
@@ -90,19 +90,7 @@ public interface CSSIds {
     String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
     String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
 
-    String MODEL_PARAM_CONTROL_CONTAINER = "ModelParamControlContainer";
-    String MODEL_PARAM_CONTROL_SPLIT_LINE = "ModelParamControlSplitLine";
-    String MODEL_PARAM_CONTROL_PARAM_NAME = "ModelParamControlParamName";
-    String MODEL_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "ModelParamControlParamNameSingleRow";
-    String MODEL_PARAM_CONTROL_LABEL_VALUE = "ModelParamControlLabelValue";
-    String MODEL_PARAM_CONTROL_NUMBER_LABEL = "ModelParamControlNumberLabel";
-    String MODEL_PARAM_CONTROL_NUMBER_LABEL2F = "ModelParamControlNumberLabel2F";
-    String MODEL_PARAM_CONTROL_VECTOR2F_FIELD = "ModelParamControlVector2fField";
-    String MODEL_PARAM_CONTROL_VECTOR3F_FIELD = "ModelParamControlVector3fField";
     String MODEL_PARAM_CONTROL_VECTOR4F_FIELD = "ModelParamControlVector4fField";
-    String MODEL_PARAM_CONTROL_COMBO_BOX = "ModelParamControlComboBox";
-    String MODEL_PARAM_CONTROL_COLOR_PICKER = "ModelParamControlColorPicker";
-    String MODEL_PARAM_CONTROL_CHECK_BOX = "ModelParamControlCheckbox";
     String MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT = "ModelParamControlInfluencerElement";
     String MODEL_PARAM_CONTROL_INFLUENCER_CONTROL = "ModelParamControlInfluencerControl";
     String MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON = "ModelParamControlInfluencerIconButton";
@@ -134,4 +122,27 @@ public interface CSSIds {
     String GENERATE_LOD_DIALOG_LIST_VIEW_CELL = "GenerateLoDDialogListViewCell";
 
     String LOG_VIEW = "LogView";
+
+    String SCENE_APP_STATE_CONTAINER = "SceneAppStateContainer";
+    String SCENE_APP_STATE_LIST_CELL = "SceneAppStateListCell";
+
+    String CREATE_SCENE_APP_STATE_DIALOG_LABEL = "CreateSceneAppStateDialogLabel";
+    String CREATE_SCENE_APP_STATE_DIALOG_CONTROL = "CreateSceneAppStateDialogControl";
+
+    String ABSTRACT_PARAM_CONTROL_CONTAINER = "AbstractParamControlContainer";
+    String ABSTRACT_PARAM_CONTROL_SPLIT_LINE = "AbstractParamControlSplitLine";
+
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "AbstractParamControlParamNameSingleRow";
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "AbstractParamControlParamName";
+    String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "AbstractParamControlCheckbox";
+    String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "AbstractParamControlColorPicker";
+    String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "AbstractParamControlLabelValue";
+    String ABSTRACT_PARAM_CONTROL_COMBO_BOX = "AbstractParamControlComboBox";
+    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "AbstractParamControlNumberLabel";
+    String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "AbstractParamControlVector3fField";
+    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F = "AbstractParamControlNumberLabel2F";
+    String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "AbstractParamControlVector2fField";
+
+    String ADD_USER_DATA_DIALOG_LABEL = "AddUserDataDialogLabel";
+    String ADD_USER_DATA_FIELD = "AddUserDataDialogField";
 }

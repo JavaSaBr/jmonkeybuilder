@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.audio;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
@@ -9,7 +11,6 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +31,7 @@ public class CreateAudioNodeAction extends AbstractNodeAction {
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.ADD_18;
+        return Icons.AUDIO_16;
     }
 
     @NotNull
@@ -43,16 +44,14 @@ public class CreateAudioNodeAction extends AbstractNodeAction {
     protected void process() {
 
         final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
 
         final AudioNode node = new AudioNode();
         node.setName("New audio");
 
         final ModelNode<?> modelNode = getNode();
-        final Node element = (Node) modelNode.getElement();
+        final Node parent = (Node) modelNode.getElement();
 
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-        modelChangeConsumer.execute(new AddChildOperation(node, index));
+        consumer.execute(new AddChildOperation(node, parent));
     }
 }

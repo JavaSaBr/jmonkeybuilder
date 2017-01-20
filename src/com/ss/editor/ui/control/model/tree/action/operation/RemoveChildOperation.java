@@ -9,8 +9,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for removing a {@link Spatial} from the
- * {@link Node}.
+ * The implementation of the {@link AbstractEditorOperation} for removing a {@link Spatial} from the {@link Node}.
  *
  * @author JavaSaBr.
  */

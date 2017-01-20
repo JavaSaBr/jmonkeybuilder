@@ -4,6 +4,7 @@ import static org.apache.http.impl.client.HttpClients.createMinimal;
 import static rlib.util.StringUtils.isEmpty;
 
 import com.ss.editor.EditorThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 
@@ -35,6 +36,8 @@ import rlib.util.linkedlist.LinkedListFactory;
 import rlib.util.os.OperatingSystem;
 
 /**
+ * The implementation to work with Google Analytics.
+ *
  * @author JavaSaBr
  */
 public class GAnalytics extends EditorThread {
@@ -71,6 +74,8 @@ public class GAnalytics extends EditorThread {
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
     private static final GAnalytics INSTANCE = new GAnalytics();
 
+    @NotNull
+    @FromAnyThread
     public static GAnalytics getInstance() {
         return INSTANCE;
     }
@@ -78,6 +83,7 @@ public class GAnalytics extends EditorThread {
     /**
      * Wait for sending max 2 sec.
      */
+    @FromAnyThread
     public static void waitForSend() {
         if (!EDITOR_CONFIG.isAnalytics()) return;
         final GAnalytics instance = getInstance();
@@ -92,7 +98,9 @@ public class GAnalytics extends EditorThread {
      * @param category the category.
      * @param action   the action.
      */
+    @FromAnyThread
     public static void sendEvent(@NotNull final String category, @NotNull final String action) {
+        if (!EDITOR_CONFIG.isAnalytics()) return;
         sendEvent(category, action, null);
     }
 
@@ -103,7 +111,9 @@ public class GAnalytics extends EditorThread {
      * @param action   the action.
      * @param label    the label.
      */
+    @FromAnyThread
     public static void sendEvent(@NotNull final String category, @NotNull final String action, @Nullable final String label) {
+        if (!EDITOR_CONFIG.isAnalytics()) return;
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_EVENT_CATEGORY, category);
@@ -120,7 +130,9 @@ public class GAnalytics extends EditorThread {
      * @param exception the exception.
      * @param fatal     true if the exception is fatal.
      */
+    @FromAnyThread
     public static void sendException(@NotNull final Throwable exception, final boolean fatal) {
+        if (!EDITOR_CONFIG.isAnalytics()) return;
 
         final StringWriter writer = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(writer);
@@ -144,8 +156,11 @@ public class GAnalytics extends EditorThread {
      * @param location the location.
      * @param page     the page.
      */
+    @FromAnyThread
     public static void sendPageView(@Nullable final String title, @Nullable final String location,
                                     @Nullable final String page) {
+
+        if (!EDITOR_CONFIG.isAnalytics()) return;
 
         final Map<String, Object> parameters = new HashMap<>();
         if (!isEmpty(title)) parameters.put(PARAM_PAGE_VIEW_TITLE, title);
@@ -163,8 +178,11 @@ public class GAnalytics extends EditorThread {
      * @param timingValue    the value.
      * @param timingLabel    the label.
      */
+    @FromAnyThread
     public static void sendTiming(@NotNull final String timingCategory, @NotNull final String timingVar,
                                   final int timingValue, @Nullable final String timingLabel) {
+
+        if (!EDITOR_CONFIG.isAnalytics()) return;
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_USER_TIMING_CATEGORY, timingCategory);
@@ -279,6 +297,7 @@ public class GAnalytics extends EditorThread {
     /**
      * The count of sending.
      */
+    @NotNull
     private final AtomicInteger progressCount;
 
     public GAnalytics() {
@@ -303,7 +322,7 @@ public class GAnalytics extends EditorThread {
 
     @Override
     public void run() {
-        for (;;) {
+        for (; ; ) {
 
             Runnable next;
 

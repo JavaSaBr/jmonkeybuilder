@@ -1,5 +1,8 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.FileExtensions.IMAGE_HDR;
+import static com.ss.editor.FileExtensions.IMAGE_PNG;
+import static com.ss.editor.FileExtensions.IMAGE_TGA;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
@@ -7,6 +10,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
+import static rlib.util.FileUtils.getFiles;
 import static rlib.util.FileUtils.toUrl;
 import static rlib.util.Util.get;
 import static rlib.util.array.ArrayFactory.toArray;
@@ -88,6 +92,12 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
+     * The list of additional ENVs.
+     */
+    @NotNull
+    private final Array<Path> additionalEnvs;
+
+    /**
      * The list of an additional classpath.
      */
     @NotNull
@@ -120,6 +130,7 @@ public class ResourceManager extends EditorThread {
     public ResourceManager() {
         InitializeManager.valid(getClass());
 
+        this.additionalEnvs = ArrayFactory.newArray(Path.class);
         this.watchKeys = ArrayFactory.newArray(WatchKey.class);
         this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
         this.resourcesInClasspath = ArrayFactory.newArray(String.class);
@@ -152,41 +163,35 @@ public class ResourceManager extends EditorThread {
             fxEventManager.addEventHandler(DeletedFileEvent.EVENT_TYPE, event -> processEvent((DeletedFileEvent) event));
         });
 
+        updateAdditionalEnvs();
         reload();
         start();
     }
 
     /**
-     * Handle changed classpath file.
+     * Update the list with additional ENVs.
      */
-    private void replaceCL(@NotNull final Path prevAssetFile, @NotNull final Path newAssetFile) {
+    public synchronized void updateAdditionalEnvs() {
 
-        final Editor editor = Editor.getInstance();
-        final AssetManager assetManager = editor.getAssetManager();
+        final EditorConfig editorConfig = EditorConfig.getInstance();
 
-        final URL prevURL = get(prevAssetFile, file -> file.toUri().toURL());
-        final URL newURL = get(newAssetFile, file -> file.toUri().toURL());
+        final Array<Path> additionalEnvs = getAdditionalEnvs();
+        additionalEnvs.clear();
 
-        final Array<URLClassLoader> classLoaders = getClassLoaders();
-        final URLClassLoader oldLoader = classLoaders.search(prevURL, (loader, url) -> contains(loader.getURLs(), url));
-        final URLClassLoader newLoader = new URLClassLoader(toArray(newURL), getClass().getClassLoader());
+        final Path folder = editorConfig.getAdditionalEnvs();
+        if (folder == null) return;
 
-        if (oldLoader != null) {
-            classLoaders.fastRemove(oldLoader);
-            assetManager.removeClassLoader(oldLoader);
-        }
-
-        classLoaders.add(newLoader);
-        assetManager.addClassLoader(newLoader);
+        additionalEnvs.addAll(getFiles(folder, IMAGE_HDR, IMAGE_TGA, IMAGE_PNG));
     }
 
     /**
-     * Handle a changed material definition file.
+     * Get a list with additional ENVs.
+     *
+     * @return the list.
      */
-    private void replaceMD(@NotNull final String prevAssetPath, @NotNull final String newAssetPath) {
-        final Array<String> materialDefinitions = getMaterialDefinitions();
-        materialDefinitions.fastRemove(prevAssetPath);
-        materialDefinitions.add(newAssetPath);
+    @NotNull
+    public Array<Path> getAdditionalEnvs() {
+        return additionalEnvs;
     }
 
     /**
@@ -296,7 +301,7 @@ public class ResourceManager extends EditorThread {
      * @return the list of an additional classpath.
      */
     @NotNull
-    private Array<URLClassLoader> getClassLoaders() {
+    public Array<URLClassLoader> getClassLoaders() {
         return classLoaders;
     }
 
@@ -362,7 +367,7 @@ public class ResourceManager extends EditorThread {
     }
 
     /**
-     * Hadle a file event in an asset folder.
+     * Handle a file event in an asset folder.
      */
     private void handleFile(@NotNull final Path file) {
         if (Files.isDirectory(file)) return;

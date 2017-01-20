@@ -5,15 +5,16 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.math.Vector2f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.BooleanModelPropertyControl;
-import com.ss.editor.ui.control.model.property.EnumModelPropertyControl;
-import com.ss.editor.ui.control.model.property.FloatModelPropertyControl;
-import com.ss.editor.ui.control.model.property.IntegerModelPropertyControl;
-import com.ss.editor.ui.control.model.property.MaterialEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.MinMaxModelPropertyControl;
-import com.ss.editor.ui.control.model.property.ModelPropertyControl;
-import com.ss.editor.ui.control.model.property.builder.PropertyBuilder;
-import com.ss.editor.ui.control.model.property.particle.ParticlesSpriteCountModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.MinMaxModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.particle.MaterialEmitterPropertyControl;
+import com.ss.editor.ui.control.model.property.control.particle.ParticlesSpriteCountModelPropertyControl;
+import com.ss.editor.ui.control.property.builder.PropertyBuilder;
+import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,7 @@ import tonegod.emitter.node.ParticleNode;
  *
  * @author JavaSaBr
  */
-public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
+public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     public static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
     public static final EmissionPoint[] PARTICLE_EMISSION_POINTS = EmissionPoint.values();
@@ -46,18 +47,22 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         return INSTANCE;
     }
 
+    public ParticlesPropertyBuilder() {
+        super(ModelChangeConsumer.class);
+    }
+
     @Override
-    public void buildFor(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
+                                @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (object instanceof ParticleEmitterNode) {
-            createEmissionControls(container, modelChangeConsumer, (ParticleEmitterNode) object);
+            createEmissionControls(container, changeConsumer, (ParticleEmitterNode) object);
         } else if (object instanceof ParticleNode) {
-            createParticlesControls(container, modelChangeConsumer, (ParticleNode) object);
+            createParticlesControls(container, changeConsumer, (ParticleNode) object);
         }
     }
 
-    private void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer modelChangeConsumer,
+    private void createParticlesControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                          @NotNull final ParticleNode particleGeometry) {
 
         final ParticleEmitterNode emitterNode = findParent(particleGeometry, spatial -> spatial instanceof ParticleEmitterNode);
@@ -78,55 +83,55 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         final ParticlesMaterial particlesMaterial = emitterNode.getParticlesMaterial();
 
         final ModelPropertyControl<ParticleEmitterNode, ParticlesMaterial> materialControl =
-                new MaterialEmitterPropertyControl(particlesMaterial, Messages.MODEL_PROPERTY_MATERIAL, modelChangeConsumer);
+                new MaterialEmitterPropertyControl(particlesMaterial, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
         materialControl.setApplyHandler(ParticleEmitterNode::setParticlesMaterial);
         materialControl.setSyncHandler(ParticleEmitterNode::getParticlesMaterial);
         materialControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> testParticlesModeControl =
-                new BooleanModelPropertyControl<>(testParticles, Messages.PARTICLE_EMITTER_TEST_PARTICLES, modelChangeConsumer);
+        final BooleanModelPropertyControl<ParticleEmitterNode> testParticlesModeControl =
+                new BooleanModelPropertyControl<>(testParticles, Messages.PARTICLE_EMITTER_TEST_PARTICLES, changeConsumer);
         testParticlesModeControl.setApplyHandler(ParticleEmitterNode::setEnabledTestParticles);
         testParticlesModeControl.setSyncHandler(ParticleEmitterNode::isEnabledTestParticles);
         testParticlesModeControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesFollowEmitControl =
-                new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_FOLLOW_EMITTER, modelChangeConsumer);
+        final BooleanModelPropertyControl<ParticleEmitterNode> particlesFollowEmitControl =
+                new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_FOLLOW_EMITTER, changeConsumer);
         particlesFollowEmitControl.setApplyHandler(ParticleEmitterNode::setParticlesFollowEmitter);
         particlesFollowEmitControl.setSyncHandler(ParticleEmitterNode::isParticlesFollowEmitter);
         particlesFollowEmitControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> particlesStretchingControl =
-                new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_STRETCHING, modelChangeConsumer);
+        final BooleanModelPropertyControl<ParticleEmitterNode> particlesStretchingControl =
+                new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_STRETCHING, changeConsumer);
         particlesStretchingControl.setApplyHandler(ParticleEmitterNode::setVelocityStretching);
         particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isVelocityStretching);
         particlesStretchingControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Float> magnitudeControl =
-                new FloatModelPropertyControl<>(stretchFactor, Messages.PARTICLE_EMITTER_MAGNITUDE, modelChangeConsumer);
+        final FloatModelPropertyControl<ParticleEmitterNode> magnitudeControl =
+                new FloatModelPropertyControl<>(stretchFactor, Messages.PARTICLE_EMITTER_MAGNITUDE, changeConsumer);
         magnitudeControl.setApplyHandler(ParticleEmitterNode::setVelocityStretchFactor);
         magnitudeControl.setSyncHandler(ParticleEmitterNode::getVelocityStretchFactor);
         magnitudeControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, BillboardMode> billboardModeControl =
-                new EnumModelPropertyControl<>(billboardMode, Messages.PARTICLE_EMITTER_BILLBOARD, modelChangeConsumer, BillboardMode.values());
+        final EnumModelPropertyControl<ParticleEmitterNode, BillboardMode> billboardModeControl =
+                new EnumModelPropertyControl<>(billboardMode, Messages.PARTICLE_EMITTER_BILLBOARD, changeConsumer, BillboardMode.values());
         billboardModeControl.setApplyHandler(ParticleEmitterNode::setBillboardMode);
         billboardModeControl.setSyncHandler(ParticleEmitterNode::getBillboardMode);
         billboardModeControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Vector2f> forceMinMaxControl =
-                new MinMaxModelPropertyControl<>(forceMinMax, Messages.PARTICLE_EMITTER_INITIAL_FORCE, modelChangeConsumer);
+        final MinMaxModelPropertyControl<ParticleEmitterNode> forceMinMaxControl =
+                new MinMaxModelPropertyControl<>(forceMinMax, Messages.PARTICLE_EMITTER_INITIAL_FORCE, changeConsumer);
         forceMinMaxControl.setApplyHandler(ParticleEmitterNode::setForceMinMax);
         forceMinMaxControl.setSyncHandler(ParticleEmitterNode::getForceMinMax);
         forceMinMaxControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Vector2f> lifeMinMaxControl =
-                new MinMaxModelPropertyControl<>(lifeMinMax, Messages.PARTICLE_EMITTER_LIFE, modelChangeConsumer);
+        final MinMaxModelPropertyControl<ParticleEmitterNode> lifeMinMaxControl =
+                new MinMaxModelPropertyControl<>(lifeMinMax, Messages.PARTICLE_EMITTER_LIFE, changeConsumer);
         lifeMinMaxControl.setApplyHandler(ParticleEmitterNode::setLifeMinMax);
         lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
         lifeMinMaxControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Vector2f> spriteCountControl =
-                new ParticlesSpriteCountModelPropertyControl(spriteCount, Messages.PARTICLE_EMITTER_SPRITE_COUNT, modelChangeConsumer);
+        final ParticlesSpriteCountModelPropertyControl spriteCountControl =
+                new ParticlesSpriteCountModelPropertyControl(spriteCount, Messages.PARTICLE_EMITTER_SPRITE_COUNT, changeConsumer);
         spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
         spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
         spriteCountControl.setEditObject(emitterNode);
@@ -161,43 +166,43 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder {
         final DirectionType directionType = emitterNode.getDirectionType();
         final EmissionPoint emissionPoint = emitterNode.getEmissionPoint();
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> testEmitterModeControl =
+        final BooleanModelPropertyControl<ParticleEmitterNode> testEmitterModeControl =
                 new BooleanModelPropertyControl<>(enabledTestEmitter, Messages.PARTICLE_EMITTER_TEST_MODE, modelChangeConsumer);
         testEmitterModeControl.setApplyHandler(ParticleEmitterNode::setEnabledTestEmitter);
         testEmitterModeControl.setSyncHandler(ParticleEmitterNode::isEnabledTestEmitter);
         testEmitterModeControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> enableControl =
+        final BooleanModelPropertyControl<ParticleEmitterNode> enableControl =
                 new BooleanModelPropertyControl<>(enabled, Messages.PARTICLE_EMITTER_ENABLED, modelChangeConsumer);
         enableControl.setApplyHandler(ParticleEmitterNode::setEnabled);
         enableControl.setSyncHandler(ParticleEmitterNode::isEnabled);
         enableControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> randomPointControl =
+        final BooleanModelPropertyControl<ParticleEmitterNode> randomPointControl =
                 new BooleanModelPropertyControl<>(randomEmissionPoint, Messages.PARTICLE_EMITTER_RANDOM_POINT, modelChangeConsumer);
         randomPointControl.setApplyHandler(ParticleEmitterNode::setRandomEmissionPoint);
         randomPointControl.setSyncHandler(ParticleEmitterNode::isRandomEmissionPoint);
         randomPointControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> sequentialFaceControl =
+        final BooleanModelPropertyControl<ParticleEmitterNode> sequentialFaceControl =
                 new BooleanModelPropertyControl<>(sequentialEmissionFace, Messages.PARTICLE_EMITTER_SEQUENTIAL_FACE, modelChangeConsumer);
         sequentialFaceControl.setApplyHandler(ParticleEmitterNode::setSequentialEmissionFace);
         sequentialFaceControl.setSyncHandler(ParticleEmitterNode::isSequentialEmissionFace);
         sequentialFaceControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, Boolean> skipPatternControl =
+        final BooleanModelPropertyControl<ParticleEmitterNode> skipPatternControl =
                 new BooleanModelPropertyControl<>(skipPattern, Messages.PARTICLE_EMITTER_SKIP_PATTERN, modelChangeConsumer);
         skipPatternControl.setApplyHandler(ParticleEmitterNode::setSequentialSkipPattern);
         skipPatternControl.setSyncHandler(ParticleEmitterNode::isSequentialSkipPattern);
         skipPatternControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, DirectionType> directionTypeControl =
+        final EnumModelPropertyControl<ParticleEmitterNode, DirectionType> directionTypeControl =
                 new EnumModelPropertyControl<>(directionType, Messages.PARTICLE_EMITTER_DIRECTION_TYPE, modelChangeConsumer, DIRECTION_TYPES);
         directionTypeControl.setApplyHandler(ParticleEmitterNode::setDirectionType);
         directionTypeControl.setSyncHandler(ParticleEmitterNode::getDirectionType);
         directionTypeControl.setEditObject(emitterNode);
 
-        final ModelPropertyControl<ParticleEmitterNode, EmissionPoint> emissionPointControl =
+        final EnumModelPropertyControl<ParticleEmitterNode, EmissionPoint> emissionPointControl =
                 new EnumModelPropertyControl<>(emissionPoint, Messages.PARTICLE_EMITTER_EMISSION_POINT, modelChangeConsumer, PARTICLE_EMISSION_POINTS);
         emissionPointControl.setApplyHandler(ParticleEmitterNode::setEmissionPoint);
         emissionPointControl.setSyncHandler(ParticleEmitterNode::getEmissionPoint);

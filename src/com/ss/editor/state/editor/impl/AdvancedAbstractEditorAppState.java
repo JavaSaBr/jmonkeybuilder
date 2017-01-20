@@ -108,11 +108,14 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     private final ObjectDictionary<String, FloatFloatConsumer> analogHandlers;
 
     /**
-     * The scene listeners.
+     * The action scene listeners.
      */
     @NotNull
     private final ActionListener actionListener;
 
+    /**
+     * The analog scene listeners.
+     */
     @NotNull
     private final AnalogListener analogListener;
 
@@ -133,6 +136,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      */
     @NotNull
     private final Vector3f prevCameraLocation;
+
+    /**
+     * The current state manager.
+     */
+    protected AppStateManager stateManager;
 
     /**
      * The previous camera zoom.
@@ -434,6 +442,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     @Override
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
+        this.stateManager = stateManager;
 
         final Node rootNode = EDITOR.getRootNode();
         rootNode.attachChild(getStateNode());

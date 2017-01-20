@@ -66,8 +66,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The Skeleton control deforms a model according to a skeleton, It handles the computation of the
- * deformation matrices and performs the transformations on the mesh
+ * The Skeleton control deforms a model according to a skeleton, It handles the computation of the deformation matrices
+ * and performs the transformations on the mesh
  *
  * @author Rémy Bouquet Based on AnimControl by Kirill Vainer
  */
@@ -82,8 +82,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
      */
     private SafeArrayList<Mesh> targets = new SafeArrayList<Mesh>(Mesh.class);
     /**
-     * Used to track when a mesh was updated. Meshes are only updated if they are visible in at
-     * least one camera.
+     * Used to track when a mesh was updated. Meshes are only updated if they are visible in at least one camera.
      */
     private boolean wasMeshUpdated = false;
 
@@ -98,14 +97,13 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     private transient boolean hwSkinningEnabled = false;
 
     /**
-     * Hardware skinning was tested on this GPU, results are stored in {@link #hwSkinningSupported}
-     * variable.
+     * Hardware skinning was tested on this GPU, results are stored in {@link #hwSkinningSupported} variable.
      */
     private transient boolean hwSkinningTested = false;
 
     /**
-     * If hardware skinning was {@link #hwSkinningTested tested}, then this variable will be set to
-     * true if supported, and false if otherwise.
+     * If hardware skinning was {@link #hwSkinningTested tested}, then this variable will be set to true if supported,
+     * and false if otherwise.
      */
     private transient boolean hwSkinningSupported = false;
 
@@ -181,8 +179,8 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * Specifies if hardware skinning is preferred. If it is preferred and supported by GPU, it
-     * shall be enabled, if its not preferred, or not supported by GPU, then it shall be disabled.
+     * Specifies if hardware skinning is preferred. If it is preferred and supported by GPU, it shall be enabled, if its
+     * not preferred, or not supported by GPU, then it shall be disabled.
      *
      * @see #isHardwareSkinningUsed()
      */
@@ -191,8 +189,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * @return True if hardware skinning is preferable to software skinning. Set to false by
-     * default.
+     * @return True if hardware skinning is preferable to software skinning. Set to false by default.
      * @see #setHardwareSkinningPreferred(boolean)
      */
     public boolean isHardwareSkinningPreferred() {
@@ -207,8 +204,8 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * Creates a skeleton control. The list of targets will be acquired automatically when the
-     * control is attached to a node.
+     * Creates a skeleton control. The list of targets will be acquired automatically when the control is attached to a
+     * node.
      *
      * @param skeleton the skeleton
      */
@@ -597,10 +594,9 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     }
 
     /**
-     * Specific method for skinning with tangents to avoid cluttering the classic skinning
-     * calculation with null checks that would slow down the process even if tangents don't have to
-     * be computed. Also the iteration has additional indexes since tangent has 4 components instead
-     * of 3 for pos and norm
+     * Specific method for skinning with tangents to avoid cluttering the classic skinning calculation with null checks
+     * that would slow down the process even if tangents don't have to be computed. Also the iteration has additional
+     * indexes since tangent has 4 components instead of 3 for pos and norm
      *
      * @param maxWeightsPerVert maximum number of weights per vertex
      * @param mesh              the mesh

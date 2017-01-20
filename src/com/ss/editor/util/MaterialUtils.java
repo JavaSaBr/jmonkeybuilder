@@ -12,8 +12,6 @@ import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState;
 import com.jme3.material.TechniqueDef;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
@@ -30,12 +28,9 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 /**
  * The class with utility methods for working with {@link Material}.
@@ -284,33 +279,26 @@ public class MaterialUtils {
         additionalRenderState.set(material.getAdditionalRenderState());
     }
 
+    /**
+     * Remove all material parameters with null value for all geometries.
+     *
+     * @param spatial the model.
+     */
     public static void cleanUpMaterialParams(@NotNull final Spatial spatial) {
-
-        final AtomicInteger counter = new AtomicInteger();
-
-        final Array<Material> materials = ArrayFactory.newArray(Material.class);
-
-        addMaterialsTo(materials, spatial);
-
-        materials.forEach(material -> cleanUp(material, counter));
-    }
-
-    private static void cleanUp(@NotNull final Material material, @NotNull final AtomicInteger counter) {
-        final Collection<MatParam> params = new ArrayList<>(material.getParams());
-        params.forEach(matParam -> {
-            if (matParam.getValue() == null) {
-                material.clearParam(matParam.getName());
-            }
+        NodeUtils.visitGeometry(spatial, geometry -> {
+            final Material material = geometry.getMaterial();
+            if (material != null) cleanUp(material);
         });
     }
 
-    private static void addMaterialsTo(@NotNull final Array<Material> materials, @NotNull final Spatial spatial) {
-        if (spatial instanceof Geometry) {
-            final Material material = ((Geometry) spatial).getMaterial();
-            if (material != null) materials.add(material);
-        } else if (spatial instanceof Node) {
-            final List<Spatial> children = ((Node) spatial).getChildren();
-            children.forEach(child -> addMaterialsTo(materials, child));
-        }
+    /**
+     * Clean up a material.
+     *
+     * @param material the material.
+     */
+    private static void cleanUp(@NotNull final Material material) {
+        final Collection<MatParam> params = new ArrayList<>(material.getParams());
+        params.stream().filter(param -> param.getValue() == null)
+                .forEach(matParam -> material.clearParam(matParam.getName()));
     }
 }

@@ -1,12 +1,14 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
+import org.jetbrains.annotations.NotNull;
+
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -16,24 +18,33 @@ import javafx.scene.image.ImageView;
  */
 public class OpenFileByEditorAction extends MenuItem {
 
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * The action element.
      */
+    @NotNull
     private final ResourceElement element;
 
     /**
      * The editor description.
      */
+    @NotNull
     private final EditorDescription description;
 
-    public OpenFileByEditorAction(final ResourceElement element, final EditorDescription description) {
+    public OpenFileByEditorAction(@NotNull final ResourceElement element, @NotNull final EditorDescription description) {
         this.element = element;
         this.description = description;
+
         setText(description.getEditorName());
         setOnAction(event -> processOpen());
-        setGraphic(new ImageView(Icons.VIEW_16));
+
+        final Image icon = description.getIcon();
+
+        if (icon != null) {
+            setGraphic(new ImageView(icon));
+        }
     }
 
     /**

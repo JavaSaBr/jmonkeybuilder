@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.creator;
 
 import com.ss.editor.ui.component.creator.impl.EmptyFileCreator;
 import com.ss.editor.ui.component.creator.impl.EmptyModelCreator;
+import com.ss.editor.ui.component.creator.impl.EmptySceneCreator;
 import com.ss.editor.ui.component.creator.impl.FolderCreator;
 import com.ss.editor.ui.component.creator.impl.MaterialFileCreator;
 import com.ss.editor.ui.component.creator.impl.PostFilterViewFileCreator;
@@ -48,6 +49,7 @@ public class FileCreatorRegistry {
         addDescription(FolderCreator.DESCRIPTION);
         addDescription(EmptyModelCreator.DESCRIPTION);
         addDescription(SingleColorTextureFileCreator.DESCRIPTION);
+        addDescription(EmptySceneCreator.DESCRIPTION);
     }
 
     /**

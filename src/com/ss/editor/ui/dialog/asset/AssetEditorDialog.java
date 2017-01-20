@@ -95,7 +95,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected Label warningLabel;
 
     /**
-     * The OK buttton.
+     * The OK button.
      */
     protected Button okButton;
 

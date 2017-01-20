@@ -3,9 +3,9 @@ package com.ss.editor.ui.component.asset.tree.resource;
 import java.nio.file.Path;
 
 /**
- * Реализация элемента для файла.
+ * The presentation of a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FileElement extends ResourceElement {
 

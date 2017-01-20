@@ -1,5 +1,8 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.nio.file.Path;
 
 import rlib.logging.Logger;
@@ -7,16 +10,16 @@ import rlib.logging.LoggerManager;
 import rlib.util.array.Array;
 
 /**
- * Базовая реализация элемента ресурса в дереве.
+ * The base implementation of a resource.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public abstract class ResourceElement implements Comparable<ResourceElement> {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(ResourceElement.class);
 
     /**
-     * Ссылка на файл.
+     * The reference to the file.
      */
     protected final Path file;
 
@@ -25,28 +28,28 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     }
 
     /**
-     * @return ссылка на файл.
+     * @return the reference to the file.
      */
     public Path getFile() {
         return file;
     }
 
     /**
-     * @return список элементов, содержащихся в этом.
+     * @return list of children resource elements.
      */
-    public Array<ResourceElement> getChildren(final Array<String> extensionFilter) {
+    public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter) {
         return null;
     }
 
     /**
-     * @return есть ли у этого элемента дочерние.
+     * @return true if this element has children.
      */
-    public boolean hasChildren(final Array<String> extensionFilter) {
+    public boolean hasChildren(@NotNull final Array<String> extensionFilter) {
         return false;
     }
 
     @Override
-    public int compareTo(final ResourceElement other) {
+    public int compareTo(@Nullable final ResourceElement other) {
 
         final Path file = getFile();
         final Path otherFile = other.getFile();

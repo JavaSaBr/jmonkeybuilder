@@ -287,7 +287,7 @@
     -fx-alignment: center-left;
 }
 
-.model-param-control {
+.abstract-param-control {
     -fx-padding: 0 0 0 0;
 }
 

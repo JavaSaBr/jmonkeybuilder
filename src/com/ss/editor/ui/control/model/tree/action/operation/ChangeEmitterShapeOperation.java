@@ -12,8 +12,7 @@ import tonegod.emitter.EmitterMesh;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for changing a shape in the {@link
- * ParticleEmitterNode}.
+ * The implementation of the {@link AbstractEditorOperation} for changing a shape in the {@link ParticleEmitterNode}.
  *
  * @author JavaSaBr.
  */

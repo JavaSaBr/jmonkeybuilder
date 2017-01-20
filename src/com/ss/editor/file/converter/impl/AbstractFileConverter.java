@@ -8,8 +8,10 @@ import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
@@ -43,6 +45,7 @@ public abstract class AbstractFileConverter implements FileConverter {
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
     @Override
@@ -92,6 +95,11 @@ public abstract class AbstractFileConverter implements FileConverter {
         assetManager.clearAssetEventListeners();
 
         final Spatial model = assetManager.loadAsset(modelKey);
+
+        if (EDITOR_CONFIG.isAutoTangentGenerating()) {
+            TangentGenerator.useMikktspaceGenerator(model);
+        }
+
         final BinaryExporter exporter = BinaryExporter.getInstance();
 
         try (final OutputStream out = Files.newOutputStream(destination)) {

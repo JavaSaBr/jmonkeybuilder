@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
@@ -17,13 +18,11 @@ import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.Objects;
 
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
@@ -49,7 +48,7 @@ public class LoadModelAction extends AbstractNodeAction {
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.ADD_18;
+        return Icons.OPEN_FILE_16;
     }
 
     @NotNull
@@ -72,9 +71,9 @@ public class LoadModelAction extends AbstractNodeAction {
     protected void processOpen(@NotNull final Path file) {
 
         final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
 
-        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final ModelKey modelKey = new ModelKey(assetPath);
@@ -85,10 +84,8 @@ public class LoadModelAction extends AbstractNodeAction {
         final Spatial loadedModel = assetManager.loadModel(modelKey);
 
         final ModelNode<?> modelNode = getNode();
-        final Node element = (Node) modelNode.getElement();
+        final Node parent = (Node) modelNode.getElement();
 
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
-
-        modelChangeConsumer.execute(new AddChildOperation(loadedModel, index));
+        consumer.execute(new AddChildOperation(loadedModel, parent));
     }
 }

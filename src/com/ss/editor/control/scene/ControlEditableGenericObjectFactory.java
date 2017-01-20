@@ -2,8 +2,8 @@ package com.ss.editor.control.scene;
 
 import com.jme3.animation.AnimControl;
 import com.ss.editor.control.scene.impl.AnimControlEditableGenericObject;
-import com.ss.editor.ui.control.model.property.builder.impl.generic.EditableGenericObject;
-import com.ss.editor.ui.control.model.property.builder.impl.generic.EditableGenericObjectFactory;
+import com.ss.editor.ui.control.model.property.generic.EditableGenericObject;
+import com.ss.editor.ui.control.model.property.generic.EditableGenericObjectFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

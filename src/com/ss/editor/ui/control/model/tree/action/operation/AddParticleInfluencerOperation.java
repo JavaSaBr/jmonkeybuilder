@@ -12,8 +12,8 @@ import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a {@link ParticleInfluencer}
- * to the {@link ParticleEmitterNode}.
+ * The implementation of the {@link AbstractEditorOperation} for adding a {@link ParticleInfluencer} to the {@link
+ * ParticleEmitterNode}.
  *
  * @author JavaSaBr.
  */

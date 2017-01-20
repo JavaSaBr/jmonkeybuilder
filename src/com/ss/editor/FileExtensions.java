@@ -10,6 +10,7 @@ public interface FileExtensions {
     String JME_MATERIAL = "j3m";
     String JME_MATERIAL_DEFINITION = "j3md";
     String JME_OBJECT = "j3o";
+    String JME_SCENE = "j3s";
 
     String JAVA_LIBRARY = "jar";
 

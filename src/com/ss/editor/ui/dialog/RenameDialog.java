@@ -1,11 +1,11 @@
 package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Point;
 import java.util.function.Consumer;
@@ -28,15 +28,10 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class RenameDialog extends EditorDialog {
+public class RenameDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-    private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
     private static final Insets NAME_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-
     private static final Point DIALOG_SIZE = new Point(400, 140);
-
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The function for validation name.
@@ -52,11 +47,6 @@ public class RenameDialog extends EditorDialog {
      * The text field.
      */
     private TextField nameField;
-
-    /**
-     * The ok button.
-     */
-    private Button okButton;
 
     @Override
     protected void createContent(@NotNull final VBox root) {
@@ -84,7 +74,7 @@ public class RenameDialog extends EditorDialog {
     }
 
     @Override
-    public void show(@NotNull Window owner) {
+    public void show(@NotNull final Window owner) {
         super.show(owner);
         EXECUTOR_MANAGER.addFXTask(() -> getNameField().requestFocus());
     }
@@ -111,15 +101,9 @@ public class RenameDialog extends EditorDialog {
     }
 
     /**
-     * @return the ok button.
-     */
-    private Button getOkButton() {
-        return okButton;
-    }
-
-    /**
      * @return the function for validation name.
      */
+    @Nullable
     public Function<String, Boolean> getValidator() {
         return validator;
     }
@@ -127,13 +111,14 @@ public class RenameDialog extends EditorDialog {
     /**
      * @param validator the function for validation name.
      */
-    public void setValidator(final Function<String, Boolean> validator) {
+    public void setValidator(@Nullable final Function<String, Boolean> validator) {
         this.validator = validator;
     }
 
     /**
      * @return the function for handling a new name.
      */
+    @Nullable
     private Consumer<String> getHandler() {
         return handler;
     }
@@ -141,7 +126,7 @@ public class RenameDialog extends EditorDialog {
     /**
      * @param handler the function for handling a new name.
      */
-    public void setHandler(final Consumer<String> handler) {
+    public void setHandler(@Nullable final Consumer<String> handler) {
         this.handler = handler;
     }
 
@@ -154,30 +139,16 @@ public class RenameDialog extends EditorDialog {
         okButton.setDisable(!(validator == null || validator.apply(name)));
     }
 
+    @NotNull
     @Override
-    protected void createActions(@NotNull final VBox root) {
-        super.createActions(root);
+    protected String getButtonCancelLabel() {
+        return Messages.RENAME_DIALOG_BUTTON_CANCEL;
+    }
 
-        final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
-
-        okButton = new Button(Messages.RENAME_DIALOG_BUTTON_OK);
-        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
-        okButton.setOnAction(event -> processOk());
-
-        final Button cancelButton = new Button(Messages.RENAME_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setOnAction(event -> hide());
-
-        FXUtils.addToPane(okButton, container);
-        FXUtils.addToPane(cancelButton, container);
-        FXUtils.addToPane(container, root);
-
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
+    @NotNull
+    @Override
+    protected String getButtonOkLabel() {
+        return Messages.RENAME_DIALOG_BUTTON_OK;
     }
 
     @Override
@@ -191,19 +162,15 @@ public class RenameDialog extends EditorDialog {
     /**
      * Finish this dialog.
      */
-    private void processOk() {
+    @Override
+    protected void processOk() {
+        super.processOk();
 
         final Consumer<String> handler = getHandler();
-
-        if (handler == null) {
-            hide();
-            return;
-        }
+        if (handler == null) return;
 
         final TextField nameField = getNameField();
         handler.accept(nameField.getText());
-
-        hide();
     }
 
     @Override

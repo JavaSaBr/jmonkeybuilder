@@ -10,7 +10,7 @@ import com.ss.editor.util.GeomUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a control to a node.
+ * The implementation of the {@link AbstractEditorOperation} to add a control to a node.
  *
  * @author JavaSaBr
  */
@@ -19,6 +19,7 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
     /**
      * The new control.
      */
+    @NotNull
     private final Control newControl;
 
     /**
@@ -42,7 +43,7 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
             final Node node = (Node) parent;
             node.addControl(newControl);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedControl(node, newControl, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, newControl, -1));
         });
     }
 
@@ -57,7 +58,7 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
             final Node node = (Node) parent;
             node.removeControl(newControl);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedControl(node, newControl));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, newControl));
         });
     }
 }

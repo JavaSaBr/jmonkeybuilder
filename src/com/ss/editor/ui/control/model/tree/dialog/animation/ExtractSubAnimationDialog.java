@@ -7,13 +7,12 @@ import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.fx.IntegerTextField;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
-import com.ss.editor.ui.control.model.tree.dialog.AbstractNodeDialog;
 import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.editor.util.EditorUtil;
 
@@ -30,6 +29,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -37,7 +37,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class ExtractSubAnimationDialog extends AbstractNodeDialog {
+public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(390, 184);
 

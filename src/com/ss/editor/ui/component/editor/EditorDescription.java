@@ -1,95 +1,125 @@
 package com.ss.editor.ui.component.editor;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.concurrent.Callable;
 
+import javafx.scene.image.Image;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * Класс для описания редактора.
+ * The class to describe an editor.
  *
- * @author Ronn
+ * @author JavaSar
  */
 public class EditorDescription {
 
     /**
-     * Набор расширений, поддерживаемых этим редактором.
+     * The list of supported extensions.
      */
+    @NotNull
     private final Array<String> extensions;
 
     /**
-     * Конструктор редактора.
+     * The editor constructor.
      */
     private Callable<FileEditor> constructor;
 
     /**
-     * Название редактора.
+     * The editor name.
      */
     private String editorName;
 
     /**
-     * Уникальный ид редактора.
+     * The editor id.
      */
     private String editorId;
+
+    /**
+     * The icon.
+     */
+    @Nullable
+    private Image icon;
 
     public EditorDescription() {
         this.extensions = ArrayFactory.newArray(String.class);
     }
 
     /**
-     * @return уникальный ид редактора.
+     * @return the editor id.
      */
+    @NotNull
     public String getEditorId() {
         return editorId;
     }
 
     /**
-     * @param editorId уникальный ид редактора.
+     * @param editorId the editor id.
      */
-    public void setEditorId(String editorId) {
+    public void setEditorId(@NotNull final String editorId) {
         this.editorId = editorId;
     }
 
     /**
-     * @param extension поддерживаемое расширение.
+     * @param extension the supported extension.
      */
-    public void addExtension(final String extension) {
+    public void addExtension(@NotNull final String extension) {
         this.extensions.add(extension);
     }
 
     /**
-     * @return набор расширений, поддерживаемых этим редактором.
+     * @return the list of supported extensions.
      */
+    @NotNull
     public Array<String> getExtensions() {
         return extensions;
     }
 
     /**
-     * @return конструктор редактора.
+     * @return the editor constructor.
      */
+    @NotNull
     public Callable<FileEditor> getConstructor() {
         return constructor;
     }
 
     /**
-     * @param constructor конструктор редактора.
+     * @param constructor the editor constructor.
      */
-    public void setConstructor(final Callable<FileEditor> constructor) {
+    public void setConstructor(@NotNull final Callable<FileEditor> constructor) {
         this.constructor = constructor;
     }
 
     /**
-     * @return название редактора.
+     * @return the editor name.
      */
+    @NotNull
     public String getEditorName() {
         return editorName;
     }
 
     /**
-     * @param editorName название редактора.
+     * @param editorName the editor name.
      */
-    public void setEditorName(final String editorName) {
+    public void setEditorName(@NotNull final String editorName) {
         this.editorName = editorName;
+    }
+
+    /**
+     * @return the icon.
+     */
+    @Nullable
+    public Image getIcon() {
+        return icon;
+    }
+
+    /**
+     * @param icon the icon.
+     */
+    public void setIcon(@Nullable final Image icon) {
+        this.icon = icon;
     }
 
     @Override

@@ -4,6 +4,9 @@ import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
 import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
@@ -27,10 +30,11 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.util.EditorUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
-import javafx.geometry.Insets;
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -47,8 +51,6 @@ import rlib.util.array.ArrayFactory;
  * @author JavaSaBr
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
-
-    public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
 
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -84,17 +86,8 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     private CheckBox flipButton;
 
-    /**
-     * The add button.
-     */
-    private Button addButton;
-
-    /**
-     * The remove button.
-     */
-    private Button removeButton;
-
-    public Texture2DMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
+    public Texture2DMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
+                                         @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -115,7 +108,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         Tooltip.install(texturePreview, textureTooltip);
 
-        addButton = new Button();
+        final Button addButton = new Button();
         addButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         addButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD));
         addButton.setGraphic(new ImageView(Icons.ADD_18));
@@ -131,7 +124,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         flipButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP));
         flipButton.selectedProperty().addListener((observ, old, newValue) -> processChangeFlip(newValue));
 
-        removeButton = new Button();
+        final Button removeButton = new Button();
         removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE));
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
@@ -160,6 +153,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * @return the checkbox for editing repeat property.
      */
+    @NotNull
     public ImageChannelPreview getTextureTooltip() {
         return textureTooltip;
     }
@@ -167,7 +161,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * Handle changing the repeat property.
      */
-    private void processChangeRepeat(final Boolean newValue) {
+    private void processChangeRepeat(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
@@ -195,7 +189,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * Handle changing the flip property.
      */
-    private void processChangeFlip(final Boolean newValue) {
+    private void processChangeFlip(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
@@ -233,7 +227,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      *
      * @param path the path to texture.
      */
-    private void addTexture(final Path path) {
+    private void addTexture(@NotNull final Path path) {
 
         final String parameterName = getParameterName();
         final Material material = getMaterial();
@@ -248,14 +242,14 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Path assetFile = EditorUtil.getAssetFile(path);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = requireNonNull(getAssetFile(path), "Can't get an asset file for " + path);
+        final String assetPath = toAssetPath(assetFile);
 
         final CheckBox flipButton = getFlipButton();
         final CheckBox repeatButton = getRepeatButton();
 
         final TextureKey newKey = new TextureKey(assetPath);
-        newKey.setFlipY(flipButton.isSelected());
+        newKey.setFlipY(oldKey == null ? EDITOR_CONFIG.isDefaultUseFlippedTexture() : flipButton.isSelected());
 
         try {
             assetManager.loadTexture(newKey);

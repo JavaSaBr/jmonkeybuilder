@@ -43,5 +43,5 @@ public interface CSSClasses {
     String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
 
     String MATERIAL_PARAM_CONTROL = "material-param-control";
-    String MODEL_PARAM_CONTROL = "model-param-control";
+    String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
 }

@@ -10,6 +10,7 @@ import com.ss.editor.ui.component.editor.impl.TextFileEditor;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
+import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,7 @@ public class EditorRegistry {
         addDescription(GLSLFileEditor.DESCRIPTION);
         addDescription(MaterialDefinitionFileEditor.DESCRIPTION);
         addDescription(AudioViewerEditor.DESCRIPTION);
+        addDescription(SceneFileEditor.DESCRIPTION);
     }
 
     /**

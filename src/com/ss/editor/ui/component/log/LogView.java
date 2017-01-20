@@ -1,8 +1,8 @@
 package com.ss.editor.ui.component.log;
 
+import static com.jme3x.jfx.util.JFXPlatform.runInFXThread;
 import static java.util.Collections.singleton;
 
-import com.jme3x.jfx.util.JFXPlatform;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -100,6 +100,7 @@ public class LogView extends CodeArea {
     public LogView() {
         setId(CSSIds.LOG_VIEW);
         setWrapText(true);
+        setEditable(false);
         richChanges().subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
 
         this.streamErrWrapper = new OutputStreamWrapper(System.err, externalAppendText());
@@ -111,6 +112,6 @@ public class LogView extends CodeArea {
 
     @NotNull
     protected Consumer<String> externalAppendText() {
-        return stringConsumer -> JFXPlatform.runInFXThread(() -> appendText(stringConsumer));
+        return stringConsumer -> runInFXThread(() -> appendText(stringConsumer));
     }
 }

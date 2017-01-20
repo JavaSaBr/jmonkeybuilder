@@ -40,37 +40,41 @@ public interface SceneEditorControl {
     Transform getTransformCenter();
 
     /**
-     * Установка направления трансформаци.
+     * @param axis the picked axis.
      */
-    void setPickedAxis(final PickedAxis axis);
+    void setPickedAxis(@NotNull final PickedAxis axis);
 
     /**
-     * @return текущее направление трансформации.
+     * @return the picked axis.
      */
+    @NotNull
     PickedAxis getPickedAxis();
 
     /**
-     * @return плоскость для вычисления трансформаций.
+     * @return the collision plane.
      */
+    @Nullable
     Node getCollisionPlane();
 
     /**
-     * Разница между предыдущей точкой трансформации и новой.
+     * @param deltaVector the delta vector.
      */
-    void setDeltaVector(final Vector3f deltaVector);
+    void setDeltaVector(@Nullable final Vector3f deltaVector);
 
     /**
-     * @return разница между предыдущей точкой трансформации и новой.
+     * @return the delta vector.
      */
+    @Nullable
     Vector3f getDeltaVector();
 
     /**
-     * @return часть модели на трансформацию.
+     * @return the model to transform.
      */
+    @Nullable
     Spatial getToTransform();
 
     /**
-     * Уведомление об изменении трансформации указанной части модели.
+     * @param spatial the model which was transformed.
      */
-    void notifyTransformed(final Spatial spatial);
+    void notifyTransformed(@NotNull final Spatial spatial);
 }

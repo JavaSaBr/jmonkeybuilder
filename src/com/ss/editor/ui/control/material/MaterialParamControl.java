@@ -1,9 +1,13 @@
 package com.ss.editor.ui.control.material;
 
 import com.jme3.material.Material;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -27,19 +31,25 @@ public class MaterialParamControl extends HBox {
     public static final double CONTROL_PERCENT_WIDTH = 0.6;
     public static final double CONTROL_PERCENT_WIDTH2 = 0.4;
 
+    @NotNull
+    protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
     /**
      * The change handler.
      */
+    @NotNull
     private final Consumer<EditorOperation> changeHandler;
 
     /**
      * The current material.
      */
+    @NotNull
     private final Material material;
 
     /**
      * The parameter name.
      */
+    @NotNull
     private final String parameterName;
 
     /**
@@ -52,7 +62,8 @@ public class MaterialParamControl extends HBox {
      */
     private boolean ignoreListeners;
 
-    public MaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
+    public MaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler, @NotNull final Material material,
+                                @NotNull final String parameterName) {
         this.changeHandler = changeHandler;
         this.material = material;
         this.parameterName = parameterName;
@@ -71,7 +82,8 @@ public class MaterialParamControl extends HBox {
     /**
      * @param operation the new operation.
      */
-    protected void execute(final EditorOperation operation) {
+    @FromAnyThread
+    protected void execute(@NotNull final EditorOperation operation) {
         changeHandler.accept(operation);
     }
 
@@ -126,6 +138,7 @@ public class MaterialParamControl extends HBox {
     /**
      * @return the parameter name.
      */
+    @NotNull
     public String getParameterName() {
         return parameterName;
     }
@@ -133,6 +146,7 @@ public class MaterialParamControl extends HBox {
     /**
      * @return the current material.
      */
+    @NotNull
     public Material getMaterial() {
         return material;
     }

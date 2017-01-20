@@ -7,12 +7,13 @@ import com.ss.editor.ui.control.material.operation.IntegerMaterialParamOperation
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.function.Consumer;
 
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
-import javafx.scene.input.ScrollEvent;
+import javafx.geometry.Insets;
+import javafx.scene.layout.HBox;
+import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -22,10 +23,12 @@ import rlib.ui.util.FXUtils;
  */
 public class IntegerMaterialParamControl extends MaterialParamControl {
 
+    public static final Insets FIELD_OFFSET = new Insets(0, 6, 0, 0);
+
     /**
-     * The integer spinner.
+     * The integer integerField.
      */
-    private Spinner<Integer> spinner;
+    private IntegerTextField integerField;
 
     public IntegerMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
@@ -35,18 +38,15 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
     protected void createComponents() {
         super.createComponents();
 
-        final SpinnerValueFactory<Integer> valueFactory = new IntegerSpinnerValueFactory(-500, 500, 0, 1);
+        integerField = new IntegerTextField();
+        integerField.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
+        integerField.addChangeListener((observable, oldValue, newValue) -> processChange(newValue));
+        integerField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
 
-        spinner = new Spinner<>();
-        spinner.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
-        spinner.setValueFactory(valueFactory);
-        spinner.setEditable(true);
-        spinner.setOnScroll(this::processScroll);
-        spinner.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
-        spinner.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
+        FXUtils.addToPane(integerField, this);
+        FXUtils.addClassTo(integerField, CSSClasses.SPECIAL_FONT_13);
 
-        FXUtils.addToPane(spinner, this);
-        FXUtils.addClassTo(spinner, CSSClasses.SPECIAL_FONT_13);
+        HBox.setMargin(integerField, FIELD_OFFSET);
     }
 
     @Override
@@ -55,24 +55,9 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * The process of scrolling value.
-     */
-    private void processScroll(final ScrollEvent event) {
-        if (!event.isControlDown()) return;
-
-        final double deltaY = event.getDeltaY();
-
-        if (deltaY > 0) {
-            spinner.increment();
-        } else {
-            spinner.decrement();
-        }
-    }
-
-    /**
      * Update a value.
      */
-    private void processChange(final Integer newValue) {
+    private void processChange(@NotNull final Integer newValue) {
         if (isIgnoreListeners()) return;
 
         final String parameterName = getParameterName();
@@ -89,13 +74,13 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
 
         final Material material = getMaterial();
         final MatParam param = material.getParam(getParameterName());
-        final SpinnerValueFactory<Integer> valueFactory = spinner.getValueFactory();
 
         if (param == null) {
-            valueFactory.setValue(0);
+            integerField.setValue(0);
             return;
         }
 
-        valueFactory.setValue((Integer) param.getValue());
+        integerField.setValue((Integer) param.getValue());
+        integerField.positionCaret(integerField.getText().length());
     }
 }
