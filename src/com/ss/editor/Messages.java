@@ -123,7 +123,6 @@ public class Messages {
     public static final String MESH_XML_TO_J3O_FILE_CONVERTER_DESCRIPTION;
 
     public static final String MODEL_FILE_EDITOR_NAME;
-    public static final String MODEL_FILE_EDITOR_TOOL_OBJECTS;
     public static final String MODEL_FILE_EDITOR_NO_SKY;
     public static final String MODEL_FILE_EDITOR_FAST_SKY;
     public static final String MODEL_FILE_EDITOR_NODE_MESH;
@@ -136,6 +135,8 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
 
     public static final String SCENE_FILE_EDITOR_NAME;
+    public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
+    public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -493,7 +494,6 @@ public class Messages {
         XBUF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("XBufToJ3oFileConverterDescription");
 
         MODEL_FILE_EDITOR_NAME = bundle.getString("ModelFileEditorName");
-        MODEL_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("ModelFileEditorToolObjects");
         MODEL_FILE_EDITOR_NO_SKY = bundle.getString("ModelFileEditorNoSky");
         MODEL_FILE_EDITOR_FAST_SKY = bundle.getString("ModelFileEditorFastSky");
         MODEL_FILE_EDITOR_NODE_MESH = bundle.getString("ModelFileEditorNodeMesh");
@@ -506,6 +506,8 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
+        SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
+        SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");

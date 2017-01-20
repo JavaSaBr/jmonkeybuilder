@@ -132,7 +132,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
         appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        editorToolComponent.addComponent(appStateSplitContainer, "App states");
+        editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(appStateSplitContainer));

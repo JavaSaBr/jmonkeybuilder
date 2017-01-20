@@ -676,7 +676,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
-        editorToolComponent.addComponent(modelSplitContainer, Messages.MODEL_FILE_EDITOR_TOOL_OBJECTS);
+        editorToolComponent.addComponent(modelSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
