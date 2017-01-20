@@ -6,6 +6,7 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.9.1 ##
+* [Video](https://www.youtube.com/watch?v=UkG3blab-xg&feature=youtu.be)
 * -Add some settings to setting dialog.
 * -Added shift+ctrl value scrolling.
 * -Added environments folder to settings dialog.
