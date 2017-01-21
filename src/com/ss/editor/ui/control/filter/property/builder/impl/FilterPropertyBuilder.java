@@ -1,20 +1,20 @@
-package com.ss.editor.ui.control.app.state.property.builder.impl;
+package com.ss.editor.ui.control.filter.property.builder.impl;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.app.state.property.control.BooleanAppStatePropertyControl;
-import com.ss.editor.ui.control.app.state.property.control.ColorAppStatePropertyControl;
-import com.ss.editor.ui.control.app.state.property.control.FloatAppStatePropertyControl;
-import com.ss.editor.ui.control.app.state.property.control.IntegerAppStatePropertyControl;
-import com.ss.editor.ui.control.app.state.property.control.Vector2fAppStatePropertyControl;
-import com.ss.editor.ui.control.app.state.property.control.Vector3fAppStatePropertyControl;
+import com.ss.editor.ui.control.filter.property.control.BooleanFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.ColorFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.FloatFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.IntegerFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.Vector2fFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.Vector3fFilterPropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
-import com.ss.extension.scene.app.state.EditableSceneAppState;
+import com.ss.extension.scene.filter.EditableSceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,15 +31,15 @@ import rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
-public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChangeConsumer> {
+public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeConsumer> {
 
-    private static final AppStatePropertyBuilder INSTANCE = new AppStatePropertyBuilder();
+    private static final FilterPropertyBuilder INSTANCE = new FilterPropertyBuilder();
 
-    public static AppStatePropertyBuilder getInstance() {
+    public static FilterPropertyBuilder getInstance() {
         return INSTANCE;
     }
 
-    protected AppStatePropertyBuilder() {
+    protected FilterPropertyBuilder() {
         super(SceneChangeConsumer.class);
     }
 
@@ -47,11 +47,11 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final SceneChangeConsumer changeConsumer) {
 
-        if (!(object instanceof EditableSceneAppState)) return;
+        if (!(object instanceof EditableSceneFilter)) return;
 
-        final EditableSceneAppState appState = (EditableSceneAppState) object;
+        final EditableSceneFilter<?> sceneFilter = (EditableSceneFilter) object;
 
-        final Array<EditableProperty<?, ?>> editableProperties = appState.getEditableProperties();
+        final Array<EditableProperty<?, ?>> editableProperties = sceneFilter.getEditableProperties();
         if (editableProperties.isEmpty()) return;
 
         for (final EditableProperty<?, ?> editableProperty : editableProperties) {
@@ -64,8 +64,8 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<Boolean, ?> property = cast(editableProperty);
                     final Boolean value = Objects.requireNonNull(property.getValue(), "Boolean value can't be null.");
 
-                    final BooleanAppStatePropertyControl<EditableProperty<Boolean, ?>> propertyControl =
-                            new BooleanAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+                    final BooleanFilterPropertyControl<EditableProperty<Boolean, ?>> propertyControl =
+                            new BooleanFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
@@ -75,8 +75,8 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<Float, ?> property = cast(editableProperty);
                     final Float value = Objects.requireNonNull(property.getValue(), "Float value can't be null.");
 
-                    final FloatAppStatePropertyControl<EditableProperty<Float, ?>> propertyControl =
-                            new FloatAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+                    final FloatFilterPropertyControl<EditableProperty<Float, ?>> propertyControl =
+                            new FloatFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     final float scrollPower = propertyControl.getScrollPower();
                     final float mod = property.getScrollPower();
@@ -92,8 +92,8 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<ColorRGBA, ?> property = cast(editableProperty);
                     final ColorRGBA color = Objects.requireNonNull(property.getValue(), "Color value can't be null.");
 
-                    final ColorAppStatePropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
-                            new ColorAppStatePropertyControl<>(color, property.getName(), changeConsumer);
+                    final ColorFilterPropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
+                            new ColorFilterPropertyControl<>(color, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
@@ -103,8 +103,8 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<Integer, ?> property = cast(editableProperty);
                     final Integer value = Objects.requireNonNull(property.getValue(), "Integer value can't be null.");
 
-                    final IntegerAppStatePropertyControl<EditableProperty<Integer, ?>> propertyControl =
-                            new IntegerAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+                    final IntegerFilterPropertyControl<EditableProperty<Integer, ?>> propertyControl =
+                            new IntegerFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
@@ -114,8 +114,8 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<Vector2f, ?> property = cast(editableProperty);
                     final Vector2f value = Objects.requireNonNull(property.getValue(), "Vector2f value can't be null.");
 
-                    final Vector2fAppStatePropertyControl<EditableProperty<Vector2f, ?>> propertyControl =
-                            new Vector2fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+                    final Vector2fFilterPropertyControl<EditableProperty<Vector2f, ?>> propertyControl =
+                            new Vector2fFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
@@ -125,8 +125,8 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                     final EditableProperty<Vector3f, ?> property = cast(editableProperty);
                     final Vector3f value = Objects.requireNonNull(property.getValue(), "Vector3f value can't be null.");
 
-                    final Vector3fAppStatePropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
-                            new Vector3fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+                    final Vector3fFilterPropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
+                            new Vector3fFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

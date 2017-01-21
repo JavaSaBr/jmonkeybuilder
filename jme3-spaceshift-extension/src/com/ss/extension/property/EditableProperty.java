@@ -1,4 +1,4 @@
-package com.ss.extension.scene.app.state.property;
+package com.ss.extension.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

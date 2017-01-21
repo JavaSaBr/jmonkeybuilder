@@ -1,12 +1,12 @@
-package com.ss.editor.ui.control.app.state.list;
+package com.ss.editor.ui.control.filter.list;
 
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.app.state.operation.DisableAppStateOperation;
-import com.ss.editor.ui.control.app.state.operation.EnableAppStateOperation;
+import com.ss.editor.ui.control.filter.operation.DisableSceneFilterOperation;
+import com.ss.editor.ui.control.filter.operation.EnableSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.extension.scene.app.state.EditableSceneAppState;
+import com.ss.extension.scene.filter.EditableSceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,19 +22,19 @@ import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
 /**
- * The implementation of list cell to present an editable scene app state.
+ * The implementation of list cell to present an editable scene filter.
  *
  * @author JavaSaBr
  */
-public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
+public class FilterListCell extends TextFieldListCell<EditableSceneFilter<?>> {
 
     private static final Insets VISIBLE_ICON_OFFSET = new Insets(0, 3, 0, 0);
 
     /**
-     * The list of app states.
+     * The list of filters.
      */
     @NotNull
-    private final AppStateList stateList;
+    private final FilterList stateList;
 
     /**
      * The content box.
@@ -54,7 +54,7 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
     @NotNull
     private final ImageView visibleIcon;
 
-    public AppStateListCell(final @NotNull AppStateList stateList) {
+    public FilterListCell(final @NotNull FilterList stateList) {
         this.stateList = stateList;
         this.content = new HBox();
         this.text = new Label();
@@ -80,7 +80,7 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
      * @return the list of app states.
      */
     @NotNull
-    private AppStateList getStateList() {
+    private FilterList getStateList() {
         return stateList;
     }
 
@@ -94,19 +94,19 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
             return;
         }
 
-        final EditableSceneAppState item = getItem();
-        final AppStateList stateList = getStateList();
+        final EditableSceneFilter<?> item = getItem();
+        final FilterList stateList = getStateList();
         final SceneChangeConsumer changeConsumer = stateList.getChangeConsumer();
 
         if (item.isEnabled()) {
-            changeConsumer.execute(new DisableAppStateOperation(item));
+            changeConsumer.execute(new DisableSceneFilterOperation(item));
         } else {
-            changeConsumer.execute(new EnableAppStateOperation(item));
+            changeConsumer.execute(new EnableSceneFilterOperation(item));
         }
     }
 
     @Override
-    public void updateItem(@Nullable final EditableSceneAppState item, final boolean empty) {
+    public void updateItem(@Nullable final EditableSceneFilter<?> item, final boolean empty) {
         super.updateItem(item, empty);
 
         if (item == null) {

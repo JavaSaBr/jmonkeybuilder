@@ -3,6 +3,7 @@ package com.ss.editor.state.editor.impl.scene;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.math.ColorRGBA;
+import com.jme3.post.FilterPostProcessor;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -11,6 +12,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.SceneAppState;
+import com.ss.extension.scene.filter.SceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,11 +69,15 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
 
+        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         final SceneNode currentModel = getCurrentModel();
 
         if (currentModel != null) {
             final Array<SceneAppState> appStates = currentModel.getAppStates();
             appStates.forEach(stateManager, (state, manager) -> manager.attach(state));
+
+            final Array<SceneFilter<?>> filters = currentModel.getFilters();
+            filters.forEach(sceneFilter -> postProcessor.addFilter(sceneFilter.get()));
         }
     }
 
@@ -79,11 +85,16 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     public void cleanup() {
         super.cleanup();
 
+        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         final SceneNode currentModel = getCurrentModel();
 
         if (currentModel != null) {
+
             final Array<SceneAppState> appStates = currentModel.getAppStates();
             appStates.forEach(stateManager, (state, manager) -> manager.detach(state));
+
+            final Array<SceneFilter<?>> filters = currentModel.getFilters();
+            filters.forEach(sceneFilter -> postProcessor.removeFilter(sceneFilter.get()));
         }
     }
 
@@ -94,10 +105,10 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      */
     @FromAnyThread
     public void addAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addedAppStateImpl(appState));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addAppStateImpl(appState));
     }
 
-    private void addedAppStateImpl(@NotNull final SceneAppState appState) {
+    private void addAppStateImpl(@NotNull final SceneAppState appState) {
         final AppStateManager stateManager = EDITOR.getStateManager();
         stateManager.attach(appState);
     }
@@ -108,12 +119,42 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      * @param appState the scene app state.
      */
     @FromAnyThread
-    public void removedAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> removedAppStateImpl(appState));
+    public void removeAppState(@NotNull final SceneAppState appState) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeAppStateImpl(appState));
     }
 
-    private void removedAppStateImpl(@NotNull final SceneAppState appState) {
+    private void removeAppStateImpl(@NotNull final SceneAppState appState) {
         final AppStateManager stateManager = EDITOR.getStateManager();
         stateManager.detach(appState);
+    }
+
+    /**
+     * Add a scene filter.
+     *
+     * @param sceneFilter the scene filter.
+     */
+    @FromAnyThread
+    public void addFilter(@NotNull final SceneFilter<?> sceneFilter) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addFilterImpl(sceneFilter));
+    }
+
+    private void addFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
+        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
+        postProcessor.addFilter(sceneFilter.get());
+    }
+
+    /**
+     * Remove a scene filter.
+     *
+     * @param sceneFilter the scene filter.
+     */
+    @FromAnyThread
+    public void removeFilter(@NotNull final SceneFilter<?> sceneFilter) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeFilterImpl(sceneFilter));
+    }
+
+    private void removeFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
+        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
+        postProcessor.removeFilter(sceneFilter.get());
     }
 }

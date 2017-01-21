@@ -1,4 +1,4 @@
-package com.ss.extension.scene.app.state.property;
+package com.ss.extension.property;
 
 /**
  * The enum with list editable property types.

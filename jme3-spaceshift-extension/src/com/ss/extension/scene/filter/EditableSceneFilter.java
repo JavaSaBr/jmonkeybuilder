@@ -1,19 +1,19 @@
-package com.ss.extension.scene.app.state;
+package com.ss.extension.scene.filter;
 
+import com.jme3.post.Filter;
 import com.ss.extension.property.EditableProperty;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The interface to implement am editable scene app state.
+ * The interface to implement editing support.
  *
  * @author JavaSaBr
  */
-public interface EditableSceneAppState extends SceneAppState {
+public interface EditableSceneFilter<T extends Filter> extends SceneFilter<T> {
 
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
 
@@ -26,16 +26,4 @@ public interface EditableSceneAppState extends SceneAppState {
     default Array<EditableProperty<?, ?>> getEditableProperties() {
         return EMPTY_PROPERTIES;
     }
-
-    /**
-     * Check state dependencies.
-     *
-     * @param exists the current exists states.
-     * @return null of can create or message with description.
-     */
-    @Nullable
-    default String canCreate(@NotNull final Array<SceneAppState> exists) {
-        return null;
-    }
 }
-

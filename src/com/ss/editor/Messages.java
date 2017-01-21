@@ -137,6 +137,7 @@ public class Messages {
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
+    public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -372,6 +373,11 @@ public class Messages {
     public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX;
     public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD;
 
+    public static final String CREATE_SCENE_FILTER_DIALOG_TITLE;
+    public static final String CREATE_SCENE_FILTER_DIALOG_BUILT_IN;
+    public static final String CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX;
+    public static final String CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD;
+
     public static final String ADD_USER_DATA_DIALOG_TITLE;
     public static final String ADD_USER_DATA_DIALOG_NAME;
     public static final String ADD_USER_DATA_DIALOG_DATA_TYPE;
@@ -516,6 +522,7 @@ public class Messages {
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
+        SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
@@ -750,6 +757,11 @@ public class Messages {
         CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN = bundle.getString("CreateSceneAppStateDialogBuiltIn");
         CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX = bundle.getString("CreateSceneAppStateDialogCustomBox");
         CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneAppStateDialogCustomField");
+
+        CREATE_SCENE_FILTER_DIALOG_TITLE = bundle.getString("CreateSceneFilterDialogTitle");
+        CREATE_SCENE_FILTER_DIALOG_BUILT_IN = bundle.getString("CreateSceneFilterDialogBuiltIn");
+        CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX = bundle.getString("CreateSceneFilterDialogCustomBox");
+        CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneFilterDialogCustomField");
 
         ADD_USER_DATA_DIALOG_TITLE = bundle.getString("AddUserDataDialogTitle");
         ADD_USER_DATA_DIALOG_NAME = bundle.getString("AddUserDataDialogName");
