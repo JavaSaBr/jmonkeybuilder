@@ -236,9 +236,15 @@ public class JFXApplication extends Application {
     }
 
     private void createSceneProcessor(@NotNull final EditorFXScene scene, @NotNull final Editor editor) {
-        this.sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
+
+        final FrameTransferSceneProcessor sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
+        sceneProcessor.setEnabled(false);
+
+        this.sceneProcessor = sceneProcessor;
+
         final Stage stage = getStage();
         stage.focusedProperty().addListener((observable, oldValue, newValue) -> editor.setPaused(!newValue));
+
         Platform.runLater(scene::notifyFinishBuild);
     }
 

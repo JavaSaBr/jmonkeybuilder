@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -64,7 +65,7 @@ public class EditorFXScene extends Scene {
      */
     private ProgressIndicator progressIndicator;
 
-    public EditorFXScene(final Group root) {
+    public EditorFXScene(@NotNull final Group root) {
         super(root);
 
         this.canvas = new Canvas();
@@ -78,12 +79,18 @@ public class EditorFXScene extends Scene {
         this.loadingLayer.setId(CSSIds.EDITOR_LOADING_LAYER);
         this.loadingLayer.setVisible(false);
 
-        root.getChildren().addAll(hideLayer, canvas, container, loadingLayer);
+        final Pane background = new Pane();
+        background.setId(CSSIds.ROOT);
+
+        root.getChildren().addAll(hideLayer, background, canvas, container, loadingLayer);
 
         canvas.setPickOnBounds(true);
         canvas.heightProperty().bind(heightProperty());
         canvas.widthProperty().bind(widthProperty());
+        canvas.setOpacity(0);
 
+        FXUtils.bindFixedWidth(background, widthProperty());
+        FXUtils.bindFixedHeight(background, heightProperty());
         FXUtils.bindFixedWidth(hideLayer, widthProperty());
         FXUtils.bindFixedHeight(hideLayer, heightProperty());
         FXUtils.bindFixedWidth(container, widthProperty());

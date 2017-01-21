@@ -835,3 +835,7 @@
     -fx-alignment: center;
     -fx-background-color: -fx-background-background;
 }
+
+#Root {
+    -fx-background-color: -fx-background-background;
+}

@@ -1,11 +1,13 @@
 package com.ss.editor.ui.css;
 
 /**
- * Интерфейс с набором констант ID используемых в CSS.
+ * The list of css ids which used in the editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface CSSIds {
+
+    String ROOT = "Root";
 
     String EDITOR_BAR_COMPONENT = "EditorBarComponent";
     String EDITOR_BAR_COMPONENT_TITLE_LABEL = "EditorBarComponentTitleLabel";

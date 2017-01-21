@@ -45,6 +45,7 @@ import java.util.Objects;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -316,6 +317,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
         final AppStateManager stateManager = EDITOR.getStateManager();
+        final Canvas canvas = JFX_APPLICATION.getScene().getCanvas();
         final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
 
         boolean enabled = false;
@@ -344,6 +346,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final boolean result = enabled;
             EXECUTOR_MANAGER.addFXTask(() -> {
                 ThreadUtils.sleep(100);
+                canvas.setOpacity(result ? 1D : 0D);
                 sceneProcessor.setEnabled(result);
             });
         }
@@ -445,24 +448,15 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     @Override
     public void notifyFinishBuild() {
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            setIgnoreOpenedFiles(true);
-            try {
-                loadOpenedFiles();
-            } finally {
-                setIgnoreOpenedFiles(false);
-            }
-        });
+        setIgnoreOpenedFiles(true);
+        try {
+            loadOpenedFiles();
+        } finally {
+            setIgnoreOpenedFiles(false);
+        }
     }
 
     private void loadOpenedFiles() {
-
-        final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
-
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            ThreadUtils.sleep(200);
-            sceneProcessor.setEnabled(false);
-        });
 
         final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
         if (workspace == null) return;
