@@ -1135,12 +1135,6 @@ public class SettingsDialog extends EditorDialog {
             needRestart++;
         }
 
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        classpathManager.updateAdditionalCL();
-
-        final ResourceManager resourceManager = ResourceManager.getInstance();
-        resourceManager.updateAdditionalEnvs();
-
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
         editorConfig.setDecorated(decorated);
@@ -1171,6 +1165,12 @@ public class SettingsDialog extends EditorDialog {
             filter.setEnabled(editorConfig.isToneMapFilter());
             filter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         });
+
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+        classpathManager.updateAdditionalCL();
+
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        resourceManager.updateAdditionalEnvs();
 
         if (needRestart > 0) {
             System.exit(2);
