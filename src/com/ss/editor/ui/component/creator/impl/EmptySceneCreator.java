@@ -54,6 +54,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
         newNode.addLayer(new SceneLayer("TransparentFX", true));
         newNode.addLayer(new SceneLayer("Ignore Raycast", true));
         newNode.addLayer(new SceneLayer("Water", true));
+        newNode.getLayers().forEach(SceneLayer::show);
 
         try (final OutputStream out = Files.newOutputStream(fileToCreate)) {
             exporter.save(newNode, out);

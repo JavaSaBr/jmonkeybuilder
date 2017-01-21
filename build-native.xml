@@ -2,7 +2,7 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="0.9.1.1" />
+    <property name="editor.version" value="0.9.1.2" />
 
     <target name="init-fx-tasks">
         <path id="fxant">
@@ -200,6 +200,7 @@
             <fx:fileset dir="dist" includes="libs/extensions/*"/>
             <fx:fileset dir="dist" includes="libs/extensions/xbuf/*"/>
             <fx:fileset dir="dist" includes="libs/extensions/toneg0d/*"/>
+            <fx:fileset dir="dist" includes="libs/extensions/simsilica/*"/>
             <fx:fileset dir="package"/>
         </fx:resources>
 
