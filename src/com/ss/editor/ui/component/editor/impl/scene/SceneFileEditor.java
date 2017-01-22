@@ -221,11 +221,13 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     @Override
     public void notifyAddedFilter(@NotNull final SceneFilter<?> sceneFilter) {
         getFilterList().fill(getCurrentModel());
+        getEditorAppState().addFilter(sceneFilter);
     }
 
     @Override
     public void notifyRemovedFilter(@NotNull final SceneFilter<?> sceneFilter) {
         getFilterList().fill(getCurrentModel());
+        getEditorAppState().removeFilter(sceneFilter);
     }
 
     @Override

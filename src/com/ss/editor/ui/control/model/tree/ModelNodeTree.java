@@ -121,7 +121,7 @@ public class ModelNodeTree extends VBox {
         final TreeItem<ModelNode<?>> newRoot = new TreeItem<>(rootElement);
         newRoot.setExpanded(true);
 
-        fill(newRoot, false);
+        fill(newRoot, false, 1);
 
         treeView.setRoot(newRoot);
     }
@@ -129,8 +129,8 @@ public class ModelNodeTree extends VBox {
     /**
      * Fill the item.
      */
-    private void fill(@NotNull final TreeItem<ModelNode<?>> treeItem, final boolean expanded) {
-        treeItem.setExpanded(expanded);
+    private void fill(@NotNull final TreeItem<ModelNode<?>> treeItem, final boolean expanded, final int level) {
+        treeItem.setExpanded(expanded || level == 1);
 
         final ModelNode<?> element = treeItem.getValue();
         if (!element.hasChildren()) return;
@@ -144,7 +144,7 @@ public class ModelNodeTree extends VBox {
             element.notifyChildAdded(child);
         });
 
-        items.forEach(item -> fill(item, expanded));
+        items.forEach(item -> fill(item, expanded, level == -1 ? -1 : level + 1));
     }
 
     /**
@@ -164,7 +164,7 @@ public class ModelNodeTree extends VBox {
         final Array<ModelNode<?>> children = element.getChildren();
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
-        items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, true));
+        items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, true, -1));
     }
 
     /**
@@ -281,7 +281,7 @@ public class ModelNodeTree extends VBox {
             if (newChild == null) return;
             final TreeItem<ModelNode<?>> childItem = new TreeItem<>(newChild);
             childItem.setExpanded(true);
-            fill(childItem, true);
+            fill(childItem, true, -1);
             treeView.setRoot(childItem);
             return;
         }
@@ -309,7 +309,7 @@ public class ModelNodeTree extends VBox {
         final TreeItem<ModelNode<?>> childItem = new TreeItem<>(newChild);
         childItem.setExpanded(needExpand);
 
-        fill(childItem, true);
+        fill(childItem, true, -1);
 
         parent.notifyChildPreAdd(newChild);
         children.add(index, childItem);
@@ -346,7 +346,7 @@ public class ModelNodeTree extends VBox {
         parentItem.setExpanded(true);
         parent.notifyChildAdded(child);
 
-        fill(childItem, true);
+        fill(childItem, true, -1);
     }
 
     /**

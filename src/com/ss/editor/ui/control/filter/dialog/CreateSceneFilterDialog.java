@@ -12,7 +12,14 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.filter.SceneFilter;
-import com.ss.extension.scene.filter.impl.EditableDropShadowFilter;
+import com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter;
+import com.ss.extension.scene.filter.impl.EditableColorOverlayFilter;
+import com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter;
+import com.ss.extension.scene.filter.impl.EditableFXAAFilter;
+import com.ss.extension.scene.filter.impl.EditableFogFilter;
+import com.ss.extension.scene.filter.impl.EditableGammaCorrectionFilter;
+import com.ss.extension.scene.filter.impl.EditablePosterizationFilter;
+import com.ss.extension.scene.filter.impl.EditableToneMapFilter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +57,14 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     public static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     static {
-        register(new EditableDropShadowFilter());
+        register(new EditableCartoonEdgeFilter());
+        register(new EditableColorOverlayFilter());
+        register(new EditableDepthOfFieldFilter());
+        register(new EditableFogFilter());
+        register(new EditableFXAAFilter());
+        register(new EditableGammaCorrectionFilter());
+        register(new EditablePosterizationFilter());
+        register(new EditableToneMapFilter());
     }
 
     private static void register(@NotNull final SceneFilter<?> sceneFilter) {

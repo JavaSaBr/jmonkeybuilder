@@ -4,11 +4,14 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.math.ColorRGBA;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FXAAFilter;
+import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.SceneAppState;
@@ -79,6 +82,12 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
             final Array<SceneFilter<?>> filters = currentModel.getFilters();
             filters.forEach(sceneFilter -> postProcessor.addFilter(sceneFilter.get()));
         }
+
+        final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
+        fxaaFilter.setEnabled(false);
+
+        final ToneMapFilter toneMapFilter = EDITOR.getToneMapFilter();
+        toneMapFilter.setEnabled(false);
     }
 
     @Override
@@ -96,6 +105,14 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
             final Array<SceneFilter<?>> filters = currentModel.getFilters();
             filters.forEach(sceneFilter -> postProcessor.removeFilter(sceneFilter.get()));
         }
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+
+        final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
+        fxaaFilter.setEnabled(editorConfig.isFXAA());
+
+        final ToneMapFilter toneMapFilter = EDITOR.getToneMapFilter();
+        toneMapFilter.setEnabled(editorConfig.isToneMapFilter());
     }
 
     /**
