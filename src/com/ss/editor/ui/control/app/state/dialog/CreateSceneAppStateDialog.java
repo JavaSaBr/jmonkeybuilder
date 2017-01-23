@@ -15,6 +15,7 @@ import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableSkySceneAppState;
+import com.ss.extension.scene.filter.SceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -143,6 +144,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
         final SceneNode currentModel = changeConsumer.getCurrentModel();
         final Array<SceneAppState> appStates = currentModel.getAppStates();
+        final Array<SceneFilter<?>> filters = currentModel.getFilters();
 
         if (customCheckBox.isSelected()) {
 
@@ -167,15 +169,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
                 throw new RuntimeException("Can't create a state of the class " + stateNameField.getText());
             }
 
-            if (newExample instanceof EditableSceneAppState) {
-
-                final EditableSceneAppState editableSceneAppState = (EditableSceneAppState) newExample;
-                final String message = editableSceneAppState.canCreate(appStates);
-
-                if (message != null) {
-                    throw new RuntimeException(message);
-                }
-            }
+            check(appStates, filters, newExample);
 
             changeConsumer.execute(new AddAppStateOperation(newExample, currentModel));
 
@@ -187,20 +181,32 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
             final EditableSceneAppState example = requireNonNull(BUILT_IN.get(name));
             final SceneAppState newExample = ClassUtils.newInstance(example.getClass());
 
-            if (newExample instanceof EditableSceneAppState) {
-
-                final EditableSceneAppState editableSceneAppState = (EditableSceneAppState) newExample;
-                final String message = editableSceneAppState.canCreate(appStates);
-
-                if (message != null) {
-                    throw new RuntimeException(message);
-                }
-            }
+            check(appStates, filters, newExample);
 
             changeConsumer.execute(new AddAppStateOperation(newExample, currentModel));
         }
 
         super.processOk();
+    }
+
+    private void check(@NotNull final Array<SceneAppState> appStates, @NotNull final Array<SceneFilter<?>> filters,
+                       @NotNull final SceneAppState newExample) {
+
+        if (!(newExample instanceof EditableSceneAppState)) return;
+
+        final EditableSceneAppState editableSceneAppState = (EditableSceneAppState) newExample;
+
+        String message = editableSceneAppState.checkStates(appStates);
+
+        if (message != null) {
+            throw new RuntimeException(message);
+        }
+
+        message = editableSceneAppState.checkFilters(filters);
+
+        if (message != null) {
+            throw new RuntimeException(message);
+        }
     }
 
     @Override

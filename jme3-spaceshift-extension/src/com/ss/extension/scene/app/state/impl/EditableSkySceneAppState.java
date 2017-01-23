@@ -33,7 +33,7 @@ public class EditableSkySceneAppState extends SkyState implements EditableSceneA
 
     @Nullable
     @Override
-    public String canCreate(@NotNull final Array<SceneAppState> exists) {
+    public String checkStates(@NotNull final Array<SceneAppState> exists) {
         final SceneAppState state = exists.search(appState -> appState instanceof LightingState);
         return state == null ? "The Sky State requires the Lighting State" : null;
     }

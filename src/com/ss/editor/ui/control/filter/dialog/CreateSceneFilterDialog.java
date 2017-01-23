@@ -17,8 +17,12 @@ import com.ss.extension.scene.filter.impl.EditableColorOverlayFilter;
 import com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter;
 import com.ss.extension.scene.filter.impl.EditableFXAAFilter;
 import com.ss.extension.scene.filter.impl.EditableFogFilter;
-import com.ss.extension.scene.filter.impl.EditableGammaCorrectionFilter;
+import com.ss.extension.scene.filter.impl.EditableLightingStateShadowFilter;
+import com.ss.extension.scene.filter.impl.EditableObjectsBloomFilter;
 import com.ss.extension.scene.filter.impl.EditablePosterizationFilter;
+import com.ss.extension.scene.filter.impl.EditableRadialBlurFilter;
+import com.ss.extension.scene.filter.impl.EditableSceneAndObjectsBloomFilter;
+import com.ss.extension.scene.filter.impl.EditableSceneBloomFilter;
 import com.ss.extension.scene.filter.impl.EditableToneMapFilter;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,9 +66,13 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableDepthOfFieldFilter());
         register(new EditableFogFilter());
         register(new EditableFXAAFilter());
-        register(new EditableGammaCorrectionFilter());
         register(new EditablePosterizationFilter());
         register(new EditableToneMapFilter());
+        register(new EditableRadialBlurFilter());
+        register(new EditableSceneBloomFilter());
+        register(new EditableObjectsBloomFilter());
+        register(new EditableSceneAndObjectsBloomFilter());
+        register(new EditableLightingStateShadowFilter());
     }
 
     private static void register(@NotNull final SceneFilter<?> sceneFilter) {

@@ -22,7 +22,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<E>>
+public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
         extends AbstractPropertyControl<C, T, E> {
 
     /**

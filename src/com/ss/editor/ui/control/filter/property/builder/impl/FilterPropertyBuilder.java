@@ -6,6 +6,7 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.filter.property.control.BooleanFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.ColorFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.EnumFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.FloatFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.IntegerFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector2fFilterPropertyControl;
@@ -127,6 +128,17 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
 
                     final Vector3fFilterPropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
                             new Vector3fFilterPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case ENUM: {
+
+                    final EditableProperty<Enum<?>, ?> property = cast(editableProperty);
+                    final Enum<?> value = Objects.requireNonNull(property.getValue(), "Enum value can't be null.");
+
+                    final EnumFilterPropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
+                            new EnumFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

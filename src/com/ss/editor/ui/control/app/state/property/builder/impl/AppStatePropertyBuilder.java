@@ -6,6 +6,7 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.control.BooleanAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.ColorAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.EnumAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.FloatAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.IntegerAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.Vector2fAppStatePropertyControl;
@@ -127,6 +128,17 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
 
                     final Vector3fAppStatePropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
                             new Vector3fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case ENUM: {
+
+                    final EditableProperty<Enum<?>, ?> property = cast(editableProperty);
+                    final Enum<?> value = Objects.requireNonNull(property.getValue(), "Enum value can't be null.");
+
+                    final EnumAppStatePropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
+                            new EnumAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

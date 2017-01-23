@@ -1,6 +1,7 @@
 package com.ss.extension.scene.app.state;
 
 import com.ss.extension.property.EditableProperty;
+import com.ss.extension.scene.filter.SceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +35,18 @@ public interface EditableSceneAppState extends SceneAppState {
      * @return null of can create or message with description.
      */
     @Nullable
-    default String canCreate(@NotNull final Array<SceneAppState> exists) {
+    default String checkStates(@NotNull final Array<SceneAppState> exists) {
+        return null;
+    }
+
+    /**
+     * Check filter dependencies.
+     *
+     * @param exists the current exists filters.
+     * @return null of can create or message with description.
+     */
+    @Nullable
+    default String checkFilters(@NotNull final Array<SceneFilter<?>> exists) {
         return null;
     }
 }

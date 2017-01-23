@@ -12,7 +12,8 @@ public enum EditablePropertyType {
     VECTOR_2F,
     VECTOR_3F,
     QUATERNION,
-    COLOR,;
+    COLOR,
+    ENUM,;
 
     private static final EditablePropertyType[] TYPES = values();
 
