@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 
 import com.ss.editor.Messages;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
@@ -50,12 +51,14 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
     private static final ObjectDictionary<String, EditableSceneAppState> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
-    public static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     static {
         register(new EditableLightingSceneAppState());
         register(new EditableSkySceneAppState());
     }
+
+    private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();
+    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     private static void register(@NotNull final EditableSceneAppState appState) {
         BUILT_IN.put(appState.getName(), appState);
@@ -158,6 +161,16 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
                 for (final URLClassLoader classLoader : classLoaders) {
                     try {
                         final Class<?> targetClass = classLoader.loadClass(stateNameField.getText());
+                        newExample = ClassUtils.newInstance(targetClass);
+                    } catch (final ClassNotFoundException ex) {
+                        LOGGER.warning(this, e);
+                    }
+                }
+
+                final URLClassLoader additionalCL = CLASSPATH_MANAGER.getAdditionalCL();
+                if (additionalCL != null) {
+                    try {
+                        final Class<?> targetClass = additionalCL.loadClass(stateNameField.getText());
                         newExample = ClassUtils.newInstance(targetClass);
                     } catch (final ClassNotFoundException ex) {
                         LOGGER.warning(this, e);
