@@ -7,6 +7,7 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
+import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
 import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -42,6 +43,15 @@ public class SceneLayerModelNode extends ModelNode<SceneLayer> implements Hideab
             items.add(new RenameNodeAction(nodeTree, this));
             items.add(new RemoveSceneLayerAction(nodeTree, this));
         }
+    }
+
+    @Override
+    public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
+
+        final SceneLayer element = getElement();
+
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new RenameNodeOperation(element.getName(), newName, element));
     }
 
     @NotNull

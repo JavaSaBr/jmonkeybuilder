@@ -10,12 +10,14 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.DefaultModelSinglePropertyControl;
 import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.LayerModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.QuaternionModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
@@ -65,6 +67,15 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         final CullHint cullHint = spatial.getLocalCullHint();
         final ShadowMode shadowMode = spatial.getLocalShadowMode();
         final Bucket queueBucket = spatial.getLocalQueueBucket();
+
+        if (changeConsumer instanceof SceneChangeConsumer) {
+
+            final SceneLayer layer = SceneLayer.getLayer(spatial);
+            final LayerModelPropertyControl propertyControl = new LayerModelPropertyControl(layer, (SceneChangeConsumer) changeConsumer);
+            propertyControl.setEditObject(spatial);
+
+            FXUtils.addToPane(propertyControl, container);
+        }
 
         final EnumModelPropertyControl<Spatial, CullHint> cullHintControl =
                 new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, changeConsumer, CULL_HINTS);

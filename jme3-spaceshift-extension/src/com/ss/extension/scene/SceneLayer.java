@@ -21,6 +21,8 @@ public class SceneLayer extends Node {
 
     public static final String KEY = SceneLayer.class.getName();
 
+    public static final SceneLayer NO_LAYER = new SceneLayer();
+
     /**
      * Get a layer of a spatial.
      *
@@ -35,11 +37,11 @@ public class SceneLayer extends Node {
     /**
      * Set a layer to a spatial.
      *
-     * @param layer the layer.
+     * @param layer   the layer.
      * @param spatial the spatial.
      */
     public static void setLayer(@Nullable final SceneLayer layer, @NotNull final Spatial spatial) {
-        spatial.setUserData(KEY, layer);
+        spatial.setUserData(KEY, layer == NO_LAYER ? null : layer);
     }
 
     /**

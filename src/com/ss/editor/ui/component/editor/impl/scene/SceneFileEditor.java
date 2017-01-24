@@ -38,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import javafx.scene.control.SplitPane;
@@ -116,11 +117,13 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         assetManager.deleteFromCache(modelKey);
 
         final SceneNode model = (SceneNode) assetManager.loadAsset(modelKey);
+        model.depthFirstTraversal(this::updateVisibility);
 
         MaterialUtils.cleanUpMaterialParams(model);
 
         final SceneEditorAppState editorState = getEditorAppState();
         editorState.openModel(model);
+
 
         setCurrentModel(model);
         setIgnoreListeners(true);
@@ -143,6 +146,11 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         }
 
         EXECUTOR_MANAGER.addFXTask(this::loadState);
+    }
+
+    private void updateVisibility(@NotNull final Spatial spatial) {
+        final SceneLayer layer = SceneLayer.getLayer(spatial);
+        if (layer != null) spatial.setVisible(layer.isShowed());
     }
 
     /**
@@ -327,6 +335,18 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
                                      @NotNull final String propertyName) {
         super.notifyChangeProperty(parent, object, propertyName);
+
+        if (object instanceof Spatial && Objects.equals(propertyName, SceneLayer.KEY)) {
+
+            final Spatial spatial = (Spatial) object;
+            final SceneLayer layer = SceneLayer.getLayer(spatial);
+
+            if (layer == null) {
+                spatial.setVisible(true);
+            } else {
+                spatial.setVisible(layer.isShowed());
+            }
+        }
 
         final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
         layerPropertyEditor.syncFor(object);
