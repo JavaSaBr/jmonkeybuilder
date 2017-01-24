@@ -10,11 +10,12 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -33,7 +34,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class LoadModelAction extends AbstractNodeAction {
+public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -41,7 +42,7 @@ public class LoadModelAction extends AbstractNodeAction {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public LoadModelAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -70,8 +71,7 @@ public class LoadModelAction extends AbstractNodeAction {
      */
     protected void processOpen(@NotNull final Path file) {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
@@ -86,6 +86,7 @@ public class LoadModelAction extends AbstractNodeAction {
         final ModelNode<?> modelNode = getNode();
         final Node parent = (Node) modelNode.getElement();
 
+        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         consumer.execute(new AddChildOperation(loadedModel, parent));
     }
 }

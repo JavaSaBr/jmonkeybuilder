@@ -4,7 +4,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,52 +17,39 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
     /**
      * The child to remove.
      */
+    @NotNull
     private final Spatial child;
 
     /**
-     * The index of the parent element.
+     * The parent element.
      */
-    private final int index;
+    @NotNull
+    private final Node parent;
 
     /**
      * The index of position in the parent.
      */
     private final int childIndex;
 
-    public RemoveChildOperation(final Spatial child, final int index) {
-        final Node parent = child.getParent();
+    public RemoveChildOperation(@NotNull final Spatial child, @NotNull final Node parent) {
         this.child = child;
-        this.index = index;
+        this.parent = parent;
         this.childIndex = parent.getChildIndex(child);
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.detachChild(child);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, child));
+            parent.detachChild(child);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(parent, child));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.attachChildAt(child, childIndex);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, child, childIndex));
+            parent.attachChildAt(child, childIndex);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(parent, child, childIndex));
         });
     }
 }

@@ -36,7 +36,7 @@ import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;

@@ -1,14 +1,15 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +21,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class RemoveLightAction extends AbstractNodeAction {
+public class RemoveLightAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public RemoveLightAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public RemoveLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -48,17 +49,14 @@ public class RemoveLightAction extends AbstractNodeAction {
 
         final Light light = (Light) element;
 
-        final ModelNodeTree nodeTree = getNodeTree();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelNode<?> parentNode = nodeTree.findParent(node);
         if (parentNode == null) return;
 
         final Object parent = parentNode.getElement();
         if (!(parent instanceof Node)) return;
 
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), parent);
-
-        modelChangeConsumer.execute(new RemoveLightOperation(light, index));
+        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new RemoveLightOperation(light, (Node) parent));
     }
 }

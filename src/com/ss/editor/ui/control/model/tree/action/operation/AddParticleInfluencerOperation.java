@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +10,7 @@ import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a {@link ParticleInfluencer} to the {@link
+ * The implementation of the {@link AbstractEditorOperation} to add a {@link ParticleInfluencer} to a {@link
  * ParticleEmitterNode}.
  *
  * @author JavaSaBr.
@@ -20,34 +18,30 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 public class AddParticleInfluencerOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * The influencer to add.
+     * The influencer.
      */
     private final ParticleInfluencer influencer;
 
     /**
-     * The index of the parent element.
+     * The parent.
      */
-    private final int index;
+    private final ParticleEmitterNode parent;
 
-    public AddParticleInfluencerOperation(final ParticleInfluencer influencer, final int index) {
+    public AddParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
+                                          @NotNull final ParticleEmitterNode parent) {
         this.influencer = influencer;
-        this.index = index;
+        this.parent = parent;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof ParticleEmitterNode)) return;
+            parent.killAllParticles();
+            parent.addInfluencer(influencer);
+            parent.emitAllParticles();
 
-            final ParticleEmitterNode emitterNode = (ParticleEmitterNode) parent;
-            emitterNode.killAllParticles();
-            emitterNode.addInfluencer(influencer);
-            emitterNode.emitAllParticles();
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(new ParticleInfluencers(emitterNode), influencer, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(new ParticleInfluencers(parent), influencer, -1));
         });
     }
 
@@ -55,16 +49,11 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof ParticleEmitterNode)) return;
+            parent.killAllParticles();
+            parent.removeInfluencer(influencer);
+            parent.emitAllParticles();
 
-            final ParticleEmitterNode emitterNode = (ParticleEmitterNode) parent;
-            emitterNode.killAllParticles();
-            emitterNode.removeInfluencer(influencer);
-            emitterNode.emitAllParticles();
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(new ParticleInfluencers(emitterNode), influencer));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(new ParticleInfluencers(parent), influencer));
         });
     }
 }

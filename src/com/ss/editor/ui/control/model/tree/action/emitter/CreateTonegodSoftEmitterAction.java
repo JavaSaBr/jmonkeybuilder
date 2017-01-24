@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.model.tree.action.emitter;
 
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ import tonegod.emitter.SoftParticleEmitterNode;
  */
 public class CreateTonegodSoftEmitterAction extends CreateTonegodEmitterAction {
 
-    public CreateTonegodSoftEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateTonegodSoftEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

@@ -7,29 +7,29 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The action for creating the {@link Geometry}.
+ * The action to create the {@link Geometry}.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractCreateGeometryAction extends AbstractNodeAction {
+public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateGeometryAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateGeometryAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @Override
     protected void process() {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         final Geometry geometry = createGeometry();

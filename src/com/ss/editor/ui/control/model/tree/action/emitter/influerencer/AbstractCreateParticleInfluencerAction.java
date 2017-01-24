@@ -3,27 +3,28 @@ package com.ss.editor.ui.control.model.tree.action.emitter.influerencer;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddParticleInfluencerOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import javafx.scene.image.Image;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The action for creating the {@link ParticleInfluencer} for the {@link ParticleEmitterNode}.
+ * The action to create a {@link ParticleInfluencer} for a {@link ParticleEmitterNode}.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractCreateParticleInfluencerAction extends AbstractNodeAction {
+public abstract class AbstractCreateParticleInfluencerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateParticleInfluencerAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateParticleInfluencerAction(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -36,17 +37,15 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     @Override
     protected void process() {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
 
         final ModelNode<?> modelNode = getNode();
         final ParticleInfluencers element = (ParticleInfluencers) modelNode.getElement();
         final ParticleEmitterNode emitterNode = element.getEmitterNode();
-
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), emitterNode);
         final ParticleInfluencer influencer = createInfluencer();
 
-        modelChangeConsumer.execute(new AddParticleInfluencerOperation(influencer, index));
+        changeConsumer.execute(new AddParticleInfluencerOperation(influencer, emitterNode));
     }
 
     @NotNull

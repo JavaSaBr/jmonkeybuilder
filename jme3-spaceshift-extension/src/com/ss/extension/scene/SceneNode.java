@@ -59,7 +59,6 @@ public class SceneNode extends Node {
      * @param layer the layer.
      */
     public void addLayer(@NotNull final SceneLayer layer) {
-        layer.setSceneNode(this);
         layers.add(layer);
     }
 
@@ -69,9 +68,6 @@ public class SceneNode extends Node {
      * @param layer the layer.
      */
     public void removeLayer(@NotNull final SceneLayer layer) {
-        if (layer.getSceneNode() == this) {
-            layer.setSceneNode(null);
-        }
         layers.slowRemove(layer);
     }
 
@@ -145,19 +141,10 @@ public class SceneNode extends Node {
         final SceneAppState[] appStates = getAppStates().toArray(SceneAppState.class);
         final SceneFilter<?>[] filters = getFilters().toArray(SceneFilter.class);
 
-        for (final SceneLayer layer : layers) {
-            if (!layer.isShowed()) continue;
-            detachChild(layer);
-        }
+        capsule.write(layers, "layers", EMPTY_LAYERS);
 
         super.write(exporter);
 
-        for (final SceneLayer layer : layers) {
-            if (!layer.isShowed()) continue;
-            attachChild(layer);
-        }
-
-        capsule.write(layers, "layers", EMPTY_LAYERS);
         capsule.write(appStates, "appStates", EMPTY_STATES);
         capsule.write(filters, "filters", EMPTY_FILTERS);
     }
@@ -167,16 +154,13 @@ public class SceneNode extends Node {
 
         final InputCapsule capsule = importer.getCapsule(this);
 
-        super.read(importer);
-
         final Savable[] importedLayers = capsule.readSavableArray("layers", EMPTY_LAYERS);
 
         for (final Savable savable : importedLayers) {
-            final SceneLayer layer = (SceneLayer) savable;
-            layer.setSceneNode(this);
-            layers.add(layer);
-            if (layer.isShowed()) attachChild(layer);
+            layers.add((SceneLayer) savable);
         }
+
+        super.read(importer);
 
         final Savable[] importedAppStates = capsule.readSavableArray("appStates", EMPTY_STATES);
 

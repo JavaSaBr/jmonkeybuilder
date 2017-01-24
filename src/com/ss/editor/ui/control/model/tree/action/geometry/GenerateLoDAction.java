@@ -2,12 +2,13 @@ package com.ss.editor.ui.control.model.tree.action.geometry;
 
 import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.lod.GenerateLodLevelsDialog;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.GeometryModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +22,9 @@ import rlib.util.ClassUtils;
  *
  * @author JavaSaBr
  */
-public class GenerateLoDAction extends AbstractNodeAction {
+public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public GenerateLoDAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public GenerateLoDAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

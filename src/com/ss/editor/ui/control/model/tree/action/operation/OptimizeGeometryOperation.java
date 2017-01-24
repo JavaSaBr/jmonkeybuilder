@@ -4,52 +4,50 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по оптимизации геометрии.
+ * The action to optimize geometry.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Новый элемент.
+     * The new element.
      */
+    @NotNull
     private final Spatial newSpatial;
 
     /**
-     * Старый элемент.
+     * The old element.
      */
+    @NotNull
     private final Spatial oldSpatial;
 
     /**
-     * Индекс родительского элемента.
+     * The parent node.
      */
-    private final int index;
+    @NotNull
+    private final Node parent;
 
-    public OptimizeGeometryOperation(final Spatial newSpatial, final Spatial oldSpatial, final int index) {
+    public OptimizeGeometryOperation(@NotNull final Spatial newSpatial, @NotNull final Spatial oldSpatial,
+                                     @NotNull final Node parent) {
         this.newSpatial = newSpatial;
         this.oldSpatial = oldSpatial;
-        this.index = index;
+        this.parent = parent;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
+            final int index = parent.getChildIndex(oldSpatial);
+            parent.detachChildAt(index);
+            parent.attachChildAt(newSpatial, index);
 
-            final Node node = (Node) parent;
-            final int index = node.getChildIndex(oldSpatial);
-            node.detachChildAt(index);
-            node.attachChildAt(newSpatial, index);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(node, oldSpatial, newSpatial));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(parent, oldSpatial, newSpatial));
         });
     }
 
@@ -57,16 +55,11 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
+            final int index = parent.getChildIndex(newSpatial);
+            parent.detachChildAt(index);
+            parent.attachChildAt(oldSpatial, index);
 
-            final Node node = (Node) parent;
-            final int index = node.getChildIndex(newSpatial);
-            node.detachChildAt(index);
-            node.attachChildAt(oldSpatial, index);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(node, newSpatial, oldSpatial));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(parent, newSpatial, oldSpatial));
         });
     }
 }

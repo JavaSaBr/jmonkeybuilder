@@ -4,8 +4,8 @@ import com.jme3.light.Light;
 import com.jme3.light.SpotLight;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.image.Image;
 
 /**
- * The action for creating the {@link SpotLight}.
+ * The action to create a {@link SpotLight}.
  *
  * @author JavaSaBr
  */
 public class CreateSpotLightAction extends AbstractCreateLightAction {
 
-    public CreateSpotLightAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public CreateSpotLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

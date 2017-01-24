@@ -450,16 +450,6 @@
     -fx-min-width: 20;
 }
 
-#ModelNodeTreeContainer {
-    -fx-background-color: -fx-background-background;
-    -fx-padding: 4 2 0 0;
-}
-
-#ModelNodeTreeTransparentContainer {
-    -fx-background-color: transparent;
-    -fx-padding: 4 2 0 0;
-}
-
 #ModelNodeTreeCell {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
@@ -842,4 +832,15 @@
 
 #Root {
     -fx-background-color: -fx-background-background;
+}
+
+
+#AbstractNodeTreeContainer {
+    -fx-background-color: -fx-background-background;
+    -fx-padding: 4 2 0 0;
+}
+
+#AbstractNodeTreeTransparentContainer {
+    -fx-background-color: transparent;
+    -fx-padding: 4 2 0 0;
 }

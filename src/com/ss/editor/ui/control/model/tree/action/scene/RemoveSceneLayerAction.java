@@ -3,13 +3,14 @@ package com.ss.editor.ui.control.model.tree.action.scene;
 import static java.util.Objects.requireNonNull;
 
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.RemoveSceneLayerOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.scene.SceneLayerModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.spatial.scene.SceneLayerModelNode;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 
@@ -25,9 +26,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class RemoveSceneLayerAction extends AbstractNodeAction {
+public class RemoveSceneLayerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public RemoveSceneLayerAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public RemoveSceneLayerAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -46,8 +47,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction {
     @Override
     protected void process() {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final SceneLayerModelNode modelNode = (SceneLayerModelNode) getNode();
         final SceneLayer layer = modelNode.getElement();
@@ -55,6 +55,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction {
         final ModelNode<?> parent = Objects.requireNonNull(modelNode.getParent(), "The layer doesn't have a parent.");
         final SceneNode sceneNode = (SceneNode) parent.getElement();
 
-        consumer.execute(new RemoveSceneLayerOperation(layer, sceneNode));
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new RemoveSceneLayerOperation(layer, sceneNode));
     }
 }

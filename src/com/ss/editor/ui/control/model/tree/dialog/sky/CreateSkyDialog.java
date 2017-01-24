@@ -19,7 +19,8 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -89,12 +90,14 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * The parent node.
      */
+    @NotNull
     private final ModelNode<?> parentNode;
 
     /**
-     * The model tree.
+     * The node tree.
      */
-    private final ModelNodeTree nodeTree;
+    @NotNull
+    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
 
     /**
      * The list of sky types.
@@ -171,7 +174,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     private ChooseTextureControl bottomTextureControl;
 
-    public CreateSkyDialog(final ModelNode<?> parentNode, final ModelNodeTree nodeTree) {
+    public CreateSkyDialog(@NotNull final ModelNode<?> parentNode, @NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
         validate();
@@ -594,15 +597,17 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * @return the model tree.
+     * @return the node tree.
      */
-    private ModelNodeTree getNodeTree() {
+    @NotNull
+    private AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
         return nodeTree;
     }
 
     /**
      * @return the parent node.
      */
+    @NotNull
     private ModelNode<?> getParentNode() {
         return parentNode;
     }
@@ -626,8 +631,8 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetManager assetManager = EDITOR.getAssetManager();
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
 
         final Spinner<Double> normalScaleXSpinner = getNormalScaleXSpinner();
         final Spinner<Double> normalScaleYSpinner = getNormalScaleYSpinner();
@@ -643,9 +648,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final SkyType selectedItem = selectionModel.getSelectedItem();
 
         if (selectedItem == SkyType.SINGLE_TEXTURE) {
-            createSingleTexture(assetManager, modelChangeConsumer, scale);
+            createSingleTexture(assetManager, changeConsumer, scale);
         } else if (selectedItem == SkyType.MULTIPLE_TEXTURE) {
-            createMultipleTexture(assetManager, modelChangeConsumer, scale);
+            createMultipleTexture(assetManager, changeConsumer, scale);
         }
 
         EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
@@ -654,7 +659,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * Create a new sky using multiply textures.
      */
-    private void createMultipleTexture(final AssetManager assetManager, final ModelChangeConsumer modelChangeConsumer, final Vector3f scale) {
+    private void createMultipleTexture(@NotNull final AssetManager assetManager,
+                                       @NotNull final ModelChangeConsumer changeConsumer,
+                                       @NotNull final Vector3f scale) {
 
         final ChooseTextureControl northTextureControl = getNorthTextureControl();
         final Path northTextureFile = northTextureControl.getTextureFile();
@@ -698,14 +705,16 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             final ModelNode<?> parentNode = getParentNode();
             final Node parent = (Node) parentNode.getElement();
 
-            modelChangeConsumer.execute(new AddChildOperation(skyModel, parent));
+            changeConsumer.execute(new AddChildOperation(skyModel, parent));
         });
     }
 
     /**
      * Create a new sky using a single texture.
      */
-    private void createSingleTexture(AssetManager assetManager, ModelChangeConsumer modelChangeConsumer, Vector3f scale) {
+    private void createSingleTexture(@NotNull final AssetManager assetManager,
+                                     @NotNull final ModelChangeConsumer modelChangeConsumer,
+                                     @NotNull final Vector3f scale) {
 
         final CheckBox flipYCheckBox = getFlipYCheckBox();
         final boolean flipY = flipYCheckBox.isSelected();
@@ -742,7 +751,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * Scroll a value.
      */
-    private void processScroll(final ScrollEvent event) {
+    private void processScroll(@NotNull final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
         final Spinner<Double> source = unsafeCast(event.getSource());

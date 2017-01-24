@@ -5,14 +5,15 @@ import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RemoveAnimationNodeOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import javafx.scene.image.Image;
 
@@ -21,9 +22,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class RemoveAnimationAction extends AbstractNodeAction {
+public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public RemoveAnimationAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public RemoveAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -48,7 +49,7 @@ public class RemoveAnimationAction extends AbstractNodeAction {
         if (!(element instanceof Animation)) return;
         final Animation animation = (Animation) element;
 
-        final ModelNodeTree nodeTree = getNodeTree();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelNode<?> parentNode = nodeTree.findParent(node);
 
         if (parentNode == null) {
@@ -58,9 +59,7 @@ public class RemoveAnimationAction extends AbstractNodeAction {
 
         final AnimControl parent = (AnimControl) parentNode.getElement();
 
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), parent);
-
-        modelChangeConsumer.execute(new RemoveAnimationNodeOperation(animation, parent));
+        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new RemoveAnimationNodeOperation(animation, parent));
     }
 }

@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
 import com.jme3.scene.Mesh;
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,19 +17,20 @@ import tonegod.emitter.ParticleEmitterNode;
 public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * The index of emitter node.
+     * The emitter node.
      */
-    private final int index;
+    @NotNull
+    private final ParticleEmitterNode emitterNode;
 
     /**
-     * The prevShape shape.
+     * The prev shape.
      */
     @NotNull
     private volatile Mesh prevShape;
 
-    public ChangeEmitterShapeOperation(@NotNull final Mesh newShape, final int index) {
+    public ChangeEmitterShapeOperation(@NotNull final Mesh newShape, @NotNull final ParticleEmitterNode emitterNode) {
         this.prevShape = newShape;
-        this.index = index;
+        this.emitterNode = emitterNode;
     }
 
     @Override
@@ -41,17 +40,12 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
 
     private void switchShape(final @NotNull ModelChangeConsumer editor) {
 
-        final Spatial currentModel = editor.getCurrentModel();
-        final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-        if (!(parent instanceof ParticleEmitterNode)) return;
-
-        final ParticleEmitterNode node = (ParticleEmitterNode) parent;
-        final EmitterMesh emitterMesh = node.getEmitterShape();
+        final EmitterMesh emitterMesh = emitterNode.getEmitterShape();
         final Mesh newShape = prevShape;
         prevShape = emitterMesh.getMesh();
-        node.changeEmitterShapeMesh(newShape);
+        emitterNode.changeEmitterShapeMesh(newShape);
 
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(node, emitterMesh, emitterMesh));
+        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(emitterNode, emitterMesh, emitterMesh));
     }
 
     @Override

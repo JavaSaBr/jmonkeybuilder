@@ -86,9 +86,6 @@ public interface CSSIds {
     String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
     String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
 
-    String MODEL_NODE_TREE_CONTAINER = "ModelNodeTreeContainer";
-    String MODEL_NODE_TREE_TRANSPARENT_CONTAINER = "ModelNodeTreeTransparentContainer";
-
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
     String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
     String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
@@ -145,10 +142,13 @@ public interface CSSIds {
     String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "AbstractParamControlElementLabel";
     String ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON = "AbstractParamControlElementButton";
 
-
     String ADD_USER_DATA_DIALOG_LABEL = "AddUserDataDialogLabel";
     String ADD_USER_DATA_FIELD = "AddUserDataDialogField";
 
     String IMAGE_VIEW_EDITOR_CONTAINER = "ImageViewEditorContainer";
     String AUDIO_VIEW_EDITOR_CONTAINER = "AudioViewEditorContainer";
+
+    String ABSTRACT_NODE_TREE_CONTAINER = "AbstractNodeTreeContainer";
+    String ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER = "AbstractNodeTreeTransparentContainer";
+
 }

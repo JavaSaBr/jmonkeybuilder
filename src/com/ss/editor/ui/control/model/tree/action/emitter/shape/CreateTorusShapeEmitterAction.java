@@ -3,21 +3,21 @@ package com.ss.editor.ui.control.model.tree.action.emitter.shape;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Torus;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link Torus}.
+ * The action to switch an emitter shape of the {@link ParticleEmitterNode} to a {@link Torus}.
  *
  * @author JavaSaBr
  */
 public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
-    public CreateTorusShapeEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateTorusShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

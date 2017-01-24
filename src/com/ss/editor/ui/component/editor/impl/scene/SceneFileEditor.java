@@ -162,6 +162,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(appStateSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+                calcVSplitSize(filtersSplitContainer));
     }
 
     /**

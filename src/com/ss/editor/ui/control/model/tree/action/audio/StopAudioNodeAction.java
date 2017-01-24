@@ -2,11 +2,12 @@ package com.ss.editor.ui.control.model.tree.action.audio;
 
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.AudioModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.spatial.AudioModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,9 +19,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class StopAudioNodeAction extends AbstractNodeAction {
+public class StopAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public StopAudioNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public StopAudioNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

@@ -1,12 +1,13 @@
 package com.ss.editor.ui.control.model.tree.action.animation;
 
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.animation.ExtractSubAnimationDialog;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,9 +20,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class ManualExtractSubAnimationAction extends AbstractNodeAction {
+public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public ManualExtractSubAnimationAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public ManualExtractSubAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -41,8 +42,9 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction {
     protected void process() {
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
 
-        final ExtractSubAnimationDialog dialog = new ExtractSubAnimationDialog(getNodeTree(), (AnimationModelNode) getNode());
+        final ExtractSubAnimationDialog dialog = new ExtractSubAnimationDialog(nodeTree, (AnimationModelNode) getNode());
         dialog.show(scene.getWindow());
     }
 }

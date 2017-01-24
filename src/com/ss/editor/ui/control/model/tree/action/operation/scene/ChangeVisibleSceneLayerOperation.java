@@ -41,7 +41,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
             needShow = !needShow;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(layer.getSceneNode(), layer, "Showed"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, layer, "Showed"));
         });
     }
 
@@ -57,7 +57,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
             needShow = !needShow;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(layer.getSceneNode(), layer, "Showed"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, layer, "Showed"));
         });
     }
 }
