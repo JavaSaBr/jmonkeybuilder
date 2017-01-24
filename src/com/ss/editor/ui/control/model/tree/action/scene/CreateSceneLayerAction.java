@@ -11,7 +11,7 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.AddSceneLayerOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.tree.node.spatial.scene.SceneNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 

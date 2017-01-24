@@ -10,8 +10,8 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveParticleInfluencerOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.tree.node.spatial.emitter.ParticleInfluencerModelNode;
-import com.ss.editor.ui.control.tree.node.spatial.emitter.ParticleInfluencersModelNode;
+import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencersModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

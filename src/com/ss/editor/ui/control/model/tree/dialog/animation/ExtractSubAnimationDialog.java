@@ -10,7 +10,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
-import com.ss.editor.ui.control.tree.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;

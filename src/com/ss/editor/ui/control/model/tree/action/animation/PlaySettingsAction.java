@@ -6,7 +6,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.animation.PlayParametersDialog;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
-import com.ss.editor.ui.control.tree.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
