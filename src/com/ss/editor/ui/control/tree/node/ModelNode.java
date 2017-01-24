@@ -76,6 +76,14 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * @return the array of children of this node.
+     */
+    @NotNull
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return getChildren();
+    }
+
+    /**
      * @return the parent of this node.
      */
     @Nullable

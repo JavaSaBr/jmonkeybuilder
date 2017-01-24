@@ -14,7 +14,7 @@ public class LayersRoot {
     @NotNull
     private final SceneChangeConsumer changeConsumer;
 
-    public LayersRoot(final SceneChangeConsumer changeConsumer) {
+    public LayersRoot(@NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
     }
 

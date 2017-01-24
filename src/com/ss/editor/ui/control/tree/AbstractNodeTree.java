@@ -61,7 +61,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Create components of this component.
      */
-    private void createComponents() {
+    protected void createComponents() {
 
         treeView = new TreeView<>();
         treeView.setCellFactory(param -> createNodeTreeCell());
@@ -100,7 +100,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * @return the tree of this model.
      */
     @NotNull
-    private TreeView<ModelNode<?>> getTreeView() {
+    protected TreeView<ModelNode<?>> getTreeView() {
         return treeView;
     }
 
@@ -138,7 +138,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
 
         final ObservableList<TreeItem<ModelNode<?>>> items = treeItem.getChildren();
 
-        final Array<ModelNode<?>> children = element.getChildren();
+        final Array<ModelNode<?>> children = element.getChildren(this);
         children.forEach(child -> {
             element.notifyChildPreAdd(child);
             items.add(new TreeItem<>(child));
@@ -162,7 +162,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         final ModelNode<?> element = treeItem.getValue();
         if (!element.hasChildren()) return;
 
-        final Array<ModelNode<?>> children = element.getChildren();
+        final Array<ModelNode<?>> children = element.getChildren(this);
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
         items.forEach(modelNodeTreeItem -> fill(modelNodeTreeItem, true, -1));
@@ -250,7 +250,11 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         if (treeItem == null) return;
 
         final TreeItem<ModelNode<?>> parentItem = treeItem.getParent();
-        if (parentItem == null) return;
+        if (parentItem == null) {
+            treeItem.setValue(null);
+            treeItem.setValue(modelNode);
+            return;
+        }
 
         final ModelNode<?> parent = parentItem.getValue();
         final ModelNode<?> old = treeItem.getValue();

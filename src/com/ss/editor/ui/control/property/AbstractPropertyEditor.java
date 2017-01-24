@@ -63,6 +63,21 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
     }
 
     /**
+     * Sync all properties with controls.
+     */
+    public void syncFor(@Nullable final Object object) {
+        if (!isNeedUpdate(object)) return;
+
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> {
+            if (node instanceof UpdatableControl) {
+                ((UpdatableControl) node).sync();
+            }
+        });
+    }
+
+    /**
      * Build property controls for the object.
      */
     public void buildFor(@Nullable final Object object, @Nullable final Object parent) {
@@ -77,21 +92,6 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
         }
 
         setCurrentObject(object);
-    }
-
-    /**
-     * Sync all properties with controls.
-     */
-    public void syncFor(@Nullable final Object object) {
-        if (!isNeedUpdate(object)) return;
-
-        final VBox container = getContainer();
-        final ObservableList<Node> children = container.getChildren();
-        children.forEach(node -> {
-            if (node instanceof UpdatableControl) {
-                ((UpdatableControl) node).sync();
-            }
-        });
     }
 
     /**

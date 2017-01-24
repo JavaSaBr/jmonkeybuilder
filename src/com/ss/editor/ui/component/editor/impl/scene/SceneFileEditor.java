@@ -20,6 +20,9 @@ import com.ss.editor.ui.control.app.state.list.AppStateList;
 import com.ss.editor.ui.control.app.state.property.AppStatePropertyEditor;
 import com.ss.editor.ui.control.filter.list.FilterList;
 import com.ss.editor.ui.control.filter.property.FilterPropertyEditor;
+import com.ss.editor.ui.control.layer.LayerNodeTree;
+import com.ss.editor.ui.control.layer.LayersRoot;
+import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
@@ -77,7 +80,23 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
      */
     private FilterPropertyEditor filterPropertyEditor;
 
+    /**
+     * The tree with layers.
+     */
+    private LayerNodeTree layerNodeTree;
+
+    /**
+     * The properties from layers tree.
+     */
+    private ModelPropertyEditor layerPropertyEditor;
+
+    /**
+     * The flag of sync selection.
+     */
+    private boolean needSyncSelection;
+
     public SceneFileEditor() {
+        setNeedSyncSelection(true);
     }
 
     @NotNull
@@ -116,6 +135,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
             final FilterList filterList = getFilterList();
             filterList.fill(model);
 
+            final LayerNodeTree layerNodeTree = getLayerNodeTree();
+            layerNodeTree.fill(new LayersRoot(this));
+
         } finally {
             setIgnoreListeners(false);
         }
@@ -137,6 +159,20 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         return filterList;
     }
 
+    /**
+     * @return the tree with layers.
+     */
+    private LayerNodeTree getLayerNodeTree() {
+        return layerNodeTree;
+    }
+
+    /**
+     * @return the properties from layers tree.
+     */
+    private ModelPropertyEditor getLayerPropertyEditor() {
+        return layerPropertyEditor;
+    }
+
     @Override
     protected void createContent(@NotNull final StackPane root) {
         super.createContent(root);
@@ -146,6 +182,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
 
         filterList = new FilterList(this::selectFilterFromList, this);
         filterPropertyEditor = new FilterPropertyEditor(this);
+
+        layerNodeTree = new LayerNodeTree(this::selectNodeFromLayersTree, this);
+        layerPropertyEditor = new ModelPropertyEditor(this);
 
         final SplitPane appStateSplitContainer = new SplitPane(appStateList, appStatePropertyEditor);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
@@ -157,13 +196,21 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         filtersSplitContainer.prefHeightProperty().bind(root.heightProperty());
         filtersSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
+        final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, layerPropertyEditor);
+        layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
+
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
         editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
+        editorToolComponent.addComponent(layersSplitContainer, "Layers");
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(appStateSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(filtersSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+                calcVSplitSize(layersSplitContainer));
     }
 
     /**
@@ -182,6 +229,46 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         filterPropertyEditor.buildFor(sceneFilter, null);
     }
 
+    /**
+     * Handle the selected object from the layers tree.
+     */
+    @FXThread
+    public void selectNodeFromLayersTree(@Nullable final Object object) {
+
+        if (isNeedSyncSelection()) {
+            setNeedSyncSelection(false);
+            try {
+
+                final ModelNodeTree modelNodeTree = getModelNodeTree();
+                modelNodeTree.select(object);
+
+            } finally {
+                setNeedSyncSelection(true);
+            }
+        }
+
+        final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
+        layerPropertyEditor.buildFor(object, null);
+    }
+
+    @Override
+    public void selectNodeFromTree(@Nullable final Object object) {
+
+        if (isNeedSyncSelection()) {
+            setNeedSyncSelection(false);
+            try {
+
+                final LayerNodeTree layerNodeTree = getLayerNodeTree();
+                layerNodeTree.select(object);
+
+            } finally {
+                setNeedSyncSelection(true);
+            }
+        }
+
+        super.selectNodeFromTree(object);
+    }
+
     @NotNull
     @Override
     public EditorDescription getDescription() {
@@ -192,6 +279,20 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     @Override
     protected Supplier<EditorState> getStateConstructor() {
         return SceneFileEditorState::new;
+    }
+
+    /**
+     * @param needSyncSelection true if need sync selection.
+     */
+    private void setNeedSyncSelection(final boolean needSyncSelection) {
+        this.needSyncSelection = needSyncSelection;
+    }
+
+    /**
+     * @return true if need sync selection.
+     */
+    private boolean isNeedSyncSelection() {
+        return needSyncSelection;
     }
 
     @Override
@@ -205,9 +306,33 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     }
 
     @Override
+    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+        super.notifyAddedChild(parent, added, index);
+
+        if (parent instanceof LayersRoot) {
+            getLayerNodeTree().notifyAdded(parent, added, index);
+        }
+    }
+
+    @Override
+    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+        super.notifyRemovedChild(parent, removed);
+
+        if (parent instanceof LayersRoot) {
+            getLayerNodeTree().notifyRemoved(parent, removed);
+        }
+    }
+
+    @Override
     public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
                                      @NotNull final String propertyName) {
         super.notifyChangeProperty(parent, object, propertyName);
+
+        final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
+        layerPropertyEditor.syncFor(object);
+
+        final LayerNodeTree layerNodeTree = getLayerNodeTree();
+        layerNodeTree.notifyChanged(null, object);
 
         if (!(object instanceof EditableProperty)) {
             return;

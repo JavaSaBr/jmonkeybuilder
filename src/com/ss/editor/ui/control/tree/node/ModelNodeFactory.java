@@ -18,6 +18,8 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
 import com.ss.editor.model.node.ParticleInfluencers;
+import com.ss.editor.ui.control.layer.LayersRoot;
+import com.ss.editor.ui.control.layer.node.LayersRootModelNode;
 import com.ss.editor.ui.control.layer.node.SceneLayerModelNode;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationAudioTrackModelNode;
@@ -66,7 +68,9 @@ public class ModelNodeFactory {
     @Nullable
     public static <T, V extends ModelNode<T>> V createFor(@Nullable final T element) {
 
-        if (element instanceof Animation) {
+        if (element instanceof LayersRoot) {
+            return unsafeCast(new LayersRootModelNode((LayersRoot) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof Animation) {
             return unsafeCast(new AnimationModelNode((Animation) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof BoneTrack) {
             return unsafeCast(new AnimationBoneTrackModelNode((BoneTrack) element, ID_GENERATOR.incrementAndGet()));

@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.operation.scene;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
+import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 
@@ -15,6 +16,12 @@ import org.jetbrains.annotations.NotNull;
 public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
+     * The layer layersRoot.
+     */
+    @NotNull
+    private final LayersRoot layersRoot;
+
+    /**
      * The removed layer.
      */
     @NotNull
@@ -26,7 +33,9 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final SceneNode sceneNode;
 
-    public RemoveSceneLayerOperation(@NotNull final SceneLayer layer, @NotNull final SceneNode sceneNode) {
+    public RemoveSceneLayerOperation(final @NotNull LayersRoot layersRoot, @NotNull final SceneLayer layer,
+                                     @NotNull final SceneNode sceneNode) {
+        this.layersRoot = layersRoot;
         this.layer = layer;
         this.sceneNode = sceneNode;
     }
@@ -35,7 +44,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             sceneNode.removeLayer(layer);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(sceneNode, layer));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(layersRoot, layer));
         });
     }
 
@@ -43,7 +52,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
             sceneNode.addLayer(layer);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(sceneNode, layer, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(layersRoot, layer, -1));
         });
     }
 }

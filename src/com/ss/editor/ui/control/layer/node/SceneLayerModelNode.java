@@ -5,18 +5,19 @@ import static java.util.Objects.requireNonNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
+import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
 import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.HideableNode;
-import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.extension.scene.SceneLayer;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.collections.ObservableList;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 
@@ -25,7 +26,7 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class SceneLayerModelNode extends NodeModelNode<SceneLayer> implements HideableNode<SceneChangeConsumer> {
+public class SceneLayerModelNode extends ModelNode<SceneLayer> implements HideableNode<SceneChangeConsumer> {
 
     public SceneLayerModelNode(@NotNull final SceneLayer element, final long objectId) {
         super(element, objectId);
@@ -38,24 +39,21 @@ public class SceneLayerModelNode extends NodeModelNode<SceneLayer> implements Hi
         final SceneLayer layer = getElement();
 
         if (!layer.isBuiltIn()) {
+            items.add(new RenameNodeAction(nodeTree, this));
             items.add(new RemoveSceneLayerAction(nodeTree, this));
         }
     }
 
-    @Nullable
+    @NotNull
     @Override
-    protected Menu createToolMenu(final @NotNull AbstractNodeTree<?> nodeTree) {
-        return null;
+    public String getName() {
+        final String name = getElement().getName();
+        return name == null ? "name is null" : name;
     }
 
     @Override
     public boolean canEditName() {
         return !getElement().isBuiltIn();
-    }
-
-    @Override
-    protected boolean canRemove() {
-        return false;
     }
 
     @Override
