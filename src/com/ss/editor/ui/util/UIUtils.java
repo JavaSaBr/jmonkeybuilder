@@ -180,11 +180,6 @@ public class UIUtils {
             constructor.setAccessible(true);
 
             Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis), new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
-
-            if (tooltipBehaviour == null) {
-                return;
-            }
-
             Field field = Tooltip.class.getDeclaredField("BEHAVIOR");
 
             if (field == null) {

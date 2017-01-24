@@ -1,14 +1,14 @@
 package com.ss.editor.model;
 
 /**
- * Интерфейс для реализации уникального объекта.
+ * The interface to implement uniq object.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface UObject {
 
     /**
-     * @return уникальный ид объекта.
+     * @return the uniq id.
      */
-    public long getObjectId();
+    long getObjectId();
 }

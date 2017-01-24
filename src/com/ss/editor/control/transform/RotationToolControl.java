@@ -1,5 +1,7 @@
 package com.ss.editor.control.transform;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.collision.CollisionResult;
 import com.jme3.input.InputManager;
 import com.jme3.math.FastMath;
@@ -16,6 +18,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
+
+import org.jetbrains.annotations.NotNull;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -65,7 +69,7 @@ public class RotationToolControl extends AbstractControl implements TransformCon
     }
 
     @Override
-    public void setCollisionPlane(final CollisionResult colResult) {
+    public void setCollisionPlane(@NotNull final CollisionResult colResult) {
 
         final Camera camera = EDITOR.getCamera();
         final SceneEditorControl editorControl = getEditorControl();
@@ -107,7 +111,7 @@ public class RotationToolControl extends AbstractControl implements TransformCon
         final InputManager inputManager = EDITOR.getInputManager();
         final Camera camera = EDITOR.getCamera();
 
-        final Transform transformCenter = editorControl.getTransformCenter();
+        final Transform transformCenter = requireNonNull(editorControl.getTransformCenter());
 
         // cursor position and selected position vectors
         final Vector2f cursorPos = new Vector2f(inputManager.getCursorPosition());
@@ -121,7 +125,6 @@ public class RotationToolControl extends AbstractControl implements TransformCon
             editorControl.setDeltaVector(new Vector3f(vecDelta.getX(), vecDelta.getY(), 0));
         }
 
-        final Spatial toTransform = editorControl.getToTransform();
 
         // Picked vector
         PickedAxis pickedAxis = editorControl.getPickedAxis();
@@ -144,11 +147,11 @@ public class RotationToolControl extends AbstractControl implements TransformCon
         final Vector3f axisToRotate = transformRotation.mult(pickedVec);
 
         float angleCheck = axisToRotate.angleBetween(camera.getDirection());
-
         if (angleCheck > FastMath.HALF_PI) angle = -angle;
 
         final Quaternion newRotation = transformRotation.mult(transformRotation.clone().fromAngleAxis(angle, pickedVec));
 
+        final Spatial toTransform = requireNonNull(editorControl.getToTransform());
         toTransform.setLocalRotation(newRotation);
 
         editorControl.notifyTransformed(toTransform);

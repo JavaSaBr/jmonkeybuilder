@@ -105,7 +105,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         final Node stateNode = getStateNode();
         stateNode.attachChild(sky);
 
-        final DirectionalLight light = getLightForCamera();
+        final DirectionalLight light = requireNonNull(getLightForCamera());
         light.setDirection(LIGHT_DIRECTION);
 
         final EditorCamera editorCamera = requireNonNull(getEditorCamera());

@@ -1,16 +1,18 @@
 package com.ss.editor.executor;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * Интерфейс для реализация исполнителей задач.
+ * The interface to implement a task executor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface EditorTaskExecutor {
 
     /**
-     * Добавление на исполнение задачи.
+     * Add a new task.
      *
-     * @param task задача.
+     * @param task the new task.
      */
-    public void execute(Runnable task);
+    void execute(@NotNull Runnable task);
 }

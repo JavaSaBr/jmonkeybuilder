@@ -1,5 +1,7 @@
 package com.ss.editor;
 
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -391,13 +393,17 @@ public class Messages {
     static {
 
         final Locale locale = Locale.getDefault();
-        final ClassLoader classLoader = com.sun.javafx.scene.control.skin.resources.ControlResources.class.getClassLoader();
+        final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
-        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", locale, classLoader, ResourceControl.getInstance());
-        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", ResourceControl.getInstance());
+        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+                locale, classLoader, ResourceControl.getInstance());
+
+        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+                ResourceControl.getInstance());
 
         final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
         final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
+        //noinspection unchecked
         original.putAll(override);
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());

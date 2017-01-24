@@ -1,5 +1,7 @@
 package com.ss.editor.control.transform;
 
+import static java.util.Objects.requireNonNull;
+
 import com.jme3.collision.CollisionResult;
 import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
@@ -15,6 +17,8 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
+
+import org.jetbrains.annotations.NotNull;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -64,7 +68,7 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
     }
 
     @Override
-    public void setCollisionPlane(final CollisionResult colResult) {
+    public void setCollisionPlane(@NotNull final CollisionResult colResult) {
 
         final Camera camera = EDITOR.getCamera();
 
@@ -105,7 +109,7 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
 
         final Camera camera = EDITOR.getCamera();
         final InputManager inputManager = EDITOR.getInputManager();
-        final Transform transformCenter = editorControl.getTransformCenter();
+        final Transform transformCenter = requireNonNull(editorControl.getTransformCenter());
 
         // cursor position and selected position vectors
         final Vector2f cursorPos = new Vector2f(inputManager.getCursorPosition());
@@ -117,8 +121,6 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
             final Vector2f deltaVecPos = new Vector2f(cursorPos.getX(), cursorPos.getY());
             editorControl.setDeltaVector(new Vector3f(deltaVecPos.getX(), deltaVecPos.getY(), 0));
         }
-
-        final Spatial toTransform = editorControl.getToTransform();
 
         // Picked vector
         PickedAxis pickedAxis = editorControl.getPickedAxis();
@@ -150,6 +152,7 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
             scaleVector = baseScale.subtract(pickedVec.mult((scaleValue)));
         }
 
+        final Spatial toTransform = requireNonNull(editorControl.getToTransform());
         toTransform.setLocalScale(scaleVector);
 
         editorControl.notifyTransformed(toTransform);

@@ -1,30 +1,30 @@
 package com.ss.editor.file.reader;
 
-import java.awt.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 /**
- * Реализация читальщика TGA изображений.
+ * The TGA image reader.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class TGAReader {
 
-    public static Image getImage(final byte[] buffer) throws IOException {
+    public static Image getImage(@NotNull final byte[] buffer) {
         return decode(buffer);
     }
 
     private static int btoi(final byte b) {
-        int a = b;
-        return (a < 0 ? 256 + a : a);
+        return ((int) b < 0 ? 256 + (int) b : (int) b);
     }
 
-    private static int read(final int offset, final byte[] buffer) {
+    private static int read(final int offset, @NotNull final byte[] buffer) {
         return btoi(buffer[offset]);
     }
 
-    public static Image decode(final byte[] buffer) {
+    public static Image decode(@NotNull final byte[] buffer) {
 
         int offset = 0;
 
