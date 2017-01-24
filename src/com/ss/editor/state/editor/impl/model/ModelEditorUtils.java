@@ -5,6 +5,7 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.scene.Spatial;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
@@ -16,12 +17,14 @@ import tonegod.emitter.geometry.ParticleGeometry;
  */
 public class ModelEditorUtils {
 
-    @NotNull
+    @Nullable
     public static Object findToSelect(@NotNull final Object object) {
 
         if (object instanceof ParticleGeometry) {
             final Spatial parent = findParent((Spatial) object, spatial -> spatial instanceof ParticleEmitterNode);
-            if (parent != null) return parent;
+            if (parent != null && parent.isVisible()) return parent;
+        } else if (object instanceof Spatial && !((Spatial) object).isVisible()) {
+            return null;
         }
 
         return object;

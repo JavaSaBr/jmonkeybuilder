@@ -503,6 +503,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             parent = spatial.getParent();
         }
 
+        if (spatial != null && !spatial.isVisible()) {
+            spatial = null;
+        }
+
         updateSelection(spatial);
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
