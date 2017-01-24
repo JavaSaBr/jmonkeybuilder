@@ -788,6 +788,38 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(collision.getGeometry())));
     }
 
+    /**
+     * Get a position on a scene for a cursor position on a screen.
+     *
+     * @param worldX the x position on screen.
+     * @param worldY the y position on screen.
+     * @return the position on a scene.
+     */
+    @NotNull
+    public Vector3f getCurrentCursorPosOnScene(final float worldX, final float worldY) {
+
+        final Camera camera = EDITOR.getCamera();
+
+        final Vector2f cursor = new Vector2f(worldX, camera.getHeight() - worldY);
+        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
+        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f).subtractLocal(click3d).normalizeLocal();
+
+        final Ray ray = new Ray();
+        ray.setOrigin(click3d);
+        ray.setDirection(dir);
+
+        final CollisionResults results = new CollisionResults();
+
+        final Node stateNode = getStateNode();
+        stateNode.updateModelBound();
+        stateNode.collideWith(ray, results);
+
+        final CollisionResult closestCollision = results.getClosestCollision();
+        if (closestCollision == null) return Vector3f.ZERO;
+
+        return closestCollision.getContactPoint();
+    }
+
     protected void notifySelected(@Nullable final Object object) {
     }
 

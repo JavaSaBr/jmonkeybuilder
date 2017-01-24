@@ -124,7 +124,6 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         final SceneEditorAppState editorState = getEditorAppState();
         editorState.openModel(model);
 
-
         setCurrentModel(model);
         setIgnoreListeners(true);
         try {
@@ -209,9 +208,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
         layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
+        editorToolComponent.addComponent(layersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
         editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
-        editorToolComponent.addComponent(layersSplitContainer, "Layers");
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(appStateSplitContainer));

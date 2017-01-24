@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.property.control;
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
@@ -36,7 +37,7 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
         protected void updateItem(@Nullable final SceneLayer layer, final boolean empty) {
             super.updateItem(layer, empty);
             if (layer == null) return;
-            setText(layer == SceneLayer.NO_LAYER ? "No layer" : layer.getName());
+            setText(layer == SceneLayer.NO_LAYER ? Messages.LAYER_PROPERTY_CONTROL_NO_LAYERT : layer.getName());
         }
     }
 
@@ -57,7 +58,7 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
     private ComboBox<SceneLayer> layerComboBox;
 
     public LayerModelPropertyControl(@Nullable final SceneLayer layer, @NotNull final SceneChangeConsumer changeConsumer) {
-        super(layer == null ? SceneLayer.NO_LAYER : layer, "Layer", changeConsumer, newChangeHandler());
+        super(layer == null ? SceneLayer.NO_LAYER : layer, Messages.MODEL_PROPERTY_LAYER, changeConsumer, newChangeHandler());
         setApplyHandler(this::setLayer);
         setSyncHandler(this::getLayer);
     }

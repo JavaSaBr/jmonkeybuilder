@@ -139,6 +139,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         sortedKeys.addAll(userDataKeys);
 
         for (final String key : sortedKeys) {
+            if (SceneLayer.KEY.equals(key)) continue;
 
             final Object data = spatial.getUserData(key);
 

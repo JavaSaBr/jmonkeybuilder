@@ -140,6 +140,7 @@ public class Messages {
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
+    public static final String SCENE_FILE_EDITOR_TOOL_LAYERS;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -225,6 +226,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_LOD;
     public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
     public static final String MODEL_PROPERTY_LEVEL;
+    public static final String MODEL_PROPERTY_LAYER;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -286,6 +288,8 @@ public class Messages {
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
     public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
+
+    public static final String LAYER_PROPERTY_CONTROL_NO_LAYERT;
 
     public static final String RENAME_DIALOG_TITLE;
     public static final String RENAME_DIALOG_NEW_NAME_LABEL;
@@ -532,6 +536,7 @@ public class Messages {
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
         SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
+        SCENE_FILE_EDITOR_TOOL_LAYERS = bundle.getString("SceneFileEditorToolLayers");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
@@ -617,6 +622,7 @@ public class Messages {
         MODEL_PROPERTY_LOD = bundle.getString("ModelPropertyLoD");
         MODEL_PROPERTY_TRIANGLE_COUNT = bundle.getString("ModelPropertyTriangleCount");
         MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
+        MODEL_PROPERTY_LAYER = bundle.getString("ModelPropertyLayer");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -678,6 +684,8 @@ public class Messages {
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
+
+        LAYER_PROPERTY_CONTROL_NO_LAYERT = bundle.getString("LayerPropertyControlNoLayer");
 
         RENAME_DIALOG_TITLE = bundle.getString("RenameDialogTitle");
         RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");

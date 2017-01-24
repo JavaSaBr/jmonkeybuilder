@@ -245,6 +245,7 @@
                 <fx:jvmarg value="-XX:+UseTLAB"/>
                 <fx:jvmarg value="-Dprism.lcdtext=false"/>
                 <fx:jvmarg value="-Dprism.text=t2k"/>
+                <fx:jvmarg value="-Djavafx.animation.fullspeed=true"/>
                 <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
             </fx:platform>
 

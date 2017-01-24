@@ -720,6 +720,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return;
         }
 
+        final MA editorAppState = getEditorAppState();
         final M currentModel = getCurrentModel();
 
         for (final File file : files) {
@@ -734,11 +735,18 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             final ModelKey modelKey = new ModelKey(assetPath);
 
             final AssetManager assetManager = EDITOR.getAssetManager();
-            assetManager.deleteFromCache(modelKey);
+            assetManager.clearCache();
 
-            final Spatial loadedModel = assetManager.loadModel(modelKey);
+            final float sceneX = (float) dragEvent.getSceneX();
+            final float sceneY = (float) dragEvent.getSceneY();
 
-            execute(new AddChildOperation(loadedModel, (Node) currentModel));
+            EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+                final Spatial loadedModel = assetManager.loadModel(modelKey);
+                loadedModel.setLocalTranslation(editorAppState.getCurrentCursorPosOnScene(sceneX, sceneY));
+
+                execute(new AddChildOperation(loadedModel, (Node) currentModel));
+            });
         }
     }
 
