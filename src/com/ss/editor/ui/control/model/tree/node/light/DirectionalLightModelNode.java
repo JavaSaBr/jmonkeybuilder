@@ -8,15 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
+import rlib.util.StringUtils;
 
 /**
- * Реализация узла с направленным светом.
+ * The implementation of {@link LightModelNode} to present direction lights.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class DirectionalLightModelNode extends LightModelNode<DirectionalLight> {
 
-    public DirectionalLightModelNode(final DirectionalLight element, final long objectId) {
+    public DirectionalLightModelNode(@NotNull final DirectionalLight element, final long objectId) {
         super(element, objectId);
     }
 
@@ -29,6 +30,8 @@ public class DirectionalLightModelNode extends LightModelNode<DirectionalLight> 
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT;
+        final DirectionalLight element = getElement();
+        final String name = element.getName();
+        return StringUtils.isEmpty(name) ? Messages.MODEL_FILE_EDITOR_NODE_DIRECTION_LIGHT : name;
     }
 }

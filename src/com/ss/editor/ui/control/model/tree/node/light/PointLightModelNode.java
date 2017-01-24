@@ -8,15 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
+import rlib.util.StringUtils;
 
 /**
- * Реализация узла для точки источника света.
+ * The implementation of {@link LightModelNode} to present point lights.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class PointLightModelNode extends LightModelNode<PointLight> {
 
-    public PointLightModelNode(final PointLight element, final long objectId) {
+    public PointLightModelNode(@NotNull final PointLight element, final long objectId) {
         super(element, objectId);
     }
 
@@ -29,6 +30,8 @@ public class PointLightModelNode extends LightModelNode<PointLight> {
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_POINT_LIGHT;
+        final PointLight element = getElement();
+        final String name = element.getName();
+        return StringUtils.isEmpty(name) ? Messages.MODEL_FILE_EDITOR_NODE_POINT_LIGHT : name;
     }
 }

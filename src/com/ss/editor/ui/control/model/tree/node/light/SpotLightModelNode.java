@@ -8,15 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
+import rlib.util.StringUtils;
 
 /**
- * Реализация узла для света в стиле фанарика.
+ * The implementation of {@link LightModelNode} to present spot lights.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class SpotLightModelNode extends LightModelNode<SpotLight> {
 
-    public SpotLightModelNode(final SpotLight element, final long objectId) {
+    public SpotLightModelNode(@NotNull final SpotLight element, final long objectId) {
         super(element, objectId);
     }
 
@@ -29,6 +30,8 @@ public class SpotLightModelNode extends LightModelNode<SpotLight> {
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_SPOT_LIGHT;
+        final SpotLight element = getElement();
+        final String name = element.getName();
+        return StringUtils.isEmpty(name) ? Messages.MODEL_FILE_EDITOR_NODE_SPOT_LIGHT : name;
     }
 }

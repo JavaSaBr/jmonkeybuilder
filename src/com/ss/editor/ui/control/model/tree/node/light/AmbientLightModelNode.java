@@ -8,15 +8,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
+import rlib.util.StringUtils;
 
 /**
- * Реализация узла с амбиент светом.
+ * The implementation of {@link LightModelNode} to present ambient lights.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class AmbientLightModelNode extends LightModelNode<AmbientLight> {
 
-    public AmbientLightModelNode(final AmbientLight element, final long objectId) {
+    public AmbientLightModelNode(@NotNull final AmbientLight element, final long objectId) {
         super(element, objectId);
     }
 
@@ -29,6 +30,8 @@ public class AmbientLightModelNode extends LightModelNode<AmbientLight> {
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT;
+        final AmbientLight element = getElement();
+        final String name = element.getName();
+        return StringUtils.isEmpty(name) ? Messages.MODEL_FILE_EDITOR_NODE_AMBIENT_LIGHT : name;
     }
 }

@@ -31,8 +31,13 @@ public class PointLightElementPropertyControl<D> extends AbstractElementFilterPr
 
     @Override
     protected void reload() {
+
         final PointLight light = getPropertyValue();
         final Label elementLabel = getElementLabel();
-        elementLabel.setText(light == null ? NO_ELEMENT : light.getClass().getSimpleName());
+
+        String name = light == null ? null : light.getName();
+        name = name == null && light != null ? light.getClass().getSimpleName() : name;
+
+        elementLabel.setText(name == null ? NO_ELEMENT : name);
     }
 }
