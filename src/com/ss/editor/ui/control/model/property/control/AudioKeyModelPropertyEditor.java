@@ -75,15 +75,15 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
         super.createComponents(container);
 
         audioKeyLabel = new Label(NO_AUDIO);
-        audioKeyLabel.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_LABEL);
+        audioKeyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         final Button changeButton = new Button();
-        changeButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
+        changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_24));
         changeButton.setOnAction(event -> processChange());
 
         final Button openButton = new Button();
-        openButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
+        openButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
         openButton.disableProperty().bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
         openButton.setOnAction(event -> processOpen());

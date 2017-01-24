@@ -40,6 +40,4 @@ public class EditableLightingStateShadowFilter extends EditableDirectionalLightS
 
         super.initFilter(manager, renderManager, viewPort, width, height);
     }
-
-
 }

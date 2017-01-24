@@ -24,7 +24,7 @@ import rlib.ui.util.FXUtils;
  *
  * @author JavaSaBr
  */
-public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, Integer> {
+public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry, Integer> {
 
     private class LodLevelCell extends ListCell<Integer> {
 
@@ -59,8 +59,8 @@ public class LodLevelModelPropertyEditor extends ModelPropertyControl<Geometry, 
      */
     private ComboBox<Integer> levelComboBox;
 
-    public LodLevelModelPropertyEditor(@Nullable final Integer element, @NotNull final String paramName,
-                                       @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public LodLevelModelPropertyControl(@Nullable final Integer element, @NotNull final String paramName,
+                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

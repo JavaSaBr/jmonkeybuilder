@@ -283,6 +283,8 @@ public class Messages {
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
+    public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
+
     public static final String RENAME_DIALOG_TITLE;
     public static final String RENAME_DIALOG_NEW_NAME_LABEL;
     public static final String RENAME_DIALOG_BUTTON_OK;
@@ -365,6 +367,7 @@ public class Messages {
     public static final String NODE_SELECTOR_DIALOG_BUTTON;
 
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
+    public static final String LIGHT_SELECTOR_DIALOG_TITLE;
 
     public static final String LOG_VIEW_TITLE;
 
@@ -668,6 +671,8 @@ public class Messages {
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
 
+        ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
+
         RENAME_DIALOG_TITLE = bundle.getString("RenameDialogTitle");
         RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");
         RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
@@ -750,6 +755,7 @@ public class Messages {
         NODE_SELECTOR_DIALOG_BUTTON = bundle.getString("NodeSelectorDialogButton");
 
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
+        LIGHT_SELECTOR_DIALOG_TITLE = bundle.getString("LightSelectorDialogTitle");
 
         LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
 

@@ -97,9 +97,6 @@ public interface CSSIds {
     String MODEL_PARAM_CONTROL_INFLUENCER_CONTROL = "ModelParamControlInfluencerControl";
     String MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON = "ModelParamControlInfluencerIconButton";
 
-    String MODEL_PARAM_CONTROL_MATERIAL_LABEL = "ModelParamControlMaterialLabel";
-    String MODEL_PARAM_CONTROL_MATERIAL_BUTTON = "ModelParamControlMaterialButton";
-
     String RENAME_DIALOG_LABEL = "RenameDialogLabel";
     String RENAME_DIALOG_TEXT_FIELD = "RenameDialogTextField";
 
@@ -144,6 +141,9 @@ public interface CSSIds {
     String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "AbstractParamControlVector3fField";
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F = "AbstractParamControlNumberLabel2F";
     String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "AbstractParamControlVector2fField";
+    String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "AbstractParamControlElementLabel";
+    String ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON = "AbstractParamControlElementButton";
+
 
     String ADD_USER_DATA_DIALOG_LABEL = "AddUserDataDialogLabel";
     String ADD_USER_DATA_FIELD = "AddUserDataDialogField";

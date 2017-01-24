@@ -31,7 +31,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelPropertyControl<T, V> {
+public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPropertyControl<T, V> {
 
     public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
@@ -51,8 +51,8 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
      */
     private Label materialLabel;
 
-    public MaterialModelPropertyEditor(@Nullable final V element, @NotNull final String paramName,
-                                       @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public MaterialModelPropertyControl(@Nullable final V element, @NotNull final String paramName,
+                                        @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 
@@ -61,15 +61,15 @@ public class MaterialModelPropertyEditor<T extends Spatial, V> extends ModelProp
         super.createComponents(container);
 
         materialLabel = new Label(NO_MATERIAL);
-        materialLabel.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_LABEL);
+        materialLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         final Button changeButton = new Button();
-        changeButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
+        changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_24));
         changeButton.setOnAction(event -> processChange());
 
         final Button editButton = new Button();
-        editButton.setId(CSSIds.MODEL_PARAM_CONTROL_MATERIAL_BUTTON);
+        editButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         editButton.setGraphic(new ImageView(Icons.EDIT_16));
         editButton.disableProperty().bind(materialLabel.textProperty().isEqualTo(NO_MATERIAL));
         editButton.setOnAction(event -> processEdit());

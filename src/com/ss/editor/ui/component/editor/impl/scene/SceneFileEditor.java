@@ -23,6 +23,7 @@ import com.ss.editor.ui.control.filter.property.FilterPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
+import com.ss.extension.property.EditableProperty;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
@@ -199,6 +200,22 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         }
 
         super.updateSelection(spatial);
+    }
+
+    @Override
+    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+                                     @NotNull final String propertyName) {
+        super.notifyChangeProperty(parent, object, propertyName);
+
+        if (!(object instanceof EditableProperty)) {
+            return;
+        }
+
+        final EditableProperty<?, ?> property = (EditableProperty<?, ?>) object;
+        final Object editObject = property.getObject();
+
+        appStatePropertyEditor.syncFor(editObject);
+        filterPropertyEditor.syncFor(editObject);
     }
 
     @Override

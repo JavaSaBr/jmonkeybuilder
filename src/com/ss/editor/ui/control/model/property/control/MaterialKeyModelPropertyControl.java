@@ -28,10 +28,10 @@ import rlib.util.StringUtils;
  *
  * @author JavaSaBr
  */
-public class MaterialKeyModelPropertyEditor<T extends Spatial> extends MaterialModelPropertyEditor<T, MaterialKey> {
+public class MaterialKeyModelPropertyControl<T extends Spatial> extends MaterialModelPropertyControl<T, MaterialKey> {
 
-    public MaterialKeyModelPropertyEditor(@Nullable final MaterialKey element, @NotNull final String paramName,
-                                          @NotNull final ModelChangeConsumer modelChangeConsumer) {
+    public MaterialKeyModelPropertyControl(@Nullable final MaterialKey element, @NotNull final String paramName,
+                                           @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
     }
 

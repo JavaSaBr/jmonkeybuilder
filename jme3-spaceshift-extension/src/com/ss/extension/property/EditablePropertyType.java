@@ -13,7 +13,9 @@ public enum EditablePropertyType {
     VECTOR_3F,
     QUATERNION,
     COLOR,
-    ENUM,;
+    ENUM,
+    DIRECTION_LIGHT_FROM_SCENE,
+    POINT_LIGHT_FROM_SCENE;
 
     private static final EditablePropertyType[] TYPES = values();
 

@@ -13,8 +13,8 @@ import com.jme3.scene.Geometry;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.DefaultModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.LodLevelModelPropertyEditor;
-import com.ss.editor.ui.control.model.property.control.MaterialKeyModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.control.LodLevelModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.MaterialKeyModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
@@ -110,7 +110,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);
 
-        final LodLevelModelPropertyEditor lodLevelControl = new LodLevelModelPropertyEditor(lodLevel,
+        final LodLevelModelPropertyControl lodLevelControl = new LodLevelModelPropertyControl(lodLevel,
                 Messages.MODEL_PROPERTY_LOD, changeConsumer);
 
         lodLevelControl.setApplyHandler(Geometry::setLodLevel);
@@ -123,7 +123,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
             final MaterialKey materialKey = (MaterialKey) material.getKey();
 
             final ModelPropertyControl<Geometry, MaterialKey> materialControl =
-                    new MaterialKeyModelPropertyEditor<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
+                    new MaterialKeyModelPropertyControl<>(materialKey, Messages.MODEL_PROPERTY_MATERIAL, changeConsumer);
 
             materialControl.setApplyHandler(MATERIAL_APPLY_HANDLER);
             materialControl.setSyncHandler(MATERIAL_SYNC_HANDLER);

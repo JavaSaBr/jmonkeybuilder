@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.dialog.geometry;
+package com.ss.editor.ui.control.model.tree.dialog;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
@@ -29,8 +29,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(600, 450);
 
-    private static final Insets TREE_OFFSET = new Insets(6,
-            CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Insets TREE_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
      * The type of selectable objects.

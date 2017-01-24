@@ -16,10 +16,12 @@ import com.ss.extension.scene.filter.SceneFilter;
 import com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter;
 import com.ss.extension.scene.filter.impl.EditableColorOverlayFilter;
 import com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter;
+import com.ss.extension.scene.filter.impl.EditableDirectionLightFromSceneShadowFilter;
 import com.ss.extension.scene.filter.impl.EditableFXAAFilter;
 import com.ss.extension.scene.filter.impl.EditableFogFilter;
 import com.ss.extension.scene.filter.impl.EditableLightingStateShadowFilter;
 import com.ss.extension.scene.filter.impl.EditableObjectsBloomFilter;
+import com.ss.extension.scene.filter.impl.EditablePointLightFromSceneShadowFilter;
 import com.ss.extension.scene.filter.impl.EditablePosterizationFilter;
 import com.ss.extension.scene.filter.impl.EditableRadialBlurFilter;
 import com.ss.extension.scene.filter.impl.EditableSceneAndObjectsBloomFilter;
@@ -61,6 +63,9 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
 
     static {
+        register(new EditableLightingStateShadowFilter());
+        register(new EditableDirectionLightFromSceneShadowFilter());
+        register(new EditablePointLightFromSceneShadowFilter());
         register(new EditableCartoonEdgeFilter());
         register(new EditableColorOverlayFilter());
         register(new EditableDepthOfFieldFilter());
@@ -72,7 +77,6 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableSceneBloomFilter());
         register(new EditableObjectsBloomFilter());
         register(new EditableSceneAndObjectsBloomFilter());
-        register(new EditableLightingStateShadowFilter());
     }
 
     private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();

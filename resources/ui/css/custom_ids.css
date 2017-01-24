@@ -485,17 +485,6 @@
     -fx-max-width: -fx-min-width;
 }
 
-#ModelParamControlMaterialLabel {
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-left;
-    -fx-text-alignment: left;
-}
-
-#ModelParamControlMaterialButton {
-}
-
 #ModelParamControlInfluencerControl {
     -fx-alignment: top-center;
 }
@@ -798,6 +787,17 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 0 2 0 2;
+}
+
+#AbstractParamControlElementLabel {
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+}
+
+#AbstractParamControlElementButton {
 }
 
 #AbstractParamControlContainer {

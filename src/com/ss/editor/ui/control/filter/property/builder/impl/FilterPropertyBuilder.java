@@ -1,14 +1,18 @@
 package com.ss.editor.ui.control.filter.property.builder.impl;
 
+import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.filter.property.control.BooleanFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.ColorFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.DirectionLightElementPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.EnumFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.FloatFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.IntegerFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.PointLightElementPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector2fFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector3fFilterPropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
@@ -139,6 +143,28 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
 
                     final EnumFilterPropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
                             new EnumFilterPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case DIRECTION_LIGHT_FROM_SCENE: {
+
+                    final EditableProperty<DirectionalLight, ?> property = cast(editableProperty);
+                    final DirectionalLight value = property.getValue();
+
+                    final DirectionLightElementPropertyControl<EditableProperty<DirectionalLight, ?>> propertyControl =
+                            new DirectionLightElementPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case POINT_LIGHT_FROM_SCENE: {
+
+                    final EditableProperty<PointLight, ?> property = cast(editableProperty);
+                    final PointLight value = property.getValue();
+
+                    final PointLightElementPropertyControl<EditableProperty<PointLight, ?>> propertyControl =
+                            new PointLightElementPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
