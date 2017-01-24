@@ -34,10 +34,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            layer.hide();
             sceneNode.removeLayer(layer);
-
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(sceneNode, layer));
         });
     }
@@ -45,10 +42,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
             sceneNode.addLayer(layer);
-            layer.show();
-
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(sceneNode, layer, -1));
         });
     }

@@ -1,5 +1,7 @@
 package com.ss.editor.util;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.BoneTrack;
@@ -13,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import rlib.util.ClassUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -125,7 +126,7 @@ public class AnimationUtils {
                                   @NotNull final String oldName, @NotNull final String newName) {
         try {
 
-            final Map<String, Animation> animationMap = ClassUtils.unsafeCast(ANIMATIONS_MAP_FIELD.get(control));
+            final Map<String, Animation> animationMap = unsafeCast(ANIMATIONS_MAP_FIELD.get(control));
 
             if (!animationMap.containsKey(oldName)) {
                 throw new IllegalArgumentException("Given animation does not exist "

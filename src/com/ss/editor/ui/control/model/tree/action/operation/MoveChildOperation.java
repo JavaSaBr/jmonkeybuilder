@@ -46,30 +46,16 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
             newParent.attachChildAt(moved, 0);
-
-            final Node oldParentToTask = oldParent;
-            final Node newParentToTask = newParent;
-            oldParent = newParentToTask;
-            newParent = oldParentToTask;
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(oldParentToTask, newParentToTask, moved, 0));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(oldParent, newParent, moved, 0));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            newParent.attachChildAt(moved, childIndex);
-
-            final Node oldParentToTask = oldParent;
-            final Node newParentToTask = newParent;
-            oldParent = newParentToTask;
-            newParent = oldParentToTask;
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(oldParentToTask, newParentToTask, moved, childIndex));
+            oldParent.attachChildAt(moved, childIndex);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(newParent, oldParent, moved, childIndex));
         });
     }
 }
