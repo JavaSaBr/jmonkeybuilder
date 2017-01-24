@@ -4,41 +4,42 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по перемещению узла.
+ * The operation to move a node.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
-     * Новый дочерний элемент.
+     * The moved node.
      */
+    @NotNull
     private final Spatial moved;
 
     /**
-     * Порядок размещения в предыдущем родителе.
+     * The child index.
      */
     private final int childIndex;
 
     /**
-     * Индекс старого родительского узла.
+     * The old parent.
      */
-    private int oldParentIndex;
+    private Node oldParent;
 
     /**
-     * Индекс нового родительского узла.
+     * The new parent.
      */
-    private int newParentIndex;
+    private Node newParent;
 
-    public MoveChildOperation(final Spatial moved, final int oldParentIndex, final int newParentIndex, final int childIndex) {
+    public MoveChildOperation(@NotNull final Spatial moved, @NotNull final Node oldParent,
+                              @NotNull final Node newParent, final int childIndex) {
         this.moved = moved;
-        this.oldParentIndex = oldParentIndex;
-        this.newParentIndex = newParentIndex;
+        this.oldParent = oldParent;
+        this.newParent = newParent;
         this.childIndex = childIndex;
     }
 
@@ -46,18 +47,14 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object oldParent = GeomUtils.getObjectByIndex(currentModel, oldParentIndex);
-            final Object newParent = GeomUtils.getObjectByIndex(currentModel, newParentIndex);
-            if (!(oldParent instanceof Node && newParent instanceof Node)) return;
+            newParent.attachChildAt(moved, 0);
 
-            final Node node = (Node) newParent;
-            node.attachChildAt(moved, 0);
+            final Node oldParentToTask = oldParent;
+            final Node newParentToTask = newParent;
+            oldParent = newParentToTask;
+            newParent = oldParentToTask;
 
-            oldParentIndex = GeomUtils.getIndex(currentModel, oldParent);
-            newParentIndex = GeomUtils.getIndex(currentModel, newParent);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved((Node) oldParent, node, moved, 0));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(oldParentToTask, newParentToTask, moved, 0));
         });
     }
 
@@ -65,18 +62,14 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object oldParent = GeomUtils.getObjectByIndex(currentModel, oldParentIndex);
-            final Object newParent = GeomUtils.getObjectByIndex(currentModel, newParentIndex);
-            if (!(oldParent instanceof Node && newParent instanceof Node)) return;
+            newParent.attachChildAt(moved, childIndex);
 
-            final Node node = (Node) oldParent;
-            node.attachChildAt(moved, childIndex);
+            final Node oldParentToTask = oldParent;
+            final Node newParentToTask = newParent;
+            oldParent = newParentToTask;
+            newParent = oldParentToTask;
 
-            oldParentIndex = GeomUtils.getIndex(currentModel, oldParent);
-            newParentIndex = GeomUtils.getIndex(currentModel, newParent);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved((Node) newParent, node, moved, childIndex));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(oldParentToTask, newParentToTask, moved, childIndex));
         });
     }
 }

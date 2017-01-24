@@ -6,7 +6,6 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTreeCell;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,13 +43,9 @@ public class ModelNodeTreeCell extends AbstractNodeTreeCell<ModelChangeConsumer,
             final Spatial spatial = (Spatial) element;
             final Node prevParentNode = (Node) prevParent.getElement();
             final Node newParentNode = (Node) newParent.getElement();
-            final Spatial currentModel = changeConsumer.getCurrentModel();
-
-            final int prevParentIndex = GeomUtils.getIndex(currentModel, prevParentNode);
-            final int newParentIndex = GeomUtils.getIndex(currentModel, newParentNode);
             final int childIndex = prevParentNode.getChildIndex(spatial);
 
-            changeConsumer.execute(new MoveChildOperation(spatial, prevParentIndex, newParentIndex, childIndex));
+            changeConsumer.execute(new MoveChildOperation(spatial, prevParentNode, newParentNode, childIndex));
             return false;
         }
 

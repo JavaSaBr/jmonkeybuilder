@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for adding a new {@link Spatial} to a {@link Node}.
+ * The implementation of the {@link AbstractEditorOperation} to add a new {@link Spatial} to a {@link Node}.
  *
  * @author JavaSaBr.
  */

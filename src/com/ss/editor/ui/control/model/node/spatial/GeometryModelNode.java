@@ -7,7 +7,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.GenerateLoDAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
-import com.ss.editor.ui.control.model.node.MeshModelNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.tree.node.ModelNodeFactory;
 
