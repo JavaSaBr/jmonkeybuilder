@@ -24,6 +24,7 @@ import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Point;
 import java.nio.file.Files;
@@ -105,7 +106,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         validateFileName();
     }
 
-    protected void expand(final Path file, final ResourceTree resourceTree, final Boolean finished) {
+    protected void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree, @NotNull final Boolean finished) {
         if (finished) resourceTree.expandTo(file, true);
     }
 
@@ -159,6 +160,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * @return the selected file in the resources tree.
      */
+    @NotNull
     protected Path getSelectedFile() {
 
         final ResourceTree resourceTree = getResourceTree();
@@ -180,6 +182,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * @return the file to creating.
      */
+    @Nullable
     protected Path getFileToCreate() {
 
         final TextField fileNameField = getFileNameField();
@@ -197,6 +200,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * @return the file extension.
      */
+    @NotNull
     protected String getFileExtension() {
         return StringUtils.EMPTY;
     }
@@ -204,7 +208,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * Notify about the file created.
      */
-    protected void notifyFileCreated(final Path createdFile, final boolean needSelect) {
+    protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
         if (!needSelect) return;
 
         final RequestSelectFileEvent event = new RequestSelectFileEvent();
@@ -242,7 +246,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         root.setOnKeyReleased(this::processEnter);
     }
 
-    protected void processEnter(final KeyEvent event) {
+    protected void processEnter(@NotNull final KeyEvent event) {
 
         final Button okButton = getOkButton();
 
@@ -254,6 +258,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * @return the filed with new file name.
      */
+    @NotNull
     protected TextField getFileNameField() {
         return fileNameField;
     }
@@ -261,7 +266,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * Create settings of the creating file.
      */
-    protected void createSettings(final VBox root) {
+    protected void createSettings(@NotNull final VBox root) {
 
         final HBox fileNameContainer = new HBox();
         fileNameContainer.setAlignment(Pos.CENTER_LEFT);
@@ -287,6 +292,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * @return the label text "file name".
      */
+    @NotNull
     protected String getFileNameLabelText() {
         return Messages.FILE_CREATOR_FILE_NAME_LABEL;
     }
@@ -294,6 +300,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * @return the creation button.
      */
+    @NotNull
     public Button getOkButton() {
         return okButton;
     }

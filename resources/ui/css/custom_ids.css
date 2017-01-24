@@ -101,6 +101,10 @@
     -fx-padding: 10, 0, 0, 0;
 }
 
+#FileEditorEditorArea {
+
+}
+
 #FileEditorMainSplitPane {
     -fx-background-color: transparent;
 }

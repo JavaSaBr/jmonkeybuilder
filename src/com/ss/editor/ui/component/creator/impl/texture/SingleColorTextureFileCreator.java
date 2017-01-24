@@ -71,13 +71,14 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
         return Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return FileExtensions.IMAGE_PNG;
     }
 
     @Override
-    protected void createSettings(final VBox root) {
+    protected void createSettings(@NotNull final VBox root) {
         super.createSettings(root);
 
         final HBox widthContainer = new HBox();

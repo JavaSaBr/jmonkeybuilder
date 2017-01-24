@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import rlib.util.StringUtils;
 
@@ -35,6 +36,7 @@ public class EmptyFileCreator extends AbstractFileCreator {
         return Messages.EMPTY_FILE_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return StringUtils.EMPTY;
@@ -44,8 +46,7 @@ public class EmptyFileCreator extends AbstractFileCreator {
     protected void processCreate() {
         super.processCreate();
 
-        final Path fileToCreate = getFileToCreate();
-
+        final Path fileToCreate = Objects.requireNonNull(getFileToCreate());
         try {
             Files.createFile(fileToCreate);
         } catch (final IOException e) {

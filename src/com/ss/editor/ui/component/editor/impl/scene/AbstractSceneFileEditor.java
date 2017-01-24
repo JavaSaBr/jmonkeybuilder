@@ -8,6 +8,7 @@ import static rlib.util.ClassUtils.unsafeCast;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
+import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
@@ -34,6 +35,7 @@ import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -44,10 +46,13 @@ import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -56,8 +61,12 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -668,6 +677,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.selectionNodeHandler = this::selectNodeFromTree;
 
         editorAreaPane = new Pane();
+        editorAreaPane.setId(CSSIds.FILE_EDITOR_EDITOR_AREA);
+        editorAreaPane.setOnDragOver(this::dragOver);
+        editorAreaPane.setOnDragDropped(this::dragDropped);
+        editorAreaPane.setOnDragExited(this::dragExited);
 
         modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
         modelPropertyEditor = new ModelPropertyEditor(this);
@@ -690,6 +703,62 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(modelSplitContainer));
+    }
+
+    protected void dragExited(@NotNull final DragEvent dragEvent) {
+    }
+
+    /**
+     * Handle dropped files to editor.
+     */
+    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+
+        final M currentModel = getCurrentModel();
+
+        for (final File file : files) {
+
+            if (!file.getName().endsWith(FileExtensions.JME_OBJECT)) {
+                continue;
+            }
+
+            final Path assetFile = requireNonNull(getAssetFile(file.toPath()), "Not found asset file for " + file);
+            final String assetPath = toAssetPath(assetFile);
+
+            final ModelKey modelKey = new ModelKey(assetPath);
+
+            final AssetManager assetManager = EDITOR.getAssetManager();
+            assetManager.deleteFromCache(modelKey);
+
+            final Spatial loadedModel = assetManager.loadModel(modelKey);
+
+            execute(new AddChildOperation(loadedModel, (Node) currentModel));
+        }
+    }
+
+    /**
+     * Handle drag over.
+     */
+    protected void dragOver(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+
+        final Set<TransferMode> transferModes = dragboard.getTransferModes();
+        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+
+        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
+        dragEvent.consume();
     }
 
     protected static void calcVSplitSize(@NotNull final SplitPane splitContainer) {

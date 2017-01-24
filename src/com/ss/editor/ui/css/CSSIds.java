@@ -34,6 +34,7 @@ public interface CSSIds {
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
+    String FILE_EDITOR_EDITOR_AREA = "FileEditorEditorArea";
     String FILE_EDITOR_MAIN_SPLIT_PANE = "FileEditorMainSplitPane";
     String FILE_EDITOR_TOOL_SPLIT_PANE = "FileEditorToolSplitPane";
     String FILE_EDITOR_TOOL_COMPONENT = "FileEditorToolComponent";

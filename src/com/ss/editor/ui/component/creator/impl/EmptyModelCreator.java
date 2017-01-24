@@ -36,6 +36,7 @@ public class EmptyModelCreator extends AbstractFileCreator {
         return Messages.EMPTY_MODEL_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return FileExtensions.JME_OBJECT;

@@ -35,11 +35,13 @@ public class FolderCreator extends AbstractFileCreator {
         return Messages.FOLDER_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return StringUtils.EMPTY;
     }
 
+    @NotNull
     @Override
     protected String getFileNameLabelText() {
         return Messages.FOLDER_CREATOR_FILE_NAME_LABEL;

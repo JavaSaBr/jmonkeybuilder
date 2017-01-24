@@ -37,6 +37,7 @@ public class PostFilterViewFileCreator extends AbstractFileCreator {
         return POST_FILTER_VIEW_FILE_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return FileExtensions.POST_FILTER_VIEW;

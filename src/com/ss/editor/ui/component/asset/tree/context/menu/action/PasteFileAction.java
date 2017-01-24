@@ -7,7 +7,10 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
+import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,9 +42,10 @@ public class PasteFileAction extends MenuItem {
     /**
      * The action element.
      */
+    @NotNull
     private final ResourceElement element;
 
-    public PasteFileAction(final ResourceElement element) {
+    public PasteFileAction(@NotNull final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE);
         setOnAction(event -> processCopy());
@@ -63,13 +67,13 @@ public class PasteFileAction extends MenuItem {
         final boolean isCut = "cut".equals(clipboard.getContent(EditorUtil.JAVA_PARAM));
 
         if (isCut) {
-            files.forEach(file -> moveFile(clipboard, currentFile, file.toPath()));
+            files.forEach(file -> moveFile(currentFile, file.toPath()));
         } else {
             files.forEach(file -> copyFile(clipboard, currentFile, file.toPath()));
         }
     }
 
-    private void copyFile(final Clipboard clipboard, final Path currentFile, final Path file) {
+    private void copyFile(@NotNull final Clipboard clipboard, @NotNull final Path currentFile, @NotNull final Path file) {
         if (Files.isDirectory(currentFile)) {
             processCopy(clipboard, currentFile, file);
         } else {
@@ -77,18 +81,19 @@ public class PasteFileAction extends MenuItem {
         }
     }
 
-    private void moveFile(final Clipboard clipboard, final Path currentFile, final Path file) {
+    private void moveFile(@NotNull final Path currentFile, @NotNull final Path file) {
+
         if (Files.isDirectory(currentFile)) {
-            processMove(clipboard, currentFile, file);
+            processMove(currentFile, file);
         } else {
-            processMove(clipboard, currentFile.getParent(), file);
+            processMove(currentFile.getParent(), file);
         }
     }
 
     /**
      * Process of moving.
      */
-    private void processMove(final Clipboard clipboard, final Path targetFolder, final Path file) {
+    private void processMove(@NotNull final Path targetFolder, @NotNull final Path file) {
 
         final Path newFile = targetFolder.resolve(file.getFileName());
 
@@ -109,7 +114,8 @@ public class PasteFileAction extends MenuItem {
     /**
      * Process of copying.
      */
-    private void processCopy(final Clipboard clipboard, final Path targetFolder, final Path file) {
+    private void processCopy(@NotNull final Clipboard clipboard, @NotNull final Path targetFolder,
+                             @NotNull final Path file) {
 
         final Array<Path> toCopy = ArrayFactory.newArray(Path.class);
         final Array<Path> copied = ArrayFactory.newArray(Path.class);
@@ -129,13 +135,19 @@ public class PasteFileAction extends MenuItem {
             EditorUtil.handleException(LOGGER, this, e);
         }
 
+        final RequestSelectFileEvent event = new RequestSelectFileEvent();
+        event.setFile(newFile);
+
+        FX_EVENT_MANAGER.notify(event);
+
         clipboard.clear();
     }
 
     /**
      * Process of copying.
      */
-    private void processCopy(final Path file, final Array<Path> toCopy, final Array<Path> copied, final Path newFile) throws IOException {
+    private void processCopy(@NotNull final Path file, @NotNull final Array<Path> toCopy,
+                             @NotNull final Array<Path> copied, @NotNull final Path newFile) throws IOException {
 
         Files.copy(file, newFile);
 
