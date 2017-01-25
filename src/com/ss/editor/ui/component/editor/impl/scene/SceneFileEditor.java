@@ -124,6 +124,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         final SceneEditorAppState editorState = getEditorAppState();
         editorState.openModel(model);
 
+        handleObjects(model);
+
         setCurrentModel(model);
         setIgnoreListeners(true);
         try {

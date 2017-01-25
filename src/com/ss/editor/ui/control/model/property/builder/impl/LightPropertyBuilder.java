@@ -19,8 +19,6 @@ import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.BiConsumer;
-
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
@@ -31,26 +29,6 @@ import rlib.ui.util.FXUtils;
  * @author JavaSaBr
  */
 public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
-
-    private static final BiConsumer<PointLight, Float> POINT_LIGHT_RADIUS_APPLY_HANDLER = (pointLight, value) -> {
-        if (value < 0f) return;
-        pointLight.setRadius(value);
-    };
-
-    private static final BiConsumer<SpotLight, Float> SPOT_LIGHT_INNER_ANGLE_APPLY_HANDLER = (spotLight, value) -> {
-        if (value < 0f || value >= FastMath.HALF_PI) return;
-        spotLight.setSpotInnerAngle(value);
-    };
-
-    private static final BiConsumer<SpotLight, Float> SPOT_LIGHT_OUTER_ANGLE_APPLY_HANDLER = (spotLight, value) -> {
-        if (value < 0f || value >= FastMath.HALF_PI) return;
-        spotLight.setSpotOuterAngle(value);
-    };
-
-    private static final BiConsumer<SpotLight, Float> SPOT_LIGHT_RANGE_APPLY_HANDLER = (spotLight, value) -> {
-        if (value < 0f) return;
-        spotLight.setSpotRange(value);
-    };
 
     private static final PropertyBuilder INSTANCE = new LightPropertyBuilder();
 
@@ -108,10 +86,10 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
 
         final FloatLightPropertyControl<PointLight> radiusControl =
                 new FloatLightPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
-        radiusControl.setApplyHandler(POINT_LIGHT_RADIUS_APPLY_HANDLER);
+        radiusControl.setApplyHandler(PointLight::setRadius);
         radiusControl.setSyncHandler(PointLight::getRadius);
+        radiusControl.setMinMax(0, Integer.MAX_VALUE);
         radiusControl.setEditObject(light);
-        radiusControl.setScrollPower(10F);
 
         final Line splitLine = createSplitLine(container);
 
@@ -146,21 +124,25 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
 
         final FloatLightPropertyControl<SpotLight> rangeControl =
                 new FloatLightPropertyControl<>(range, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
-        rangeControl.setApplyHandler(SPOT_LIGHT_RANGE_APPLY_HANDLER);
+        rangeControl.setApplyHandler(SpotLight::setSpotRange);
         rangeControl.setSyncHandler(SpotLight::getSpotRange);
-        rangeControl.setScrollPower(10F);
+        rangeControl.setMinMax(0, Integer.MAX_VALUE);
         rangeControl.setEditObject(light);
 
         final FloatLightPropertyControl<SpotLight> innerAngleControl =
                 new FloatLightPropertyControl<>(innerAngle, Messages.MODEL_PROPERTY_INNER_ANGLE, changeConsumer);
-        innerAngleControl.setApplyHandler(SPOT_LIGHT_INNER_ANGLE_APPLY_HANDLER);
+        innerAngleControl.setApplyHandler(SpotLight::setSpotInnerAngle);
         innerAngleControl.setSyncHandler(SpotLight::getSpotInnerAngle);
+        innerAngleControl.setMinMax(0F, FastMath.HALF_PI);
+        innerAngleControl.setScrollPower(1F);
         innerAngleControl.setEditObject(light);
 
         final FloatLightPropertyControl<SpotLight> outerAngleControl =
                 new FloatLightPropertyControl<>(outerAngle, Messages.MODEL_PROPERTY_OUTER_ANGLE, changeConsumer);
-        outerAngleControl.setApplyHandler(SPOT_LIGHT_OUTER_ANGLE_APPLY_HANDLER);
+        outerAngleControl.setApplyHandler(SpotLight::setSpotOuterAngle);
         outerAngleControl.setSyncHandler(SpotLight::getSpotOuterAngle);
+        outerAngleControl.setMinMax(0F, FastMath.HALF_PI);
+        outerAngleControl.setScrollPower(1F);
         outerAngleControl.setEditObject(light);
 
         final Line splitLine = createSplitLine(container);

@@ -38,6 +38,21 @@ public class NodeUtils {
     }
 
     /**
+     * Find the parent of the model.
+     */
+    @Nullable
+    public static Spatial findParent(@NotNull final Spatial spatial, int count) {
+
+        Spatial parent = spatial;
+
+        while (count-- > 0 && parent != null) {
+            parent = parent.getParent();
+        }
+
+        return parent;
+    }
+
+    /**
      * Find the first geometry in the {@link Spatial}.
      */
     @Nullable
@@ -50,6 +65,46 @@ public class NodeUtils {
             final Geometry geometry = findGeometry(children);
             if (geometry != null) return geometry;
             if (children instanceof Geometry) return (Geometry) children;
+        }
+
+        return null;
+    }
+
+    /**
+     * Find the first geometry in the {@link Spatial}.
+     */
+    @Nullable
+    public static Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
+        if (!(spatial instanceof Node)) return null;
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            final Geometry geometry = findGeometry(children, name);
+            if (geometry != null) return geometry;
+            if (children instanceof Geometry && StringUtils.equals(children.getName(), name)) {
+                return (Geometry) children;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Find the first spatial in the {@link Spatial}.
+     */
+    @Nullable
+    public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
+        if (!(spatial instanceof Node)) return null;
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            final Spatial geometry = findSpatial(children, name);
+            if (geometry != null) return geometry;
+            if (StringUtils.equals(children.getName(), name)) {
+                return children;
+            }
         }
 
         return null;

@@ -1,6 +1,7 @@
 package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bounding.BoundingBox;
@@ -10,9 +11,14 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.InputManager;
+import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
+import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector2f;
@@ -33,14 +39,14 @@ import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
@@ -59,6 +65,33 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
+
+    /**
+     * The table with models to present lights on a scene.
+     */
+    protected static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
+
+    static {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        LIGHT_MODEL_TABLE = DictionaryFactory.newObjectDictionary();
+        LIGHT_MODEL_TABLE.put(Light.Type.Point, (Node) assetManager.loadModel("graphics/models/light/point_light.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Directional, (Node) assetManager.loadModel("graphics/models/light/direction_light.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Spot, (Node) assetManager.loadModel("graphics/models/light/spot_light.j3o"));
+    }
+
+    /**
+     * The map with cached light nodes.
+     */
+    @NotNull
+    protected final ObjectDictionary<Light, EditorLightNode> cachedLights;
+
+    /**
+     * The array of light nodes.
+     */
+    @NotNull
+    protected final Array<EditorLightNode> lightNodes;
 
     /**
      * The selection models of selected models.
@@ -89,6 +122,12 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      */
     @NotNull
     private final Node modelNode;
+
+    /**
+     * The node for the placement of lights.
+     */
+    @NotNull
+    private final Node lightNode;
 
     /**
      * The nodes for the placement of model controls.
@@ -167,19 +206,24 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
 
     public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
+        this.cachedLights = DictionaryFactory.newObjectDictionary();
         this.modelNode = new Node("ModelNode");
         this.modelNode.setUserData(SceneEditorControl.class.getName(), true);
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();
         this.toolNode = new Node("ToolNode");
         this.transformToolNode = new Node("TransformToolNode");
+        this.lightNodes = ArrayFactory.newArray(EditorLightNode.class);
+        this.lightNode = new Node("Lights");
 
-        final EditorCamera editorCamera = Objects.requireNonNull(getEditorCamera());
+        final EditorCamera editorCamera = requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(getCameraNode());
+
+        modelNode.attachChild(lightNode);
 
         createCollisionPlane();
         createToolElements();
@@ -207,6 +251,14 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @Override
     protected boolean needEditorCamera() {
         return true;
+    }
+
+    /**
+     * @return the node for the placement of lights.
+     */
+    @NotNull
+    protected Node getLightNode() {
+        return lightNode;
     }
 
     /**
@@ -463,18 +515,27 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null) editorCamera.update(tpf);
 
-        final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
-        final Array<Spatial> selected = getSelected();
-        selected.forEach(spatial -> {
+        final Array<EditorLightNode> lightNodes = getLightNodes();
+        lightNodes.forEach(EditorLightNode::updateModel);
 
+        final Array<Spatial> selected = getSelected();
+        selected.forEach(this, (spatial, state) -> {
+
+            final ObjectDictionary<Spatial, Spatial> selectionShape = state.getSelectionShape();
             final Spatial shape = selectionShape.get(spatial);
             if (shape == null) return;
+
+            state.updateTransformNode(spatial.getLocalTransform());
+
+            if (spatial instanceof EditorLightNode) {
+                spatial = ((EditorLightNode) spatial).getModel();
+            }
+
+            requireNonNull(spatial);
 
             shape.setLocalTranslation(spatial.getWorldTranslation());
             shape.setLocalRotation(spatial.getWorldRotation());
             shape.setLocalScale(spatial.getWorldScale());
-
-            updateTransformNode(spatial.getLocalTransform());
         });
 
         final Node toolNode = getToolNode();
@@ -538,6 +599,22 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @NotNull
     private ObjectDictionary<Spatial, Spatial> getSelectionShape() {
         return selectionShape;
+    }
+
+    /**
+     * @return the array of light nodes.
+     */
+    @NotNull
+    protected Array<EditorLightNode> getLightNodes() {
+        return lightNodes;
+    }
+
+    /**
+     * @return the map with cached light nodes.
+     */
+    @NotNull
+    protected ObjectDictionary<Light, EditorLightNode> getCachedLights() {
+        return cachedLights;
     }
 
     /**
@@ -785,7 +862,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
             return;
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(collision.getGeometry())));
+        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(this, collision.getGeometry())));
     }
 
     /**
@@ -1001,5 +1078,128 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @Nullable
     public M getCurrentModel() {
         return currentModel;
+    }
+
+    /**
+     * Add a light.
+     *
+     * @param light the light.
+     */
+    public void addLight(@NotNull final Light light) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addLightImpl(light));
+    }
+
+    /**
+     * The process of adding a light.
+     */
+    private void addLightImpl(@NotNull final Light light) {
+
+        final Node node = LIGHT_MODEL_TABLE.get(light.getType());
+        if (node == null) return;
+
+        final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
+
+        final Camera camera = EDITOR.getCamera();
+        final EditorLightNode lightModel = requireNonNull(cachedLights.get(light, () -> {
+
+            final Node model = (Node) node.clone();
+            model.setLocalScale(0.01F);
+
+            final EditorLightNode result = new EditorLightNode();
+            result.setModel(model);
+
+            final Geometry geometry = NodeUtils.findGeometry(model, "White");
+
+            if (geometry == null) {
+                LOGGER.warning(this, "not found geometry for the node " + geometry);
+                return null;
+            }
+
+            final Material material = geometry.getMaterial();
+            material.setColor("Color", light.getColor());
+
+            return result;
+        }));
+
+        if (light instanceof SpotLight) {
+
+            final SpotLight spotLight = (SpotLight) light;
+
+            final Quaternion rotation = new Quaternion();
+            rotation.lookAt(spotLight.getDirection(), camera.getUp());
+
+            lightModel.setLocalTranslation(spotLight.getPosition());
+            lightModel.setLocalRotation(rotation);
+
+        } else if (light instanceof PointLight) {
+            lightModel.setLocalTranslation(((PointLight) light).getPosition());
+        } else if (light instanceof DirectionalLight) {
+
+            final DirectionalLight directionalLight = (DirectionalLight) light;
+            final Quaternion rotation = new Quaternion();
+            rotation.lookAt(directionalLight.getDirection(), camera.getUp());
+
+            lightModel.setLocalRotation(rotation);
+        }
+
+        final Node lightNode = getLightNode();
+        lightNode.attachChild(lightModel);
+        lightNode.attachChild(lightModel.getModel());
+
+        lightModel.setLight(light);
+
+        getLightNodes().add(lightModel);
+    }
+
+    /**
+     * Remove a light.
+     *
+     * @param light the light.
+     */
+    public void removeLight(@NotNull final Light light) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeLightImpl(light));
+    }
+
+    /**
+     * The process of removing a light.
+     */
+    private void removeLightImpl(@NotNull final Light light) {
+
+        final Node node = LIGHT_MODEL_TABLE.get(light.getType());
+        if (node == null) return;
+
+        final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
+        final EditorLightNode lightModel = cachedLights.get(light);
+        if (lightModel == null) return;
+
+        lightModel.setLight(null);
+
+        final Node lightNode = getLightNode();
+        lightNode.detachChild(lightModel);
+        lightNode.detachChild(requireNonNull(lightModel.getModel()));
+
+        getLightNodes().fastRemove(lightModel);
+    }
+
+    /**
+     * Get a light node for a light.
+     *
+     * @param light the light.
+     * @return the light node or null.
+     */
+    @Nullable
+    public EditorLightNode getLightNode(@NotNull final Light light) {
+        return getLightNodes().search(light, (node, toCheck) -> node.getLight() == toCheck);
+    }
+
+    /**
+     * Get a light node for a model.
+     *
+     * @param model the model.
+     * @return the light node or null.
+     */
+    @Nullable
+    public EditorLightNode getLightNode(@NotNull final Spatial model) {
+        return getLightNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
     }
 }

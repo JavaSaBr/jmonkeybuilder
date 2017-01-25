@@ -10,6 +10,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
@@ -26,6 +27,7 @@ import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
+import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -286,6 +288,21 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Handle the model.
+     */
+    protected void handleObjects(@NotNull final Spatial model) {
+
+        final MA editorState = getEditorAppState();
+        final Array<Light> lights = ArrayFactory.newArray(Light.class);
+
+        NodeUtils.addLight(model, lights);
+
+        if (!lights.isEmpty()) {
+            lights.forEach(editorState::addLight);
+        }
+    }
+
+    /**
      * Load the saved state.
      */
     protected void loadState() {
@@ -417,14 +434,24 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);
+
+        if (added instanceof Light) {
+            getEditorAppState().addLight((Light) added);
+        }
     }
 
     @Override
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
+
+        if (removed instanceof Light) {
+            getEditorAppState().removeLight((Light) removed);
+        }
     }
 
     @Override
@@ -472,7 +499,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Handle the selected object.
      */
     @FXThread
-    public void notifySelected(@Nullable final Object object) {
+    public void notifySelected(@Nullable Object object) {
+
+        if (object instanceof EditorLightNode) {
+            object = ((EditorLightNode) object).getLight();
+        }
+
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
     }
@@ -501,6 +533,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         if (element instanceof Spatial) {
             spatial = (Spatial) element;
             parent = spatial.getParent();
+        } else if (element instanceof Light) {
+            spatial = getEditorAppState().getLightNode((Light) element);
         }
 
         if (spatial != null && !spatial.isVisible()) {
@@ -815,8 +849,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Notify about transformed the object.
      */
     private void notifyTransformedImpl(@NotNull final Spatial spatial) {
+
+        Object toUpdate = spatial;
+
+        if (spatial instanceof EditorLightNode) {
+            toUpdate = ((EditorLightNode) spatial).getLight();
+        }
+
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.syncFor(spatial);
+        modelPropertyEditor.syncFor(toUpdate);
     }
 }
 

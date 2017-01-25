@@ -7,7 +7,6 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
-import com.jme3.light.Light;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
@@ -157,10 +156,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         return ModelFileEditorState::new;
     }
 
-    /**
-     * Handle the model.
-     */
-    private void handleObjects(@NotNull final Spatial model) {
+    @Override
+    protected void handleObjects(@NotNull final Spatial model) {
+        super.handleObjects(model);
 
         final ModelEditorAppState editorState = getEditorAppState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
@@ -173,14 +171,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
                     editorState.addCustomSky(geometry);
                 }
             });
-        }
-
-        final Array<Light> lights = ArrayFactory.newArray(Light.class);
-
-        NodeUtils.addLight(model, lights);
-
-        if (!lights.isEmpty()) {
-            lights.forEach(editorState::addLight);
         }
     }
 
@@ -285,9 +275,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
                 editorAppState.addCustomSky(spatial);
                 editorAppState.updateLightProbe();
             }
-
-        } else if (added instanceof Light) {
-            editorAppState.addLight((Light) added);
         }
     }
 
@@ -307,9 +294,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
                 editorAppState.removeCustomSky(spatial);
                 editorAppState.updateLightProbe();
             }
-
-        } else if (removed instanceof Light) {
-            editorAppState.removeLight((Light) removed);
         }
     }
 
