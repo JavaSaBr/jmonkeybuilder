@@ -101,7 +101,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
         final Node stateNode = getStateNode();
         stateNode.attachChild(getModelNode());
         stateNode.attachChild(getToolNode());
-        stateNode.attachChild(getLightNode());
 
         final Node customSkyNode = getCustomSkyNode();
         customSkyNode.detachAllChildren();
@@ -152,7 +151,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
         final Node stateNode = getStateNode();
         stateNode.detachChild(getModelNode());
         stateNode.detachChild(getToolNode());
-        stateNode.detachChild(getLightNode());
     }
 
     @Override
@@ -232,7 +230,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
         stateNode.detachChild(getModelNode());
         stateNode.detachChild(getToolNode());
-        stateNode.detachChild(getLightNode());
 
         setCurrentFastSky(fastSky);
 
@@ -278,7 +275,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
             final Node stateNode = getStateNode();
             stateNode.detachChild(getModelNode());
             stateNode.detachChild(getToolNode());
-            stateNode.detachChild(getLightNode());
 
             frame = 0;
         });
