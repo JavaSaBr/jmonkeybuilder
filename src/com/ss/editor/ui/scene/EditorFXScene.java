@@ -33,31 +33,37 @@ public class EditorFXScene extends Scene {
     /**
      * The list of components.
      */
+    @NotNull
     private final Array<ScreenComponent> components;
 
     /**
      * The view for drawing JME.
      */
+    @NotNull
     private final Canvas canvas;
 
     /**
      * The container of this scene.
      */
+    @NotNull
     private final StackPane container;
 
     /**
      * The hide layer.
      */
+    @NotNull
     private final StackPane hideLayer;
 
     /**
      * The loading layer.
      */
+    @NotNull
     private final VBox loadingLayer;
 
     /**
      * THe loading counter.
      */
+    @NotNull
     private final AtomicInteger loadingCount;
 
     /**

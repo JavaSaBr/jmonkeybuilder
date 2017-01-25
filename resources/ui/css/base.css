@@ -1,39 +1,4 @@
 @font-face {
-    font-family: Roboto;
-    src: url("/ui/fonts/roboto/Roboto-Regular.ttf");
-}
-
-@font-face {
-    font-family: "Roboto Medium";
-    src: url("/ui/fonts/roboto/Roboto-Medium.ttf");
-}
-
-@font-face {
-    font-family: "Roboto Light";
-    src: url("/ui/fonts/roboto/Roboto-Light.ttf");
-}
-
-@font-face {
-    font-family: "Roboto Bold";
-    src: url("/ui/fonts/roboto/Roboto-Bold.ttf");
-}
-
-@font-face {
-    font-family: Roboto Condensed;
-    src: url("/ui/fonts/roboto/RobotoCondensed-Regular.ttf");
-}
-
-@font-face {
-    font-family: "Roboto Condensed Light";
-    src: url("/ui/fonts/roboto/RobotoCondensed-Light.ttf");
-}
-
-@font-face {
-    font-family: "Roboto Condensed Bold";
-    src: url("/ui/fonts/roboto/RobotoCondensed-Bold.ttf");
-}
-
-@font-face {
     font-family: Ubuntu Regular;
     src: url("/ui/fonts/ubuntu/Ubuntu-R.ttf");
 }

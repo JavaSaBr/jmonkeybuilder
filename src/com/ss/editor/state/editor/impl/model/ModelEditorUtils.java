@@ -5,6 +5,7 @@ import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -36,6 +37,8 @@ public class ModelEditorUtils {
             final Spatial parent = NodeUtils.findParent((Spatial) object, 2);
             final EditorLightNode lightNode = parent == null ? null : state.getLightNode(parent);
             if (lightNode != null) return lightNode;
+            final EditorAudioNode audioNode = parent == null ? null : state.getAudioNode(parent);
+            if (audioNode != null) return audioNode;
         }
 
         if (object instanceof Spatial && !((Spatial) object).isVisible()) {

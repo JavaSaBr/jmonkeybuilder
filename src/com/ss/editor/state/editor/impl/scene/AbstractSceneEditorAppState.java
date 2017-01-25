@@ -4,6 +4,7 @@ import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelec
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.bounding.BoundingVolume;
@@ -39,6 +40,7 @@ import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -71,9 +73,13 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      */
     protected static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
 
+    protected static final Node AUDIO_NODE_MODEL;
+
     static {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
+
+        AUDIO_NODE_MODEL = (Node) assetManager.loadModel("graphics/models/speaker/speaker.j3o");
 
         LIGHT_MODEL_TABLE = DictionaryFactory.newObjectDictionary();
         LIGHT_MODEL_TABLE.put(Light.Type.Point, (Node) assetManager.loadModel("graphics/models/light/point_light.j3o"));
@@ -88,10 +94,22 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     protected final ObjectDictionary<Light, EditorLightNode> cachedLights;
 
     /**
+     * The map with cached audio nodes.
+     */
+    @NotNull
+    protected final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes;
+
+    /**
      * The array of light nodes.
      */
     @NotNull
     protected final Array<EditorLightNode> lightNodes;
+
+    /**
+     * The array of audio nodes.
+     */
+    @NotNull
+    protected final Array<EditorAudioNode> audioNodes;
 
     /**
      * The selection models of selected models.
@@ -128,6 +146,12 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      */
     @NotNull
     private final Node lightNode;
+
+    /**
+     * The node for the placement of audio nodes.
+     */
+    @NotNull
+    private final Node audioNode;
 
     /**
      * The nodes for the placement of model controls.
@@ -207,6 +231,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
+        this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
         this.modelNode = new Node("ModelNode");
         this.modelNode.setUserData(SceneEditorControl.class.getName(), true);
         this.selected = ArrayFactory.newArray(Spatial.class);
@@ -214,7 +239,9 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         this.toolNode = new Node("ToolNode");
         this.transformToolNode = new Node("TransformToolNode");
         this.lightNodes = ArrayFactory.newArray(EditorLightNode.class);
+        this.audioNodes = ArrayFactory.newArray(EditorAudioNode.class);
         this.lightNode = new Node("Lights");
+        this.audioNode = new Node("Audio nodes");
 
         final EditorCamera editorCamera = requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
@@ -224,6 +251,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         stateNode.attachChild(getCameraNode());
 
         modelNode.attachChild(lightNode);
+        modelNode.attachChild(audioNode);
 
         createCollisionPlane();
         createToolElements();
@@ -259,6 +287,14 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @NotNull
     protected Node getLightNode() {
         return lightNode;
+    }
+
+    /**
+     * @return the node for the placement of audio nodes.
+     */
+    @NotNull
+    public Node getAudioNode() {
+        return audioNode;
     }
 
     /**
@@ -518,6 +554,9 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         final Array<EditorLightNode> lightNodes = getLightNodes();
         lightNodes.forEach(EditorLightNode::updateModel);
 
+        final Array<EditorAudioNode> audioNodes = getAudioNodes();
+        audioNodes.forEach(EditorAudioNode::updateModel);
+
         final Array<Spatial> selected = getSelected();
         selected.forEach(this, (spatial, state) -> {
 
@@ -610,11 +649,27 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     /**
+     * @return the array of audio nodes.
+     */
+    @NotNull
+    public Array<EditorAudioNode> getAudioNodes() {
+        return audioNodes;
+    }
+
+    /**
      * @return the map with cached light nodes.
      */
     @NotNull
     protected ObjectDictionary<Light, EditorLightNode> getCachedLights() {
         return cachedLights;
+    }
+
+    /**
+     * @return the map with cached audio nodes.
+     */
+    @NotNull
+    public ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
+        return cachedAudioNodes;
     }
 
     /**
@@ -1182,6 +1237,76 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     /**
+     * Add an audio node.
+     *
+     * @param audioNode the audio node.
+     */
+    public void addAudioNode(@NotNull final AudioNode audioNode) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addAudioNodeImpl(audioNode));
+    }
+
+    /**
+     * The process of adding an audio node.
+     */
+    private void addAudioNodeImpl(@NotNull final AudioNode audio) {
+
+        final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
+
+        final Camera camera = EDITOR.getCamera();
+        final EditorAudioNode audioModel = requireNonNull(cachedAudioNodes.get(audio, () -> {
+
+            final Node model = (Node) AUDIO_NODE_MODEL.clone();
+            model.setLocalScale(0.005F);
+
+            final EditorAudioNode result = new EditorAudioNode();
+            result.setModel(model);
+
+            return result;
+        }));
+
+        final Quaternion rotation = new Quaternion();
+        rotation.lookAt(audio.getDirection(), camera.getUp());
+
+        audioModel.setLocalRotation(rotation);
+        audioModel.setLocalTranslation(audio.getLocalTranslation());
+
+        final Node audioNode = getAudioNode();
+        audioNode.attachChild(audioModel);
+        audioNode.attachChild(audioModel.getModel());
+
+        audioModel.setAudioNode(audio);
+
+        getAudioNodes().add(audioModel);
+    }
+
+    /**
+     * Remove an audio node.
+     *
+     * @param audio the audio node.
+     */
+    public void removeAudioNode(@NotNull final AudioNode audio) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeAudioNodeImpl(audio));
+    }
+
+    /**
+     * The process of removing an audio node.
+     */
+    private void removeAudioNodeImpl(@NotNull final AudioNode audio) {
+
+        final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
+        final EditorAudioNode audioModel = cachedAudioNodes.get(audio);
+        if (audioModel == null) return;
+
+        audioModel.setAudioNode(null);
+
+        final Node audioNode = getAudioNode();
+        audioNode.detachChild(audioModel);
+        audioNode.detachChild(requireNonNull(audioModel.getModel()));
+
+        getAudioNodes().fastRemove(audioModel);
+    }
+
+    /**
      * Get a light node for a light.
      *
      * @param light the light.
@@ -1201,5 +1326,27 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @Nullable
     public EditorLightNode getLightNode(@NotNull final Spatial model) {
         return getLightNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+    }
+
+    /**
+     * Get an editor audio node for an audio node.
+     *
+     * @param audioNode the audio node.
+     * @return the editor audio node or null.
+     */
+    @Nullable
+    public EditorAudioNode getAudioNode(@NotNull final AudioNode audioNode) {
+        return getAudioNodes().search(audioNode, (node, toCheck) -> node.getAudioNode() == toCheck);
+    }
+
+    /**
+     * Get an editor audio node for an model.
+     *
+     * @param model the model.
+     * @return the editor audio node or null.
+     */
+    @Nullable
+    public EditorAudioNode getAudioNode(@NotNull final Spatial model) {
+        return getAudioNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
     }
 }

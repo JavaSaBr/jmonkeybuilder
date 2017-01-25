@@ -3,6 +3,7 @@ package com.ss.editor.util;
 import static rlib.util.ClassUtils.unsafeCast;
 
 import com.jme3.asset.AssetKey;
+import com.jme3.audio.AudioNode;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.material.Material;
@@ -214,6 +215,22 @@ public class NodeUtils {
 
         for (final Spatial children : node.getChildren()) {
             addLight(children, container);
+        }
+    }
+
+    /**
+     * Collect all audio nodes.
+     */
+    public static void addAudioNodes(@NotNull final Spatial spatial, @NotNull final Array<AudioNode> container) {
+        if (!(spatial instanceof Node)) return;
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            if (children instanceof AudioNode) {
+                container.add((AudioNode) children);
+            }
+            addAudioNodes(children, container);
         }
     }
 }

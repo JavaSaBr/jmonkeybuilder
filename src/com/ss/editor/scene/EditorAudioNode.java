@@ -2,10 +2,7 @@ package com.ss.editor.scene;
 
 import static com.ss.editor.util.GeomUtils.getDirection;
 
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.Light;
-import com.jme3.light.PointLight;
-import com.jme3.light.SpotLight;
+import com.jme3.audio.AudioNode;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -16,19 +13,19 @@ import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The node to present and edit lights.
+ * The node to present and edit audio nodes.
  *
  * @author JavaSaBr
  */
-public class EditorLightNode extends Node {
+public class EditorAudioNode extends Node {
 
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * The light.
+     * The audio node.
      */
     @Nullable
-    private Light light;
+    private AudioNode audioNode;
 
     /**
      * The model.
@@ -37,22 +34,22 @@ public class EditorLightNode extends Node {
     private Node model;
 
     /**
-     * Set a light.
+     * Set a audio node.
      *
-     * @param light the light.
+     * @param audioNode the audio node.
      */
-    public void setLight(@Nullable final Light light) {
-        this.light = light;
+    public void setAudioNode(@Nullable final AudioNode audioNode) {
+        this.audioNode = audioNode;
     }
 
     /**
-     * Get a light.
+     * Get a audio node.
      *
-     * @return the light.
+     * @return the audio node.
      */
     @Nullable
-    public Light getLight() {
-        return light;
+    public AudioNode getAudioNode() {
+        return audioNode;
     }
 
     /**
@@ -77,21 +74,12 @@ public class EditorLightNode extends Node {
     @Override
     public void updateGeometricState() {
 
-        final Light light = getLight();
+        final AudioNode audioNode = getAudioNode();
 
-        if (light instanceof PointLight) {
-            final PointLight pointLight = (PointLight) light;
-            pointLight.setPosition(getLocalTranslation());
-        } else if (light instanceof DirectionalLight) {
-            final DirectionalLight directionalLight = (DirectionalLight) light;
+        if (audioNode != null) {
             final Quaternion rotation = getLocalRotation();
-            directionalLight.setDirection(getDirection(rotation, directionalLight.getDirection()));
-        } else if (light instanceof SpotLight) {
-            final SpotLight spotLight = (SpotLight) light;
-            final Quaternion rotation = getLocalRotation();
-            final Vector3f direction = getDirection(rotation, spotLight.getDirection());
-            spotLight.setDirection(direction);
-            spotLight.setPosition(getLocalTranslation());
+            audioNode.setDirection(getDirection(rotation, audioNode.getDirection()));
+            audioNode.setLocalTranslation(getLocalTranslation());
         }
 
         super.updateGeometricState();

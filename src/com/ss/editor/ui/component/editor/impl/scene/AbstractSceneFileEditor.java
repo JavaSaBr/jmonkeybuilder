@@ -9,6 +9,7 @@ import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
+import com.jme3.audio.AudioNode;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
@@ -27,6 +28,7 @@ import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
+import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
@@ -294,12 +296,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final MA editorState = getEditorAppState();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
+        final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
+        NodeUtils.addAudioNodes(model, audioNodes);
 
-        if (!lights.isEmpty()) {
-            lights.forEach(editorState::addLight);
-        }
+        lights.forEach(editorState, (light, state) -> state.addLight(light));
+        audioNodes.forEach(editorState, (audioNode, state) -> state.addAudioNode(audioNode));
     }
 
     /**
@@ -435,22 +438,28 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @Override
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
 
+        final MA editorAppState = getEditorAppState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);
 
         if (added instanceof Light) {
-            getEditorAppState().addLight((Light) added);
+            editorAppState.addLight((Light) added);
+        } else if (added instanceof AudioNode) {
+            editorAppState.addAudioNode((AudioNode) added);
         }
     }
 
     @Override
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
+        final MA editorAppState = getEditorAppState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
 
         if (removed instanceof Light) {
-            getEditorAppState().removeLight((Light) removed);
+            editorAppState.removeLight((Light) removed);
+        } else if (removed instanceof AudioNode) {
+            editorAppState.removeAudioNode((AudioNode) removed);
         }
     }
 
@@ -505,6 +514,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             object = ((EditorLightNode) object).getLight();
         }
 
+        if (object instanceof EditorAudioNode) {
+            object = ((EditorAudioNode) object).getAudioNode();
+        }
+
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.select(object);
     }
@@ -530,7 +543,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         Spatial spatial = null;
 
-        if (element instanceof Spatial) {
+        if (element instanceof AudioNode) {
+            spatial = getEditorAppState().getAudioNode((AudioNode) element);
+        } else if (element instanceof Spatial) {
             spatial = (Spatial) element;
             parent = spatial.getParent();
         } else if (element instanceof Light) {
@@ -854,6 +869,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         if (spatial instanceof EditorLightNode) {
             toUpdate = ((EditorLightNode) spatial).getLight();
+        } else if (spatial instanceof EditorAudioNode) {
+            toUpdate = ((EditorAudioNode) spatial).getAudioNode();
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
