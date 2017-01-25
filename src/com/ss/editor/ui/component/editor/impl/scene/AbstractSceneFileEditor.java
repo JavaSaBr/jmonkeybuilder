@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
@@ -22,7 +23,6 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
@@ -40,6 +40,7 @@ import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -817,35 +818,89 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return;
         }
 
-        final MA editorAppState = getEditorAppState();
-        final M currentModel = getCurrentModel();
 
         for (final File file : files) {
 
-            if (!file.getName().endsWith(FileExtensions.JME_OBJECT)) {
-                continue;
+            if (file.getName().endsWith(FileExtensions.JME_OBJECT)) {
+                addNewModel(dragEvent, file.toPath());
+            } else if (file.getName().endsWith(FileExtensions.JME_MATERIAL)) {
+                applyMaterial(dragEvent, file.toPath());
             }
+        }
+    }
 
-            final Path assetFile = requireNonNull(getAssetFile(file.toPath()), "Not found asset file for " + file);
-            final String assetPath = toAssetPath(assetFile);
+    /**
+     * Apply a new material from an asset tree.
+     *
+     * @param dragEvent the drag event.
+     * @param file      the file.
+     */
+    protected void applyMaterial(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
 
-            final ModelKey modelKey = new ModelKey(assetPath);
+        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final String assetPath = toAssetPath(assetFile);
+
+        final MaterialKey materialKey = new MaterialKey(assetPath);
+
+        final Camera camera = EDITOR.getCamera();
+
+        final float sceneX = (float) dragEvent.getSceneX();
+        final float sceneY = camera.getHeight() - (float) dragEvent.getSceneY();
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+            final MA editorAppState = getEditorAppState();
+            final Geometry geometry = editorAppState.getGeometryByScreenPos(sceneX, sceneY);
+            if (geometry == null) return;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             assetManager.clearCache();
 
-            final float sceneX = (float) dragEvent.getSceneX();
-            final float sceneY = (float) dragEvent.getSceneY();
+            final Material material = assetManager.loadAsset(materialKey);
 
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+            final ModelPropertyOperation<Geometry, Material> operation =
+                    new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_MATERIAL, material, geometry.getMaterial());
 
-                final Spatial loadedModel = assetManager.loadModel(modelKey);
-                loadedModel.setUserData(SceneEditorControl.LOADED_MODEL_KEY, true);
-                loadedModel.setLocalTranslation(editorAppState.getCurrentCursorPosOnScene(sceneX, sceneY));
+            operation.setApplyHandler(Geometry::setMaterial);
 
-                execute(new AddChildOperation(loadedModel, (Node) currentModel));
-            });
-        }
+            execute(operation);
+        });
+    }
+
+    /**
+     * Add a new model from an asset tree.
+     *
+     * @param dragEvent the drag event.
+     * @param file      the file.
+     */
+    protected void addNewModel(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
+
+        final M currentModel = getCurrentModel();
+        if (!(currentModel instanceof Node)) return;
+
+        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final String assetPath = toAssetPath(assetFile);
+
+        final ModelKey modelKey = new ModelKey(assetPath);
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.clearCache();
+
+        final Camera camera = EDITOR.getCamera();
+
+        final float sceneX = (float) dragEvent.getSceneX();
+        final float sceneY = camera.getHeight() - (float) dragEvent.getSceneY();
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+            final MA editorAppState = getEditorAppState();
+
+            final Spatial loadedModel = assetManager.loadModel(modelKey);
+            loadedModel.setUserData(LOADED_MODEL_KEY, true);
+            loadedModel.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+
+            execute(new AddChildOperation(loadedModel, (Node) currentModel));
+        });
     }
 
     /**
