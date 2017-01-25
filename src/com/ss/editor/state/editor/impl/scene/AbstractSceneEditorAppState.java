@@ -525,7 +525,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
             final Spatial shape = selectionShape.get(spatial);
             if (shape == null) return;
 
-            state.updateTransformNode(spatial.getLocalTransform());
+            state.updateTransformNode(spatial.getWorldTransform());
 
             if (spatial instanceof EditorLightNode) {
                 spatial = ((EditorLightNode) spatial).getModel();

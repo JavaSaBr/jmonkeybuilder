@@ -86,6 +86,7 @@ public class SceneNode extends Node {
      */
     public void addAppState(@NotNull final SceneAppState appState) {
         appStates.add(appState);
+        appState.setSceneNode(this);
     }
 
     /**
@@ -95,6 +96,7 @@ public class SceneNode extends Node {
      */
     public void removeAppState(@NotNull final SceneAppState appState) {
         appStates.slowRemove(appState);
+        appState.setSceneNode(null);
     }
 
     /**
