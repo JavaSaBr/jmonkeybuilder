@@ -2,14 +2,11 @@ package com.ss.editor.state.editor.impl.scene;
 
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.math.ColorRGBA;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.debug.Grid;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
@@ -42,13 +39,9 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
         getFileEditor().notifyTransformed(spatial);
     }
 
-    @NotNull
     @Override
-    protected Geometry createGrid() {
-        final Geometry grid = new Geometry("grid", new Grid(2000, 2000, 1.0f));
-        grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
-        grid.setLocalTranslation(-1000, 0, -1000);
-        return grid;
+    protected int getGridSize() {
+        return 1000;
     }
 
     @Override

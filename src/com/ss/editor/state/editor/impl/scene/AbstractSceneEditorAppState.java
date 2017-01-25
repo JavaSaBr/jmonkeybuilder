@@ -25,6 +25,7 @@ import com.jme3.math.Transform;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -32,6 +33,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
+import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.control.transform.MoveToolControl;
 import com.ss.editor.control.transform.RotationToolControl;
@@ -211,7 +213,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     /**
      * Grid of the scene.
      */
-    private Geometry grid;
+    private Node grid;
 
     /**
      * The flag of visibility grid.
@@ -332,11 +334,64 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     @NotNull
-    protected Geometry createGrid() {
-        final Geometry grid = new Geometry("grid", new Grid(20, 20, 1.0f));
-        grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
-        grid.setLocalTranslation(-10, 0, -10);
-        return grid;
+    protected Node createGrid() {
+
+        final Node gridNode = new Node("GridNode");
+
+        final ColorRGBA gridColor = new ColorRGBA(0.4f, 0.4f, 0.4f, 0.5f);
+        final ColorRGBA xColor = new ColorRGBA(1.0f, 0.1f, 0.1f, 0.5f);
+        final ColorRGBA zColor = new ColorRGBA(0.1f, 1.0f, 0.1f, 0.5f);
+
+        final Material gridMaterial = createColorMaterial(gridColor);
+        gridMaterial.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+
+        final Material xMaterial = createColorMaterial(xColor);
+        xMaterial.getAdditionalRenderState().setLineWidth(5);
+
+        final Material zMaterial = createColorMaterial(zColor);
+        zMaterial.getAdditionalRenderState().setLineWidth(5);
+
+        final int gridSize = getGridSize();
+
+        final Geometry grid = new Geometry("grid", new Grid(gridSize, gridSize, 1.0f));
+        grid.setMaterial(gridMaterial);
+        grid.setQueueBucket(RenderQueue.Bucket.Transparent);
+        grid.setShadowMode(RenderQueue.ShadowMode.Off);
+        grid.setCullHint(Spatial.CullHint.Never);
+        grid.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
+
+        gridNode.attachChild(grid);
+
+        // Red line for X axis
+        final Line xAxis = new Line(new Vector3f(-gridSize / 2, 0f, 0f), new Vector3f(gridSize / 2 - 1, 0f, 0f));
+
+        final Geometry gxAxis = new Geometry("XAxis", xAxis);
+        gxAxis.setModelBound(new BoundingBox());
+        gxAxis.setShadowMode(RenderQueue.ShadowMode.Off);
+        gxAxis.setCullHint(Spatial.CullHint.Never);
+        gxAxis.setMaterial(xMaterial);
+
+        gridNode.attachChild(gxAxis);
+
+        // Blue line for Z axis
+        final Line zAxis = new Line(new Vector3f(0f, 0f, -gridSize / 2), new Vector3f(0f, 0f, gridSize / 2 - 1));
+
+        final Geometry gzAxis = new Geometry("ZAxis", zAxis);
+        gzAxis.setModelBound(new BoundingBox());
+        gzAxis.setShadowMode(RenderQueue.ShadowMode.Off);
+        gzAxis.setCullHint(Spatial.CullHint.Never);
+        gzAxis.setMaterial(zMaterial);
+
+        gridNode.attachChild(gzAxis);
+
+        return gridNode;
+    }
+
+    /**
+     * @return the grid size.
+     */
+    protected int getGridSize() {
+        return 20;
     }
 
     /**
@@ -481,7 +536,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      * @return grid of the scene.
      */
     @NotNull
-    private Geometry getGrid() {
+    private Node getGrid() {
         return grid;
     }
 
@@ -995,7 +1050,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         if (isShowGrid() == showGrid) return;
 
         final Node toolNode = getToolNode();
-        final Geometry grid = getGrid();
+        final Node grid = getGrid();
 
         if (showGrid) {
             toolNode.attachChild(grid);
