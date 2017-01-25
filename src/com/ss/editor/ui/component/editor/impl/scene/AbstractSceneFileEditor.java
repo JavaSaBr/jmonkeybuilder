@@ -818,7 +818,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return;
         }
 
-
         for (final File file : files) {
 
             if (file.getName().endsWith(FileExtensions.JME_OBJECT)) {
@@ -827,6 +826,25 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 applyMaterial(dragEvent, file.toPath());
             }
         }
+    }
+
+    /**
+     * Handle drag over.
+     */
+    protected void dragOver(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+
+        final Set<TransferMode> transferModes = dragboard.getTransferModes();
+        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+
+        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
+        dragEvent.consume();
     }
 
     /**
@@ -901,25 +919,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
             execute(new AddChildOperation(loadedModel, (Node) currentModel));
         });
-    }
-
-    /**
-     * Handle drag over.
-     */
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.isEmpty()) {
-            return;
-        }
-
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
     }
 
     protected static void calcVSplitSize(@NotNull final SplitPane splitContainer) {

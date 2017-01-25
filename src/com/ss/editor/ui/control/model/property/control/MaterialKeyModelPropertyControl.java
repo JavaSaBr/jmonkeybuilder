@@ -54,10 +54,8 @@ public class MaterialKeyModelPropertyControl<T extends Spatial> extends Material
         dialog.show(scene.getWindow());
     }
 
-    /**
-     * Add the mew material.
-     */
-    private void addMaterial(@NotNull final Path file) {
+    @Override
+    protected void addMaterial(@NotNull final Path file) {
 
         final Path assetFile = Objects.requireNonNull(getAssetFile(file));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));

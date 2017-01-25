@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.property.control;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
@@ -15,12 +17,20 @@ import com.ss.editor.ui.event.FXEventManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
@@ -54,7 +64,69 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
     public MaterialModelPropertyControl(@Nullable final V element, @NotNull final String paramName,
                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
+        setOnDragOver(this::dragOver);
+        setOnDragDropped(this::dragDropped);
+        setOnDragExited(this::dragExited);
     }
+
+    /**
+     * Handle grad exiting.
+     */
+    private void dragExited(@NotNull final DragEvent dragEvent) {
+
+    }
+
+    /**
+     * Handle dropped files to editor.
+     */
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return;
+        }
+
+        final File file = files.get(0);
+        if (!file.getName().endsWith(FileExtensions.JME_MATERIAL)) {
+            return;
+        }
+
+        addMaterial(file.toPath());
+    }
+
+    /**
+     * Handle drag over.
+     */
+    private void dragOver(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return;
+        }
+
+        final File file = files.get(0);
+        if (!file.getName().endsWith(FileExtensions.JME_MATERIAL)) {
+            return;
+        }
+
+        final Set<TransferMode> transferModes = dragboard.getTransferModes();
+        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+
+        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
+        dragEvent.consume();
+    }
+
+    /**
+     * Add the mew material.
+     */
+    protected void addMaterial(@NotNull final Path file) {
+
+    }
+
 
     @Override
     protected void createComponents(@NotNull final HBox container) {
