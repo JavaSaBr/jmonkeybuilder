@@ -4,6 +4,9 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
@@ -14,6 +17,7 @@ import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,6 +39,10 @@ import rlib.util.array.ArrayFactory;
 public class ChooseTextureControl extends HBox {
 
     public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -160,6 +168,7 @@ public class ChooseTextureControl extends HBox {
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::setTextureFile);
         dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 

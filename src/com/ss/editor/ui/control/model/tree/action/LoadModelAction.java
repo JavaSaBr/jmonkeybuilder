@@ -13,6 +13,9 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -24,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.function.Predicate;
 
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
@@ -35,6 +39,10 @@ import rlib.util.array.ArrayFactory;
  * @author JavaSaBr
  */
 public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -63,6 +71,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
         dialog.setExtensionFilter(MODEL_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 

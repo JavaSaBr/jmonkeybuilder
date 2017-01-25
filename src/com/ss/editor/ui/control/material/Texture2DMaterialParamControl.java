@@ -21,6 +21,9 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -34,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
@@ -51,6 +55,10 @@ import rlib.util.array.ArrayFactory;
  * @author JavaSaBr
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -219,6 +227,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addTexture);
         dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 

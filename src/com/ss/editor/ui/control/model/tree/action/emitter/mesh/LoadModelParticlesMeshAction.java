@@ -10,6 +10,9 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeParticleMeshOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -23,6 +26,7 @@ import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.function.Predicate;
 
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -37,6 +41,10 @@ import tonegod.emitter.particle.ParticleDataTemplateMesh;
  * @author JavaSaBr
  */
 public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChangeConsumer> {
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -59,6 +67,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
         dialog.setExtensionFilter(MODEL_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 

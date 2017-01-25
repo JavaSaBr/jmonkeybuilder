@@ -15,6 +15,9 @@ import com.ss.editor.file.PostFilterViewFile;
 import com.ss.editor.serializer.PostFilterViewSerializer;
 import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorAppState;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -36,6 +39,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -64,6 +68,10 @@ import rlib.util.array.ArrayFactory;
  * @author JavaSaBr.
  */
 public class PostFilterEditor extends AbstractFileEditor<StackPane> {
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     public static final Insets ADD_MATERIAL_OFFSET = new Insets(3, 0, 0, 0);
     public static final Insets TITLE_CONTAINER_OFFSET = new Insets(0, 0, 0, 5);
@@ -297,6 +305,7 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSION);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 
