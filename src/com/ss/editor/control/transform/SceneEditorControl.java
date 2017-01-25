@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface SceneEditorControl {
 
+    public static final String LOADED_MODEL_KEY = SceneEditorControl.class.getName() + ".loadedModel";
+
     enum TransformType {
         MOVE_TOOL,
         ROTATE_TOOL,

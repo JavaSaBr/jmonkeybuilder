@@ -14,6 +14,7 @@ import com.jme3.export.binary.BinaryExporter;
 import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -21,6 +22,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
@@ -584,12 +586,25 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         updateSelection(spatial);
 
-        if (spatial != null && !isIgnoreCameraMove()) {
+        if (spatial != null && !isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
             editorAppState.moveCameraTo(spatial.getWorldTranslation());
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
+    }
+
+    protected boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
+
+        final Camera camera = EDITOR.getCamera();
+
+        final Vector3f position = spatial.getWorldTranslation();
+        final Vector3f coordinates = camera.getScreenCoordinates(position, new Vector3f());
+
+        boolean invisible = coordinates.getZ() < 0;
+        invisible = invisible || !isInside(coordinates.getX(), camera.getHeight() - coordinates.getY());
+
+        return !invisible;
     }
 
     /**
@@ -599,7 +614,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     protected void updateSelection(@Nullable final Spatial spatial) {
 
-        //FIXME
         final Array<Spatial> selection = ArrayFactory.newArray(Spatial.class);
         if (spatial != null) selection.add(spatial);
 
@@ -826,6 +840,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
                 final Spatial loadedModel = assetManager.loadModel(modelKey);
+                loadedModel.setUserData(SceneEditorControl.LOADED_MODEL_KEY, true);
                 loadedModel.setLocalTranslation(editorAppState.getCurrentCursorPosOnScene(sceneX, sceneY));
 
                 execute(new AddChildOperation(loadedModel, (Node) currentModel));

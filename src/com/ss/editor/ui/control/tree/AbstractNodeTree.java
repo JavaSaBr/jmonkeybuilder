@@ -353,7 +353,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         parentItem.setExpanded(true);
         parent.notifyChildAdded(child);
 
-        fill(childItem, true, -1);
+        fill(childItem, false, -1);
     }
 
     /**

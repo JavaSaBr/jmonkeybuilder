@@ -1,5 +1,6 @@
 package com.ss.editor.state.editor.impl.model;
 
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.NodeUtils.findParent;
 
 import com.jme3.scene.Geometry;
@@ -34,11 +35,19 @@ public class ModelEditorUtils {
         }
 
         if (object instanceof Geometry) {
-            final Spatial parent = NodeUtils.findParent((Spatial) object, 2);
+
+            final Spatial spatial = (Spatial) object;
+
+            Spatial parent = NodeUtils.findParent(spatial, 2);
+
             final EditorLightNode lightNode = parent == null ? null : state.getLightNode(parent);
             if (lightNode != null) return lightNode;
+
             final EditorAudioNode audioNode = parent == null ? null : state.getAudioNode(parent);
             if (audioNode != null) return audioNode;
+
+            parent = NodeUtils.findParent(spatial, p -> p.getUserData(LOADED_MODEL_KEY) == Boolean.TRUE);
+            if (parent != null) return parent;
         }
 
         if (object instanceof Spatial && !((Spatial) object).isVisible()) {

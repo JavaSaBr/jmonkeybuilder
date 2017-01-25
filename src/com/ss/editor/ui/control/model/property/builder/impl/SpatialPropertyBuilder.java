@@ -9,6 +9,7 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
+import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
@@ -140,6 +141,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
         for (final String key : sortedKeys) {
             if (SceneLayer.KEY.equals(key)) continue;
+            if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) continue;
 
             final Object data = spatial.getUserData(key);
 
