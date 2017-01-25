@@ -37,7 +37,7 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
         protected void updateItem(@Nullable final SceneLayer layer, final boolean empty) {
             super.updateItem(layer, empty);
             if (layer == null) return;
-            setText(layer == SceneLayer.NO_LAYER ? Messages.LAYER_PROPERTY_CONTROL_NO_LAYERT : layer.getName());
+            setText(layer == SceneLayer.NO_LAYER ? Messages.LAYER_PROPERTY_CONTROL_NO_LAYER : layer.getName());
         }
     }
 

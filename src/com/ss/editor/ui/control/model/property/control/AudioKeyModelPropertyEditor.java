@@ -10,8 +10,12 @@ import com.jme3.audio.AudioNode;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
@@ -27,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -45,7 +50,11 @@ import rlib.util.array.ArrayFactory;
  */
 public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode, AudioKey> {
 
-    public static final String NO_AUDIO = "No audio";
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
+
+    public static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -116,6 +125,7 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addAudioData);
         dialog.setExtensionFilter(AUDIO_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 

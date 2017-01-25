@@ -286,10 +286,9 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
-
     public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
-
-    public static final String LAYER_PROPERTY_CONTROL_NO_LAYERT;
+    public static final String LAYER_PROPERTY_CONTROL_NO_LAYER;
+    public static final String AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
 
     public static final String RENAME_DIALOG_TITLE;
     public static final String RENAME_DIALOG_NEW_NAME_LABEL;
@@ -682,10 +681,9 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
-
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
-
-        LAYER_PROPERTY_CONTROL_NO_LAYERT = bundle.getString("LayerPropertyControlNoLayer");
+        LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");
+        AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO = bundle.getString("AudioKeyPropertyControlNoAudio");
 
         RENAME_DIALOG_TITLE = bundle.getString("RenameDialogTitle");
         RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");
