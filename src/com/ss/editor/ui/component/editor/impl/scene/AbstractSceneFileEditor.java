@@ -177,6 +177,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     private boolean ignoreListeners;
 
+    /**
+     * The flag of ignoring camera moving.
+     */
+    private boolean ignoreCameraMove;
+
     public AbstractSceneFileEditor() {
         this.editorAppState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
@@ -407,6 +412,20 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * @return true if need to ignore moving camera.
+     */
+    protected boolean isIgnoreCameraMove() {
+        return ignoreCameraMove;
+    }
+
+    /**
+     * @param ignoreCameraMove true if need to ignore moving camera.
+     */
+    protected void setIgnoreCameraMove(final boolean ignoreCameraMove) {
+        this.ignoreCameraMove = ignoreCameraMove;
+    }
+
+    /**
      * @param currentModel the opened model.
      */
     protected void setCurrentModel(@NotNull final M currentModel) {
@@ -518,8 +537,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             object = ((EditorAudioNode) object).getAudioNode();
         }
 
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.select(object);
+        setIgnoreCameraMove(true);
+        try {
+            final ModelNodeTree modelNodeTree = getModelNodeTree();
+            modelNodeTree.select(object);
+        } finally {
+            setIgnoreCameraMove(false);
+        }
     }
 
     @NotNull
@@ -530,6 +554,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @FXThread
     public void selectNodeFromTree(@Nullable final Object object) {
+
+        final MA editorAppState = getEditorAppState();
 
         Object parent = null;
         Object element = null;
@@ -544,12 +570,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         Spatial spatial = null;
 
         if (element instanceof AudioNode) {
-            spatial = getEditorAppState().getAudioNode((AudioNode) element);
+            spatial = editorAppState.getAudioNode((AudioNode) element);
         } else if (element instanceof Spatial) {
             spatial = (Spatial) element;
             parent = spatial.getParent();
         } else if (element instanceof Light) {
-            spatial = getEditorAppState().getLightNode((Light) element);
+            spatial = editorAppState.getLightNode((Light) element);
         }
 
         if (spatial != null && !spatial.isVisible()) {
@@ -557,6 +583,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
 
         updateSelection(spatial);
+
+        if (spatial != null && !isIgnoreCameraMove()) {
+            editorAppState.moveCameraTo(spatial.getWorldTranslation());
+        }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);

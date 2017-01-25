@@ -1262,6 +1262,15 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     /**
+     * Move a camera to a location.
+     *
+     * @param location the location.
+     */
+    public void moveCameraTo(@NotNull final Vector3f location) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getNodeForCamera().setLocalTranslation(location));
+    }
+
+    /**
      * Remove a light.
      *
      * @param light the light.
