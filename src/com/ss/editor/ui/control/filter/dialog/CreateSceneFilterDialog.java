@@ -12,6 +12,8 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.extension.scene.SceneNode;
+import com.ss.extension.scene.app.state.SceneAppState;
+import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
 import com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter;
 import com.ss.extension.scene.filter.impl.EditableColorOverlayFilter;
@@ -63,7 +65,6 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
 
     static {
-        register(new EditableLightingStateShadowFilter());
         register(new EditableDirectionLightFromSceneShadowFilter());
         register(new EditablePointLightFromSceneShadowFilter());
         register(new EditableCartoonEdgeFilter());
@@ -77,6 +78,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableSceneBloomFilter());
         register(new EditableObjectsBloomFilter());
         register(new EditableSceneAndObjectsBloomFilter());
+        register(new EditableLightingStateShadowFilter());
     }
 
     private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();
@@ -168,6 +170,8 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     protected void processOk() {
 
         final SceneNode currentModel = changeConsumer.getCurrentModel();
+        final Array<SceneAppState> appStates = currentModel.getAppStates();
+        final Array<SceneFilter<?>> filters = currentModel.getFilters();
 
         if (customCheckBox.isSelected()) {
 
@@ -202,6 +206,8 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
                 throw new RuntimeException("Can't create a state of the class " + filterNameField.getText());
             }
 
+            check(appStates, filters, newExample);
+
             changeConsumer.execute(new AddSceneFilterOperation(newExample, currentModel));
 
         } else {
@@ -212,10 +218,32 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
             final SceneFilter<?> example = requireNonNull(BUILT_IN.get(name));
             final SceneFilter<?> newExample = ClassUtils.newInstance(example.getClass());
 
+            check(appStates, filters, newExample);
+
             changeConsumer.execute(new AddSceneFilterOperation(newExample, currentModel));
         }
 
         super.processOk();
+    }
+
+    private void check(@NotNull final Array<SceneAppState> appStates, @NotNull final Array<SceneFilter<?>> filters,
+                       @NotNull final SceneFilter<?> newExample) {
+
+        if (!(newExample instanceof EditableSceneFilter<?>)) return;
+
+        final EditableSceneFilter<?> editableSceneFilter = (EditableSceneFilter<?>) newExample;
+
+        String message = editableSceneFilter.checkStates(appStates);
+
+        if (message != null) {
+            throw new RuntimeException(message);
+        }
+
+        message = editableSceneFilter.checkFilters(filters);
+
+        if (message != null) {
+            throw new RuntimeException(message);
+        }
     }
 
     @Override

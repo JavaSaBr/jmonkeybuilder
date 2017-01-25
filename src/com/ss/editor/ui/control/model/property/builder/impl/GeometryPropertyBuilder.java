@@ -110,13 +110,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         boundingVolumeControl.reload();
         boundingVolumeControl.setEditObject(geometry);
 
-        final LodLevelModelPropertyControl lodLevelControl = new LodLevelModelPropertyControl(lodLevel,
-                Messages.MODEL_PROPERTY_LOD, changeConsumer);
-
-        lodLevelControl.setApplyHandler(Geometry::setLodLevel);
-        lodLevelControl.setSyncHandler(Geometry::getLodLevel);
-        lodLevelControl.setEditObject(geometry, true);
-
         if (canEditMaterial(geometry)) {
 
             final Material material = geometry.getMaterial();
@@ -132,10 +125,18 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
             FXUtils.addToPane(materialControl, container);
         }
 
-        FXUtils.addToPane(lodLevelControl, container);
         FXUtils.addToPane(boundingVolumeControl, container);
 
         addSplitLine(container);
+
+        final LodLevelModelPropertyControl lodLevelControl = new LodLevelModelPropertyControl(lodLevel,
+                Messages.MODEL_PROPERTY_LOD, changeConsumer);
+
+        lodLevelControl.setApplyHandler(Geometry::setLodLevel);
+        lodLevelControl.setSyncHandler(Geometry::getLodLevel);
+        lodLevelControl.setEditObject(geometry, true);
+
+        FXUtils.addToPane(lodLevelControl, container);
     }
 
     protected boolean canEditMaterial(final Geometry geometry) {

@@ -65,6 +65,11 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
     }
 
     @Override
+    protected boolean isSingleRow() {
+        return true;
+    }
+
+    @Override
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
@@ -73,7 +78,7 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
         levelComboBox.setCellFactory(param -> new LodLevelCell());
         levelComboBox.setButtonCell(new LodLevelCell());
         levelComboBox.setEditable(false);
-        levelComboBox.prefWidthProperty().bind(widthProperty());
+        levelComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
         levelComboBox.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
 

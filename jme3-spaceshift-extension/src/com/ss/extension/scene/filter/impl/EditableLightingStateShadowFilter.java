@@ -8,8 +8,12 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.simsilica.fx.LightingState;
 import com.ss.extension.loader.SceneLoader;
+import com.ss.extension.scene.app.state.SceneAppState;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import rlib.util.array.Array;
 
 /**
  * The editable implementation of a {@link DirectionalLightShadowFilter} which uses the light from {@link
@@ -26,6 +30,17 @@ public class EditableLightingStateShadowFilter extends EditableDirectionalLightS
     @Override
     public String getName() {
         return "Shadows from Lighting State";
+    }
+
+    @Nullable
+    @Override
+    public String checkStates(@NotNull final Array<SceneAppState> exists) {
+
+        if (exists.search(appState -> appState instanceof LightingState) == null) {
+            return "The Shadows from Lighting State requires the Lighting State";
+        }
+
+        return null;
     }
 
     @Override
