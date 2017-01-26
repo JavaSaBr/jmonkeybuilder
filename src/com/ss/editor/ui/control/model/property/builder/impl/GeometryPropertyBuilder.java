@@ -31,7 +31,7 @@ import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link Geometry} objects.
+ * The implementation of the {@link PropertyBuilder} to build property controls for {@link Geometry} objects.
  *
  * @author JavaSaBr
  */

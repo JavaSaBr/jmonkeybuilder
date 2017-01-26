@@ -38,7 +38,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link Spatial} objects.
+ * The implementation of the {@link PropertyBuilder} to build property controls for {@link Spatial} objects.
  *
  * @author JavaSaBr
  */

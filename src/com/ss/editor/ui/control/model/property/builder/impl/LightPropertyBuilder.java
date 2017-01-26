@@ -24,7 +24,7 @@ import javafx.scene.shape.Line;
 import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link Light} objects.
+ * The implementation of the {@link PropertyBuilder} to build property controls for {@link Light} objects.
  *
  * @author JavaSaBr
  */

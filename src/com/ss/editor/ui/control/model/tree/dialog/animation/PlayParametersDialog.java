@@ -5,8 +5,8 @@ import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -111,8 +111,6 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
         loopModeComboBox = new ComboBox<>(LOOP_MODES);
         loopModeComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         loopModeComboBox.prefWidthProperty().bind(root.widthProperty());
-
-        final AnimationControlModelNode node = getNode();
 
         FXUtils.addToPane(loopModeLabel, loopModeContainer);
         FXUtils.addToPane(loopModeComboBox, loopModeContainer);

@@ -31,7 +31,7 @@ import tonegod.emitter.material.ParticlesMaterial;
 import tonegod.emitter.node.ParticleNode;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link ParticleEmitterNode}
+ * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleEmitterNode}
  * objects.
  *
  * @author JavaSaBr

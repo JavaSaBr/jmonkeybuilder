@@ -4,6 +4,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.builder.impl.AppStatePropertyBuilder;
 import com.ss.editor.ui.control.filter.property.builder.impl.FilterPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.AudioNodePropertyBuilder;
+import com.ss.editor.ui.control.model.property.builder.impl.DefaultControlPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.EditableControlPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
 import com.ss.editor.ui.control.model.property.builder.impl.LightPropertyBuilder;
@@ -37,6 +38,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(EditableControlPropertyBuilder.getInstance());
         BUILDERS.add(AppStatePropertyBuilder.getInstance());
         BUILDERS.add(FilterPropertyBuilder.getInstance());
+        BUILDERS.add(DefaultControlPropertyBuilder.getInstance());
     }
 
     /**
