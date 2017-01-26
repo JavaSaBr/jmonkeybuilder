@@ -25,6 +25,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -331,10 +332,23 @@ public class UIUtils {
     }
 
     /**
-     * Конвертирование Color в ColorRGBA.
+     * Convert a color from {@link Color} to {@link ColorRGBA}.
      */
-    public static ColorRGBA convertColor(final Color newValue) {
+    @NotNull
+    public static ColorRGBA convertColor(@NotNull final Color newValue) {
         return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), (float) newValue.getOpacity());
+    }
+
+    /**
+     * Consume an event if the event is not hotkey.
+     *
+     * @param event the event.
+     */
+    public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
+        if (event == null || event.isControlDown() || event.isShiftDown()) {
+            return;
+        }
+        event.consume();
     }
 
     private UIUtils() {

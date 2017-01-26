@@ -5,13 +5,13 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.util.UIUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-import javafx.event.Event;
 import javafx.scene.layout.HBox;
 import rlib.function.SixObjectConsumer;
 import rlib.ui.control.input.FloatTextField;
@@ -42,7 +42,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
 
         valueField = new FloatTextField();
         valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        valueField.setOnKeyPressed(Event::consume);
+        valueField.setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
