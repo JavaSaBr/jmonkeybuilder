@@ -148,6 +148,7 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
      * Updating rotation.
      */
     private void updateRotation(@Nullable final KeyEvent event) {
+        if (event != null) event.consume();
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final Quaternion oldValue = getPropertyValue();

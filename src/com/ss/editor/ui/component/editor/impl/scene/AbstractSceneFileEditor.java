@@ -21,6 +21,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
@@ -369,18 +370,58 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @Override
     protected void processKeyReleased(@NotNull final KeyEvent event) {
         super.processKeyReleased(event);
-        if (!event.isControlDown()) return;
 
         final KeyCode code = event.getCode();
 
-        if (code == KeyCode.Z) {
-            undo();
-            event.consume();
-        } else if (code == KeyCode.Y) {
-            redo();
+        if (handleKeyActionImpl(code, event.isControlDown())) {
             event.consume();
         }
     }
+
+    /**
+     * Handle a key code.
+     *
+     * @param isControlDown true if control is down.
+     * @param keyCode       the key code.
+     */
+    @FromAnyThread
+    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isControlDown) {
+        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isControlDown));
+    }
+
+    /**
+     * Handle a key code.
+     *
+     * @param keyCode       the key code.
+     * @param isControlDown true if control is down.
+     * @return true if can consume an event.
+     */
+    @EditorThread
+    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isControlDown) {
+
+        if (isControlDown && keyCode == KeyCode.Z) {
+            undo();
+            return true;
+        } else if (isControlDown && keyCode == KeyCode.Y) {
+            redo();
+            return true;
+        } else if (keyCode == KeyCode.G) {
+            final ToggleButton moveToolButton = getMoveToolButton();
+            moveToolButton.setSelected(true);
+            return true;
+        } else if (keyCode == KeyCode.R) {
+            final ToggleButton rotationToolButton = getRotationToolButton();
+            rotationToolButton.setSelected(true);
+            return true;
+        } else if (keyCode == KeyCode.S) {
+            final ToggleButton scaleToolButton = getScaleToolButton();
+            scaleToolButton.setSelected(true);
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
      * Redo the last operation.

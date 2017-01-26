@@ -88,11 +88,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
         return customSky;
     }
 
-    @Override
-    public void notifyTransformed(@NotNull final Spatial spatial) {
-        getFileEditor().notifyTransformed(spatial);
-    }
-
     /**
      * Activate the node with models.
      */
@@ -284,11 +279,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
     protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                                        final float vRotation, final float targetDistance) {
         EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
-    }
-
-    @Override
-    protected void notifySelected(@Nullable final Object object) {
-        getFileEditor().notifySelected(object);
     }
 
     @Override

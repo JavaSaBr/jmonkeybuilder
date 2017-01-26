@@ -84,6 +84,7 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
      * Update the value.
      */
     private void updateValue(final KeyEvent event) {
+        if (event != null) event.consume();
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final String textValue = valueField.getText();

@@ -12,6 +12,8 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.jme3.light.PointLight;
@@ -45,13 +47,15 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
-import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javafx.scene.input.KeyCode;
+import rlib.function.BooleanFloatConsumer;
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -64,11 +68,21 @@ import rlib.util.dictionary.ObjectDictionary;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelChangeConsumer, M extends Spatial>
+public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends AdvancedAbstractEditorAppState<T> implements SceneEditorControl {
+
+    protected static final String KEY_S = "SSEditor.editorState.S";
+    protected static final String KEY_G = "SSEditor.editorState.G";
+    protected static final String KEY_R = "SSEditor.editorState.R";
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
+
+    static {
+        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
+        TRIGGERS.put(KEY_G, new KeyTrigger(KeyInput.KEY_G));
+        TRIGGERS.put(KEY_R, new KeyTrigger(KeyInput.KEY_R));
+    }
 
     /**
      * The table with models to present lights on a scene.
@@ -264,6 +278,23 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     @Override
+    protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
+        super.registerActionHandlers(actionHandlers);
+
+        final T fileEditor = getFileEditor();
+
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isControlDown()));
+        actionHandlers.put(KEY_G, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.G, isControlDown()));
+        actionHandlers.put(KEY_R, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.R, isControlDown()));
+    }
+
+    @Override
+    protected void registerActionListener(@NotNull final InputManager inputManager) {
+        super.registerActionListener(inputManager);
+        inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R);
+    }
+
+    @Override
     @NotNull
     protected Node getNodeForCamera() {
         if (cameraNode == null) cameraNode = new Node("CameraNode");
@@ -297,6 +328,11 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @NotNull
     public Node getAudioNode() {
         return audioNode;
+    }
+
+    @Override
+    public void notifyTransformed(@NotNull final Spatial spatial) {
+        getFileEditor().notifyTransformed(spatial);
     }
 
     /**
@@ -1040,6 +1076,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     protected void notifySelected(@Nullable final Object object) {
+        getFileEditor().notifySelected(object);
     }
 
     /**

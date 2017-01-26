@@ -149,6 +149,7 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
      * Update the vector.
      */
     protected void updateVector(@Nullable final KeyEvent event) {
+        if (event != null) event.consume();
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final FloatTextField xField = getXField();

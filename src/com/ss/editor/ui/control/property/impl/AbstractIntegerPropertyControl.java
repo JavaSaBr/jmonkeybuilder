@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
+import javafx.event.Event;
 import javafx.scene.layout.HBox;
 import rlib.function.SixObjectConsumer;
 import rlib.ui.control.input.IntegerTextField;
@@ -40,6 +41,7 @@ public abstract class AbstractIntegerPropertyControl<C extends ChangeConsumer, T
 
         valueField = new IntegerTextField();
         valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        valueField.setOnKeyPressed(Event::consume);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

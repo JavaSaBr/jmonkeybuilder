@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
@@ -91,6 +92,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         assetManager.deleteFromCache(modelKey);
 
         final Spatial loadedModel = assetManager.loadModel(modelKey);
+        loadedModel.setUserData(LOADED_MODEL_KEY, true);
 
         final ModelNode<?> modelNode = getNode();
         final Node parent = (Node) modelNode.getElement();

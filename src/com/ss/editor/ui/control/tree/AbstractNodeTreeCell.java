@@ -125,6 +125,9 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
         setOnDragExited(this::dragExited);
+        setOnKeyReleased(event -> {
+            if (isEditing()) event.consume();
+        });
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);
         FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
@@ -362,17 +365,17 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     protected boolean processDragDropped(@NotNull final TreeItem<ModelNode<?>> dragTreeItem, @NotNull final ModelNode<?> dragItem,
                                          @NotNull final ModelNode<?> item, final boolean isCopy,
                                          @NotNull final TreeItem<ModelNode<?>> newParentItem, @NotNull final Object element) {
-        if (isCopy) {
-
-            //TODO переделать на операцию
-            final ModelNode<?> copy = item.copy();
-            final ModelNode<?> newParent = newParentItem.getValue();
-            newParent.add(dragItem);
-
-            final M nodeTree = getNodeTree();
-            nodeTree.notifyAdded(newParent, copy, -1);
-            return false;
-        }
+//        FIXME if (isCopy) {
+//
+//            //TODO переделать на операцию
+//            final ModelNode<?> copy = item.copy();
+//            final ModelNode<?> newParent = newParentItem.getValue();
+//            newParent.add(dragItem);
+//
+//            final M nodeTree = getNodeTree();
+//            nodeTree.notifyAdded(newParent, copy, -1);
+//            return false;
+//        }
 
         return true;
     }

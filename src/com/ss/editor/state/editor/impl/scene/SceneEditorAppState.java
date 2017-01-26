@@ -6,7 +6,6 @@ import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
@@ -15,7 +14,6 @@ import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.SceneFilter;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import rlib.util.array.Array;
 
@@ -35,18 +33,8 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     }
 
     @Override
-    public void notifyTransformed(@NotNull final Spatial spatial) {
-        getFileEditor().notifyTransformed(spatial);
-    }
-
-    @Override
     protected int getGridSize() {
         return 1000;
-    }
-
-    @Override
-    protected void notifySelected(@Nullable final Object object) {
-        getFileEditor().notifySelected(object);
     }
 
     @Override

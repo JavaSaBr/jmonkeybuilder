@@ -9,7 +9,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
-import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ import tonegod.emitter.geometry.ParticleGeometry;
 public class ModelEditorUtils {
 
     @Nullable
-    public static <T extends FileEditor & ModelChangeConsumer, M extends Spatial> Object findToSelect(
+    public static <T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial> Object findToSelect(
             @NotNull final AbstractSceneEditorAppState<T, M> state, @NotNull final Object object) {
 
         if (object instanceof ParticleGeometry) {
