@@ -74,6 +74,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     protected static final String KEY_S = "SSEditor.editorState.S";
     protected static final String KEY_G = "SSEditor.editorState.G";
     protected static final String KEY_R = "SSEditor.editorState.R";
+    protected static final String KEY_DEL = "SSEditor.editorState.Del";
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
@@ -82,6 +83,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
         TRIGGERS.put(KEY_G, new KeyTrigger(KeyInput.KEY_G));
         TRIGGERS.put(KEY_R, new KeyTrigger(KeyInput.KEY_R));
+        TRIGGERS.put(KEY_DEL, new KeyTrigger(KeyInput.KEY_DELETE));
     }
 
     /**
@@ -283,15 +285,16 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
         final T fileEditor = getFileEditor();
 
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isControlDown()));
-        actionHandlers.put(KEY_G, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.G, isControlDown()));
-        actionHandlers.put(KEY_R, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.R, isControlDown()));
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown()));
+        actionHandlers.put(KEY_G, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.G, isPressed, isControlDown()));
+        actionHandlers.put(KEY_R, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.R, isPressed, isControlDown()));
+        actionHandlers.put(KEY_DEL, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.DELETE, isPressed, isControlDown()));
     }
 
     @Override
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         super.registerActionListener(inputManager);
-        inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R);
+        inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
     }
 
     @Override
@@ -1481,5 +1484,11 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @Nullable
     public EditorAudioNode getAudioNode(@NotNull final Spatial model) {
         return getAudioNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+    }
+
+    @Override
+    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                       final float vRotation, final float targetDistance) {
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
     }
 }

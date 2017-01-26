@@ -2,12 +2,12 @@ package com.ss.editor.ui.control.model.node.spatial.emitter;
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.CreateImpostorParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.CreatePointParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.CreateQuadParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.LoadModelParticlesMeshAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
-import com.ss.editor.ui.control.model.node.spatial.GeometryModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,7 +52,7 @@ public class ParticleGeometryModelNode extends GeometryModelNode<ParticleGeometr
     }
 
     @Override
-    protected boolean canRemove() {
+    public boolean canRemove() {
         return false;
     }
 

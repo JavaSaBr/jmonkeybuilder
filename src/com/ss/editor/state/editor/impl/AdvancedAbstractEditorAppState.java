@@ -18,6 +18,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
 
@@ -440,6 +441,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     @Override
+    @EditorThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         this.stateManager = stateManager;
@@ -498,6 +500,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     @Override
+    @EditorThread
     public void cleanup() {
         super.cleanup();
 
@@ -577,27 +580,45 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         return lightForCamera;
     }
 
-    public float getPrevHRotation() {
+    /**
+     * @return the previous horizontal camera rotation.
+     */
+    protected float getPrevHRotation() {
         return prevHRotation;
     }
 
-    public void setPrevHRotation(final float prevHRotation) {
+    /**
+     * @param prevHRotation the previous horizontal camera rotation.
+     */
+    protected void setPrevHRotation(final float prevHRotation) {
         this.prevHRotation = prevHRotation;
     }
 
-    public float getPrevTargetDistance() {
+    /**
+     * @return the previous camera zoom.
+     */
+    protected float getPrevTargetDistance() {
         return prevTargetDistance;
     }
 
-    public void setPrevTargetDistance(final float prevTargetDistance) {
+    /**
+     * @param prevTargetDistance the previous camera zoom.
+     */
+    protected void setPrevTargetDistance(final float prevTargetDistance) {
         this.prevTargetDistance = prevTargetDistance;
     }
 
-    public float getPrevVRotation() {
+    /**
+     * @return the previous vertical camera rotation.
+     */
+    protected float getPrevVRotation() {
         return prevVRotation;
     }
 
-    public void setPrevVRotation(final float prevVRotation) {
+    /**
+     * @param prevVRotation the previous vertical camera rotation.
+     */
+    protected void setPrevVRotation(final float prevVRotation) {
         this.prevVRotation = prevVRotation;
     }
 
@@ -677,6 +698,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     /**
      * Update the editor camera.
      */
+    @EditorThread
     public void updateCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                              final float vRotation, final float targetDistance) {
 

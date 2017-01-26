@@ -25,7 +25,7 @@ public class ParticleNodeModelNode extends NodeModelNode<ParticleNode> {
     }
 
     @Override
-    protected boolean canRemove() {
+    public boolean canRemove() {
         return false;
     }
 

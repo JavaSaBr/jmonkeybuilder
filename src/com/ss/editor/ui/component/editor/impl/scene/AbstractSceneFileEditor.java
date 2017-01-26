@@ -19,6 +19,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.Control;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.EditorThread;
@@ -44,6 +45,9 @@ import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -373,7 +377,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final KeyCode code = event.getCode();
 
-        if (handleKeyActionImpl(code, event.isControlDown())) {
+        if (handleKeyActionImpl(code, false, event.isControlDown())) {
             event.consume();
         }
     }
@@ -381,23 +385,26 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * Handle a key code.
      *
+     * @param isPressed     true if key is pressed.
      * @param isControlDown true if control is down.
      * @param keyCode       the key code.
      */
     @FromAnyThread
-    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isControlDown) {
-        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isControlDown));
+    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown) {
+        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown));
     }
 
     /**
      * Handle a key code.
      *
      * @param keyCode       the key code.
+     * @param isPressed     true if key is pressed.
      * @param isControlDown true if control is down.
      * @return true if can consume an event.
      */
     @EditorThread
-    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isControlDown) {
+    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown) {
+        if (isPressed) return false;
 
         if (isControlDown && keyCode == KeyCode.Z) {
             undo();
@@ -416,6 +423,28 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         } else if (keyCode == KeyCode.S) {
             final ToggleButton scaleToolButton = getScaleToolButton();
             scaleToolButton.setSelected(true);
+            return true;
+        } else if (keyCode == KeyCode.DELETE) {
+
+            final ModelNodeTree modelNodeTree = getModelNodeTree();
+            final ModelNode<?> selected = modelNodeTree.getSelected();
+            if (selected == null || !selected.canRemove()) return false;
+
+            final Object element = selected.getElement();
+            final ModelNode<?> parent = selected.getParent();
+            final Object parentElement = parent == null ? null : parent.getElement();
+
+            if (element instanceof Spatial) {
+                final Spatial spatial = (Spatial) element;
+                execute(new RemoveChildOperation(spatial, spatial.getParent()));
+            } else if (element instanceof Light && parentElement instanceof Node) {
+                final Light light = (Light) element;
+                execute(new RemoveLightOperation(light, (Node) parentElement));
+            } else if (element instanceof Control && parentElement instanceof Spatial) {
+                final Control control = (Control) element;
+                execute(new RemoveControlOperation(control, (Spatial) parentElement));
+            }
+
             return true;
         }
 

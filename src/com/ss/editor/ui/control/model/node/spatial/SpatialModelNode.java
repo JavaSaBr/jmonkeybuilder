@@ -12,14 +12,14 @@ import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.control.ControlModelNode;
+import com.ss.editor.ui.control.model.node.light.LightModelNode;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.control.ControlModelNode;
-import com.ss.editor.ui.control.model.node.light.LightModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,10 +51,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         super.fillContextMenu(nodeTree, items);
     }
 
-    /**
-     * @return true if you can remove this node.
-     */
-    protected boolean canRemove() {
+    @Override
+    public boolean canRemove() {
         final Node parent = getElement().getParent();
         return parent != null && parent.getUserData(SceneEditorControl.class.getName()) != Boolean.TRUE;
     }

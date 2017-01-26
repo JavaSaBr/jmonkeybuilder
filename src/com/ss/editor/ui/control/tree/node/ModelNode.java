@@ -159,6 +159,13 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * @return true if you can remove this node.
+     */
+    public boolean canRemove() {
+        return true;
+    }
+
+    /**
      * @return the new copy of this node.
      */
     @NotNull

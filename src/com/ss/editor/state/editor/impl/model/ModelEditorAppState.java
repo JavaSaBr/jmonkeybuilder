@@ -5,7 +5,6 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
@@ -273,12 +272,6 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
             frame = 0;
         });
-    }
-
-    @Override
-    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                       final float vRotation, final float targetDistance) {
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
     }
 
     @Override
