@@ -890,9 +890,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         for (final File file : files) {
 
-            if (file.getName().endsWith(FileExtensions.JME_OBJECT)) {
+            final String name = file.getName();
+
+            if (name.endsWith(FileExtensions.JME_OBJECT)) {
                 addNewModel(dragEvent, file.toPath());
-            } else if (file.getName().endsWith(FileExtensions.JME_MATERIAL)) {
+            } else if (name.endsWith(FileExtensions.JME_MATERIAL)) {
                 applyMaterial(dragEvent, file.toPath());
             }
         }
@@ -909,6 +911,21 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         if (files == null || files.isEmpty()) {
             return;
         }
+
+        int count = 0;
+
+        for (final File file : files) {
+
+            final String name = file.getName();
+
+            if (name.endsWith(FileExtensions.JME_OBJECT)) {
+                count++;
+            } else if (name.endsWith(FileExtensions.JME_MATERIAL)) {
+                count++;
+            }
+        }
+
+        if (count < 1) return;
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);
