@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.property.control;
 
 import static com.ss.editor.ui.control.model.property.control.ModelPropertyControl.newChangeHandler;
 
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.impl.AbstractFloatPropertyControl;
 
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class FloatModelPropertyControl<T extends Spatial> extends AbstractFloatPropertyControl<ModelChangeConsumer, T> {
+public class FloatModelPropertyControl<T> extends AbstractFloatPropertyControl<ModelChangeConsumer, T> {
 
     public FloatModelPropertyControl(@Nullable final Float element, @NotNull final String paramName,
                                      @NotNull final ModelChangeConsumer modelChangeConsumer) {
