@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.property.control;
 
 import static com.ss.editor.ui.control.model.property.control.ModelPropertyControl.newChangeHandler;
 
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.impl.AbstractBooleanPropertyControl;
 
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class BooleanModelPropertyControl<T extends Spatial> extends AbstractBooleanPropertyControl<ModelChangeConsumer, T> {
+public class BooleanModelPropertyControl<T> extends AbstractBooleanPropertyControl<ModelChangeConsumer, T> {
 
     public BooleanModelPropertyControl(@NotNull final Boolean element, @NotNull final String paramName,
                                        @NotNull final ModelChangeConsumer changeConsumer) {

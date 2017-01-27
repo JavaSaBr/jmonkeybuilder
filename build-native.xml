@@ -2,7 +2,7 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="0.9.1.2" />
+    <property name="editor.version" value="0.9.2" />
 
     <target name="init-fx-tasks">
         <path id="fxant">
@@ -245,6 +245,7 @@
                 <fx:jvmarg value="-XX:+UseTLAB"/>
                 <fx:jvmarg value="-Dprism.lcdtext=false"/>
                 <fx:jvmarg value="-Dprism.text=t2k"/>
+                <fx:jvmarg value="-Djavafx.animation.fullspeed=true"/>
                 <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
             </fx:platform>
 

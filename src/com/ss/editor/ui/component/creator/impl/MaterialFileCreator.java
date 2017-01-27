@@ -69,6 +69,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
         return Messages.MATERIAL_FILE_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return JME_MATERIAL;
@@ -82,7 +83,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void createSettings(final VBox root) {
+    protected void createSettings(@NotNull final VBox root) {
         super.createSettings(root);
 
         final HBox materialTypeContainer = new HBox();

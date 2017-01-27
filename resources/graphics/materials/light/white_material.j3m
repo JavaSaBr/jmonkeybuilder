@@ -1,0 +1,7 @@
+Material MyMaterial : Common/MatDefs/Misc/Unshaded.j3md {
+    MaterialParameters {
+        BackfaceShadows : true
+    }
+    AdditionalRenderState {
+    }
+}

@@ -41,7 +41,7 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
 import tonegod.emitter.influencers.impl.SpriteInfluencer;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link ParticleInfluencer}.
+ * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleInfluencer}.
  *
  * @author JavaSaBr
  */

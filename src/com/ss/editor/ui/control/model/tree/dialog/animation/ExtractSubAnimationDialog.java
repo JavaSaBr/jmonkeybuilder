@@ -1,15 +1,16 @@
 package com.ss.editor.ui.control.model.tree.dialog.animation;
 
 import static com.ss.editor.util.AnimationUtils.extractAnimation;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
-import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -19,7 +20,6 @@ import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
-import java.util.Objects;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -50,11 +50,13 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * The model tree component.
      */
-    private final ModelNodeTree nodeTree;
+    @NotNull
+    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
 
     /**
      * The animation node.
      */
+    @NotNull
     private final AnimationModelNode node;
 
     /**
@@ -72,12 +74,12 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      */
     private IntegerTextField endFrameField;
 
-    public ExtractSubAnimationDialog(@NotNull final ModelNodeTree nodeTree, @NotNull final AnimationModelNode node) {
+    public ExtractSubAnimationDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final AnimationModelNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
         final Animation animation = node.getElement();
-        final AnimControl control = Objects.requireNonNull(node.getControl());
+        final AnimControl control = requireNonNull(node.getControl());
         final int frameCount = AnimationUtils.getFrameCount(animation);
 
         final TextField nameField = getNameField();
@@ -95,13 +97,15 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the model tree component.
      */
-    protected ModelNodeTree getNodeTree() {
+    @NotNull
+    protected AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
         return nodeTree;
     }
 
     /**
      * @return the animation node.
      */
+    @NotNull
     protected AnimationModelNode getNode() {
         return node;
     }
@@ -211,7 +215,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     protected void processExtract() {
 
         final AnimationModelNode node = getNode();
-        final AnimControl control = Objects.requireNonNull(node.getControl());
+        final AnimControl control = requireNonNull(node.getControl());
         final Animation animation = node.getElement();
 
         final TextField nameField = getNameField();
@@ -227,9 +231,9 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
         final Animation subAnimation = extractAnimation(animation, nameField.getText(), startFrame, endFrame);
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-        modelChangeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
 
         EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
     }

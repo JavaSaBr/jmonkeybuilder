@@ -2,11 +2,11 @@ package com.ss.extension.scene.app.state.impl;
 
 import com.simsilica.fx.LightingState;
 import com.simsilica.fx.sky.SkyState;
+import com.ss.extension.property.EditableProperty;
+import com.ss.extension.property.EditablePropertyType;
+import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
-import com.ss.extension.scene.app.state.property.EditableProperty;
-import com.ss.extension.scene.app.state.property.EditablePropertyType;
-import com.ss.extension.scene.app.state.property.SimpleProperty;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +22,7 @@ import rlib.util.array.ArrayFactory;
 public class EditableSkySceneAppState extends SkyState implements EditableSceneAppState {
 
     public EditableSkySceneAppState() {
+        super();
     }
 
     @NotNull
@@ -32,7 +33,7 @@ public class EditableSkySceneAppState extends SkyState implements EditableSceneA
 
     @Nullable
     @Override
-    public String canCreate(@NotNull final Array<SceneAppState> exists) {
+    public String checkStates(@NotNull final Array<SceneAppState> exists) {
         final SceneAppState state = exists.search(appState -> appState instanceof LightingState);
         return state == null ? "The Sky State requires the Lighting State" : null;
     }

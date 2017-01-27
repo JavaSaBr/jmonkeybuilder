@@ -3,6 +3,8 @@ package com.ss.editor.executor.impl;
 import com.ss.editor.EditorThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 
@@ -61,7 +63,7 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     }
 
     @Override
-    public void execute(final Runnable task) {
+    public void execute(@NotNull final Runnable task) {
         lock();
         try {
 

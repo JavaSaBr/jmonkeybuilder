@@ -9,14 +9,17 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
+import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.DefaultModelSinglePropertyControl;
 import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.LayerModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.QuaternionModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.StringModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -35,7 +38,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link PropertyBuilder} for building property controls for {@link Spatial} objects.
+ * The implementation of the {@link PropertyBuilder} to build property controls for {@link Spatial} objects.
  *
  * @author JavaSaBr
  */
@@ -65,6 +68,15 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         final CullHint cullHint = spatial.getLocalCullHint();
         final ShadowMode shadowMode = spatial.getLocalShadowMode();
         final Bucket queueBucket = spatial.getLocalQueueBucket();
+
+        if (changeConsumer instanceof SceneChangeConsumer) {
+
+            final SceneLayer layer = SceneLayer.getLayer(spatial);
+            final LayerModelPropertyControl propertyControl = new LayerModelPropertyControl(layer, (SceneChangeConsumer) changeConsumer);
+            propertyControl.setEditObject(spatial);
+
+            FXUtils.addToPane(propertyControl, container);
+        }
 
         final EnumModelPropertyControl<Spatial, CullHint> cullHintControl =
                 new EnumModelPropertyControl<>(cullHint, Messages.MODEL_PROPERTY_CULL_HINT, changeConsumer, CULL_HINTS);
@@ -106,8 +118,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
             scaleControl.setSyncHandler(Spatial::getLocalScale);
             scaleControl.setEditObject(spatial);
 
-            final QuaternionModelPropertyControl rotationControl =
-                    new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
+            final QuaternionModelPropertyControl<Spatial> rotationControl =
+                    new QuaternionModelPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
             rotationControl.setApplyHandler(Spatial::setLocalRotation);
             rotationControl.setSyncHandler(Spatial::getLocalRotation);
             rotationControl.setEditObject(spatial);
@@ -128,6 +140,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         sortedKeys.addAll(userDataKeys);
 
         for (final String key : sortedKeys) {
+            if (SceneLayer.KEY.equals(key)) continue;
+            if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) continue;
 
             final Object data = spatial.getUserData(key);
 
@@ -201,7 +215,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final String value = (String) data;
 
-                final DefaultModelSinglePropertyControl<Spatial, String> control = new DefaultModelSinglePropertyControl<>(value, key, changeConsumer);
+                final StringModelPropertyControl<Spatial> control = new StringModelPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);

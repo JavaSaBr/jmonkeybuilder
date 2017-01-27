@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.operation.scene;
 
+import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.extension.scene.SceneLayer;
@@ -33,31 +34,44 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
+            final Spatial currentModel = editor.getCurrentModel();
+
             if (needShow && !layer.isShowed()) {
                 layer.show();
+                currentModel.depthFirstTraversal(this::updateSpatial);
             } else if (!needShow && layer.isShowed()) {
                 layer.hide();
+                currentModel.depthFirstTraversal(this::updateSpatial);
             }
 
             needShow = !needShow;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(layer.getSceneNode(), layer, "Showed"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, layer, "Showed"));
         });
+    }
+
+    private void updateSpatial(@NotNull final Spatial spatial) {
+        if (SceneLayer.getLayer(spatial) != layer) return;
+        spatial.setVisible(layer.isShowed());
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
+            final Spatial currentModel = editor.getCurrentModel();
+
             if (needShow && !layer.isShowed()) {
                 layer.show();
+                currentModel.depthFirstTraversal(this::updateSpatial);
             } else if (!needShow && layer.isShowed()) {
                 layer.hide();
+                currentModel.depthFirstTraversal(this::updateSpatial);
             }
 
             needShow = !needShow;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(layer.getSceneNode(), layer, "Showed"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, layer, "Showed"));
         });
     }
 }

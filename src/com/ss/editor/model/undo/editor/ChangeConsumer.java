@@ -17,4 +17,6 @@ public interface ChangeConsumer {
      */
     @FromAnyThread
     void execute(@NotNull EditorOperation operation);
+
+
 }

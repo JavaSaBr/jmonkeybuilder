@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +10,7 @@ import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
- * The implementation of the {@link AbstractEditorOperation} for removing a {@link ParticleInfluencer} from the {@link
+ * The implementation of the {@link AbstractEditorOperation} to remove a {@link ParticleInfluencer} from a {@link
  * ParticleEmitterNode}.
  *
  * @author JavaSaBr.
@@ -22,21 +20,24 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
     /**
      * The influencer to remove.
      */
+    @NotNull
     private final ParticleInfluencer influencer;
 
     /**
-     * The index of the parent element.
+     * The parent element.
      */
-    private final int index;
+    @NotNull
+    private final ParticleEmitterNode emitterNode;
 
     /**
      * The index of position in the influencers.
      */
     private final int childIndex;
 
-    public RemoveParticleInfluencerOperation(final ParticleInfluencer influencer, final int index, final int childIndex) {
+    public RemoveParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
+                                             @NotNull final ParticleEmitterNode emitterNode, final int childIndex) {
         this.influencer = influencer;
-        this.index = index;
+        this.emitterNode = emitterNode;
         this.childIndex = childIndex;
     }
 
@@ -44,11 +45,6 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof ParticleEmitterNode)) return;
-
-            final ParticleEmitterNode emitterNode = (ParticleEmitterNode) parent;
             emitterNode.killAllParticles();
             emitterNode.removeInfluencer(influencer);
             emitterNode.emitAllParticles();
@@ -61,13 +57,8 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof ParticleEmitterNode)) return;
-
-            final ParticleEmitterNode emitterNode = (ParticleEmitterNode) parent;
             emitterNode.killAllParticles();
-            emitterNode.addInfluencer(influencer, index);
+            emitterNode.addInfluencer(influencer, childIndex);
             emitterNode.emitAllParticles();
 
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(new ParticleInfluencers(emitterNode), influencer, childIndex));

@@ -18,19 +18,27 @@ import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
 import com.ss.editor.ui.control.app.state.list.AppStateList;
 import com.ss.editor.ui.control.app.state.property.AppStatePropertyEditor;
+import com.ss.editor.ui.control.filter.list.FilterList;
+import com.ss.editor.ui.control.filter.property.FilterPropertyEditor;
+import com.ss.editor.ui.control.layer.LayerNodeTree;
+import com.ss.editor.ui.control.layer.LayersRoot;
+import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
+import com.ss.extension.property.EditableProperty;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
+import com.ss.extension.scene.filter.EditableSceneFilter;
+import com.ss.extension.scene.filter.SceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.function.Consumer;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import javafx.scene.control.SplitPane;
@@ -54,21 +62,42 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     }
 
     /**
-     * The selection handler.
-     */
-    private Consumer<EditableSceneAppState> selectionAppStateHandler;
-
-    /**
      * The list with app states.
      */
     private AppStateList appStateList;
+
+    /**
+     * The list with filters.
+     */
+    private FilterList filterList;
 
     /**
      * The property editor of app states.
      */
     private AppStatePropertyEditor appStatePropertyEditor;
 
+    /**
+     * The property editor of filters.
+     */
+    private FilterPropertyEditor filterPropertyEditor;
+
+    /**
+     * The tree with layers.
+     */
+    private LayerNodeTree layerNodeTree;
+
+    /**
+     * The properties from layers tree.
+     */
+    private ModelPropertyEditor layerPropertyEditor;
+
+    /**
+     * The flag of sync selection.
+     */
+    private boolean needSyncSelection;
+
     public SceneFileEditor() {
+        setNeedSyncSelection(true);
     }
 
     @NotNull
@@ -88,11 +117,14 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         assetManager.deleteFromCache(modelKey);
 
         final SceneNode model = (SceneNode) assetManager.loadAsset(modelKey);
+        model.depthFirstTraversal(this::updateVisibility);
 
         MaterialUtils.cleanUpMaterialParams(model);
 
         final SceneEditorAppState editorState = getEditorAppState();
         editorState.openModel(model);
+
+        handleObjects(model);
 
         setCurrentModel(model);
         setIgnoreListeners(true);
@@ -104,11 +136,22 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
             final AppStateList appStateList = getAppStateList();
             appStateList.fill(model);
 
+            final FilterList filterList = getFilterList();
+            filterList.fill(model);
+
+            final LayerNodeTree layerNodeTree = getLayerNodeTree();
+            layerNodeTree.fill(new LayersRoot(this));
+
         } finally {
             setIgnoreListeners(false);
         }
 
         EXECUTOR_MANAGER.addFXTask(this::loadState);
+    }
+
+    private void updateVisibility(@NotNull final Spatial spatial) {
+        final SceneLayer layer = SceneLayer.getLayer(spatial);
+        if (layer != null) spatial.setVisible(layer.isShowed());
     }
 
     /**
@@ -118,24 +161,66 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         return appStateList;
     }
 
+    /**
+     * @return the list with filters.
+     */
+    private FilterList getFilterList() {
+        return filterList;
+    }
+
+    /**
+     * @return the tree with layers.
+     */
+    private LayerNodeTree getLayerNodeTree() {
+        return layerNodeTree;
+    }
+
+    /**
+     * @return the properties from layers tree.
+     */
+    private ModelPropertyEditor getLayerPropertyEditor() {
+        return layerPropertyEditor;
+    }
+
     @Override
     protected void createContent(@NotNull final StackPane root) {
-        this.selectionAppStateHandler = this::selectAppStateFromList;
-
         super.createContent(root);
 
-        appStateList = new AppStateList(selectionAppStateHandler, this);
+        appStateList = new AppStateList(this::selectAppStateFromList, this);
         appStatePropertyEditor = new AppStatePropertyEditor(this);
+
+        filterList = new FilterList(this::selectFilterFromList, this);
+        filterPropertyEditor = new FilterPropertyEditor(this);
+
+        layerNodeTree = new LayerNodeTree(this::selectNodeFromLayersTree, this);
+        layerPropertyEditor = new ModelPropertyEditor(this);
 
         final SplitPane appStateSplitContainer = new SplitPane(appStateList, appStatePropertyEditor);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
         appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
+        final SplitPane filtersSplitContainer = new SplitPane(filterList, filterPropertyEditor);
+        filtersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        filtersSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        filtersSplitContainer.prefWidthProperty().bind(root.widthProperty());
+
+        //TODO когда в дереве будут модели показываться
+        //final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, layerPropertyEditor);
+       // layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+       // layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
+       // layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
+
+        editorToolComponent.addComponent(layerNodeTree, Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
+        editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(appStateSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+                calcVSplitSize(filtersSplitContainer));
+       // root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+       //         calcVSplitSize(layersSplitContainer));
     }
 
     /**
@@ -144,6 +229,54 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     @FXThread
     public void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
         appStatePropertyEditor.buildFor(appState, null);
+    }
+
+    /**
+     * Handle the selected filter from the list.
+     */
+    @FXThread
+    public void selectFilterFromList(@Nullable final EditableSceneFilter<?> sceneFilter) {
+        filterPropertyEditor.buildFor(sceneFilter, null);
+    }
+
+    /**
+     * Handle the selected object from the layers tree.
+     */
+    @FXThread
+    public void selectNodeFromLayersTree(@Nullable final Object object) {
+
+        if (isNeedSyncSelection()) {
+            setNeedSyncSelection(false);
+            try {
+
+                final ModelNodeTree modelNodeTree = getModelNodeTree();
+                modelNodeTree.select(object);
+
+            } finally {
+                setNeedSyncSelection(true);
+            }
+        }
+
+        final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
+        layerPropertyEditor.buildFor(object, null);
+    }
+
+    @Override
+    public void selectNodeFromTree(@Nullable final Object object) {
+
+        if (isNeedSyncSelection()) {
+            setNeedSyncSelection(false);
+            try {
+
+                final LayerNodeTree layerNodeTree = getLayerNodeTree();
+                layerNodeTree.select(object);
+
+            } finally {
+                setNeedSyncSelection(true);
+            }
+        }
+
+        super.selectNodeFromTree(object);
     }
 
     @NotNull
@@ -158,6 +291,20 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         return SceneFileEditorState::new;
     }
 
+    /**
+     * @param needSyncSelection true if need sync selection.
+     */
+    private void setNeedSyncSelection(final boolean needSyncSelection) {
+        this.needSyncSelection = needSyncSelection;
+    }
+
+    /**
+     * @return true if need sync selection.
+     */
+    private boolean isNeedSyncSelection() {
+        return needSyncSelection;
+    }
+
     @Override
     protected void updateSelection(@Nullable Spatial spatial) {
 
@@ -169,8 +316,55 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
     }
 
     @Override
-    public String toString() {
-        return "SceneFileEditor{} " + super.toString();
+    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+        super.notifyAddedChild(parent, added, index);
+
+        if (parent instanceof LayersRoot) {
+            getLayerNodeTree().notifyAdded(parent, added, index);
+        }
+    }
+
+    @Override
+    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+        super.notifyRemovedChild(parent, removed);
+
+        if (parent instanceof LayersRoot) {
+            getLayerNodeTree().notifyRemoved(parent, removed);
+        }
+    }
+
+    @Override
+    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+                                     @NotNull final String propertyName) {
+        super.notifyChangeProperty(parent, object, propertyName);
+
+        if (object instanceof Spatial && Objects.equals(propertyName, SceneLayer.KEY)) {
+
+            final Spatial spatial = (Spatial) object;
+            final SceneLayer layer = SceneLayer.getLayer(spatial);
+
+            if (layer == null) {
+                spatial.setVisible(true);
+            } else {
+                spatial.setVisible(layer.isShowed());
+            }
+        }
+
+        final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
+        layerPropertyEditor.syncFor(object);
+
+        final LayerNodeTree layerNodeTree = getLayerNodeTree();
+        layerNodeTree.notifyChanged(null, object);
+
+        if (!(object instanceof EditableProperty)) {
+            return;
+        }
+
+        final EditableProperty<?, ?> property = (EditableProperty<?, ?>) object;
+        final Object editObject = property.getObject();
+
+        appStatePropertyEditor.syncFor(editObject);
+        filterPropertyEditor.syncFor(editObject);
     }
 
     @Override
@@ -181,12 +375,34 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
 
     @Override
     public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
-        getEditorAppState().removedAppState(appState);
+        getEditorAppState().removeAppState(appState);
         getAppStateList().fill(getCurrentModel());
     }
 
     @Override
     public void notifyChangedAppState(@NotNull final SceneAppState appState) {
         getAppStateList().fill(getCurrentModel());
+    }
+
+    @Override
+    public void notifyAddedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+        getFilterList().fill(getCurrentModel());
+        getEditorAppState().addFilter(sceneFilter);
+    }
+
+    @Override
+    public void notifyRemovedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+        getFilterList().fill(getCurrentModel());
+        getEditorAppState().removeFilter(sceneFilter);
+    }
+
+    @Override
+    public void notifyChangedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+        getFilterList().fill(getCurrentModel());
+    }
+
+    @Override
+    public String toString() {
+        return "SceneFileEditor{} " + super.toString();
     }
 }

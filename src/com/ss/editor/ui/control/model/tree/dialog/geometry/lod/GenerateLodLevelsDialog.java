@@ -10,7 +10,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -65,7 +65,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      * The model tree component.
      */
     @NotNull
-    private final ModelNodeTree nodeTree;
+    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
 
     /**
      * The geometry.
@@ -89,7 +89,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     private ListView<Number> levelsList;
 
-    public GenerateLodLevelsDialog(@NotNull final ModelNodeTree nodeTree, final @NotNull Geometry geometry) {
+    public GenerateLodLevelsDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, final @NotNull Geometry geometry) {
         this.nodeTree = nodeTree;
         this.geometry = geometry;
         this.mesh = geometry.getMesh();
@@ -100,7 +100,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      * @return the model tree component.
      */
     @NotNull
-    private ModelNodeTree getNodeTree() {
+    private AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
         return nodeTree;
     }
 
@@ -302,8 +302,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
         EXECUTOR_MANAGER.addFXTask(() -> {
 
-            final ModelNodeTree nodeTree = getNodeTree();
-            final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
+            final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+            final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
 
             final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(geometry,
                     Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);

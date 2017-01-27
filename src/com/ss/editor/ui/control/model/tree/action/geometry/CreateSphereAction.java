@@ -4,8 +4,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.image.Image;
 
 /**
- * The action for creating the {@link Geometry} with the {@link Sphere} mesh.
+ * The action to create a {@link Geometry} with a {@link Sphere} mesh.
  *
  * @author JavaSaBr
  */
 public class CreateSphereAction extends AbstractCreateGeometryAction {
 
-    public CreateSphereAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateSphereAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

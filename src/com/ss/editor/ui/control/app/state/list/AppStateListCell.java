@@ -22,7 +22,7 @@ import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 
 /**
- * The implementation of list cell to present EditableSceneAppState.
+ * The implementation of list cell to present an editable scene app state.
  *
  * @author JavaSaBr
  */

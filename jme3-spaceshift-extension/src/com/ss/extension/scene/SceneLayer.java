@@ -5,13 +5,12 @@ import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.scene.Node;
-import com.jme3.util.clone.Cloner;
+import com.jme3.scene.Spatial;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * The implementation of a scene layer.
@@ -20,11 +19,30 @@ import java.util.Objects;
  */
 public class SceneLayer extends Node {
 
+    public static final String KEY = SceneLayer.class.getName();
+
+    public static final SceneLayer NO_LAYER = new SceneLayer();
+
     /**
-     * The parent scene node.
+     * Get a layer of a spatial.
+     *
+     * @param spatial the spatial.
+     * @return the layer or null.
      */
     @Nullable
-    private SceneNode sceneNode;
+    public static SceneLayer getLayer(@NotNull final Spatial spatial) {
+        return spatial.getUserData(KEY);
+    }
+
+    /**
+     * Set a layer to a spatial.
+     *
+     * @param layer   the layer.
+     * @param spatial the spatial.
+     */
+    public static void setLayer(@Nullable final SceneLayer layer, @NotNull final Spatial spatial) {
+        spatial.setUserData(KEY, layer == NO_LAYER ? null : layer);
+    }
 
     /**
      * The flag that layer is builtin.
@@ -74,26 +92,10 @@ public class SceneLayer extends Node {
     }
 
     /**
-     * @param sceneNode The parent scene node.
-     */
-    public void setSceneNode(@Nullable final SceneNode sceneNode) {
-        this.sceneNode = sceneNode;
-    }
-
-    /**
-     * @return the parent scene node.
-     */
-    @NotNull
-    public SceneNode getSceneNode() {
-        return Objects.requireNonNull(sceneNode);
-    }
-
-    /**
      * Hide this layer.
      */
     public void hide() {
         if (!isShowed()) return;
-        removeFromParent();
         setShowed(false);
     }
 
@@ -102,7 +104,6 @@ public class SceneLayer extends Node {
      */
     public void show() {
         if (isShowed()) return;
-        getSceneNode().attachChild(this);
         setShowed(true);
     }
 
@@ -122,12 +123,5 @@ public class SceneLayer extends Node {
         final InputCapsule capsule = importer.getCapsule(this);
         setShowed(capsule.readBoolean("showed", false));
         setBuiltIn(capsule.readBoolean("builtIn", false));
-    }
-
-    @Override
-    public void cloneFields(@NotNull final Cloner cloner, @NotNull final Object original) {
-        super.cloneFields(cloner, original);
-
-        sceneNode = cloner.clone(sceneNode);
     }
 }

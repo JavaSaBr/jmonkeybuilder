@@ -6,15 +6,17 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.control.BooleanAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.ColorAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.EnumAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.FloatAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.IntegerAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.StringAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.Vector2fAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.Vector3fAppStatePropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.extension.property.EditableProperty;
+import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
-import com.ss.extension.scene.app.state.property.EditableProperty;
-import com.ss.extension.scene.app.state.property.EditablePropertyType;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +29,7 @@ import rlib.util.ClassUtils;
 import rlib.util.array.Array;
 
 /**
- * The iproperty builder to build property controls of editavle scene app states.
+ * The property builder to build property controls of editable scene app states.
  *
  * @author JavaSaBr
  */
@@ -90,7 +92,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case COLOR: {
 
                     final EditableProperty<ColorRGBA, ?> property = cast(editableProperty);
-                    final ColorRGBA color = Objects.requireNonNull(property.getValue(), "Color value can't be null.");
+                    final ColorRGBA color = property.getValue();
 
                     final ColorAppStatePropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
                             new ColorAppStatePropertyControl<>(color, property.getName(), changeConsumer);
@@ -105,6 +107,17 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
 
                     final IntegerAppStatePropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case STRING: {
+
+                    final EditableProperty<String, ?> property = cast(editableProperty);
+                    final String value = property.getValue();
+
+                    final StringAppStatePropertyControl<EditableProperty<String, ?>> propertyControl =
+                            new StringAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
@@ -127,6 +140,17 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
 
                     final Vector3fAppStatePropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
                             new Vector3fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case ENUM: {
+
+                    final EditableProperty<Enum<?>, ?> property = cast(editableProperty);
+                    final Enum<?> value = Objects.requireNonNull(property.getValue(), "Enum value can't be null.");
+
+                    final EnumAppStatePropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
+                            new EnumAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

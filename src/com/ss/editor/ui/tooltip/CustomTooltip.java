@@ -16,6 +16,7 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     /**
      * The root container.
      */
+    @NotNull
     private final R root;
 
     public CustomTooltip() {
@@ -25,6 +26,14 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
         scene.setRoot(root);
 
         createContent(root);
+    }
+
+    /**
+     * @return the root container.
+     */
+    @NotNull
+    protected R getRoot() {
+        return root;
     }
 
     @NotNull

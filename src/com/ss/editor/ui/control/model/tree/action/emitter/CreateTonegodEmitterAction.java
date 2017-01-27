@@ -4,12 +4,13 @@ import static java.util.Objects.requireNonNull;
 
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,9 +26,9 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  *
  * @author JavaSaBr
  */
-public class CreateTonegodEmitterAction extends AbstractNodeAction {
+public class CreateTonegodEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public CreateTonegodEmitterAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateTonegodEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -46,8 +47,7 @@ public class CreateTonegodEmitterAction extends AbstractNodeAction {
     @Override
     protected void process() {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final ParticleEmitterNode emitter = createEmitterNode();
         emitter.addInfluencers(new ColorInfluencer(), new AlphaInfluencer(), new SizeInfluencer());
@@ -63,7 +63,8 @@ public class CreateTonegodEmitterAction extends AbstractNodeAction {
         final ModelNode<?> modelNode = getNode();
         final Node parent = (Node) modelNode.getElement();
 
-        consumer.execute(new AddChildOperation(emitter, parent));
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new AddChildOperation(emitter, parent));
     }
 
     @NotNull

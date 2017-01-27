@@ -18,6 +18,8 @@ import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 import com.ss.editor.ui.util.UIUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 import javafx.geometry.Insets;
@@ -44,6 +46,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * The list of waited files to select.
      */
+    @NotNull
     private final Array<Path> waitedFilesToSelect;
 
     /**
@@ -75,6 +78,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * @return the list of waited files to select.
      */
+    @NotNull
     public Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
@@ -82,7 +86,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle request for selection a file.
      */
-    private void processEvent(final RequestSelectFileEvent event) {
+    private void processEvent(@NotNull final RequestSelectFileEvent event) {
 
         final Path file = event.getFile();
 
@@ -101,7 +105,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle a created file.
      */
-    private void processEvent(final CreatedFileEvent event) {
+    private void processEvent(@NotNull final CreatedFileEvent event) {
 
         final Path file = event.getFile();
 
@@ -118,7 +122,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle a deleted file.
      */
-    private void processEvent(final DeletedFileEvent event) {
+    private void processEvent(@NotNull final DeletedFileEvent event) {
 
         final Path file = event.getFile();
 
@@ -175,7 +179,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * Handle changing loading state of the tree.
      */
-    private void handleTreeLoading(final Boolean finished) {
+    private void handleTreeLoading(@NotNull final Boolean finished) {
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
         final Workspace workspace = workspaceManager.getCurrentWorkspace();

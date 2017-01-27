@@ -34,4 +34,10 @@ public class ModelPropertyControl<D, T> extends AbstractPropertyControl<ModelCha
                                 @NotNull final ModelChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());
     }
+
+    public ModelPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
+                                @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>> changeHandler) {
+        super(propertyValue, propertyName, changeConsumer, changeHandler);
+    }
 }

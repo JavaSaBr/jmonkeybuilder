@@ -5,7 +5,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,42 +22,29 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     private final Light light;
 
     /**
-     * The index of parent position.
+     * The parent.
      */
-    private final int index;
+    @NotNull
+    private final Node parent;
 
-    public RemoveLightOperation(@NotNull final Light light, final int index) {
+    public RemoveLightOperation(@NotNull final Light light, @NotNull final Node parent) {
         this.light = light;
-        this.index = index;
+        this.parent = parent;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.removeLight(light);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, light));
+            parent.removeLight(light);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(parent, light));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.addLight(light);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, light, -1));
+            parent.addLight(light);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(parent, light, -1));
         });
     }
 }

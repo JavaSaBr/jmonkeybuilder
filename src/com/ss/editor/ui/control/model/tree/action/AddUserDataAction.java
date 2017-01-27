@@ -4,9 +4,9 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.dialog.AddUserDataDialog;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +21,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class AddUserDataAction extends AbstractNodeAction {
+public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AddUserDataAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public AddUserDataAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -43,8 +43,8 @@ public class AddUserDataAction extends AbstractNodeAction {
     protected void process() {
 
         final ModelNode<?> node = getNode();
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
         final Object element = node.getElement();
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();

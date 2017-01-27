@@ -7,6 +7,7 @@ import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
+import static rlib.util.ClassUtils.unsafeCast;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
@@ -21,6 +22,9 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -32,16 +36,25 @@ import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -51,6 +64,10 @@ import rlib.util.array.ArrayFactory;
  * @author JavaSaBr
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -89,6 +106,9 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     public Texture2DMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
                                          @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
+        setOnDragOver(this::dragOver);
+        setOnDragDropped(this::dragDropped);
+        setOnDragExited(this::dragExited);
     }
 
     @Override
@@ -143,6 +163,61 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());
         repeatButton.disableProperty().bind(texturePreview.imageProperty().isNull());
         flipButton.disableProperty().bind(texturePreview.imageProperty().isNull());
+    }
+
+    /**
+     * Handle grad exiting.
+     */
+    private void dragExited(@NotNull final DragEvent dragEvent) {
+
+    }
+
+    /**
+     * Handle dropped files to editor.
+     */
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return;
+        }
+
+        final File file = files.get(0);
+        final String extension = FileUtils.getExtension(file.getName());
+
+        if (!TEXTURE_EXTENSIONS.contains(extension)) {
+            return;
+        }
+
+        addTexture(file.toPath());
+    }
+
+    /**
+     * Handle drag over.
+     */
+    private void dragOver(@NotNull final DragEvent dragEvent) {
+
+        final Dragboard dragboard = dragEvent.getDragboard();
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return;
+        }
+
+        final File file = files.get(0);
+        final String extension = FileUtils.getExtension(file.getName());
+
+        if (!TEXTURE_EXTENSIONS.contains(extension)) {
+            return;
+        }
+
+        final Set<TransferMode> transferModes = dragboard.getTransferModes();
+        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+
+        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
+        dragEvent.consume();
     }
 
     @Override
@@ -219,6 +294,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addTexture);
         dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 

@@ -2,10 +2,8 @@ package com.ss.editor.ui.control.model.tree.action.operation;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
-import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,51 +17,40 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
     /**
      * The new mesh.
      */
+    @NotNull
     private final Mesh newMesh;
 
     /**
      * The previous mesh.
      */
+    @NotNull
     private final Mesh oldMesh;
 
     /**
-     * The index of geometry.
+     * The geometry.
      */
-    private final int index;
+    @NotNull
+    private final Geometry geometry;
 
-    public ChangeMeshOperation(final Mesh newMesh, final Mesh oldMesh, final int index) {
+    public ChangeMeshOperation(@NotNull final Mesh newMesh, @NotNull final Mesh oldMesh, @NotNull final Geometry geometry) {
         this.newMesh = newMesh;
         this.oldMesh = oldMesh;
-        this.index = index;
+        this.geometry = geometry;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(object instanceof Geometry)) return;
-
-            final Geometry geometry = (Geometry) object;
             geometry.setMesh(newMesh);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, object, "mesh"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(geometry, newMesh, "mesh"));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(object instanceof Geometry)) return;
-
-            final Geometry geometry = (Geometry) object;
             geometry.setMesh(oldMesh);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(object, object, "mesh"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(geometry, oldMesh, "mesh"));
         });
     }
 }

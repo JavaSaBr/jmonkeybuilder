@@ -21,6 +21,8 @@ import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.LocalObjects;
 
+import org.jetbrains.annotations.NotNull;
+
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
@@ -69,7 +71,7 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     }
 
     @Override
-    public void setCollisionPlane(final CollisionResult collisionResult) {
+    public void setCollisionPlane(@NotNull final CollisionResult collisionResult) {
 
         final Camera camera = EDITOR.getCamera();
         final Vector3f direction = camera.getDirection();

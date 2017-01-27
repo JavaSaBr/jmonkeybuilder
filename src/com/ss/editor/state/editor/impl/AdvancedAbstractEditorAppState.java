@@ -18,6 +18,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
 
@@ -52,9 +53,9 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
     protected static final String KEY_SHIFT = "SSEditor.editorState.keyShift";
-    protected static final String KEY_S = "SSEditor.editorState.S";
-    protected static final String KEY_Z = "SSEditor.editorState.Z";
-    protected static final String KEY_Y = "SSEditor.editorState.Y";
+    protected static final String KEY_CTRL_S = "SSEditor.editorState.Ctrl.S";
+    protected static final String KEY_CTRL_Z = "SSEditor.editorState.Ctrl.Z";
+    protected static final String KEY_CTRL_Y = "SSEditor.editorState.Ctrl.Y";
 
     protected static final String KEY_NUM_1 = "SSEditor.editorState.num1";
     protected static final String KEY_NUM_2 = "SSEditor.editorState.num2";
@@ -80,9 +81,9 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         MULTI_TRIGGERS.put(KEY_SHIFT, toArray(new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_LSHIFT)));
         MULTI_TRIGGERS.put(KEY_ALT, toArray(new KeyTrigger(KeyInput.KEY_RMENU), new KeyTrigger(KeyInput.KEY_LMENU)));
 
-        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
-        TRIGGERS.put(KEY_Z, new KeyTrigger(KeyInput.KEY_Z));
-        TRIGGERS.put(KEY_Y, new KeyTrigger(KeyInput.KEY_Y));
+        TRIGGERS.put(KEY_CTRL_S, new KeyTrigger(KeyInput.KEY_S));
+        TRIGGERS.put(KEY_CTRL_Z, new KeyTrigger(KeyInput.KEY_Z));
+        TRIGGERS.put(KEY_CTRL_Y, new KeyTrigger(KeyInput.KEY_Y));
 
         TRIGGERS.put(KEY_NUM_1, new KeyTrigger(KeyInput.KEY_NUMPAD1));
         TRIGGERS.put(KEY_NUM_2, new KeyTrigger(KeyInput.KEY_NUMPAD2));
@@ -111,13 +112,13 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * The action scene listeners.
      */
     @NotNull
-    private final ActionListener actionListener;
+    protected final ActionListener actionListener;
 
     /**
      * The analog scene listeners.
      */
     @NotNull
-    private final AnalogListener analogListener;
+    protected final AnalogListener analogListener;
 
     /**
      * The editor camera.
@@ -187,7 +188,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      */
     private boolean buttonMiddleDown;
 
-    public AdvancedAbstractEditorAppState(final T fileEditor) {
+    public AdvancedAbstractEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
@@ -226,14 +227,14 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         actionHandlers.put(KEY_NUM_4, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.LEFT, isPressed));
         actionHandlers.put(KEY_NUM_6, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.RIGHT, isPressed));
 
-        actionHandlers.put(KEY_Z, (isPressed, tpf) -> {
+        actionHandlers.put(KEY_CTRL_Z, (isPressed, tpf) -> {
             if (!isPressed && isControlDown()) undo();
         });
-        actionHandlers.put(KEY_Y, (isPressed, tpf) -> {
+        actionHandlers.put(KEY_CTRL_Y, (isPressed, tpf) -> {
             if (!isPressed && isControlDown()) redo();
         });
 
-        actionHandlers.put(KEY_S, (isPressed, tpf) -> {
+        actionHandlers.put(KEY_CTRL_S, (isPressed, tpf) -> {
 
             final FileEditor fileEditor = getFileEditor();
 
@@ -440,6 +441,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     @Override
+    @EditorThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         this.stateManager = stateManager;
@@ -493,11 +495,12 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      */
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
-        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_S, KEY_Z, KEY_Y, KEY_NUM_1,
+        inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_CTRL_S, KEY_CTRL_Z, KEY_CTRL_Y, KEY_NUM_1,
                 KEY_NUM_2, KEY_NUM_3, KEY_NUM_4, KEY_NUM_5, KEY_NUM_6, KEY_NUM_7, KEY_NUM_8, KEY_NUM_9);
     }
 
     @Override
+    @EditorThread
     public void cleanup() {
         super.cleanup();
 
@@ -577,27 +580,45 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         return lightForCamera;
     }
 
-    public float getPrevHRotation() {
+    /**
+     * @return the previous horizontal camera rotation.
+     */
+    protected float getPrevHRotation() {
         return prevHRotation;
     }
 
-    public void setPrevHRotation(final float prevHRotation) {
+    /**
+     * @param prevHRotation the previous horizontal camera rotation.
+     */
+    protected void setPrevHRotation(final float prevHRotation) {
         this.prevHRotation = prevHRotation;
     }
 
-    public float getPrevTargetDistance() {
+    /**
+     * @return the previous camera zoom.
+     */
+    protected float getPrevTargetDistance() {
         return prevTargetDistance;
     }
 
-    public void setPrevTargetDistance(final float prevTargetDistance) {
+    /**
+     * @param prevTargetDistance the previous camera zoom.
+     */
+    protected void setPrevTargetDistance(final float prevTargetDistance) {
         this.prevTargetDistance = prevTargetDistance;
     }
 
-    public float getPrevVRotation() {
+    /**
+     * @return the previous vertical camera rotation.
+     */
+    protected float getPrevVRotation() {
         return prevVRotation;
     }
 
-    public void setPrevVRotation(final float prevVRotation) {
+    /**
+     * @param prevVRotation the previous vertical camera rotation.
+     */
+    protected void setPrevVRotation(final float prevVRotation) {
         this.prevVRotation = prevVRotation;
     }
 
@@ -677,6 +698,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     /**
      * Update the editor camera.
      */
+    @EditorThread
     public void updateCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                              final float vRotation, final float targetDistance) {
 

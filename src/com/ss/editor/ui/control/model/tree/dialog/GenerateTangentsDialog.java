@@ -1,24 +1,24 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
+import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.model.tool.TangentGenerator;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Point;
-import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -57,11 +57,13 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     /**
      * The model tree component.
      */
-    private final ModelNodeTree nodeTree;
+    @NotNull
+    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
 
     /**
      * The generated node.
      */
+    @NotNull
     private final ModelNode<?> node;
 
     /**
@@ -74,7 +76,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      */
     private CheckBox splitMirroredCheckBox;
 
-    public GenerateTangentsDialog(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public GenerateTangentsDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
     }
@@ -82,13 +84,15 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the model tree component.
      */
-    protected ModelNodeTree getNodeTree() {
+    @NotNull
+    protected AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
         return nodeTree;
     }
 
     /**
      * @return the generated node.
      */
+    @NotNull
     protected ModelNode<?> getNode() {
         return node;
     }
@@ -168,8 +172,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @Override
     protected void processOk() {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final ModelNode<?> node = getNode();
         final Geometry geometry = (Geometry) node.getElement();
@@ -186,9 +189,8 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
             TangentGenerator.useMikktspaceGenerator(geometry);
         }
 
-        final int index = GeomUtils.getIndex(consumer.getCurrentModel(), geometry);
-
-        consumer.execute(new ChangeMeshOperation(newMesh, oldMesh, index));
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new ChangeMeshOperation(newMesh, oldMesh, geometry));
 
         hide();
     }

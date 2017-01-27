@@ -1,6 +1,9 @@
 package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
+import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
+import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static java.util.Objects.requireNonNull;
 
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
@@ -14,6 +17,10 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
+import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.event.impl.CreatedFileEvent;
+import com.ss.editor.ui.event.impl.DeletedFileEvent;
+import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,10 +31,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -46,6 +56,7 @@ import javafx.stage.Window;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link EditorDialog} for choosing the object from asset.
@@ -62,16 +73,40 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
+
+    @NotNull
+    protected final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
+
+    @NotNull
+    protected final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
+
+    @NotNull
+    protected final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
+
+    /**
+     * The list of waited files to select.
+     */
+    @NotNull
+    private final Array<Path> waitedFilesToSelect;
 
     /**
      * The function for handling the choose.
      */
+    @NotNull
     protected final Consumer<C> consumer;
+
+    /**
+     * The action tester.
+     */
+    @Nullable
+    protected Predicate<Class<?>> actionTester;
 
     /**
      * The function for validating the choose.
      */
+    @Nullable
     protected final Function<C, String> validator;
 
     /**
@@ -104,6 +139,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     public AssetEditorDialog(@NotNull final Consumer<C> consumer, @Nullable final Function<C, String> validator) {
+        this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
         this.consumer = consumer;
         this.validator = validator;
     }
@@ -111,8 +147,15 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @param extensionFilter the list of available extensions.
      */
-    public void setExtensionFilter(final Array<String> extensionFilter) {
+    public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
         resourceTree.setExtensionFilter(extensionFilter);
+    }
+
+    /**
+     * @param actionTester the action tester.
+     */
+    public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
+        resourceTree.setActionTester(actionTester);
     }
 
     @Override
@@ -121,7 +164,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
         final HBox container = new HBox();
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER);
 
-        resourceTree = new ResourceTree(this::processOpen, true);
+        resourceTree = new ResourceTree(this::processOpen, false);
         resourceTree.prefHeightProperty().bind(root.heightProperty());
         resourceTree.prefWidthProperty().bind(root.widthProperty());
         resourceTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelected(newValue));
@@ -178,9 +221,70 @@ public class AssetEditorDialog<C> extends EditorDialog {
         final EditorConfig editorConfig = EditorConfig.getInstance();
 
         final ResourceTree resourceTree = getResourceTree();
-        resourceTree.fill(editorConfig.getCurrentAsset());
+        final Path currentAsset = requireNonNull(editorConfig.getCurrentAsset());
+
+        resourceTree.fill(currentAsset);
+
+        FX_EVENT_MANAGER.addEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
+        FX_EVENT_MANAGER.addEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
+        FX_EVENT_MANAGER.addEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
 
         EXECUTOR_MANAGER.addFXTask(resourceTree::requestFocus);
+    }
+
+    /**
+     * Handle creating file event.
+     */
+    private void processEvent(@NotNull final CreatedFileEvent event) {
+
+        final Path file = event.getFile();
+
+        final Array<Path> waitedFilesToSelect = getWaitedFilesToSelect();
+        final boolean waitedSelect = waitedFilesToSelect.contains(file);
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.notifyCreated(file);
+
+        if (waitedSelect) waitedFilesToSelect.fastRemove(file);
+        if (waitedSelect || event.isNeedSelect()) resourceTree.expandTo(file, true);
+    }
+
+    /**
+     * Handle deleting file event.
+     */
+    private void processEvent(@NotNull final DeletedFileEvent event) {
+
+        final Path file = event.getFile();
+
+        final ResourceTree resourceTree = getResourceTree();
+        resourceTree.notifyDeleted(file);
+    }
+
+    /**
+     * Handle selecting file event.
+     */
+    private void processEvent(@NotNull final RequestSelectFileEvent event) {
+
+        final Path file = event.getFile();
+
+        final ResourceTree resourceTree = getResourceTree();
+        final ResourceElement element = createFor(file);
+        final TreeItem<ResourceElement> treeItem = findItemForValue(resourceTree.getRoot(), element);
+
+        if (treeItem == null) {
+            getWaitedFilesToSelect().add(file);
+            return;
+        }
+
+        resourceTree.expandTo(treeItem, true);
+    }
+
+    /**
+     * @return the list of waited files to select.
+     */
+    @NotNull
+    protected Array<Path> getWaitedFilesToSelect() {
+        return waitedFilesToSelect;
     }
 
     /**
@@ -200,6 +304,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the function for validating the choose.
      */
+    @Nullable
     protected Function<C, String> getValidator() {
         return validator;
     }
@@ -214,7 +319,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Handle selected element in the tree.
      */
-    private void processSelected(final TreeItem<ResourceElement> newValue) {
+    private void processSelected(@Nullable final TreeItem<ResourceElement> newValue) {
 
         final ResourceElement element = newValue == null ? null : newValue.getValue();
         final Path file = element == null ? null : element.getFile();
@@ -286,8 +391,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
     @Override
     public void hide() {
+
+        FX_EVENT_MANAGER.removeEventHandler(CreatedFileEvent.EVENT_TYPE, createdFileHandler);
+        FX_EVENT_MANAGER.removeEventHandler(RequestSelectFileEvent.EVENT_TYPE, selectFileHandle);
+        FX_EVENT_MANAGER.removeEventHandler(DeletedFileEvent.EVENT_TYPE, deletedFileHandler);
+
         final JMEFilePreviewManager previewManager = JMEFilePreviewManager.getInstance();
         previewManager.clear();
+
         super.hide();
     }
 
@@ -343,6 +454,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the function for handling the choose.
      */
+    @NotNull
     protected Consumer<C> getConsumer() {
         return consumer;
     }

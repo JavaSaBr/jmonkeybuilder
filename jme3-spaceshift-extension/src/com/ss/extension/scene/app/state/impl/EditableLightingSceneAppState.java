@@ -1,10 +1,10 @@
 package com.ss.extension.scene.app.state.impl;
 
 import com.simsilica.fx.LightingState;
+import com.ss.extension.property.EditableProperty;
+import com.ss.extension.property.EditablePropertyType;
+import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
-import com.ss.extension.scene.app.state.property.EditableProperty;
-import com.ss.extension.scene.app.state.property.EditablePropertyType;
-import com.ss.extension.scene.app.state.property.SimpleProperty;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,22 +19,13 @@ import rlib.util.array.ArrayFactory;
 public class EditableLightingSceneAppState extends LightingState implements EditableSceneAppState {
 
     public EditableLightingSceneAppState() {
+        super();
     }
 
     @NotNull
     @Override
     public String getName() {
         return "Lighting State";
-    }
-
-    @NotNull
-    @Override
-    public Object jmeClone() {
-        try {
-            return super.clone();
-        } catch (final CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @NotNull

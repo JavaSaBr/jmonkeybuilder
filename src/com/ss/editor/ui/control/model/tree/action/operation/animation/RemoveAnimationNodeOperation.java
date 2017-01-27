@@ -17,11 +17,13 @@ public class RemoveAnimationNodeOperation extends AbstractEditorOperation<ModelC
     /**
      * The animation control.
      */
+    @NotNull
     private final AnimControl control;
 
     /**
      * The animation.
      */
+    @NotNull
     private final Animation animation;
 
     public RemoveAnimationNodeOperation(@NotNull final Animation animation, @NotNull final AnimControl control) {

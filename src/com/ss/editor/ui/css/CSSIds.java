@@ -34,6 +34,7 @@ public interface CSSIds {
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
+    String FILE_EDITOR_EDITOR_AREA = "FileEditorEditorArea";
     String FILE_EDITOR_MAIN_SPLIT_PANE = "FileEditorMainSplitPane";
     String FILE_EDITOR_TOOL_SPLIT_PANE = "FileEditorToolSplitPane";
     String FILE_EDITOR_TOOL_COMPONENT = "FileEditorToolComponent";
@@ -85,9 +86,6 @@ public interface CSSIds {
     String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
     String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
 
-    String MODEL_NODE_TREE_CONTAINER = "ModelNodeTreeContainer";
-    String MODEL_NODE_TREE_TRANSPARENT_CONTAINER = "ModelNodeTreeTransparentContainer";
-
     String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
     String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
     String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
@@ -96,9 +94,6 @@ public interface CSSIds {
     String MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT = "ModelParamControlInfluencerElement";
     String MODEL_PARAM_CONTROL_INFLUENCER_CONTROL = "ModelParamControlInfluencerControl";
     String MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON = "ModelParamControlInfluencerIconButton";
-
-    String MODEL_PARAM_CONTROL_MATERIAL_LABEL = "ModelParamControlMaterialLabel";
-    String MODEL_PARAM_CONTROL_MATERIAL_BUTTON = "ModelParamControlMaterialButton";
 
     String RENAME_DIALOG_LABEL = "RenameDialogLabel";
     String RENAME_DIALOG_TEXT_FIELD = "RenameDialogTextField";
@@ -144,10 +139,16 @@ public interface CSSIds {
     String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "AbstractParamControlVector3fField";
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F = "AbstractParamControlNumberLabel2F";
     String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "AbstractParamControlVector2fField";
+    String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "AbstractParamControlElementLabel";
+    String ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON = "AbstractParamControlElementButton";
 
     String ADD_USER_DATA_DIALOG_LABEL = "AddUserDataDialogLabel";
     String ADD_USER_DATA_FIELD = "AddUserDataDialogField";
 
     String IMAGE_VIEW_EDITOR_CONTAINER = "ImageViewEditorContainer";
     String AUDIO_VIEW_EDITOR_CONTAINER = "AudioViewEditorContainer";
+
+    String ABSTRACT_NODE_TREE_CONTAINER = "AbstractNodeTreeContainer";
+    String ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER = "AbstractNodeTreeTransparentContainer";
+
 }

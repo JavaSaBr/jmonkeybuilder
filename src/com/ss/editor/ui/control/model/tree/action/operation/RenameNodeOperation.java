@@ -3,65 +3,55 @@ package com.ss.editor.ui.control.model.tree.action.operation;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Реализация операции по переименованию узла модели.
+ * The operation to rename a node.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RenameNodeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
+    public static final String PROPERTY_NAME = "name";
+
     /**
-     * Старое название узла.
+     * The old name.
      */
+    @NotNull
     private final String oldName;
 
     /**
-     * Новое название узла.
+     * The new name.
      */
+    @NotNull
     private final String newName;
 
     /**
-     * Индекс переименуемого узла.
+     * The node.
      */
-    private final int index;
+    @NotNull
+    private final Spatial spatial;
 
-    public RenameNodeOperation(final String oldName, final String newName, final int index) {
+    public RenameNodeOperation(@NotNull final String oldName, @NotNull final String newName, @NotNull final Spatial spatial) {
         this.oldName = oldName;
         this.newName = newName;
-        this.index = index;
+        this.spatial = spatial;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(object instanceof Spatial)) return;
-
-            final Spatial spatial = (Spatial) object;
             spatial.setName(newName);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(spatial.getParent(), object, "name"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(spatial.getParent(), spatial, PROPERTY_NAME));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object object = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(object instanceof Spatial)) return;
-
-            final Spatial spatial = (Spatial) object;
             spatial.setName(oldName);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(spatial.getParent(), object, "name"));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(spatial.getParent(), spatial, PROPERTY_NAME));
         });
     }
 }

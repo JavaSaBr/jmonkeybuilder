@@ -7,6 +7,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.util.UIUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -130,6 +131,8 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
      * Update the vector.
      */
     protected void updateVector(@Nullable final KeyEvent event) {
+        UIUtils.consumeIfIsNotHotKey(event);
+
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final FloatTextField xField = getXField();

@@ -6,12 +6,13 @@ import com.jme3.animation.AnimEventListener;
 import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
-import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,9 +25,9 @@ import rlib.util.StringUtils;
  *
  * @author JavaSaBr
  */
-public class PlayAnimationAction extends AbstractNodeAction implements AnimEventListener {
+public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer> implements AnimEventListener {
 
-    public PlayAnimationAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public PlayAnimationAction(final AbstractNodeTree<?> nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -64,12 +65,14 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
             channel.setSpeed(controlModelNode.getSpeed());
         });
 
-        final ModelNodeTree nodeTree = getNodeTree();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.update(modelNode);
     }
 
     @Override
-    public void onAnimCycleDone(final AnimControl control, final AnimChannel channel, final String animName) {
+    public void onAnimCycleDone(@NotNull final AnimControl control, @NotNull final AnimChannel channel,
+                                @NotNull final String animName) {
+
         if (channel.getLoopMode() != LoopMode.DontLoop) return;
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
@@ -83,6 +86,7 @@ public class PlayAnimationAction extends AbstractNodeAction implements AnimEvent
     }
 
     @Override
-    public void onAnimChange(final AnimControl control, final AnimChannel channel, final String animName) {
+    public void onAnimChange(@NotNull final AnimControl control, @NotNull final AnimChannel channel,
+                             @NotNull final String animName) {
     }
 }

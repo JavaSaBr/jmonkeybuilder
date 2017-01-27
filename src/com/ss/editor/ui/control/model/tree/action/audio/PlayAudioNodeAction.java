@@ -5,11 +5,12 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.AudioModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.model.node.spatial.AudioModelNode;
 import com.ss.editor.util.AudioNodeUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,9 +23,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class PlayAudioNodeAction extends AbstractNodeAction {
+public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public PlayAudioNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public PlayAudioNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

@@ -1,12 +1,14 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.mesh;
 
+import static java.util.Objects.requireNonNull;
+
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeParticleMeshOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.util.GeomUtils;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,13 +18,13 @@ import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
 
 /**
- * The action for switching the particle mesh of the {@link ParticleGeometry} to another mesh.
+ * The action to switch a particle mesh of the {@link ParticleGeometry} to another mesh.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractCreateParticleMeshAction extends AbstractNodeAction {
+public abstract class AbstractCreateParticleMeshAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateParticleMeshAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -35,16 +37,14 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
     @Override
     protected void process() {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final ModelNode<?> modelNode = getNode();
         final ParticleGeometry element = (ParticleGeometry) modelNode.getElement();
-
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), element);
         final ParticleDataMeshInfo meshInfo = createMeshInfo();
 
-        modelChangeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, index));
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, element));
     }
 
     @NotNull

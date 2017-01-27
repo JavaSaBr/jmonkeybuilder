@@ -1,0 +1,107 @@
+package com.ss.editor.scene;
+
+import static com.ss.editor.util.GeomUtils.getDirection;
+
+import com.jme3.audio.AudioNode;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
+import com.ss.editor.Editor;
+import com.ss.editor.util.LocalObjects;
+
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * The node to present and edit audio nodes.
+ *
+ * @author JavaSaBr
+ */
+public class EditorAudioNode extends Node {
+
+    private static final Editor EDITOR = Editor.getInstance();
+
+    /**
+     * The audio node.
+     */
+    @Nullable
+    private AudioNode audioNode;
+
+    /**
+     * The model.
+     */
+    @Nullable
+    private Node model;
+
+    /**
+     * Set a audio node.
+     *
+     * @param audioNode the audio node.
+     */
+    public void setAudioNode(@Nullable final AudioNode audioNode) {
+        this.audioNode = audioNode;
+    }
+
+    /**
+     * Get a audio node.
+     *
+     * @return the audio node.
+     */
+    @Nullable
+    public AudioNode getAudioNode() {
+        return audioNode;
+    }
+
+    /**
+     * Get a model.
+     *
+     * @return the model.
+     */
+    @Nullable
+    public Node getModel() {
+        return model;
+    }
+
+    /**
+     * Set a model.
+     *
+     * @param model the model.
+     */
+    public void setModel(@Nullable final Node model) {
+        this.model = model;
+    }
+
+    @Override
+    public void updateGeometricState() {
+
+        final AudioNode audioNode = getAudioNode();
+
+        if (audioNode != null) {
+            final Quaternion rotation = getLocalRotation();
+            audioNode.setDirection(getDirection(rotation, audioNode.getDirection()));
+            audioNode.setLocalTranslation(getLocalTranslation());
+        }
+
+        super.updateGeometricState();
+    }
+
+    /**
+     * Update position and rotation of a model.
+     */
+    public void updateModel() {
+
+        final Node model = getModel();
+        if (model == null) return;
+
+        final Camera camera = EDITOR.getCamera();
+        final LocalObjects local = LocalObjects.get();
+        final Vector3f positionOnCamera = local.getNextVector();
+        positionOnCamera.set(getLocalTranslation()).subtractLocal(camera.getLocation());
+        positionOnCamera.normalizeLocal();
+        positionOnCamera.multLocal(camera.getFrustumNear() + 0.4f);
+        positionOnCamera.addLocal(camera.getLocation());
+
+        model.setLocalTranslation(positionOnCamera);
+        model.setLocalRotation(getLocalRotation());
+    }
+}

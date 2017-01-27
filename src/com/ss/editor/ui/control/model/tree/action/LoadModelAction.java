@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
@@ -10,11 +11,15 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -23,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
+import java.util.function.Predicate;
 
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
@@ -33,7 +39,11 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class LoadModelAction extends AbstractNodeAction {
+public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
+
+    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class ||
+            type == RenameFileAction.class;
 
     private static final Array<String> MODEL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
@@ -41,7 +51,7 @@ public class LoadModelAction extends AbstractNodeAction {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
-    public LoadModelAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -62,6 +72,7 @@ public class LoadModelAction extends AbstractNodeAction {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
         dialog.setExtensionFilter(MODEL_EXTENSIONS);
+        dialog.setActionTester(ACTION_TESTER);
         dialog.show(scene.getWindow());
     }
 
@@ -70,8 +81,7 @@ public class LoadModelAction extends AbstractNodeAction {
      */
     protected void processOpen(@NotNull final Path file) {
 
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getModelChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
@@ -82,10 +92,12 @@ public class LoadModelAction extends AbstractNodeAction {
         assetManager.deleteFromCache(modelKey);
 
         final Spatial loadedModel = assetManager.loadModel(modelKey);
+        loadedModel.setUserData(LOADED_MODEL_KEY, true);
 
         final ModelNode<?> modelNode = getNode();
         final Node parent = (Node) modelNode.getElement();
 
+        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         consumer.execute(new AddChildOperation(loadedModel, parent));
     }
 }

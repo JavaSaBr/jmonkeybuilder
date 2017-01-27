@@ -1,19 +1,19 @@
 package com.ss.editor.model.undo;
 
 /**
- * Интерфейс для поддержки редактора с отменяемыми изменениями.
+ * The interface to implement an undoable editor.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface UndoableEditor {
 
     /**
-     * Увеличение счетчка изменений.
+     * Increment changes count.
      */
-    public void incrementChange();
+    void incrementChange();
 
     /**
-     * Уменьшение счетчика изменений.
+     * Decrement changes count.
      */
-    public void decrementChange();
+    void decrementChange();
 }

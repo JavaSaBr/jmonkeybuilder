@@ -85,6 +85,8 @@ public class EditorDialog extends AbstractPopupDialog {
 
     public EditorDialog() {
         this.showedTime = LocalTime.now();
+        final VBox container = getContainer();
+        container.setOnKeyReleased(Event::consume);
     }
 
     @Override

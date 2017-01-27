@@ -1,6 +1,7 @@
 package com.ss.extension.loader;
 
 import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetInfo;
 import com.jme3.asset.AssetManager;
 import com.jme3.export.InputCapsule;
@@ -11,6 +12,7 @@ import com.jme3.export.binary.BinaryImporter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * The implementation of jME Importer to load scenes.
@@ -33,6 +35,17 @@ public class SceneLoader implements JmeImporter {
         final AssetManager assetManager = application.getAssetManager();
         assetManager.unregisterLoader(BinaryImporter.class);
         assetManager.registerLoader(SceneLoader.class, "j3o", "j3f", "j3s");
+        SceneLoader.application = application;
+    }
+
+    @NotNull
+    public static AssetManager tryToGetAssetManager() {
+        return Objects.requireNonNull(application).getAssetManager();
+    }
+
+    @NotNull
+    public static AppStateManager tryToGetStateManager() {
+        return Objects.requireNonNull(application).getStateManager();
     }
 
     @NotNull

@@ -37,6 +37,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
         return Messages.EMPTY_SCENE_CREATOR_TITLE;
     }
 
+    @NotNull
     @Override
     protected String getFileExtension() {
         return FileExtensions.JME_SCENE;

@@ -5,7 +5,7 @@ import static com.ss.editor.util.EditorUtil.getRealFile;
 import com.jme3.asset.AssetKey;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.MaterialModelPropertyEditor;
+import com.ss.editor.ui.control.model.property.control.MaterialModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
 import com.ss.editor.ui.dialog.asset.ParticlesAssetEditorDialog;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
@@ -28,7 +28,7 @@ import tonegod.emitter.material.ParticlesMaterial;
  *
  * @author JavaSaBr
  */
-public class MaterialEmitterPropertyControl extends MaterialModelPropertyEditor<ParticleEmitterNode, ParticlesMaterial> {
+public class MaterialEmitterPropertyControl extends MaterialModelPropertyControl<ParticleEmitterNode, ParticlesMaterial> {
 
     public MaterialEmitterPropertyControl(@NotNull final ParticlesMaterial element, @NotNull final String paramName,
                                           @NotNull final ModelChangeConsumer modelChangeConsumer) {

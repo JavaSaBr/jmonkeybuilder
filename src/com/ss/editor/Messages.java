@@ -1,5 +1,7 @@
 package com.ss.editor;
 
+import com.sun.javafx.scene.control.skin.resources.ControlResources;
+
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -137,6 +139,8 @@ public class Messages {
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
+    public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
+    public static final String SCENE_FILE_EDITOR_TOOL_LAYERS;
 
     public static final String MODEL_NODE_TREE_ACTION_REMOVE;
     public static final String MODEL_NODE_TREE_ACTION_RENAME;
@@ -193,6 +197,11 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_LAYER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -222,6 +231,38 @@ public class Messages {
     public static final String MODEL_PROPERTY_LOD;
     public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
     public static final String MODEL_PROPERTY_LEVEL;
+    public static final String MODEL_PROPERTY_LAYER;
+
+    public static final String CONTROL_PROPERTY_ENABLED;
+    public static final String CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED;
+    public static final String CONTROL_PROPERTY_VIEW_DIRECTION;
+    public static final String CONTROL_PROPERTY_WALK_DIRECTION;
+    public static final String CONTROL_PROPERTY_FALL_SPEED;
+    public static final String CONTROL_PROPERTY_GRAVITY;
+    public static final String CONTROL_PROPERTY_JUMP_SPEED;
+    public static final String CONTROL_PROPERTY_MAX_SLOPE;
+    public static final String CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL;
+    public static final String CONTROL_PROPERTY_USE_VIEW_DIRECTION;
+    public static final String CONTROL_PROPERTY_KINEMATIC_SPATIAL;
+    public static final String CONTROL_PROPERTY_KINEMATIC;
+    public static final String CONTROL_PROPERTY_ANGULAR_VELOCITY;
+    public static final String CONTROL_PROPERTY_LINEAR_FACTOR;
+    public static final String CONTROL_PROPERTY_ANGULAR_DAMPING;
+    public static final String CONTROL_PROPERTY_ANGULAR_FACTOR;
+    public static final String CONTROL_PROPERTY_FRICTION;
+    public static final String CONTROL_PROPERTY_LINEAR_DAMPING;
+    public static final String CONTROL_PROPERTY_MASS;
+    public static final String CONTROL_PROPERTY_RESTITUTION;
+    public static final String CONTROL_PROPERTY_CURRENT_VALUE;
+    public static final String CONTROL_PROPERTY_CURRENT_WAY_POINT;
+    public static final String CONTROL_PROPERTY_DIRECTION_TYPE;
+    public static final String CONTROL_PROPERTY_DIRECTION;
+    public static final String CONTROL_PROPERTY_ROTATION;
+    public static final String CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD;
+    public static final String CONTROL_PROPERTY_LOOP_MODE;
+    public static final String CONTROL_PROPERTY_INITIAL_DURATION;
+    public static final String CONTROL_PROPERTY_SPEED;
+    public static final String CONTROL_PROPERTY_TIME;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -281,6 +322,9 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
 
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
+    public static final String LAYER_PROPERTY_CONTROL_NO_LAYER;
+    public static final String AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
 
     public static final String RENAME_DIALOG_TITLE;
     public static final String RENAME_DIALOG_NEW_NAME_LABEL;
@@ -364,6 +408,7 @@ public class Messages {
     public static final String NODE_SELECTOR_DIALOG_BUTTON;
 
     public static final String GEOMETRY_SELECTOR_DIALOG_TITLE;
+    public static final String LIGHT_SELECTOR_DIALOG_TITLE;
 
     public static final String LOG_VIEW_TITLE;
 
@@ -372,23 +417,37 @@ public class Messages {
     public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX;
     public static final String CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD;
 
+    public static final String CREATE_SCENE_FILTER_DIALOG_TITLE;
+    public static final String CREATE_SCENE_FILTER_DIALOG_BUILT_IN;
+    public static final String CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX;
+    public static final String CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD;
+
     public static final String ADD_USER_DATA_DIALOG_TITLE;
     public static final String ADD_USER_DATA_DIALOG_NAME;
     public static final String ADD_USER_DATA_DIALOG_DATA_TYPE;
     public static final String ADD_USER_DATA_DIALOG_BUTTON_OK;
+
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_TITLE;
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN;
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX;
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD;
 
     public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
 
     static {
 
         final Locale locale = Locale.getDefault();
-        final ClassLoader classLoader = com.sun.javafx.scene.control.skin.resources.ControlResources.class.getClassLoader();
+        final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
-        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", locale, classLoader, ResourceControl.getInstance());
-        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", ResourceControl.getInstance());
+        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+                locale, classLoader, ResourceControl.getInstance());
+
+        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+                ResourceControl.getInstance());
 
         final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
         final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
+        //noinspection unchecked
         original.putAll(override);
 
         final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
@@ -516,6 +575,8 @@ public class Messages {
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
+        SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
+        SCENE_FILE_EDITOR_TOOL_LAYERS = bundle.getString("SceneFileEditorToolLayers");
 
         MODEL_NODE_TREE_ACTION_REMOVE = bundle.getString("ModelNodeTreeActionRemove");
         MODEL_NODE_TREE_ACTION_RENAME = bundle.getString("ModelNodeTreeActionRename");
@@ -572,6 +633,11 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
         MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -601,6 +667,38 @@ public class Messages {
         MODEL_PROPERTY_LOD = bundle.getString("ModelPropertyLoD");
         MODEL_PROPERTY_TRIANGLE_COUNT = bundle.getString("ModelPropertyTriangleCount");
         MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
+        MODEL_PROPERTY_LAYER = bundle.getString("ModelPropertyLayer");
+
+        CONTROL_PROPERTY_ENABLED = bundle.getString("ControlPropertyEnabled");
+        CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED = bundle.getString("ControlPropertyHardwareSkinningPreferred");
+        CONTROL_PROPERTY_VIEW_DIRECTION = bundle.getString("ControlPropertyViewDirection");
+        CONTROL_PROPERTY_WALK_DIRECTION = bundle.getString("ControlPropertyWalkDirection");
+        CONTROL_PROPERTY_FALL_SPEED = bundle.getString("ControlPropertyFallSpeed");
+        CONTROL_PROPERTY_GRAVITY = bundle.getString("ControlPropertyGravity");
+        CONTROL_PROPERTY_JUMP_SPEED = bundle.getString("ControlPropertyJumpSpeed");
+        CONTROL_PROPERTY_MAX_SLOPE = bundle.getString("ControlPropertyMaxSlope");
+        CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL = bundle.getString("ControlPropertyApplyPhysicsLocal");
+        CONTROL_PROPERTY_USE_VIEW_DIRECTION = bundle.getString("ControlPropertyUseViewDirection");
+        CONTROL_PROPERTY_KINEMATIC_SPATIAL = bundle.getString("ControlPropertyKinematicSpatial");
+        CONTROL_PROPERTY_KINEMATIC = bundle.getString("ControlPropertyKinematic");
+        CONTROL_PROPERTY_ANGULAR_VELOCITY = bundle.getString("ControlPropertyAngularVelocity");
+        CONTROL_PROPERTY_LINEAR_FACTOR = bundle.getString("ControlPropertyLinearFactor");
+        CONTROL_PROPERTY_ANGULAR_DAMPING = bundle.getString("ControlPropertyAngularDamping");
+        CONTROL_PROPERTY_ANGULAR_FACTOR = bundle.getString("ControlPropertyAngularFactor");
+        CONTROL_PROPERTY_FRICTION = bundle.getString("ControlPropertyFriction");
+        CONTROL_PROPERTY_LINEAR_DAMPING = bundle.getString("ControlPropertyLinearDamping");
+        CONTROL_PROPERTY_MASS = bundle.getString("ControlPropertyMass");
+        CONTROL_PROPERTY_RESTITUTION = bundle.getString("ControlPropertyRestitution");
+        CONTROL_PROPERTY_CURRENT_VALUE = bundle.getString("ControlPropertyCurrentValue");
+        CONTROL_PROPERTY_CURRENT_WAY_POINT = bundle.getString("ControlPropertyCurrentWayPoint");
+        CONTROL_PROPERTY_DIRECTION_TYPE = bundle.getString("ControlPropertyDirectionType");
+        CONTROL_PROPERTY_DIRECTION = bundle.getString("ControlPropertyDirection");
+        CONTROL_PROPERTY_ROTATION = bundle.getString("ControlPropertyRotation");
+        CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD = bundle.getString("ControlPropertyAngularSleepingThreshold");
+        CONTROL_PROPERTY_LOOP_MODE = bundle.getString("ControlPropertyLoopMode");
+        CONTROL_PROPERTY_INITIAL_DURATION = bundle.getString("ControlPropertyInitialDuration");
+        CONTROL_PROPERTY_SPEED = bundle.getString("ControlPropertySpeed");
+        CONTROL_PROPERTY_TIME = bundle.getString("ControlPropertyTime");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -660,6 +758,9 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
+        ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
+        LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");
+        AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO = bundle.getString("AudioKeyPropertyControlNoAudio");
 
         RENAME_DIALOG_TITLE = bundle.getString("RenameDialogTitle");
         RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");
@@ -743,6 +844,7 @@ public class Messages {
         NODE_SELECTOR_DIALOG_BUTTON = bundle.getString("NodeSelectorDialogButton");
 
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
+        LIGHT_SELECTOR_DIALOG_TITLE = bundle.getString("LightSelectorDialogTitle");
 
         LOG_VIEW_TITLE = bundle.getString("LogViewTitle");
 
@@ -751,10 +853,20 @@ public class Messages {
         CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX = bundle.getString("CreateSceneAppStateDialogCustomBox");
         CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneAppStateDialogCustomField");
 
+        CREATE_SCENE_FILTER_DIALOG_TITLE = bundle.getString("CreateSceneFilterDialogTitle");
+        CREATE_SCENE_FILTER_DIALOG_BUILT_IN = bundle.getString("CreateSceneFilterDialogBuiltIn");
+        CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX = bundle.getString("CreateSceneFilterDialogCustomBox");
+        CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneFilterDialogCustomField");
+
         ADD_USER_DATA_DIALOG_TITLE = bundle.getString("AddUserDataDialogTitle");
         ADD_USER_DATA_DIALOG_NAME = bundle.getString("AddUserDataDialogName");
         ADD_USER_DATA_DIALOG_DATA_TYPE = bundle.getString("AddUserDataDialogDataType");
         ADD_USER_DATA_DIALOG_BUTTON_OK = bundle.getString("AddUserDataDialogButtonOk");
+
+        CREATE_CUSTOM_CONTROL_DIALOG_TITLE = bundle.getString("CreateCustomControlDialogTitle");
+        CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN = bundle.getString("CreateCustomControlDialogBuiltIn");
+        CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX = bundle.getString("CreateCustomControlDialogCustomBox");
+        CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD = bundle.getString("CreateCustomControlDialogCustomField");
 
         ANALYTICS_CONFIRM_DIALOG_MESSAGE = bundle.getString("AnalyticsConfirmDialogMessage");
     }

@@ -7,6 +7,8 @@ import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.config.EditorConfig;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
@@ -39,7 +41,7 @@ public class ClasspathManager {
     /**
      * The additional class loader.
      */
-    private URLClassLoader additionalCL;
+    private volatile URLClassLoader additionalCL;
 
     public ClasspathManager() {
         InitializeManager.valid(getClass());
@@ -67,20 +69,21 @@ public class ClasspathManager {
 
         ASSET_MANAGER.addClassLoader(newCL);
 
-        setAdditionalCL(currentCL);
+        setAdditionalCL(newCL);
     }
 
     /**
      * @param additionalCL the additional class loader.
      */
-    private void setAdditionalCL(final URLClassLoader additionalCL) {
+    private void setAdditionalCL(@Nullable final URLClassLoader additionalCL) {
         this.additionalCL = additionalCL;
     }
 
     /**
      * @return the additional class loader.
      */
-    private URLClassLoader getAdditionalCL() {
+    @Nullable
+    public URLClassLoader getAdditionalCL() {
         return additionalCL;
     }
 }

@@ -4,11 +4,12 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,9 +21,9 @@ import javafx.scene.image.Image;
  *
  * @author JavaSaBr
  */
-public class StopAnimationAction extends AbstractNodeAction {
+public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public StopAnimationAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public StopAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -45,14 +46,14 @@ public class StopAnimationAction extends AbstractNodeAction {
         if (modelNode.getChannel() < 0) return;
 
         final AnimControl control = modelNode.getControl();
-        if (control.getNumChannels() <= 0) return;
+        if (control == null || control.getNumChannels() <= 0) return;
 
         final AnimChannel channel = control.getChannel(modelNode.getChannel());
         channel.setLoopMode(LoopMode.DontLoop);
 
         EXECUTOR_MANAGER.addEditorThreadTask(control::clearChannels);
 
-        final ModelNodeTree nodeTree = getNodeTree();
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.update(modelNode);
     }
 }

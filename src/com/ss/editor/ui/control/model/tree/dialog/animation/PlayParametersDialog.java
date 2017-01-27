@@ -4,8 +4,9 @@ import static javafx.collections.FXCollections.observableArrayList;
 
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -43,10 +44,10 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
     private static final ObservableList<LoopMode> LOOP_MODES = observableArrayList(LoopMode.values());
 
     /**
-     * The model tree component.
+     * The node tree component.
      */
     @NotNull
-    private final ModelNodeTree nodeTree;
+    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
 
     /**
      * The animation control node.
@@ -64,7 +65,7 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
      */
     private FloatTextField speedField;
 
-    public PlayParametersDialog(@NotNull final ModelNodeTree nodeTree, @NotNull final AnimationControlModelNode node) {
+    public PlayParametersDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final AnimationControlModelNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
@@ -78,7 +79,7 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
      * @return the model tree component.
      */
     @NotNull
-    protected ModelNodeTree getNodeTree() {
+    protected AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
         return nodeTree;
     }
 
@@ -110,8 +111,6 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
         loopModeComboBox = new ComboBox<>(LOOP_MODES);
         loopModeComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         loopModeComboBox.prefWidthProperty().bind(root.widthProperty());
-
-        final AnimationControlModelNode node = getNode();
 
         FXUtils.addToPane(loopModeLabel, loopModeContainer);
         FXUtils.addToPane(loopModeComboBox, loopModeContainer);

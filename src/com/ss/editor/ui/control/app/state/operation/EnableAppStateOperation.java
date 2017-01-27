@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The implementation of the {@link AbstractEditorOperation} to enable a {@link SceneAppState}.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class EnableAppStateOperation extends AbstractEditorOperation<SceneChangeConsumer> {
 

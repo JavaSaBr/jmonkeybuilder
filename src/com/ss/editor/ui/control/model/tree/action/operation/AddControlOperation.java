@@ -1,11 +1,9 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,42 +21,29 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
     private final Control newControl;
 
     /**
-     * The index of parent node.
+     * The parent.
      */
-    private final int index;
+    @NotNull
+    private final Spatial spatial;
 
-    public AddControlOperation(@NotNull final Control newControl, final int index) {
+    public AddControlOperation(@NotNull final Control newControl, @NotNull final Spatial spatial) {
         this.newControl = newControl;
-        this.index = index;
+        this.spatial = spatial;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.addControl(newControl);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, newControl, -1));
+            spatial.addControl(newControl);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(spatial, newControl, -1));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.removeControl(newControl);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, newControl));
+            spatial.removeControl(newControl);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(spatial, newControl));
         });
     }
 }

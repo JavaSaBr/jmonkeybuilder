@@ -42,6 +42,7 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
+import rlib.util.ClassUtils;
 import rlib.util.StringUtils;
 
 /**
@@ -411,5 +412,10 @@ public abstract class EditorUtil {
         final JFXApplication jfxApplication = JFXApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();
         scene.decrementLoading();
+    }
+
+    public static <E extends Enum<?>> E[] getAvailableValues(@NotNull final E value) {
+        final Enum<?>[] enumConstants = value.getClass().getEnumConstants();
+        return ClassUtils.unsafeCast(enumConstants);
     }
 }

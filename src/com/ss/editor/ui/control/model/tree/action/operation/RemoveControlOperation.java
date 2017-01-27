@@ -1,11 +1,9 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.util.GeomUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,42 +21,29 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
     private final Control control;
 
     /**
-     * The index of parent node.
+     * The parent.
      */
-    private final int index;
+    @NotNull
+    private final Spatial parent;
 
-    public RemoveControlOperation(@NotNull final Control control, final int index) {
+    public RemoveControlOperation(@NotNull final Control control, @NotNull final Spatial parent) {
         this.control = control;
-        this.index = index;
+        this.parent = parent;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.removeControl(control);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(node, control));
+            parent.removeControl(control);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(parent, control));
         });
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final Spatial currentModel = editor.getCurrentModel();
-            final Object parent = GeomUtils.getObjectByIndex(currentModel, index);
-            if (!(parent instanceof Node)) return;
-
-            final Node node = (Node) parent;
-            node.addControl(control);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(node, control, -1));
+            parent.addControl(control);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(parent, control, -1));
         });
     }
 }

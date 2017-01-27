@@ -1,21 +1,20 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.influerencer;
 
+import static java.util.Objects.requireNonNull;
+
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveParticleInfluencerOperation;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencerModelNode;
-import com.ss.editor.ui.control.model.tree.node.spatial.emitter.ParticleInfluencersModelNode;
-import com.ss.editor.util.GeomUtils;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencersModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 import javafx.scene.image.Image;
 import rlib.util.array.Array;
@@ -27,9 +26,9 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  *
  * @author JavaSaBr
  */
-public class RemoveParticleInfluencerAction extends AbstractNodeAction {
+public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public RemoveParticleInfluencerAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public RemoveParticleInfluencerAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -49,19 +48,16 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction {
     protected void process() {
 
         final ParticleInfluencerModelNode node = (ParticleInfluencerModelNode) getNode();
-        final ParticleInfluencersModelNode parent = (ParticleInfluencersModelNode) Objects.requireNonNull(node.getParent());
-        final ParticleInfluencers particleInfluencers = Objects.requireNonNull(parent.getElement());
+        final ParticleInfluencersModelNode parent = (ParticleInfluencersModelNode) requireNonNull(node.getParent());
+        final ParticleInfluencers particleInfluencers = requireNonNull(parent.getElement());
 
         final ParticleInfluencer influencer = node.getElement();
         final ParticleEmitterNode emitterNode = particleInfluencers.getEmitterNode();
         final Array<ParticleInfluencer> influencers = emitterNode.getInfluencers();
-
-        final ModelNodeTree nodeTree = getNodeTree();
-        final ModelChangeConsumer modelChangeConsumer = nodeTree.getModelChangeConsumer();
-
-        final int index = GeomUtils.getIndex(modelChangeConsumer.getCurrentModel(), emitterNode);
         final int childIndex = influencers.indexOf(influencer);
 
-        modelChangeConsumer.execute(new RemoveParticleInfluencerOperation(influencer, index, childIndex));
+        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new RemoveParticleInfluencerOperation(influencer, emitterNode, childIndex));
     }
 }

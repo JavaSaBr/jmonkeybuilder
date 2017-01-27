@@ -53,7 +53,7 @@ public class EditorThreadExecutor {
      */
     @FromAnyThread
     public void addToExecute(@NotNull final Runnable task) {
-        ArrayUtils.runInWriteLock(waitTasks, task, Array::add);
+        ArrayUtils.runInWriteLock(waitTasks, task, (tasks, toAdd) -> tasks.add(task));
     }
 
     /**

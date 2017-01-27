@@ -1,8 +1,10 @@
 package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
 import com.jme3.bounding.BoundingVolume;
@@ -10,14 +12,22 @@ import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.DirectionalLight;
+import com.jme3.light.Light;
+import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
@@ -25,6 +35,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
+import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.control.transform.MoveToolControl;
 import com.ss.editor.control.transform.RotationToolControl;
@@ -33,15 +44,18 @@ import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.control.transform.TransformControl;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.scene.EditorAudioNode;
+import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
-import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.util.NodeUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
+import javafx.scene.input.KeyCode;
+import rlib.function.BooleanFloatConsumer;
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -54,11 +68,66 @@ import rlib.util.dictionary.ObjectDictionary;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelChangeConsumer, M extends Spatial>
+public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends AdvancedAbstractEditorAppState<T> implements SceneEditorControl {
+
+    protected static final String KEY_S = "SSEditor.editorState.S";
+    protected static final String KEY_G = "SSEditor.editorState.G";
+    protected static final String KEY_R = "SSEditor.editorState.R";
+    protected static final String KEY_DEL = "SSEditor.editorState.Del";
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
+
+    static {
+        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
+        TRIGGERS.put(KEY_G, new KeyTrigger(KeyInput.KEY_G));
+        TRIGGERS.put(KEY_R, new KeyTrigger(KeyInput.KEY_R));
+        TRIGGERS.put(KEY_DEL, new KeyTrigger(KeyInput.KEY_DELETE));
+    }
+
+    /**
+     * The table with models to present lights on a scene.
+     */
+    protected static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
+
+    protected static final Node AUDIO_NODE_MODEL;
+
+    static {
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        AUDIO_NODE_MODEL = (Node) assetManager.loadModel("graphics/models/speaker/speaker.j3o");
+
+        LIGHT_MODEL_TABLE = DictionaryFactory.newObjectDictionary();
+        LIGHT_MODEL_TABLE.put(Light.Type.Point, (Node) assetManager.loadModel("graphics/models/light/point_light.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Directional, (Node) assetManager.loadModel("graphics/models/light/direction_light.j3o"));
+        LIGHT_MODEL_TABLE.put(Light.Type.Spot, (Node) assetManager.loadModel("graphics/models/light/spot_light.j3o"));
+    }
+
+    /**
+     * The map with cached light nodes.
+     */
+    @NotNull
+    protected final ObjectDictionary<Light, EditorLightNode> cachedLights;
+
+    /**
+     * The map with cached audio nodes.
+     */
+    @NotNull
+    protected final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes;
+
+    /**
+     * The array of light nodes.
+     */
+    @NotNull
+    protected final Array<EditorLightNode> lightNodes;
+
+    /**
+     * The array of audio nodes.
+     */
+    @NotNull
+    protected final Array<EditorAudioNode> audioNodes;
 
     /**
      * The selection models of selected models.
@@ -89,6 +158,18 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      */
     @NotNull
     private final Node modelNode;
+
+    /**
+     * The node for the placement of lights.
+     */
+    @NotNull
+    private final Node lightNode;
+
+    /**
+     * The node for the placement of audio nodes.
+     */
+    @NotNull
+    private final Node audioNode;
 
     /**
      * The nodes for the placement of model controls.
@@ -148,7 +229,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     /**
      * Grid of the scene.
      */
-    private Geometry grid;
+    private Node grid;
 
     /**
      * The flag of visibility grid.
@@ -167,19 +248,28 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
 
     public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
+        this.cachedLights = DictionaryFactory.newObjectDictionary();
+        this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
         this.modelNode = new Node("ModelNode");
         this.modelNode.setUserData(SceneEditorControl.class.getName(), true);
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();
         this.toolNode = new Node("ToolNode");
         this.transformToolNode = new Node("TransformToolNode");
+        this.lightNodes = ArrayFactory.newArray(EditorLightNode.class);
+        this.audioNodes = ArrayFactory.newArray(EditorAudioNode.class);
+        this.lightNode = new Node("Lights");
+        this.audioNode = new Node("Audio nodes");
 
-        final EditorCamera editorCamera = Objects.requireNonNull(getEditorCamera());
+        final EditorCamera editorCamera = requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(getCameraNode());
+
+        modelNode.attachChild(lightNode);
+        modelNode.attachChild(audioNode);
 
         createCollisionPlane();
         createToolElements();
@@ -187,6 +277,24 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         setShowSelection(true);
         setShowGrid(true);
         setTransformType(TransformType.MOVE_TOOL);
+    }
+
+    @Override
+    protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
+        super.registerActionHandlers(actionHandlers);
+
+        final T fileEditor = getFileEditor();
+
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown()));
+        actionHandlers.put(KEY_G, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.G, isPressed, isControlDown()));
+        actionHandlers.put(KEY_R, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.R, isPressed, isControlDown()));
+        actionHandlers.put(KEY_DEL, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.DELETE, isPressed, isControlDown()));
+    }
+
+    @Override
+    protected void registerActionListener(@NotNull final InputManager inputManager) {
+        super.registerActionListener(inputManager);
+        inputManager.addListener(actionListener, KEY_S, KEY_G, KEY_R, KEY_DEL);
     }
 
     @Override
@@ -207,6 +315,27 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @Override
     protected boolean needEditorCamera() {
         return true;
+    }
+
+    /**
+     * @return the node for the placement of lights.
+     */
+    @NotNull
+    protected Node getLightNode() {
+        return lightNode;
+    }
+
+    /**
+     * @return the node for the placement of audio nodes.
+     */
+    @NotNull
+    public Node getAudioNode() {
+        return audioNode;
+    }
+
+    @Override
+    public void notifyTransformed(@NotNull final Spatial spatial) {
+        getFileEditor().notifyTransformed(spatial);
     }
 
     /**
@@ -244,11 +373,64 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     }
 
     @NotNull
-    protected Geometry createGrid() {
-        final Geometry grid = new Geometry("grid", new Grid(20, 20, 1.0f));
-        grid.setMaterial(createColorMaterial(ColorRGBA.Gray));
-        grid.setLocalTranslation(-10, 0, -10);
-        return grid;
+    protected Node createGrid() {
+
+        final Node gridNode = new Node("GridNode");
+
+        final ColorRGBA gridColor = new ColorRGBA(0.4f, 0.4f, 0.4f, 0.5f);
+        final ColorRGBA xColor = new ColorRGBA(1.0f, 0.1f, 0.1f, 0.5f);
+        final ColorRGBA zColor = new ColorRGBA(0.1f, 1.0f, 0.1f, 0.5f);
+
+        final Material gridMaterial = createColorMaterial(gridColor);
+        gridMaterial.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
+
+        final Material xMaterial = createColorMaterial(xColor);
+        xMaterial.getAdditionalRenderState().setLineWidth(5);
+
+        final Material zMaterial = createColorMaterial(zColor);
+        zMaterial.getAdditionalRenderState().setLineWidth(5);
+
+        final int gridSize = getGridSize();
+
+        final Geometry grid = new Geometry("grid", new Grid(gridSize, gridSize, 1.0f));
+        grid.setMaterial(gridMaterial);
+        grid.setQueueBucket(RenderQueue.Bucket.Transparent);
+        grid.setShadowMode(RenderQueue.ShadowMode.Off);
+        grid.setCullHint(Spatial.CullHint.Never);
+        grid.setLocalTranslation(gridSize / 2 * -1, 0, gridSize / 2 * -1);
+
+        gridNode.attachChild(grid);
+
+        // Red line for X axis
+        final Line xAxis = new Line(new Vector3f(-gridSize / 2, 0f, 0f), new Vector3f(gridSize / 2 - 1, 0f, 0f));
+
+        final Geometry gxAxis = new Geometry("XAxis", xAxis);
+        gxAxis.setModelBound(new BoundingBox());
+        gxAxis.setShadowMode(RenderQueue.ShadowMode.Off);
+        gxAxis.setCullHint(Spatial.CullHint.Never);
+        gxAxis.setMaterial(xMaterial);
+
+        gridNode.attachChild(gxAxis);
+
+        // Blue line for Z axis
+        final Line zAxis = new Line(new Vector3f(0f, 0f, -gridSize / 2), new Vector3f(0f, 0f, gridSize / 2 - 1));
+
+        final Geometry gzAxis = new Geometry("ZAxis", zAxis);
+        gzAxis.setModelBound(new BoundingBox());
+        gzAxis.setShadowMode(RenderQueue.ShadowMode.Off);
+        gzAxis.setCullHint(Spatial.CullHint.Never);
+        gzAxis.setMaterial(zMaterial);
+
+        gridNode.attachChild(gzAxis);
+
+        return gridNode;
+    }
+
+    /**
+     * @return the grid size.
+     */
+    protected int getGridSize() {
+        return 20;
     }
 
     /**
@@ -393,7 +575,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
      * @return grid of the scene.
      */
     @NotNull
-    private Geometry getGrid() {
+    private Node getGrid() {
         return grid;
     }
 
@@ -463,18 +645,30 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null) editorCamera.update(tpf);
 
-        final ObjectDictionary<Spatial, Spatial> selectionShape = getSelectionShape();
-        final Array<Spatial> selected = getSelected();
-        selected.forEach(spatial -> {
+        final Array<EditorLightNode> lightNodes = getLightNodes();
+        lightNodes.forEach(EditorLightNode::updateModel);
 
+        final Array<EditorAudioNode> audioNodes = getAudioNodes();
+        audioNodes.forEach(EditorAudioNode::updateModel);
+
+        final Array<Spatial> selected = getSelected();
+        selected.forEach(this, (spatial, state) -> {
+
+            final ObjectDictionary<Spatial, Spatial> selectionShape = state.getSelectionShape();
             final Spatial shape = selectionShape.get(spatial);
             if (shape == null) return;
+
+            state.updateTransformNode(spatial.getWorldTransform());
+
+            if (spatial instanceof EditorLightNode) {
+                spatial = ((EditorLightNode) spatial).getModel();
+            }
+
+            requireNonNull(spatial);
 
             shape.setLocalTranslation(spatial.getWorldTranslation());
             shape.setLocalRotation(spatial.getWorldRotation());
             shape.setLocalScale(spatial.getWorldScale());
-
-            updateTransformNode(spatial.getLocalTransform());
         });
 
         final Node toolNode = getToolNode();
@@ -538,6 +732,38 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @NotNull
     private ObjectDictionary<Spatial, Spatial> getSelectionShape() {
         return selectionShape;
+    }
+
+    /**
+     * @return the array of light nodes.
+     */
+    @NotNull
+    protected Array<EditorLightNode> getLightNodes() {
+        return lightNodes;
+    }
+
+    /**
+     * @return the array of audio nodes.
+     */
+    @NotNull
+    public Array<EditorAudioNode> getAudioNodes() {
+        return audioNodes;
+    }
+
+    /**
+     * @return the map with cached light nodes.
+     */
+    @NotNull
+    protected ObjectDictionary<Light, EditorLightNode> getCachedLights() {
+        return cachedLights;
+    }
+
+    /**
+     * @return the map with cached audio nodes.
+     */
+    @NotNull
+    public ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
+        return cachedAudioNodes;
     }
 
     /**
@@ -785,10 +1011,75 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
             return;
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(collision.getGeometry())));
+        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(this, collision.getGeometry())));
+    }
+
+    /**
+     * Get a position on a scene for a cursor position on a screen.
+     *
+     * @param worldX the x position on screen.
+     * @param worldY the y position on screen.
+     * @return the position on a scene.
+     */
+    @NotNull
+    public Vector3f getScenePosByScreenPos(final float worldX, final float worldY) {
+
+        final Camera camera = EDITOR.getCamera();
+
+        final Vector2f cursor = new Vector2f(worldX, worldY);
+        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
+        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f).subtractLocal(click3d).normalizeLocal();
+
+        final Ray ray = new Ray();
+        ray.setOrigin(click3d);
+        ray.setDirection(dir);
+
+        final CollisionResults results = new CollisionResults();
+
+        final Node stateNode = getStateNode();
+        stateNode.updateModelBound();
+        stateNode.collideWith(ray, results);
+
+        final CollisionResult closestCollision = results.getClosestCollision();
+        if (closestCollision == null) return Vector3f.ZERO;
+
+        return closestCollision.getContactPoint();
+    }
+
+    /**
+     * Get a geometry on a scene for a position on a screen.
+     *
+     * @param worldX the x position on screen.
+     * @param worldY the y position on screen.
+     * @return the position on a scene.
+     */
+    @Nullable
+    public Geometry getGeometryByScreenPos(final float worldX, final float worldY) {
+
+        final Camera camera = EDITOR.getCamera();
+
+        final Vector2f cursor = new Vector2f(worldX, worldY);
+        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
+        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f).subtractLocal(click3d).normalizeLocal();
+
+        final Ray ray = new Ray();
+        ray.setOrigin(click3d);
+        ray.setDirection(dir);
+
+        final CollisionResults results = new CollisionResults();
+
+        final M currentModel = requireNonNull(getCurrentModel());
+        currentModel.updateModelBound();
+        currentModel.collideWith(ray, results);
+
+        final CollisionResult closestCollision = results.getClosestCollision();
+        if (closestCollision == null) return null;
+
+        return closestCollision.getGeometry();
     }
 
     protected void notifySelected(@Nullable final Object object) {
+        getFileEditor().notifySelected(object);
     }
 
     /**
@@ -831,7 +1122,7 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
         if (isShowGrid() == showGrid) return;
 
         final Node toolNode = getToolNode();
-        final Geometry grid = getGrid();
+        final Node grid = getGrid();
 
         if (showGrid) {
             toolNode.attachChild(grid);
@@ -969,5 +1260,235 @@ public abstract class AbstractSceneEditorAppState<T extends FileEditor & ModelCh
     @Nullable
     public M getCurrentModel() {
         return currentModel;
+    }
+
+    /**
+     * Add a light.
+     *
+     * @param light the light.
+     */
+    public void addLight(@NotNull final Light light) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addLightImpl(light));
+    }
+
+    /**
+     * The process of adding a light.
+     */
+    private void addLightImpl(@NotNull final Light light) {
+
+        final Node node = LIGHT_MODEL_TABLE.get(light.getType());
+        if (node == null) return;
+
+        final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
+
+        final Camera camera = EDITOR.getCamera();
+        final EditorLightNode lightModel = requireNonNull(cachedLights.get(light, () -> {
+
+            final Node model = (Node) node.clone();
+            model.setLocalScale(0.01F);
+
+            final EditorLightNode result = new EditorLightNode();
+            result.setModel(model);
+
+            final Geometry geometry = NodeUtils.findGeometry(model, "White");
+
+            if (geometry == null) {
+                LOGGER.warning(this, "not found geometry for the node " + geometry);
+                return null;
+            }
+
+            final Material material = geometry.getMaterial();
+            material.setColor("Color", light.getColor());
+
+            return result;
+        }));
+
+        if (light instanceof SpotLight) {
+
+            final SpotLight spotLight = (SpotLight) light;
+
+            final Quaternion rotation = new Quaternion();
+            rotation.lookAt(spotLight.getDirection(), camera.getUp());
+
+            lightModel.setLocalTranslation(spotLight.getPosition());
+            lightModel.setLocalRotation(rotation);
+
+        } else if (light instanceof PointLight) {
+            lightModel.setLocalTranslation(((PointLight) light).getPosition());
+        } else if (light instanceof DirectionalLight) {
+
+            final DirectionalLight directionalLight = (DirectionalLight) light;
+            final Quaternion rotation = new Quaternion();
+            rotation.lookAt(directionalLight.getDirection(), camera.getUp());
+
+            lightModel.setLocalRotation(rotation);
+        }
+
+        final Node lightNode = getLightNode();
+        lightNode.attachChild(lightModel);
+        lightNode.attachChild(lightModel.getModel());
+
+        lightModel.setLight(light);
+
+        getLightNodes().add(lightModel);
+    }
+
+    /**
+     * Move a camera to a location.
+     *
+     * @param location the location.
+     */
+    public void moveCameraTo(@NotNull final Vector3f location) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getNodeForCamera().setLocalTranslation(location));
+    }
+
+    /**
+     * Remove a light.
+     *
+     * @param light the light.
+     */
+    public void removeLight(@NotNull final Light light) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeLightImpl(light));
+    }
+
+    /**
+     * The process of removing a light.
+     */
+    private void removeLightImpl(@NotNull final Light light) {
+
+        final Node node = LIGHT_MODEL_TABLE.get(light.getType());
+        if (node == null) return;
+
+        final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
+        final EditorLightNode lightModel = cachedLights.get(light);
+        if (lightModel == null) return;
+
+        lightModel.setLight(null);
+
+        final Node lightNode = getLightNode();
+        lightNode.detachChild(lightModel);
+        lightNode.detachChild(requireNonNull(lightModel.getModel()));
+
+        getLightNodes().fastRemove(lightModel);
+    }
+
+    /**
+     * Add an audio node.
+     *
+     * @param audioNode the audio node.
+     */
+    public void addAudioNode(@NotNull final AudioNode audioNode) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> addAudioNodeImpl(audioNode));
+    }
+
+    /**
+     * The process of adding an audio node.
+     */
+    private void addAudioNodeImpl(@NotNull final AudioNode audio) {
+
+        final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
+
+        final Camera camera = EDITOR.getCamera();
+        final EditorAudioNode audioModel = requireNonNull(cachedAudioNodes.get(audio, () -> {
+
+            final Node model = (Node) AUDIO_NODE_MODEL.clone();
+            model.setLocalScale(0.005F);
+
+            final EditorAudioNode result = new EditorAudioNode();
+            result.setModel(model);
+
+            return result;
+        }));
+
+        final Quaternion rotation = new Quaternion();
+        rotation.lookAt(audio.getDirection(), camera.getUp());
+
+        audioModel.setLocalRotation(rotation);
+        audioModel.setLocalTranslation(audio.getLocalTranslation());
+
+        final Node audioNode = getAudioNode();
+        audioNode.attachChild(audioModel);
+        audioNode.attachChild(audioModel.getModel());
+
+        audioModel.setAudioNode(audio);
+
+        getAudioNodes().add(audioModel);
+    }
+
+    /**
+     * Remove an audio node.
+     *
+     * @param audio the audio node.
+     */
+    public void removeAudioNode(@NotNull final AudioNode audio) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeAudioNodeImpl(audio));
+    }
+
+    /**
+     * The process of removing an audio node.
+     */
+    private void removeAudioNodeImpl(@NotNull final AudioNode audio) {
+
+        final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
+        final EditorAudioNode audioModel = cachedAudioNodes.get(audio);
+        if (audioModel == null) return;
+
+        audioModel.setAudioNode(null);
+
+        final Node audioNode = getAudioNode();
+        audioNode.detachChild(audioModel);
+        audioNode.detachChild(requireNonNull(audioModel.getModel()));
+
+        getAudioNodes().fastRemove(audioModel);
+    }
+
+    /**
+     * Get a light node for a light.
+     *
+     * @param light the light.
+     * @return the light node or null.
+     */
+    @Nullable
+    public EditorLightNode getLightNode(@NotNull final Light light) {
+        return getLightNodes().search(light, (node, toCheck) -> node.getLight() == toCheck);
+    }
+
+    /**
+     * Get a light node for a model.
+     *
+     * @param model the model.
+     * @return the light node or null.
+     */
+    @Nullable
+    public EditorLightNode getLightNode(@NotNull final Spatial model) {
+        return getLightNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+    }
+
+    /**
+     * Get an editor audio node for an audio node.
+     *
+     * @param audioNode the audio node.
+     * @return the editor audio node or null.
+     */
+    @Nullable
+    public EditorAudioNode getAudioNode(@NotNull final AudioNode audioNode) {
+        return getAudioNodes().search(audioNode, (node, toCheck) -> node.getAudioNode() == toCheck);
+    }
+
+    /**
+     * Get an editor audio node for an model.
+     *
+     * @param model the model.
+     * @return the editor audio node or null.
+     */
+    @Nullable
+    public EditorAudioNode getAudioNode(@NotNull final Spatial model) {
+        return getAudioNodes().search(model, (node, toCheck) -> node.getModel() == toCheck);
+    }
+
+    @Override
+    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                       final float vRotation, final float targetDistance) {
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
     }
 }

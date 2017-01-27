@@ -4,8 +4,8 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.image.Image;
 
 /**
- * The action for creating the {@link DirectionalLight}.
+ * The action to create a {@link DirectionalLight}.
  *
  * @author JavaSaBr
  */
 public class CreateDirectionLightAction extends AbstractCreateLightAction {
 
-    public CreateDirectionLightAction(final ModelNodeTree nodeTree, final ModelNode<?> node) {
+    public CreateDirectionLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

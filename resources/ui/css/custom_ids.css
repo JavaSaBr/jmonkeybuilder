@@ -101,6 +101,10 @@
     -fx-padding: 10, 0, 0, 0;
 }
 
+#FileEditorEditorArea {
+
+}
+
 #FileEditorMainSplitPane {
     -fx-background-color: transparent;
 }
@@ -446,16 +450,6 @@
     -fx-min-width: 20;
 }
 
-#ModelNodeTreeContainer {
-    -fx-background-color: -fx-background-background;
-    -fx-padding: 4 2 0 0;
-}
-
-#ModelNodeTreeTransparentContainer {
-    -fx-background-color: transparent;
-    -fx-padding: 4 2 0 0;
-}
-
 #ModelNodeTreeCell {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
@@ -483,17 +477,6 @@
     -fx-min-width: 50;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-#ModelParamControlMaterialLabel {
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-left;
-    -fx-text-alignment: left;
-}
-
-#ModelParamControlMaterialButton {
 }
 
 #ModelParamControlInfluencerControl {
@@ -800,6 +783,17 @@
     -fx-padding: 0 2 0 2;
 }
 
+#AbstractParamControlElementLabel {
+    -fx-min-height: 20;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+}
+
+#AbstractParamControlElementButton {
+}
+
 #AbstractParamControlContainer {
     -fx-alignment: top-center;
     -fx-padding: 2 10 4 4;
@@ -838,4 +832,15 @@
 
 #Root {
     -fx-background-color: -fx-background-background;
+}
+
+
+#AbstractNodeTreeContainer {
+    -fx-background-color: -fx-background-background;
+    -fx-padding: 4 2 0 0;
+}
+
+#AbstractNodeTreeTransparentContainer {
+    -fx-background-color: transparent;
+    -fx-padding: 4 2 0 0;
 }

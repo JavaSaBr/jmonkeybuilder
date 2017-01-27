@@ -1,10 +1,13 @@
 package com.ss.editor.ui.control.model.tree.action;
 
+import static rlib.util.ClassUtils.unsafeCast;
+
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.node.ModelNode;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,11 +19,11 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
 /**
- * The base implementation of the action for an element in a model tree.
+ * The base implementation of an action for an element in a node tree.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractNodeAction extends MenuItem {
+public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractNodeAction.class);
 
@@ -29,24 +32,25 @@ public abstract class AbstractNodeAction extends MenuItem {
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * The component of the model three.
+     * The component of the node tree.
      */
     @NotNull
-    private final ModelNodeTree nodeTree;
+    private final AbstractNodeTree<C> nodeTree;
 
     /**
-     * The node of the model.
+     * The node.
      */
     @NotNull
     private final ModelNode<?> node;
 
-    public AbstractNodeAction(@NotNull final ModelNodeTree nodeTree, @NotNull final ModelNode<?> node) {
-        this.nodeTree = nodeTree;
+    public AbstractNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+        this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
         setOnAction(event -> process());
         setText(getName());
 
         final Image icon = getIcon();
+
         if (icon != null) {
             setGraphic(new ImageView(icon));
         }
@@ -77,7 +81,7 @@ public abstract class AbstractNodeAction extends MenuItem {
      * @return the component of the model three.
      */
     @NotNull
-    protected ModelNodeTree getNodeTree() {
+    protected AbstractNodeTree<C> getNodeTree() {
         return nodeTree;
     }
 

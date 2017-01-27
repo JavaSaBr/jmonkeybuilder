@@ -76,6 +76,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      * Handle starting dragging.
      */
     private void startDrag(final MouseEvent mouseEvent) {
+        startFullDrag();
 
         final ResourceElement item = getItem();
         if (item == null) return;

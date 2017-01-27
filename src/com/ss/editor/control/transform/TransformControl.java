@@ -3,20 +3,22 @@ package com.ss.editor.control.transform;
 import com.jme3.collision.CollisionResult;
 import com.jme3.scene.control.Control;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
- * Интерфейс для реализации контрола трансформации.
+ * The interface to implement a transformation control.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface TransformControl extends Control {
 
     /**
-     * Обработка колизии для активации трансформации.
+     * Set a collision result.
      */
-    public void setCollisionPlane(final CollisionResult colResult);
+    void setCollisionPlane(@NotNull final CollisionResult colResult);
 
     /**
-     * Процесс трансформации.
+     * Handle transformation.
      */
-    public void processTransform();
+    void processTransform();
 }

@@ -17,11 +17,13 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
     /**
      * The animation control.
      */
+    @NotNull
     private final AnimControl control;
 
     /**
      * The animation.
      */
+    @NotNull
     private final Animation animation;
 
     public AddAnimationNodeOperation(@NotNull final Animation animation, @NotNull final AnimControl control) {
