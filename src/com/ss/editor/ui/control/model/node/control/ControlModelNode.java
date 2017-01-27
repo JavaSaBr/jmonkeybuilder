@@ -5,6 +5,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.RemoveControlAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.extension.scene.control.EditableControl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -39,6 +40,13 @@ public class ControlModelNode<T extends Control> extends ModelNode<T> {
     @NotNull
     @Override
     public String getName() {
-        return getElement().getClass().getSimpleName();
+
+        final T element = getElement();
+
+        if (element instanceof EditableControl) {
+            return ((EditableControl) element).getName();
+        }
+
+        return element.getClass().getSimpleName();
     }
 }

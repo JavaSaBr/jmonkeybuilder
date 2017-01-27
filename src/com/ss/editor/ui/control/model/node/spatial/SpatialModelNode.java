@@ -18,6 +18,7 @@ import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCharacterAction;
+import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateRigidBodyControlAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
@@ -66,7 +67,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         final Menu menu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
 
         final Menu createControlsMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
-        createControlsMenu.getItems().addAll(new CreateRigidBodyControlAction(nodeTree, this),
+        createControlsMenu.getItems().addAll(new CreateCustomControlAction(nodeTree, this),
+                new CreateRigidBodyControlAction(nodeTree, this),
                 new CreateMotionControlAction(nodeTree, this),
                 new CreateCharacterAction(nodeTree, this));
 

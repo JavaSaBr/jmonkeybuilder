@@ -35,10 +35,10 @@ public class PropertyBuilderFactory {
         BUILDERS.add(GeometryPropertyBuilder.getInstance());
         BUILDERS.add(LightPropertyBuilder.getInstance());
         BUILDERS.add(SpatialPropertyBuilder.getInstance());
-        BUILDERS.add(EditableControlPropertyBuilder.getInstance());
         BUILDERS.add(AppStatePropertyBuilder.getInstance());
         BUILDERS.add(FilterPropertyBuilder.getInstance());
         BUILDERS.add(DefaultControlPropertyBuilder.getInstance());
+        BUILDERS.add(EditableControlPropertyBuilder.getInstance());
     }
 
     /**

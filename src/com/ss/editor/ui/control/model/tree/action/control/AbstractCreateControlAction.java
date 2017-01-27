@@ -2,8 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.control;
 
 import static java.util.Objects.requireNonNull;
 
-import com.jme3.asset.AssetManager;
-import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -28,14 +27,12 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
     protected void process() {
 
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
-        final AssetManager assetManager = EDITOR.getAssetManager();
-
         final Control control = createControl();
 
         final ModelNode<?> modelNode = getNode();
-        final Node parent = (Node) modelNode.getElement();
+        final Spatial parent = (Spatial) modelNode.getElement();
 
+        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         consumer.execute(new AddControlOperation(control, parent));
     }
 

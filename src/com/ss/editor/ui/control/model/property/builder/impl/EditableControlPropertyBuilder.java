@@ -4,7 +4,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.EnumControlPropertyControl;
@@ -34,7 +33,7 @@ import rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
-public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<SceneChangeConsumer> {
+public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     private static final EditableControlPropertyBuilder INSTANCE = new EditableControlPropertyBuilder();
 
@@ -43,12 +42,12 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Scen
     }
 
     protected EditableControlPropertyBuilder() {
-        super(SceneChangeConsumer.class);
+        super(ModelChangeConsumer.class);
     }
 
     @Override
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                                @NotNull final SceneChangeConsumer changeConsumer) {
+                                @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (!(object instanceof EditableControl)) return;
 

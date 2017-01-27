@@ -201,6 +201,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -426,6 +427,11 @@ public class Messages {
     public static final String ADD_USER_DATA_DIALOG_DATA_TYPE;
     public static final String ADD_USER_DATA_DIALOG_BUTTON_OK;
 
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_TITLE;
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN;
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX;
+    public static final String CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD;
+
     public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
 
     static {
@@ -631,6 +637,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -855,6 +862,11 @@ public class Messages {
         ADD_USER_DATA_DIALOG_NAME = bundle.getString("AddUserDataDialogName");
         ADD_USER_DATA_DIALOG_DATA_TYPE = bundle.getString("AddUserDataDialogDataType");
         ADD_USER_DATA_DIALOG_BUTTON_OK = bundle.getString("AddUserDataDialogButtonOk");
+
+        CREATE_CUSTOM_CONTROL_DIALOG_TITLE = bundle.getString("CreateCustomControlDialogTitle");
+        CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN = bundle.getString("CreateCustomControlDialogBuiltIn");
+        CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX = bundle.getString("CreateCustomControlDialogCustomBox");
+        CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD = bundle.getString("CreateCustomControlDialogCustomField");
 
         ANALYTICS_CONFIRM_DIALOG_MESSAGE = bundle.getString("AnalyticsConfirmDialogMessage");
     }

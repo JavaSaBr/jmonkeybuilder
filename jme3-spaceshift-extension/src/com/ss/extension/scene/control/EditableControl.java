@@ -18,6 +18,13 @@ public interface EditableControl extends Control {
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
 
     /**
+     * @return the control's name.
+     */
+    default String getName() {
+        return getClass().getSimpleName();
+    }
+
+    /**
      * Get list of editable properties.
      *
      * @return the list of editable properties.
