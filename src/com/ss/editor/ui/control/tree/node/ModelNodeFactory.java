@@ -7,6 +7,7 @@ import com.jme3.animation.Animation;
 import com.jme3.animation.AudioTrack;
 import com.jme3.animation.BoneTrack;
 import com.jme3.animation.EffectTrack;
+import com.jme3.animation.SpatialTrack;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -27,6 +28,7 @@ import com.ss.editor.ui.control.model.node.control.anim.AnimationBoneTrackModelN
 import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationEffectTrackModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationSpatialTrackModelNode;
 import com.ss.editor.ui.control.model.node.light.AmbientLightModelNode;
 import com.ss.editor.ui.control.model.node.light.DirectionalLightModelNode;
 import com.ss.editor.ui.control.model.node.light.LightProbeModelNode;
@@ -78,6 +80,8 @@ public class ModelNodeFactory {
             return unsafeCast(new AnimationEffectTrackModelNode((EffectTrack) element, ID_GENERATOR.incrementAndGet()));
         } else if (element instanceof AudioTrack) {
             return unsafeCast(new AnimationAudioTrackModelNode((AudioTrack) element, ID_GENERATOR.incrementAndGet()));
+        } else if (element instanceof SpatialTrack) {
+            return unsafeCast(new AnimationSpatialTrackModelNode((SpatialTrack) element, ID_GENERATOR.incrementAndGet()));
         }
 
         if (element instanceof AnimControl) {
