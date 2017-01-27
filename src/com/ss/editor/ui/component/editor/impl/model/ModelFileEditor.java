@@ -123,7 +123,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final ModelEditorAppState editorAppState = getEditorAppState();
         editorAppState.openModel(model);
 
-        handleObjects(model);
+        handleAddedObject(model);
 
         setCurrentModel(model);
         setIgnoreListeners(true);
@@ -157,8 +157,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    protected void handleObjects(@NotNull final Spatial model) {
-        super.handleObjects(model);
+    protected void handleAddedObject(@NotNull final Spatial model) {
+        super.handleAddedObject(model);
 
         final ModelEditorAppState editorState = getEditorAppState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);

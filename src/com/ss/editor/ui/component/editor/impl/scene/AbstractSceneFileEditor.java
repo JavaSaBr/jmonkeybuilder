@@ -303,9 +303,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
-     * Handle the model.
+     * Handle a added model.
      */
-    protected void handleObjects(@NotNull final Spatial model) {
+    protected void handleAddedObject(@NotNull final Spatial model) {
 
         final MA editorState = getEditorAppState();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
@@ -316,6 +316,22 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         lights.forEach(editorState, (light, state) -> state.addLight(light));
         audioNodes.forEach(editorState, (audioNode, state) -> state.addAudioNode(audioNode));
+    }
+
+    /**
+     * Handle a removed model.
+     */
+    protected void handleRemovedObject(@NotNull final Spatial model) {
+
+        final MA editorState = getEditorAppState();
+        final Array<Light> lights = ArrayFactory.newArray(Light.class);
+        final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
+
+        NodeUtils.addLight(model, lights);
+        NodeUtils.addAudioNodes(model, audioNodes);
+
+        lights.forEach(editorState, (light, state) -> state.removeLight(light));
+        audioNodes.forEach(editorState, (audioNode, state) -> state.removeAudioNode(audioNode));
     }
 
     /**
@@ -538,6 +554,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             editorAppState.addLight((Light) added);
         } else if (added instanceof AudioNode) {
             editorAppState.addAudioNode((AudioNode) added);
+        } else if (added instanceof Spatial) {
+            handleAddedObject((Spatial) added);
         }
     }
 
@@ -552,6 +570,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             editorAppState.removeLight((Light) removed);
         } else if (removed instanceof AudioNode) {
             editorAppState.removeAudioNode((AudioNode) removed);
+        } else if (removed instanceof Spatial) {
+            handleRemovedObject((Spatial) removed);
         }
     }
 
@@ -643,7 +663,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         Spatial spatial = null;
 
         if (element instanceof AudioNode) {
-            spatial = editorAppState.getAudioNode((AudioNode) element);
+            final EditorAudioNode audioNode = editorAppState.getAudioNode((AudioNode) element);
+            spatial = audioNode == null ? null : audioNode.getEditedNode();
         } else if (element instanceof Spatial) {
             spatial = (Spatial) element;
             parent = spatial.getParent();
@@ -1055,8 +1076,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         if (spatial instanceof EditorLightNode) {
             toUpdate = ((EditorLightNode) spatial).getLight();
-        } else if (spatial instanceof EditorAudioNode) {
-            toUpdate = ((EditorAudioNode) spatial).getAudioNode();
+        } else if (spatial.getParent() instanceof EditorAudioNode) {
+            toUpdate = ((EditorAudioNode) spatial.getParent()).getAudioNode();
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();

@@ -124,7 +124,7 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         final SceneEditorAppState editorState = getEditorAppState();
         editorState.openModel(model);
 
-        handleObjects(model);
+        handleAddedObject(model);
 
         setCurrentModel(model);
         setIgnoreListeners(true);
@@ -207,9 +207,9 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
 
         //TODO когда в дереве будут модели показываться
         //final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, layerPropertyEditor);
-       // layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
-       // layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
-       // layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
+        // layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        // layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        // layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
         editorToolComponent.addComponent(layerNodeTree, Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
@@ -219,8 +219,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
                 calcVSplitSize(appStateSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) ->
                 calcVSplitSize(filtersSplitContainer));
-       // root.heightProperty().addListener((observableValue, oldValue, newValue) ->
-       //         calcVSplitSize(layersSplitContainer));
+        // root.heightProperty().addListener((observableValue, oldValue, newValue) ->
+        //         calcVSplitSize(layersSplitContainer));
     }
 
     /**

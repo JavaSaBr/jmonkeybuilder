@@ -658,11 +658,13 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
             final Spatial shape = selectionShape.get(spatial);
             if (shape == null) return;
 
-            state.updateTransformNode(spatial.getWorldTransform());
-
             if (spatial instanceof EditorLightNode) {
                 spatial = ((EditorLightNode) spatial).getModel();
+            } else if (spatial instanceof EditorAudioNode) {
+                spatial = ((EditorAudioNode) spatial).getModel();
             }
+
+            state.updateTransformNode(spatial.getWorldTransform());
 
             requireNonNull(spatial);
 
@@ -1403,8 +1405,9 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         final Quaternion rotation = new Quaternion();
         rotation.lookAt(audio.getDirection(), camera.getUp());
 
-        audioModel.setLocalRotation(rotation);
-        audioModel.setLocalTranslation(audio.getLocalTranslation());
+        final Node editedNode = audioModel.getEditedNode();
+        editedNode.setLocalRotation(rotation);
+        editedNode.setLocalTranslation(audio.getLocalTranslation());
 
         final Node audioNode = getAudioNode();
         audioNode.attachChild(audioModel);
