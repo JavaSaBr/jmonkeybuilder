@@ -5,6 +5,7 @@ import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.control.Control;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -34,7 +35,7 @@ public class CreateMotionControlAction extends AbstractCreateControlAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Motion";
+        return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
     }
 
     @NotNull
@@ -47,8 +48,8 @@ public class CreateMotionControlAction extends AbstractCreateControlAction {
         motionPath.addWayPoint(new Vector3f(1f, 0f, 1f));
 
         final MotionEvent control = new MotionEvent();
-        control.setLookAt(Vector3f.UNIT_Z, Vector3f.UNIT_Y); // TODO: DELETE WHEN ALPHA-4 IS OUT!!
-        control.setRotation(Quaternion.IDENTITY); // TODO: DELETE WHEN ALPHA-4 IS OUT!!
+        control.setLookAt(Vector3f.UNIT_Z, Vector3f.UNIT_Y);
+        control.setRotation(Quaternion.IDENTITY);
         control.setPath(motionPath);
 
         return control;

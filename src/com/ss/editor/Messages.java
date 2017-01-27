@@ -197,6 +197,10 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_LAYER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -227,6 +231,37 @@ public class Messages {
     public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
     public static final String MODEL_PROPERTY_LEVEL;
     public static final String MODEL_PROPERTY_LAYER;
+
+    public static final String CONTROL_PROPERTY_ENABLED;
+    public static final String CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED;
+    public static final String CONTROL_PROPERTY_VIEW_DIRECTION;
+    public static final String CONTROL_PROPERTY_WALK_DIRECTION;
+    public static final String CONTROL_PROPERTY_FALL_SPEED;
+    public static final String CONTROL_PROPERTY_GRAVITY;
+    public static final String CONTROL_PROPERTY_JUMP_SPEED;
+    public static final String CONTROL_PROPERTY_MAX_SLOPE;
+    public static final String CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL;
+    public static final String CONTROL_PROPERTY_USE_VIEW_DIRECTION;
+    public static final String CONTROL_PROPERTY_KINEMATIC_SPATIAL;
+    public static final String CONTROL_PROPERTY_KINEMATIC;
+    public static final String CONTROL_PROPERTY_ANGULAR_VELOCITY;
+    public static final String CONTROL_PROPERTY_LINEAR_FACTOR;
+    public static final String CONTROL_PROPERTY_ANGULAR_DAMPING;
+    public static final String CONTROL_PROPERTY_ANGULAR_FACTOR;
+    public static final String CONTROL_PROPERTY_FRICTION;
+    public static final String CONTROL_PROPERTY_LINEAR_DAMPING;
+    public static final String CONTROL_PROPERTY_MASS;
+    public static final String CONTROL_PROPERTY_RESTITUTION;
+    public static final String CONTROL_PROPERTY_CURRENT_VALUE;
+    public static final String CONTROL_PROPERTY_CURRENT_WAY_POINT;
+    public static final String CONTROL_PROPERTY_DIRECTION_TYPE;
+    public static final String CONTROL_PROPERTY_DIRECTION;
+    public static final String CONTROL_PROPERTY_ROTATION;
+    public static final String CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD;
+    public static final String CONTROL_PROPERTY_LOOP_MODE;
+    public static final String CONTROL_PROPERTY_INITIAL_DURATION;
+    public static final String CONTROL_PROPERTY_SPEED;
+    public static final String CONTROL_PROPERTY_TIME;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -592,6 +627,10 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
         MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -622,6 +661,37 @@ public class Messages {
         MODEL_PROPERTY_TRIANGLE_COUNT = bundle.getString("ModelPropertyTriangleCount");
         MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
         MODEL_PROPERTY_LAYER = bundle.getString("ModelPropertyLayer");
+
+        CONTROL_PROPERTY_ENABLED = bundle.getString("ControlPropertyEnabled");
+        CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED = bundle.getString("ControlPropertyHardwareSkinningPreferred");
+        CONTROL_PROPERTY_VIEW_DIRECTION = bundle.getString("ControlPropertyViewDirection");
+        CONTROL_PROPERTY_WALK_DIRECTION = bundle.getString("ControlPropertyWalkDirection");
+        CONTROL_PROPERTY_FALL_SPEED = bundle.getString("ControlPropertyFallSpeed");
+        CONTROL_PROPERTY_GRAVITY = bundle.getString("ControlPropertyGravity");
+        CONTROL_PROPERTY_JUMP_SPEED = bundle.getString("ControlPropertyJumpSpeed");
+        CONTROL_PROPERTY_MAX_SLOPE = bundle.getString("ControlPropertyMaxSlope");
+        CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL = bundle.getString("ControlPropertyApplyPhysicsLocal");
+        CONTROL_PROPERTY_USE_VIEW_DIRECTION = bundle.getString("ControlPropertyUseViewDirection");
+        CONTROL_PROPERTY_KINEMATIC_SPATIAL = bundle.getString("ControlPropertyKinematicSpatial");
+        CONTROL_PROPERTY_KINEMATIC = bundle.getString("ControlPropertyKinematic");
+        CONTROL_PROPERTY_ANGULAR_VELOCITY = bundle.getString("ControlPropertyAngularVelocity");
+        CONTROL_PROPERTY_LINEAR_FACTOR = bundle.getString("ControlPropertyLinearFactor");
+        CONTROL_PROPERTY_ANGULAR_DAMPING = bundle.getString("ControlPropertyAngularDamping");
+        CONTROL_PROPERTY_ANGULAR_FACTOR = bundle.getString("ControlPropertyAngularFactor");
+        CONTROL_PROPERTY_FRICTION = bundle.getString("ControlPropertyFriction");
+        CONTROL_PROPERTY_LINEAR_DAMPING = bundle.getString("ControlPropertyLinearDamping");
+        CONTROL_PROPERTY_MASS = bundle.getString("ControlPropertyMass");
+        CONTROL_PROPERTY_RESTITUTION = bundle.getString("ControlPropertyRestitution");
+        CONTROL_PROPERTY_CURRENT_VALUE = bundle.getString("ControlPropertyCurrentValue");
+        CONTROL_PROPERTY_CURRENT_WAY_POINT = bundle.getString("ControlPropertyCurrentWayPoint");
+        CONTROL_PROPERTY_DIRECTION_TYPE = bundle.getString("ControlPropertyDirectionType");
+        CONTROL_PROPERTY_DIRECTION = bundle.getString("ControlPropertyDirection");
+        CONTROL_PROPERTY_ROTATION = bundle.getString("ControlPropertyRotation");
+        CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD = bundle.getString("ControlPropertyAngularSleepingThreshold");
+        CONTROL_PROPERTY_LOOP_MODE = bundle.getString("ControlPropertyLoopMode");
+        CONTROL_PROPERTY_INITIAL_DURATION = bundle.getString("ControlPropertyInitialDuration");
+        CONTROL_PROPERTY_SPEED = bundle.getString("ControlPropertySpeed");
+        CONTROL_PROPERTY_TIME = bundle.getString("ControlPropertyTime");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");

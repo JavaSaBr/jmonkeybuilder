@@ -118,8 +118,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
             scaleControl.setSyncHandler(Spatial::getLocalScale);
             scaleControl.setEditObject(spatial);
 
-            final QuaternionModelPropertyControl rotationControl =
-                    new QuaternionModelPropertyControl(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
+            final QuaternionModelPropertyControl<Spatial> rotationControl =
+                    new QuaternionModelPropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
             rotationControl.setApplyHandler(Spatial::setLocalRotation);
             rotationControl.setSyncHandler(Spatial::getLocalRotation);
             rotationControl.setEditObject(spatial);

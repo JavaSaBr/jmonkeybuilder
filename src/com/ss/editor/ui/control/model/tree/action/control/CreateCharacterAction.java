@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.control;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.scene.control.Control;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -32,7 +33,7 @@ public class CreateCharacterAction extends AbstractCreateControlAction {
     @NotNull
     @Override
     protected String getName() {
-        return "Character";
+        return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     }
 
     @NotNull

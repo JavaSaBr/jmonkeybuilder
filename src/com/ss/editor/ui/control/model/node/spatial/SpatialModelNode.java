@@ -65,7 +65,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
         final Menu menu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
 
-        final Menu createControlsMenu = new Menu("Control", new ImageView(Icons.ADD_18));
+        final Menu createControlsMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
         createControlsMenu.getItems().addAll(new CreateRigidBodyControlAction(nodeTree, this),
                 new CreateMotionControlAction(nodeTree, this),
                 new CreateCharacterAction(nodeTree, this));
