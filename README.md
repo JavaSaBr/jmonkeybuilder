@@ -6,6 +6,7 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.9.2 ##
+* [Video](https://www.youtube.com/watch?v=CPNaI9jDoOk&feature=youtu.be)
 * -Implemented scene filters editing and provided API to support custom filters.
 * -Added some build in filters.
 * -Fixed problems with custom classpath.
