@@ -1,9 +1,28 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.1 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.2 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.2 ##
+* -Implemented scene filters editing and provided API to support custom filters.
+* -Added some build in filters.
+* -Fixed problems with custom classpath.
+* -Implemented D&D models from asset tree to model/scene editor.
+* -Implemented renaming lights in model/scene editor.
+* -Re-implemented working with scene layers.
+* -Implemented more user-friendly light editing in scene/model editor.
+* -Updated API for custom app states.
+* -Updated file selector dialogs, added some actions to a context menu.
+* -Updated a grid in scene/model editor.
+* -Added auto move editor's camera to selected node.
+* -Implemented D&D materials from asset tree to model/scene editor.
+* -Implemented D&D textures from asset tree to material editor.
+* -Added hotkeys(R/G/S) to switch a manipulator mode in scene/model editor.
+* -Added hotkey(delete) to delete a selected node from scene/model editor.
+* -Implemented D&D audio files from asset tree to audio data property in model/scene editor.
+* -Implemented control editing and provided API to support custom controls.
 
 ## ver. 0.9.1 ##
 * [Video](https://www.youtube.com/watch?v=UkG3blab-xg&feature=youtu.be)
