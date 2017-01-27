@@ -9,6 +9,7 @@ import com.ss.editor.ui.control.app.state.property.control.ColorAppStateProperty
 import com.ss.editor.ui.control.app.state.property.control.EnumAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.FloatAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.IntegerAppStatePropertyControl;
+import com.ss.editor.ui.control.app.state.property.control.StringAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.Vector2fAppStatePropertyControl;
 import com.ss.editor.ui.control.app.state.property.control.Vector3fAppStatePropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
@@ -91,7 +92,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case COLOR: {
 
                     final EditableProperty<ColorRGBA, ?> property = cast(editableProperty);
-                    final ColorRGBA color = Objects.requireNonNull(property.getValue(), "Color value can't be null.");
+                    final ColorRGBA color = property.getValue();
 
                     final ColorAppStatePropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
                             new ColorAppStatePropertyControl<>(color, property.getName(), changeConsumer);
@@ -106,6 +107,17 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
 
                     final IntegerAppStatePropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case STRING: {
+
+                    final EditableProperty<String, ?> property = cast(editableProperty);
+                    final String value = property.getValue();
+
+                    final StringAppStatePropertyControl<EditableProperty<String, ?>> propertyControl =
+                            new StringAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

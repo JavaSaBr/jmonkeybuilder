@@ -11,27 +11,29 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import rlib.function.SixObjectConsumer;
-import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
 /**
- * The implementation of the {@link AbstractPropertyControl} to edit integer values.
+ * The implementation of the {@link AbstractPropertyControl} to edit string values.
  *
  * @author JavaSaBr
  */
-public abstract class AbstractIntegerPropertyControl<C extends ChangeConsumer, T>
-        extends AbstractPropertyControl<C, T, Integer> {
+public abstract class AbstractStringPropertyControl<C extends ChangeConsumer, T>
+        extends AbstractPropertyControl<C, T, String> {
 
     /**
      * The filed with current value.
      */
-    private IntegerTextField valueField;
+    private TextField valueField;
 
-    public AbstractIntegerPropertyControl(@Nullable final Integer propertyValue, @NotNull final String propertyName,
-                                          @NotNull final C changeConsumer,
-                                          @NotNull final SixObjectConsumer<C, T, String, Integer, Integer, BiConsumer<T, Integer>> changeHandler) {
+    public AbstractStringPropertyControl(@Nullable final String propertyValue, @NotNull final String propertyName,
+                                         @NotNull final C changeConsumer,
+                                         @NotNull final SixObjectConsumer<C, T, String, String, String, BiConsumer<T, String>> changeHandler) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
     }
 
@@ -39,10 +41,9 @@ public abstract class AbstractIntegerPropertyControl<C extends ChangeConsumer, T
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
 
-        valueField = new IntegerTextField();
+        valueField = new TextField();
         valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
-        valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
+        valueField.setOnKeyReleased(this::updateValue);
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addClassTo(valueField, CSSClasses.SPECIAL_FONT_13);
@@ -57,29 +58,32 @@ public abstract class AbstractIntegerPropertyControl<C extends ChangeConsumer, T
     /**
      * @return the filed with current value.
      */
-    private IntegerTextField getValueField() {
+    private TextField getValueField() {
         return valueField;
     }
 
     @Override
     protected void reload() {
-        final Integer element = getPropertyValue();
-        final IntegerTextField valueField = getValueField();
+        final String value = getPropertyValue();
+        final TextField valueField = getValueField();
         final int caretPosition = valueField.getCaretPosition();
-        valueField.setText(String.valueOf(element));
+        valueField.setText(value == null ? "" : value);
         valueField.positionCaret(caretPosition);
     }
 
     /**
      * Update the value.
      */
-    private void updateValue() {
-        if (isIgnoreListener()) return;
+    private void updateValue(@NotNull final KeyEvent event) {
+        UIUtils.consumeIfIsNotHotKey(event);
 
-        final IntegerTextField valueField = getValueField();
-        final int value = valueField.getValue();
-        final Integer oldValue = getPropertyValue();
+        if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) return;
 
-        changed(value, oldValue);
+        final TextField valueField = getValueField();
+
+        final String oldValue = getPropertyValue();
+        final String newValue = valueField.getText();
+
+        changed(newValue, oldValue);
     }
 }

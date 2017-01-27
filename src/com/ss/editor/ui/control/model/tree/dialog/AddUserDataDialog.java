@@ -47,6 +47,7 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
         VECTOR2F,
         COLOR,
         BOOLEAN,
+        STRING,
     }
 
     private static final ObservableList<DataType> DATA_TYPES = observableArrayList(DataType.values());
@@ -163,6 +164,9 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
                 break;
             case COLOR:
                 value = new ColorRGBA();
+                break;
+            case STRING:
+                value = "empty string";
                 break;
         }
 

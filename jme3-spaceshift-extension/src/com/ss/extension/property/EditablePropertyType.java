@@ -14,6 +14,7 @@ public enum EditablePropertyType {
     QUATERNION,
     COLOR,
     ENUM,
+    STRING,
     DIRECTION_LIGHT_FROM_SCENE,
     POINT_LIGHT_FROM_SCENE;
 

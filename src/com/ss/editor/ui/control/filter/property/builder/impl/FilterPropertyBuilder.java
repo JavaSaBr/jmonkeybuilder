@@ -13,6 +13,7 @@ import com.ss.editor.ui.control.filter.property.control.EnumFilterPropertyContro
 import com.ss.editor.ui.control.filter.property.control.FloatFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.IntegerFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.PointLightElementPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.StringFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector2fFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector3fFilterPropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
@@ -95,7 +96,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case COLOR: {
 
                     final EditableProperty<ColorRGBA, ?> property = cast(editableProperty);
-                    final ColorRGBA color = Objects.requireNonNull(property.getValue(), "Color value can't be null.");
+                    final ColorRGBA color = property.getValue();
 
                     final ColorFilterPropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
                             new ColorFilterPropertyControl<>(color, property.getName(), changeConsumer);
@@ -110,6 +111,17 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
 
                     final IntegerFilterPropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerFilterPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case STRING: {
+
+                    final EditableProperty<String, ?> property = cast(editableProperty);
+                    final String value = property.getValue();
+
+                    final StringFilterPropertyControl<EditableProperty<String, ?>> propertyControl =
+                            new StringFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

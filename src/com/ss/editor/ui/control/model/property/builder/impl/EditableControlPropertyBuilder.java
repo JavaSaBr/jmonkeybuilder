@@ -10,6 +10,7 @@ import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl
 import com.ss.editor.ui.control.model.property.control.EnumControlPropertyControl;
 import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.StringModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
@@ -92,7 +93,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Scen
                 case COLOR: {
 
                     final EditableProperty<ColorRGBA, ?> property = cast(editableProperty);
-                    final ColorRGBA color = Objects.requireNonNull(property.getValue(), "Color value can't be null.");
+                    final ColorRGBA color = property.getValue();
 
                     final ColorModelPropertyControl<EditableProperty<ColorRGBA, ?>> propertyControl =
                             new ColorModelPropertyControl<>(color, property.getName(), changeConsumer);
@@ -107,6 +108,17 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Scen
 
                     final IntegerModelPropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerModelPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case STRING: {
+
+                    final EditableProperty<String, ?> property = cast(editableProperty);
+                    final String value = property.getValue();
+
+                    final StringModelPropertyControl<EditableProperty<String, ?>> propertyControl =
+                            new StringModelPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

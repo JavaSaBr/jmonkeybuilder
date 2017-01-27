@@ -14,12 +14,12 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.DefaultModelSinglePropertyControl;
 import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.LayerModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.QuaternionModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.StringModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
 import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
@@ -215,7 +215,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
                 final String value = (String) data;
 
-                final DefaultModelSinglePropertyControl<Spatial, String> control = new DefaultModelSinglePropertyControl<>(value, key, changeConsumer);
+                final StringModelPropertyControl<Spatial> control = new StringModelPropertyControl<>(value, key, changeConsumer);
                 control.setApplyHandler((sp, newValue) -> sp.setUserData(key, newValue));
                 control.setSyncHandler(sp -> sp.getUserData(key));
                 control.setEditObject(spatial);

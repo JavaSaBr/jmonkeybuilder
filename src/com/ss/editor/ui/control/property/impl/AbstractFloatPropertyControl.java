@@ -42,7 +42,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
 
         valueField = new FloatTextField();
         valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        valueField.setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
+        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
