@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
@@ -35,7 +36,7 @@ public class CreateRigidBodyControlAction extends AbstractCreateControlAction {
 
     @NotNull
     @Override
-    protected RigidBodyControl createControl() {
+    protected RigidBodyControl createControl(@NotNull final Spatial parent) {
         final RigidBodyControl rigidBodyControl = new RigidBodyControl();
         rigidBodyControl.setEnabled(false);
         return rigidBodyControl;

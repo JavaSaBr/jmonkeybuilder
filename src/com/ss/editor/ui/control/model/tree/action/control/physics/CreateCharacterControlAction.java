@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.control.physics;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
@@ -37,7 +38,7 @@ public class CreateCharacterControlAction extends AbstractCreateControlAction {
 
     @NotNull
     @Override
-    protected Control createControl() {
+    protected Control createControl(@NotNull final Spatial parent) {
         return new CharacterControl(new CapsuleCollisionShape(0.6f, 1.8f), 0.03f);
     }
 }

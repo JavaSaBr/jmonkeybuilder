@@ -1,7 +1,10 @@
 package com.ss.editor.ui.control.model.node.spatial;
 
+import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
+import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static java.util.Objects.requireNonNull;
+import com.jme3.animation.SkeletonControl;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.Node;
@@ -18,10 +21,7 @@ import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacterControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBodyControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.physics.CreateStaticRigidBodyControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.physics.CreateVehicleControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.*;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -36,7 +36,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link ModelNode} for representing the {@link Spatial} in the editor.
+ * The implementation of the {@link ModelNode} to represent a {@link Spatial} in an editor.
  *
  * @author JavaSaBr
  */
@@ -73,16 +73,27 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     @Nullable
     protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
 
-        final Menu menu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
+        final T element = getElement();
+        final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
 
-        final Menu createControlsMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL,
-                new ImageView(Icons.ADD_18));
-        createControlsMenu.getItems().addAll(new CreateCustomControlAction(nodeTree, this),
-                new CreateStaticRigidBodyControlAction(nodeTree, this), new CreateVehicleControlAction(nodeTree, this),
-                new CreateRigidBodyControlAction(nodeTree, this), new CreateMotionControlAction(nodeTree, this),
-                new CreateCharacterControlAction(nodeTree, this));
+        final Menu menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
+        final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
 
-        menu.getItems().add(createControlsMenu);
+        final ObservableList<MenuItem> items = createControlsMenu.getItems();
+
+        items.addAll(new CreateCustomControlAction(nodeTree, this),
+                     new CreateStaticRigidBodyControlAction(nodeTree, this),
+                     new CreateVehicleControlAction(nodeTree, this),
+                     new CreateRigidBodyControlAction(nodeTree, this),
+                     new CreateMotionControlAction(nodeTree, this),
+                     new CreateCharacterControlAction(nodeTree, this));
+
+        if (skeletonControl != null) {
+            items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
+        }
+
+        menu.getItems()
+            .add(createControlsMenu);
 
         return menu;
     }
