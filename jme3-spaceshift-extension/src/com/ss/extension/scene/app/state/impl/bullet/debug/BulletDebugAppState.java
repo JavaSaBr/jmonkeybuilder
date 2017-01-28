@@ -44,11 +44,13 @@ import com.jme3.bullet.objects.PhysicsGhostObject;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.bullet.objects.PhysicsVehicle;
 import com.jme3.material.Material;
+import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.extension.scene.app.state.impl.bullet.debug.control.BulletCharacterDebugControl;
 import com.ss.extension.scene.app.state.impl.bullet.debug.control.BulletRigidBodyDebugControl;
+import com.ss.extension.scene.app.state.impl.bullet.debug.control.BulletVehicleDebugControl;
 import org.jetbrains.annotations.NotNull;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -69,31 +71,50 @@ public class BulletDebugAppState extends AbstractAppState {
     /**
      * The current registered rigid bodies.
      */
+    @NotNull
     protected final ObjectDictionary<PhysicsRigidBody, Spatial> bodies;
 
     /**
      * The previous registered rigid bodies.
      */
+    @NotNull
     protected final ObjectDictionary<PhysicsRigidBody, Spatial> prevBodies;
 
     /**
      * The current registered characters.
      */
+    @NotNull
     protected final ObjectDictionary<PhysicsCharacter, Spatial> characters;
 
     /**
      * The previous registered characters.
      */
+    @NotNull
     protected final ObjectDictionary<PhysicsCharacter, Spatial> prevCharacters;
 
+    /**
+     * The current registered vehicles.
+     */
+    @NotNull
+    protected final ObjectDictionary<PhysicsVehicle, Spatial> vehicles;
+
+    /**
+     * The previous registered vehicles.
+     */
+    @NotNull
+    protected final ObjectDictionary<PhysicsVehicle, Spatial> prevVehicles;
+
+    @NotNull
     protected final ObjectDictionary<PhysicsJoint, Spatial> joints;
+
+    @NotNull
     protected final ObjectDictionary<PhysicsJoint, Spatial> prevJoints;
 
+    @NotNull
     protected final ObjectDictionary<PhysicsGhostObject, Spatial> ghosts;
-    protected final ObjectDictionary<PhysicsGhostObject, Spatial> prevGhosts;
 
-    protected final ObjectDictionary<PhysicsVehicle, Spatial> vehicles;
-    protected final ObjectDictionary<PhysicsVehicle, Spatial> prevVehicles;
+    @NotNull
+    protected final ObjectDictionary<PhysicsGhostObject, Spatial> prevGhosts;
 
     /**
      * The debug root node.
@@ -247,6 +268,7 @@ public class BulletDebugAppState extends AbstractAppState {
         // update all object links
         updateRigidBodies();
         updateCharacters();
+        updateVehicles();
         // update our debug root node
         debugRootNode.updateLogicalState(tpf);
         debugRootNode.updateGeometricState();
@@ -257,40 +279,40 @@ public class BulletDebugAppState extends AbstractAppState {
         final AssetManager assetManager = application.getAssetManager();
 
         if (debugBlue == null) {
-            debugBlue = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            debugBlue.getAdditionalRenderState().setWireframe(true);
-            debugBlue.setColor("Color", ColorRGBA.Blue);
+            debugBlue = createDebugMaterial(assetManager, ColorRGBA.Blue);
         }
 
         if (debugGreen == null) {
-            debugGreen = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            debugGreen.getAdditionalRenderState().setWireframe(true);
-            debugGreen.setColor("Color", ColorRGBA.Green);
+            debugGreen = createDebugMaterial(assetManager, ColorRGBA.Green);
         }
 
         if (debugRed == null) {
-            debugRed = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            debugRed.getAdditionalRenderState().setWireframe(true);
-            debugRed.setColor("Color", ColorRGBA.Red);
+            debugRed = createDebugMaterial(assetManager, ColorRGBA.Red);
         }
 
         if (debugYellow == null) {
-            debugYellow = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            debugYellow.getAdditionalRenderState().setWireframe(true);
-            debugYellow.setColor("Color", ColorRGBA.Yellow);
+            debugYellow = createDebugMaterial(assetManager, ColorRGBA.Yellow);
         }
 
         if (debugMagenta == null) {
-            debugMagenta = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            debugMagenta.getAdditionalRenderState().setWireframe(true);
-            debugMagenta.setColor("Color", ColorRGBA.Magenta);
+            debugMagenta = createDebugMaterial(assetManager, ColorRGBA.Magenta);
         }
 
         if (debugPink == null) {
-            debugPink = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            debugPink.getAdditionalRenderState().setWireframe(true);
-            debugPink.setColor("Color", ColorRGBA.Pink);
+            debugPink = createDebugMaterial(assetManager, ColorRGBA.Pink);
         }
+    }
+
+    @NotNull
+    private Material createDebugMaterial(@NotNull final AssetManager assetManager, @NotNull final ColorRGBA blue) {
+
+        final Material material = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        material.setColor("Color", blue);
+
+        final RenderState additionalRenderState = material.getAdditionalRenderState();
+        additionalRenderState.setWireframe(true);
+
+        return material;
     }
 
     /**
@@ -347,6 +369,22 @@ public class BulletDebugAppState extends AbstractAppState {
     @NotNull
     protected ObjectDictionary<PhysicsCharacter, Spatial> getCharacters() {
         return characters;
+    }
+
+    /**
+     * @return the current registered vehicles.
+     */
+    @NotNull
+    protected ObjectDictionary<PhysicsVehicle, Spatial> getVehicles() {
+        return vehicles;
+    }
+
+    /**
+     * @return the previous registered vehicles.
+     */
+    @NotNull
+    protected ObjectDictionary<PhysicsVehicle, Spatial> getPrevVehicles() {
+        return prevVehicles;
     }
 
     private void updateRigidBodies() {
@@ -419,8 +457,38 @@ public class BulletDebugAppState extends AbstractAppState {
         prevCharacters.clear();
     }
 
-    @Override
-    public void setEnabled(final boolean enabled) {
-        super.setEnabled(enabled);
+    private void updateVehicles() {
+
+        final Predicate<Object> filter = getFilter();
+
+        final ObjectDictionary<PhysicsVehicle, Spatial> prevVehicles = getPrevVehicles();
+        final ObjectDictionary<PhysicsVehicle, Spatial> vehicles = getVehicles();
+
+        prevVehicles.put(vehicles);
+        vehicles.clear();
+
+        final Collection<PhysicsVehicle> current = physicsSpace.getVehicleList();
+
+        for (final PhysicsVehicle object : current) {
+
+            // copy existing spatials
+            if (prevVehicles.containsKey(object)) {
+                vehicles.put(object, prevVehicles.get(object));
+            } else {
+                if (filter == null || filter.test(object)) {
+                    //create new spatial
+                    final Node node = new Node(object.toString());
+                    node.addControl(new BulletVehicleDebugControl(this, object));
+                    vehicles.put(object, node);
+                    debugRootNode.attachChild(node);
+                }
+            }
+        }
+
+        prevVehicles.forEach(vehicles, (actual, key, value) -> {
+            if (!actual.containsKey(key)) value.removeFromParent();
+        });
+
+        prevVehicles.clear();
     }
 }

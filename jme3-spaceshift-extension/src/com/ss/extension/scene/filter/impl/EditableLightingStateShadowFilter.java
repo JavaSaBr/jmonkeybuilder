@@ -9,10 +9,8 @@ import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.simsilica.fx.LightingState;
 import com.ss.extension.loader.SceneLoader;
 import com.ss.extension.scene.app.state.SceneAppState;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import rlib.util.array.Array;
 
 /**

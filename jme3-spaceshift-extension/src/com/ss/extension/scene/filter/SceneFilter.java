@@ -4,10 +4,8 @@ import com.jme3.export.Savable;
 import com.jme3.post.Filter;
 import com.jme3.util.clone.JmeCloneable;
 import com.ss.extension.scene.app.state.SceneAppState;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import rlib.util.array.Array;
 
 /**

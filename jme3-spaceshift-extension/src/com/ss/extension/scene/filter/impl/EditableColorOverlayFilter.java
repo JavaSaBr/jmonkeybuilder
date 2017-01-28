@@ -6,9 +6,7 @@ import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.filter.EditableSceneFilter;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -46,7 +44,8 @@ public class EditableColorOverlayFilter extends ColorOverlayFilter implements Ed
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.COLOR, "Color", this,
-                ColorOverlayFilter::getColor, ColorOverlayFilter::setColor));
+                                        ColorOverlayFilter::getColor,
+                                        ColorOverlayFilter::setColor));
 
         return result;
     }

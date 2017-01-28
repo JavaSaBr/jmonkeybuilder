@@ -10,20 +10,19 @@ import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.filter.EditableSceneFilter;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.io.IOException;
 
 /**
  * The editable implementation of posterization filter.
  *
  * @author JavaSaBr
  */
-public class EditablePosterizationFilter extends PosterizationFilter implements EditableSceneFilter<PosterizationFilter> {
+public class EditablePosterizationFilter extends PosterizationFilter implements
+        EditableSceneFilter<PosterizationFilter> {
 
     @Override
     public PosterizationFilter get() {
@@ -52,11 +51,14 @@ public class EditablePosterizationFilter extends PosterizationFilter implements 
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Gamma", 0.005F, 0F, 10F, this,
-                EditablePosterizationFilter::getGamma, EditablePosterizationFilter::setGamma));
+                                        EditablePosterizationFilter::getGamma,
+                                        EditablePosterizationFilter::setGamma));
         result.add(new SimpleProperty<>(EditablePropertyType.INTEGER, "Num colors", 1F, 0F, 100F, this,
-                EditablePosterizationFilter::getNumColors, EditablePosterizationFilter::setNumColors));
+                                        EditablePosterizationFilter::getNumColors,
+                                        EditablePosterizationFilter::setNumColors));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Strength", 0.1F, 0F, 100F, this,
-                EditablePosterizationFilter::getStrength, EditablePosterizationFilter::setStrength));
+                                        EditablePosterizationFilter::getStrength,
+                                        EditablePosterizationFilter::setStrength));
 
         return result;
     }

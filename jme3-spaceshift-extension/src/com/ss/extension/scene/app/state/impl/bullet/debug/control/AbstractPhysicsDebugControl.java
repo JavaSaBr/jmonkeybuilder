@@ -89,14 +89,20 @@ public abstract class AbstractPhysicsDebugControl extends AbstractControl {
             spatial.setLocalRotation(worldRotation);
         } else {
 
-            localLocation.set(worldLocation).subtractLocal(parent.getWorldTranslation());
+            localLocation.set(worldLocation)
+                         .subtractLocal(parent.getWorldTranslation());
+
             localLocation.divideLocal(parent.getWorldScale());
 
-            inverseWorldRotation.set(parent.getWorldRotation()).inverseLocal().multLocal(localLocation);
+            inverseWorldRotation.set(parent.getWorldRotation())
+                                .inverseLocal()
+                                .multLocal(localLocation);
 
             localRotation.set(worldRotation);
 
-            inverseWorldRotation.set(parent.getWorldRotation()).inverseLocal().mult(localRotation, localRotation);
+            inverseWorldRotation.set(parent.getWorldRotation())
+                                .inverseLocal()
+                                .mult(localRotation, localRotation);
 
             spatial.setLocalTranslation(localLocation);
             spatial.setLocalRotation(localRotation);

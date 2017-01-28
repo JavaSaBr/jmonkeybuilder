@@ -6,17 +6,7 @@ package com.ss.extension.property;
  * @author JavaSaBr
  */
 public enum EditablePropertyType {
-    BOOLEAN,
-    INTEGER,
-    FLOAT,
-    VECTOR_2F,
-    VECTOR_3F,
-    QUATERNION,
-    COLOR,
-    ENUM,
-    STRING,
-    DIRECTION_LIGHT_FROM_SCENE,
-    POINT_LIGHT_FROM_SCENE;
+    BOOLEAN, INTEGER, FLOAT, VECTOR_2F, VECTOR_3F, QUATERNION, COLOR, ENUM, STRING, DIRECTION_LIGHT_FROM_SCENE, POINT_LIGHT_FROM_SCENE;
 
     private static final EditablePropertyType[] TYPES = values();
 

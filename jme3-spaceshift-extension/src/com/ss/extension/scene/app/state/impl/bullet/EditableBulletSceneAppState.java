@@ -53,6 +53,7 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
     /***
      * The physics space.
      */
+    @Nullable
     protected volatile PhysicsSpace physicsSpace;
 
     /**
@@ -63,51 +64,61 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
     /**
      * The executor.
      */
+    @Nullable
     protected ScheduledExecutorService executor;
 
     /**
      * The state manager.
      */
+    @Nullable
     protected AppStateManager stateManager;
 
     /**
      * The application.
      */
+    @Nullable
     protected Application application;
 
     /**
      * The debug state.
      */
+    @Nullable
     protected BulletDebugAppState debugAppState;
 
     /**
      * The scene node.
      */
+    @Nullable
     protected SceneNode sceneNode;
 
     /**
      * The threading type.
      */
+    @NotNull
     protected ThreadingType threadingType;
 
     /**
      * The prev threading type.
      */
+    @Nullable
     protected ThreadingType prevThreadingType;
 
     /**
      * The broadphase type.
      */
+    @NotNull
     protected BroadphaseType broadphaseType;
 
     /**
      * The world min.
      */
+    @NotNull
     protected Vector3f worldMin;
 
     /**
      * Thw world max.
      */
+    @NotNull
     protected Vector3f worldMax;
 
     /**
@@ -164,6 +175,7 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
     /**
      * @return the physics space.
      */
+    @Nullable
     public PhysicsSpace getPhysicsSpace() {
         return physicsSpace;
     }
@@ -327,7 +339,8 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
                 physicsSpace = new PhysicsSpace(worldMin, worldMax, broadphaseType);
                 physicsSpace.addTickListener(this);
                 return true;
-            }).get();
+            })
+                           .get();
         } catch (final InterruptedException | ExecutionException e) {
             LOGGER.warning(e);
             return false;
@@ -460,18 +473,23 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.BOOLEAN, "Debug enabled", this,
-                EditableBulletSceneAppState::isDebugEnabled, EditableBulletSceneAppState::setDebugEnabled));
-        result.add(
-                new SimpleProperty<>(EditablePropertyType.FLOAT, "Speed", this, EditableBulletSceneAppState::getSpeed,
-                        EditableBulletSceneAppState::setSpeed));
+                                        EditableBulletSceneAppState::isDebugEnabled,
+                                        EditableBulletSceneAppState::setDebugEnabled));
+        result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Speed", this,
+                                        EditableBulletSceneAppState::getSpeed,
+                                        EditableBulletSceneAppState::setSpeed));
         result.add(new SimpleProperty<>(EditablePropertyType.ENUM, "Broadphase type", this,
-                EditableBulletSceneAppState::getBroadphaseType, EditableBulletSceneAppState::setBroadphaseType));
+                                        EditableBulletSceneAppState::getBroadphaseType,
+                                        EditableBulletSceneAppState::setBroadphaseType));
         result.add(new SimpleProperty<>(EditablePropertyType.ENUM, "Threading type", this,
-                EditableBulletSceneAppState::getThreadingType, EditableBulletSceneAppState::setThreadingType));
+                                        EditableBulletSceneAppState::getThreadingType,
+                                        EditableBulletSceneAppState::setThreadingType));
         result.add(new SimpleProperty<>(EditablePropertyType.VECTOR_3F, "World max", this,
-                EditableBulletSceneAppState::getWorldMax, EditableBulletSceneAppState::setWorldMax));
+                                        EditableBulletSceneAppState::getWorldMax,
+                                        EditableBulletSceneAppState::setWorldMax));
         result.add(new SimpleProperty<>(EditablePropertyType.VECTOR_3F, "World max", this,
-                EditableBulletSceneAppState::getWorldMin, EditableBulletSceneAppState::setWorldMin));
+                                        EditableBulletSceneAppState::getWorldMin,
+                                        EditableBulletSceneAppState::setWorldMin));
 
         return result;
     }

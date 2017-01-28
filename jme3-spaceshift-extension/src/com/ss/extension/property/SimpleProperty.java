@@ -63,7 +63,8 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
     }
 
     public SimpleProperty(@NotNull final EditablePropertyType type, @NotNull final String name, final float scrollPower,
-                          @NotNull final O object, @NotNull final Function<O, T> getter, @NotNull final BiConsumer<O, T> setter) {
+                          @NotNull final O object, @NotNull final Function<O, T> getter,
+                          @NotNull final BiConsumer<O, T> setter) {
         this(type, name, scrollPower, Integer.MIN_VALUE, Integer.MAX_VALUE, object, getter, setter);
     }
 
@@ -126,15 +127,8 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
 
     @Override
     public String toString() {
-        return "SimpleProperty{" +
-                "type=" + type +
-                ", name='" + name + '\'' +
-                ", getter=" + getter +
-                ", setter=" + setter +
-                ", object=" + object +
-                ", scrollPower=" + scrollPower +
-                ", minValue=" + minValue +
-                ", maxValue=" + maxValue +
-                '}';
+        return "SimpleProperty{" + "type=" + type + ", name='" + name + '\'' + ", getter=" + getter + ", setter=" +
+                setter + ", object=" + object + ", scrollPower=" + scrollPower + ", minValue=" + minValue +
+                ", maxValue=" + maxValue + '}';
     }
 }

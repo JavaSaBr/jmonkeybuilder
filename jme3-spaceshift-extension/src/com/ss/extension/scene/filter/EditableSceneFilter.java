@@ -2,9 +2,7 @@ package com.ss.extension.scene.filter;
 
 import com.jme3.post.Filter;
 import com.ss.extension.property.EditableProperty;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 

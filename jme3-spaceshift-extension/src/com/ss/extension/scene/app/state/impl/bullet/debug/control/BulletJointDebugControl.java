@@ -87,11 +87,15 @@ public class BulletJointDebugControl extends AbstractPhysicsDebugControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        body.getBodyA().getPhysicsLocation(a.getTranslation());
-        body.getBodyA().getPhysicsRotation(a.getRotation());
+        body.getBodyA()
+            .getPhysicsLocation(a.getTranslation());
+        body.getBodyA()
+            .getPhysicsRotation(a.getRotation());
 
-        body.getBodyB().getPhysicsLocation(b.getTranslation());
-        body.getBodyB().getPhysicsRotation(b.getRotation());
+        body.getBodyB()
+            .getPhysicsLocation(b.getTranslation());
+        body.getBodyB()
+            .getPhysicsRotation(b.getRotation());
 
         geomA.setLocalTransform(a);
         geomB.setLocalTransform(b);

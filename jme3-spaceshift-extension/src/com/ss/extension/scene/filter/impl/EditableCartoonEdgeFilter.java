@@ -11,13 +11,11 @@ import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.filter.EditableSceneFilter;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.io.IOException;
 
 /**
  * The editable implementation of cartoon edge filter.
@@ -53,19 +51,26 @@ public class EditableCartoonEdgeFilter extends CartoonEdgeFilter implements Edit
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.COLOR, "Edge color", this,
-                EditableCartoonEdgeFilter::getEdgeColor, EditableCartoonEdgeFilter::setEdgeColor));
+                                        EditableCartoonEdgeFilter::getEdgeColor,
+                                        EditableCartoonEdgeFilter::setEdgeColor));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Edge width", this,
-                EditableCartoonEdgeFilter::getEdgeWidth, EditableCartoonEdgeFilter::setEdgeWidth));
+                                        EditableCartoonEdgeFilter::getEdgeWidth,
+                                        EditableCartoonEdgeFilter::setEdgeWidth));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Edge intensity", this,
-                EditableCartoonEdgeFilter::getEdgeIntensity, EditableCartoonEdgeFilter::setEdgeIntensity));
+                                        EditableCartoonEdgeFilter::getEdgeIntensity,
+                                        EditableCartoonEdgeFilter::setEdgeIntensity));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Normal threshold", this,
-                EditableCartoonEdgeFilter::getNormalThreshold, EditableCartoonEdgeFilter::setNormalThreshold));
+                                        EditableCartoonEdgeFilter::getNormalThreshold,
+                                        EditableCartoonEdgeFilter::setNormalThreshold));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Depth threshold", this,
-                EditableCartoonEdgeFilter::getDepthThreshold, EditableCartoonEdgeFilter::setDepthThreshold));
+                                        EditableCartoonEdgeFilter::getDepthThreshold,
+                                        EditableCartoonEdgeFilter::setDepthThreshold));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Normal sensitivity", this,
-                EditableCartoonEdgeFilter::getNormalSensitivity, EditableCartoonEdgeFilter::setNormalSensitivity));
+                                        EditableCartoonEdgeFilter::getNormalSensitivity,
+                                        EditableCartoonEdgeFilter::setNormalSensitivity));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Depth sensitivity", this,
-                EditableCartoonEdgeFilter::getDepthSensitivity, EditableCartoonEdgeFilter::setDepthSensitivity));
+                                        EditableCartoonEdgeFilter::getDepthSensitivity,
+                                        EditableCartoonEdgeFilter::setDepthSensitivity));
 
         return result;
     }

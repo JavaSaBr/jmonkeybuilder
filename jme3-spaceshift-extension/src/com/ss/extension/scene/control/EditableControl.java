@@ -2,9 +2,7 @@ package com.ss.extension.scene.control;
 
 import com.jme3.scene.control.Control;
 import com.ss.extension.property.EditableProperty;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
