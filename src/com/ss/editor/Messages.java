@@ -1,12 +1,11 @@
 package com.ss.editor;
 
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import rlib.util.ReflectionUtils;
 
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import rlib.util.ReflectionUtils;
 
 /**
  * The class with all messages of this application.
@@ -135,6 +134,8 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
+    public static final String MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -199,9 +200,11 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
+    public static final String MODEL_NODE_TREE_ACTION_REACTIVATE;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -439,11 +442,12 @@ public class Messages {
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
-        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                locale, classLoader, ResourceControl.getInstance());
+        final ResourceBundle controlBundle = ResourceBundle
+                .getBundle("com/sun/javafx/scene/control/skin/resources/controls", locale, classLoader,
+                        ResourceControl.getInstance());
 
-        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                ResourceControl.getInstance());
+        final ResourceBundle overrideBundle = ResourceBundle
+                .getBundle("com/sun/javafx/scene/control/skin/resources/controls", ResourceControl.getInstance());
 
         final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
         final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
@@ -454,7 +458,8 @@ public class Messages {
 
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
-        EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponentAssetOpenAssetDirectoryChooser");
+        EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle
+                .getString("EditorBarComponentAssetOpenAssetDirectoryChooser");
         EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponentAssetReopen");
         EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponentAssetClose");
 
@@ -462,17 +467,28 @@ public class Messages {
 
         EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE = bundle.getString("AssetComponentResourceTreeContextMenuOpenWithFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE = bundle.getString("AssetComponentResourceTreeContextMenuCopyFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuCutFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuPasteFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION = bundle.getString("AssetComponentResourceTreeContextMenuDeleteFileQuestion");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE = bundle.getString("AssetComponentResourceTreeContextMenuConvertFile");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR = bundle.getString("AssetComponentResourceTreeContextMenuOpenFileByExternalEditor");
-        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle.getString("AssetComponentResourceTreeContextMenuRenameFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuNewFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuOpenFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuOpenWithFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_COPY_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuCopyFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuCutFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_PASTE_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuPasteFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuDeleteFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE_QUESTION = bundle
+                .getString("AssetComponentResourceTreeContextMenuDeleteFileQuestion");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CONVERT_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuConvertFile");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR = bundle
+                .getString("AssetComponentResourceTreeContextMenuOpenFileByExternalEditor");
+        ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle
+                .getString("AssetComponentResourceTreeContextMenuRenameFile");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
 
@@ -481,13 +497,16 @@ public class Messages {
         ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
         ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
 
-        PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureParamLabel");
-        PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
+        PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle
+                .getString("ParticlesAssetEditorDialogTextureParamLabel");
+        PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle
+                .getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
 
         MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE = bundle.getString("MaterialFileEditorTexturesComponentTitle");
         MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorColorsComponentTitle");
         MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE = bundle.getString("MaterialFileEditorOtherComponentTitle");
-        MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE = bundle.getString("MaterialFileEditorRenderParamsComponentTitle");
+        MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE = bundle
+                .getString("MaterialFileEditorRenderParamsComponentTitle");
 
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT = bundle.getString("Texture2DMaterialParamControlRepeat");
         TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP = bundle.getString("Texture2DMaterialParamControlFlip");
@@ -571,6 +590,9 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
         MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
+        MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL = bundle
+                .getString("ModelFileEditorNodeStaticRigidBodyControl");
+        MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeRigidBodyControl");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -600,44 +622,71 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
-        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
+        MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle
+                .getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER = bundle.getString("ModelNodeTreeActionCreateSoftTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePrimitiveShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeTriangleShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangePrimitiveShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeCylinderShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeDomeShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeQuadShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeSphereShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTorusShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeModelShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMesh");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshQuad");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshPoint");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshImpostor");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshModel");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ALPHA = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerAlpha");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_COLOR = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerColor");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_DESTINATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerDestination");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_GRAVITY = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerGravity");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_IMPULSE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerImpulse");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_PHYSICS = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerPhysics");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_RADIAL_VELOCITY = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRadialVelocity");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRotation");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSize");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeCylinderShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeDomeShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeQuadShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeSphereShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeTorusShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE = bundle
+                .getString("ModelNodeTreeActionEmitterChangeModelShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH = bundle
+                .getString("ModelNodeTreeActionEmitterChangeParticlesMesh");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD = bundle
+                .getString("ModelNodeTreeActionEmitterChangeParticlesMeshQuad");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT = bundle
+                .getString("ModelNodeTreeActionEmitterChangeParticlesMeshPoint");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR = bundle
+                .getString("ModelNodeTreeActionEmitterChangeParticlesMeshImpostor");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL = bundle
+                .getString("ModelNodeTreeActionEmitterChangeParticlesMeshModel");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ALPHA = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerAlpha");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_COLOR = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerColor");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_DESTINATION = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerDestination");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_GRAVITY = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerGravity");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_IMPULSE = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerImpulse");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_PHYSICS = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerPhysics");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_RADIAL_VELOCITY = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerRadialVelocity");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerRotation");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerSize");
+        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle
+                .getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
         MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle
+                .getString("ModelNodeTreeActionAddControlStaticRigidBody");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
+        MODEL_NODE_TREE_ACTION_REACTIVATE = bundle.getString("ModelNodeTreeActionReactivate");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -724,8 +773,10 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION = bundle.getString("ParticleEmitterInfluencerFixedDuration");
         PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR = bundle.getString("ParticleEmitterInfluencerRandomStartColor");
         PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE = bundle.getString("ParticleEmitterInfluencerRandomStartSize");
-        PARTICLE_EMITTER_INFLUENCER_SIZE_VARIATION_FACTOR = bundle.getString("ParticleEmitterInfluencerSizeVariationFactor");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION = bundle.getString("ParticleEmitterInfluencerRandomStartDestination");
+        PARTICLE_EMITTER_INFLUENCER_SIZE_VARIATION_FACTOR = bundle
+                .getString("ParticleEmitterInfluencerSizeVariationFactor");
+        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION = bundle
+                .getString("ParticleEmitterInfluencerRandomStartDestination");
         PARTICLE_EMITTER_INFLUENCER_CHANCE = bundle.getString("ParticleEmitterInfluencerChance");
         PARTICLE_EMITTER_INFLUENCER_STRENGTH = bundle.getString("ParticleEmitterInfluencerStrength");
         PARTICLE_EMITTER_INFLUENCER_MAGNITUDE = bundle.getString("ParticleEmitterInfluencerMagnitude");
@@ -737,10 +788,14 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT = bundle.getString("ParticleEmitterInfluencerUpAlignment");
         PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL = bundle.getString("ParticleEmitterInfluencerRadialPull");
         PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE = bundle.getString("ParticleEmitterInfluencerTangetForce");
-        PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerAlphaInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerColorInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerDestinationInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerRotationInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION = bundle
+                .getString("ParticleEmitterInfluencerAlphaInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION = bundle
+                .getString("ParticleEmitterInfluencerColorInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION = bundle
+                .getString("ParticleEmitterInfluencerDestinationInterpolation");
+        PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION = bundle
+                .getString("ParticleEmitterInfluencerRotationInterpolation");
         PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerSizeInterpolation");
         PARTICLE_EMITTER_INFLUENCER_ALPHA = bundle.getString("ParticleEmitterInfluencerAlpha");
         PARTICLE_EMITTER_INFLUENCER_COLOR = bundle.getString("ParticleEmitterInfluencerColor");
@@ -752,7 +807,8 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_REACTION = bundle.getString("ParticleEmitterInfluencerReaction");
         PARTICLE_EMITTER_INFLUENCER_RESTITUTION = bundle.getString("ParticleEmitterInfluencerRestitution");
         PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED = bundle.getString("ParticleEmitterInfluencerRandomSpeed");
-        PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X = bundle.getString("ParticleEmitterInfluencerStartRandomRotationX");
+        PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X = bundle
+                .getString("ParticleEmitterInfluencerStartRandomRotationX");
         PARTICLE_EMITTER_INFLUENCER_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerInterpolation");
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST = bundle.getString("ParticleEmitterInfluencerGeometryList");
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
@@ -837,7 +893,8 @@ public class Messages {
 
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME = bundle.getString("BoundingVolumeModelPropertyControlName");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");
-        BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS = bundle.getString("BoundingVolumeModelPropertyControlSphereRadius");
+        BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE_RADIUS = bundle
+                .getString("BoundingVolumeModelPropertyControlSphereRadius");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
 
         NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");

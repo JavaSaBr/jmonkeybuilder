@@ -3,11 +3,12 @@ package com.ss.editor.ui.control.model.node.control.anim;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Track;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+
 /**
- * The implementation of node for showing {@link Track}.
+ * The implementation of node to show {@link Track}.
  *
  * @author JavaSaBr
  */
@@ -16,11 +17,13 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     /**
      * The animation control.
      */
+    @Nullable
     private AnimControl control;
 
     /**
      * The cached name.
      */
+    @Nullable
     private String cachedName;
 
     public AnimationTrackModelNode(@NotNull final T element, final long objectId) {
@@ -28,9 +31,9 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     }
 
     /**
-     * @param control The animation control.
+     * @param control the animation control.
      */
-    public void setControl(final AnimControl control) {
+    public void setControl(@Nullable final AnimControl control) {
         this.control = control;
         this.cachedName = computeName();
     }
@@ -38,7 +41,7 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     @NotNull
     protected abstract String computeName();
 
-    @NotNull
+    @Nullable
     @Override
     public String getName() {
         return cachedName;
@@ -47,6 +50,7 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     /**
      * @return the animation control.
      */
+    @Nullable
     protected AnimControl getControl() {
         return control;
     }

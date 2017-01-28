@@ -14,29 +14,30 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class CreateRigidBodyControlAction extends AbstractCreateControlAction {
+public class CreateStaticRigidBodyControlAction extends CreateRigidBodyControlAction {
 
-    public CreateRigidBodyControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateStaticRigidBodyControlAction(@NotNull final AbstractNodeTree<?> nodeTree,
+                                              @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.RIGID_BODY_16;
+        return Icons.STATIC_RIGID_BODY_16;
     }
 
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
+        return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
     }
 
     @NotNull
     @Override
     protected RigidBodyControl createControl() {
-        final RigidBodyControl rigidBodyControl = new RigidBodyControl();
-        rigidBodyControl.setEnabled(false);
+        final RigidBodyControl rigidBodyControl = super.createControl();
+        rigidBodyControl.setMass(0F);
         return rigidBodyControl;
     }
 }

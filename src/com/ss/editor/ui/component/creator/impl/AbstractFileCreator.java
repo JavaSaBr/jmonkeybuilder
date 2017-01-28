@@ -2,12 +2,10 @@ package com.ss.editor.ui.component.creator.impl;
 
 import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_CANCEL;
 import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_OK;
-import static com.ss.editor.ui.css.CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_CANCEL;
-import static com.ss.editor.ui.css.CSSIds.EDITOR_DIALOG_BUTTON_OK;
+import static com.ss.editor.ui.css.CSSIds.*;
+import static java.util.Objects.requireNonNull;
 import static javafx.geometry.Pos.CENTER_LEFT;
 import static javafx.geometry.Pos.TOP_CENTER;
-
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
@@ -22,29 +20,26 @@ import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.Point;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.*;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
+
+import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * The base implementation of a file creator.
@@ -92,7 +87,7 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         setInitFile(file);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
+        final Path currentAsset = requireNonNull(editorConfig.getCurrentAsset());
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         show(scene.getWindow());
@@ -106,7 +101,8 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         validateFileName();
     }
 
-    protected void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree, @NotNull final Boolean finished) {
+    protected void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
+                          @NotNull final Boolean finished) {
         if (finished) resourceTree.expandTo(file, true);
     }
 
@@ -194,7 +190,8 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         final Path selectedFile = getSelectedFile();
         final Path directory = Files.isDirectory(selectedFile) ? selectedFile : selectedFile.getParent();
 
-        return StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) : directory.resolve(filename + "." + fileExtension);
+        return StringUtils.isEmpty(fileExtension) ? directory.resolve(filename) :
+                directory.resolve(filename + "." + fileExtension);
     }
 
     /**

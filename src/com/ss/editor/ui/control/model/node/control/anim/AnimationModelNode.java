@@ -2,11 +2,10 @@ package com.ss.editor.ui.control.model.node.control.anim;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.Track;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.animation.ManualExtractSubAnimationAction;
@@ -17,20 +16,18 @@ import com.ss.editor.ui.control.model.tree.action.operation.animation.RenameAnim
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.util.AnimationUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.ArrayUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of node for showing {@link Animation}.
+ * The implementation of node to show {@link Animation}.
  *
  * @author JavaSaBr
  */
@@ -59,7 +56,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+                                @NotNull final ObservableList<MenuItem> items) {
 
         final Animation animation = getElement();
         final int frameCount = AnimationUtils.getFrameCount(animation);
@@ -100,13 +98,14 @@ public class AnimationModelNode extends ModelNode<Animation> {
     @Override
     public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
         if (StringUtils.equals(getName(), newName)) return;
+
         super.changeName(nodeTree, newName);
 
         final AnimationControlModelNode controlModelNode = requireNonNull(getControlModelNode());
         final AnimControl control = controlModelNode.getElement();
         final RenameAnimationNodeOperation operation = new RenameAnimationNodeOperation(getName(), newName, control);
 
-        final ModelChangeConsumer changeConsumer = requireNonNull((ModelChangeConsumer) nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(operation);
     }
 

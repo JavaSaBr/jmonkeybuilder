@@ -2,20 +2,18 @@ package com.ss.editor.ui.control.model.node.control.anim;
 
 import com.jme3.animation.EffectTrack;
 import com.ss.editor.ui.Icons;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javafx.scene.image.Image;
-
 /**
- * The implementation of node for showing {@link EffectTrack}.
+ * The implementation of node to show {@link EffectTrack}.
  *
  * @author JavaSaBr
  */
 public class AnimationEffectTrackModelNode extends AnimationTrackModelNode<EffectTrack> {
 
-    public AnimationEffectTrackModelNode(final EffectTrack element, final long objectId) {
+    public AnimationEffectTrackModelNode(@NotNull final EffectTrack element, final long objectId) {
         super(element, objectId);
     }
 
@@ -23,7 +21,7 @@ public class AnimationEffectTrackModelNode extends AnimationTrackModelNode<Effec
     @Override
     protected String computeName() {
         final EffectTrack effectTrack = getElement();
-        return "EffectTrack : " + effectTrack.getEmitter().getName();
+        return "Effect track : " + effectTrack.getEmitter().getName();
     }
 
     @Nullable

@@ -2,7 +2,6 @@ package com.ss.editor.ui.dialog;
 
 import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.scene.text.TextAlignment.LEFT;
-
 import com.ss.editor.Editor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -11,13 +10,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.time.Duration;
-import java.time.LocalTime;
-
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -31,11 +23,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.hanlder.WindowDragHandler;
 import rlib.ui.util.FXUtils;
 import rlib.ui.window.popup.dialog.AbstractPopupDialog;
+
+import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link Editor}.
@@ -85,8 +82,6 @@ public class EditorDialog extends AbstractPopupDialog {
 
     public EditorDialog() {
         this.showedTime = LocalTime.now();
-        final VBox container = getContainer();
-        container.setOnKeyReleased(Event::consume);
     }
 
     @Override
@@ -100,6 +95,7 @@ public class EditorDialog extends AbstractPopupDialog {
     }
 
     protected void processKey(@NotNull final KeyEvent event) {
+        event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
             hide();
         }

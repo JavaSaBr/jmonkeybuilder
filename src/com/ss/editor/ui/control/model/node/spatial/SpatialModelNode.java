@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.node.spatial;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.Node;
@@ -17,21 +16,16 @@ import com.ss.editor.ui.control.model.node.light.LightModelNode;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
-import com.ss.editor.ui.control.model.tree.action.control.CreateCharacterAction;
-import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.CreateRigidBodyControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.*;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -48,10 +42,20 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+                                @NotNull final ObservableList<MenuItem> items) {
+
+        final Menu createMenu = createCreationMenu(nodeTree);
+        if (createMenu != null) items.add(createMenu);
+
+        final Menu toolMenu = createToolMenu(nodeTree);
+        if (toolMenu != null) items.add(toolMenu);
+
         if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
         if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
+
         items.add(new AddUserDataAction(nodeTree, this));
+
         super.fillContextMenu(nodeTree, items);
     }
 
@@ -66,15 +70,21 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
         final Menu menu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
 
-        final Menu createControlsMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
+        final Menu createControlsMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL,
+                new ImageView(Icons.ADD_18));
         createControlsMenu.getItems().addAll(new CreateCustomControlAction(nodeTree, this),
-                new CreateRigidBodyControlAction(nodeTree, this),
-                new CreateMotionControlAction(nodeTree, this),
+                new CreateStaticRigidBodyControlAction(nodeTree, this),
+                new CreateRigidBodyControlAction(nodeTree, this), new CreateMotionControlAction(nodeTree, this),
                 new CreateCharacterAction(nodeTree, this));
 
         menu.getItems().add(createControlsMenu);
 
         return menu;
+    }
+
+    @Nullable
+    protected Menu createToolMenu(final @NotNull AbstractNodeTree<?> nodeTree) {
+        return null;
     }
 
     @NotNull
