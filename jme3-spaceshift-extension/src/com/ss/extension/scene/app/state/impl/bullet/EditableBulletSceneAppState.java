@@ -14,6 +14,7 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.jme3.util.clone.Cloner;
 import com.ss.extension.property.EditableProperty;
@@ -250,23 +251,23 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
 
         final SceneNode sceneNode = getSceneNode();
         if (sceneNode != null) {
-            updateSceneNode(sceneNode, physicsSpace);
+            updateNode(sceneNode, physicsSpace);
         }
     }
 
     /**
-     * Update a scene node.
+     * Update a spatial.
      *
-     * @param sceneNode    the scene node.
+     * @param spatial      the spatial.
      * @param physicsSpace the new physical space or null.
      */
-    private void updateSceneNode(@NotNull final SceneNode sceneNode, @Nullable final PhysicsSpace physicsSpace) {
-        sceneNode.depthFirstTraversal(spatial -> {
+    private void updateNode(@NotNull final Spatial spatial, @Nullable final PhysicsSpace physicsSpace) {
+        spatial.depthFirstTraversal(sp -> {
 
-            final int numControls = spatial.getNumControls();
+            final int numControls = sp.getNumControls();
 
             for (int i = 0; i < numControls; i++) {
-                final Control control = spatial.getControl(i);
+                final Control control = sp.getControl(i);
                 if (control instanceof PhysicsControl) {
                     ((PhysicsControl) control).setPhysicsSpace(physicsSpace);
                 }
@@ -285,7 +286,7 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
 
         final SceneNode sceneNode = getSceneNode();
         if (sceneNode != null) {
-            updateSceneNode(sceneNode, null);
+            updateNode(sceneNode, null);
         }
 
         stopPhysics();
@@ -347,7 +348,7 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
         }
 
         if (sceneNode != null) {
-            updateSceneNode(sceneNode, null);
+            updateNode(sceneNode, null);
         }
 
         stopPhysics();
@@ -359,7 +360,7 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
         }
 
         if (sceneNode != null) {
-            updateSceneNode(sceneNode, physicsSpace);
+            updateNode(sceneNode, physicsSpace);
         }
     }
 
@@ -432,6 +433,24 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
         }
 
         this.tpf = tpf;
+    }
+
+    @Override
+    public void notifyAdded(@NotNull final Object object) {
+        if (object instanceof PhysicsControl) {
+            ((PhysicsControl) object).setPhysicsSpace(getPhysicsSpace());
+        } else if (object instanceof Spatial) {
+            updateNode((Spatial) object, getPhysicsSpace());
+        }
+    }
+
+    @Override
+    public void notifyRemoved(@NotNull final Object object) {
+        if (object instanceof PhysicsControl) {
+            ((PhysicsControl) object).setPhysicsSpace(null);
+        } else if (object instanceof Spatial) {
+            updateNode((Spatial) object, null);
+        }
     }
 
     @NotNull

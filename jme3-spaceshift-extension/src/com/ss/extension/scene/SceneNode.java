@@ -1,21 +1,15 @@
 package com.ss.extension.scene;
 
-import com.jme3.export.InputCapsule;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.export.OutputCapsule;
-import com.jme3.export.Savable;
+import com.jme3.export.*;
 import com.jme3.scene.Node;
 import com.jme3.util.clone.Cloner;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.SceneFilter;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.io.IOException;
 
 /**
  * The implementation of a scene node.
@@ -198,5 +192,23 @@ public class SceneNode extends Node {
         for (int i = 0; i < filters.size(); i++) {
             filters.set(i, cloner.clone(filters.get(i)));
         }
+    }
+
+    /**
+     * Notify a scene node about added an object to this scene.
+     *
+     * @param object the added object.
+     */
+    public void notifyAdded(@NotNull final Object object) {
+        getAppStates().forEach(object, SceneAppState::notifyAdded);
+    }
+
+    /**
+     * Notify a scene node about removed an object from this scene.
+     *
+     * @param object the removed object.
+     */
+    public void notifyRemoved(@NotNull final Object object) {
+        getAppStates().forEach(object, SceneAppState::notifyRemoved);
     }
 }

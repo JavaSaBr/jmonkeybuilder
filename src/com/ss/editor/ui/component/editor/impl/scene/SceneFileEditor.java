@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.editor.impl.scene;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
@@ -33,7 +32,8 @@ import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
-
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,16 +41,14 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.StackPane;
-
 /**
  * The implementation of the {@link AbstractFileEditor} for working with {@link SceneNode}.
  *
  * @author JavaSaBr
  */
-public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, SceneNode,
-        SceneEditorAppState, SceneFileEditorState> implements SceneChangeConsumer {
+public class SceneFileEditor extends
+        AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditorAppState, SceneFileEditorState> implements
+        SceneChangeConsumer {
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -215,10 +213,10 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
         editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
 
-        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
-                calcVSplitSize(appStateSplitContainer));
-        root.heightProperty().addListener((observableValue, oldValue, newValue) ->
-                calcVSplitSize(filtersSplitContainer));
+        root.heightProperty()
+                .addListener((observableValue, oldValue, newValue) -> calcVSplitSize(appStateSplitContainer));
+        root.heightProperty()
+                .addListener((observableValue, oldValue, newValue) -> calcVSplitSize(filtersSplitContainer));
         // root.heightProperty().addListener((observableValue, oldValue, newValue) ->
         //         calcVSplitSize(layersSplitContainer));
     }
@@ -322,6 +320,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         if (parent instanceof LayersRoot) {
             getLayerNodeTree().notifyAdded(parent, added, index);
         }
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCurrentModel().notifyAdded(added));
     }
 
     @Override
@@ -331,6 +331,8 @@ public class SceneFileEditor extends AbstractSceneFileEditor<SceneFileEditor, Sc
         if (parent instanceof LayersRoot) {
             getLayerNodeTree().notifyRemoved(parent, removed);
         }
+
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCurrentModel().notifyRemoved(removed));
     }
 
     @Override
