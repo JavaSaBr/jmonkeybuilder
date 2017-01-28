@@ -1,8 +1,9 @@
-package com.ss.editor.ui.control.model.tree.action.control;
+package com.ss.editor.ui.control.model.tree.action.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;

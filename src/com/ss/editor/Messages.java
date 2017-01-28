@@ -138,6 +138,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -206,6 +207,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
     public static final String MODEL_NODE_TREE_ACTION_REACTIVATE;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
@@ -600,6 +602,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeRigidBodyControl");
         MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL = bundle.getString("ModelFileEditorNodeCharacterControl");
         MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL = bundle.getString("ModelFileEditorNodeSkeletonControl");
+        MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL = bundle.getString("ModelFileEditorNodeVehicleControl");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -692,11 +695,14 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
+
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle
                 .getString("ModelNodeTreeActionAddControlStaticRigidBody");
+
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE = bundle.getString("ModelNodeTreeActionAddControlVehicle");
         MODEL_NODE_TREE_ACTION_REACTIVATE = bundle.getString("ModelNodeTreeActionReactivate");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");

@@ -4,6 +4,7 @@ import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.PhysicsRigidBody;
 import com.jme3.cinematic.events.AbstractCinematicEvent;
 import com.jme3.cinematic.events.MotionEvent;
@@ -56,65 +57,13 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (object instanceof AbstractCinematicEvent) {
-
-            final AbstractCinematicEvent control = (AbstractCinematicEvent) object;
-
-            final LoopMode loopMode = control.getLoopMode();
-
-            final float initialDuration = control.getInitialDuration();
-            final float speed = control.getSpeed();
-            final float time = control.getTime();
-
-            final EnumModelPropertyControl<AbstractCinematicEvent, LoopMode> loopModeControl = new EnumModelPropertyControl<>(
-                    loopMode, Messages.CONTROL_PROPERTY_LOOP_MODE, changeConsumer, LOOP_MODES);
-
-            loopModeControl.setApplyHandler(AbstractCinematicEvent::setLoopMode);
-            loopModeControl.setSyncHandler(AbstractCinematicEvent::getLoopMode);
-            loopModeControl.setEditObject(control);
-
-            final FloatModelPropertyControl<AbstractCinematicEvent> initialDurationControl = new FloatModelPropertyControl<>(
-                    initialDuration, Messages.CONTROL_PROPERTY_INITIAL_DURATION, changeConsumer);
-
-            initialDurationControl.setApplyHandler(AbstractCinematicEvent::setInitialDuration);
-            initialDurationControl.setSyncHandler(AbstractCinematicEvent::getInitialDuration);
-            initialDurationControl.setEditObject(control);
-
-            final FloatModelPropertyControl<AbstractCinematicEvent> speedControl = new FloatModelPropertyControl<>(
-                    speed, Messages.CONTROL_PROPERTY_SPEED, changeConsumer);
-
-            speedControl.setApplyHandler(AbstractCinematicEvent::setSpeed);
-            speedControl.setSyncHandler(AbstractCinematicEvent::getSpeed);
-            speedControl.setEditObject(control);
-
-            final FloatModelPropertyControl<AbstractCinematicEvent> timeControl = new FloatModelPropertyControl<>(time,
-                    Messages.CONTROL_PROPERTY_TIME, changeConsumer);
-
-            timeControl.setApplyHandler(AbstractCinematicEvent::setSpeed);
-            timeControl.setSyncHandler(AbstractCinematicEvent::getSpeed);
-            timeControl.setEditObject(control);
-
-            FXUtils.addToPane(loopModeControl, container);
-            FXUtils.addToPane(initialDurationControl, container);
-            FXUtils.addToPane(speedControl, container);
-            FXUtils.addToPane(timeControl, container);
+            build((AbstractCinematicEvent) object, container, changeConsumer);
         }
 
         if (!(object instanceof Control)) return;
 
         if (object instanceof AbstractControl) {
-
-            final AbstractControl control = (AbstractControl) object;
-
-            final boolean enabled = control.isEnabled();
-
-            final BooleanModelPropertyControl<AbstractControl> enabledControl = new BooleanModelPropertyControl<>(
-                    enabled, Messages.CONTROL_PROPERTY_ENABLED, changeConsumer);
-
-            enabledControl.setApplyHandler(AbstractControl::setEnabled);
-            enabledControl.setSyncHandler(AbstractControl::isEnabled);
-            enabledControl.setEditObject(control);
-
-            FXUtils.addToPane(enabledControl, container);
+            build((AbstractControl) object, container, changeConsumer);
         }
 
         if (object instanceof SkeletonControl) {
@@ -123,9 +72,73 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
             build((CharacterControl) object, container, changeConsumer);
         } else if (object instanceof RigidBodyControl) {
             build((RigidBodyControl) object, container, changeConsumer);
+        } else if (object instanceof VehicleControl) {
+            build((VehicleControl) object, container, changeConsumer);
         } else if (object instanceof MotionEvent) {
             build((MotionEvent) object, container, changeConsumer);
         }
+
+        if (object instanceof PhysicsRigidBody) {
+            build((PhysicsRigidBody) object, container, changeConsumer);
+        }
+    }
+
+    private void build(final @NotNull AbstractCinematicEvent control, final @NotNull VBox container,
+                       final @NotNull ModelChangeConsumer changeConsumer) {
+
+        final LoopMode loopMode = control.getLoopMode();
+
+        final float initialDuration = control.getInitialDuration();
+        final float speed = control.getSpeed();
+        final float time = control.getTime();
+
+        final EnumModelPropertyControl<AbstractCinematicEvent, LoopMode> loopModeControl = new EnumModelPropertyControl<>(
+                loopMode, Messages.CONTROL_PROPERTY_LOOP_MODE, changeConsumer, LOOP_MODES);
+
+        loopModeControl.setApplyHandler(AbstractCinematicEvent::setLoopMode);
+        loopModeControl.setSyncHandler(AbstractCinematicEvent::getLoopMode);
+        loopModeControl.setEditObject(control);
+
+        final FloatModelPropertyControl<AbstractCinematicEvent> initialDurationControl = new FloatModelPropertyControl<>(
+                initialDuration, Messages.CONTROL_PROPERTY_INITIAL_DURATION, changeConsumer);
+
+        initialDurationControl.setApplyHandler(AbstractCinematicEvent::setInitialDuration);
+        initialDurationControl.setSyncHandler(AbstractCinematicEvent::getInitialDuration);
+        initialDurationControl.setEditObject(control);
+
+        final FloatModelPropertyControl<AbstractCinematicEvent> speedControl = new FloatModelPropertyControl<>(speed,
+                Messages.CONTROL_PROPERTY_SPEED, changeConsumer);
+
+        speedControl.setApplyHandler(AbstractCinematicEvent::setSpeed);
+        speedControl.setSyncHandler(AbstractCinematicEvent::getSpeed);
+        speedControl.setEditObject(control);
+
+        final FloatModelPropertyControl<AbstractCinematicEvent> timeControl = new FloatModelPropertyControl<>(time,
+                Messages.CONTROL_PROPERTY_TIME, changeConsumer);
+
+        timeControl.setApplyHandler(AbstractCinematicEvent::setSpeed);
+        timeControl.setSyncHandler(AbstractCinematicEvent::getSpeed);
+        timeControl.setEditObject(control);
+
+        FXUtils.addToPane(loopModeControl, container);
+        FXUtils.addToPane(initialDurationControl, container);
+        FXUtils.addToPane(speedControl, container);
+        FXUtils.addToPane(timeControl, container);
+    }
+
+    private void build(final @NotNull AbstractControl control, final @NotNull VBox container,
+                       final @NotNull ModelChangeConsumer changeConsumer) {
+
+        final boolean enabled = control.isEnabled();
+
+        final BooleanModelPropertyControl<AbstractControl> enabledControl = new BooleanModelPropertyControl<>(enabled,
+                Messages.CONTROL_PROPERTY_ENABLED, changeConsumer);
+
+        enabledControl.setApplyHandler(AbstractControl::setEnabled);
+        enabledControl.setSyncHandler(AbstractControl::isEnabled);
+        enabledControl.setEditObject(control);
+
+        FXUtils.addToPane(enabledControl, container);
     }
 
     private void build(final @NotNull MotionEvent control, @NotNull final VBox container,
@@ -163,150 +176,6 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
 
         FXUtils.addToPane(directionControl, container);
         FXUtils.addToPane(rotationControl, container);
-    }
-
-    private void build(final @NotNull RigidBodyControl control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
-
-        final Vector3f angularVelocity = control.getAngularVelocity();
-        final Vector3f gravity = control.getGravity();
-        final Vector3f linearFactor = control.getLinearFactor();
-
-        final float angularDamping = control.getAngularDamping();
-        final float angularFactor = control.getAngularFactor();
-        final float angularSleepingThreshold = control.getAngularSleepingThreshold();
-        final float friction = control.getFriction();
-        final float linearDamping = control.getLinearDamping();
-        final float mass = control.getMass();
-        final float restitution = control.getRestitution();
-
-        final boolean kinematicSpatial = control.isKinematicSpatial();
-        final boolean kinematic = control.isKinematic();
-        final boolean enabled = control.isEnabled();
-
-        final BooleanModelPropertyControl<RigidBodyControl> enabledControl = new BooleanModelPropertyControl<>(enabled,
-                Messages.CONTROL_PROPERTY_ENABLED, changeConsumer);
-
-        enabledControl.setApplyHandler(RigidBodyControl::setEnabled);
-        enabledControl.setSyncHandler(RigidBodyControl::isEnabled);
-        enabledControl.setEditObject(control);
-
-        final BooleanModelPropertyControl<RigidBodyControl> kinematicSpatialControl = new BooleanModelPropertyControl<>(
-                kinematicSpatial, Messages.CONTROL_PROPERTY_KINEMATIC_SPATIAL, changeConsumer);
-
-        kinematicSpatialControl.setApplyHandler(RigidBodyControl::setKinematicSpatial);
-        kinematicSpatialControl.setSyncHandler(RigidBodyControl::isKinematicSpatial);
-        kinematicSpatialControl.setEditObject(control);
-
-        final BooleanModelPropertyControl<RigidBodyControl> kinematicControl = new BooleanModelPropertyControl<>(
-                kinematic, Messages.CONTROL_PROPERTY_KINEMATIC, changeConsumer);
-
-        kinematicControl.setApplyHandler(RigidBodyControl::setKinematic);
-        kinematicControl.setSyncHandler(RigidBodyControl::isKinematic);
-        kinematicControl.setEditObject(control);
-
-        final Vector3fModelPropertyControl<RigidBodyControl> angularVelocityControl = new Vector3fModelPropertyControl<>(
-                angularVelocity, Messages.CONTROL_PROPERTY_ANGULAR_VELOCITY, changeConsumer);
-
-        angularVelocityControl.setApplyHandler(RigidBodyControl::setAngularVelocity);
-        angularVelocityControl.setSyncHandler(RigidBodyControl::getAngularVelocity);
-        angularVelocityControl.setEditObject(control);
-
-        final Vector3fModelPropertyControl<RigidBodyControl> gravityControl = new Vector3fModelPropertyControl<>(
-                gravity, Messages.CONTROL_PROPERTY_GRAVITY, changeConsumer);
-
-        gravityControl.setApplyHandler(RigidBodyControl::setGravity);
-        gravityControl.setSyncHandler(RigidBodyControl::getGravity);
-        gravityControl.setEditObject(control);
-
-        final Vector3fModelPropertyControl<RigidBodyControl> linearFactorControl = new Vector3fModelPropertyControl<>(
-                linearFactor, Messages.CONTROL_PROPERTY_LINEAR_FACTOR, changeConsumer);
-
-        linearFactorControl.setApplyHandler(RigidBodyControl::setLinearFactor);
-        linearFactorControl.setSyncHandler(RigidBodyControl::getLinearFactor);
-        linearFactorControl.setEditObject(control);
-
-        final FloatModelPropertyControl<RigidBodyControl> angularDampingControl = new FloatModelPropertyControl<>(
-                angularDamping, Messages.CONTROL_PROPERTY_ANGULAR_DAMPING, changeConsumer);
-
-        angularDampingControl.setApplyHandler(RigidBodyControl::setAngularDamping);
-        angularDampingControl.setSyncHandler(PhysicsRigidBody::getAngularDamping);
-        angularDampingControl.setMinMax(0F, 1F);
-        angularDampingControl.setScrollPower(1F);
-        angularDampingControl.setEditObject(control);
-
-        final FloatModelPropertyControl<RigidBodyControl> angularFactorControl = new FloatModelPropertyControl<>(
-                angularFactor, Messages.CONTROL_PROPERTY_ANGULAR_FACTOR, changeConsumer);
-
-        angularFactorControl.setApplyHandler(RigidBodyControl::setAngularFactor);
-        angularFactorControl.setSyncHandler(PhysicsRigidBody::getAngularFactor);
-        angularFactorControl.setEditObject(control);
-
-        final FloatModelPropertyControl<RigidBodyControl> angularSleepingThresholdControl = new FloatModelPropertyControl<>(
-                angularSleepingThreshold, Messages.CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD, changeConsumer);
-
-        angularSleepingThresholdControl.setApplyHandler(RigidBodyControl::setAngularSleepingThreshold);
-        angularSleepingThresholdControl.setSyncHandler(PhysicsRigidBody::getAngularSleepingThreshold);
-        angularSleepingThresholdControl.setEditObject(control);
-
-        final FloatModelPropertyControl<RigidBodyControl> frictionControl = new FloatModelPropertyControl<>(friction,
-                Messages.CONTROL_PROPERTY_FRICTION, changeConsumer);
-
-        frictionControl.setApplyHandler(RigidBodyControl::setFriction);
-        frictionControl.setSyncHandler(PhysicsRigidBody::getFriction);
-        frictionControl.setMinMax(0F, Integer.MAX_VALUE);
-        frictionControl.setScrollPower(10F);
-        frictionControl.setEditObject(control);
-
-        final FloatModelPropertyControl<RigidBodyControl> linearDampingControl = new FloatModelPropertyControl<>(
-                linearDamping, Messages.CONTROL_PROPERTY_LINEAR_DAMPING, changeConsumer);
-
-        linearDampingControl.setApplyHandler(RigidBodyControl::setLinearDamping);
-        linearDampingControl.setSyncHandler(PhysicsRigidBody::getLinearDamping);
-        linearDampingControl.setMinMax(0F, 1F);
-        linearDampingControl.setScrollPower(1F);
-        linearDampingControl.setEditObject(control);
-
-        FloatModelPropertyControl<RigidBodyControl> massControl = null;
-
-        if (control.getMass() != 0F) {
-
-            massControl = new FloatModelPropertyControl<>(mass, Messages.CONTROL_PROPERTY_MASS, changeConsumer);
-
-            massControl.setApplyHandler(RigidBodyControl::setMass);
-            massControl.setSyncHandler(PhysicsRigidBody::getMass);
-            massControl.setMinMax(0.0001F, Integer.MAX_VALUE);
-            massControl.setScrollPower(1F);
-            massControl.setEditObject(control);
-        }
-
-        final FloatModelPropertyControl<RigidBodyControl> restitutionControl = new FloatModelPropertyControl<>(
-                restitution, Messages.CONTROL_PROPERTY_RESTITUTION, changeConsumer);
-
-        restitutionControl.setApplyHandler(RigidBodyControl::setRestitution);
-        restitutionControl.setSyncHandler(PhysicsRigidBody::getRestitution);
-        restitutionControl.setEditObject(control);
-
-        FXUtils.addToPane(enabledControl, container);
-        FXUtils.addToPane(kinematicSpatialControl, container);
-        FXUtils.addToPane(kinematicControl, container);
-        FXUtils.addToPane(angularDampingControl, container);
-        FXUtils.addToPane(angularFactorControl, container);
-        FXUtils.addToPane(angularSleepingThresholdControl, container);
-        FXUtils.addToPane(frictionControl, container);
-        FXUtils.addToPane(linearDampingControl, container);
-
-        if (massControl != null) {
-            FXUtils.addToPane(massControl, container);
-        }
-
-        FXUtils.addToPane(restitutionControl, container);
-
-        addSplitLine(container);
-
-        FXUtils.addToPane(angularVelocityControl, container);
-        FXUtils.addToPane(gravityControl, container);
-        FXUtils.addToPane(linearFactorControl, container);
     }
 
     private void build(final @NotNull CharacterControl control, final @NotNull VBox container,
@@ -414,5 +283,180 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         hardwareSkinningPreferredControl.setEditObject(control);
 
         FXUtils.addToPane(hardwareSkinningPreferredControl, container);
+    }
+
+    private void build(final @NotNull RigidBodyControl control, final @NotNull VBox container,
+                       final @NotNull ModelChangeConsumer changeConsumer) {
+
+
+        final boolean kinematicSpatial = control.isKinematicSpatial();
+        final boolean enabled = control.isEnabled();
+
+        final BooleanModelPropertyControl<RigidBodyControl> enabledControl = new BooleanModelPropertyControl<>(enabled,
+                Messages.CONTROL_PROPERTY_ENABLED, changeConsumer);
+
+        enabledControl.setApplyHandler(RigidBodyControl::setEnabled);
+        enabledControl.setSyncHandler(RigidBodyControl::isEnabled);
+        enabledControl.setEditObject(control);
+
+        final BooleanModelPropertyControl<RigidBodyControl> kinematicSpatialControl = new BooleanModelPropertyControl<>(
+                kinematicSpatial, Messages.CONTROL_PROPERTY_KINEMATIC_SPATIAL, changeConsumer);
+
+        kinematicSpatialControl.setApplyHandler(RigidBodyControl::setKinematicSpatial);
+        kinematicSpatialControl.setSyncHandler(RigidBodyControl::isKinematicSpatial);
+        kinematicSpatialControl.setEditObject(control);
+
+        FXUtils.addToPane(enabledControl, container);
+        FXUtils.addToPane(kinematicSpatialControl, container);
+    }
+
+    private void build(final @NotNull VehicleControl control, final @NotNull VBox container,
+                       final @NotNull ModelChangeConsumer changeConsumer) {
+
+        final boolean enabled = control.isEnabled();
+        final boolean applyPhysicsLocal = control.isApplyPhysicsLocal();
+
+        final BooleanModelPropertyControl<VehicleControl> enabledControl = new BooleanModelPropertyControl<>(enabled,
+                Messages.CONTROL_PROPERTY_ENABLED, changeConsumer);
+
+        enabledControl.setApplyHandler(VehicleControl::setEnabled);
+        enabledControl.setSyncHandler(VehicleControl::isEnabled);
+        enabledControl.setEditObject(control);
+
+        final BooleanModelPropertyControl<VehicleControl> applyPhysicsLocalControl = new BooleanModelPropertyControl<>(
+                applyPhysicsLocal, Messages.CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL, changeConsumer);
+
+        applyPhysicsLocalControl.setApplyHandler(VehicleControl::setApplyPhysicsLocal);
+        applyPhysicsLocalControl.setSyncHandler(VehicleControl::isApplyPhysicsLocal);
+        applyPhysicsLocalControl.setEditObject(control);
+
+        FXUtils.addToPane(enabledControl, container);
+        FXUtils.addToPane(applyPhysicsLocalControl, container);
+    }
+
+    private void build(final @NotNull PhysicsRigidBody control, final @NotNull VBox container,
+                       final @NotNull ModelChangeConsumer changeConsumer) {
+
+        final Vector3f angularVelocity = control.getAngularVelocity();
+        final Vector3f gravity = control.getGravity();
+        final Vector3f linearFactor = control.getLinearFactor();
+
+        final float angularDamping = control.getAngularDamping();
+        final float angularFactor = control.getAngularFactor();
+        final float angularSleepingThreshold = control.getAngularSleepingThreshold();
+        final float friction = control.getFriction();
+        final float linearDamping = control.getLinearDamping();
+        final float mass = control.getMass();
+        final float restitution = control.getRestitution();
+
+        final boolean kinematic = control.isKinematic();
+
+        final BooleanModelPropertyControl<PhysicsRigidBody> kinematicControl = new BooleanModelPropertyControl<>(
+                kinematic, Messages.CONTROL_PROPERTY_KINEMATIC, changeConsumer);
+
+        kinematicControl.setApplyHandler(PhysicsRigidBody::setKinematic);
+        kinematicControl.setSyncHandler(PhysicsRigidBody::isKinematic);
+        kinematicControl.setEditObject(control);
+
+        final Vector3fModelPropertyControl<PhysicsRigidBody> angularVelocityControl = new Vector3fModelPropertyControl<>(
+                angularVelocity, Messages.CONTROL_PROPERTY_ANGULAR_VELOCITY, changeConsumer);
+
+        angularVelocityControl.setApplyHandler(PhysicsRigidBody::setAngularVelocity);
+        angularVelocityControl.setSyncHandler(PhysicsRigidBody::getAngularVelocity);
+        angularVelocityControl.setEditObject(control);
+
+        final Vector3fModelPropertyControl<PhysicsRigidBody> gravityControl = new Vector3fModelPropertyControl<>(
+                gravity, Messages.CONTROL_PROPERTY_GRAVITY, changeConsumer);
+
+        gravityControl.setApplyHandler(PhysicsRigidBody::setGravity);
+        gravityControl.setSyncHandler(PhysicsRigidBody::getGravity);
+        gravityControl.setEditObject(control);
+
+        final Vector3fModelPropertyControl<PhysicsRigidBody> linearFactorControl = new Vector3fModelPropertyControl<>(
+                linearFactor, Messages.CONTROL_PROPERTY_LINEAR_FACTOR, changeConsumer);
+
+        linearFactorControl.setApplyHandler(PhysicsRigidBody::setLinearFactor);
+        linearFactorControl.setSyncHandler(PhysicsRigidBody::getLinearFactor);
+        linearFactorControl.setEditObject(control);
+
+        final FloatModelPropertyControl<PhysicsRigidBody> angularDampingControl = new FloatModelPropertyControl<>(
+                angularDamping, Messages.CONTROL_PROPERTY_ANGULAR_DAMPING, changeConsumer);
+
+        angularDampingControl.setApplyHandler(PhysicsRigidBody::setAngularDamping);
+        angularDampingControl.setSyncHandler(PhysicsRigidBody::getAngularDamping);
+        angularDampingControl.setMinMax(0F, 1F);
+        angularDampingControl.setScrollPower(1F);
+        angularDampingControl.setEditObject(control);
+
+        final FloatModelPropertyControl<PhysicsRigidBody> angularFactorControl = new FloatModelPropertyControl<>(
+                angularFactor, Messages.CONTROL_PROPERTY_ANGULAR_FACTOR, changeConsumer);
+
+        angularFactorControl.setApplyHandler(PhysicsRigidBody::setAngularFactor);
+        angularFactorControl.setSyncHandler(PhysicsRigidBody::getAngularFactor);
+        angularFactorControl.setEditObject(control);
+
+        final FloatModelPropertyControl<PhysicsRigidBody> angularSleepingThresholdControl = new FloatModelPropertyControl<>(
+                angularSleepingThreshold, Messages.CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD, changeConsumer);
+
+        angularSleepingThresholdControl.setApplyHandler(PhysicsRigidBody::setAngularSleepingThreshold);
+        angularSleepingThresholdControl.setSyncHandler(PhysicsRigidBody::getAngularSleepingThreshold);
+        angularSleepingThresholdControl.setEditObject(control);
+
+        final FloatModelPropertyControl<PhysicsRigidBody> frictionControl = new FloatModelPropertyControl<>(friction,
+                Messages.CONTROL_PROPERTY_FRICTION, changeConsumer);
+
+        frictionControl.setApplyHandler(PhysicsRigidBody::setFriction);
+        frictionControl.setSyncHandler(PhysicsRigidBody::getFriction);
+        frictionControl.setMinMax(0F, Integer.MAX_VALUE);
+        frictionControl.setScrollPower(10F);
+        frictionControl.setEditObject(control);
+
+        final FloatModelPropertyControl<PhysicsRigidBody> linearDampingControl = new FloatModelPropertyControl<>(
+                linearDamping, Messages.CONTROL_PROPERTY_LINEAR_DAMPING, changeConsumer);
+
+        linearDampingControl.setApplyHandler(PhysicsRigidBody::setLinearDamping);
+        linearDampingControl.setSyncHandler(PhysicsRigidBody::getLinearDamping);
+        linearDampingControl.setMinMax(0F, 1F);
+        linearDampingControl.setScrollPower(1F);
+        linearDampingControl.setEditObject(control);
+
+        FloatModelPropertyControl<PhysicsRigidBody> massControl = null;
+
+        if (control.getMass() != 0F) {
+
+            massControl = new FloatModelPropertyControl<>(mass, Messages.CONTROL_PROPERTY_MASS, changeConsumer);
+
+            massControl.setApplyHandler(PhysicsRigidBody::setMass);
+            massControl.setSyncHandler(PhysicsRigidBody::getMass);
+            massControl.setMinMax(0.0001F, Integer.MAX_VALUE);
+            massControl.setScrollPower(1F);
+            massControl.setEditObject(control);
+        }
+
+        final FloatModelPropertyControl<PhysicsRigidBody> restitutionControl = new FloatModelPropertyControl<>(
+                restitution, Messages.CONTROL_PROPERTY_RESTITUTION, changeConsumer);
+
+        restitutionControl.setApplyHandler(PhysicsRigidBody::setRestitution);
+        restitutionControl.setSyncHandler(PhysicsRigidBody::getRestitution);
+        restitutionControl.setEditObject(control);
+
+        FXUtils.addToPane(kinematicControl, container);
+        FXUtils.addToPane(angularDampingControl, container);
+        FXUtils.addToPane(angularFactorControl, container);
+        FXUtils.addToPane(angularSleepingThresholdControl, container);
+        FXUtils.addToPane(frictionControl, container);
+        FXUtils.addToPane(linearDampingControl, container);
+
+        if (massControl != null) {
+            FXUtils.addToPane(massControl, container);
+        }
+
+        FXUtils.addToPane(restitutionControl, container);
+
+        addSplitLine(container);
+
+        FXUtils.addToPane(angularVelocityControl, container);
+        FXUtils.addToPane(gravityControl, container);
+        FXUtils.addToPane(linearFactorControl, container);
     }
 }

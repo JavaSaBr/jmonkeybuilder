@@ -5,6 +5,7 @@ import com.jme3.animation.*;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.control.VehicleControl;
 import com.jme3.light.*;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -19,6 +20,7 @@ import com.ss.editor.ui.control.model.node.control.SkeletonControlModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.*;
 import com.ss.editor.ui.control.model.node.control.physics.CharacterControlModelNode;
 import com.ss.editor.ui.control.model.node.control.physics.RigidBodyControlModelNode;
+import com.ss.editor.ui.control.model.node.control.physics.VehicleControlModelNode;
 import com.ss.editor.ui.control.model.node.light.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.emitter.*;
@@ -62,7 +64,9 @@ public class ModelNodeFactory {
             return unsafeCast(new AnimationSpatialTrackModelNode((SpatialTrack) element, objectId));
         }
 
-        if (element instanceof SkeletonControl) {
+        if (element instanceof VehicleControl) {
+            return unsafeCast(new VehicleControlModelNode((VehicleControl) element, objectId));
+        } else if (element instanceof SkeletonControl) {
             return unsafeCast(new SkeletonControlModelNode((SkeletonControl) element, objectId));
         } else if (element instanceof CharacterControl) {
             return unsafeCast(new CharacterControlModelNode((CharacterControl) element, objectId));
