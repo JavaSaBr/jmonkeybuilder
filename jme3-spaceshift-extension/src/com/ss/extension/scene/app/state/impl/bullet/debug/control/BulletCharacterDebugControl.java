@@ -31,6 +31,7 @@
  */
 package com.ss.extension.scene.app.state.impl.bullet.debug.control;
 
+import static com.jme3.bullet.util.DebugShapeFactory.getDebugShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.objects.PhysicsCharacter;
 import com.jme3.bullet.util.DebugShapeFactory;
@@ -41,52 +42,88 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.extension.scene.app.state.impl.bullet.debug.BulletDebugAppState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * @author normenhansen
+ * @author normenhansen, JavaSaBr
  */
 public class BulletCharacterDebugControl extends AbstractPhysicsDebugControl {
 
+    /**
+     * The physics character.
+     */
+    @NotNull
     protected final PhysicsCharacter body;
-    protected final Vector3f location = new Vector3f();
-    protected final Quaternion rotation = new Quaternion();
-    protected CollisionShape myShape;
+
+    /**
+     * The current shape.
+     */
+    @Nullable
+    protected CollisionShape currentShape;
+
+    /**
+     * The geometry.
+     */
+    @Nullable
     protected Spatial geom;
 
-    public BulletCharacterDebugControl(BulletDebugAppState debugAppState, PhysicsCharacter body) {
+    public BulletCharacterDebugControl(@NotNull final BulletDebugAppState debugAppState,
+                                       @NotNull final PhysicsCharacter body) {
         super(debugAppState);
         this.body = body;
-        myShape = body.getCollisionShape();
+        this.currentShape = body.getCollisionShape();
         this.geom = DebugShapeFactory.getDebugShape(body.getCollisionShape());
-        //geom.setMaterial(debugAppState.DEBUG_PINK);
+        this.geom.setMaterial(debugAppState.getDebugPink());
     }
 
     @Override
-    public void setSpatial(Spatial spatial) {
+    public void setSpatial(@Nullable final Spatial spatial) {
+
+        final Spatial currentSpatial = getSpatial();
+
         if (spatial != null && spatial instanceof Node) {
-            Node node = (Node) spatial;
+            final Node node = (Node) spatial;
             node.attachChild(geom);
-        } else if (spatial == null && this.spatial != null) {
-            Node node = (Node) this.spatial;
+        } else if (spatial == null && currentSpatial != null) {
+            final Node node = (Node) currentSpatial;
             node.detachChild(geom);
         }
+
         super.setSpatial(spatial);
     }
 
-    @Override
-    protected void controlUpdate(float tpf) {
-        if (myShape != body.getCollisionShape()) {
-            Node node = (Node) this.spatial;
-            node.detachChild(geom);
-            geom = DebugShapeFactory.getDebugShape(body.getCollisionShape());
-            //  geom.setMaterial(debugAppState.DEBUG_PINK);
-            node.attachChild(geom);
-        }
-        applyPhysicsTransform(body.getPhysicsLocation(location), Quaternion.IDENTITY);
-        geom.setLocalScale(body.getCollisionShape().getScale());
+    /**
+     * @return the physics character.
+     */
+    @NotNull
+    public PhysicsCharacter getBody() {
+        return body;
     }
 
     @Override
-    protected void controlRender(RenderManager rm, ViewPort vp) {
+    protected void controlUpdate(final float tpf) {
+
+        final PhysicsCharacter body = getBody();
+        final CollisionShape shape = body.getCollisionShape();
+
+        if (currentShape != shape) {
+            final Node node = (Node) getSpatial();
+            node.detachChild(geom);
+            geom = getDebugShape(shape);
+            geom.setMaterial(debugAppState.getDebugPink());
+            node.attachChild(geom);
+            currentShape = shape;
+        }
+
+        final Vector3f physicsLocation = body.getPhysicsLocation(physicalLocation);
+
+        applyPhysicsTransform(physicsLocation, Quaternion.IDENTITY);
+
+        geom.setLocalScale(shape.getScale());
+    }
+
+    @Override
+    protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 }

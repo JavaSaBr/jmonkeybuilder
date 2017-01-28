@@ -58,6 +58,8 @@ public interface Icons {
     Image STATIC_RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/static-rigid-body.png");
     Image RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rigid-body.png");
     Image REPLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/reply.png");
+    Image CHARACTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/character.png");
+    Image SKELETON_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/skeleton.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);

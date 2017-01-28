@@ -55,9 +55,15 @@ public class BulletRigidBodyDebugControl extends AbstractPhysicsDebugControl {
     @NotNull
     protected final PhysicsRigidBody body;
 
+    /**
+     * The current shape.
+     */
     @Nullable
     protected CollisionShape currentShape;
 
+    /**
+     * The geometry.
+     */
     @Nullable
     protected Spatial geom;
 

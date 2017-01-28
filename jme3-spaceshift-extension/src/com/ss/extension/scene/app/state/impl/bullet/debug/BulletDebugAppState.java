@@ -47,6 +47,7 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.extension.scene.app.state.impl.bullet.debug.control.BulletCharacterDebugControl;
 import com.ss.extension.scene.app.state.impl.bullet.debug.control.BulletRigidBodyDebugControl;
 import org.jetbrains.annotations.NotNull;
 import rlib.logging.Logger;
@@ -75,14 +76,21 @@ public class BulletDebugAppState extends AbstractAppState {
      */
     protected final ObjectDictionary<PhysicsRigidBody, Spatial> prevBodies;
 
+    /**
+     * The current registered characters.
+     */
+    protected final ObjectDictionary<PhysicsCharacter, Spatial> characters;
+
+    /**
+     * The previous registered characters.
+     */
+    protected final ObjectDictionary<PhysicsCharacter, Spatial> prevCharacters;
+
     protected final ObjectDictionary<PhysicsJoint, Spatial> joints;
     protected final ObjectDictionary<PhysicsJoint, Spatial> prevJoints;
 
     protected final ObjectDictionary<PhysicsGhostObject, Spatial> ghosts;
     protected final ObjectDictionary<PhysicsGhostObject, Spatial> prevGhosts;
-
-    protected final ObjectDictionary<PhysicsCharacter, Spatial> characters;
-    protected final ObjectDictionary<PhysicsCharacter, Spatial> prevCharacters;
 
     protected final ObjectDictionary<PhysicsVehicle, Spatial> vehicles;
     protected final ObjectDictionary<PhysicsVehicle, Spatial> prevVehicles;
@@ -238,6 +246,7 @@ public class BulletDebugAppState extends AbstractAppState {
         super.update(tpf);
         // update all object links
         updateRigidBodies();
+        updateCharacters();
         // update our debug root node
         debugRootNode.updateLogicalState(tpf);
         debugRootNode.updateGeometricState();
@@ -284,14 +293,28 @@ public class BulletDebugAppState extends AbstractAppState {
         }
     }
 
+    /**
+     * @return the blue material.
+     */
     @Nullable
     public Material getDebugBlue() {
         return debugBlue;
     }
 
+    /**
+     * @return the magenta material.
+     */
     @Nullable
     public Material getDebugMagenta() {
         return debugMagenta;
+    }
+
+    /**
+     * @return the pink material.
+     */
+    @Nullable
+    public Material getDebugPink() {
+        return debugPink;
     }
 
     /**
@@ -308,6 +331,22 @@ public class BulletDebugAppState extends AbstractAppState {
     @NotNull
     protected ObjectDictionary<PhysicsRigidBody, Spatial> getBodies() {
         return bodies;
+    }
+
+    /**
+     * @return the previous registered characters.
+     */
+    @NotNull
+    protected ObjectDictionary<PhysicsCharacter, Spatial> getPrevCharacters() {
+        return prevCharacters;
+    }
+
+    /**
+     * @return the current registered characters.
+     */
+    @NotNull
+    protected ObjectDictionary<PhysicsCharacter, Spatial> getCharacters() {
+        return characters;
     }
 
     private void updateRigidBodies() {
@@ -343,6 +382,41 @@ public class BulletDebugAppState extends AbstractAppState {
         });
 
         prevBodies.clear();
+    }
+
+    private void updateCharacters() {
+
+        final Predicate<Object> filter = getFilter();
+
+        final ObjectDictionary<PhysicsCharacter, Spatial> prevCharacters = getPrevCharacters();
+        final ObjectDictionary<PhysicsCharacter, Spatial> characters = getCharacters();
+
+        prevCharacters.put(characters);
+        characters.clear();
+
+        final Collection<PhysicsCharacter> current = physicsSpace.getCharacterList();
+
+        for (final PhysicsCharacter object : current) {
+
+            // copy existing spatials
+            if (prevCharacters.containsKey(object)) {
+                characters.put(object, prevCharacters.get(object));
+            } else {
+                if (filter == null || filter.test(object)) {
+                    //create new spatial
+                    final Node node = new Node(object.toString());
+                    node.addControl(new BulletCharacterDebugControl(this, object));
+                    characters.put(object, node);
+                    debugRootNode.attachChild(node);
+                }
+            }
+        }
+
+        prevCharacters.forEach(characters, (actual, key, value) -> {
+            if (!actual.containsKey(key)) value.removeFromParent();
+        });
+
+        prevCharacters.clear();
     }
 
     @Override

@@ -7,11 +7,9 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to create a {@link CharacterControl}.
@@ -27,7 +25,7 @@ public class CreateCharacterAction extends AbstractCreateControlAction {
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.GEAR_16;
+        return Icons.CHARACTER_16;
     }
 
     @NotNull
