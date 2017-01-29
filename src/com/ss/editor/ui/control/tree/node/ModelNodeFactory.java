@@ -3,6 +3,9 @@ package com.ss.editor.ui.control.tree.node;
 import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
 import com.jme3.audio.AudioNode;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
+import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -24,6 +27,9 @@ import com.ss.editor.ui.control.model.node.control.physics.RagdollControlModelNo
 import com.ss.editor.ui.control.model.node.control.physics.RigidBodyControlModelNode;
 import com.ss.editor.ui.control.model.node.control.physics.VehicleControlModelNode;
 import com.ss.editor.ui.control.model.node.light.*;
+import com.ss.editor.ui.control.model.node.physics.ChildCollisionShapeModelNode;
+import com.ss.editor.ui.control.model.node.physics.CollisionShapeModelNode;
+import com.ss.editor.ui.control.model.node.physics.ComputedCollisionShapeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.emitter.*;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
@@ -51,6 +57,14 @@ public class ModelNodeFactory {
     public static <T, V extends ModelNode<T>> V createFor(@Nullable final T element) {
 
         final long objectId = ID_GENERATOR.incrementAndGet();
+
+        if (element instanceof CompoundCollisionShape) {
+            return unsafeCast(new ComputedCollisionShapeModelNode((CompoundCollisionShape) element, objectId));
+        } else if (element instanceof ChildCollisionShape) {
+            return unsafeCast(new ChildCollisionShapeModelNode((ChildCollisionShape) element, objectId));
+        } else if (element instanceof CollisionShape) {
+            return unsafeCast(new CollisionShapeModelNode<>((CollisionShape) element, objectId));
+        }
 
         if (element instanceof LayersRoot) {
             return unsafeCast(new LayersRootModelNode((LayersRoot) element, objectId));

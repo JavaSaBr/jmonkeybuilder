@@ -137,7 +137,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         treeItem.setExpanded(expanded || level == 1);
 
         final ModelNode<?> element = treeItem.getValue();
-        if (!element.hasChildren()) return;
+        if (!element.hasChildren(this)) return;
 
         final ObservableList<TreeItem<ModelNode<?>>> items = treeItem.getChildren();
 
@@ -164,7 +164,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         items.clear();
 
         final ModelNode<?> element = treeItem.getValue();
-        if (!element.hasChildren()) return;
+        if (!element.hasChildren(this)) return;
 
         final Array<ModelNode<?>> children = element.getChildren(this);
         children.forEach(child -> items.add(new TreeItem<>(child)));

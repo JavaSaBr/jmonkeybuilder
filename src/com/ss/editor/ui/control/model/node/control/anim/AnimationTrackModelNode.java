@@ -41,7 +41,7 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     @NotNull
     protected abstract String computeName();
 
-    @Nullable
+    @NotNull
     @Override
     public String getName() {
         return cachedName;

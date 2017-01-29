@@ -1,11 +1,9 @@
-package com.ss.editor.ui.control.model.node.control.physics;
+package com.ss.editor.ui.control.model.node.physics;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
-import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.scene.control.Control;
+import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
@@ -15,14 +13,13 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link ModelNode} to show a {@link PhysicsCollisionObject} in the tree.
+ * The implementation of the {@link ModelNode} to show a {@link ChildCollisionShape} in the tree.
  *
  * @author JavaSaBr
  */
-@SuppressWarnings("WeakerAccess")
-public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> extends ControlModelNode<T> {
+public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape> {
 
-    public PhysicsObjectModelNode(@NotNull final T element, final long objectId) {
+    public ChildCollisionShapeModelNode(@NotNull final ChildCollisionShape element, final long objectId) {
         super(element, objectId);
     }
 
@@ -30,11 +27,11 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
     @Override
     public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
-        final T element = getElement();
-        final CollisionShape collisionShape = element.getCollisionShape();
+        final ChildCollisionShape element = getElement();
+        final CollisionShape shape = element.shape;
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class, 1);
-        result.add(createFor(collisionShape));
+        result.add(createFor(shape));
 
         return result;
     }
@@ -47,6 +44,12 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.PHYSICS_16;
+        return Icons.NODE_16;
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return "ChildCollisionShape";
     }
 }

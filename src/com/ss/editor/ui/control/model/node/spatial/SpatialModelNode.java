@@ -89,7 +89,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
                      new CreateCharacterControlAction(nodeTree, this));
 
         if (skeletonControl != null) {
-            items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
+            //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
         }
 
         menu.getItems()
