@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.node.physics;
+package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
 import com.ss.editor.ui.Icons;

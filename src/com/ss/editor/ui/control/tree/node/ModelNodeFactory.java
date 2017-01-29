@@ -26,7 +26,7 @@ import com.ss.editor.ui.control.model.node.control.physics.RagdollControlModelNo
 import com.ss.editor.ui.control.model.node.control.physics.RigidBodyControlModelNode;
 import com.ss.editor.ui.control.model.node.control.physics.VehicleControlModelNode;
 import com.ss.editor.ui.control.model.node.light.*;
-import com.ss.editor.ui.control.model.node.physics.*;
+import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.emitter.*;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;

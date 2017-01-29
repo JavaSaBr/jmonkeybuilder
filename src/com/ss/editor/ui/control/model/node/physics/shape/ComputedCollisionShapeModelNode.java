@@ -1,7 +1,7 @@
-package com.ss.editor.ui.control.model.node.physics;
+package com.ss.editor.ui.control.model.node.physics.shape;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
-import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -12,14 +12,16 @@ import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import java.util.List;
+
 /**
- * The implementation of the {@link ModelNode} to show a {@link ChildCollisionShape} in the tree.
+ * The implementation of node to show {@link CompoundCollisionShape}.
  *
  * @author JavaSaBr
  */
-public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape> {
+public class ComputedCollisionShapeModelNode extends CollisionShapeModelNode<CompoundCollisionShape> {
 
-    public ChildCollisionShapeModelNode(@NotNull final ChildCollisionShape element, final long objectId) {
+    public ComputedCollisionShapeModelNode(@NotNull final CompoundCollisionShape element, final long objectId) {
         super(element, objectId);
     }
 
@@ -27,11 +29,10 @@ public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape>
     @Override
     public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
-        final ChildCollisionShape element = getElement();
-        final CollisionShape shape = element.shape;
-
-        final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class, 1);
-        result.add(createFor(shape));
+        final CompoundCollisionShape element = getElement();
+        final List<ChildCollisionShape> children = element.getChildren();
+        final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
+        children.forEach(childCollisionShape -> result.add(createFor(childCollisionShape)));
 
         return result;
     }
@@ -44,12 +45,12 @@ public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape>
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.NODE_16;
+        return Icons.ATOM_16;
     }
 
     @NotNull
     @Override
     public String getName() {
-        return "ChildCollisionShape";
+        return "Computed shape";
     }
 }
