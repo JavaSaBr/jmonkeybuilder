@@ -284,6 +284,14 @@ public class Messages {
     public static final String CONTROL_PROPERTY_INITIAL_DURATION;
     public static final String CONTROL_PROPERTY_SPEED;
     public static final String CONTROL_PROPERTY_TIME;
+    public static final String CONTROL_PROPERTY_MARGIN;
+    public static final String CONTROL_PROPERTY_LOCATION;
+    public static final String CONTROL_PROPERTY_HALF_EXTENTS;
+    public static final String CONTROL_PROPERTY_RADIUS;
+    public static final String CONTROL_PROPERTY_HEIGHT;
+    public static final String CONTROL_PROPERTY_AXIS;
+    public static final String CONTROL_PROPERTY_SCALE;
+    public static final String CONTROL_PROPERTY_OBJECT_ID;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -744,6 +752,15 @@ public class Messages {
         CONTROL_PROPERTY_INITIAL_DURATION = bundle.getString("ControlPropertyInitialDuration");
         CONTROL_PROPERTY_SPEED = bundle.getString("ControlPropertySpeed");
         CONTROL_PROPERTY_TIME = bundle.getString("ControlPropertyTime");
+
+        CONTROL_PROPERTY_MARGIN = bundle.getString("ControlPropertyMargin");
+        CONTROL_PROPERTY_LOCATION = bundle.getString("ControlPropertyLocation");
+        CONTROL_PROPERTY_HALF_EXTENTS = bundle.getString("ControlPropertyHalfExtents");
+        CONTROL_PROPERTY_RADIUS = bundle.getString("ControlPropertyRadius");
+        CONTROL_PROPERTY_HEIGHT = bundle.getString("ControlPropertyHeight");
+        CONTROL_PROPERTY_AXIS = bundle.getString("ControlPropertyAxis");
+        CONTROL_PROPERTY_SCALE = bundle.getString("ControlPropertyScale");
+        CONTROL_PROPERTY_OBJECT_ID = bundle.getString("ControlPropertyObjectId");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
