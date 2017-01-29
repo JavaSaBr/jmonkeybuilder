@@ -13,6 +13,7 @@ import rlib.util.array.ArrayFactory;
  */
 public interface EditableSceneFilter<T extends Filter> extends SceneFilter<T> {
 
+    @NotNull
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
 
     /**

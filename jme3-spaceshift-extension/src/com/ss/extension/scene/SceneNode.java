@@ -16,6 +16,7 @@ import java.io.IOException;
  *
  * @author JavaSaBr
  */
+@SuppressWarnings("WeakerAccess")
 public class SceneNode extends Node {
 
     public static final SceneLayer[] EMPTY_LAYERS = new SceneLayer[0];

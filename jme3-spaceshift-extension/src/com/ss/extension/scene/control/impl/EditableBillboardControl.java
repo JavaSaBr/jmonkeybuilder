@@ -16,6 +16,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class EditableBillboardControl extends BillboardControl implements EditableControl {
 
+    @NotNull
     @Override
     public String getName() {
         return "Billboard";

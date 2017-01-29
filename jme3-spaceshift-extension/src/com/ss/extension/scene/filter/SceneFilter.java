@@ -13,6 +13,7 @@ import rlib.util.array.Array;
  *
  * @author JavaSaBr
  */
+@SuppressWarnings("NullableProblems")
 public interface SceneFilter<T extends Filter> extends Savable, JmeCloneable, Cloneable {
 
     /**

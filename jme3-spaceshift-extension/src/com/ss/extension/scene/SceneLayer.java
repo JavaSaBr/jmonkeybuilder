@@ -16,6 +16,7 @@ import java.io.IOException;
  *
  * @author JavaSaBr
  */
+@SuppressWarnings("WeakerAccess")
 public class SceneLayer extends Node {
 
     public static final String KEY = SceneLayer.class.getName();

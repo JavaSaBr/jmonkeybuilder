@@ -13,11 +13,13 @@ import rlib.util.array.ArrayFactory;
  */
 public interface EditableControl extends Control {
 
+    @NotNull
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
 
     /**
      * @return the control's name.
      */
+    @NotNull
     default String getName() {
         return getClass().getSimpleName();
     }

@@ -17,7 +17,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class EditableBloomFilter extends BloomFilter implements EditableSceneFilter<BloomFilter> {
 
-    public EditableBloomFilter(@NotNull final GlowMode glowMode) {
+    EditableBloomFilter(@NotNull final GlowMode glowMode) {
         super(glowMode);
     }
 

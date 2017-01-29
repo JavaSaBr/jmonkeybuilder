@@ -17,6 +17,7 @@ import rlib.util.array.ArrayFactory;
 public class EditableDropShadowFilter extends DropShadowFilter implements EditableSceneFilter<DropShadowFilter> {
 
     public EditableDropShadowFilter() {
+        super();
     }
 
     @NotNull

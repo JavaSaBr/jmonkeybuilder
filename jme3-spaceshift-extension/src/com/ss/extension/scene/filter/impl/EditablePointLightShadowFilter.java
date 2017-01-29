@@ -16,6 +16,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
+@SuppressWarnings("WeakerAccess")
 public class EditablePointLightShadowFilter extends PointLightShadowFilter implements
         EditableSceneFilter<AbstractShadowFilter<?>> {
 

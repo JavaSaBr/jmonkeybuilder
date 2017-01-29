@@ -14,6 +14,7 @@ import rlib.util.array.ArrayFactory;
  */
 public interface EditableSceneAppState extends SceneAppState {
 
+    @NotNull
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
 
     /**

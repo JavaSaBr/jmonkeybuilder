@@ -16,6 +16,7 @@ public class SimpleProperty<T, O> implements EditableProperty<T, O> {
     /**
      * The type of this property.
      */
+    @NotNull
     private final EditablePropertyType type;
 
     /**
