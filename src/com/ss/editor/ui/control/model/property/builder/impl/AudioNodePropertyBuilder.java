@@ -52,7 +52,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         return INSTANCE;
     }
 
-    public AudioNodePropertyBuilder() {
+    private AudioNodePropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

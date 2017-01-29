@@ -89,7 +89,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         return INSTANCE;
     }
 
-    public GeometryPropertyBuilder() {
+    private GeometryPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

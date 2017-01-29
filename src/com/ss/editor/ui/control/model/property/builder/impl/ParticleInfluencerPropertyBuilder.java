@@ -47,11 +47,11 @@ import tonegod.emitter.influencers.impl.SpriteInfluencer;
  */
 public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
-    public static final GravityAlignment[] GRAVITY_ALIGNMENTS = GravityAlignment.values();
-    public static final CollisionReaction[] COLLISION_REACTIONS = CollisionReaction.values();
-    public static final RadialPullCenter[] RADIAL_PULL_CENTERS = RadialPullCenter.values();
-    public static final RadialPullAlignment[] RADIAL_PULL_ALIGNMENTS = RadialPullAlignment.values();
-    public static final RadialUpAlignment[] RADIAL_UP_ALIGNMENTS = RadialUpAlignment.values();
+    private static final GravityAlignment[] GRAVITY_ALIGNMENTS = GravityAlignment.values();
+    private static final CollisionReaction[] COLLISION_REACTIONS = CollisionReaction.values();
+    private static final RadialPullCenter[] RADIAL_PULL_CENTERS = RadialPullCenter.values();
+    private static final RadialPullAlignment[] RADIAL_PULL_ALIGNMENTS = RadialPullAlignment.values();
+    private static final RadialUpAlignment[] RADIAL_UP_ALIGNMENTS = RadialUpAlignment.values();
 
     private static final PropertyBuilder INSTANCE = new ParticleInfluencerPropertyBuilder();
 
@@ -59,7 +59,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         return INSTANCE;
     }
 
-    public ParticleInfluencerPropertyBuilder() {
+    private ParticleInfluencerPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

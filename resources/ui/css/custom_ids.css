@@ -740,8 +740,8 @@
 }
 
 #AbstractParamControlLabelValue {
-    -fx-alignment: center;
-    -fx-text-alignment: center;
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
 }
 
 #AbstractParamControlComboBox {

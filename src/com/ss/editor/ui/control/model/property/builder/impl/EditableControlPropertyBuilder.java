@@ -41,7 +41,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
         return INSTANCE;
     }
 
-    protected EditableControlPropertyBuilder() {
+    private EditableControlPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

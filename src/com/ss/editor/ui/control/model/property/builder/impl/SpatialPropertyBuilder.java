@@ -54,7 +54,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         return INSTANCE;
     }
 
-    public SpatialPropertyBuilder() {
+    private SpatialPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

@@ -3,14 +3,7 @@ package com.ss.editor.ui.control.property.builder;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.builder.impl.AppStatePropertyBuilder;
 import com.ss.editor.ui.control.filter.property.builder.impl.FilterPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.AudioNodePropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.DefaultControlPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.EditableControlPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.GeometryPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.LightPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.ParticleInfluencerPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.ParticlesPropertyBuilder;
-import com.ss.editor.ui.control.model.property.builder.impl.SpatialPropertyBuilder;
+import com.ss.editor.ui.control.model.property.builder.impl.*;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +13,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The builder to build controls to edit properties of objects.
+ * The builder to build controls for edit properties of objects.
  *
  * @author JavaSaBr
  */
@@ -39,6 +32,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(FilterPropertyBuilder.getInstance());
         BUILDERS.add(DefaultControlPropertyBuilder.getInstance());
         BUILDERS.add(EditableControlPropertyBuilder.getInstance());
+        BUILDERS.add(CollisionShapePropertyBuilder.getInstance());
     }
 
     /**

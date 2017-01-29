@@ -36,7 +36,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         return INSTANCE;
     }
 
-    public LightPropertyBuilder() {
+    private LightPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

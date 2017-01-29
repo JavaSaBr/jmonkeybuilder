@@ -48,7 +48,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         return INSTANCE;
     }
 
-    public DefaultControlPropertyBuilder() {
+    private DefaultControlPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 
