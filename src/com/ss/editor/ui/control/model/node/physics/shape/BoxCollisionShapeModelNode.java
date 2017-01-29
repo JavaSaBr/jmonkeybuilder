@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.ss.editor.Messages;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,6 +18,6 @@ public class BoxCollisionShapeModelNode extends CollisionShapeModelNode<BoxColli
     @NotNull
     @Override
     public String getName() {
-        return "Box shape";
+        return Messages.MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE;
     }
 }

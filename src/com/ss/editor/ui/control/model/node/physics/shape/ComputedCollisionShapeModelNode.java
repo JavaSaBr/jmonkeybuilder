@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.node.physics.shape;
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -51,6 +52,6 @@ public class ComputedCollisionShapeModelNode extends CollisionShapeModelNode<Com
     @NotNull
     @Override
     public String getName() {
-        return "Computed shape";
+        return Messages.MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE;
     }
 }

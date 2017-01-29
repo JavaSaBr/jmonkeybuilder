@@ -140,6 +140,18 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CONE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CYLINDER_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_GIMPACT_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_HEIGHT_FIELD_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_HULL_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -449,9 +461,11 @@ public class Messages {
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
-        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", locale, classLoader, ResourceControl.getInstance());
+        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+                locale, classLoader, ResourceControl.getInstance());
 
-        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls", ResourceControl.getInstance());
+        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+                ResourceControl.getInstance());
 
         final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
         final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
@@ -580,14 +594,24 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
         MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
-
         MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeStaticRigidBodyControl");
-
         MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeRigidBodyControl");
         MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL = bundle.getString("ModelFileEditorNodeCharacterControl");
         MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL = bundle.getString("ModelFileEditorNodeSkeletonControl");
         MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL = bundle.getString("ModelFileEditorNodeVehicleControl");
         MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL = bundle.getString("ModelFileEditorNodeRagDollControl");
+        MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeBoxCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeCapsuleCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeChildCollisionShape");
+        MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeComputedCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CONE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeConeCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CYLINDER_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeCylinderCollisionShape");
+        MODEL_FILE_EDITOR_NODE_GIMPACT_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeGImpactCollisionShape");
+        MODEL_FILE_EDITOR_NODE_HEIGHT_FIELD_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeHeightFieldCollisionShape");
+        MODEL_FILE_EDITOR_NODE_HULL_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeHullCollisionShape");
+        MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeMeshCollisionShape");
+        MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodePlaneCollisionShape");
+        MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeSphereCollisionShape");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -617,16 +641,13 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY = bundle.getString("ModelNodeTreeActionAnimationPlay");
         MODEL_NODE_TREE_ACTION_ANIMATION_PLAY_SETTINGS = bundle.getString("ModelNodeTreeActionAnimationPlaySettings");
         MODEL_NODE_TREE_ACTION_ANIMATION_STOP = bundle.getString("ModelNodeTreeActionAnimationStop");
-
         MODEL_NODE_TREE_ACTION_ANIMATION_MANUAL_EXTRAXT_SUB_ANIMATION = bundle.getString("ModelNodeTreeActionAnimationManualExtractSubAnimation");
-
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER = bundle.getString("ModelNodeTreeActionCreateSoftTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
-
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePrimitiveShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
@@ -651,14 +672,11 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRotation");
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSize");
         MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
-
         MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
-
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlStaticRigidBody");
-
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");

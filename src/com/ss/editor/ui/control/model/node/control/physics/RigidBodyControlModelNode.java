@@ -42,7 +42,7 @@ public class RigidBodyControlModelNode extends PhysicsObjectModelNode<RigidBodyC
         final RigidBodyControl element = getElement();
 
         if (element.getMass() == 0F) {
-            return Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
+            return Messages.MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL;
         }
 
         return Messages.MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL;

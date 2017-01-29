@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.physics.shape;
 
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,6 @@ public class CapsuleCollisionShapeModelNode extends CollisionShapeModelNode<Caps
     @NotNull
     @Override
     public String getName() {
-        return "Capsule shape";
+        return Messages.MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE;
     }
 }
