@@ -4,7 +4,6 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.math.Vector3f;
@@ -16,6 +15,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
@@ -24,28 +24,23 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-import java.nio.file.Path;
-
+import com.ss.editor.util.EditorUtil;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
+import java.nio.file.Path;
 
 /**
  * The dialog for creating a sky.
@@ -54,16 +49,28 @@ import rlib.ui.util.FXUtils;
  */
 public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    @NotNull
     private static final Insets SKY_TYPE_OFFSET = new Insets(16, 0, 0, 0);
+
+    @NotNull
     private static final Insets FIELD_OFFSET = new Insets(8, 0, 0, 0);
+
+    @NotNull
     private static final Insets CHECK_BOX_OFFSET = new Insets(FIELD_OFFSET.getTop(), 0, 0, 200);
+
+    @NotNull
     private static final Insets SETTINGS_OFFSET = new Insets(0, 0, 10, 0);
+
 
     private static final Point DIALOG_SIZE = new Point(580, 385);
 
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     private enum SkyType {
@@ -75,9 +82,10 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         /**
          * The sky name.
          */
+        @NotNull
         private final String title;
 
-        SkyType(final String title) {
+        SkyType(@NotNull final String title) {
             this.title = title;
         }
 
@@ -97,84 +105,100 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * The node tree.
      */
     @NotNull
-    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
+    private final AbstractNodeTree<?> nodeTree;
 
     /**
      * The list of sky types.
      */
+    @Nullable
     private ComboBox<SkyType> skyTypeComboBox;
 
     /**
      * The scale control for X.
      */
+    @Nullable
     private Spinner<Double> normalScaleXSpinner;
 
     /**
      * The scale control for Y.
      */
+    @Nullable
     private Spinner<Double> normalScaleYSpinner;
 
     /**
      * The scale control for Z.
      */
+    @Nullable
     private Spinner<Double> normalScaleZSpinner;
 
     /**
      * The container of single texture settings.
      */
+    @Nullable
     private VBox singleTextureSettings;
 
     /**
      * The container of multiply texture settings.
      */
+    @Nullable
     private VBox multipleTextureSettings;
 
     /**
      * The single texture control.
      */
+    @Nullable
     private ChooseTextureControl singleTextureControl;
 
     /**
      * The list of env types.
      */
+    @Nullable
     private ComboBox<SkyFactory.EnvMapType> envMapTypeComboBox;
 
     /**
      * The check box for fliping.
      */
+    @Nullable
     private CheckBox flipYCheckBox;
 
     /**
      * The north texture control.
      */
+    @Nullable
     private ChooseTextureControl northTextureControl;
 
     /**
      * The south texture control.
      */
+    @Nullable
     private ChooseTextureControl southTextureControl;
 
     /**
      * The east texture control.
      */
+    @Nullable
     private ChooseTextureControl eastTextureControl;
 
     /**
      * The west texture control.
      */
+    @Nullable
     private ChooseTextureControl westTextureControl;
 
     /**
      * The top texture control.
      */
+    @Nullable
     private ChooseTextureControl topTextureControl;
 
     /**
      * The bottom texture control.
      */
+    @Nullable
     private ChooseTextureControl bottomTextureControl;
 
-    public CreateSkyDialog(@NotNull final ModelNode<?> parentNode, @NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree) {
+    public CreateSkyDialog(@NotNull final ModelNode<?> parentNode,
+                           @NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
         validate();
@@ -183,8 +207,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the list of sky types.
      */
+    @NotNull
     private ComboBox<SkyType> getSkyTypeComboBox() {
-        return skyTypeComboBox;
+        return requireNonNull(skyTypeComboBox);
     }
 
     @NotNull
@@ -361,7 +386,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         VBox.setMargin(flipYCheckBox, CHECK_BOX_OFFSET);
     }
 
-    private void createNormalScaleControls(final VBox root) {
+    private void createNormalScaleControls(@NotNull final VBox root) {
 
         final HBox normalScaleContainer = new HBox();
 
@@ -409,7 +434,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         VBox.setMargin(normalScaleContainer, FIELD_OFFSET);
     }
 
-    private void createSkyTypeComboBox(final VBox root) {
+    private void createSkyTypeComboBox(@NotNull final VBox root) {
 
         final HBox skyTypeContainer = new HBox();
 
@@ -433,21 +458,23 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the container of single texture settings.
      */
+    @NotNull
     private VBox getSingleTextureSettings() {
-        return singleTextureSettings;
+        return requireNonNull(singleTextureSettings);
     }
 
     /**
      * @return the container of multiply texture settings.
      */
+    @NotNull
     private VBox getMultipleTextureSettings() {
-        return multipleTextureSettings;
+        return requireNonNull(multipleTextureSettings);
     }
 
     /**
      * Handle changing sky type.
      */
-    private void processChange(final SkyType newValue) {
+    private void processChange(@NotNull final SkyType newValue) {
 
         final VBox singleTextureSettings = getSingleTextureSettings();
         singleTextureSettings.setVisible(newValue == SkyType.SINGLE_TEXTURE);
@@ -461,57 +488,65 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the single texture control.
      */
+    @NotNull
     private ChooseTextureControl getSingleTextureControl() {
-        return singleTextureControl;
+        return requireNonNull(singleTextureControl);
     }
 
     /**
      * @return the list of env types.
      */
+    @NotNull
     private ComboBox<SkyFactory.EnvMapType> getEnvMapTypeComboBox() {
-        return envMapTypeComboBox;
+        return requireNonNull(envMapTypeComboBox);
     }
 
     /**
      * @return the top texture control.
      */
+    @NotNull
     private ChooseTextureControl getTopTextureControl() {
-        return topTextureControl;
+        return requireNonNull(topTextureControl);
     }
 
     /**
      * @return the bottom texture control.
      */
+    @NotNull
     private ChooseTextureControl getBottomTextureControl() {
-        return bottomTextureControl;
+        return requireNonNull(bottomTextureControl);
     }
 
     /**
      * @return the north texture control.
      */
+    @NotNull
     private ChooseTextureControl getNorthTextureControl() {
-        return northTextureControl;
+        return requireNonNull(northTextureControl);
     }
 
     /**
      * @return the south texture control.
      */
+    @NotNull
     private ChooseTextureControl getSouthTextureControl() {
-        return southTextureControl;
+        return requireNonNull(southTextureControl);
     }
 
     /**
      * @return the east texture control.
      */
+    @NotNull
     private ChooseTextureControl getEastTextureControl() {
-        return eastTextureControl;
+        return requireNonNull(eastTextureControl);
     }
 
     /**
      * @return the west texture control.
      */
+    @NotNull
     private ChooseTextureControl getWestTextureControl() {
-        return westTextureControl;
+        return requireNonNull(westTextureControl);
     }
 
     /**
@@ -571,36 +606,40 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the check box for fliping.
      */
+    @NotNull
     private CheckBox getFlipYCheckBox() {
-        return flipYCheckBox;
+        return requireNonNull(flipYCheckBox);
     }
 
     /**
      * @return the scale control for X.
      */
+    @NotNull
     private Spinner<Double> getNormalScaleXSpinner() {
-        return normalScaleXSpinner;
+        return requireNonNull(normalScaleXSpinner);
     }
 
     /**
      * @return the scale control for Y.
      */
+    @NotNull
     private Spinner<Double> getNormalScaleYSpinner() {
-        return normalScaleYSpinner;
+        return requireNonNull(normalScaleYSpinner);
     }
 
     /**
      * @return the scale control for Z.
      */
+    @NotNull
     private Spinner<Double> getNormalScaleZSpinner() {
-        return normalScaleZSpinner;
+        return requireNonNull(normalScaleZSpinner);
     }
 
     /**
      * @return the node tree.
      */
     @NotNull
-    private AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
+    private AbstractNodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -614,13 +653,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
     @Override
     protected void processOk() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
-
+        EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::createSkyInBackground);
-
-        hide();
+        super.processOk();
     }
 
     /**
@@ -628,11 +663,10 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     private void createSkyInBackground() {
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AssetManager assetManager = EDITOR.getAssetManager();
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
 
         final Spinner<Double> normalScaleXSpinner = getNormalScaleXSpinner();
         final Spinner<Double> normalScaleYSpinner = getNormalScaleYSpinner();
@@ -653,15 +687,14 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             createMultipleTexture(assetManager, changeConsumer, scale);
         }
 
-        EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+        EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
     }
 
     /**
      * Create a new sky using multiply textures.
      */
     private void createMultipleTexture(@NotNull final AssetManager assetManager,
-                                       @NotNull final ModelChangeConsumer changeConsumer,
-                                       @NotNull final Vector3f scale) {
+                                       @NotNull final ChangeConsumer changeConsumer, @NotNull final Vector3f scale) {
 
         final ChooseTextureControl northTextureControl = getNorthTextureControl();
         final Path northTextureFile = northTextureControl.getTextureFile();
@@ -713,8 +746,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * Create a new sky using a single texture.
      */
     private void createSingleTexture(@NotNull final AssetManager assetManager,
-                                     @NotNull final ModelChangeConsumer modelChangeConsumer,
-                                     @NotNull final Vector3f scale) {
+                                     @NotNull final ChangeConsumer changeConsumer, @NotNull final Vector3f scale) {
 
         final CheckBox flipYCheckBox = getFlipYCheckBox();
         final boolean flipY = flipYCheckBox.isSelected();
@@ -744,7 +776,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             final ModelNode<?> parentNode = getParentNode();
             final Node parent = (Node) parentNode.getElement();
 
-            modelChangeConsumer.execute(new AddChildOperation(sky, parent));
+            changeConsumer.execute(new AddChildOperation(sky, parent));
         });
     }
 

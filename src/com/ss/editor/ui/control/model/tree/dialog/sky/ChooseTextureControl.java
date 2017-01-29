@@ -1,7 +1,10 @@
 package com.ss.editor.ui.control.model.tree.dialog.sky;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.Messages;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -13,10 +16,12 @@ import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import javafx.geometry.Insets;
@@ -27,6 +32,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -38,12 +45,15 @@ import rlib.util.array.ArrayFactory;
  */
 public class ChooseTextureControl extends HBox {
 
-    public static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
+    @NotNull
+    private static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
 
+    @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
+    @NotNull
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -55,35 +65,40 @@ public class ChooseTextureControl extends HBox {
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_HDR);
     }
 
+    @NotNull
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * The image channels preview.
      */
+    @Nullable
     private ImageChannelPreview textureTooltip;
 
     /**
      * The image preview.
      */
+    @Nullable
     private ImageView texturePreview;
 
     /**
      * The label for the path of texture.
      */
+    @Nullable
     private Label textureLabel;
 
     /**
      * The selected file.
      */
+    @Nullable
     private Path textureFile;
 
     /**
      * The handler.
      */
+    @Nullable
     private Runnable changeHandler;
 
-    public ChooseTextureControl() {
+    ChooseTextureControl() {
         setAlignment(Pos.CENTER_LEFT);
         createComponents();
     }
@@ -91,13 +106,14 @@ public class ChooseTextureControl extends HBox {
     /**
      * @param changeHandler the handler.
      */
-    public void setChangeHandler(final Runnable changeHandler) {
+    public void setChangeHandler(@Nullable final Runnable changeHandler) {
         this.changeHandler = changeHandler;
     }
 
     /**
      * tThe handler.
      */
+    @Nullable
     private Runnable getChangeHandler() {
         return changeHandler;
     }
@@ -148,41 +164,38 @@ public class ChooseTextureControl extends HBox {
     /**
      * @return the label for the path of texture.
      */
+    @NotNull
     private Label getTextureLabel() {
-        return textureLabel;
+        return requireNonNull(textureLabel);
     }
 
     /**
      * @return The image channels preview.
      */
-    public ImageChannelPreview getTextureTooltip() {
-        return textureTooltip;
+    @NotNull
+    private ImageChannelPreview getTextureTooltip() {
+        return requireNonNull(textureTooltip);
     }
 
     /**
      * Add new texture.
      */
     private void processAdd() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::setTextureFile);
-        dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
      * @return the selected file.
      */
-    public Path getTextureFile() {
+    @Nullable
+    Path getTextureFile() {
         return textureFile;
     }
 
     /**
      * @param textureFile the selected file.
      */
-    private void setTextureFile(final Path textureFile) {
+    private void setTextureFile(@Nullable final Path textureFile) {
         this.textureFile = textureFile;
 
         reload();
@@ -201,8 +214,9 @@ public class ChooseTextureControl extends HBox {
     /**
      * @return the image preview.
      */
-    public ImageView getTexturePreview() {
-        return texturePreview;
+    @NotNull
+    private ImageView getTexturePreview() {
+        return requireNonNull(texturePreview);
     }
 
     protected void reload() {
@@ -214,16 +228,13 @@ public class ChooseTextureControl extends HBox {
         final Path textureFile = getTextureFile();
 
         if (textureFile == null) {
-            //FIXME добавить локализацию
-            textureLabel.setText("No texture");
+            textureLabel.setText(Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE);
             preview.setImage(null);
             textureTooltip.showImage(null);
             return;
         }
 
-        final Path assetFile = EditorUtil.getAssetFile(textureFile);
-
-        Objects.requireNonNull(assetFile, "can't find the asset file for the " + textureFile);
+        final Path assetFile = requireNonNull(getAssetFile(textureFile));
 
         textureLabel.setText(assetFile.toString());
         preview.setImage(IMAGE_MANAGER.getTexturePreview(textureFile, 28, 28));

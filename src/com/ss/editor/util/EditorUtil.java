@@ -1,7 +1,7 @@
 package com.ss.editor.util;
 
+import static rlib.util.ClassUtils.cast;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -9,30 +9,10 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.apache.commons.lang3.SystemUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
@@ -40,10 +20,23 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.SystemUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.ClassUtils;
 import rlib.util.StringUtils;
+import rlib.util.array.Array;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The class with utility methods for the Editor.
@@ -414,8 +407,62 @@ public abstract class EditorUtil {
         scene.decrementLoading();
     }
 
+    /**
+     * Get an array of available enum values by an enum value.
+     *
+     * @param value the enum value.
+     * @return the array of enum values.
+     */
+    @NotNull
     public static <E extends Enum<?>> E[] getAvailableValues(@NotNull final E value) {
-        final Enum<?>[] enumConstants = value.getClass().getEnumConstants();
+        final Class<? extends Enum> valueClass = value.getClass();
+        if (!valueClass.isEnum()) throw new RuntimeException("The class " + valueClass + " isn't enum.");
+        final Enum<?>[] enumConstants = valueClass.getEnumConstants();
         return ClassUtils.unsafeCast(enumConstants);
+    }
+
+    /**
+     * Try to create an user object using asset classpath and additional classpath.
+     *
+     * @param owner      the requester.
+     * @param className  the classname.
+     * @param resultType the result type.
+     * @return the new instance or null.
+     */
+    @Nullable
+    public static <T> T tryToCreateUserObject(@NotNull final Object owner, @NotNull final String className,
+                                              @NotNull final Class<T> resultType) {
+
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+
+        Object newExample = null;
+        try {
+            newExample = ClassUtils.newInstance(className);
+        } catch (final RuntimeException e) {
+
+            final Array<URLClassLoader> classLoaders = resourceManager.getClassLoaders();
+
+            for (final URLClassLoader classLoader : classLoaders) {
+                try {
+                    final Class<?> targetClass = classLoader.loadClass(className);
+                    newExample = ClassUtils.newInstance(targetClass);
+                } catch (final ClassNotFoundException ex) {
+                    LOGGER.warning(owner, e);
+                }
+            }
+
+            final URLClassLoader additionalCL = classpathManager.getAdditionalCL();
+            if (additionalCL != null) {
+                try {
+                    final Class<?> targetClass = additionalCL.loadClass(className);
+                    newExample = ClassUtils.newInstance(targetClass);
+                } catch (final ClassNotFoundException ex) {
+                    LOGGER.warning(owner, e);
+                }
+            }
+        }
+
+        return cast(resultType, newExample);
     }
 }

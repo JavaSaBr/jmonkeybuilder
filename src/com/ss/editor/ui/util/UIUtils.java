@@ -1,37 +1,34 @@
 package com.ss.editor.ui.util;
 
 import com.jme3.math.ColorRGBA;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.Objects;
-
+import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
+import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
+import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Control;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * The utility class with utility UI methods.
@@ -349,6 +346,43 @@ public class UIUtils {
             return;
         }
         event.consume();
+    }
+
+    /**
+     * Update an edited cell.
+     *
+     * @param cell the edited cell.
+     */
+    public static void updateEditedCell(final Labeled cell) {
+
+        final javafx.scene.Node graphic = cell.getGraphic();
+
+        if (graphic instanceof HBox) {
+            final HBox hbox = (HBox) graphic;
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            hbox.setMinHeight(cell.getMinHeight());
+        } else if (graphic instanceof Control) {
+            ((Control) graphic).setMinHeight(cell.getMinHeight());
+        }
+    }
+
+    /**
+     * Open an asset dialog.
+     *
+     * @param handler      the result handler.
+     * @param extensions   the extensions list.
+     * @param actionTester the action tester.
+     */
+    public static void openAssetDialog(@NotNull final Consumer<Path> handler, @NotNull final Array<String> extensions,
+                                       @Nullable final Predicate<Class<?>> actionTester) {
+
+        final JFXApplication jfxApplication = JFXApplication.getInstance();
+        final EditorFXScene scene = jfxApplication.getScene();
+
+        final AssetEditorDialog dialog = new FileAssetEditorDialog(handler);
+        dialog.setExtensionFilter(extensions);
+        dialog.setActionTester(actionTester);
+        dialog.show(scene.getWindow());
     }
 
     private UIUtils() {

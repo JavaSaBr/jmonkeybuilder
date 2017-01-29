@@ -5,6 +5,7 @@ import com.ss.editor.ui.control.model.tree.dialog.geometry.lod.GenerateLodLevels
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import com.ss.editor.ui.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javafx.geometry.Pos;
@@ -59,7 +60,7 @@ public class LodValueCell extends TextFieldListCell<Number> {
     @NotNull
     private final GenerateLodLevelsDialog dialog;
 
-    public LodValueCell(final @NotNull GenerateLodLevelsDialog dialog) {
+    LodValueCell(final @NotNull GenerateLodLevelsDialog dialog) {
         setId(CSSIds.GENERATE_LOD_DIALOG_LIST_VIEW_CELL);
         setConverter(converter);
 
@@ -72,17 +73,7 @@ public class LodValueCell extends TextFieldListCell<Number> {
     @Override
     public void startEdit() {
         if (!isEditable()) return;
-
         super.startEdit();
-
-        final javafx.scene.Node graphic = getGraphic();
-
-        if (graphic instanceof HBox) {
-            final HBox hbox = (HBox) graphic;
-            hbox.setAlignment(Pos.CENTER_LEFT);
-            hbox.setMinHeight(getMinHeight());
-        } else if (graphic instanceof Control) {
-            ((Control) graphic).setMinHeight(getMinHeight());
-        }
+        UIUtils.updateEditedCell(this);
     }
 }

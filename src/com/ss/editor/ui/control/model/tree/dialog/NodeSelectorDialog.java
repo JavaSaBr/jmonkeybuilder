@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Point;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
@@ -27,8 +29,10 @@ import rlib.ui.util.FXUtils;
  */
 public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(600, 450);
 
+    @NotNull
     private static final Insets TREE_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
@@ -52,6 +56,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     /**
      * The model tree component.
      */
+    @Nullable
     private ModelNodeTree nodeTree;
 
     /**
@@ -76,7 +81,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      */
     @NotNull
     protected ModelNodeTree getNodeTree() {
-        return nodeTree;
+        return requireNonNull(nodeTree);
     }
 
     @NotNull
@@ -94,7 +99,6 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
         nodeTree.prefHeightProperty().bind(heightProperty());
 
         FXUtils.addToPane(nodeTree, root);
-
         VBox.setMargin(nodeTree, TREE_OFFSET);
     }
 
@@ -126,17 +130,9 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void processKey(@NotNull final KeyEvent event) {
-        super.processKey(event);
-        if (event.getCode() == KeyCode.ENTER) {
-            processOk();
-        }
-    }
-
-    @Override
     protected void processOk() {
         handler.accept(selected);
-        hide();
+        super.processOk();
     }
 
     @NotNull

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
+import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
-
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -12,11 +12,6 @@ import com.ss.editor.ui.control.model.property.operation.ModelPropertyCountOpera
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,7 +21,11 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
 
 /**
  * The implementation of a dialog to add a new user data.
@@ -35,9 +34,13 @@ import rlib.ui.util.FXUtils;
  */
 public class AddUserDataDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Insets NAME_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+
+    @NotNull
     private static final Insets DATA_TYPE_OFFSET = new Insets(4, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 168);
 
     private enum DataType {
@@ -50,6 +53,7 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
         STRING,
     }
 
+    @NotNull
     private static final ObservableList<DataType> DATA_TYPES = observableArrayList(DataType.values());
 
     /**
@@ -67,19 +71,23 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
     /**
      * The text field.
      */
+    @Nullable
     private TextField nameField;
 
     /**
      * The combo box with data type.
      */
+    @Nullable
     private ComboBox<DataType> dataTypeComboBox;
 
     public AddUserDataDialog(final @NotNull ModelChangeConsumer changeConsumer, final @NotNull Spatial spatial) {
         super();
         this.changeConsumer = changeConsumer;
         this.spatial = spatial;
-        getOkButton().disableProperty().bind(dataTypeComboBox.getSelectionModel()
-                .selectedItemProperty().isNull().or(nameField.textProperty().isEmpty()));
+        getOkButton().disableProperty().bind(getDataTypeComboBox()
+                .getSelectionModel()
+                .selectedItemProperty().isNull()
+                .or(getNameField().textProperty().isEmpty()));
     }
 
     @Override
@@ -123,6 +131,22 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
         VBox.setMargin(dataTypeContainer, DATA_TYPE_OFFSET);
     }
 
+    /**
+     * @return the combo box with data type.
+     */
+    @NotNull
+    private ComboBox<DataType> getDataTypeComboBox() {
+        return requireNonNull(dataTypeComboBox);
+    }
+
+    /**
+     * @return the text field.
+     */
+    @NotNull
+    private TextField getNameField() {
+        return requireNonNull(nameField);
+    }
+
     @NotNull
     @Override
     protected String getTitleText() {
@@ -138,6 +162,9 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
     @Override
     protected void processOk() {
         super.processOk();
+
+        final ComboBox<DataType> dataTypeComboBox = getDataTypeComboBox();
+        final TextField nameField = getNameField();
 
         final String key = nameField.getText();
 
@@ -170,7 +197,9 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
                 break;
         }
 
-        final ModelPropertyCountOperation<Spatial, Object> operation = new ModelPropertyCountOperation<>(spatial, "userData", value, null);
+        final ModelPropertyCountOperation<Spatial, Object> operation =
+                new ModelPropertyCountOperation<>(spatial, "userData", value, null);
+
         operation.setApplyHandler((object, val) -> object.setUserData(key, val));
 
         changeConsumer.execute(operation);

@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
@@ -52,7 +53,7 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeShapeMenu = new Menu("Change shape");
+        final Menu changeShapeMenu = new Menu("Change shape", new ImageView(Icons.ADD_18));
         changeShapeMenu.getItems().addAll(new GenerateCollisionShapeAction(nodeTree, this));
 
         items.add(changeShapeMenu);

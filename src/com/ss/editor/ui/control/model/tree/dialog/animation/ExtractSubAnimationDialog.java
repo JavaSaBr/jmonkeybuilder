@@ -2,35 +2,31 @@ package com.ss.editor.ui.control.model.tree.dialog.animation;
 
 import static com.ss.editor.util.AnimationUtils.extractAnimation;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
 
 /**
  * The implementation of a dialog to extract a sub animation.
@@ -39,19 +35,23 @@ import rlib.ui.util.FXUtils;
  */
 public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(390, 184);
 
+    @NotNull
     private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(),
-            CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
+    @NotNull
+    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(), CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The model tree component.
+     * The node tree component.
      */
     @NotNull
-    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
+    private final AbstractNodeTree<?> nodeTree;
 
     /**
      * The animation node.
@@ -62,19 +62,23 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     /**
      * The field with a value of new animation name.
      */
+    @Nullable
     private TextField nameField;
 
     /**
      * The field with a value of start frame.
      */
+    @Nullable
     private IntegerTextField startFrameField;
 
     /**
      * The field with a value of end frame.
      */
+    @Nullable
     private IntegerTextField endFrameField;
 
-    public ExtractSubAnimationDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final AnimationModelNode node) {
+    public ExtractSubAnimationDialog(@NotNull final AbstractNodeTree<?> nodeTree,
+                                     @NotNull final AnimationModelNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
@@ -95,10 +99,10 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * @return the model tree component.
+     * @return the node tree component.
      */
     @NotNull
-    protected AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
+    protected AbstractNodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -173,46 +177,41 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         VBox.setMargin(endFrameContainer, LAST_FIELD_OFFSET);
     }
 
-    @Override
-    protected void processKey(@NotNull final KeyEvent event) {
-        super.processKey(event);
-        if (event.getCode() == KeyCode.ENTER) {
-            processOk();
-        }
-    }
-
     /**
      * @return the field with a value of new animation name.
      */
+    @NotNull
     private TextField getNameField() {
-        return nameField;
+        return requireNonNull(nameField);
     }
 
     /**
      * @return the field with a value of start frame.
      */
+    @NotNull
     private IntegerTextField getStartFrameField() {
-        return startFrameField;
+        return requireNonNull(startFrameField);
     }
 
     /**
      * @return the field with a value of end frame.
      */
+    @NotNull
     private IntegerTextField getEndFrameField() {
-        return endFrameField;
+        return requireNonNull(endFrameField);
     }
 
     @Override
     protected void processOk() {
         EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processExtract);
-        hide();
+        super.processOk();
     }
 
     /**
      * Process of extraction a sub animation.
      */
-    protected void processExtract() {
+    private void processExtract() {
 
         final AnimationModelNode node = getNode();
         final AnimControl control = requireNonNull(node.getControl());
@@ -231,8 +230,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
         final Animation subAnimation = extractAnimation(animation, nameField.getText(), startFrame, endFrame);
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
 
         EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);

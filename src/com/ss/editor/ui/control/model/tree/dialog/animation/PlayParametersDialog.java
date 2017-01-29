@@ -1,20 +1,13 @@
 package com.ss.editor.ui.control.model.tree.dialog.animation;
 
+import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
-
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,8 +18,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
+import java.util.Objects;
 
 /**
  * The implementation of a dialog with play animation parameters.
@@ -35,19 +33,20 @@ import rlib.ui.util.FXUtils;
  */
 public class PlayParametersDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 154);
 
+    @NotNull
     private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(),
-            CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
-    private static final ObservableList<LoopMode> LOOP_MODES = observableArrayList(LoopMode.values());
+    @NotNull
+    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(), CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
-     * The node tree component.
+     * The list of loop modes.
      */
     @NotNull
-    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
+    private static final ObservableList<LoopMode> LOOP_MODES = observableArrayList(LoopMode.values());
 
     /**
      * The animation control node.
@@ -58,29 +57,24 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of loop modes.
      */
+    @Nullable
     private ComboBox<LoopMode> loopModeComboBox;
 
     /**
      * The field with a value of speed.
      */
+    @Nullable
     private FloatTextField speedField;
 
-    public PlayParametersDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final AnimationControlModelNode node) {
-        this.nodeTree = nodeTree;
+    public PlayParametersDialog(@NotNull final AnimationControlModelNode node) {
         this.node = node;
 
+        final ComboBox<LoopMode> loopModeComboBox = getLoopModeComboBox();
         final SingleSelectionModel<LoopMode> selectionModel = loopModeComboBox.getSelectionModel();
         selectionModel.select(node.getLoopMode());
 
+        final FloatTextField speedField = getSpeedField();
         speedField.setValue(node.getSpeed());
-    }
-
-    /**
-     * @return the model tree component.
-     */
-    @NotNull
-    protected AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
-        return nodeTree;
     }
 
     /**
@@ -140,20 +134,12 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
         VBox.setMargin(speedContainer, LAST_FIELD_OFFSET);
     }
 
-    @Override
-    protected void processKey(@NotNull final KeyEvent event) {
-        super.processKey(event);
-        if (event.getCode() == KeyCode.ENTER) {
-            processOk();
-        }
-    }
-
     /**
      * @return the field with a value of speed.
      */
     @NotNull
     private FloatTextField getSpeedField() {
-        return speedField;
+        return requireNonNull(speedField);
     }
 
     /**
@@ -161,7 +147,7 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<LoopMode> getLoopModeComboBox() {
-        return loopModeComboBox;
+        return requireNonNull(loopModeComboBox);
     }
 
     @Override
@@ -176,7 +162,7 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
         final AnimationControlModelNode node = getNode();
         node.updateSettings(selectionModel.getSelectedItem(), speed);
 
-        hide();
+        super.processOk();
     }
 
     @NotNull

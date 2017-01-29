@@ -12,6 +12,7 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import com.ss.editor.ui.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,15 +179,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
             setIgnoreUpdate(false);
         }
 
-        final javafx.scene.Node graphic = getGraphic();
-
-        if (graphic instanceof HBox) {
-            final HBox hbox = (HBox) graphic;
-            hbox.setAlignment(Pos.CENTER_LEFT);
-            hbox.setMinHeight(getMinHeight());
-        } else if (graphic instanceof Control) {
-            ((Control) graphic).setMinHeight(getMinHeight());
-        }
+        UIUtils.updateEditedCell(this);
     }
 
     /**

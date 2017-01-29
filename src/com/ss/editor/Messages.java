@@ -330,6 +330,7 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
     public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
 
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
     public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
     public static final String LAYER_PROPERTY_CONTROL_NO_LAYER;
@@ -783,6 +784,7 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST = bundle.getString("ParticleEmitterInfluencerGeometryList");
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
 
+        MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
         LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");

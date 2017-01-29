@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
+import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
-
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
@@ -15,25 +15,21 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.extension.scene.control.EditableControl;
 import com.ss.extension.scene.control.impl.EditableBillboardControl;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-import java.net.URLClassLoader;
-
 import javafx.geometry.Insets;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.ObjectDictionary;
+
+import java.awt.*;
 
 /**
  * The dialog to create a custom control.
@@ -42,20 +38,24 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 184);
 
+    @NotNull
     private static final Insets THE_FIRST_OFFSET = new Insets(10, 0, 0, 0);
+
+    @NotNull
     private static final Insets THE_SECOND_OFFSET = new Insets(0, 0, 10, 0);
 
+    @NotNull
     private static final ObjectDictionary<String, EditableControl> BUILT_IN = newObjectDictionary();
+
+    @NotNull
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
 
     static {
         register(new EditableBillboardControl());
     }
-
-    private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();
-    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     private static void register(@NotNull final EditableControl editableControl) {
         BUILT_IN.put(editableControl.getName(), editableControl);
@@ -65,16 +65,19 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of built in controls.
      */
+    @Nullable
     private ComboBox<String> builtInBox;
 
     /**
      * The check box to chose an option of creating control.
      */
+    @Nullable
     private CheckBox customCheckBox;
 
     /**
      * The full class name of creating control.
      */
+    @Nullable
     private TextField controlNameField;
 
     /**
@@ -89,7 +92,8 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final Spatial spatial;
 
-    public CreateCustomControlDialog(@NotNull final ModelChangeConsumer changeConsumer, @NotNull final Spatial spatial) {
+    public CreateCustomControlDialog(@NotNull final ModelChangeConsumer changeConsumer,
+                                     @NotNull final Spatial spatial) {
         this.changeConsumer = changeConsumer;
         this.spatial = spatial;
     }
@@ -98,6 +102,30 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     @Override
     protected String getTitleText() {
         return Messages.CREATE_CUSTOM_CONTROL_DIALOG_TITLE;
+    }
+
+    /**
+     * @return the check box to chose an option of creating control.
+     */
+    @NotNull
+    private CheckBox getCustomCheckBox() {
+        return requireNonNull(customCheckBox);
+    }
+
+    /**
+     * @return the list of built in controls.
+     */
+    @NotNull
+    private ComboBox<String> getBuiltInBox() {
+        return requireNonNull(builtInBox);
+    }
+
+    /**
+     * @return the full class name of creating control.
+     */
+    @NotNull
+    private TextField getControlNameField() {
+        return requireNonNull(controlNameField);
     }
 
     @Override
@@ -149,34 +177,12 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     @Override
     protected void processOk() {
 
+        final CheckBox customCheckBox = getCustomCheckBox();
+
         if (customCheckBox.isSelected()) {
 
-            Control newExample = null;
-            try {
-                newExample = ClassUtils.newInstance(controlNameField.getText());
-            } catch (final RuntimeException e) {
-
-                final Array<URLClassLoader> classLoaders = RESOURCE_MANAGER.getClassLoaders();
-
-                for (final URLClassLoader classLoader : classLoaders) {
-                    try {
-                        final Class<?> targetClass = classLoader.loadClass(controlNameField.getText());
-                        newExample = ClassUtils.newInstance(targetClass);
-                    } catch (final ClassNotFoundException ex) {
-                        LOGGER.warning(this, e);
-                    }
-                }
-
-                final URLClassLoader additionalCL = CLASSPATH_MANAGER.getAdditionalCL();
-                if (additionalCL != null) {
-                    try {
-                        final Class<?> targetClass = additionalCL.loadClass(controlNameField.getText());
-                        newExample = ClassUtils.newInstance(targetClass);
-                    } catch (final ClassNotFoundException ex) {
-                        LOGGER.warning(this, e);
-                    }
-                }
-            }
+            final TextField controlNameField = getControlNameField();
+            final Control newExample = tryToCreateUserObject(this, controlNameField.getText(), Control.class);
 
             if (newExample == null) {
                 throw new RuntimeException("Can't create a control of the class " + controlNameField.getText());
@@ -186,6 +192,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
         } else {
 
+            final ComboBox<String> builtInBox = getBuiltInBox();
             final SingleSelectionModel<String> selectionModel = builtInBox.getSelectionModel();
             final String name = selectionModel.getSelectedItem();
 
