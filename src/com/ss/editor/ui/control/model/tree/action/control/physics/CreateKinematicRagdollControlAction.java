@@ -1,8 +1,5 @@
 package com.ss.editor.ui.control.model.tree.action.control.physics;
 
-import com.jme3.animation.Bone;
-import com.jme3.animation.Skeleton;
-import com.jme3.animation.SkeletonControl;
 import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
@@ -42,17 +39,6 @@ public class CreateKinematicRagdollControlAction extends AbstractCreateControlAc
     @NotNull
     @Override
     protected Control createControl(@NotNull final Spatial parent) {
-
-        final SkeletonControl control = parent.getControl(SkeletonControl.class);
-        final Skeleton skeleton = control.getSkeleton();
-
-        final KinematicRagdollControl ragdollControl = new KinematicRagdollControl(0.5F);
-
-        for (int i = 0; i < skeleton.getBoneCount(); i++) {
-            final Bone bone = skeleton.getBone(i);
-            //FIXME how does it work? ragdollControl.addBoneName(bone.getName());
-        }
-
-        return ragdollControl;
+        return new KinematicRagdollControl(0.5F);
     }
 }

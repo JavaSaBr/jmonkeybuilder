@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.model.node.control.physics;
 import com.jme3.bullet.control.CharacterControl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class CharacterControlModelNode extends ControlModelNode<CharacterControl> {
+public class CharacterControlModelNode extends PhysicsObjectModelNode<CharacterControl> {
 
     public CharacterControlModelNode(@NotNull final CharacterControl element, final long objectId) {
         super(element, objectId);

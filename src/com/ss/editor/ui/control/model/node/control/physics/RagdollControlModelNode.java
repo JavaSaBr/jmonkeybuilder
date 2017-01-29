@@ -1,8 +1,10 @@
 package com.ss.editor.ui.control.model.node.control.physics;
 
+import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.bullet.control.VehicleControl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,21 +14,21 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class VehicleControlModelNode extends PhysicsObjectModelNode<VehicleControl> {
+public class RagdollControlModelNode extends ControlModelNode<KinematicRagdollControl> {
 
-    public VehicleControlModelNode(@NotNull final VehicleControl element, final long objectId) {
+    public RagdollControlModelNode(@NotNull final KinematicRagdollControl element, final long objectId) {
         super(element, objectId);
     }
 
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.VEHICLE_16;
+        return Icons.DOLL_16;
     }
 
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL;
+        return Messages.MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL;
     }
 }

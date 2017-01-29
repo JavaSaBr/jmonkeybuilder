@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.model.node.control.physics;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.action.control.ReactivatePhysicsControl;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import javafx.collections.ObservableList;
@@ -17,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class RigidBodyControlModelNode extends ControlModelNode<RigidBodyControl> {
+public class RigidBodyControlModelNode extends PhysicsObjectModelNode<RigidBodyControl> {
 
     public RigidBodyControlModelNode(@NotNull final RigidBodyControl element, final long objectId) {
         super(element, objectId);

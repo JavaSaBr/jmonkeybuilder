@@ -62,6 +62,8 @@ public interface Icons {
     Image SKELETON_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/skeleton.png");
     Image VEHICLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/vehicle.png");
     Image ATOM_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/atom.png");
+    Image PHYSICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/physics.png");
+    Image DOLL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/doll.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
