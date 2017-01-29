@@ -3,8 +3,7 @@ package com.ss.editor.ui.control.tree.node;
 import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
 import com.jme3.audio.AudioNode;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.CompoundCollisionShape;
+import com.jme3.bullet.collision.shapes.*;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.KinematicRagdollControl;
@@ -27,9 +26,7 @@ import com.ss.editor.ui.control.model.node.control.physics.RagdollControlModelNo
 import com.ss.editor.ui.control.model.node.control.physics.RigidBodyControlModelNode;
 import com.ss.editor.ui.control.model.node.control.physics.VehicleControlModelNode;
 import com.ss.editor.ui.control.model.node.light.*;
-import com.ss.editor.ui.control.model.node.physics.ChildCollisionShapeModelNode;
-import com.ss.editor.ui.control.model.node.physics.CollisionShapeModelNode;
-import com.ss.editor.ui.control.model.node.physics.ComputedCollisionShapeModelNode;
+import com.ss.editor.ui.control.model.node.physics.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.emitter.*;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
@@ -45,7 +42,7 @@ import tonegod.emitter.node.ParticleNode;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * The factory for creating the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
+ * The factory to create the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
  *
  * @author JavaSabr
  */
@@ -58,8 +55,26 @@ public class ModelNodeFactory {
 
         final long objectId = ID_GENERATOR.incrementAndGet();
 
-        if (element instanceof CompoundCollisionShape) {
+        if (element instanceof BoxCollisionShape) {
+            return unsafeCast(new BoxCollisionShapeModelNode((BoxCollisionShape) element, objectId));
+        } else if (element instanceof CapsuleCollisionShape) {
+            return unsafeCast(new CapsuleCollisionShapeModelNode((CapsuleCollisionShape) element, objectId));
+        } else if (element instanceof CompoundCollisionShape) {
             return unsafeCast(new ComputedCollisionShapeModelNode((CompoundCollisionShape) element, objectId));
+        } else if (element instanceof ConeCollisionShape) {
+            return unsafeCast(new ConeCollisionShapeModelNode((ConeCollisionShape) element, objectId));
+        } else if (element instanceof CylinderCollisionShape) {
+            return unsafeCast(new CylinderCollisionShapeModelNode((CylinderCollisionShape) element, objectId));
+        } else if (element instanceof GImpactCollisionShape) {
+            return unsafeCast(new GImpactCollisionShapeModelNode((GImpactCollisionShape) element, objectId));
+        } else if (element instanceof HullCollisionShape) {
+            return unsafeCast(new HullCollisionShapeModelNode((HullCollisionShape) element, objectId));
+        } else if (element instanceof MeshCollisionShape) {
+            return unsafeCast(new MeshCollisionShapeModelNode((MeshCollisionShape) element, objectId));
+        } else if (element instanceof PlaneCollisionShape) {
+            return unsafeCast(new PlaneCollisionShapeModelNode((PlaneCollisionShape) element, objectId));
+        } else if (element instanceof SphereCollisionShape) {
+            return unsafeCast(new SphereCollisionShapeModelNode((SphereCollisionShape) element, objectId));
         } else if (element instanceof ChildCollisionShape) {
             return unsafeCast(new ChildCollisionShapeModelNode((ChildCollisionShape) element, objectId));
         } else if (element instanceof CollisionShape) {

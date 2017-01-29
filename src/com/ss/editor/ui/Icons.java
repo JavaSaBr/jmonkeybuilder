@@ -64,6 +64,10 @@ public interface Icons {
     Image ATOM_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/atom.png");
     Image PHYSICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/physics.png");
     Image DOLL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/doll.png");
+    Image CAPSULE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/capsule.png");
+    Image CONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cone.png");
+    Image CYLINDER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cylinder.png");
+    Image TERRAIN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/terrain.png");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
