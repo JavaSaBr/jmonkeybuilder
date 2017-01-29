@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.action.control;
+package com.ss.editor.ui.control.model.tree.action.control.physics;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;

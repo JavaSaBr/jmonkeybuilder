@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.control.physics;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.action.control.ReactivatePhysicsControl;
+import com.ss.editor.ui.control.model.tree.action.control.physics.ReactivatePhysicsControl;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;

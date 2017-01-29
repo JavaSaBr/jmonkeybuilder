@@ -6,8 +6,12 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.scene.control.Control;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
+import com.ss.editor.ui.control.model.tree.action.physics.shape.GenerateCollisionShapeAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +46,18 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
     @Override
     public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
         return true;
+    }
+
+    @Override
+    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+                                @NotNull final ObservableList<MenuItem> items) {
+
+        final Menu changeShapeMenu = new Menu("Change shape");
+        changeShapeMenu.getItems().addAll(new GenerateCollisionShapeAction(nodeTree, this));
+
+        items.add(changeShapeMenu);
+
+        super.fillContextMenu(nodeTree, items);
     }
 
     @Nullable
