@@ -487,7 +487,7 @@ public class EditableBulletSceneAppState extends AbstractAppState implements Edi
         result.add(new SimpleProperty<>(EditablePropertyType.VECTOR_3F, "World max", this,
                                         EditableBulletSceneAppState::getWorldMax,
                                         EditableBulletSceneAppState::setWorldMax));
-        result.add(new SimpleProperty<>(EditablePropertyType.VECTOR_3F, "World max", this,
+        result.add(new SimpleProperty<>(EditablePropertyType.VECTOR_3F, "World min", this,
                                         EditableBulletSceneAppState::getWorldMin,
                                         EditableBulletSceneAppState::setWorldMin));
 
