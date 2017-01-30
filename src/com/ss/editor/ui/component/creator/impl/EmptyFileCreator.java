@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
@@ -14,20 +15,18 @@ import java.util.Objects;
 import rlib.util.StringUtils;
 
 /**
- * The creator for creating an empty file.
+ * The creator to create an empty file.
  *
  * @author JavaSaBr
  */
 public class EmptyFileCreator extends AbstractFileCreator {
 
+    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
     static {
         DESCRIPTION.setFileDescription(Messages.EMPTY_FILE_CREATOR_DESCRIPTION);
         DESCRIPTION.setConstructor(EmptyFileCreator::new);
-    }
-
-    public EmptyFileCreator() {
     }
 
     @NotNull
@@ -46,7 +45,7 @@ public class EmptyFileCreator extends AbstractFileCreator {
     protected void processCreate() {
         super.processCreate();
 
-        final Path fileToCreate = Objects.requireNonNull(getFileToCreate());
+        final Path fileToCreate = requireNonNull(getFileToCreate());
         try {
             Files.createFile(fileToCreate);
         } catch (final IOException e) {

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl.texture;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -27,6 +29,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
 
@@ -37,8 +40,10 @@ import rlib.ui.util.FXUtils;
  */
 public class SingleColorTextureFileCreator extends AbstractFileCreator {
 
-    protected static final Insets CONTAINER_OFFSET = new Insets(1, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    @NotNull
+    private static final Insets CONTAINER_OFFSET = new Insets(1, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
 
+    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
     static {
@@ -49,21 +54,20 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
     /**
      * The width field.
      */
+    @Nullable
     private IntegerTextField widthField;
 
     /**
      * The height field.
      */
+    @Nullable
     private IntegerTextField heightField;
 
     /**
      * The color picker.
      */
+    @Nullable
     private ColorPicker colorPicker;
-
-    public SingleColorTextureFileCreator() {
-        super();
-    }
 
     @NotNull
     @Override
@@ -139,22 +143,25 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
     /**
      * @return the width field.
      */
+    @NotNull
     private IntegerTextField getWidthField() {
-        return widthField;
+        return requireNonNull(widthField);
     }
 
     /**
      * @return the height field.
      */
+    @NotNull
     private IntegerTextField getHeightField() {
-        return heightField;
+        return requireNonNull(heightField);
     }
 
     /**
      * @return the color picker.
      */
+    @NotNull
     private ColorPicker getColorPicker() {
-        return colorPicker;
+        return requireNonNull(colorPicker);
     }
 
     @Override

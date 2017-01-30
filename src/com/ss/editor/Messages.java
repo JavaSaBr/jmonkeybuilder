@@ -223,6 +223,8 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL;
     public static final String MODEL_NODE_TREE_ACTION_REACTIVATE;
+    public static final String MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -691,6 +693,9 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE = bundle.getString("ModelNodeTreeActionAddControlVehicle");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL = bundle.getString("ModelNodeTreeActionAddControlKinematicRagdoll");
         MODEL_NODE_TREE_ACTION_REACTIVATE = bundle.getString("ModelNodeTreeActionReactivate");
+        MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionChangeCollisionShape");
+        MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionGenerateCollisionShape");
+
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");

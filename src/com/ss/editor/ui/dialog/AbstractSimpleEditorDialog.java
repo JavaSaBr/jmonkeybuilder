@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
@@ -14,7 +15,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.util.Objects;
 
 /**
  * The simple implementation of the dialog.
@@ -23,14 +27,19 @@ import rlib.ui.util.FXUtils;
  */
 public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
+    @NotNull
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+
+    @NotNull
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The ok button.
      */
+    @Nullable
     private Button okButton;
 
     public AbstractSimpleEditorDialog() {
@@ -39,6 +48,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     @Override
     protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
+        final Button okButton = getOkButton();
         if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
             processOk();
         }
@@ -49,7 +59,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      */
     @NotNull
     protected Button getOkButton() {
-        return okButton;
+        return requireNonNull(okButton);
     }
 
     @Override

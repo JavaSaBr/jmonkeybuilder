@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
 import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
 import static java.util.Objects.requireNonNull;
+import com.google.protobuf.Message;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -14,6 +15,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
+import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -34,7 +36,6 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction<Phys
     @Override
     protected void createShape(@NotNull final PhysicsCollisionObject object, @NotNull final Spatial parentElement,
                                @NotNull final AbstractNodeTree<?> nodeTree) {
-
 
         CollisionShape shape = null;
 
@@ -69,6 +70,6 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction<Phys
     @NotNull
     @Override
     protected String getName() {
-        return "Generate collision shape";
+        return Messages.MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
     }
 }

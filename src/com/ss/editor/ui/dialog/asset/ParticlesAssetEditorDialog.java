@@ -70,7 +70,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
     @NotNull
     @Override
-    protected Parent buildSecondPart(final HBox container) {
+    protected Parent buildSecondPart(@NotNull final HBox container) {
 
         final GridPane settingsContainer = new GridPane();
         settingsContainer.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER);

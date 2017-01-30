@@ -1,13 +1,8 @@
 package com.ss.editor.ui.dialog;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-import java.util.function.Consumer;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -15,7 +10,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
+import java.util.function.Consumer;
 
 /**
  * The implementation of a dialog for asking questions.
@@ -30,16 +30,27 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     /**
      * The handler pf an answer.
      */
+    @NotNull
     private final Consumer<Boolean> handler;
 
     /**
      * The label.
      */
+    @Nullable
     private Label questionLabel;
 
     public ConfirmDialog(@NotNull final Consumer<Boolean> handler, @NotNull final String question) {
         this.handler = handler;
-        this.questionLabel.setText(question);
+        final Label questionLabel = getQuestionLabel();
+        questionLabel.setText(question);
+    }
+
+    /**
+     * @return the label.
+     */
+    @NotNull
+    protected Label getQuestionLabel() {
+        return requireNonNull(questionLabel);
     }
 
     @NotNull
@@ -53,11 +64,11 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         questionLabel = new Label();
-        questionLabel.setAlignment(Pos.CENTER);
-        questionLabel.setTextAlignment(TextAlignment.CENTER);
         questionLabel.setWrapText(true);
-        questionLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.9));
+        questionLabel.setAlignment(Pos.CENTER);
         questionLabel.setPadding(QUESTION_PADDING);
+        questionLabel.setTextAlignment(TextAlignment.CENTER);
+        questionLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.9));
         questionLabel.prefHeightProperty().bind(root.heightProperty());
 
         FXUtils.addToPane(questionLabel, root);

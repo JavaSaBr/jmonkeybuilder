@@ -41,13 +41,16 @@ import java.time.LocalTime;
  */
 public class EditorDialog extends AbstractPopupDialog {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    @NotNull
+    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * The handler for handling changing a focus of the window.
      */
+    @NotNull
     private final EventHandler<? super Event> hideEventHandler = event -> {
         final WindowChangeFocusEvent focusEvent = (WindowChangeFocusEvent) event;
         if (!focusEvent.isFocused()) {
@@ -60,6 +63,7 @@ public class EditorDialog extends AbstractPopupDialog {
     /**
      * The handler for handling changing a focus of the window from JavaFX.
      */
+    @NotNull
     private final ChangeListener<Boolean> hideListener = (observable, oldValue, newValue) -> {
         if (newValue == Boolean.FALSE) {
             super.hide();

@@ -14,20 +14,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * The creator for creating an empty model.
+ * The creator to create an empty model.
  *
  * @author JavaSaBr
  */
 public class EmptyModelCreator extends AbstractFileCreator {
 
+    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
     static {
         DESCRIPTION.setFileDescription(Messages.EMPTY_MODEL_CREATOR_DESCRIPTION);
         DESCRIPTION.setConstructor(EmptyModelCreator::new);
-    }
-
-    public EmptyModelCreator() {
     }
 
     @NotNull

@@ -4,6 +4,7 @@ import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.scene.control.Control;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.action.physics.shape.GenerateCollisionShapeAction;
@@ -53,7 +54,7 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeShapeMenu = new Menu("Change shape", new ImageView(Icons.ADD_18));
+        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE, new ImageView(Icons.ADD_18));
         changeShapeMenu.getItems().addAll(new GenerateCollisionShapeAction(nodeTree, this));
 
         items.add(changeShapeMenu);

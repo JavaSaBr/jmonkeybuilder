@@ -30,7 +30,7 @@ import java.awt.*;
  *
  * @author JavaSaBr
  */
-public class AbstractCreateShapeDialog extends AbstractSimpleEditorDialog {
+public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDialog {
 
     private static final Point DIALOG_SIZE = new Point(400, 154);
 
@@ -76,14 +76,6 @@ public class AbstractCreateShapeDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
         root.setAlignment(Pos.CENTER_LEFT);
-    }
-
-    @Override
-    protected void processKey(@NotNull final KeyEvent event) {
-        super.processKey(event);
-        if (event.getCode() == KeyCode.ENTER) {
-            processOk();
-        }
     }
 
     @Override

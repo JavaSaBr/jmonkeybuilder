@@ -4,7 +4,6 @@ import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static java.util.Objects.requireNonNull;
-
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
@@ -22,17 +21,6 @@ import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.Point;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
-
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -42,9 +30,8 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -53,10 +40,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link EditorDialog} for choosing the object from asset.
@@ -65,15 +61,28 @@ import rlib.util.array.ArrayFactory;
  */
 public class AssetEditorDialog<C> extends EditorDialog {
 
+    @NotNull
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+
+    @NotNull
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+
+    @NotNull
     protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
 
+    @NotNull
     protected static final Point DIALOG_SIZE = new Point(1204, 720);
 
+    @NotNull
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull
@@ -112,26 +121,31 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * The tree with all resources.
      */
+    @Nullable
     protected ResourceTree resourceTree;
 
     /**
      * The image preview.
      */
+    @Nullable
     protected ImageView imageView;
 
     /**
      * The preview of text files.
      */
+    @Nullable
     protected TextArea textView;
 
     /**
      * The label with any warning.
      */
+    @Nullable
     protected Label warningLabel;
 
     /**
      * The OK button.
      */
+    @Nullable
     protected Button okButton;
 
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
@@ -148,14 +162,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @param extensionFilter the list of available extensions.
      */
     public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
-        resourceTree.setExtensionFilter(extensionFilter);
+        getResourceTree().setExtensionFilter(extensionFilter);
     }
 
     /**
      * @param actionTester the action tester.
      */
     public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
-        resourceTree.setActionTester(actionTester);
+        getResourceTree().setActionTester(actionTester);
     }
 
     @Override
@@ -179,7 +193,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     @NotNull
-    protected Parent buildSecondPart(final HBox container) {
+    protected Parent buildSecondPart(@NotNull final HBox container) {
 
         final StackPane previewContainer = new StackPane();
         previewContainer.setId(CSSIds.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
@@ -202,13 +216,22 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * @return the ok button.
+     */
+    @NotNull
+    public Button getOkButton() {
+        return requireNonNull(okButton);
+    }
+
+    /**
      * The process of opening the element.
      */
     protected void processOpen(@NotNull final ResourceElement element) {
         hide();
     }
 
-    private void processKeyEvent(final KeyEvent event) {
+    private void processKeyEvent(@NotNull final KeyEvent event) {
+        final Button okButton = getOkButton();
         if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
             processSelect();
         }
@@ -290,15 +313,17 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the image preview.
      */
+    @NotNull
     private ImageView getImageView() {
-        return imageView;
+        return requireNonNull(imageView);
     }
 
     /**
      * @return the text preview.
      */
-    public TextArea getTextView() {
-        return textView;
+    @NotNull
+    private TextArea getTextView() {
+        return requireNonNull(textView);
     }
 
     /**
@@ -312,8 +337,9 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the label with any warning.
      */
+    @NotNull
     private Label getWarningLabel() {
-        return warningLabel;
+        return requireNonNull(warningLabel);
     }
 
     /**
@@ -445,9 +471,11 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
     protected BooleanBinding buildDisableCondition() {
 
+        final ResourceTree resourceTree = getResourceTree();
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
         final ReadOnlyObjectProperty<TreeItem<ResourceElement>> selectedItemProperty = selectionModel.selectedItemProperty();
 
+        final Label warningLabel = getWarningLabel();
         return warningLabel.visibleProperty().or(selectedItemProperty.isNull());
     }
 
@@ -462,8 +490,9 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * @return the tree with all resources.
      */
+    @NotNull
     private ResourceTree getResourceTree() {
-        return resourceTree;
+        return requireNonNull(resourceTree);
     }
 
     /**
