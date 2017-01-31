@@ -225,6 +225,11 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_REACTIVATE;
     public static final String MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -466,6 +471,12 @@ public class Messages {
 
     public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
 
+    public static final String CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -695,7 +706,11 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_REACTIVATE = bundle.getString("ModelNodeTreeActionReactivate");
         MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionChangeCollisionShape");
         MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionGenerateCollisionShape");
-
+        MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionBoxCollisionShape");
+        MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionCapsuleCollisionShape");
+        MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionConeCollisionShape");
+        MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionCylinderCollisionShape");
+        MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -937,5 +952,11 @@ public class Messages {
         CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD = bundle.getString("CreateCustomControlDialogCustomField");
 
         ANALYTICS_CONFIRM_DIALOG_MESSAGE = bundle.getString("AnalyticsConfirmDialogMessage");
+
+        CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateBoxCollisionShapeDialogTitle");
+        CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateSphereCollisionShapeDialogTitle");
+        CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCylinderCollisionShapeDialogTitle");
+        CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateConeCollisionShapeDialogTitle");
+        CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCapsuleCollisionShapeDialogTitle");
     }
 }

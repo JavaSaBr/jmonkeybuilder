@@ -2,9 +2,11 @@ package com.ss.editor.ui.control.model.tree.dialog.physics.shape;
 
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
+import com.google.protobuf.Message;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.ConeCollisionShape;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -43,7 +45,7 @@ public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeD
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label axisLabel = new Label("Axis:");
+        final Label axisLabel = new Label(Messages.CONTROL_PROPERTY_AXIS + ":");
         axisLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         axisBox = new ComboBox<>(observableArrayList("X", "Y", "Z"));
@@ -61,7 +63,7 @@ public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeD
     @NotNull
     @Override
     protected String getTitleText() {
-        return super.getTitleText();
+        return Messages.CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
     /**

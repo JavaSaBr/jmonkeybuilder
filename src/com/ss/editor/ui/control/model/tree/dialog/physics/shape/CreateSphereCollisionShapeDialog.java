@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -40,13 +41,14 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label radiusLabel = new Label("Radius:");
+        final Label radiusLabel = new Label(Messages.CONTROL_PROPERTY_RADIUS + ":");
         radiusLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         radiusField = new FloatTextField();
         radiusField.prefWidthProperty().bind(widthProperty());
         radiusField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         radiusField.setMinMax(0, Integer.MAX_VALUE);
+        radiusField.setScrollPower(10F);
         radiusField.setValue(1);
 
         root.add(radiusLabel, 0, 0);
@@ -59,7 +61,7 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
     @NotNull
     @Override
     protected String getTitleText() {
-        return super.getTitleText();
+        return Messages.CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateBoxCollisionShapeDialog;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateCylinderCollisionShapeDialog;
@@ -42,6 +43,6 @@ public class CreateCylinderCollisionShapeAction extends AbstractCreateShapeActio
     @NotNull
     @Override
     protected String getName() {
-        return "Cylinder shape";
+        return Messages.MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE;
     }
 }

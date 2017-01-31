@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateBoxCollisionShapeDialog;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -32,6 +33,6 @@ public class CreateBoxCollisionShapeAction extends AbstractCreateShapeAction<Phy
     @NotNull
     @Override
     protected String getName() {
-        return "Box shape";
+        return Messages.MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE;
     }
 }

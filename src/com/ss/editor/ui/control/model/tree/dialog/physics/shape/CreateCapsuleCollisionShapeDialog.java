@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -40,13 +41,14 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label heightLabel = new Label("Height:");
+        final Label heightLabel = new Label(Messages.CONTROL_PROPERTY_HEIGHT + ":");
         heightLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         heightField = new FloatTextField();
         heightField.prefWidthProperty().bind(widthProperty());
         heightField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         heightField.setMinMax(0, Integer.MAX_VALUE);
+        heightField.setScrollPower(10F);
         heightField.setValue(1);
 
         root.add(heightLabel, 0, 1);
@@ -59,7 +61,7 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
     @NotNull
     @Override
     protected String getTitleText() {
-        return super.getTitleText();
+        return Messages.CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
     /**

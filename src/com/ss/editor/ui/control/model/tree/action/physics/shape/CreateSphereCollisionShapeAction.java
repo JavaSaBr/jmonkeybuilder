@@ -1,7 +1,9 @@
 package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
+import com.google.protobuf.Message;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateBoxCollisionShapeDialog;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateSphereCollisionShapeDialog;
@@ -42,6 +44,6 @@ public class CreateSphereCollisionShapeAction extends AbstractCreateShapeAction<
     @NotNull
     @Override
     protected String getName() {
-        return "Sphere shape";
+        return Messages.MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
     }
 }

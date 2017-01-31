@@ -5,6 +5,7 @@ import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -60,6 +61,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         xField.prefWidthProperty().bind(widthProperty());
         xField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         xField.setMinMax(0, Integer.MAX_VALUE);
+        xField.setScrollPower(5F);
         xField.setValue(1);
 
         final Label yLabel = new Label("y:");
@@ -69,6 +71,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         yField.prefWidthProperty().bind(widthProperty());
         yField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         yField.setMinMax(0, Integer.MAX_VALUE);
+        yField.setScrollPower(5F);
         yField.setValue(1);
 
         final Label zLabel = new Label("z:");
@@ -77,6 +80,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         zField = new FloatTextField();
         zField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         zField.setMinMax(0, Integer.MAX_VALUE);
+        zField.setScrollPower(5F);
         zField.setValue(1);
 
         root.add(xLabel, 0, 0);
@@ -97,7 +101,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return super.getTitleText();
+        return Messages.CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
     /**

@@ -6,6 +6,7 @@ import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.CylinderCollisionShape;
 import com.jme3.math.Vector3f;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.control.ComboBox;
@@ -42,7 +43,7 @@ public class CreateCylinderCollisionShapeDialog extends CreateBoxCollisionShapeD
     protected void createContent(@NotNull final GridPane container) {
         super.createContent(container);
 
-        final Label axisLabel = new Label("Axis:");
+        final Label axisLabel = new Label(Messages.CONTROL_PROPERTY_AXIS + ":");
         axisLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
 
         axisBox = new ComboBox<>(observableArrayList("X", "Y", "Z"));
@@ -57,7 +58,7 @@ public class CreateCylinderCollisionShapeDialog extends CreateBoxCollisionShapeD
     @NotNull
     @Override
     protected String getTitleText() {
-        return super.getTitleText();
+        return Messages.CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE;
     }
 
     /**

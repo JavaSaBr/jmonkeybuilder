@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateBoxCollisionShapeDialog;
 import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateConeCollisionShapeDialog;
@@ -42,6 +43,6 @@ public class CreateConeCollisionShapeAction extends AbstractCreateShapeAction<Ph
     @NotNull
     @Override
     protected String getName() {
-        return "Cone shape";
+        return Messages.MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE;
     }
 }
