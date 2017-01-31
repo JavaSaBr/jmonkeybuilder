@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractCreateShapeAction<T extends PhysicsCollisionObject> extends
         AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateShapeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    AbstractCreateShapeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

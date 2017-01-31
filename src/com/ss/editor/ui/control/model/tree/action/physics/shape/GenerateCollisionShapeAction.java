@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
 import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
 import static java.util.Objects.requireNonNull;
-import com.google.protobuf.Message;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;

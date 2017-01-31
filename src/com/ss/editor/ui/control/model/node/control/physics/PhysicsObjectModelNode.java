@@ -7,7 +7,7 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
-import com.ss.editor.ui.control.model.tree.action.physics.shape.GenerateCollisionShapeAction;
+import com.ss.editor.ui.control.model.tree.action.physics.shape.*;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.collections.ObservableList;
@@ -55,7 +55,12 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
                                 @NotNull final ObservableList<MenuItem> items) {
 
         final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE, new ImageView(Icons.ADD_18));
-        changeShapeMenu.getItems().addAll(new GenerateCollisionShapeAction(nodeTree, this));
+        changeShapeMenu.getItems().addAll(new GenerateCollisionShapeAction(nodeTree, this),
+                new CreateBoxCollisionShapeAction(nodeTree, this),
+                new CreateCapsuleCollisionShapeAction(nodeTree, this),
+                new CreateConeCollisionShapeAction(nodeTree, this),
+                new CreateCylinderCollisionShapeAction(nodeTree, this),
+                new CreateSphereCollisionShapeAction(nodeTree, this));
 
         items.add(changeShapeMenu);
 
