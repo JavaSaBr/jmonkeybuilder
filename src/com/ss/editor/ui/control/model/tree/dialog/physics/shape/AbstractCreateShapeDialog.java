@@ -4,12 +4,11 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDialog {
 
-    protected static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
      * The node tree component.
@@ -34,10 +33,16 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
     @NotNull
     private final PhysicsCollisionObject collisionObject;
 
-    public AbstractCreateShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
-                                     @NotNull final PhysicsCollisionObject collisionObject) {
+    AbstractCreateShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
+                              @NotNull final PhysicsCollisionObject collisionObject) {
         this.nodeTree = nodeTree;
         this.collisionObject = collisionObject;
+    }
+
+    @Override
+    protected void createContent(@NotNull final GridPane root) {
+        super.createContent(root);
+        VBox.setMargin(root, CONTAINER_OFFSET);
     }
 
     /**
@@ -52,14 +57,13 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
      * @return the collision object.
      */
     @NotNull
-    public PhysicsCollisionObject getCollisionObject() {
+    private PhysicsCollisionObject getCollisionObject() {
         return collisionObject;
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
-        super.createContent(root);
-        root.setAlignment(Pos.CENTER_LEFT);
+    protected boolean isGridStructure() {
+        return true;
     }
 
     @Override

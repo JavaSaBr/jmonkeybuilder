@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.tree.dialog.physics.shape;
 
 import static java.util.Objects.requireNonNull;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -10,7 +9,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
@@ -39,7 +37,7 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         final Label radiusLabel = new Label("Radius:");
@@ -51,15 +49,11 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
         radiusField.setMinMax(0, Integer.MAX_VALUE);
         radiusField.setValue(1);
 
-        final GridPane container = new GridPane();
-        container.add(radiusLabel, 0, 0);
-        container.add(radiusField, 1, 0);
+        root.add(radiusLabel, 0, 0);
+        root.add(radiusField, 1, 0);
 
         FXUtils.addClassTo(radiusLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(radiusField, CSSClasses.SPECIAL_FONT_14);
-
-        FXUtils.addToPane(container, root);
-        VBox.setMargin(container, CONTAINER_OFFSET);
     }
 
     @NotNull
@@ -72,7 +66,7 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
      * @return the radius size.
      */
     @NotNull
-    private FloatTextField getRadiusField() {
+    FloatTextField getRadiusField() {
         return requireNonNull(radiusField);
     }
 

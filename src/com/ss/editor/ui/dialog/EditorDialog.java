@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -89,12 +90,23 @@ public class EditorDialog extends AbstractPopupDialog {
     }
 
     @Override
-    protected void createControls(final VBox root) {
-        super.createControls(root);
+    protected void createControls(@NotNull final VBox root) {
         root.setId(CSSIds.EDITOR_DIALOG_BACKGROUND);
+
+        super.createControls(root);
+
         createHeader(root);
-        createContent(root);
+
+        if (isGridStructure()) {
+            final GridPane gridPane = new GridPane();
+            createContent(gridPane);
+            FXUtils.addToPane(gridPane, root);
+        } else {
+            createContent(root);
+        }
+
         createActions(root);
+
         addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
 
@@ -199,6 +211,19 @@ public class EditorDialog extends AbstractPopupDialog {
      * Create the content of this dialog.
      */
     protected void createContent(@NotNull final VBox root) {
+    }
+
+    /**
+     * Create the content of this dialog.
+     */
+    protected void createContent(@NotNull final GridPane root) {
+    }
+
+    /**
+     * @return true if this dialog has grid structure.
+     */
+    protected boolean isGridStructure() {
+        return false;
     }
 
     /**

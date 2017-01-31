@@ -10,7 +10,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
@@ -51,7 +50,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         final Label xLabel = new Label("x:");
@@ -80,15 +79,12 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         zField.setMinMax(0, Integer.MAX_VALUE);
         zField.setValue(1);
 
-        final GridPane container = new GridPane();
-        container.add(xLabel, 0, 0);
-        container.add(xField, 1, 0);
-        container.add(yLabel, 0, 1);
-        container.add(yField, 1, 1);
-        container.add(zLabel, 0, 2);
-        container.add(zField, 1, 2);
-
-        createContent(container);
+        root.add(xLabel, 0, 0);
+        root.add(xField, 1, 0);
+        root.add(yLabel, 0, 1);
+        root.add(yField, 1, 1);
+        root.add(zLabel, 0, 2);
+        root.add(zField, 1, 2);
 
         FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_14);
@@ -96,19 +92,12 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_14);
-
-        FXUtils.addToPane(container, root);
-
-        VBox.setMargin(container, CONTAINER_OFFSET);
     }
 
     @NotNull
     @Override
     protected String getTitleText() {
         return super.getTitleText();
-    }
-
-    protected void createContent(@NotNull final GridPane container) {
     }
 
     /**

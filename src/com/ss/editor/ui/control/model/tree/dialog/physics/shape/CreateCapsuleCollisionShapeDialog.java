@@ -9,7 +9,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
@@ -22,15 +21,9 @@ import java.awt.*;
  *
  * @author JavaSaBr
  */
-public class CreateCapsuleCollisionShapeDialog extends AbstractCreateShapeDialog {
+public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShapeDialog {
 
     private static final Point DIALOG_SIZE = new Point(400, 150);
-
-    /**
-     * The radius field.
-     */
-    @Nullable
-    private FloatTextField radiusField;
 
     /**
      * The height field.
@@ -44,17 +37,8 @@ public class CreateCapsuleCollisionShapeDialog extends AbstractCreateShapeDialog
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
-
-        final Label radiusLabel = new Label("Radius:");
-        radiusLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
-
-        radiusField = new FloatTextField();
-        radiusField.prefWidthProperty().bind(widthProperty());
-        radiusField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        radiusField.setMinMax(0, Integer.MAX_VALUE);
-        radiusField.setValue(1);
 
         final Label heightLabel = new Label("Height:");
         heightLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
@@ -65,20 +49,11 @@ public class CreateCapsuleCollisionShapeDialog extends AbstractCreateShapeDialog
         heightField.setMinMax(0, Integer.MAX_VALUE);
         heightField.setValue(1);
 
-        final GridPane container = new GridPane();
-        container.add(radiusLabel, 0, 0);
-        container.add(radiusField, 1, 0);
-        container.add(heightLabel, 0, 1);
-        container.add(heightField, 1, 1);
+        root.add(heightLabel, 0, 1);
+        root.add(heightField, 1, 1);
 
-        FXUtils.addClassTo(radiusLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(heightLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(radiusField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(heightField, CSSClasses.SPECIAL_FONT_14);
-
-        FXUtils.addToPane(container, root);
-
-        VBox.setMargin(container, CONTAINER_OFFSET);
     }
 
     @NotNull
@@ -88,18 +63,10 @@ public class CreateCapsuleCollisionShapeDialog extends AbstractCreateShapeDialog
     }
 
     /**
-     * @return the radius size.
-     */
-    @NotNull
-    private FloatTextField getRadiusField() {
-        return requireNonNull(radiusField);
-    }
-
-    /**
      * @return the height size.
      */
     @NotNull
-    private FloatTextField getHeightField() {
+    FloatTextField getHeightField() {
         return requireNonNull(heightField);
     }
 

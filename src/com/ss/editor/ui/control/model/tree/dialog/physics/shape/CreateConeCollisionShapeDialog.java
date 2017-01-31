@@ -12,7 +12,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
@@ -25,21 +24,9 @@ import java.awt.*;
  *
  * @author JavaSaBr
  */
-public class CreateConeCollisionShapeDialog extends AbstractCreateShapeDialog {
+public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeDialog {
 
     private static final Point DIALOG_SIZE = new Point(400, 174);
-
-    /**
-     * The radius field.
-     */
-    @Nullable
-    private FloatTextField radiusField;
-
-    /**
-     * The height field.
-     */
-    @Nullable
-    private FloatTextField heightField;
 
     /**
      * The axis box.
@@ -53,26 +40,8 @@ public class CreateConeCollisionShapeDialog extends AbstractCreateShapeDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
-
-        final Label radiusLabel = new Label("Radius:");
-        radiusLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
-
-        radiusField = new FloatTextField();
-        radiusField.prefWidthProperty().bind(widthProperty());
-        radiusField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        radiusField.setMinMax(0, Integer.MAX_VALUE);
-        radiusField.setValue(1);
-
-        final Label heightLabel = new Label("Height:");
-        heightLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
-
-        heightField = new FloatTextField();
-        heightField.prefWidthProperty().bind(widthProperty());
-        heightField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        heightField.setMinMax(0, Integer.MAX_VALUE);
-        heightField.setValue(1);
 
         final Label axisLabel = new Label("Axis:");
         axisLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
@@ -82,46 +51,17 @@ public class CreateConeCollisionShapeDialog extends AbstractCreateShapeDialog {
         axisBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         axisBox.getSelectionModel().select(0);
 
-        final GridPane container = new GridPane();
-        container.add(radiusLabel, 0, 0);
-        container.add(radiusField, 1, 0);
-        container.add(heightLabel, 0, 1);
-        container.add(heightField, 1, 1);
-        container.add(axisLabel, 0, 2);
-        container.add(axisBox, 1, 2);
+        root.add(axisLabel, 0, 2);
+        root.add(axisBox, 1, 2);
 
-        FXUtils.addClassTo(radiusLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(axisLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(radiusField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(axisBox, CSSClasses.SPECIAL_FONT_14);
-
-        FXUtils.addToPane(container, root);
-
-        VBox.setMargin(container, CONTAINER_OFFSET);
     }
 
     @NotNull
     @Override
     protected String getTitleText() {
         return super.getTitleText();
-    }
-
-    /**
-     * @return the radius size.
-     */
-    @NotNull
-    private FloatTextField getRadiusField() {
-        return requireNonNull(radiusField);
-    }
-
-    /**
-     * @return the height size.
-     */
-    @NotNull
-    private FloatTextField getHeightField() {
-        return requireNonNull(heightField);
     }
 
     /**
