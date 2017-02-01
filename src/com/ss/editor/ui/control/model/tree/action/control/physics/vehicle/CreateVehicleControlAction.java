@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.action.control.physics;
+package com.ss.editor.ui.control.model.tree.action.control.physics.vehicle;
 
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.control.VehicleControl;

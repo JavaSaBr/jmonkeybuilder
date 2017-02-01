@@ -9,6 +9,7 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.KinematicRagdollControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
+import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.light.*;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -24,7 +25,8 @@ import com.ss.editor.ui.control.model.node.control.anim.*;
 import com.ss.editor.ui.control.model.node.control.physics.CharacterControlModelNode;
 import com.ss.editor.ui.control.model.node.control.physics.RagdollControlModelNode;
 import com.ss.editor.ui.control.model.node.control.physics.RigidBodyControlModelNode;
-import com.ss.editor.ui.control.model.node.control.physics.VehicleControlModelNode;
+import com.ss.editor.ui.control.model.node.control.physics.vehicle.VehicleControlModelNode;
+import com.ss.editor.ui.control.model.node.control.physics.vehicle.VehicleWheelModelNode;
 import com.ss.editor.ui.control.model.node.light.*;
 import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
@@ -54,6 +56,10 @@ public class ModelNodeFactory {
     public static <T, V extends ModelNode<T>> V createFor(@Nullable final T element) {
 
         final long objectId = ID_GENERATOR.incrementAndGet();
+
+        if (element instanceof VehicleWheel) {
+            return unsafeCast(new VehicleWheelModelNode((VehicleWheel) element, objectId));
+        }
 
         if (element instanceof BoxCollisionShape) {
             return unsafeCast(new BoxCollisionShapeModelNode((BoxCollisionShape) element, objectId));
