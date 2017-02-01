@@ -2,7 +2,6 @@ package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -33,17 +32,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -57,8 +45,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * The implementation of the Editor for editing materials.
@@ -210,9 +207,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
-            if (newMaterial == null) return;
 
-            EXECUTOR_MANAGER.addFXTask(() -> reload(newMaterial));
+            if (newMaterial == null) {
+                EXECUTOR_MANAGER.addFXTask(() -> reload(currentMaterial));
+            } else {
+                EXECUTOR_MANAGER.addFXTask(() -> reload(newMaterial));
+            }
         });
     }
 
@@ -374,8 +374,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(materialKey);
-
         final Material material = assetManager.loadAsset(materialKey);
 
         final MaterialEditorAppState editorState = getEditorAppState();
@@ -593,8 +591,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final AssetKey<MaterialDef> materialDefKey = new AssetKey<>(newType);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(materialDefKey);
-
         final Material newMaterial = new Material(assetManager, newType);
 
         MaterialUtils.migrateTo(newMaterial, getCurrentMaterial());

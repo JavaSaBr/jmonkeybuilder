@@ -183,8 +183,6 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
             }
 
             final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
-            assetManager.deleteFromCache(materialKey);
-
             final Material material = assetManager.loadAsset(materialKey);
             final MaterialDef materialDef = material.getMaterialDef();
 

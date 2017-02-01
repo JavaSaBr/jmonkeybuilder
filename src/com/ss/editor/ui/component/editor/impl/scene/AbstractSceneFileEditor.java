@@ -266,8 +266,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final MaterialKey materialKey = new MaterialKey(assetPath);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(materialKey);
-
         final Material material = assetManager.loadMaterial(assetPath);
         geometries.forEach(geometry -> geometry.setMaterial(material));
 
@@ -980,8 +978,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             if (geometry == null) return;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
-            assetManager.clearCache();
-
             final Material material = assetManager.loadAsset(materialKey);
 
             final ModelPropertyOperation<Geometry, Material> operation =
@@ -1008,10 +1004,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final String assetPath = toAssetPath(assetFile);
 
         final ModelKey modelKey = new ModelKey(assetPath);
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearCache();
-
         final Camera camera = EDITOR.getCamera();
 
         final float sceneX = (float) dragEvent.getSceneX();
@@ -1021,6 +1013,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
             final MA editorAppState = getEditorAppState();
 
+            final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
             loadedModel.setUserData(LOADED_MODEL_KEY, true);
             loadedModel.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));

@@ -112,8 +112,6 @@ public class SceneFileEditor extends
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(modelKey);
-
         final SceneNode model = (SceneNode) assetManager.loadAsset(modelKey);
         model.depthFirstTraversal(this::updateVisibility);
 

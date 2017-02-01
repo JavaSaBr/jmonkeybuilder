@@ -2,35 +2,23 @@ package com.ss.editor.util;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.TextureKey;
-import com.jme3.material.MatParam;
-import com.jme3.material.Material;
-import com.jme3.material.MaterialDef;
-import com.jme3.material.RenderState;
-import com.jme3.material.TechniqueDef;
+import com.jme3.material.*;
 import com.jme3.scene.Spatial;
 import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Objects;
-
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
+
+import java.nio.file.Path;
+import java.util.*;
 
 /**
  * The class with utility methods for working with {@link Material}.
@@ -52,6 +40,7 @@ public class MaterialUtils {
     public static Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
 
         boolean needToReload = false;
+
         String textureKey = null;
 
         if (MaterialUtils.isShaderFile(file)) {
@@ -60,28 +49,24 @@ public class MaterialUtils {
         } else if (MaterialUtils.isTextureFile(file)) {
             textureKey = MaterialUtils.containsTexture(material, file);
             if (textureKey == null) return null;
-            needToReload = true;
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final String assetName = material.getAssetName();
 
         // try to refresh texture directly
-        if (assetName == null && textureKey != null) {
-            assetManager.clearCache();
+        if (textureKey != null) {
             refreshTextures(material, textureKey);
             return null;
-        } else if (!needToReload || StringUtils.isEmpty(assetName)) return null;
-
-        final MaterialKey materialKey = new MaterialKey(assetName);
-        assetManager.deleteFromCache(materialKey);
-
-        if (textureKey != null) {
-            assetManager.clearCache();
+        } else if (!needToReload || StringUtils.isEmpty(assetName)) {
+            return null;
         }
 
+        final MaterialKey materialKey = new MaterialKey(assetName);
         final Material newMaterial = assetManager.loadAsset(materialKey);
-        MaterialUtils.updateTo(newMaterial, material, textureKey);
+
+        MaterialUtils.updateTo(newMaterial, material);
+
         return newMaterial;
     }
 
@@ -92,7 +77,7 @@ public class MaterialUtils {
      * @param file     the file of the shader.
      * @return true if the material contains the shader.
      */
-    public static boolean containsShader(@NotNull final Material material, @NotNull final Path file) {
+    private static boolean containsShader(@NotNull final Material material, @NotNull final Path file) {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
@@ -110,7 +95,7 @@ public class MaterialUtils {
      * @return changed texture key or null.
      */
     @Nullable
-    public static String containsTexture(@NotNull final Material material, @NotNull final Path file) {
+    private static String containsTexture(@NotNull final Material material, @NotNull final Path file) {
 
         final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
@@ -125,7 +110,7 @@ public class MaterialUtils {
      * @param assetPath   the path of the shader.
      * @return true if the material definition contains the shader.
      */
-    public static boolean containsShader(@NotNull final MaterialDef materialDef, @NotNull final String assetPath) {
+    private static boolean containsShader(@NotNull final MaterialDef materialDef, @NotNull final String assetPath) {
 
         final List<TechniqueDef> defaultTechniques = materialDef.getTechniqueDefs("Default");
 
@@ -144,7 +129,7 @@ public class MaterialUtils {
      * @param assetPath the path of the texture.
      * @return true if the material definition contains the texture.
      */
-    public static boolean containsTexture(@NotNull final Material material, @NotNull final String assetPath) {
+    private static boolean containsTexture(@NotNull final Material material, @NotNull final String assetPath) {
 
         final Collection<MatParam> materialParams = material.getParams();
         for (final MatParam materialParam : materialParams) {
@@ -188,7 +173,7 @@ public class MaterialUtils {
      * @param material   the material.
      * @param textureKey the texture key.
      */
-    public static void refreshTextures(@NotNull final Material material, @NotNull final String textureKey) {
+    private static void refreshTextures(@NotNull final Material material, @NotNull final String textureKey) {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
@@ -217,8 +202,7 @@ public class MaterialUtils {
      * @param toUpdate the material for updating.
      * @param material the target material.
      */
-    public static void updateTo(@NotNull final Material toUpdate, @NotNull final Material material,
-                                @Nullable final String textureKey) {
+    private static void updateTo(@NotNull final Material toUpdate, @NotNull final Material material) {
 
         final Collection<MatParam> oldParams = new ArrayList<>(toUpdate.getParams());
         oldParams.forEach(matParam -> {
@@ -235,16 +219,6 @@ public class MaterialUtils {
 
             final VarType varType = matParam.getVarType();
             final Object value = matParam.getValue();
-
-            if (varType == VarType.Texture2D && value != null && textureKey != null) {
-
-                final Texture texture = (Texture) value;
-                final AssetKey key = texture.getKey();
-
-                if (key != null && StringUtils.equals(key.getName(), textureKey)) {
-                    return;
-                }
-            }
 
             toUpdate.setParam(matParam.getName(), varType, value);
         });
@@ -298,7 +272,7 @@ public class MaterialUtils {
      */
     private static void cleanUp(@NotNull final Material material) {
         final Collection<MatParam> params = new ArrayList<>(material.getParams());
-        params.stream().filter(param -> param.getValue() == null)
-                .forEach(matParam -> material.clearParam(matParam.getName()));
+        params.stream().filter(param -> param.getValue() ==
+                null).forEach(matParam -> material.clearParam(matParam.getName()));
     }
 }

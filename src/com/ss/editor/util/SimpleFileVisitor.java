@@ -2,6 +2,7 @@ package com.ss.editor.util;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -31,13 +32,13 @@ public interface SimpleFileVisitor extends FileVisitor<Path> {
     void visit(@NotNull final Path file, @NotNull final BasicFileAttributes attrs);
 
     @Override
-    default FileVisitResult visitFileFailed(@NotNull final Path file, @NotNull final IOException exc)
+    default FileVisitResult visitFileFailed(@NotNull final Path file, @Nullable final IOException exc)
             throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    default FileVisitResult postVisitDirectory(@NotNull final Path dir, @NotNull final IOException exc)
+    default FileVisitResult postVisitDirectory(@NotNull final Path dir, @Nullable final IOException exc)
             throws IOException {
         return FileVisitResult.CONTINUE;
     }

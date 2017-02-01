@@ -85,8 +85,6 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         final ModelKey modelKey = new ModelKey(assetPath);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(modelKey);
-
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         final Geometry geometry = NodeUtils.findGeometry(loadedModel);
 

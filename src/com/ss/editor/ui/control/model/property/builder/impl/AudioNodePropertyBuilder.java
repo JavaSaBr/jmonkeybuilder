@@ -37,11 +37,7 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         if (audioKey == null) {
             audioNode.setAudioData(null, null);
         } else {
-
-            assetManager.deleteFromCache(audioKey);
-
             final AudioData audioData = assetManager.loadAudio(audioKey);
-
             AudioNodeUtils.updateData(audioNode, audioData, audioKey);
         }
     };

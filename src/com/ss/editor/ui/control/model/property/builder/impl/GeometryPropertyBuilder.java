@@ -49,9 +49,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
             geometry.setMaterial(material);
 
         } else {
-
-            assetManager.deleteFromCache(materialKey);
-
             final Material material = assetManager.loadAsset(materialKey);
             geometry.setMaterial(material);
         }

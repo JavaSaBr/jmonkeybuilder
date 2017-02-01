@@ -200,8 +200,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
 
         final MaterialKey materialKey = new MaterialKey(assetPath);
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(materialKey);
-
         final Material material = assetManager.loadAsset(materialKey);
 
         editorState.removeFilter(material);
@@ -341,8 +339,6 @@ public class PostFilterEditor extends AbstractFileEditor<StackPane> {
         if (editorState.hasFilter(materialKey)) return;
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(materialKey);
-
         final Material material = assetManager.loadAsset(materialKey);
 
         editorState.addFilter(material);
