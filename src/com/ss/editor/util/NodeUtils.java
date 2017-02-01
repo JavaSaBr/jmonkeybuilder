@@ -1,7 +1,6 @@
 package com.ss.editor.util;
 
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.asset.AssetKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.Light;
@@ -10,15 +9,13 @@ import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.util.StringUtils;
+import rlib.util.array.Array;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import rlib.util.StringUtils;
-import rlib.util.array.Array;
 
 /**
  * The class with utility methods for working with {@link Node}.
@@ -54,7 +51,7 @@ public class NodeUtils {
     }
 
     /**
-     * Find the first geometry in the {@link Spatial}.
+     * Find a first geometry in the {@link Spatial}.
      */
     @Nullable
     public static Geometry findGeometry(@NotNull final Spatial spatial) {
@@ -72,7 +69,7 @@ public class NodeUtils {
     }
 
     /**
-     * Find the first geometry in the {@link Spatial}.
+     * Find a first geometry in the {@link Spatial}.
      */
     @Nullable
     public static Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
@@ -92,7 +89,7 @@ public class NodeUtils {
     }
 
     /**
-     * Find the first spatial in the {@link Spatial}.
+     * Find a first spatial in the {@link Spatial}.
      */
     @Nullable
     public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
@@ -114,7 +111,8 @@ public class NodeUtils {
     /**
      * Collect all geometries from the asset path.
      */
-    public static void addGeometryWithMaterial(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container, @NotNull final String assetPath) {
+    public static void addGeometryWithMaterial(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container,
+                                               @NotNull final String assetPath) {
         if (StringUtils.isEmpty(assetPath)) return;
 
         if (spatial instanceof Geometry) {
@@ -143,7 +141,8 @@ public class NodeUtils {
     /**
      * Collect all geometries from the asset path.
      */
-    public static void addSpatialWithAssetPath(@NotNull final Spatial spatial, @NotNull final Array<Spatial> container, @NotNull final String assetPath) {
+    public static void addSpatialWithAssetPath(@NotNull final Spatial spatial, @NotNull final Array<Spatial> container,
+                                               @NotNull final String assetPath) {
         if (StringUtils.isEmpty(assetPath)) return;
 
         final AssetKey key = spatial.getKey();

@@ -81,7 +81,7 @@ public class Editor extends JmeToJFXApplication {
         return EDITOR;
     }
 
-    public static Editor prepareToStart() {
+    static Editor prepareToStart() {
 
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
@@ -106,7 +106,7 @@ public class Editor extends JmeToJFXApplication {
         return EDITOR;
     }
 
-    protected static void configureLogger() {
+    private static void configureLogger() {
 
         // disable the standard logger
         if (!Config.DEV_DEBUG) {
@@ -131,11 +131,13 @@ public class Editor extends JmeToJFXApplication {
     /**
      * The main synchronizer of this application.
      */
+    @NotNull
     private final StampedLock lock;
 
     /**
      * The node for preview.
      */
+    @NotNull
     private final Node previewNode;
 
     /**

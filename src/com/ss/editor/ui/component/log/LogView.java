@@ -26,12 +26,15 @@ import rlib.ui.util.FXUtils;
  */
 public class LogView extends CodeArea {
 
+    @NotNull
     private static final LogView INSTANCE = new LogView();
 
+    @NotNull
     public static LogView getInstance() {
         return INSTANCE;
     }
 
+    @NotNull
     private static final String[] FRAMEWORKS = {
             "log4j",
             "com.jme3.util.",
@@ -40,29 +43,37 @@ public class LogView extends CodeArea {
             "com.ss.editor.model.",
     };
 
+    @NotNull
     private static final String[] CLASSES = {
             BufferOverflowException.class.getName(),
             NullPointerException.class.getName(),
-
             BufferOverflowException.class.getSimpleName(),
             NullPointerException.class.getSimpleName(),
     };
 
+    @NotNull
     private static final String[] SEVERITIES = {
             "WARN", "INFO", "ERROR", "DEBUG", "WARNING"
     };
 
+    @NotNull
     private static final String SEVERITY_PATTERN = "\\b(" + String.join("|", SEVERITIES) + ")\\b";
+
+    @NotNull
     private static final String FRAMEWORK_PATTERN = "\\b(" + String.join("|", FRAMEWORKS) + ")\\b";
+
+    @NotNull
     private static final String CLASS_PATTERN = "\\b(" + String.join("|", CLASSES) + ")\\b";
 
+    @NotNull
     private static final Pattern PATTERN = Pattern.compile(
             "(?<SEVERITY>" + SEVERITY_PATTERN + ")"
                     + "|(?<FRAMEWORK>" + FRAMEWORK_PATTERN + ")"
                     + "|(?<CLASS>" + CLASS_PATTERN + ")"
     );
 
-    private static StyleSpans<Collection<String>> computeHighlighting(final String text) {
+    @NotNull
+    private static StyleSpans<Collection<String>> computeHighlighting(@NotNull final String text) {
 
         final Matcher matcher = PATTERN.matcher(text);
         final StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
@@ -92,26 +103,20 @@ public class LogView extends CodeArea {
         return spansBuilder.create();
     }
 
-    /**
-     * The stream err wrapper.
-     */
-    private final OutputStreamWrapper streamErrWrapper;
-
     public LogView() {
         setId(CSSIds.LOG_VIEW);
         setWrapText(true);
         setEditable(false);
+
         richChanges().subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
 
-        this.streamErrWrapper = new OutputStreamWrapper(System.err, externalAppendText());
-
-        System.setErr(streamErrWrapper);
+        System.setErr(new OutputStreamWrapper(System.err, externalAppendText()));
 
         FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
     }
 
     @NotNull
-    protected Consumer<String> externalAppendText() {
+    private Consumer<String> externalAppendText() {
         return stringConsumer -> runInFXThread(() -> appendText(stringConsumer));
     }
 }

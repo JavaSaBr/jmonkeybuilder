@@ -57,8 +57,9 @@ public class JFXApplication extends Application {
      *
      * @return the current stage.
      */
+    @Nullable
     @FromAnyThread
-    public static Stage getStage() {
+    private static Stage getStage() {
         final JFXApplication instance = JFXApplication.instance;
         return instance == null ? null : instance.stage;
     }
@@ -66,8 +67,8 @@ public class JFXApplication extends Application {
     public static void main(final String[] args) throws IOException {
 
         // fix of the fonts render
-        //System.setProperty("prism.lcdtext", "false");
-        //System.setProperty("prism.text", "t2k");
+        System.setProperty("prism.lcdtext", "false");
+        System.setProperty("prism.text", "t2k");
 
         // some settings for the render of JavaFX
         //System.setProperty("prism.cacheshapes", "true");
@@ -135,7 +136,8 @@ public class JFXApplication extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        LogView.getInstance();
+        final LogView logView = LogView.getInstance();
+        System.out.println("Initialized the " + logView);
 
         JFXApplication.instance = this;
         this.stage = stage;
@@ -202,7 +204,7 @@ public class JFXApplication extends Application {
      * Build the scene.
      */
     @FXThread
-    public void buildScene() {
+    private void buildScene() {
         this.scene = EditorFXSceneBuilder.build(requireNonNull(stage));
 
         final EditorFXScene scene = getScene();
@@ -224,6 +226,7 @@ public class JFXApplication extends Application {
 
         Platform.runLater(() -> {
 
+            final Stage stage = requireNonNull(getStage());
             final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
 
                 editorConfig.setAnalyticsQuestion(true);
@@ -231,7 +234,8 @@ public class JFXApplication extends Application {
                 editorConfig.save();
 
             }, Messages.ANALYTICS_CONFIRM_DIALOG_MESSAGE);
-            confirmDialog.show(getStage());
+
+            confirmDialog.show(stage);
         });
     }
 
@@ -242,7 +246,7 @@ public class JFXApplication extends Application {
 
         this.sceneProcessor = sceneProcessor;
 
-        final Stage stage = getStage();
+        final Stage stage = requireNonNull(getStage());
         stage.focusedProperty().addListener((observable, oldValue, newValue) -> editor.setPaused(!newValue));
 
         Platform.runLater(scene::notifyFinishBuild);

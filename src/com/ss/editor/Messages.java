@@ -1,5 +1,6 @@
 package com.ss.editor;
 
+import static java.util.ResourceBundle.getBundle;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import rlib.util.ReflectionUtils;
 
@@ -482,18 +483,19 @@ public class Messages {
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
-        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+        final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 locale, classLoader, ResourceControl.getInstance());
 
-        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+        final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 ResourceControl.getInstance());
 
         final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
         final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
-        //noinspection unchecked
+
+        //noinspection ConstantConditions,ConstantConditions,unchecked
         original.putAll(override);
 
-        final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
+        final ResourceBundle bundle = getBundle(BUNDLE_NAME, ResourceControl.getInstance());
 
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
