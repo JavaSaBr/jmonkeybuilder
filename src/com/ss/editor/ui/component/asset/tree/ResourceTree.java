@@ -1,8 +1,8 @@
 package com.ss.editor.ui.component.asset.tree;
 
-import static com.ss.editor.ui.component.asset.tree.ResourceTreeCell.CELL_FACTORY;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static java.util.Objects.requireNonNull;
 
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverterDescription;
@@ -71,10 +71,10 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         if (firstLevel != secondLevel) return firstLevel - secondLevel;
 
-        final Path firstFile = first.getFile();
+        final Path firstFile = requireNonNull(first).getFile();
         final String firstName = firstFile.getFileName().toString();
 
-        final Path secondFile = second.getFile();
+        final Path secondFile = requireNonNull(second).getFile();
         final String secondName = secondFile.getFileName().toString();
 
         return StringUtils.compareIgnoreCase(firstName, secondName);
@@ -82,8 +82,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     private static final ArrayComparator<TreeItem<ResourceElement>> ITEM_COMPARATOR = (first, second) -> {
 
-        final ResourceElement firstElement = first.getValue();
-        final ResourceElement secondElement = second.getValue();
+        final ResourceElement firstElement = requireNonNull(first).getValue();
+        final ResourceElement secondElement = requireNonNull(second).getValue();
 
         final int firstLevel = getLevel(firstElement);
         final int secondLevel = getLevel(secondElement);
@@ -167,7 +167,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         expandedItemCountProperty().addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
 
-        setCellFactory(CELL_FACTORY);
+        setCellFactory(param -> new ResourceTreeCell());
         setOnKeyPressed(this::processKey);
         setShowRoot(true);
         setContextMenu(new ContextMenu());
@@ -177,7 +177,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * Handle changed count of expanded elements.
      */
-    private void processChangedExpands(final Number newValue) {
+    private void processChangedExpands(@NotNull final Number newValue) {
         if (expandHandler == null) return;
         expandHandler.accept(newValue.intValue(), this);
     }
@@ -245,14 +245,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @return the action tester.
      */
     @Nullable
-    protected Predicate<Class<?>> getActionTester() {
+    private Predicate<Class<?>> getActionTester() {
         return actionTester;
     }
 
     /**
      * @return the context menu for the element.
      */
-    public ContextMenu getContextMenu(@NotNull final ResourceElement element) {
+    ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -341,7 +341,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @return the list of expanded elements.
      */
     @NotNull
-    public ConcurrentArray<ResourceElement> getExpandedElements() {
+    private ConcurrentArray<ResourceElement> getExpandedElements() {
         return expandedElements;
     }
 
@@ -349,7 +349,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @return the list of selected elements.
      */
     @NotNull
-    public ConcurrentArray<ResourceElement> getSelectedElements() {
+    private ConcurrentArray<ResourceElement> getSelectedElements() {
         return selectedElements;
     }
 
@@ -703,14 +703,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @return the open resource function.
      */
     @Nullable
-    public Consumer<ResourceElement> getOpenFunction() {
+    Consumer<ResourceElement> getOpenFunction() {
         return openFunction;
     }
 
     /**
      * Cleanup the tree.
      */
-    public void cleanup(@NotNull final TreeItem<ResourceElement> treeItem) {
+    private void cleanup(@NotNull final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
         if (element instanceof FileElement) return;
@@ -741,11 +741,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addFXTask(() -> {
-                final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
-                selectionModel.select(treeItem);
-                scrollTo(getRow(treeItem));
-            });
+            scrollToAndSelect(treeItem);
         }
     }
 
@@ -778,11 +774,15 @@ public class ResourceTree extends TreeView<ResourceElement> {
         }
 
         if (needSelect) {
-            EXECUTOR_MANAGER.addFXTask(() -> {
-                final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
-                selectionModel.select(treeItem);
-                scrollTo(getRow(treeItem));
-            });
+            scrollToAndSelect(treeItem);
         }
+    }
+
+    private void scrollToAndSelect(@NotNull final TreeItem<ResourceElement> treeItem) {
+        EXECUTOR_MANAGER.addFXTask(() -> {
+            final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = getSelectionModel();
+            selectionModel.select(treeItem);
+            scrollTo(getRow(treeItem));
+        });
     }
 }

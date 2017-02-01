@@ -41,8 +41,6 @@ import rlib.util.StringUtils;
  */
 public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
-    public static final Callback<TreeView<ResourceElement>, TreeCell<ResourceElement>> CELL_FACTORY = param -> new ResourceTreeCell();
-
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     /**
