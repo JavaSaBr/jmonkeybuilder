@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editor.impl.material;
 
 import static java.lang.Float.parseFloat;
 import static javafx.collections.FXCollections.observableArrayList;
+import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
 
 import com.jme3.material.Material;
@@ -25,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -37,20 +39,18 @@ public class MaterialRenderParamsComponent extends VBox {
     private static final ObservableList<FaceCullMode> FACE_CULL_MODES = observableArrayList(FaceCullMode.values());
     private static final ObservableList<BlendMode> BLEND_MODES = observableArrayList(BlendMode.values());
 
-    private static final Insets ELEMENT_OFFSET = new Insets(3, 0, 0, 0);
-
     /**
-     * Обработчик внесения изменений.
+     * The changes handler.
      */
     private final Consumer<EditorOperation> changeHandler;
 
     /**
-     * Выбор режима FaceCullMode.
+     * The combo box to choose FaceCullMode.
      */
     private ComboBox<FaceCullMode> faceCullModeComboBox;
 
     /**
-     * Выбор режима BlendMode.
+     * The combo box to choose BlendMode.
      */
     private ComboBox<BlendMode> blendModeComboBox;
 
@@ -94,7 +94,8 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     private boolean ignoreListeners;
 
-    public MaterialRenderParamsComponent(final Consumer<EditorOperation> changeHandler) {
+    //FIXME переделать на использование пропертей
+    MaterialRenderParamsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         setId(CSSIds.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
         this.changeHandler = changeHandler;
         createContent();
@@ -125,6 +126,8 @@ public class MaterialRenderParamsComponent extends VBox {
      * Создание контролов.
      */
     private void createContent() {
+
+        final VBox container = new VBox();
 
         final Label faceCullModeLabel = new Label(Messages.MATERIAL_RENDER_STATE_FACE_CULL_MODE + ":");
         faceCullModeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
@@ -222,14 +225,17 @@ public class MaterialRenderParamsComponent extends VBox {
         final HBox wireframeContainer = new HBox(wireframeLabel, wireframeCheckBox);
         wireframeContainer.setAlignment(CENTER_LEFT);
 
-        FXUtils.addToPane(faceCullModeContainer, this);
-        FXUtils.addToPane(blendModeContainer, this);
-        FXUtils.addToPane(polyOffsetFactorContainer, this);
-        FXUtils.addToPane(polyOffsetUnitsContainer, this);
-        FXUtils.addToPane(depthWriteContainer, this);
-        FXUtils.addToPane(colorWriteContainer, this);
-        FXUtils.addToPane(depthTestContainer, this);
-        FXUtils.addToPane(wireframeContainer, this);
+        FXUtils.addToPane(faceCullModeContainer, container);
+        FXUtils.addToPane(blendModeContainer, container);
+        FXUtils.addToPane(polyOffsetFactorContainer, container);
+        FXUtils.addToPane(polyOffsetUnitsContainer, container);
+        FXUtils.addToPane(depthWriteContainer, container);
+        FXUtils.addToPane(colorWriteContainer, container);
+        FXUtils.addToPane(depthTestContainer, container);
+        FXUtils.addToPane(wireframeContainer, container);
+        FXUtils.addToPane(container, this);
+
+        container.setPadding(new Insets(0, 6, 0, 0));
 
         FXUtils.addClassTo(faceCullModeLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(faceCullModeComboBox, CSSClasses.SPECIAL_FONT_13);
@@ -407,7 +413,6 @@ public class MaterialRenderParamsComponent extends VBox {
                 renderState.setFaceCullMode(value);
             }
         });
-
     }
 
     /**

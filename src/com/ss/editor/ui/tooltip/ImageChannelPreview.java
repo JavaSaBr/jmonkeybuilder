@@ -119,19 +119,15 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
 
         redView = new ImageView();
         redView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-        redView.setImage(getRedImage());
 
         greenView = new ImageView();
         greenView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-        greenView.setImage(getGreenImage());
 
         blueView = new ImageView();
         blueView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-        blueView.setImage(getBlueImage());
 
         alphaView = new ImageView();
         alphaView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-        alphaView.setImage(getAlphaImage());
 
         root.add(redView, 0, 0);
         root.add(greenView, 1, 0);

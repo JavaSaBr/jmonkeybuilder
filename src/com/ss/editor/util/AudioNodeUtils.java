@@ -59,7 +59,7 @@ public class AudioNodeUtils {
      * @param audioNode the audio node.
      * @return the audio key.
      */
-    @NotNull
+    @Nullable
     @FromAnyThread
     public static AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
         try {

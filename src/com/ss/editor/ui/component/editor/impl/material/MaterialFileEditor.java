@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -46,6 +47,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 
@@ -64,6 +66,7 @@ import java.util.function.Consumer;
  */
 public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, MaterialChangeConsumer {
 
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -73,106 +76,130 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL);
     }
 
+    @NotNull
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
+    @NotNull
     private static final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();
 
+    @NotNull
     private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
+
+    @NotNull
     private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
-
-    /**
-     * 3D part of this editor.
-     */
-    private final MaterialEditorAppState editorAppState;
-
-    /**
-     * The state of this editor.
-     */
-    private MaterialFileEditorState editorState;
 
     /**
      * The operation control.
      */
+    @NotNull
     private final EditorOperationControl operationControl;
 
     /**
      * The changes counter.
      */
+    @NotNull
     private final AtomicInteger changeCounter;
+
+    /**
+     * 3D part of this editor.
+     */
+    @NotNull
+    private final MaterialEditorAppState editorAppState;
+
+    /**
+     * The state of this editor.
+     */
+    @Nullable
+    private MaterialFileEditorState editorState;
 
     /**
      * The textures editor.
      */
+    @Nullable
     private MaterialTexturesComponent materialTexturesComponent;
 
     /**
      * The colors editor.
      */
+    @Nullable
     private MaterialColorsComponent materialColorsComponent;
 
     /**
      * The other parameters editor.
      */
+    @Nullable
     private MaterialOtherParamsComponent materialOtherParamsComponent;
 
     /**
      * The render settings editor.
      */
+    @Nullable
     private MaterialRenderParamsComponent materialRenderParamsComponent;
 
     /**
      * The main split container.
      */
+    @Nullable
     private EditorToolSplitPane mainSplitContainer;
 
     /**
      * Editor tool component.
      */
+    @Nullable
     private ScrollableEditorToolComponent editorToolComponent;
 
     /**
      * The current editing material.
      */
+    @Nullable
     private Material currentMaterial;
 
     /**
      * The button for using a cube.
      */
+    @Nullable
     private ToggleButton cubeButton;
 
     /**
      * The button for using a sphere.
      */
+    @Nullable
     private ToggleButton sphereButton;
 
     /**
      * The button for using a plane.
      */
+    @Nullable
     private ToggleButton planeButton;
 
     /**
      * The button for using a light.
      */
+    @Nullable
     private ToggleButton lightButton;
 
     /**
      * The list of RenderQueue.Bucket.
      */
+    @Nullable
     private ComboBox<RenderQueue.Bucket> bucketComboBox;
 
     /**
      * The list of material definitions.
      */
+    @Nullable
     private ComboBox<String> materialDefinitionBox;
 
     /**
      * The pane of editor area.
      */
+    @Nullable
     private Pane editorAreaPane;
 
     /**
      * The change handler.
      */
+    @Nullable
     private Consumer<EditorOperation> changeHandler;
 
     /**
@@ -180,7 +207,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     private boolean ignoreListeners;
 
-    public MaterialFileEditor() {
+    private MaterialFileEditor() {
         this.editorAppState = new MaterialEditorAppState(this);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
@@ -233,6 +260,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return the operation control.
      */
+    @NotNull
     private EditorOperationControl getOperationControl() {
         return operationControl;
     }
@@ -329,8 +357,17 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addToPane(mainSplitContainer, root);
     }
 
+    /**
+     * @return the pane of editor area.
+     */
+    @NotNull
+    private Pane getEditorAreaPane() {
+        return requireNonNull(editorAreaPane);
+    }
+
     @Override
     public boolean isInside(final double sceneX, final double sceneY) {
+        final Pane editorAreaPane = getEditorAreaPane();
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
         return editorAreaPane.contains(point2D);
     }
@@ -338,29 +375,33 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return the textures editor.
      */
+    @NotNull
     private MaterialTexturesComponent getMaterialTexturesComponent() {
-        return materialTexturesComponent;
+        return requireNonNull(materialTexturesComponent);
     }
 
     /**
      * @return the colors editor.
      */
+    @NotNull
     private MaterialColorsComponent getMaterialColorsComponent() {
-        return materialColorsComponent;
+        return requireNonNull(materialColorsComponent);
     }
 
     /**
      * @return the other parameters editor.
      */
+    @NotNull
     private MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
-        return materialOtherParamsComponent;
+        return requireNonNull(materialOtherParamsComponent);
     }
 
     /**
      * @return the render settings editor.
      */
+    @NotNull
     private MaterialRenderParamsComponent getMaterialRenderParamsComponent() {
-        return materialRenderParamsComponent;
+        return requireNonNull(materialRenderParamsComponent);
     }
 
     @Override
@@ -369,7 +410,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         final Path assetFile = EditorUtil.getAssetFile(file);
 
-        Objects.requireNonNull(assetFile, "Asset file can't be null.");
+        requireNonNull(assetFile, "Asset file can't be null.");
 
         final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
 
@@ -387,6 +428,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return the state of this editor.
      */
+    @Nullable
     private MaterialFileEditorState getEditorState() {
         return editorState;
     }
@@ -407,10 +449,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Loading a state of this editor.
      */
-    protected void loadState() {
+    @SuppressWarnings("ConstantConditions")
+    private void loadState() {
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = Objects.requireNonNull(workspaceManager.getCurrentWorkspace(),
+        final Workspace currentWorkspace = requireNonNull(workspaceManager.getCurrentWorkspace(),
                 "Current workspace can't be null.");
 
         editorState = currentWorkspace.getEditorState(getEditFile(), MaterialFileEditorState::new);
@@ -487,8 +530,9 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return the list of material definitions.
      */
+    @NotNull
     private ComboBox<String> getMaterialDefinitionBox() {
-        return materialDefinitionBox;
+        return requireNonNull(materialDefinitionBox);
     }
 
     @Override
@@ -549,10 +593,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addClassTo(planeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.MAIN_FONT_12);
-        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.MAIN_FONT_12);
-        FXUtils.addClassTo(bucketLabel, CSSClasses.MAIN_FONT_12);
-        FXUtils.addClassTo(bucketComboBox, CSSClasses.MAIN_FONT_12);
+        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(bucketLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(bucketComboBox, CSSClasses.SPECIAL_FONT_13);
 
         HBox.setMargin(cubeButton, SMALL_OFFSET);
         HBox.setMargin(sphereButton, SMALL_OFFSET);
@@ -572,7 +616,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         final MaterialFileEditorState editorState = getEditorState();
         if (editorState != null) editorState.setBucketType(newValue);
-
     }
 
     /**
@@ -618,22 +661,25 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return the button for using a cube.
      */
+    @NotNull
     private ToggleButton getCubeButton() {
-        return cubeButton;
+        return requireNonNull(cubeButton);
     }
 
     /**
      * @return the button for using a plane.
      */
+    @NotNull
     private ToggleButton getPlaneButton() {
-        return planeButton;
+        return requireNonNull(planeButton);
     }
 
     /**
      * @return the button for using a sphere.
      */
+    @NotNull
     private ToggleButton getSphereButton() {
-        return sphereButton;
+        return requireNonNull(sphereButton);
     }
 
     /**
@@ -669,7 +715,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     @NotNull
     @Override
     public Material getCurrentMaterial() {
-        return currentMaterial;
+        return requireNonNull(currentMaterial);
     }
 
     @Override
@@ -694,13 +740,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @param currentMaterial the current editing material.
      */
-    private void setCurrentMaterial(final Material currentMaterial) {
+    private void setCurrentMaterial(@NotNull final Material currentMaterial) {
         this.currentMaterial = currentMaterial;
     }
 
     /**
      * @return 3D part of this editor.
      */
+    @NotNull
     private MaterialEditorAppState getEditorAppState() {
         return editorAppState;
     }

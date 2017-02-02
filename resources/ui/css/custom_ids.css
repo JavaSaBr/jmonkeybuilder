@@ -302,7 +302,7 @@
 }
 
 #MaterialFileEditorToolbarSmallBox {
-    -fx-min-height: 28;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 150;
