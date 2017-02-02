@@ -1,18 +1,15 @@
 package com.ss.editor.ui.tooltip;
 
+import static java.util.Objects.requireNonNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.css.CSSIds;
-
+import javafx.scene.image.*;
+import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.GridPane;
 
 /**
  * THe implementation of tooltip for showing image channels.
@@ -26,41 +23,49 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * The red image.
      */
+    @NotNull
     private final WritableImage redImage;
 
     /**
      * The green image.
      */
+    @NotNull
     private final WritableImage greenImage;
 
     /**
      * The blue image.
      */
+    @NotNull
     private final WritableImage blueImage;
 
     /**
      * The alpha image.
      */
+    @NotNull
     private final WritableImage alphaImage;
 
     /**
      * The red image view.
      */
+    @Nullable
     private ImageView redView;
 
     /**
      * The green image view.
      */
+    @Nullable
     private ImageView greenView;
 
     /**
      * The blue image view.
      */
+    @Nullable
     private ImageView blueView;
 
     /**
      * The alpha image view.
      */
+    @Nullable
     private ImageView alphaView;
 
     public ImageChannelPreview() {
@@ -73,6 +78,8 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the alpha image.
      */
+    @NotNull
+    @FXThread
     private WritableImage getAlphaImage() {
         return alphaImage;
     }
@@ -80,6 +87,8 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the red image.
      */
+    @NotNull
+    @FXThread
     private WritableImage getRedImage() {
         return redImage;
     }
@@ -87,6 +96,8 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the blue image.
      */
+    @NotNull
+    @FXThread
     private WritableImage getBlueImage() {
         return blueImage;
     }
@@ -94,6 +105,8 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the green image.
      */
+    @NotNull
+    @FXThread
     private WritableImage getGreenImage() {
         return greenImage;
     }
@@ -135,35 +148,44 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     /**
      * @return the alpha image view.
      */
+    @NotNull
+    @FXThread
     private ImageView getAlphaView() {
-        return alphaView;
+        return requireNonNull(alphaView);
     }
 
     /**
      * @return the blue image view.
      */
+    @NotNull
+    @FXThread
     private ImageView getBlueView() {
-        return blueView;
+        return requireNonNull(blueView);
     }
 
     /**
      * @return the green image view.
      */
+    @NotNull
+    @FXThread
     private ImageView getGreenView() {
-        return greenView;
+        return requireNonNull(greenView);
     }
 
     /**
      * @return the red image view.
      */
+    @NotNull
+    @FXThread
     private ImageView getRedView() {
-        return redView;
+        return requireNonNull(redView);
     }
 
     /**
      * Show the file.
      */
-    public void showImage(final Path file) {
+    @FXThread
+    public void showImage(@Nullable final Path file) {
 
         final Image image = file == null ? null : IMAGE_MANAGER.getTexturePreview(file, 120, 120);
 

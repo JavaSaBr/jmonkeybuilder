@@ -2,6 +2,7 @@ package com.ss.editor.ui;
 
 import com.ss.editor.manager.FileIconManager;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The interface with all icons of this application.
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
  */
 public interface Icons {
 
+    @NotNull
     FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/save.png", 16);

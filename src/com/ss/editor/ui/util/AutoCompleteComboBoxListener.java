@@ -8,35 +8,45 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
 import rlib.util.StringUtils;
 
 /**
- * Реализация слушателя комбобокса для формирования подсказок.
+ * The implementation of autocomplete for combobox.
+ *
+ * @author JavaSaBr
  */
 public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
-    public static <T> void install(ComboBox<T> comboBox) {
+    /**
+     * Install autocomplete to a combobox.
+     *
+     * @param comboBox the combobox.
+     */
+    public static <T> void install(@NotNull final ComboBox<T> comboBox) {
         new AutoCompleteComboBoxListener<>(comboBox);
     }
 
     /**
-     * Комбобокс.
+     * The combobox.
      */
+    @NotNull
     private final ComboBox<T> comboBox;
 
     /**
-     * Изначальный список значений.
+     * The list of available values.
      */
+    @NotNull
     private final ObservableList<T> data;
 
     /**
-     * Позиция курсора.
+     * The caret position.
      */
     private int caretPos;
 
     private boolean moveCaretToPos;
 
-    public AutoCompleteComboBoxListener(final ComboBox<T> comboBox) {
+    private AutoCompleteComboBoxListener(@NotNull final ComboBox<T> comboBox) {
         this.comboBox = comboBox;
         this.data = comboBox.getItems();
 
@@ -46,21 +56,23 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
     }
 
     /**
-     * @return комбобокс.
+     * @return the combobox.
      */
+    @NotNull
     private ComboBox<T> getComboBox() {
         return comboBox;
     }
 
     /**
-     * @return изначальный список значений.
+     * @return the list of available values.
      */
+    @NotNull
     private ObservableList<T> getData() {
         return data;
     }
 
     @Override
-    public void handle(KeyEvent event) {
+    public void handle(@NotNull final KeyEvent event) {
 
         final KeyCode keyCode = event.getCode();
 
@@ -91,7 +103,9 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
             caretPos = editor.getCaretPosition();
         }
 
-        if (keyCode == KeyCode.RIGHT || keyCode == KeyCode.LEFT || event.isControlDown() || keyCode == KeyCode.HOME || keyCode == KeyCode.END || keyCode == KeyCode.TAB) {
+        if (keyCode == KeyCode.RIGHT || keyCode == KeyCode.LEFT ||
+                event.isControlDown() || keyCode == KeyCode.HOME ||
+                keyCode == KeyCode.END || keyCode == KeyCode.TAB) {
             return;
         }
 
@@ -103,23 +117,16 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
             final StringConverter<T> converter = comboBox.getConverter();
             final String presentation = converter.toString(value);
-
-            if (presentation == null) {
-                return;
-            }
+            if (presentation == null) return;
 
             final String lowerCase = presentation.toLowerCase();
-
-            if (!lowerCase.contains(toCheck)) {
-                return;
-            }
+            if (!lowerCase.contains(toCheck)) return;
 
             filtered.add(value);
         });
 
 
         comboBox.setItems(filtered);
-
         editor.setText(editorText);
 
         if (!moveCaretToPos) {

@@ -19,11 +19,13 @@ public class SceneEvent extends Event {
 
     private static final long serialVersionUID = 6827900349094865635L;
 
+    @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
 
     /**
      * The parameters.
      */
+    @Nullable
     private ObjectDictionary<Object, Object> values;
 
     public SceneEvent(@Nullable final Object source, @NotNull final EventType<? extends Event> eventType) {

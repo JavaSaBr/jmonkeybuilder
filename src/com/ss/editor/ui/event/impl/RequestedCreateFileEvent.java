@@ -1,23 +1,32 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.event.EventType;
-
 /**
- * The event-request for creating a new file.
+ * The event about request to create a new file.
  *
  * @author JavaSaBr
  */
 public class RequestedCreateFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RequestedCreateFileEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
-    public static final String FILE = "file";
-    public static final String CREATOR = "creator";
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RequestedCreateFileEvent.class.getSimpleName());
+        }
+    }
+
+    private static final String FILE = "file";
+    private static final String CREATOR = "creator";
 
     public RequestedCreateFileEvent() {
         super(EVENT_TYPE);
@@ -26,28 +35,30 @@ public class RequestedCreateFileEvent extends SceneEvent {
     /**
      * @return the creator description.
      */
+    @NotNull
     public FileCreatorDescription getDescription() {
-        return get(CREATOR);
+        return requireNonNull(get(CREATOR));
     }
 
     /**
      * @param description the creator description.
      */
-    public void setDescription(final FileCreatorDescription description) {
+    public void setDescription(@NotNull final FileCreatorDescription description) {
         set(CREATOR, description);
     }
 
     /**
      * @return the file.
      */
+    @NotNull
     public Path getFile() {
-        return get(FILE);
+        return requireNonNull(get(FILE));
     }
 
     /**
      * @param file the file.
      */
-    public void setFile(final Path file) {
+    public void setFile(@NotNull final Path file) {
         set(FILE, file);
     }
 }

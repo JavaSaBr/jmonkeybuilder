@@ -1,52 +1,63 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.event.EventType;
-
 /**
- * Событие о переименовании файла в Asset.
+ * The event about renamed a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RenamedFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RenamedFileEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
-    public static final String PREV_FILE = "prev_file";
-    public static final String NEW_FILE = "new_file";
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RenamedFileEvent.class.getSimpleName());
+        }
+    }
+
+    private static final String PREV_FILE = "prev_file";
+    private static final String NEW_FILE = "new_file";
 
     public RenamedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * @return новый файл.
+     * @return the new file.
      */
+    @NotNull
     public Path getNewFile() {
-        return get(NEW_FILE);
+        return requireNonNull(get(NEW_FILE));
     }
 
     /**
-     * @param file новый файл.
+     * @param file the new file.
      */
-    public void setNewFile(final Path file) {
+    public void setNewFile(@NotNull final Path file) {
         set(NEW_FILE, file);
     }
 
     /**
-     * @return предыдущий файл.
+     * @return the previous file.
      */
+    @NotNull
     public Path getPrevFile() {
-        return get(PREV_FILE);
+        return requireNonNull(get(PREV_FILE));
     }
 
     /**
-     * @param file предыдущий файл.
+     * @param file the previous file.
      */
-    public void setPrevFile(final Path file) {
+    public void setPrevFile(@NotNull final Path file) {
         set(PREV_FILE, file);
     }
 }

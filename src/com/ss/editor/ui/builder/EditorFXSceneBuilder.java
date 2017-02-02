@@ -37,22 +37,22 @@ public class EditorFXSceneBuilder {
     /**
      * The path to the base CSS styles.
      */
-    public static final String CSS_FILE_BASE = "/ui/css/base.bss";
+    private static final String CSS_FILE_BASE = "/ui/css/base.bss";
 
     /**
      * The path to the external CSS styles.
      */
-    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
+    private static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
 
     /**
      * The path to the custom ids CSS styles.
      */
-    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
+    private static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
 
     /**
      * The path to the custom classes CSS styles.
      */
-    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
+    private static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
     @NotNull
     @FXThread

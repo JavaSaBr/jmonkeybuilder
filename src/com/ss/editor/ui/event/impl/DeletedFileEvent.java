@@ -1,17 +1,15 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.event.SceneEvent;
-
+import javafx.event.Event;
+import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-import java.util.Objects;
-
-import javafx.event.Event;
-import javafx.event.EventType;
 
 /**
- * The event about deleting a file.
+ * The event about deleted a file.
  *
  * @author JavaSaBr
  */
@@ -26,11 +24,8 @@ public class DeletedFileEvent extends SceneEvent {
         }
     }
 
-    @NotNull
-    public static final String FILE = "file";
-
-    @NotNull
-    public static final String IS_DIRECTORY = "isDirectory";
+    private static final String FILE = "file";
+    private static final String IS_DIRECTORY = "isDirectory";
 
     public DeletedFileEvent() {
         super(EVENT_TYPE);
@@ -41,7 +36,7 @@ public class DeletedFileEvent extends SceneEvent {
      */
     @NotNull
     public Path getFile() {
-        return Objects.requireNonNull(get(FILE), "Can't find a file");
+        return requireNonNull(get(FILE), "Can't find a file");
     }
 
     /**

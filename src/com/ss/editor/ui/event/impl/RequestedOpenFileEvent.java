@@ -1,24 +1,33 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.event.EventType;
-
 /**
- * Событие об запроса на открытие файла.
+ * The event about request to open a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RequestedOpenFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RequestedOpenFileEvent.class.getSimpleName());
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
-    public static final String FILE = "file";
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RequestedOpenFileEvent.class.getSimpleName());
+        }
+    }
+
     public static final String EDITOR = "editor";
-    public static final String NEED_SHOW = "need_show";
+
+    private static final String FILE = "file";
+    private static final String NEED_SHOW = "need_show";
 
     public RequestedOpenFileEvent() {
         super(EVENT_TYPE);
@@ -26,42 +35,44 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
-     * @return описание редактора.
+     * @return the editor descriptor.
      */
+    @NotNull
     public EditorDescription getDescription() {
-        return get(EDITOR);
+        return requireNonNull(get(EDITOR));
     }
 
     /**
-     * @param description описание редактора.
+     * @param description the editor descriptor.
      */
     public void setDescription(final EditorDescription description) {
         set(EDITOR, description);
     }
 
     /**
-     * @return открываемый файл.
+     * @return the file to open.
      */
+    @NotNull
     public Path getFile() {
-        return get(FILE);
+        return requireNonNull(get(FILE));
     }
 
     /**
-     * @param file открываемый файл.
+     * @param file the file to open.
      */
     public void setFile(final Path file) {
         set(FILE, file);
     }
 
     /**
-     * @return нужно ли переходить в этот редактор.
+     * @return true if need to show the editor.
      */
     public boolean isNeedShow() {
-        return get(NEED_SHOW);
+        return get(NEED_SHOW) == Boolean.TRUE;
     }
 
     /**
-     * @param needShow нужно ли переходить в этот редактор.
+     * @param needShow true if need to show the editor.
      */
     public void setNeedShow(final boolean needShow) {
         set(NEED_SHOW, needShow);

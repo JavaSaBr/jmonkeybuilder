@@ -1,37 +1,47 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.event.EventType;
-
 /**
- * Событие об изменении текущей папки Asset.
+ * The event about changed an asset folder.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ChangedCurrentAssetFolderEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, ChangedCurrentAssetFolderEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
-    public static final String ASSET = "asset";
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, ChangedCurrentAssetFolderEvent.class.getSimpleName());
+        }
+    }
+
+    private static final String ASSET = "asset";
 
     public ChangedCurrentAssetFolderEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * @return новая папка Asset.
+     * @return the new asset.
      */
+    @NotNull
     public Path getNewAssetFolder() {
-        return get(ASSET);
+        return requireNonNull(get(ASSET));
     }
 
     /**
-     * @param newAssetFolder новая папка Asset.
+     * @param newAssetFolder the new asset.
      */
-    public void setNewAssetFolder(final Path newAssetFolder) {
+    public void setNewAssetFolder(@NotNull final Path newAssetFolder) {
         set(ASSET, newAssetFolder);
     }
 }

@@ -2,6 +2,7 @@ package com.ss.editor.ui.util;
 
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
@@ -37,13 +38,25 @@ import java.util.function.Predicate;
  */
 public class UIUtils {
 
-    public static void clear(final Pane node) {
-        final ObservableList<Node> children = node.getChildren();
+    /**
+     * Clear children of a pane.
+     *
+     * @param pane the pane.
+     */
+    @FXThread
+    public static void clear(@NotNull final Pane pane) {
+        final ObservableList<Node> children = pane.getChildren();
         children.forEach(UIUtils::unbind);
         children.clear();
     }
 
-    public static void unbind(final Node node) {
+    /**
+     * Unbind a node.
+     *
+     * @param node the node.
+     */
+    @FXThread
+    private static void unbind(@NotNull final Node node) {
         if (node instanceof Control) {
             final Control control = (Control) node;
             control.prefWidthProperty().unbind();
@@ -56,9 +69,10 @@ public class UIUtils {
     }
 
     /**
-     * Поиск всех компонентов экрана.
+     * Fill a list of components.
      */
-    public static void fillComponents(final Array<ScreenComponent> container, final Node node) {
+    @FXThread
+    public static void fillComponents(@NotNull final Array<ScreenComponent> container, @NotNull final Node node) {
 
         if (node instanceof ScreenComponent) {
             container.add((ScreenComponent) node);
@@ -81,18 +95,22 @@ public class UIUtils {
     }
 
     /**
-     * Поиск всех компонентов экрана.
+     * Find all components for a type.
      */
-    public static <T extends Node> Array<T> fillComponents(final Node node, final Class<T> type) {
+    @NotNull
+    @FXThread
+    public static <T extends Node> Array<T> fillComponents(@NotNull final Node node, @NotNull final Class<T> type) {
         final Array<T> container = ArrayFactory.newArray(type);
         fillComponents(container, node, type);
         return container;
     }
 
     /**
-     * Поиск всех компонентов.
+     * Find all components for a type.
      */
-    public static <T extends Node> void fillComponents(final Array<T> container, final Node node, final Class<T> type) {
+    @FXThread
+    public static <T extends Node> void fillComponents(@NotNull final Array<T> container, @NotNull final Node node,
+                                                       @NotNull final Class<T> type) {
 
         if (type.isInstance(container)) {
             container.add(type.cast(node));
@@ -107,9 +125,11 @@ public class UIUtils {
     }
 
     /**
-     * Поиск всех элементов меню.
+     * Get all elements of a menu.
      */
-    public static Array<MenuItem> getAllItems(final MenuBar menuBar) {
+    @NotNull
+    @FXThread
+    public static Array<MenuItem> getAllItems(@NotNull final MenuBar menuBar) {
 
         final Array<MenuItem> container = ArrayFactory.newArray(MenuItem.class);
 
@@ -120,9 +140,10 @@ public class UIUtils {
     }
 
     /**
-     * Поиск всех элементов меню.
+     * Collect all elements of a menu.
      */
-    public static void getAllItems(final Array<MenuItem> container, final MenuItem menuItem) {
+    @FXThread
+    private static void getAllItems(@NotNull final Array<MenuItem> container, @NotNull final MenuItem menuItem) {
 
         container.add(menuItem);
 
@@ -137,13 +158,15 @@ public class UIUtils {
     /**
      * Collect all items.
      */
-    public static void getAllItems(final Array<MenuItem> container, final MenuButton menuButton) {
+    @FXThread
+    public static void getAllItems(@NotNull final Array<MenuItem> container, @NotNull final MenuButton menuButton) {
         final ObservableList<MenuItem> items = menuButton.getItems();
         items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
     }
 
-
-    public static void addTo(TreeItem<? super Object> item, TreeItem<? super Object> parent) {
+    @FXThread
+    public static void addTo(@NotNull final TreeItem<? super Object> item,
+                             @NotNull final TreeItem<? super Object> parent) {
         final ObservableList<TreeItem<Object>> children = parent.getChildren();
         children.add(item);
     }
@@ -151,7 +174,8 @@ public class UIUtils {
     /**
      * Override tooltip timeout.
      */
-    public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis, int closeDelayInMillis) {
+    public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis,
+                                               int closeDelayInMillis) {
 
         try {
 
@@ -190,15 +214,21 @@ public class UIUtils {
             field.get(Tooltip.class);
             field.set(Tooltip.class, tooltipBehaviour);
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("Aborted setup due to error:" + e.getMessage());
         }
     }
 
     /**
-     * Поиск элемента дерево по уникальному ид.
+     * Find a tree item by object id.
+     *
+     * @param treeView the tree.
+     * @param objectId the object id.
+     * @return the tree item or null.
      */
-    public static <T> TreeItem<T> findItem(final TreeView<T> treeView, final long objectId) {
+    @Nullable
+    @FXThread
+    public static <T> TreeItem<T> findItem(@NotNull final TreeView<T> treeView, final long objectId) {
 
         final TreeItem<T> root = treeView.getRoot();
         final T value = root.getValue();
@@ -210,14 +240,9 @@ public class UIUtils {
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
         if (!children.isEmpty()) {
-
-            for (TreeItem<T> treeItem : children) {
-
+            for (final TreeItem<T> treeItem : children) {
                 final TreeItem<T> result = findItem(treeItem, objectId);
-
-                if (result != null) {
-                    return result;
-                }
+                if (result != null) return result;
             }
         }
 
@@ -225,9 +250,15 @@ public class UIUtils {
     }
 
     /**
-     * Поиск элемента.
+     * Find a tree item by object id.
+     *
+     * @param root     the root item.
+     * @param objectId the object id.
+     * @return the tree item or null.
      */
-    public static <T> TreeItem<T> findItem(final TreeItem<T> root, final long objectId) {
+    @Nullable
+    @FXThread
+    public static <T> TreeItem<T> findItem(@NotNull final TreeItem<T> root, final long objectId) {
 
         final T value = root.getValue();
 
@@ -238,14 +269,9 @@ public class UIUtils {
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
         if (!children.isEmpty()) {
-
-            for (TreeItem<T> treeItem : children) {
-
+            for (final TreeItem<T> treeItem : children) {
                 final TreeItem<T> result = findItem(treeItem, objectId);
-
-                if (result != null) {
-                    return result;
-                }
+                if (result != null) return result;
             }
         }
 
@@ -253,9 +279,14 @@ public class UIUtils {
     }
 
     /**
-     * Поиск элемента дерева, содержашего указанное значение.
+     * Find a tree item by its value.
+     *
+     * @param treeView the tree view.
+     * @param object   the value.
+     * @return the tree item or null.
      */
     @Nullable
+    @FXThread
     public static <T> TreeItem<T> findItemForValue(@NotNull final TreeView<T> treeView, @Nullable final Object object) {
         if (object == null) return null;
 
@@ -275,9 +306,15 @@ public class UIUtils {
     }
 
     /**
-     * Поиск элемента дерева, содержашего указанное значение.
+     * Find a tree item by its value.
+     *
+     * @param root   the root item.
+     * @param object the value.
+     * @return the tree item or null.
      */
-    public static <T> TreeItem<T> findItemForValue(final TreeItem<T> root, final Object object) {
+    @Nullable
+    @FXThread
+    public static <T> TreeItem<T> findItemForValue(@NotNull final TreeItem<T> root, @Nullable final Object object) {
 
         if (Objects.equals(root.getValue(), object)) {
             return root;
@@ -286,14 +323,9 @@ public class UIUtils {
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
         if (!children.isEmpty()) {
-
-            for (TreeItem<T> treeItem : children) {
-
+            for (final TreeItem<T> treeItem : children) {
                 final TreeItem<T> result = findItemForValue(treeItem, object);
-
-                if (result != null) {
-                    return result;
-                }
+                if (result != null) return result;
             }
         }
 
@@ -301,9 +333,14 @@ public class UIUtils {
     }
 
     /**
-     * Получение всех элементов дерева.
+     * Get all elements of a tree view.
+     *
+     * @param treeView the tree view.
+     * @return the list of all items.
      */
-    public static <T> Array<TreeItem<T>> getAllItems(final TreeView<T> treeView) {
+    @NotNull
+    @FXThread
+    public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeView<T> treeView) {
 
         final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
 
@@ -317,6 +354,13 @@ public class UIUtils {
         return container;
     }
 
+    /**
+     * Collect all elements of a tree item.
+     *
+     * @param container the container.
+     * @param root      the tree item.
+     */
+    @FXThread
     public static <T> void getAllItems(final Array<TreeItem<T>> container, final TreeItem<T> root) {
 
         container.add(root);
@@ -332,6 +376,7 @@ public class UIUtils {
      * Convert a color from {@link Color} to {@link ColorRGBA}.
      */
     @NotNull
+    @FXThread
     public static ColorRGBA convertColor(@NotNull final Color newValue) {
         return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), (float) newValue.getOpacity());
     }
@@ -341,6 +386,7 @@ public class UIUtils {
      *
      * @param event the event.
      */
+    @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
         if (event == null || event.isControlDown() || event.isShiftDown()) {
             return;
@@ -353,6 +399,7 @@ public class UIUtils {
      *
      * @param cell the edited cell.
      */
+    @FXThread
     public static void updateEditedCell(final Labeled cell) {
 
         final javafx.scene.Node graphic = cell.getGraphic();
@@ -373,6 +420,7 @@ public class UIUtils {
      * @param extensions   the extensions list.
      * @param actionTester the action tester.
      */
+    @FXThread
     public static void openAssetDialog(@NotNull final Consumer<Path> handler, @NotNull final Array<String> extensions,
                                        @Nullable final Predicate<Class<?>> actionTester) {
 
