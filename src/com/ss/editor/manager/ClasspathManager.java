@@ -5,8 +5,10 @@ import static rlib.util.array.ArrayFactory.toArray;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
@@ -19,20 +21,28 @@ import rlib.util.Util;
 import rlib.util.array.Array;
 
 /**
- * THe manager for managing custom classpathes.
+ * The class to manage custom classpathes.
  *
  * @author JavaSaBr
  */
 public class ClasspathManager {
 
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
+
+    @NotNull
     private static final AssetManager ASSET_MANAGER = EDITOR.getAssetManager();
+
+    @NotNull
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
+    @NotNull
     private static final String[] EXTENSIONS = toArray(FileExtensions.JAVA_LIBRARY);
 
+    @Nullable
     private static ClasspathManager instance;
 
+    @NotNull
     public static ClasspathManager getInstance() {
         if (instance == null) instance = new ClasspathManager();
         return instance;
@@ -41,9 +51,10 @@ public class ClasspathManager {
     /**
      * The additional class loader.
      */
+    @Nullable
     private volatile URLClassLoader additionalCL;
 
-    public ClasspathManager() {
+    private ClasspathManager() {
         InitializeManager.valid(getClass());
         updateAdditionalCL();
     }
@@ -51,7 +62,8 @@ public class ClasspathManager {
     /**
      * Update additional classpath.
      */
-    public void updateAdditionalCL() {
+    @FromAnyThread
+    public synchronized void updateAdditionalCL() {
 
         final URLClassLoader currentCL = getAdditionalCL();
 
@@ -75,7 +87,7 @@ public class ClasspathManager {
     /**
      * @param additionalCL the additional class loader.
      */
-    private void setAdditionalCL(@Nullable final URLClassLoader additionalCL) {
+    private synchronized void setAdditionalCL(@Nullable final URLClassLoader additionalCL) {
         this.additionalCL = additionalCL;
     }
 
@@ -83,7 +95,8 @@ public class ClasspathManager {
      * @return the additional class loader.
      */
     @Nullable
-    public URLClassLoader getAdditionalCL() {
+    @FromAnyThread
+    public synchronized URLClassLoader getAdditionalCL() {
         return additionalCL;
     }
 }

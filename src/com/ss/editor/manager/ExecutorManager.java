@@ -1,61 +1,72 @@
 package com.ss.editor.manager;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.executor.impl.FXEditorTaskExecutor;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rlib.concurrent.atomic.AtomicInteger;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import rlib.concurrent.atomic.AtomicInteger;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-
 /**
- * Реализация менеджера по исполнению различных задач.
+ * The class to manage executing some tasks in the some threads.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ExecutorManager {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(ExecutorManager.class);
 
+    @NotNull
     private static final Runtime RUNTIME = Runtime.getRuntime();
 
     private static final int PROP_BACKGROUND_TASK_EXECUTORS = RUNTIME.availableProcessors();
 
+    @Nullable
     private static ExecutorManager instance;
 
+    @NotNull
     public static ExecutorManager getInstance() {
         if (instance == null) instance = new ExecutorManager();
         return instance;
     }
 
     /**
-     * Сервс для выполнения задач по расписанию.
+     * The service to execute tasks using schedule.
      */
+    @NotNull
     private final ScheduledExecutorService scheduledExecutorService;
 
     /**
-     * Список исполнителей фоновых.
+     * The list of background tasks executors.
      */
+    @NotNull
     private final EditorTaskExecutor[] backgroundTaskExecutors;
 
     /**
-     * Исполнитель задач в основном потоке.
+     * The executor of editor tasks.
      */
+    @NotNull
     private final EditorThreadExecutor editorThreadExecutor;
 
     /**
-     * Исполнитель задач в потоке JavaFX.
+     * The executor of javaFX tasks.
      */
+    @NotNull
     private final EditorTaskExecutor fxEditorTaskExecutor;
 
     /**
-     * Индекс следующего исполнителя фоновых задач.
+     * The index of a next background executor.
      */
+    @NotNull
     private final AtomicInteger nextBackgroundTaskExecutor;
 
     private ExecutorManager() {
@@ -76,11 +87,12 @@ public class ExecutorManager {
     }
 
     /**
-     * Добавление на обработку фоновой задачи.
+     * Add a new background task.
      *
-     * @param task фоновая задача.
+     * @param task the background task.
      */
-    public void addBackgroundTask(final Runnable task) {
+    @FromAnyThread
+    public void addBackgroundTask(@NotNull final Runnable task) {
 
         final EditorTaskExecutor[] executors = getBackgroundTaskExecutors();
         final AtomicInteger nextTaskExecutor = getNextBackgroundTaskExecutor();
@@ -96,60 +108,67 @@ public class ExecutorManager {
     }
 
     /**
-     * Добавление на обработку задачи по обновлению FX UI.
+     * Add a new javaFX task.
      *
-     * @param task задача.
+     * @param task the javaFX task.
      */
-    public void addFXTask(final Runnable task) {
+    @FromAnyThread
+    public void addFXTask(@NotNull final Runnable task) {
         final EditorTaskExecutor executor = getFxTaskExecutor();
         executor.execute(task);
     }
 
     /**
-     * Добавление на обработку задачи для выполнения в основном потоке.
+     * Add a new editor task.
      *
-     * @param task задача.
+     * @param task the editor task.
      */
-    public void addEditorThreadTask(final Runnable task) {
+    @FromAnyThread
+    public void addEditorThreadTask(@NotNull final Runnable task) {
         final EditorThreadExecutor executor = getEditorThreadExecutor();
         executor.addToExecute(task);
     }
 
     /**
-     * @return список исполнителей фоновых.
+     * @return the list of background tasks executors.
      */
-    protected EditorTaskExecutor[] getBackgroundTaskExecutors() {
+    @NotNull
+    private EditorTaskExecutor[] getBackgroundTaskExecutors() {
         return backgroundTaskExecutors;
     }
 
     /**
-     * @return исполнитель задач по обновлению FX UI.
+     * @return the executor of javaFX tasks.
      */
-    protected EditorTaskExecutor getFxTaskExecutor() {
+    @NotNull
+    private EditorTaskExecutor getFxTaskExecutor() {
         return fxEditorTaskExecutor;
     }
 
     /**
-     * @return индекс следующего исполнителя фоновых задач.
+     * @return the index of a next background executor.
      */
-    protected AtomicInteger getNextBackgroundTaskExecutor() {
+    @NotNull
+    private AtomicInteger getNextBackgroundTaskExecutor() {
         return nextBackgroundTaskExecutor;
     }
 
     /**
-     * @return исполнитель задач в основном потоке.
+     * @return the executor of editor tasks.
      */
-    public EditorThreadExecutor getEditorThreadExecutor() {
+    @NotNull
+    private EditorThreadExecutor getEditorThreadExecutor() {
         return editorThreadExecutor;
     }
 
     /**
-     * Отправить на выполнение задачу.
+     * Add a scheduled task.
      *
-     * @param runnable выполняемая задача.
-     * @param timeout  задержка перед выполнением.
+     * @param runnable the scheduled task.
+     * @param timeout  the timeout.
      */
-    public void schedule(final Runnable runnable, final long timeout) {
+    @FromAnyThread
+    public void schedule(@NotNull final Runnable runnable, final long timeout) {
         scheduledExecutorService.schedule(runnable, timeout, TimeUnit.MILLISECONDS);
     }
 }

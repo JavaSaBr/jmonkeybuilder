@@ -2,19 +2,12 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.lang.String.valueOf;
-
 import com.ss.editor.FileExtensions;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
-
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
@@ -22,13 +15,20 @@ import rlib.util.FileUtils;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 /**
- * The file icon manager.
+ * The class to manage file icons.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FileIconManager {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
@@ -82,8 +82,10 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_XBUF, "image-svg+xml");
     }
 
+    @Nullable
     private static FileIconManager instance;
 
+    @NotNull
     public static FileIconManager getInstance() {
         if (instance == null) instance = new FileIconManager();
         return instance;
@@ -95,7 +97,7 @@ public class FileIconManager {
     @NotNull
     private final ObjectDictionary<String, Image> imageCache;
 
-    public FileIconManager() {
+    private FileIconManager() {
         InitializeManager.valid(getClass());
         this.imageCache = DictionaryFactory.newObjectDictionary();
     }
@@ -108,6 +110,7 @@ public class FileIconManager {
      * @return the icon.
      */
     @NotNull
+    @FXThread
     public Image getIcon(@NotNull final Path path, int size) {
 
         final String extension = FileUtils.getExtension(path);
@@ -162,6 +165,7 @@ public class FileIconManager {
      * @return the image.
      */
     @NotNull
+    @FXThread
     public Image getImage(@NotNull final String url) {
         return getImage(url, 16);
     }
@@ -174,6 +178,7 @@ public class FileIconManager {
      * @return the image.
      */
     @NotNull
+    @FXThread
     public Image getImage(@NotNull final String url, final int size) {
         final Image image = imageCache.get(url, () -> new Image(url, size, size, false, true));
         return Objects.requireNonNull(image);

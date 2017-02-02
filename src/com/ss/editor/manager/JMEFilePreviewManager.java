@@ -25,6 +25,7 @@ import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
@@ -42,19 +43,26 @@ import rlib.util.array.ArrayFactory;
 import java.nio.file.Path;
 
 /**
- * The manager for creating preview for JME files.
+ * The class to manage previews of JME files.
  *
  * @author JavaSaBr
  */
 public class JMEFilePreviewManager extends AbstractControl {
 
+    @NotNull
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
+
+    @NotNull
     private static final Vector3f CAMERA_LOCATION = new Vector3f(13.660254F, 5.176381F, 13.660254F);
 
+    @NotNull
     private static final Quaternion CAMERA_ROTATION = new Quaternion(0.9159756F, 0.04995022F, -0.37940952F,
             0.12059049F);
 
+    @NotNull
     private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
+
+    @NotNull
     private static final Array<String> AUDIO_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
@@ -65,12 +73,19 @@ public class JMEFilePreviewManager extends AbstractControl {
         AUDIO_FORMATS.add(FileExtensions.AUDIO_WAV);
     }
 
+    @NotNull
     private static final EditorThreadExecutor EDITOR_THREAD_EXECUTOR = EditorThreadExecutor.getInstance();
+
+    @NotNull
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
+    @Nullable
     private static volatile JMEFilePreviewManager instance;
 
+    @NotNull
     public static JMEFilePreviewManager getInstance() {
         if (instance == null) {
             synchronized (JMEFilePreviewManager.class) {
@@ -79,7 +94,7 @@ public class JMEFilePreviewManager extends AbstractControl {
                 }
             }
         }
-        return instance;
+        return requireNonNull(instance);
     }
 
     /**
@@ -128,8 +143,9 @@ public class JMEFilePreviewManager extends AbstractControl {
     private final Node modelNode;
 
     /**
-     * THe copy processor.
+     * The transfer processor.
      */
+    @Nullable
     private volatile FrameTransferSceneProcessor processor;
 
     /**
@@ -137,7 +153,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      */
     private int frame;
 
-    public JMEFilePreviewManager() {
+    private JMEFilePreviewManager() {
         this.imageView = new ImageView();
         this.imageView.setId(CSSIds.JME_PREVIEW_MANAGER_IMAGE_VIEW);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
@@ -163,13 +179,14 @@ public class JMEFilePreviewManager extends AbstractControl {
         frame++;
     }
 
+    @EditorThread
     private void notifyProbeComplete() {
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.attachChild(modelNode);
     }
 
     @Override
-    protected void controlRender(@NotNull final RenderManager rm, @NotNull final ViewPort vp) {
+    protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 
     /**
@@ -202,8 +219,10 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param path the path to object.
      */
+    @EditorThread
     private void showObject(@NotNull final String path) {
         if (processor != null) processor.setEnabled(true);
+
         frame = 0;
 
         final Camera camera = EDITOR.getPreviewCamera();
@@ -225,8 +244,10 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param path the path to material.
      */
+    @EditorThread
     private void showMaterial(@NotNull final String path) {
         if (processor != null) processor.setEnabled(true);
+
         frame = 0;
 
         final Camera camera = EDITOR.getPreviewCamera();
@@ -253,9 +274,12 @@ public class JMEFilePreviewManager extends AbstractControl {
         EDITOR_THREAD_EXECUTOR.addToExecute(this::clearImpl);
     }
 
+    @EditorThread
     private void clearImpl() {
+
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.detachChild(modelNode);
+
         if (processor != null) processor.setEnabled(false);
     }
 
@@ -274,11 +298,11 @@ public class JMEFilePreviewManager extends AbstractControl {
      * @return the transfer processor.
      */
     @NotNull
-    protected FrameTransferSceneProcessor prepareScene() {
+    private FrameTransferSceneProcessor prepareScene() {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Spatial sky = SkyFactory
-                .createSky(assetManager, "graphics/textures/sky/studio.hdr", SkyFactory.EnvMapType.EquirectMap);
+        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
+                        SkyFactory.EnvMapType.EquirectMap);
 
         final DirectionalLight light = new DirectionalLight();
         light.setDirection(LIGHT_DIRECTION);

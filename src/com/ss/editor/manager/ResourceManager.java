@@ -20,6 +20,7 @@ import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.EditorThread;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
@@ -53,15 +54,19 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The manager for working with resources.
+ * The class to manage working with resources of an editor.
  *
  * @author JavaSaBr
  */
 public class ResourceManager extends EditorThread implements AssetEventListener {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(ResourceManager.class);
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     @NotNull
@@ -79,6 +84,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         }
     }
 
+    @Nullable
     private static ResourceManager instance;
 
     @NotNull
@@ -129,6 +135,12 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @NotNull
     private final Array<WatchKey> watchKeys;
 
+    /**
+     * The classpath scanner.
+     */
+    @NotNull
+    private final ClassPathScanner classPathScanner;
+
     public ResourceManager() {
         InitializeManager.valid(getClass());
 
@@ -140,8 +152,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         this.materialDefinitionsInClasspath = ArrayFactory.newArray(String.class);
         this.materialDefinitions = ArrayFactory.newArray(String.class);
 
-        final ClassPathScanner scanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
-        scanner.scanning(path -> {
+        classPathScanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
+        classPathScanner.scanning(path -> {
 
             if (!(path.contains("jme3-core") || path.contains("jme3-effects") || path.contains("tonegod"))) {
                 return false;
@@ -154,7 +166,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
             return true;
         });
 
-        scanner.getAllResources(resourcesInClasspath);
+        classPathScanner.getAllResources(resourcesInClasspath);
         prepareClasspathResources();
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
@@ -175,7 +187,19 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         start();
     }
 
+    /**
+     * Get a classpath scanner.
+     *
+     * @return the classpath scanner.
+     */
+    @NotNull
+    @FromAnyThread
+    public ClassPathScanner getClassPathScanner() {
+        return classPathScanner;
+    }
+
     @Override
+    @FromAnyThread
     public synchronized void assetLoaded(@NotNull final AssetKey key) {
 
         final String extension = key.getExtension();
@@ -187,6 +211,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     @Override
+    @FromAnyThread
     public synchronized void assetRequested(@NotNull final AssetKey key) {
 
         final String extension = key.getExtension();
@@ -216,6 +241,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     @Override
+    @FromAnyThread
     public void assetDependencyNotFound(@NotNull final AssetKey parentKey, @NotNull final AssetKey dependentAssetKey) {
 
     }
@@ -223,6 +249,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Update the list with additional ENVs.
      */
+    @FromAnyThread
     public synchronized void updateAdditionalEnvs() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -257,6 +284,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Handle a removed file.
      */
+    @FromAnyThread
     private synchronized void processEvent(@NotNull final DeletedFileEvent event) {
         if (event.isDirectory()) return;
 
@@ -289,6 +317,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Handle a created file.
      */
+    @FromAnyThread
     private synchronized void processEvent(@NotNull final CreatedFileEvent event) {
         if (event.isDirectory()) return;
         handleFile(event.getFile());
@@ -343,6 +372,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the list of all available material definitions.
      */
     @NotNull
+    @FromAnyThread
     public synchronized Array<String> getAvailableMaterialDefinitions() {
 
         final Array<String> result = ArrayFactory.newArray(String.class);
@@ -362,6 +392,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Reload available resources.
      */
+    @FromAnyThread
     private synchronized void reload() {
 
         final ObjectDictionary<String, Reference> lastModifyTable = getAssetCacheTable();
@@ -406,6 +437,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Handle a file event in an asset folder.
      */
+    @FromAnyThread
     private synchronized void handleFile(@NotNull final Path file) {
         if (Files.isDirectory(file)) return;
 
@@ -505,6 +537,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * @return the watch key or null.
      */
     @Nullable
+    @FromAnyThread
     private synchronized WatchKey findWatchKey(@NotNull final Path path) {
         final Array<WatchKey> watchKeys = getWatchKeys();
         return watchKeys.search(path, (watchKey, toCheck) -> watchKey.watchable().equals(toCheck));
@@ -515,6 +548,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @param path the file.
      */
+    @FromAnyThread
     private synchronized void removeWatchKeyFor(@NotNull final Path path) {
 
         final WatchKey watchKey = findWatchKey(path);
@@ -531,6 +565,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      *
      * @param path the file.
      */
+    @FromAnyThread
     private synchronized void registerWatchKey(@NotNull final Path path) {
         Util.run(() -> getWatchKeys().add(path.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
     }
