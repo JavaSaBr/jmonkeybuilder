@@ -77,7 +77,8 @@ public class GeomUtils {
     /**
      * Get the index of the object in the model.
      */
-    private static boolean getIndex(@NotNull final Object model, @NotNull final Object object, @NotNull final AtomicInteger counter) {
+    private static boolean getIndex(@NotNull final Object model, @NotNull final Object object,
+                                    @NotNull final AtomicInteger counter) {
         counter.incrementAndGet();
 
         if (Objects.equals(model, object)) {
@@ -136,7 +137,8 @@ public class GeomUtils {
      * Find the object by the index in the model.
      */
     @Nullable
-    private static Object getObjectByIndex(@NotNull final Object model, final int index, @NotNull final AtomicInteger counter) {
+    private static Object getObjectByIndex(@NotNull final Object model, final int index,
+                                           @NotNull final AtomicInteger counter) {
 
         if (counter.incrementAndGet() == index) {
             return model;

@@ -45,76 +45,31 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(GAnalytics.class);
 
-    @NotNull
     private static final String PARAM_PROTOCOL_VERSION = "v";
-
-    @NotNull
     private static final String PARAM_TRACKING_ID = "tid";
-
-    @NotNull
     private static final String PARAM_CLIENT_ID = "cid";
-
-    @NotNull
     private static final String PARAM_HIT_TYPE = "t";
-
-    @NotNull
     private static final String PARAM_EVENT_CATEGORY = "ec";
-
-    @NotNull
     private static final String PARAM_EVENT_ACTION = "ea";
-
-    @NotNull
     private static final String PARAM_EVENT_LABEL = "el";
-
-    @NotNull
     private static final String PARAM_PAGE_VIEW_LOCATION = "dl";
-
-    @NotNull
     private static final String PARAM_PAGE_VIEW_TITLE = "dt";
-
-    @NotNull
     private static final String PARAM_PAGE_VIEW_PAGE = "dp";
-
-    @NotNull
     private static final String PARAM_USER_TIMING_CATEGORY = "utc";
-
-    @NotNull
     private static final String PARAM_USER_TIMING_VAR_NAME = "utv";
-
-    @NotNull
     private static final String PARAM_USER_TIMING_TIME = "utt";
-
-    @NotNull
     private static final String PARAM_USER_TIMING_LABEL = "utl";
-
-    @NotNull
     private static final String PARAM_EXCEPTION_DESCRIPTION = "exd";
-
-    @NotNull
     private static final String PARAM_IS_EXCEPTION_FATAL = "exf";
-
-    @NotNull
     private static final String PARAM_CUSTOM_DIMENSION = "cd";
 
-    @NotNull
     private static final String FIELD_OS = PARAM_CUSTOM_DIMENSION + "1";
-
-    @NotNull
     private static final String FIELD_APP_VERSION = PARAM_CUSTOM_DIMENSION + "2";
-
-    @NotNull
     private static final String FIELD_LOCALE = PARAM_CUSTOM_DIMENSION + "3";
-
-    @NotNull
     private static final String FIELD_USER_ID = PARAM_CUSTOM_DIMENSION + "4";
 
-    @NotNull
     private static final String PROP_ANALYTICS_HOST = "http://www.google-analytics.com/collect";
-
-    @NotNull
     private static final String PROP_TRACKING_ID = "UA-89459340-1";
-
-    @NotNull
     private static final String PROP_CLIENT_ID = "89459340";
 
     @NotNull

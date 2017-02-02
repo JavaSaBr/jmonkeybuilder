@@ -27,6 +27,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class FolderAssetLocator implements AssetLocator {
 
+    @NotNull
     private static final Array<String> URL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {

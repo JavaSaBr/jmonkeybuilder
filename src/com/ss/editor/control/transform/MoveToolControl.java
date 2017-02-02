@@ -43,13 +43,8 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
-    @NotNull
     private static final String NODE_MOVE_X = "move_x";
-
-    @NotNull
     private static final String NODE_MOVE_Y = "move_y";
-
-    @NotNull
     private static final String NODE_MOVE_Z = "move_z";
 
     @NotNull

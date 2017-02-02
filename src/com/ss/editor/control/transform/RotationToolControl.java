@@ -36,13 +36,8 @@ public class RotationToolControl extends AbstractControl implements TransformCon
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
-    @NotNull
     private static final String NODE_ROTATION_X = "rot_x";
-
-    @NotNull
     private static final String NODE_ROTATION_Y = "rot_y";
-
-    @NotNull
     private static final String NODE_ROTATION_Z = "rot_z";
 
     @NotNull

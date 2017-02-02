@@ -27,6 +27,7 @@ import java.util.*;
  */
 public class MaterialUtils {
 
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**

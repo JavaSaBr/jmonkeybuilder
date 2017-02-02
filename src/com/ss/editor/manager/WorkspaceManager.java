@@ -25,10 +25,7 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class WorkspaceManager {
 
-    @NotNull
     public static final String FOLDER_EDITOR = ".jme3-spaceshift-editor";
-
-    @NotNull
     public static final String FILE_WORKSPACE = "workspace";
 
     @Nullable

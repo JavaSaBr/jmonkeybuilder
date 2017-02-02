@@ -1,5 +1,8 @@
 package com.ss.editor.util;
 
+import static java.lang.Math.acos;
+import static java.lang.Math.toDegrees;
+import static java.lang.ThreadLocal.withInitial;
 import static rlib.util.ClassUtils.cast;
 import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.math.Vector2f;
@@ -45,11 +48,14 @@ import java.util.List;
  */
 public abstract class EditorUtil {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
 
+    @NotNull
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
-    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
+    @NotNull
+    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
 
     /**
      * @param path the path to resource.
@@ -87,13 +93,14 @@ public abstract class EditorUtil {
             return 180.0F;
         }
 
-        return (float) Math.toDegrees(Math.acos(delta));
+        return (float) toDegrees(acos(delta));
     }
 
     /**
      * @param path the path to resource.
      * @return the input stream of the resource or null.
      */
+    @NotNull
     public static InputStream getInputStream(@NotNull final String path) {
         return Object.class.getResourceAsStream(path);
     }
@@ -103,6 +110,7 @@ public abstract class EditorUtil {
      *
      * @return the user name.
      */
+    @NotNull
     public static String getUserName() {
         return System.getProperty("user.name");
     }
@@ -148,6 +156,7 @@ public abstract class EditorUtil {
      * @param time the unix time.
      * @return the string presentation.
      */
+    @NotNull
     public static String timeFormat(final long time) {
         final SimpleDateFormat format = LOCATE_DATE_FORMAT.get();
         return format.format(new Date(time));
@@ -285,6 +294,7 @@ public abstract class EditorUtil {
     /**
      * Create a dialog for showing the exception.
      */
+    @NotNull
     private static Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
                                           @Nullable final String stackTrace) {
 

@@ -13,6 +13,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.Editor;
 import com.ss.editor.util.LocalObjects;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EditorLightNode extends Node {
 
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**

@@ -22,10 +22,7 @@ import java.util.Map;
  */
 public class AnimationUtils {
 
-    @NotNull
     private static final Field ANIMATIONS_MAP_FIELD;
-
-    @NotNull
     private static final Field ANIMATION_NAME_FIELD;
 
     static {

@@ -18,10 +18,7 @@ import java.lang.reflect.Field;
  */
 public class AudioNodeUtils {
 
-    @NotNull
     private static final Field AUDIO_DATA_FIELD;
-
-    @NotNull
     private static final Field AUDIO_KEY_FIELD;
 
     static {
@@ -45,7 +42,6 @@ public class AudioNodeUtils {
      * @param audioData the audio data.
      * @param audioKey  the audio key.
      */
-    @NotNull
     @EditorThread
     public static void updateData(@NotNull final AudioNode audioNode, @Nullable final AudioData audioData,
                                   @Nullable final AudioKey audioKey) {

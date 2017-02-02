@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EditorAudioNode extends Node {
 
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**

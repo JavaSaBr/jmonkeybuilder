@@ -45,11 +45,13 @@ import javafx.stage.StageStyle;
  */
 public class JFXApplication extends Application {
 
+    @Nullable
     private static JFXApplication instance;
 
+    @NotNull
     @FromAnyThread
     public static JFXApplication getInstance() {
-        return instance;
+        return requireNonNull(instance);
     }
 
     /**

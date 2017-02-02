@@ -33,13 +33,8 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
-    @NotNull
     private static final String NODE_SCALE_X = "scale_x";
-
-    @NotNull
     private static final String NODE_SCALE_Y = "scale_y";
-
-    @NotNull
     private static final String NODE_SCALE_Z = "scale_z";
 
     @NotNull

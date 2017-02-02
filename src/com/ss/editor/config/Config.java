@@ -22,22 +22,16 @@ import rlib.util.os.OperatingSystem;
  */
 public abstract class Config {
 
-    @NotNull
     private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
-    @NotNull
     public static final String TITLE = "jME3 SpaceShift Editor";
-
-    @NotNull
     public static final String VERSION = "v.0.9.3";
 
-    @NotNull
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
     /**
      * The path to application folder.
      */
-    @NotNull
     public static final String PROJECT_PATH;
 
     /**
