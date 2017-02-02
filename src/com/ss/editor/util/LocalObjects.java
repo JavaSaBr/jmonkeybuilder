@@ -21,6 +21,7 @@ public class LocalObjects {
 
     private static final int SIZE = 20;
 
+    @NotNull
     public static LocalObjects get() {
         return ((EditorThread) currentThread()).getLocal();
     }
@@ -28,26 +29,31 @@ public class LocalObjects {
     /**
      * The buffer of vectors.
      */
+    @NotNull
     private final CycleBuffer<Vector3f> vectorBuffer;
 
     /**
      * The buffer of rotation.
      */
+    @NotNull
     private final CycleBuffer<Quaternion> rotationBuffer;
 
     /**
      * The buffer of rays.
      */
+    @NotNull
     private final CycleBuffer<Ray> rayBuffer;
 
     /**
      * The buffer of matrixes.
      */
+    @NotNull
     private final CycleBuffer<Matrix3f> matrix3fBuffer;
 
     /**
      * The buffer of matrix float arrays.
      */
+    @NotNull
     private final CycleBuffer<float[]> matrixFloatBuffer;
 
     @SuppressWarnings("unchecked")

@@ -12,7 +12,6 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.PostFilterViewFile;
-import com.ss.editor.serializer.PostFilterViewSerializer;
 import com.ss.editor.state.editor.impl.post.filter.PostFilterEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;

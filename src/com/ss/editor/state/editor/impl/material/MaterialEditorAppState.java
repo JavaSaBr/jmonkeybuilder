@@ -1,7 +1,6 @@
 package com.ss.editor.state.editor.impl.material;
 
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -25,9 +24,8 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
-
 import org.jetbrains.annotations.NotNull;
-
+import org.jetbrains.annotations.Nullable;
 import rlib.geom.util.AngleUtils;
 
 /**
@@ -55,30 +53,35 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * The test box.
      */
+    @NotNull
     private final Geometry testBox;
 
     /**
      * The test sphere.
      */
+    @NotNull
     private final Geometry testSphere;
 
     /**
      * The test quad.
      */
+    @NotNull
     private final Geometry testQuad;
 
     /**
      * The model node.
      */
+    @Nullable
     private Node modelNode;
 
     /**
      * The current model mode.
      */
+    @Nullable
     private ModelType currentModelType;
 
     /**
-     * THe flag of enabling light.
+     * The flag of enabling light.
      */
     private boolean lightEnabled;
 
@@ -100,7 +103,9 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         TangentGenerator.useMikktspaceGenerator(testQuad);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr", SkyFactory.EnvMapType.EquirectMap);
+
+        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
+                SkyFactory.EnvMapType.EquirectMap);
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(sky);
@@ -124,6 +129,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * @return the test box.
      */
+    @NotNull
     private Geometry getTestBox() {
         return testBox;
     }
@@ -131,6 +137,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * @return the test quad.
      */
+    @NotNull
     private Geometry getTestQuad() {
         return testQuad;
     }
@@ -138,6 +145,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * @return the test sphere.
      */
+    @NotNull
     private Geometry getTestSphere() {
         return testSphere;
     }
@@ -145,14 +153,14 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * Update the {@link Material}.
      */
-    public void updateMaterial(final Material material) {
+    public void updateMaterial(@NotNull final Material material) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterialImpl(material));
     }
 
     /**
      * Update the {@link Material} in the {@link EditorThread}.
      */
-    private void updateMaterialImpl(final Material material) {
+    private void updateMaterialImpl(@NotNull final Material material) {
 
         final Geometry testBox = getTestBox();
         testBox.setMaterial(material);
@@ -167,21 +175,22 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * @return the model node.
      */
+    @NotNull
     private Node getModelNode() {
-        return modelNode;
+        return requireNonNull(modelNode);
     }
 
     /**
      * Change the {@link ModelType}.
      */
-    public void changeMode(final ModelType modelType) {
+    public void changeMode(@NotNull final ModelType modelType) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeModeImpl(modelType));
     }
 
     /**
      * Change the {@link ModelType} in the {@link EditorThread}.
      */
-    private void changeModeImpl(final ModelType modelType) {
+    private void changeModeImpl(@NotNull final ModelType modelType) {
 
         final Node modelNode = getModelNode();
         modelNode.detachAllChildren();
@@ -207,14 +216,14 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * Change the {@link Bucket}.
      */
-    public void changeBucketType(final Bucket bucket) {
+    public void changeBucketType(@NotNull final Bucket bucket) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeBucketTypeImpl(bucket));
     }
 
     /**
      * Change the {@link Bucket} in the {@link EditorThread}.
      */
-    private void changeBucketTypeImpl(final Bucket bucket) {
+    private void changeBucketTypeImpl(@NotNull final Bucket bucket) {
 
         final Geometry testQuad = getTestQuad();
         testQuad.setQueueBucket(bucket);
@@ -272,14 +281,15 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     /**
      * @return the current model mode.
      */
+    @NotNull
     private ModelType getCurrentModelType() {
-        return currentModelType;
+        return requireNonNull(currentModelType);
     }
 
     /**
      * @param currentModelType the current model mode.
      */
-    private void setCurrentModelType(final ModelType currentModelType) {
+    private void setCurrentModelType(@NotNull final ModelType currentModelType) {
         this.currentModelType = currentModelType;
     }
 

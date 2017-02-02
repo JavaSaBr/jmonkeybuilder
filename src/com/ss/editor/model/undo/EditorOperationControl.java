@@ -1,5 +1,6 @@
 package com.ss.editor.model.undo;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 
@@ -16,7 +17,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class EditorOperationControl {
 
-    public static final int HISTORY_SIZE = 20;
+    private static final int HISTORY_SIZE = 20;
 
     /**
      * The list of operations.
@@ -86,6 +87,7 @@ public class EditorOperationControl {
      *
      * @param operation the operation.
      */
+    @FXThread
     private void executeImpl(@NotNull final EditorOperation operation) {
 
         final UndoableEditor editor = getEditor();
@@ -117,6 +119,7 @@ public class EditorOperationControl {
     /**
      * Undo the last operation.
      */
+    @FXThread
     private synchronized void undoImpl() {
 
         final Array<EditorOperation> operations = getOperations();
@@ -147,6 +150,7 @@ public class EditorOperationControl {
     /**
      * Redo the last undo operation.
      */
+    @FXThread
     private void redoImpl() {
 
         final Array<EditorOperation> toRedo = getToRedo();

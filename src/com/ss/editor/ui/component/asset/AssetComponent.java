@@ -185,7 +185,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
         final Workspace workspace = workspaceManager.getCurrentWorkspace();
 
         if (finished && workspace != null) {
-            final Array<Path> expandedFolders = workspace.getExpandedFolders();
+            final Array<Path> expandedFolders = workspace.getExpandedAbsoluteFolders();
             expandedFolders.forEach(resourceTree::markExpand);
         }
 

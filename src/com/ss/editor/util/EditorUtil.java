@@ -68,7 +68,8 @@ public abstract class EditorUtil {
      * @param second the second point.
      * @return the angle between these points.
      */
-    public static float getAngle(@NotNull final Vector2f center, @NotNull final Vector2f first, @NotNull final Vector2f second) {
+    public static float getAngle(@NotNull final Vector2f center, @NotNull final Vector2f first,
+                                 @NotNull final Vector2f second) {
 
         final float x = center.getX();
         final float y = center.getY();
@@ -134,7 +135,8 @@ public abstract class EditorUtil {
      * @param store  the container of the result.
      * @param length the distance.
      */
-    public static void movePoint(@NotNull final Vector3f first, @NotNull final Vector3f second, final @NotNull Vector3f store, final int length) {
+    public static void movePoint(@NotNull final Vector3f first, @NotNull final Vector3f second,
+                                 final @NotNull Vector3f store, final int length) {
         store.x = first.x + (second.x - first.x) * length;
         store.y = first.y + (second.y - first.y) * length;
         store.z = first.z + (second.z - first.z) * length;
@@ -227,14 +229,16 @@ public abstract class EditorUtil {
     /**
      * Handle exception.
      */
-    public static void handleException(@Nullable final Logger logger, @Nullable final Object owner, @NotNull final Exception e) {
+    public static void handleException(@Nullable final Logger logger, @Nullable final Object owner,
+                                       @NotNull final Exception e) {
         handleException(logger, owner, e, null);
     }
 
     /**
      * Handle exception.
      */
-    public static void handleException(@Nullable Logger logger, @Nullable final Object owner, @NotNull final Exception e, @Nullable final Runnable callback) {
+    public static void handleException(@Nullable Logger logger, @Nullable final Object owner,
+                                       @NotNull final Exception e, @Nullable final Runnable callback) {
         if (logger == null) logger = LOGGER;
 
         if (owner == null) {
@@ -281,7 +285,8 @@ public abstract class EditorUtil {
     /**
      * Create a dialog for showing the exception.
      */
-    private static Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage, @Nullable final String stackTrace) {
+    private static Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
+                                          @Nullable final String stackTrace) {
 
         final TextArea textArea = new TextArea(stackTrace);
         textArea.setEditable(false);

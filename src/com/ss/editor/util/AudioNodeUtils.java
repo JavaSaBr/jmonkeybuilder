@@ -45,6 +45,7 @@ public class AudioNodeUtils {
      * @param audioData the audio data.
      * @param audioKey  the audio key.
      */
+    @NotNull
     @EditorThread
     public static void updateData(@NotNull final AudioNode audioNode, @Nullable final AudioData audioData,
                                   @Nullable final AudioKey audioKey) {
@@ -62,6 +63,7 @@ public class AudioNodeUtils {
      * @param audioNode the audio node.
      * @return the audio key.
      */
+    @NotNull
     @FromAnyThread
     public static AudioKey getAudioKey(@NotNull final AudioNode audioNode) {
         try {

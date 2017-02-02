@@ -3,6 +3,7 @@ package com.ss.editor.state.editor.impl.scene;
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 import static java.util.Objects.requireNonNull;
 
+import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
@@ -64,7 +65,7 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
+ * The base implementation of the {@link AppState} for the editor.
  *
  * @author JavaSaBr
  */
