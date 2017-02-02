@@ -5,6 +5,10 @@ import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static java.util.Objects.requireNonNull;
 import com.jme3.animation.SkeletonControl;
+import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.control.VehicleControl;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.Node;
@@ -20,7 +24,9 @@ import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.physics.*;
+import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacterControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBodyControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.CreateStaticRigidBodyControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.CreateVehicleControlAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -80,13 +86,24 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
 
         final ObservableList<MenuItem> items = createControlsMenu.getItems();
+        items.add(new CreateCustomControlAction(nodeTree, this));
 
-        items.addAll(new CreateCustomControlAction(nodeTree, this),
-                     new CreateStaticRigidBodyControlAction(nodeTree, this),
-                     new CreateVehicleControlAction(nodeTree, this),
-                     new CreateRigidBodyControlAction(nodeTree, this),
-                     new CreateMotionControlAction(nodeTree, this),
-                     new CreateCharacterControlAction(nodeTree, this));
+        if (element.getControl(RigidBodyControl.class) == null) {
+            items.add(new CreateStaticRigidBodyControlAction(nodeTree, this));
+            items.add(new CreateRigidBodyControlAction(nodeTree, this));
+        }
+
+        if (element.getControl(VehicleControl.class) == null) {
+            items.add(new CreateVehicleControlAction(nodeTree, this));
+        }
+
+        if (element.getControl(CharacterControl.class) == null) {
+            items.add(new CreateCharacterControlAction(nodeTree, this));
+        }
+
+        if (element.getControl(MotionEvent.class) == null) {
+            items.add(new CreateMotionControlAction(nodeTree, this));
+        }
 
         if (skeletonControl != null) {
             //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
