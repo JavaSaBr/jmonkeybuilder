@@ -1,5 +1,9 @@
 package com.ss.editor.control.transform;
 
+import static com.ss.editor.util.GeomUtils.getDirection;
+import static com.ss.editor.util.GeomUtils.getLeft;
+import static com.ss.editor.util.GeomUtils.getUp;
+import static java.util.Objects.requireNonNull;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
@@ -17,6 +21,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
+import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.LocalObjects;
@@ -26,39 +31,51 @@ import org.jetbrains.annotations.NotNull;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
+import java.util.Objects;
+
 /**
- * THe class for implementing the moving control.
+ * The implementation of the moving control.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class MoveToolControl extends AbstractControl implements TransformControl {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
-    public static final String NODE_MOVE_X = "move_x";
-    public static final String NODE_MOVE_Y = "move_y";
-    public static final String NODE_MOVE_Z = "move_z";
+    @NotNull
+    private static final String NODE_MOVE_X = "move_x";
 
+    @NotNull
+    private static final String NODE_MOVE_Y = "move_y";
+
+    @NotNull
+    private static final String NODE_MOVE_Z = "move_z";
+
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The scene editor controller.
      */
+    @NotNull
     private final SceneEditorControl editorControl;
 
     /**
      * The collision plane.
      */
+    @NotNull
     private final Node collisionPlane;
 
-    public MoveToolControl(final SceneEditorControl editorControl) {
+    public MoveToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
-        this.collisionPlane = editorControl.getCollisionPlane();
+        this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());
     }
 
     /**
      * @return the collision plane.
      */
+    @NotNull
     private Node getCollisionPlane() {
         return collisionPlane;
     }
@@ -66,6 +83,7 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     /**
      * @return the scene editor controller.
      */
+    @NotNull
     private SceneEditorControl getEditorControl() {
         return editorControl;
     }
@@ -250,26 +268,28 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     }
 
     /**
-     * Процесс перемещения объектов.
+     * Process of moving objects.
      *
-     * @param distance       дистанция перемещения.
-     * @param pickedAxis     ось перемещения.
-     * @param toTransform    объект для перемещения.
-     * @param selectedCenter центр трансформации.
+     * @param distance       the moving distance,
+     * @param pickedAxis     the moving axis.
+     * @param toTransform    the moving object.
+     * @param selectedCenter the transform's center.
      */
-    private void translateObjects(final float distance, final PickedAxis pickedAxis, final Spatial toTransform, final Transform selectedCenter) {
+    private void translateObjects(final float distance, final PickedAxis pickedAxis, final Spatial toTransform,
+                                  @NotNull final Transform selectedCenter) {
 
         final LocalObjects local = LocalObjects.get();
         final Vector3f temp = local.getNextVector();
+        final Vector3f mult = local.getNextVector();
         final Vector3f currentLocation = selectedCenter.getTranslation();
         final Quaternion currentRotation = selectedCenter.getRotation();
 
         if (pickedAxis == PickedAxis.X) {
-            currentLocation.addLocal(GeomUtils.getLeft(currentRotation, temp).mult(distance));
+            currentLocation.addLocal(getLeft(currentRotation, temp).mult(distance, mult));
         } else if (pickedAxis == PickedAxis.Y) {
-            currentLocation.addLocal(GeomUtils.getUp(currentRotation, temp).mult(distance));
+            currentLocation.addLocal(getUp(currentRotation, temp).mult(distance, mult));
         } else if (pickedAxis == PickedAxis.Z) {
-            currentLocation.addLocal(GeomUtils.getDirection(currentRotation, temp).mult(distance));
+            currentLocation.addLocal(getDirection(currentRotation, temp).mult(distance, mult));
         }
 
         toTransform.setLocalTranslation(currentLocation);
@@ -283,6 +303,6 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     }
 
     @Override
-    protected void controlRender(final RenderManager renderManager, final ViewPort viewPort) {
+    protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 }

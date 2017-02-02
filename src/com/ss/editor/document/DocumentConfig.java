@@ -16,11 +16,11 @@ import rlib.util.VarTable;
  */
 public final class DocumentConfig extends AbstractStreamDocument<VarTable> {
 
-    public static final String NODE_LIST = "list";
-    public static final String NODE_SET = "set";
+    private static final String NODE_LIST = "list";
+    private static final String NODE_SET = "set";
 
-    public static final String ATTR_NAME = "name";
-    public static final String ATTR_VALUE = "value";
+    private static final String ATTR_NAME = "name";
+    private static final String ATTR_VALUE = "value";
 
     public DocumentConfig(@NotNull final InputStream stream) {
         super(stream);

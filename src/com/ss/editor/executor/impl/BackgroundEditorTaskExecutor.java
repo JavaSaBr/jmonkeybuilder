@@ -1,5 +1,6 @@
 package com.ss.editor.executor.impl;
 
+import org.jetbrains.annotations.NotNull;
 import rlib.util.array.Array;
 
 import static java.lang.Math.min;
@@ -33,7 +34,7 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
     }
 
     @Override
-    protected void doExecute(final Array<Runnable> execute, final Array<Runnable> executed) {
+    protected void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed) {
 
         final Runnable[] array = execute.array();
 

@@ -22,26 +22,34 @@ import rlib.util.os.OperatingSystem;
  */
 public abstract class Config {
 
-    public static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
+    @NotNull
+    private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
+    @NotNull
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.9.2";
 
-    public static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
+    @NotNull
+    public static final String VERSION = "v.0.9.3";
+
+    @NotNull
+    private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
     /**
      * The path to application folder.
      */
+    @NotNull
     public static final String PROJECT_PATH;
 
     /**
      * The graphics adapter.
      */
+    @NotNull
     public static final GraphicsDevice GRAPHICS_DEVICE;
 
     /**
      * The operation system.
      */
+    @NotNull
     public static final OperatingSystem OPERATING_SYSTEM;
 
     /**

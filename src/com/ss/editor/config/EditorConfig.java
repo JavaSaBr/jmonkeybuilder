@@ -1,5 +1,6 @@
 package com.ss.editor.config;
 
+import static java.util.Objects.requireNonNull;
 import static rlib.util.Util.get;
 
 import com.jme3.asset.AssetEventListener;
@@ -27,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -42,42 +44,45 @@ import rlib.logging.LoggerManager;
  */
 public final class EditorConfig implements AssetEventListener {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorConfig.class);
 
-    public static final String GRAPHICS_ALIAS = "Graphics";
-    public static final String SCREEN_ALIAS = "Screen";
-    public static final String ASSET_ALIAS = "ASSET";
-    public static final String ASSET_OTHER = "Other";
-    public static final String ASSET_EDITING = "Editing";
+    private static final String GRAPHICS_ALIAS = "Graphics";
+    private static final String SCREEN_ALIAS = "Screen";
+    private static final String ASSET_ALIAS = "ASSET";
+    private static final String ASSET_OTHER = "Other";
+    private static final String ASSET_EDITING = "Editing";
 
-    public static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
-    public static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
-    public static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
-    public static final String PREF_SCREEN_DECORATED = SCREEN_ALIAS + "." + "decorated";
+    private static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
+    private static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
+    private static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
+    private static final String PREF_SCREEN_DECORATED = SCREEN_ALIAS + "." + "decorated";
 
-    public static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
-    public static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
-    public static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
-    public static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
-    public static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
-    public static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
-    public static final String PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT = GRAPHICS_ALIAS + "." + "toneMapFilterWhitePoint";
+    private static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
+    private static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
+    private static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
+    private static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
+    private static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
+    private static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
+    private static final String PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT = GRAPHICS_ALIAS + "." + "toneMapFilterWhitePoint";
 
-    public static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
-    public static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
+    private static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
+    private static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
-    public static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
-    public static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
-    public static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
-    public static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
-    public static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
-    public static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
-    public static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
-    public static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
-    public static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion";
+    private static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
+    private static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
+    private static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
+    private static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
+    private static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
+    private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
+    private static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
+    private static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
+    private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion";
 
+    @Nullable
     private static volatile EditorConfig instance;
 
+    @NotNull
     public static EditorConfig getInstance() {
 
         if (instance == null) {
@@ -94,26 +99,31 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * The list of last opened asset folders.
      */
+    @NotNull
     private final List<String> lastOpenedAssets;
 
     /**
      * The current white point for the tone map filter.
      */
+    @Nullable
     private volatile Vector3f toneMapFilterWhitePoint;
 
     /**
      * The current asset folder.
      */
+    @Nullable
     private volatile Path currentAsset;
 
     /**
      * The path to the folder with additional classpath.
      */
+    @Nullable
     private volatile Path additionalClasspath;
 
     /**
      * The path to the folder with additional envs.
      */
+    @Nullable
     private volatile Path additionalEnvs;
 
     /**
@@ -365,7 +375,7 @@ public final class EditorConfig implements AssetEventListener {
     @NotNull
     @FromAnyThread
     public Vector3f getToneMapFilterWhitePoint() {
-        return toneMapFilterWhitePoint;
+        return requireNonNull(toneMapFilterWhitePoint);
     }
 
     /**
@@ -714,9 +724,13 @@ public final class EditorConfig implements AssetEventListener {
 
         prefs.put(PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT, whitePoint.getX() + "," + whitePoint.getY() + "," + whitePoint.getZ());
 
-        if (currentAsset != null && !Files.exists(currentAsset)) currentAsset = null;
-        if (additionalClasspath != null && !Files.exists(additionalClasspath))
+        if (currentAsset != null && !Files.exists(currentAsset)) {
+            currentAsset = null;
+        }
+
+        if (additionalClasspath != null && !Files.exists(additionalClasspath)) {
             additionalClasspath = null;
+        }
 
         if (currentAsset != null) {
             prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());
@@ -739,7 +753,6 @@ public final class EditorConfig implements AssetEventListener {
         final List<String> lastOpenedAssets = getLastOpenedAssets();
 
         prefs.putByteArray(PREF_LAST_OPENED_ASSETS, EditorUtil.serialize((Serializable) lastOpenedAssets));
-
         try {
             prefs.flush();
         } catch (final BackingStoreException e) {

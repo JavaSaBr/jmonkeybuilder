@@ -1,6 +1,7 @@
 package com.ss.editor.executor.impl;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
 import com.sun.javafx.application.PlatformImpl;
 
@@ -40,7 +41,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         for (int i = 0, length = execute.size(); i < length; ) {
             try {
 
-                for (int count = 0, limit = EXECUTE_LIMIT; count < limit && i < length; count++, i++) {
+                for (int count = 0; count < EXECUTE_LIMIT && i < length; count++, i++) {
 
                     final Runnable task = array[i];
                     try {
@@ -100,6 +101,7 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
         }
     }
 
+    @FromAnyThread
     private void executeInFXUIThread() {
         while (true) {
             try {

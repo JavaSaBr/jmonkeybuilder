@@ -26,11 +26,13 @@ import rlib.util.array.ArrayFactory;
  */
 public class FileConverterRegistry {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileConverterRegistry.class);
 
     @NotNull
     private static final FileConverterRegistry INSTANCE = new FileConverterRegistry();
 
+    @NotNull
     public static FileConverterRegistry getInstance() {
         return INSTANCE;
     }
@@ -41,7 +43,7 @@ public class FileConverterRegistry {
     @NotNull
     private final Array<FileConverterDescription> descriptions;
 
-    public FileConverterRegistry() {
+    private FileConverterRegistry() {
         this.descriptions = ArrayFactory.newArray(FileConverterDescription.class);
         addDescription(BlendToJ3oFileConverter.DESCRIPTION);
         addDescription(FBXToJ3oFileConverter.DESCRIPTION);
@@ -65,7 +67,7 @@ public class FileConverterRegistry {
      */
     @NotNull
     @FromAnyThread
-    public Array<FileConverterDescription> getDescriptions() {
+    private Array<FileConverterDescription> getDescriptions() {
         return descriptions;
     }
 
@@ -99,7 +101,7 @@ public class FileConverterRegistry {
      * @return the new converter.
      */
     @FromAnyThread
-    public FileConverter newCreator(final FileConverterDescription description, final Path file) {
+    public FileConverter newCreator(@NotNull final FileConverterDescription description, @NotNull final Path file) {
         final Supplier<FileConverter> constructor = description.getConstructor();
         return constructor.get();
     }

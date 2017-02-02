@@ -20,6 +20,7 @@ import rlib.util.array.ConcurrentArray;
  */
 public class EditorThreadExecutor {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorThreadExecutor.class);
 
     @NotNull
@@ -41,7 +42,7 @@ public class EditorThreadExecutor {
     @NotNull
     private final Array<Runnable> execute;
 
-    public EditorThreadExecutor() {
+    private EditorThreadExecutor() {
         this.waitTasks = ArrayFactory.newConcurrentAtomicARSWLockArray(Runnable.class);
         this.execute = ArrayFactory.newArray(Runnable.class);
     }
@@ -72,6 +73,7 @@ public class EditorThreadExecutor {
         }
     }
 
+    @EditorThread
     private static void execute(@NotNull final Runnable runnable) {
         try {
             runnable.run();

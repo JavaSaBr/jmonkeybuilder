@@ -24,45 +24,56 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
 /**
- * Реализация контролера манипулятора маштабирования объекта.
+ * The implementation of the scaling control.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ScaleToolControl extends AbstractControl implements TransformControl {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
-    public static final String NODE_SCALE_X = "scale_x";
-    public static final String NODE_SCALE_Y = "scale_y";
-    public static final String NODE_SCALE_Z = "scale_z";
+    @NotNull
+    private static final String NODE_SCALE_X = "scale_x";
 
+    @NotNull
+    private static final String NODE_SCALE_Y = "scale_y";
+
+    @NotNull
+    private static final String NODE_SCALE_Z = "scale_z";
+
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Контролер редактора сцены.
+     * The scene editor controller.
      */
+    @NotNull
     private final SceneEditorControl editorControl;
 
     /**
-     * Поскость для определения перемещения.
+     * The collision plane.
      */
+    @NotNull
     private final Node collisionPlane;
 
-    public ScaleToolControl(final SceneEditorControl editorControl) {
+    public ScaleToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
-        this.collisionPlane = editorControl.getCollisionPlane();
+        this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());
     }
 
     /**
-     * @return плоскость для определения перемещения.
+     * @return the collision plane.
      */
+    @NotNull
     private Node getCollisionPlane() {
         return collisionPlane;
     }
 
     /**
-     * @return контролер редактора сцены.
+     * @return the scene editor controller.
      */
+    @NotNull
     private SceneEditorControl getEditorControl() {
         return editorControl;
     }
@@ -163,6 +174,6 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
     }
 
     @Override
-    protected void controlRender(final RenderManager renderManager, final ViewPort viewPort) {
+    protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 }
