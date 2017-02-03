@@ -91,9 +91,6 @@ public class BulletVehicleDebugControl extends AbstractPhysicsDebugControl {
 
         final int numWheels = body.getNumWheels();
 
-        final List<Spatial> children = suspensionNode.getChildren();
-        if (children.size() * 4 == numWheels) return;
-
         suspensionNode.detachAllChildren();
 
         for (int i = 0; i < numWheels; i++) {

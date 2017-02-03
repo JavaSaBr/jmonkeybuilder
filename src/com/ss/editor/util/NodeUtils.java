@@ -94,15 +94,22 @@ public class NodeUtils {
     @Nullable
     public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
         if (!(spatial instanceof Node)) return null;
+        return ((Node) spatial).getChild(name);
+    }
+
+    /**
+     * Find a first spatial in the {@link Spatial}.
+     */
+    @Nullable
+    public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
+        if (condition.test(spatial)) return spatial;
+        if (!(spatial instanceof Node)) return null;
 
         final Node node = (Node) spatial;
 
         for (final Spatial children : node.getChildren()) {
-            final Spatial geometry = findSpatial(children, name);
-            if (geometry != null) return geometry;
-            if (StringUtils.equals(children.getName(), name)) {
-                return children;
-            }
+            final Spatial subSpatial = findSpatial(children, condition);
+            if (subSpatial != null) return subSpatial;
         }
 
         return null;

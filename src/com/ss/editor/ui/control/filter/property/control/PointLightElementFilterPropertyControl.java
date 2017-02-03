@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.filter.property.control;
 
-import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.LightSelectorDialog;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
@@ -11,20 +11,20 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.control.Label;
 
 /**
- * The implementation of the {@link AbstractElementFilterPropertyControl} to edit direction light from a scene.
+ * The implementation of the {@link AbstractElementFilterPropertyControl} to edit point light from a scene.
  *
  * @author JavaSaBr
  */
-public class DirectionLightElementPropertyControl<D> extends AbstractElementFilterPropertyControl<D, DirectionalLight> {
+public class PointLightElementFilterPropertyControl<D> extends AbstractElementFilterPropertyControl<D, PointLight> {
 
-    public DirectionLightElementPropertyControl(@Nullable final DirectionalLight propertyValue,
-                                                @NotNull final String propertyName,
-                                                @NotNull final SceneChangeConsumer changeConsumer) {
-        super(DirectionalLight.class, propertyValue, propertyName, changeConsumer);
+    public PointLightElementFilterPropertyControl(@Nullable final PointLight propertyValue,
+                                                  @NotNull final String propertyName,
+                                                  @NotNull final SceneChangeConsumer changeConsumer) {
+        super(PointLight.class, propertyValue, propertyName, changeConsumer);
     }
 
     @NotNull
-    protected NodeSelectorDialog<DirectionalLight> createNodeSelectorDialog() {
+    protected NodeSelectorDialog<PointLight> createNodeSelectorDialog() {
         final SceneChangeConsumer changeConsumer = getChangeConsumer();
         return new LightSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
@@ -32,7 +32,7 @@ public class DirectionLightElementPropertyControl<D> extends AbstractElementFilt
     @Override
     protected void reload() {
 
-        final DirectionalLight light = getPropertyValue();
+        final PointLight light = getPropertyValue();
         final Label elementLabel = getElementLabel();
 
         String name = light == null ? null : light.getName();

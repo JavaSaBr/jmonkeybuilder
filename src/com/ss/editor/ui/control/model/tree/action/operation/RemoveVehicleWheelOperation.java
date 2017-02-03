@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The operation to add a wheel to a vehicle control.
+ * The operation to remove a wheel from a vehicle control.
  *
  * @author JavaSaBr
  */
-public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
      * The vehicle control.
@@ -61,33 +61,19 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
      */
     private final boolean isFrontWheel;
 
-    public AddVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final Vector3f connectionPoint,
-                                    @NotNull final Vector3f direction, @NotNull final Vector3f axle,
-                                    final float restLength, final float wheelRadius, final boolean isFrontWheel) {
+    public RemoveVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final VehicleWheel wheel) {
         this.control = control;
-        this.connectionPoint = connectionPoint;
-        this.direction = direction;
-        this.axle = axle;
-        this.restLength = restLength;
-        this.wheelRadius = wheelRadius;
-        this.isFrontWheel = isFrontWheel;
+        this.connectionPoint = wheel.getLocation();
+        this.direction = wheel.getDirection();
+        this.axle = wheel.getAxle();
+        this.restLength = wheel.getRestLength();
+        this.wheelRadius = wheel.getRadius();
+        this.isFrontWheel = wheel.isFrontWheel();
+        this.createdWheel = wheel;
     }
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-
-            final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
-                    wheelRadius, isFrontWheel);
-
-            this.createdWheel = vehicleWheel;
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(control, vehicleWheel, -1));
-        });
-    }
-
-    @Override
-    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             for (int i = 0, length = control.getNumWheels(); i < length; i++) {
@@ -103,6 +89,19 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
             this.createdWheel = null;
 
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(control, toRemove));
+        });
+    }
+
+    @Override
+    protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+
+            final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
+                    wheelRadius, isFrontWheel);
+
+            this.createdWheel = vehicleWheel;
+
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(control, vehicleWheel, -1));
         });
     }
 }

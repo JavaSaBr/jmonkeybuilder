@@ -102,7 +102,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      * The suspension rest length.
      */
     @Nullable
-    private FloatTextField suspensionRestLengthField;
+    private FloatTextField restLengthField;
 
     /**
      * The wheel radius.
@@ -197,12 +197,12 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         suspensionRestLengthLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         suspensionRestLengthLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
 
-        suspensionRestLengthField = new FloatTextField();
-        suspensionRestLengthField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        suspensionRestLengthField.setValue(1);
+        restLengthField = new FloatTextField();
+        restLengthField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        restLengthField.setValue(1);
 
         root.add(suspensionRestLengthLabel, 0, 3);
-        root.add(suspensionRestLengthField, 1, 3, 3, 1);
+        root.add(restLengthField, 1, 3, 3, 1);
 
         final Label wheelRadiusLabel = new Label("Wheel radius:");
         wheelRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
@@ -239,7 +239,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(axleYField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(axleZField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(suspensionRestLengthLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(suspensionRestLengthField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(restLengthField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(wheelRadiusLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(wheelRadiusField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(frontLabel, CSSClasses.SPECIAL_FONT_14);
@@ -337,8 +337,8 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      * @return the suspension rest length.
      */
     @NotNull
-    private FloatTextField getSuspensionRestLengthField() {
-        return requireNonNull(suspensionRestLengthField);
+    private FloatTextField getRestLengthField() {
+        return requireNonNull(restLengthField);
     }
 
     /**
@@ -381,7 +381,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Vector3f axle = new Vector3f(axleXField.getValue(), axleYField.getValue(), axleZField.getValue());
 
-        final FloatTextField suspensionRestLengthField = getSuspensionRestLengthField();
+        final FloatTextField restLengthField = getRestLengthField();
         final FloatTextField wheelRadiusField = getWheelRadiusField();
         final CheckBox frontBox = getFrontBox();
 
@@ -389,7 +389,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
 
         changeConsumer.execute(new AddVehicleWheelOperation(control, location, direction, axle,
-                suspensionRestLengthField.getValue(), wheelRadiusField.getValue(), frontBox.isSelected()));
+                restLengthField.getValue(), wheelRadiusField.getValue(), frontBox.isSelected()));
     }
 
     @Override

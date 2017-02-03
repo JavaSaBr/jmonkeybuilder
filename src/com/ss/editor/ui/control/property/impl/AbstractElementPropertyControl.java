@@ -31,8 +31,9 @@ import rlib.ui.util.FXUtils;
  */
 public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D, T> extends AbstractPropertyControl<C, D, T> {
 
-    public static final String NO_ELEMENT = Messages.ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
-    public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
+    protected static final String NO_ELEMENT = Messages.ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
+    
+    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
