@@ -41,6 +41,7 @@ import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
+import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -118,66 +119,79 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * The opened model.
      */
+    @Nullable
     protected M currentModel;
 
     /**
      * The selection handler.
      */
+    @Nullable
     protected Consumer<Object> selectionNodeHandler;
 
     /**
      * The model tree.
      */
+    @Nullable
     protected ModelNodeTree modelNodeTree;
 
     /**
      * The model property editor.
      */
+    @Nullable
     protected ModelPropertyEditor modelPropertyEditor;
 
     /**
      * The state of this editor.
      */
+    @Nullable
     protected ES editorState;
 
     /**
      * The main split container.
      */
+    @Nullable
     protected EditorToolSplitPane mainSplitContainer;
 
     /**
      * The editor tool component.
      */
+    @Nullable
     protected EditorToolComponent editorToolComponent;
 
     /**
      * The pane of editor area.
      */
+    @Nullable
     protected Pane editorAreaPane;
 
     /**
      * The selection toggle.
      */
+    @Nullable
     protected ToggleButton selectionButton;
 
     /**
      * The grid toggle.
      */
+    @Nullable
     protected ToggleButton gridButton;
 
     /**
      * The move tool toggle.
      */
+    @Nullable
     protected ToggleButton moveToolButton;
 
     /**
      * The rotation tool toggle.
      */
+    @Nullable
     protected ToggleButton rotationToolButton;
 
     /**
      * The scaling tool toggle.
      */
+    @Nullable
     protected ToggleButton scaleToolButton;
 
     /**
@@ -218,22 +232,24 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the state of this editor.
      */
     @Nullable
-    public ES getEditorState() {
+    protected ES getEditorState() {
         return editorState;
     }
 
     /**
      * @return the model tree.
      */
+    @NotNull
     protected ModelNodeTree getModelNodeTree() {
-        return modelNodeTree;
+        return requireNonNull(modelNodeTree);
     }
 
     /**
      * @return the model property editor.
      */
-    protected ModelPropertyEditor getModelPropertyEditor() {
-        return modelPropertyEditor;
+    @NotNull
+    private ModelPropertyEditor getModelPropertyEditor() {
+        return requireNonNull(modelPropertyEditor);
     }
 
     @Override
@@ -262,8 +278,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
         NodeUtils.addGeometryWithMaterial(currentModel, geometries, assetPath);
         if (geometries.isEmpty()) return;
-
-        final MaterialKey materialKey = new MaterialKey(assetPath);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Material material = assetManager.loadMaterial(assetPath);
@@ -522,7 +536,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @NotNull
     @Override
     public M getCurrentModel() {
-        return currentModel;
+        return requireNonNull(currentModel);
     }
 
     @Override
@@ -711,8 +725,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAppState.updateSelection(selection);
     }
 
+    /**
+     * @return the editor are panel.
+     */
+    @NotNull
+    private Pane getEditorAreaPane() {
+        return requireNonNull(editorAreaPane);
+    }
+
     @Override
     public boolean isInside(final double sceneX, final double sceneY) {
+        final Pane editorAreaPane = getEditorAreaPane();
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
         return editorAreaPane.contains(point2D);
     }
@@ -758,7 +781,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     protected ToggleButton getScaleToolButton() {
-        return scaleToolButton;
+        return requireNonNull(scaleToolButton);
     }
 
     /**
@@ -766,7 +789,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     protected ToggleButton getMoveToolButton() {
-        return moveToolButton;
+        return requireNonNull(moveToolButton);
     }
 
     /**
@@ -774,7 +797,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     protected ToggleButton getRotationToolButton() {
-        return rotationToolButton;
+        return requireNonNull(rotationToolButton);
     }
 
     /**

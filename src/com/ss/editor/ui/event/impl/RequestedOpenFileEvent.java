@@ -6,6 +6,7 @@ import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -37,9 +38,9 @@ public class RequestedOpenFileEvent extends SceneEvent {
     /**
      * @return the editor descriptor.
      */
-    @NotNull
+    @Nullable
     public EditorDescription getDescription() {
-        return requireNonNull(get(EDITOR));
+        return get(EDITOR);
     }
 
     /**
