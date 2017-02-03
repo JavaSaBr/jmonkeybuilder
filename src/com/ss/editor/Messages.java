@@ -153,6 +153,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE;
     public static final String MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE;
     public static final String MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_WHEEL;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -231,6 +232,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -300,6 +302,17 @@ public class Messages {
     public static final String CONTROL_PROPERTY_AXIS;
     public static final String CONTROL_PROPERTY_SCALE;
     public static final String CONTROL_PROPERTY_OBJECT_ID;
+    public static final String CONTROL_PROPERTY_AXLE;
+    public static final String CONTROL_PROPERTY_REST_LENGTH;
+    public static final String CONTROL_PROPERTY_FRONT;
+    public static final String CONTROL_PROPERTY_DAMPING_COMPRESSION;
+    public static final String CONTROL_PROPERTY_FRICTION_SLIP;
+    public static final String CONTROL_PROPERTY_MAX_SUSPENSION_FORCE;
+    public static final String CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM;
+    public static final String CONTROL_PROPERTY_DAMPING_RELAXATION;
+    public static final String CONTROL_PROPERTY_SUSPENSION_STIFFNESS;
+    public static final String CONTROL_PROPERTY_ROLL_INFLUENCE;
+    public static final String CONTROL_PROPERTY_WHEEL_SPATIAL;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -477,6 +490,7 @@ public class Messages {
     public static final String CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE;
     public static final String CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
     public static final String CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String ADD_VEHICLE_WHEEL_DIALOG_TITLE;
 
     static {
 
@@ -635,6 +649,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeMeshCollisionShape");
         MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodePlaneCollisionShape");
         MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeSphereCollisionShape");
+        MODEL_FILE_EDITOR_NODE_WHEEL = bundle.getString("ModelFileEditorNodeWheel");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -713,6 +728,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionConeCollisionShape");
         MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionCylinderCollisionShape");
         MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
+        MODEL_NODE_TREE_ACTION_ADD_WHEEL = bundle.getString("ModelNodeTreeActionAddWheel");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -774,7 +790,6 @@ public class Messages {
         CONTROL_PROPERTY_INITIAL_DURATION = bundle.getString("ControlPropertyInitialDuration");
         CONTROL_PROPERTY_SPEED = bundle.getString("ControlPropertySpeed");
         CONTROL_PROPERTY_TIME = bundle.getString("ControlPropertyTime");
-
         CONTROL_PROPERTY_MARGIN = bundle.getString("ControlPropertyMargin");
         CONTROL_PROPERTY_LOCATION = bundle.getString("ControlPropertyLocation");
         CONTROL_PROPERTY_HALF_EXTENTS = bundle.getString("ControlPropertyHalfExtents");
@@ -783,6 +798,17 @@ public class Messages {
         CONTROL_PROPERTY_AXIS = bundle.getString("ControlPropertyAxis");
         CONTROL_PROPERTY_SCALE = bundle.getString("ControlPropertyScale");
         CONTROL_PROPERTY_OBJECT_ID = bundle.getString("ControlPropertyObjectId");
+        CONTROL_PROPERTY_AXLE = bundle.getString("ControlPropertyObjectId");
+        CONTROL_PROPERTY_REST_LENGTH = bundle.getString("ControlPropertyObjectId");
+        CONTROL_PROPERTY_FRONT = bundle.getString("ControlPropertyFront");
+        CONTROL_PROPERTY_DAMPING_COMPRESSION = bundle.getString("ControlPropertyDampingCompression");
+        CONTROL_PROPERTY_FRICTION_SLIP = bundle.getString("ControlPropertyFrictionSlip");
+        CONTROL_PROPERTY_MAX_SUSPENSION_FORCE = bundle.getString("ControlPropertyMaxSuspensionForce");
+        CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM = bundle.getString("ControlPropertyMaxSuspensionTravelCm");
+        CONTROL_PROPERTY_DAMPING_RELAXATION = bundle.getString("ControlPropertyDampingRelaxation");
+        CONTROL_PROPERTY_SUSPENSION_STIFFNESS = bundle.getString("ControlPropertySuspensionStiffness");
+        CONTROL_PROPERTY_ROLL_INFLUENCE = bundle.getString("ControlPropertyRollInfluence");
+        CONTROL_PROPERTY_WHEEL_SPATIAL = bundle.getString("ControlPropertyWheelSpatial");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -960,5 +986,6 @@ public class Messages {
         CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCylinderCollisionShapeDialogTitle");
         CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateConeCollisionShapeDialogTitle");
         CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCapsuleCollisionShapeDialogTitle");
+        ADD_VEHICLE_WHEEL_DIALOG_TITLE = bundle.getString("AddVehicleWheelDialogTitle");
     }
 }

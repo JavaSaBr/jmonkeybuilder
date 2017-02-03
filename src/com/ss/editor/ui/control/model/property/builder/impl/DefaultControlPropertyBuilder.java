@@ -363,7 +363,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         final boolean applyLocal = control.isApplyLocal();
 
         final BooleanModelPropertyControl<VehicleWheel> frontWheelControl =
-                new BooleanModelPropertyControl<>(frontWheel, "Front", changeConsumer);
+                new BooleanModelPropertyControl<>(frontWheel, Messages.CONTROL_PROPERTY_FRONT, changeConsumer);
 
         frontWheelControl.setApplyHandler(VehicleWheel::setFrontWheel);
         frontWheelControl.setSyncHandler(VehicleWheel::isFrontWheel);
@@ -377,14 +377,14 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         applyLocalControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> dampingCompressionControl =
-                new FloatModelPropertyControl<>(wheelsDampingCompression, "wheelsDampingCompression", changeConsumer);
+                new FloatModelPropertyControl<>(wheelsDampingCompression, Messages.CONTROL_PROPERTY_DAMPING_COMPRESSION, changeConsumer);
 
         dampingCompressionControl.setApplyHandler(VehicleWheel::setWheelsDampingCompression);
         dampingCompressionControl.setSyncHandler(VehicleWheel::getWheelsDampingCompression);
         dampingCompressionControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> frictionSlipControl =
-                new FloatModelPropertyControl<>(frictionSlip, "frictionSlip", changeConsumer);
+                new FloatModelPropertyControl<>(frictionSlip, Messages.CONTROL_PROPERTY_FRICTION_SLIP, changeConsumer);
 
         frictionSlipControl.setApplyHandler(VehicleWheel::setFrictionSlip);
         frictionSlipControl.setSyncHandler(VehicleWheel::getFrictionSlip);
@@ -398,49 +398,49 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         radiusControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> maxSuspensionForceControl =
-                new FloatModelPropertyControl<>(maxSuspensionForce, "maxSuspensionForceControl", changeConsumer);
+                new FloatModelPropertyControl<>(maxSuspensionForce, Messages.CONTROL_PROPERTY_MAX_SUSPENSION_FORCE, changeConsumer);
 
         maxSuspensionForceControl.setApplyHandler(VehicleWheel::setMaxSuspensionForce);
         maxSuspensionForceControl.setSyncHandler(VehicleWheel::getMaxSuspensionForce);
         maxSuspensionForceControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> maxSuspensionTravelCmControl =
-                new FloatModelPropertyControl<>(maxSuspensionTravelCm, "maxSuspensionTravelCm", changeConsumer);
+                new FloatModelPropertyControl<>(maxSuspensionTravelCm, Messages.CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM, changeConsumer);
 
         maxSuspensionTravelCmControl.setApplyHandler(VehicleWheel::setMaxSuspensionTravelCm);
         maxSuspensionTravelCmControl.setSyncHandler(VehicleWheel::getMaxSuspensionTravelCm);
         maxSuspensionTravelCmControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> wheelsDampingRelaxationControl =
-                new FloatModelPropertyControl<>(wheelsDampingRelaxation, "wheelsDampingRelaxation", changeConsumer);
+                new FloatModelPropertyControl<>(wheelsDampingRelaxation, Messages.CONTROL_PROPERTY_DAMPING_RELAXATION, changeConsumer);
 
         wheelsDampingRelaxationControl.setApplyHandler(VehicleWheel::setWheelsDampingRelaxation);
         wheelsDampingRelaxationControl.setSyncHandler(VehicleWheel::getWheelsDampingRelaxation);
         wheelsDampingRelaxationControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> suspensionStiffnessControl =
-                new FloatModelPropertyControl<>(suspensionStiffness, "suspensionStiffness", changeConsumer);
+                new FloatModelPropertyControl<>(suspensionStiffness, Messages.CONTROL_PROPERTY_SUSPENSION_STIFFNESS, changeConsumer);
 
         suspensionStiffnessControl.setApplyHandler(VehicleWheel::setSuspensionStiffness);
         suspensionStiffnessControl.setSyncHandler(VehicleWheel::getSuspensionStiffness);
         suspensionStiffnessControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> restLengthControl =
-                new FloatModelPropertyControl<>(restLength, "restLength", changeConsumer);
+                new FloatModelPropertyControl<>(restLength, Messages.CONTROL_PROPERTY_REST_LENGTH, changeConsumer);
 
         restLengthControl.setApplyHandler(VehicleWheel::setRestLength);
         restLengthControl.setSyncHandler(VehicleWheel::getRestLength);
         restLengthControl.setEditObject(control);
 
         final FloatModelPropertyControl<VehicleWheel> rollInfluenceControl =
-                new FloatModelPropertyControl<>(rollInfluence, "rollInfluence", changeConsumer);
+                new FloatModelPropertyControl<>(rollInfluence, Messages.CONTROL_PROPERTY_ROLL_INFLUENCE, changeConsumer);
 
         rollInfluenceControl.setApplyHandler(VehicleWheel::setRollInfluence);
         rollInfluenceControl.setSyncHandler(VehicleWheel::getRollInfluence);
         rollInfluenceControl.setEditObject(control);
 
         final WheelElementModelPropertyControl wheelSpatialControl =
-                new WheelElementModelPropertyControl(wheelSpatial, "wheelSpatial", changeConsumer);
+                new WheelElementModelPropertyControl(wheelSpatial, Messages.CONTROL_PROPERTY_WHEEL_SPATIAL, changeConsumer);
 
         wheelSpatialControl.setApplyHandler(VehicleWheel::setWheelSpatial);
         wheelSpatialControl.setSyncHandler(VehicleWheel::getWheelSpatial);
@@ -468,7 +468,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         directionControl.setEditObject(control);
 
         final DefaultModelSinglePropertyControl<VehicleWheel, Vector3f> axleControl =
-                new DefaultModelSinglePropertyControl<>(axle, Messages.CONTROL_PROPERTY_AXIS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(axle, Messages.CONTROL_PROPERTY_AXLE, changeConsumer);
 
         axleControl.setSyncHandler(VehicleWheel::getAxle);
         axleControl.setToStringFunction(Vector3f::toString);
@@ -485,10 +485,10 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(suspensionStiffnessControl, container);
         FXUtils.addToPane(restLengthControl, container);
         FXUtils.addToPane(rollInfluenceControl, container);
-        FXUtils.addToPane(wheelSpatialControl, container);
 
         addSplitLine(container);
 
+        FXUtils.addToPane(wheelSpatialControl, container);
         FXUtils.addToPane(wheelIdControl, container);
         FXUtils.addToPane(locationControl, container);
         FXUtils.addToPane(directionControl, container);

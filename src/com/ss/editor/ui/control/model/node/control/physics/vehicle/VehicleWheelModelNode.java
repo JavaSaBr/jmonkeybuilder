@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.node.control.physics.vehicle;
 
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.RemoveVehicleWheelAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -34,7 +35,8 @@ public class VehicleWheelModelNode extends ModelNode<VehicleWheel> {
     public String getName() {
         final VehicleWheel element = getElement();
         final Spatial wheelSpatial = element.getWheelSpatial();
-        return wheelSpatial != null ? "Wheel [" + wheelSpatial.getName() + "]" : "Wheel";
+        return wheelSpatial != null ? Messages.MODEL_FILE_EDITOR_NODE_WHEEL + " [" + wheelSpatial.getName() + "]" :
+                Messages.MODEL_FILE_EDITOR_NODE_WHEEL;
     }
 
     @Override
