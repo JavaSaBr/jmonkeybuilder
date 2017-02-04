@@ -275,6 +275,24 @@ public class SceneFileEditor extends
      */
     @FXThread
     private void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
+        if (!isNeedSyncSelection()) return;
+
+        setNeedSyncSelection(false);
+        try {
+
+            final ModelNodeTree modelNodeTree = getModelNodeTree();
+            modelNodeTree.select(null);
+
+            final LayerNodeTree layerNodeTree = getLayerNodeTree();
+            layerNodeTree.select(null);
+
+            final FilterList filterList = getFilterList();
+            filterList.clearSelection();
+
+        } finally {
+            setNeedSyncSelection(true);
+        }
+
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(appState, null);
     }
@@ -284,8 +302,26 @@ public class SceneFileEditor extends
      */
     @FXThread
     private void selectFilterFromList(@Nullable final EditableSceneFilter<?> sceneFilter) {
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.buildFor(sceneFilter, null);
+        if (!isNeedSyncSelection()) return;
+
+        setNeedSyncSelection(false);
+        try {
+
+            final ModelNodeTree modelNodeTree = getModelNodeTree();
+            modelNodeTree.select(null);
+
+            final LayerNodeTree layerNodeTree = getLayerNodeTree();
+            layerNodeTree.select(null);
+
+            final AppStateList appStateList = getAppStateList();
+            appStateList.clearSelection();
+
+            final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+            modelPropertyEditor.buildFor(sceneFilter, null);
+
+        } finally {
+            setNeedSyncSelection(true);
+        }
     }
 
     /**
@@ -293,39 +329,49 @@ public class SceneFileEditor extends
      */
     @FXThread
     private void selectNodeFromLayersTree(@Nullable final Object object) {
+        if (!isNeedSyncSelection()) return;
 
-        if (isNeedSyncSelection()) {
-            setNeedSyncSelection(false);
-            try {
+        setNeedSyncSelection(false);
+        try {
 
-                final ModelNodeTree modelNodeTree = getModelNodeTree();
-                modelNodeTree.select(object);
+            final ModelNodeTree modelNodeTree = getModelNodeTree();
+            modelNodeTree.select(object);
 
-            } finally {
-                setNeedSyncSelection(true);
-            }
+            final AppStateList appStateList = getAppStateList();
+            appStateList.clearSelection();
+
+            final FilterList filterList = getFilterList();
+            filterList.clearSelection();
+
+            final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+            modelPropertyEditor.buildFor(object, null);
+
+        } finally {
+            setNeedSyncSelection(true);
         }
-
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.buildFor(object, null);
     }
 
     @Override
     public void selectNodeFromTree(@Nullable final Object object) {
-
-        if (isNeedSyncSelection()) {
-            setNeedSyncSelection(false);
-            try {
-
-                final LayerNodeTree layerNodeTree = getLayerNodeTree();
-                layerNodeTree.select(object);
-
-            } finally {
-                setNeedSyncSelection(true);
-            }
-        }
-
         super.selectNodeFromTree(object);
+
+        if (!isNeedSyncSelection()) return;
+
+        setNeedSyncSelection(false);
+        try {
+
+            final LayerNodeTree layerNodeTree = getLayerNodeTree();
+            layerNodeTree.select(object);
+
+            final AppStateList appStateList = getAppStateList();
+            appStateList.clearSelection();
+
+            final FilterList filterList = getFilterList();
+            filterList.clearSelection();
+
+        } finally {
+            setNeedSyncSelection(true);
+        }
     }
 
     @NotNull

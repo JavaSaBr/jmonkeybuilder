@@ -713,7 +713,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelPropertyEditor.buildFor(element, parent);
     }
 
-    protected boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
+    private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
 
         final Camera camera = EDITOR.getCamera();
 
@@ -795,7 +795,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the scaling tool toggle.
      */
     @NotNull
-    protected ToggleButton getScaleToolButton() {
+    private ToggleButton getScaleToolButton() {
         return requireNonNull(scaleToolButton);
     }
 
@@ -803,7 +803,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the move tool toggle.
      */
     @NotNull
-    protected ToggleButton getMoveToolButton() {
+    private ToggleButton getMoveToolButton() {
         return requireNonNull(moveToolButton);
     }
 
@@ -811,7 +811,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the rotation tool toggle.
      */
     @NotNull
-    protected ToggleButton getRotationToolButton() {
+    private ToggleButton getRotationToolButton() {
         return requireNonNull(rotationToolButton);
     }
 
