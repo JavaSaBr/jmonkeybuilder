@@ -679,6 +679,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             final ModelNode parentNode = modelNode.getParent();
             parent = parentNode == null ? null : parentNode.getElement();
             element = modelNode.getElement();
+        } else {
+            element = object;
+        }
+
+        if (element instanceof SceneLayer || element instanceof SceneNode) {
+            element = null;
         }
 
         Spatial spatial = null;

@@ -289,12 +289,11 @@ public class SceneFileEditor extends
             final FilterList filterList = getFilterList();
             filterList.clearSelection();
 
+            super.selectNodeFromTree(appState);
+
         } finally {
             setNeedSyncSelection(true);
         }
-
-        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.buildFor(appState, null);
     }
 
     /**
@@ -316,8 +315,7 @@ public class SceneFileEditor extends
             final AppStateList appStateList = getAppStateList();
             appStateList.clearSelection();
 
-            final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-            modelPropertyEditor.buildFor(sceneFilter, null);
+            super.selectNodeFromTree(sceneFilter);
 
         } finally {
             setNeedSyncSelection(true);
@@ -343,8 +341,7 @@ public class SceneFileEditor extends
             final FilterList filterList = getFilterList();
             filterList.clearSelection();
 
-            final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-            modelPropertyEditor.buildFor(object, null);
+            super.selectNodeFromTree(object);
 
         } finally {
             setNeedSyncSelection(true);
@@ -353,8 +350,6 @@ public class SceneFileEditor extends
 
     @Override
     public void selectNodeFromTree(@Nullable final Object object) {
-        super.selectNodeFromTree(object);
-
         if (!isNeedSyncSelection()) return;
 
         setNeedSyncSelection(false);
@@ -368,6 +363,8 @@ public class SceneFileEditor extends
 
             final FilterList filterList = getFilterList();
             filterList.clearSelection();
+
+            super.selectNodeFromTree(object);
 
         } finally {
             setNeedSyncSelection(true);

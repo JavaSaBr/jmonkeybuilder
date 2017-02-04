@@ -7,6 +7,7 @@ import com.ss.editor.ui.control.property.AbstractPropertyEditor;
 import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.ui.util.FXUtils;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.node.ParticleNode;
 
