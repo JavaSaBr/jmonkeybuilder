@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.scene;
 
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -28,6 +29,7 @@ public class SceneNodeModelNode extends NodeModelNode<SceneNode> {
 
     @Override
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+        if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final Menu createMenu = createCreationMenu(nodeTree);
 

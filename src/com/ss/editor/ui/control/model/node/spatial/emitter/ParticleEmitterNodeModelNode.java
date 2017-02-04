@@ -6,6 +6,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.emitter.shape.CreateBoxShapeEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.shape.CreateCylinderShapeEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.shape.CreateDomeShapeEmitterAction;
@@ -53,6 +54,7 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
 
     @Override
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+        if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final Menu jmePrimitivesMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE, new ImageView(Icons.ADD_18));
         final ObservableList<MenuItem> primitivesItems = jmePrimitivesMenu.getItems();
@@ -64,7 +66,9 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
         primitivesItems.add(new CreateTorusShapeEmitterAction(nodeTree, this));
 
         final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.GEOMETRY_16));
-        changeShapeMenu.getItems().addAll(new CreateTriangleShapeEmitterAction(nodeTree, this), jmePrimitivesMenu, new LoadModelShapeEmitterAction(nodeTree, this));
+        changeShapeMenu.getItems().addAll(new CreateTriangleShapeEmitterAction(nodeTree, this),
+                jmePrimitivesMenu,
+                new LoadModelShapeEmitterAction(nodeTree, this));
 
         items.add(changeShapeMenu);
 

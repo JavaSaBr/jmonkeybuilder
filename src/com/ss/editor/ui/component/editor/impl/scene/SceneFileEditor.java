@@ -414,8 +414,12 @@ public class SceneFileEditor extends
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         super.notifyAddedChild(parent, added, index);
 
+        final LayerNodeTree layerNodeTree = getLayerNodeTree();
+
         if (parent instanceof LayersRoot) {
-            getLayerNodeTree().notifyAdded(parent, added, index);
+            layerNodeTree.notifyAdded(parent, added, index);
+        } else if (added instanceof Spatial) {
+            layerNodeTree.notifyAdded((Spatial) added);
         }
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getCurrentModel().notifyAdded(added));
@@ -425,8 +429,12 @@ public class SceneFileEditor extends
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         super.notifyRemovedChild(parent, removed);
 
+        final LayerNodeTree layerNodeTree = getLayerNodeTree();
+
         if (parent instanceof LayersRoot) {
-            getLayerNodeTree().notifyRemoved(parent, removed);
+            layerNodeTree.notifyRemoved(parent, removed);
+        } else if (removed instanceof Spatial) {
+            layerNodeTree.notifyRemoved(null, removed);
         }
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getCurrentModel().notifyRemoved(removed));
@@ -447,6 +455,9 @@ public class SceneFileEditor extends
             } else {
                 spatial.setVisible(layer.isShowed());
             }
+
+            final LayerNodeTree layerNodeTree = getLayerNodeTree();
+            layerNodeTree.notifyChangedLayer(spatial, layer);
         }
 
         final LayerNodeTree layerNodeTree = getLayerNodeTree();

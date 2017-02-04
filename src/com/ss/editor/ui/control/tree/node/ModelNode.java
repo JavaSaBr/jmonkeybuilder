@@ -20,7 +20,7 @@ import rlib.util.array.ArrayFactory;
  */
 public abstract class ModelNode<T> implements UObject {
 
-    private static final Array<ModelNode<?>> EMPTY_ARRAY = ArrayFactory.newArray(ModelNode.class);
+    public static final Array<ModelNode<?>> EMPTY_ARRAY = ArrayFactory.newArray(ModelNode.class);
 
     protected static final Editor EDITOR = Editor.getInstance();
 

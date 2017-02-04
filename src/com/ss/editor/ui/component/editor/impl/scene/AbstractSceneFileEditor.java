@@ -6,7 +6,6 @@ import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -54,10 +53,24 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
-
+import com.ss.extension.scene.SceneLayer;
+import com.ss.extension.scene.SceneNode;
+import javafx.geometry.Point2D;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
+import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,25 +82,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import javafx.geometry.Point2D;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
  * The base implementation of a model file editor.
@@ -1075,11 +1069,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final MA editorAppState = getEditorAppState();
+            final SceneLayer defaultLayer = currentModel instanceof SceneNode ?
+                    ((SceneNode) currentModel).getLayers().first() : null;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
             loadedModel.setUserData(LOADED_MODEL_KEY, true);
             loadedModel.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+
+            if (defaultLayer != null) {
+                SceneLayer.setLayer(defaultLayer, loadedModel);
+            }
 
             execute(new AddChildOperation(loadedModel, (Node) currentModel));
         });

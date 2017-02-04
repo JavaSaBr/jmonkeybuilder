@@ -103,7 +103,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * @return the tree of this model.
      */
     @NotNull
-    private TreeView<ModelNode<?>> getTreeView() {
+    protected TreeView<ModelNode<?>> getTreeView() {
         return treeView;
     }
 
@@ -376,7 +376,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about removing the element.
      */
     @FXThread
-    public void notifyRemoved(@NotNull final Object parent, @NotNull final Object child) {
+    public void notifyRemoved(@Nullable final Object parent, @NotNull final Object child) {
         notifyRemoved(createFor(child));
     }
 

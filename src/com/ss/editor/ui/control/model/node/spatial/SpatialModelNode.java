@@ -19,6 +19,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.node.light.LightModelNode;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
@@ -55,6 +56,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     @Override
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
+        if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final Menu createMenu = createCreationMenu(nodeTree);
         if (createMenu != null) items.add(createMenu);
@@ -105,12 +107,11 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
             items.add(new CreateMotionControlAction(nodeTree, this));
         }
 
-        if (skeletonControl != null) {
+        //if (skeletonControl != null) {
             //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
-        }
+        //}
 
-        menu.getItems()
-            .add(createControlsMenu);
+        menu.getItems().add(createControlsMenu);
 
         return menu;
     }
@@ -133,8 +134,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
