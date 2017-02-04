@@ -15,10 +15,9 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
+import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.app.state.list.AppStateList;
-import com.ss.editor.ui.control.app.state.property.AppStatePropertyEditor;
 import com.ss.editor.ui.control.filter.list.FilterList;
-import com.ss.editor.ui.control.filter.property.FilterPropertyEditor;
 import com.ss.editor.ui.control.layer.LayerNodeTree;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
@@ -34,8 +33,10 @@ import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.ui.util.FXUtils;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -62,39 +63,45 @@ public class SceneFileEditor extends
     /**
      * The list with app states.
      */
+    @Nullable
     private AppStateList appStateList;
 
     /**
      * The list with filters.
      */
+    @Nullable
     private FilterList filterList;
-
-    /**
-     * The property editor of app states.
-     */
-    private AppStatePropertyEditor appStatePropertyEditor;
-
-    /**
-     * The property editor of filters.
-     */
-    private FilterPropertyEditor filterPropertyEditor;
 
     /**
      * The tree with layers.
      */
+    @Nullable
     private LayerNodeTree layerNodeTree;
 
     /**
-     * The properties from layers tree.
+     * The property container of app states.
      */
-    private ModelPropertyEditor layerPropertyEditor;
+    @Nullable
+    private VBox appStatePropertyContainer;
+
+    /**
+     * The property container of filters.
+     */
+    @Nullable
+    private VBox filterPropertyContainer;
+
+    /**
+     * The property container from layers tree.
+     */
+    @Nullable
+    private VBox layerTreePropertyContainer;
 
     /**
      * The flag of sync selection.
      */
     private boolean needSyncSelection;
 
-    public SceneFileEditor() {
+    private SceneFileEditor() {
         setNeedSyncSelection(true);
     }
 
@@ -153,29 +160,49 @@ public class SceneFileEditor extends
     /**
      * @return the list with app states.
      */
+    @NotNull
     private AppStateList getAppStateList() {
-        return appStateList;
+        return requireNonNull(appStateList);
     }
 
     /**
      * @return the list with filters.
      */
+    @NotNull
     private FilterList getFilterList() {
-        return filterList;
+        return requireNonNull(filterList);
     }
 
     /**
      * @return the tree with layers.
      */
+    @NotNull
     private LayerNodeTree getLayerNodeTree() {
-        return layerNodeTree;
+        return requireNonNull(layerNodeTree);
     }
 
     /**
-     * @return the properties from layers tree.
+     * @return the property container from layers tree.
      */
-    private ModelPropertyEditor getLayerPropertyEditor() {
-        return layerPropertyEditor;
+    @NotNull
+    private VBox getLayerTreePropertyContainer() {
+        return requireNonNull(layerTreePropertyContainer);
+    }
+
+    /**
+     * @return the property container of filters.
+     */
+    @NotNull
+    private VBox getFilterPropertyContainer() {
+        return requireNonNull(filterPropertyContainer);
+    }
+
+    /**
+     * @return the property container of app states.
+     */
+    @NotNull
+    private VBox getAppStatePropertyContainer() {
+        return requireNonNull(appStatePropertyContainer);
     }
 
     @Override
@@ -183,63 +210,89 @@ public class SceneFileEditor extends
         super.createContent(root);
 
         appStateList = new AppStateList(this::selectAppStateFromList, this);
-        appStatePropertyEditor = new AppStatePropertyEditor(this);
+        appStatePropertyContainer = new VBox();
 
         filterList = new FilterList(this::selectFilterFromList, this);
-        filterPropertyEditor = new FilterPropertyEditor(this);
+        filterPropertyContainer = new VBox();
 
         layerNodeTree = new LayerNodeTree(this::selectNodeFromLayersTree, this);
-        layerPropertyEditor = new ModelPropertyEditor(this);
+        layerTreePropertyContainer = new VBox();
 
-        final SplitPane appStateSplitContainer = new SplitPane(appStateList, appStatePropertyEditor);
+        final SplitPane appStateSplitContainer = new SplitPane(appStateList, appStatePropertyContainer);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
         appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane filtersSplitContainer = new SplitPane(filterList, filterPropertyEditor);
+        final SplitPane filtersSplitContainer = new SplitPane(filterList, filterPropertyContainer);
         filtersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         filtersSplitContainer.prefHeightProperty().bind(root.heightProperty());
         filtersSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        //TODO когда в дереве будут модели показываться
-        //final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, layerPropertyEditor);
-        // layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
-        // layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        // layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
+        final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, layerTreePropertyContainer);
+        layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
+        layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
+        layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        editorToolComponent.addComponent(layerNodeTree, Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
+        final EditorToolComponent editorToolComponent = getEditorToolComponent();
+        editorToolComponent.addComponent(layersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
         editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
 
-        root.heightProperty()
-                .addListener((observableValue, oldValue, newValue) -> calcVSplitSize(appStateSplitContainer));
-        root.heightProperty()
-                .addListener((observableValue, oldValue, newValue) -> calcVSplitSize(filtersSplitContainer));
-        // root.heightProperty().addListener((observableValue, oldValue, newValue) ->
-        //         calcVSplitSize(layersSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(appStateSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(filtersSplitContainer));
+        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(layersSplitContainer));
+    }
+
+    @Override
+    protected void processChangeTool(@NotNull final Number newValue) {
+        super.processChangeTool(newValue);
+
+        if (newValue.intValue() < 1) return;
+
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        final VBox appStatePropertyContainer = getAppStatePropertyContainer();
+        final VBox filterPropertyContainer = getFilterPropertyContainer();
+        final VBox layerTreePropertyContainer = getLayerTreePropertyContainer();
+
+        switch (newValue.intValue()) {
+            case 1: {
+                FXUtils.addToPane(modelPropertyEditor, layerTreePropertyContainer);
+                break;
+            }
+            case 2: {
+                FXUtils.addToPane(modelPropertyEditor, appStatePropertyContainer);
+                break;
+            }
+            case 3: {
+                FXUtils.addToPane(modelPropertyEditor, filterPropertyContainer);
+                break;
+            }
+        }
     }
 
     /**
      * Handle the selected app state from the list.
      */
     @FXThread
-    public void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
-        appStatePropertyEditor.buildFor(appState, null);
+    private void selectAppStateFromList(@Nullable final EditableSceneAppState appState) {
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.buildFor(appState, null);
     }
 
     /**
      * Handle the selected filter from the list.
      */
     @FXThread
-    public void selectFilterFromList(@Nullable final EditableSceneFilter<?> sceneFilter) {
-        filterPropertyEditor.buildFor(sceneFilter, null);
+    private void selectFilterFromList(@Nullable final EditableSceneFilter<?> sceneFilter) {
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.buildFor(sceneFilter, null);
     }
 
     /**
      * Handle the selected object from the layers tree.
      */
     @FXThread
-    public void selectNodeFromLayersTree(@Nullable final Object object) {
+    private void selectNodeFromLayersTree(@Nullable final Object object) {
 
         if (isNeedSyncSelection()) {
             setNeedSyncSelection(false);
@@ -253,8 +306,8 @@ public class SceneFileEditor extends
             }
         }
 
-        final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
-        layerPropertyEditor.buildFor(object, null);
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.buildFor(object, null);
     }
 
     @Override
@@ -350,9 +403,6 @@ public class SceneFileEditor extends
             }
         }
 
-        final ModelPropertyEditor layerPropertyEditor = getLayerPropertyEditor();
-        layerPropertyEditor.syncFor(object);
-
         final LayerNodeTree layerNodeTree = getLayerNodeTree();
         layerNodeTree.notifyChanged(null, object);
 
@@ -363,8 +413,8 @@ public class SceneFileEditor extends
         final EditableProperty<?, ?> property = (EditableProperty<?, ?>) object;
         final Object editObject = property.getObject();
 
-        appStatePropertyEditor.syncFor(editObject);
-        filterPropertyEditor.syncFor(editObject);
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        modelPropertyEditor.syncFor(editObject);
     }
 
     @Override

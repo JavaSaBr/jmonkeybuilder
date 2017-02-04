@@ -808,7 +808,7 @@
 
 #AbstractParamControlContainer {
     -fx-alignment: top-center;
-    -fx-padding: 2 10 4 4;
+    -fx-padding: 2 6 4 4;
 }
 
 #AbstractParamControlSplitLine {

@@ -41,7 +41,6 @@ import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
-import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -56,6 +55,7 @@ import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -102,43 +102,49 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The 3D part of this editor.
      */
     @NotNull
-    protected final MA editorAppState;
+    private final MA editorAppState;
 
     /**
      * The operation control.
      */
     @NotNull
-    protected final EditorOperationControl operationControl;
+    private final EditorOperationControl operationControl;
 
     /**
      * The changes counter.
      */
     @NotNull
-    protected final AtomicInteger changeCounter;
+    private final AtomicInteger changeCounter;
 
     /**
      * The opened model.
      */
     @Nullable
-    protected M currentModel;
+    private M currentModel;
 
     /**
      * The selection handler.
      */
     @Nullable
-    protected Consumer<Object> selectionNodeHandler;
+    private Consumer<Object> selectionNodeHandler;
 
     /**
      * The model tree.
      */
     @Nullable
-    protected ModelNodeTree modelNodeTree;
+    private ModelNodeTree modelNodeTree;
 
     /**
      * The model property editor.
      */
     @Nullable
-    protected ModelPropertyEditor modelPropertyEditor;
+    private ModelPropertyEditor modelPropertyEditor;
+
+    /**
+     * The model tree property container.
+     */
+    @Nullable
+    private VBox modelTreePropertyContainer;
 
     /**
      * The state of this editor.
@@ -150,49 +156,49 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The main split container.
      */
     @Nullable
-    protected EditorToolSplitPane mainSplitContainer;
+    private EditorToolSplitPane mainSplitContainer;
 
     /**
      * The editor tool component.
      */
     @Nullable
-    protected EditorToolComponent editorToolComponent;
+    private EditorToolComponent editorToolComponent;
 
     /**
      * The pane of editor area.
      */
     @Nullable
-    protected Pane editorAreaPane;
+    private Pane editorAreaPane;
 
     /**
      * The selection toggle.
      */
     @Nullable
-    protected ToggleButton selectionButton;
+    private ToggleButton selectionButton;
 
     /**
      * The grid toggle.
      */
     @Nullable
-    protected ToggleButton gridButton;
+    private ToggleButton gridButton;
 
     /**
      * The move tool toggle.
      */
     @Nullable
-    protected ToggleButton moveToolButton;
+    private ToggleButton moveToolButton;
 
     /**
      * The rotation tool toggle.
      */
     @Nullable
-    protected ToggleButton rotationToolButton;
+    private ToggleButton rotationToolButton;
 
     /**
      * The scaling tool toggle.
      */
     @Nullable
-    protected ToggleButton scaleToolButton;
+    private ToggleButton scaleToolButton;
 
     /**
      * The flag of ignoring listeners.
@@ -248,8 +254,16 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the model property editor.
      */
     @NotNull
-    private ModelPropertyEditor getModelPropertyEditor() {
+    ModelPropertyEditor getModelPropertyEditor() {
         return requireNonNull(modelPropertyEditor);
+    }
+
+    /**
+     * @return the model tree property container.
+     */
+    @NotNull
+    private VBox getModelTreePropertyContainer() {
+        return requireNonNull(modelTreePropertyContainer);
     }
 
     @Override
@@ -431,7 +445,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return true if can consume an event.
      */
     @EditorThread
-    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown) {
+    private boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
+                                        final boolean isControlDown) {
         if (isPressed) return false;
 
         if (isControlDown && keyCode == KeyCode.Z) {
@@ -515,14 +530,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * @return true if need to ignore moving camera.
      */
-    protected boolean isIgnoreCameraMove() {
+    private boolean isIgnoreCameraMove() {
         return ignoreCameraMove;
     }
 
     /**
      * @param ignoreCameraMove true if need to ignore moving camera.
      */
-    protected void setIgnoreCameraMove(final boolean ignoreCameraMove) {
+    private void setIgnoreCameraMove(final boolean ignoreCameraMove) {
         this.ignoreCameraMove = ignoreCameraMove;
     }
 
@@ -894,8 +909,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
         modelPropertyEditor = new ModelPropertyEditor(this);
+        modelPropertyEditor.prefHeightProperty().bind(root.heightProperty());
+        modelTreePropertyContainer = new VBox();
 
-        final SplitPane modelSplitContainer = new SplitPane(modelNodeTree, modelPropertyEditor);
+        final SplitPane modelSplitContainer = new SplitPane(modelNodeTree, modelTreePropertyContainer);
         modelSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         modelSplitContainer.prefHeightProperty().bind(root.heightProperty());
         modelSplitContainer.prefWidthProperty().bind(root.widthProperty());
@@ -905,6 +922,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
+        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(newValue));
         editorToolComponent.addComponent(modelSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
@@ -915,13 +933,35 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 calcVSplitSize(modelSplitContainer));
     }
 
-    protected void dragExited(@NotNull final DragEvent dragEvent) {
+    /**
+     * @return the editor tool component.
+     */
+    @NotNull
+    EditorToolComponent getEditorToolComponent() {
+        return requireNonNull(editorToolComponent);
+    }
+
+    protected void processChangeTool(@NotNull final Number newValue) {
+
+        final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        final VBox parent = (VBox) modelPropertyEditor.getParent();
+
+        if(parent != null) {
+            FXUtils.removeFromParent(modelPropertyEditor, parent);
+        }
+
+        if(newValue.intValue() == 0) {
+            FXUtils.addToPane(modelPropertyEditor, getModelTreePropertyContainer());
+        }
+    }
+
+    private void dragExited(@NotNull final DragEvent dragEvent) {
     }
 
     /**
      * Handle dropped files to editor.
      */
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -945,7 +985,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * Handle drag over.
      */
-    protected void dragOver(@NotNull final DragEvent dragEvent) {
+    private void dragOver(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
@@ -982,7 +1022,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @param dragEvent the drag event.
      * @param file      the file.
      */
-    protected void applyMaterial(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
+    private void applyMaterial(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
@@ -1018,7 +1058,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @param dragEvent the drag event.
      * @param file      the file.
      */
-    protected void addNewModel(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
+    private void addNewModel(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
 
         final M currentModel = getCurrentModel();
         if (!(currentModel instanceof Node)) return;
@@ -1045,7 +1085,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         });
     }
 
-    protected static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
+    static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
         splitContainer.setDividerPosition(0, 0.3);
     }
 
