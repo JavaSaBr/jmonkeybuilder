@@ -695,14 +695,23 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final ToggleButton planeButton = getPlaneButton();
 
         if (modelType == ModelType.BOX) {
+            cubeButton.setMouseTransparent(true);
+            sphereButton.setMouseTransparent(false);
+            planeButton.setMouseTransparent(false);
             sphereButton.setSelected(false);
             planeButton.setSelected(false);
             editorAppState.changeMode(modelType);
         } else if (modelType == ModelType.SPHERE) {
+            cubeButton.setMouseTransparent(false);
+            sphereButton.setMouseTransparent(true);
+            planeButton.setMouseTransparent(false);
             cubeButton.setSelected(false);
             planeButton.setSelected(false);
             editorAppState.changeMode(modelType);
         } else if (modelType == ModelType.QUAD) {
+            cubeButton.setMouseTransparent(false);
+            sphereButton.setMouseTransparent(false);
+            planeButton.setMouseTransparent(true);
             sphereButton.setSelected(false);
             cubeButton.setSelected(false);
             editorAppState.changeMode(modelType);
