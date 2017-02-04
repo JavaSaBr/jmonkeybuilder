@@ -6,9 +6,7 @@ import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.filter.EditableSceneFilter;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -19,7 +17,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class EditableBloomFilter extends BloomFilter implements EditableSceneFilter<BloomFilter> {
 
-    public EditableBloomFilter(@NotNull final GlowMode glowMode) {
+    EditableBloomFilter(@NotNull final GlowMode glowMode) {
         super(glowMode);
     }
 
@@ -50,15 +48,20 @@ public class EditableBloomFilter extends BloomFilter implements EditableSceneFil
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Blur scale", 0.1F, 0F, 10F, this,
-                EditableBloomFilter::getBlurScale, EditableBloomFilter::setBlurScale));
+                                        EditableBloomFilter::getBlurScale,
+                                        EditableBloomFilter::setBlurScale));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Bloom intensity", 0.1F, 0F, 10F, this,
-                EditableBloomFilter::getBloomIntensity, EditableBloomFilter::setBloomIntensity));
+                                        EditableBloomFilter::getBloomIntensity,
+                                        EditableBloomFilter::setBloomIntensity));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Exposure cut off", 0.01F, 0F, 100F, this,
-                EditableBloomFilter::getExposureCutOff, EditableBloomFilter::setExposureCutOff));
+                                        EditableBloomFilter::getExposureCutOff,
+                                        EditableBloomFilter::setExposureCutOff));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Exposure power", 0.1F, 0F, 100F, this,
-                EditableBloomFilter::getExposurePower, EditableBloomFilter::setExposurePower));
+                                        EditableBloomFilter::getExposurePower,
+                                        EditableBloomFilter::setExposurePower));
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Down sampling factor", 0.1F, 0F, 100F, this,
-                EditableBloomFilter::getDownSamplingFactor, EditableBloomFilter::setDownSamplingFactor));
+                                        EditableBloomFilter::getDownSamplingFactor,
+                                        EditableBloomFilter::setDownSamplingFactor));
 
         return result;
     }

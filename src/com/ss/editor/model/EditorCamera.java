@@ -10,6 +10,7 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
 import com.jme3.input.CameraInput;
+import com.jme3.input.ChaseCamera;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.MouseInput;
@@ -29,21 +30,21 @@ import com.ss.editor.Editor;
 import java.io.IOException;
 
 /**
- * Реализация камеры редактора. Базируется на com.jme3.input.ChaseCamera.
+ * The implementation of editor camera based on {@link ChaseCamera}.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class EditorCamera implements ActionListener, AnalogListener, Control {
 
-    public static final String CHASECAM_TOGGLEROTATE = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_TOGGLEROTATE;
-    public static final String CHASECAM_DOWN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_DOWN;
-    public static final String CHASECAM_UP = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_UP;
-    public static final String CHASECAM_MOVELEFT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_MOVELEFT;
-    public static final String CHASECAM_MOVERIGHT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_MOVERIGHT;
-    public static final String CHASECAM_ZOOMIN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_ZOOMIN;
-    public static final String CHASECAM_ZOOMOUT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_ZOOMOUT;
+    private static final String CHASECAM_TOGGLEROTATE = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_TOGGLEROTATE;
+    private static final String CHASECAM_DOWN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_DOWN;
+    private static final String CHASECAM_UP = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_UP;
+    private static final String CHASECAM_MOVELEFT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_MOVELEFT;
+    private static final String CHASECAM_MOVERIGHT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_MOVERIGHT;
+    private static final String CHASECAM_ZOOMIN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_ZOOMIN;
+    private static final String CHASECAM_ZOOMOUT = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_ZOOMOUT;
 
-    public static final String[] ALL_INPUTS = {
+    private static final String[] ALL_INPUTS = {
             CHASECAM_TOGGLEROTATE,
             CHASECAM_DOWN,
             CHASECAM_UP,
@@ -61,78 +62,78 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         LEFT, RIGHT, TOP, BOTTOM
     }
 
-    protected static final Editor EDITOR = Editor.getInstance();
+    private static final Editor EDITOR = Editor.getInstance();
 
-    protected InputManager inputManager;
+    private InputManager inputManager;
 
-    protected final Camera camera;
+    private final Camera camera;
 
-    protected Spatial target;
+    private Spatial target;
 
-    protected final Vector3f targetDir;
-    protected final Vector3f position;
+    private final Vector3f targetDir;
+    private final Vector3f position;
 
-    protected final Vector3f targetLocation;
-    protected final Vector3f temp;
+    private final Vector3f targetLocation;
+    private final Vector3f temp;
 
-    protected Vector3f initialUpVec;
-    protected Vector3f prevPos;
-    protected Vector3f lookAtOffset;
+    private Vector3f initialUpVec;
+    private Vector3f prevPos;
+    private Vector3f lookAtOffset;
 
-    protected float minDistance = 1.0f;
-    protected float maxDistance = 40.0f;
+    private float minDistance = 1.0f;
+    private float maxDistance = 40.0f;
 
-    protected float distance = 20;
+    private float distance = 20;
 
-    protected float rotationSpeed = 1.0f;
-    protected float rotation = 0;
+    private float rotationSpeed = 1.0f;
+    private float rotation = 0;
 
-    protected float trailingRotationInertia = 0.05f;
+    private float trailingRotationInertia = 0.05f;
 
-    protected float zoomSensitivity = 2f;
-    protected float rotationSensitivity = 5f;
-    protected float chasingSensitivity = 5f;
-    protected float trailingSensitivity = 0.5f;
+    private float zoomSensitivity = 2f;
+    private float rotationSensitivity = 5f;
+    private float chasingSensitivity = 5f;
+    private float trailingSensitivity = 0.5f;
 
-    protected float verticalRotation = FastMath.PI / 6;
+    private float verticalRotation = FastMath.PI / 6;
 
-    protected float rotationLerpFactor = 0;
-    protected float trailingLerpFactor = 0;
+    private float rotationLerpFactor = 0;
+    private float trailingLerpFactor = 0;
 
     /**
      * Целевой разворот камеры.
      */
-    protected float targetRotation = rotation;
+    private float targetRotation = rotation;
 
     /**
      * Целевой разворот камеры по вертикали.
      */
-    protected float targetVRotation = verticalRotation;
+    private float targetVRotation = verticalRotation;
 
-    protected float vRotationLerpFactor = 0;
-    protected float targetDistance = distance;
-    protected float distanceLerpFactor = 0;
+    private float vRotationLerpFactor = 0;
+    private float targetDistance = distance;
+    private float distanceLerpFactor = 0;
 
-    protected float offsetDistance = 0.002f;
+    private float offsetDistance = 0.002f;
 
-    protected float previousTargetRotation;
+    private float previousTargetRotation;
 
-    protected boolean enabled = true;
-    protected boolean dragToRotate = true;
-    protected boolean trailingEnabled = true;
-    protected boolean hideCursorOnRotate = true;
+    private boolean enabled = true;
+    private boolean dragToRotate = true;
+    private boolean trailingEnabled = true;
+    private boolean hideCursorOnRotate = true;
 
-    protected boolean rotating = false;
-    protected boolean verticalRotating = false;
-    protected boolean smoothMotion = false;
-    protected boolean targetMoves = false;
+    private boolean rotating = false;
+    private boolean verticalRotating = false;
+    private boolean smoothMotion = false;
+    private boolean targetMoves = false;
 
-    protected boolean zooming = false;
-    protected boolean trailing = false;
-    protected boolean chasing = false;
-    protected boolean canRotate;
-    protected boolean zoomin;
-    protected boolean lockRotation;
+    private boolean zooming = false;
+    private boolean trailing = false;
+    private boolean chasing = false;
+    private boolean canRotate;
+    private boolean zoomin;
+    private boolean lockRotation;
 
     /**
      * Constructs the chase camera

@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Created by ronn on 17.12.16.
+ * The class to update bss files.
  */
 public class UpdateBSS {
 

@@ -5,9 +5,7 @@ import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.control.EditableControl;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -18,6 +16,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class EditableBillboardControl extends BillboardControl implements EditableControl {
 
+    @NotNull
     @Override
     public String getName() {
         return "Billboard";
@@ -30,7 +29,8 @@ public class EditableBillboardControl extends BillboardControl implements Editab
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.ENUM, "Alignment", this,
-                BillboardControl::getAlignment, BillboardControl::setAlignment));
+                                        BillboardControl::getAlignment,
+                                        BillboardControl::setAlignment));
 
         return result;
     }

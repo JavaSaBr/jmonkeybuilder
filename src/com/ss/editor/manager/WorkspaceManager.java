@@ -3,6 +3,7 @@ package com.ss.editor.manager;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.Util.get;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.util.EditorUtil;
@@ -18,7 +19,7 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * The manager for working with workspaces.
+ * The class to manage workspaces.
  *
  * @author JavaSaBr
  */
@@ -27,8 +28,10 @@ public class WorkspaceManager {
     public static final String FOLDER_EDITOR = ".jme3-spaceshift-editor";
     public static final String FILE_WORKSPACE = "workspace";
 
+    @Nullable
     private static WorkspaceManager instance;
 
+    @NotNull
     public static WorkspaceManager getInstance() {
         if (instance == null) instance = new WorkspaceManager();
         return instance;
@@ -40,7 +43,7 @@ public class WorkspaceManager {
     @NotNull
     private final ObjectDictionary<Path, Workspace> workspaces;
 
-    public WorkspaceManager() {
+    private WorkspaceManager() {
         InitializeManager.valid(getClass());
         this.workspaces = DictionaryFactory.newObjectDictionary();
     }
@@ -59,6 +62,7 @@ public class WorkspaceManager {
      * @return the current workspace or null.
      */
     @Nullable
+    @FromAnyThread
     public Workspace getCurrentWorkspace() {
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -74,7 +78,8 @@ public class WorkspaceManager {
      * @return the workspace.
      */
     @NotNull
-    public synchronized Workspace getWorkspace(@NotNull final Path assetFolder) {
+    @FromAnyThread
+    private synchronized Workspace getWorkspace(@NotNull final Path assetFolder) {
 
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         final Workspace exists = workspaces.get(assetFolder);
@@ -110,6 +115,7 @@ public class WorkspaceManager {
     /**
      * Clear all workspaces.
      */
+    @FromAnyThread
     public synchronized void clear() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         workspaces.forEach(Workspace::clear);
@@ -119,6 +125,7 @@ public class WorkspaceManager {
     /**
      * Save all workspaces.
      */
+    @FromAnyThread
     public synchronized void save() {
         final ObjectDictionary<Path, Workspace> workspaces = getWorkspaces();
         workspaces.forEach((path, workspace) -> workspace.save(true));

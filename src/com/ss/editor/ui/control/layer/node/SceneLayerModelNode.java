@@ -1,11 +1,13 @@
 package com.ss.editor.ui.control.layer.node;
 
 import static java.util.Objects.requireNonNull;
-
+import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.SpatialModelNode;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
@@ -13,14 +15,15 @@ import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.ModelNodeFactory;
 import com.ss.extension.scene.SceneLayer;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link NodeModelNode} for representing the {@link SceneLayer} in the editor.
@@ -52,6 +55,39 @@ public class SceneLayerModelNode extends ModelNode<SceneLayer> implements Hideab
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RenameNodeOperation(element.getName(), newName, element));
+    }
+
+    @Override
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return true;
+    }
+
+    @NotNull
+    @Override
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+
+        final SceneLayer element = getElement();
+
+        final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
+        final ModelChangeConsumer changeConsumer = (ModelChangeConsumer) requireNonNull(nodeTree.getChangeConsumer());
+
+        final Spatial currentModel = changeConsumer.getCurrentModel();
+        currentModel.depthFirstTraversal(spatial -> {
+            final SceneLayer layer = SceneLayer.getLayer(spatial);
+            if(layer == element) {
+                result.add(ModelNodeFactory.createFor(spatial));
+            }
+        });
+
+        return result;
+    }
+
+    @Override
+    public boolean canAccept(@NotNull final ModelNode<?> child) {
+        if (!(child instanceof SpatialModelNode<?>)) return false;
+        final SpatialModelNode<?> spatialNode = (SpatialModelNode<?>) child;
+        final Spatial element = spatialNode.getElement();
+        return SceneLayer.getLayer(element) != getElement();
     }
 
     @NotNull

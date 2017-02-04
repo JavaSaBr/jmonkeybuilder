@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.tree.dialog;
 
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
-
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
@@ -15,11 +14,6 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -31,7 +25,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
 
 /**
  * The implementation of a dialog for generating tangents.
@@ -40,25 +38,30 @@ import rlib.ui.util.FXUtils;
  */
 public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(530, 154);
 
+    @NotNull
     private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(),
-            CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+
+    @NotNull
+    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(), CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     public enum AlgorithmType {
         STANDARD,
         MIKKTSPACE;
+
         public static final AlgorithmType[] VALUES = values();
     }
 
     /**
-     * The model tree component.
+     * The node tree component.
      */
     @NotNull
-    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
+    private final AbstractNodeTree<?> nodeTree;
 
     /**
      * The generated node.
@@ -69,23 +72,26 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of types.
      */
+    @Nullable
     private ComboBox<AlgorithmType> algorithmTypeComboBox;
 
     /**
      * The check box about spliting mirrored.
      */
+    @Nullable
     private CheckBox splitMirroredCheckBox;
 
-    public GenerateTangentsDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
+    public GenerateTangentsDialog(@NotNull final AbstractNodeTree<?> nodeTree,
+                                  @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
     }
 
     /**
-     * @return the model tree component.
+     * @return the node tree component.
      */
     @NotNull
-    protected AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
+    protected AbstractNodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -147,26 +153,20 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         VBox.setMargin(splitMirroredContainer, LAST_FIELD_OFFSET);
     }
 
-    @Override
-    protected void processKey(@NotNull final KeyEvent event) {
-        super.processKey(event);
-        if (event.getCode() == KeyCode.ENTER) {
-            processOk();
-        }
-    }
-
     /**
      * @return the check box about spliting mirrored.
      */
+    @NotNull
     private CheckBox getSplitMirroredCheckBox() {
-        return splitMirroredCheckBox;
+        return requireNonNull(splitMirroredCheckBox);
     }
 
     /**
      * @return the list of types.
      */
+    @NotNull
     private ComboBox<AlgorithmType> getAlgorithmTypeComboBox() {
-        return algorithmTypeComboBox;
+        return requireNonNull(algorithmTypeComboBox);
     }
 
     @Override
@@ -192,7 +192,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeMeshOperation(newMesh, oldMesh, geometry));
 
-        hide();
+        super.processOk();
     }
 
     @NotNull

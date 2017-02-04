@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -20,7 +21,7 @@ import javafx.scene.control.TreeItem;
  */
 public class ModelNodeTreeCell extends AbstractNodeTreeCell<ModelChangeConsumer, ModelNodeTree> {
 
-    public ModelNodeTreeCell(@NotNull final ModelNodeTree nodeTree) {
+    ModelNodeTreeCell(@NotNull final ModelNodeTree nodeTree) {
         super(nodeTree);
     }
 
@@ -32,7 +33,7 @@ public class ModelNodeTreeCell extends AbstractNodeTreeCell<ModelChangeConsumer,
         if (element instanceof Spatial) {
 
             final ModelNodeTree nodeTree = getNodeTree();
-            final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+            final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
 
             final TreeItem<ModelNode<?>> parent = dragTreeItem.getParent();
 

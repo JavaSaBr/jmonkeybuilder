@@ -1,5 +1,7 @@
 package com.ss.editor.file.converter.impl;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static java.util.Objects.requireNonNull;
 import static rlib.util.FileUtils.containsExtensions;
 
 import com.jme3.asset.AssetManager;
@@ -8,6 +10,8 @@ import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
@@ -38,14 +42,25 @@ import rlib.util.array.ArrayFactory;
  */
 public abstract class AbstractFileConverter implements FileConverter {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileConverter.class);
 
+    @NotNull
     private static final Array<String> EMPTY_ARRAY = ArrayFactory.newArray(String.class);
 
+    @NotNull
+    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-    protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @Override
@@ -84,11 +99,9 @@ public abstract class AbstractFileConverter implements FileConverter {
         });
     }
 
-    protected void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite) {
+    private void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite) {
 
-        final Path assetFile = Objects.requireNonNull(EditorUtil.getAssetFile(source),
-                "Not found asset file for " + source);
-
+        final Path assetFile = requireNonNull(getAssetFile(source), "Not found asset file for " + source);
         final ModelKey modelKey = new ModelKey(assetFile.toString());
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -134,10 +147,12 @@ public abstract class AbstractFileConverter implements FileConverter {
      *
      * @param file the changed file.
      */
-    protected void notifyFileChanged(@NotNull final Path file) {
+    @FromAnyThread
+    private void notifyFileChanged(@NotNull final Path file) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileChangedImpl(file));
     }
 
+    @FXThread
     private void notifyFileChangedImpl(@NotNull final Path file) {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.decrementLoading();
@@ -148,10 +163,12 @@ public abstract class AbstractFileConverter implements FileConverter {
      *
      * @param file the created file.
      */
-    protected void notifyFileCreated(@Nullable final Path file) {
+    @FromAnyThread
+    private void notifyFileCreated(@Nullable final Path file) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(file));
     }
 
+    @FXThread
     private void notifyFileCreatedImpl(@Nullable final Path file) {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.decrementLoading();

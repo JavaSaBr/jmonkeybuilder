@@ -1,57 +1,74 @@
 package com.ss.editor.ui.control.model.node.spatial;
 
+import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
+import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static java.util.Objects.requireNonNull;
-
+import com.jme3.animation.SkeletonControl;
+import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.control.VehicleControl;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
-import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.node.light.LightModelNode;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.AddUserDataAction;
 import com.ss.editor.ui.control.model.tree.action.RemoveNodeAction;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
-import com.ss.editor.ui.control.model.tree.action.control.CreateCharacterAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateCustomControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.CreateMotionControlAction;
-import com.ss.editor.ui.control.model.tree.action.control.CreateRigidBodyControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacterControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBodyControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.CreateStaticRigidBodyControlAction;
+import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.CreateVehicleControlAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link ModelNode} for representing the {@link Spatial} in the editor.
+ * The implementation of the {@link ModelNode} to represent a {@link Spatial} in an editor.
  *
  * @author JavaSaBr
  */
 public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
-    public SpatialModelNode(@NotNull final T element, final long objectId) {
+    SpatialModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+                                @NotNull final ObservableList<MenuItem> items) {
+        if (!(nodeTree instanceof ModelNodeTree)) return;
+
+        final Menu createMenu = createCreationMenu(nodeTree);
+        if (createMenu != null) items.add(createMenu);
+
+        final Menu toolMenu = createToolMenu(nodeTree);
+        if (toolMenu != null) items.add(toolMenu);
+
         if (canEditName()) items.add(new RenameNodeAction(nodeTree, this));
         if (canRemove()) items.add(new RemoveNodeAction(nodeTree, this));
+
         items.add(new AddUserDataAction(nodeTree, this));
+
         super.fillContextMenu(nodeTree, items);
     }
 
@@ -64,17 +81,44 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     @Nullable
     protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
 
-        final Menu menu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
+        final T element = getElement();
+        final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
 
-        final Menu createControlsMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
-        createControlsMenu.getItems().addAll(new CreateCustomControlAction(nodeTree, this),
-                new CreateRigidBodyControlAction(nodeTree, this),
-                new CreateMotionControlAction(nodeTree, this),
-                new CreateCharacterAction(nodeTree, this));
+        final Menu menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
+        final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
+
+        final ObservableList<MenuItem> items = createControlsMenu.getItems();
+        items.add(new CreateCustomControlAction(nodeTree, this));
+
+        if (element.getControl(RigidBodyControl.class) == null) {
+            items.add(new CreateStaticRigidBodyControlAction(nodeTree, this));
+            items.add(new CreateRigidBodyControlAction(nodeTree, this));
+        }
+
+        if (element.getControl(VehicleControl.class) == null) {
+            items.add(new CreateVehicleControlAction(nodeTree, this));
+        }
+
+        if (element.getControl(CharacterControl.class) == null) {
+            items.add(new CreateCharacterControlAction(nodeTree, this));
+        }
+
+        if (element.getControl(MotionEvent.class) == null) {
+            items.add(new CreateMotionControlAction(nodeTree, this));
+        }
+
+        //if (skeletonControl != null) {
+            //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
+        //}
 
         menu.getItems().add(createControlsMenu);
 
         return menu;
+    }
+
+    @Nullable
+    protected Menu createToolMenu(final @NotNull AbstractNodeTree<?> nodeTree) {
+        return null;
     }
 
     @NotNull
@@ -90,8 +134,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof ModelNodeTree;
     }
 
     @Override

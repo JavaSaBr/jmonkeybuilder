@@ -1,13 +1,13 @@
 package com.ss.editor.ui.control.model.tree.dialog.geometry.lod;
 
+import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
-
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -15,29 +15,25 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-import java.util.Objects;
-
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import jme3tools.optimize.LodGenerator;
 import jme3tools.optimize.LodGenerator.TriangleReductionMethod;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
+import java.util.Objects;
 
 /**
  * The implementation of a dialog for generating lod levels.
@@ -58,14 +54,15 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     public enum ReductionMethod {
         PROPORTIONAL,
         CONSTANT;
+
         public static final ReductionMethod[] VALUES = values();
     }
 
     /**
-     * The model tree component.
+     * The node tree component.
      */
     @NotNull
-    private final AbstractNodeTree<ModelChangeConsumer> nodeTree;
+    private final AbstractNodeTree<?> nodeTree;
 
     /**
      * The geometry.
@@ -82,14 +79,16 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of reduction methods.
      */
+    @Nullable
     private ComboBox<ReductionMethod> reductionMethodComboBox;
 
     /**
      * The list view with levels of LoD.
      */
+    @Nullable
     private ListView<Number> levelsList;
 
-    public GenerateLodLevelsDialog(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, final @NotNull Geometry geometry) {
+    public GenerateLodLevelsDialog(@NotNull final AbstractNodeTree<?> nodeTree, final @NotNull Geometry geometry) {
         this.nodeTree = nodeTree;
         this.geometry = geometry;
         this.mesh = geometry.getMesh();
@@ -97,10 +96,10 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * @return the model tree component.
+     * @return the node tree component.
      */
     @NotNull
-    private AbstractNodeTree<ModelChangeConsumer> getNodeTree() {
+    private AbstractNodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -135,7 +134,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ListView<Number> getLevelsList() {
-        return Objects.requireNonNull(levelsList);
+        return requireNonNull(levelsList);
     }
 
     @NotNull
@@ -188,8 +187,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         final Button removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
         removeButton.setOnAction(event -> processRemove());
-        removeButton.disableProperty().bind(levelsList.getSelectionModel()
-                .selectedItemProperty().isNull());
+        removeButton.disableProperty().bind(levelsList.getSelectionModel().selectedItemProperty().isNull());
 
         FXUtils.addToPane(addButton, addRemoveButtonsContainer);
         FXUtils.addToPane(removeButton, addRemoveButtonsContainer);
@@ -260,14 +258,14 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<ReductionMethod> getReductionMethodComboBox() {
-        return Objects.requireNonNull(reductionMethodComboBox);
+        return requireNonNull(reductionMethodComboBox);
     }
 
     @Override
     protected void processOk() {
         EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(this::processGenerate);
-        hide();
+        super.processOk();
     }
 
     /**
@@ -286,8 +284,9 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         }
 
         final ReductionMethod method = getMethod();
-        final TriangleReductionMethod resultMethod = method == ReductionMethod.CONSTANT ?
-                TriangleReductionMethod.CONSTANT : TriangleReductionMethod.PROPORTIONAL;
+        final TriangleReductionMethod resultMethod =
+                method == ReductionMethod.CONSTANT ? TriangleReductionMethod.CONSTANT :
+                        TriangleReductionMethod.PROPORTIONAL;
 
         final ListView<Number> levelsList = getLevelsList();
         final ObservableList<Number> items = levelsList.getItems();
@@ -302,11 +301,10 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
         EXECUTOR_MANAGER.addFXTask(() -> {
 
-            final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-            final ModelChangeConsumer consumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+            final AbstractNodeTree<?> nodeTree = getNodeTree();
+            final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
 
-            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(geometry,
-                    Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
+            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
             operation.setApplyHandler((geom, buffers) -> geom.getMesh().setLodLevels(buffers));
 
             consumer.execute(operation);

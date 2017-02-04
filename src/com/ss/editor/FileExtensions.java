@@ -1,7 +1,7 @@
 package com.ss.editor;
 
 /**
- * The list of all file extension.
+ * The list of all file extensions.
  *
  * @author JavaSaBr
  */

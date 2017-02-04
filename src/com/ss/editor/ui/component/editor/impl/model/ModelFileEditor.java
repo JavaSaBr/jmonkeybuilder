@@ -41,6 +41,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -52,9 +53,9 @@ import rlib.util.array.ArrayFactory;
  */
 public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditorAppState, ModelFileEditorState> {
 
-    public static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
+    private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
-    public static final Insets LIGHT_BUTTON_OFFSET = new Insets(0, 4, 0, 4);
+    private static final Insets LIGHT_BUTTON_OFFSET = new Insets(0, 4, 0, 4);
 
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -81,14 +82,16 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     /**
      * The list of fast skies.
      */
+    @Nullable
     private ComboBox<String> fastSkyComboBox;
 
     /**
      * The light toggle.
      */
+    @Nullable
     private ToggleButton lightButton;
 
-    public ModelFileEditor() {
+    private ModelFileEditor() {
         super();
     }
 
@@ -103,7 +106,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
      */
     @NotNull
     private ComboBox<String> getFastSkyComboBox() {
-        return fastSkyComboBox;
+        return requireNonNull(fastSkyComboBox);
     }
 
     @Override
@@ -114,8 +117,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(modelKey);
-
         final Spatial model = assetManager.loadAsset(modelKey);
 
         MaterialUtils.cleanUpMaterialParams(model);
@@ -123,7 +124,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final ModelEditorAppState editorAppState = getEditorAppState();
         editorAppState.openModel(model);
 
-        handleObjects(model);
+        handleAddedObject(model);
 
         setCurrentModel(model);
         setIgnoreListeners(true);
@@ -157,8 +158,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    protected void handleObjects(@NotNull final Spatial model) {
-        super.handleObjects(model);
+    protected void handleAddedObject(@NotNull final Spatial model) {
+        super.handleAddedObject(model);
 
         final ModelEditorAppState editorState = getEditorAppState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);

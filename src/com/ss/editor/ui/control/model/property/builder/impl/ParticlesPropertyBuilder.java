@@ -38,8 +38,8 @@ import tonegod.emitter.node.ParticleNode;
  */
 public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
-    public static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
-    public static final EmissionPoint[] PARTICLE_EMISSION_POINTS = EmissionPoint.values();
+    private static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
+    private static final EmissionPoint[] PARTICLE_EMISSION_POINTS = EmissionPoint.values();
 
     private static final PropertyBuilder INSTANCE = new ParticlesPropertyBuilder();
 
@@ -47,7 +47,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
         return INSTANCE;
     }
 
-    public ParticlesPropertyBuilder() {
+    private ParticlesPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

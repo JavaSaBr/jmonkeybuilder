@@ -2,11 +2,9 @@ package com.ss.editor.ui.component.tab;
 
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSClasses;
-
-import org.jetbrains.annotations.NotNull;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventTarget;
 import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
@@ -15,6 +13,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -27,12 +27,14 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * The split pane.
      */
+    @NotNull
     protected final SplitPane pane;
 
     /**
      * Is collapsed.
      */
-    protected final BooleanProperty collapsed;
+    @NotNull
+    private final BooleanProperty collapsed;
 
     /**
      * The last expand position.
@@ -44,12 +46,21 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      */
     private boolean changingTab;
 
-    public TabToolComponent(@NotNull final SplitPane pane) {
+    TabToolComponent(@NotNull final SplitPane pane) {
         this.collapsed = new SimpleBooleanProperty(this, "collapsed", false);
         this.collapsed.bind(widthProperty().lessThanOrEqualTo(minWidthProperty()));
         this.pane = pane;
         addEventHandler(MouseEvent.MOUSE_CLICKED, this::processMouseClick);
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changedTab(oldValue));
+    }
+
+    /**
+     * Add a change tab index listener.
+     *
+     * @param listener the listener.
+     */
+    public void addChangeListener(@NotNull final ChangeListener<? super Number> listener) {
+        getSelectionModel().selectedIndexProperty().addListener(listener);
     }
 
     /**
@@ -62,28 +73,28 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * @return the last expand position.
      */
-    public double getExpandPosition() {
+    private double getExpandPosition() {
         return expandPosition;
     }
 
     /**
      * @param changingTab true if now is changing tab.
      */
-    public void setChangingTab(final boolean changingTab) {
+    private void setChangingTab(final boolean changingTab) {
         this.changingTab = changingTab;
     }
 
     /**
      * @return true if now is changing tab.
      */
-    public boolean isChangingTab() {
+    private boolean isChangingTab() {
         return changingTab;
     }
 
     /**
      * Handle a changed tab.
      */
-    private void changedTab(final Tab oldValue) {
+    private void changedTab(@Nullable final Tab oldValue) {
         if (isCollapsed()) expand();
         setChangingTab(oldValue != null);
     }
@@ -149,7 +160,7 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * Expand selected tab.
      */
-    public void expand() {
+    private void expand() {
 
         final int dividerIndex = getDividerIndex();
         final double position = getExpandPosition();
@@ -157,14 +168,14 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
         expand(dividerIndex, position);
     }
 
-    protected int getDividerIndex() {
+    private int getDividerIndex() {
         return 0;
     }
 
     /**
      * Expand selected tab.
      */
-    public void expand(final int dividerIndex, final double position) {
+    private void expand(final int dividerIndex, final double position) {
         pane.setDividerPosition(dividerIndex, position);
     }
 }

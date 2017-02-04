@@ -1,13 +1,14 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.event.EventType;
-
 /**
- * The event-request for selecting a file.
+ * The event about request to select a file.
  *
  * @author JavaSaBr
  */
@@ -21,7 +22,7 @@ public class RequestSelectFileEvent extends SceneEvent {
         }
     }
 
-    public static final String FILE = "file";
+    private static final String FILE = "file";
 
     public RequestSelectFileEvent() {
         super(EVENT_TYPE);
@@ -30,14 +31,15 @@ public class RequestSelectFileEvent extends SceneEvent {
     /**
      * @return the file.
      */
+    @NotNull
     public Path getFile() {
-        return get(FILE);
+        return requireNonNull(get(FILE));
     }
 
     /**
      * @param file the file.
      */
-    public void setFile(final Path file) {
+    public void setFile(@NotNull final Path file) {
         set(FILE, file);
     }
 }

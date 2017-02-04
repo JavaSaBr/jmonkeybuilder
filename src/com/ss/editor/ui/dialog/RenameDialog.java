@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Point;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -30,22 +32,28 @@ import rlib.ui.util.FXUtils;
  */
 public class RenameDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Insets NAME_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 140);
 
     /**
      * The function for validation name.
      */
+    @Nullable
     private Function<String, Boolean> validator;
 
     /**
      * The function for handling a new name.
      */
+    @Nullable
     private Consumer<String> handler;
 
     /**
      * The text field.
      */
+    @Nullable
     private TextField nameField;
 
     @Override
@@ -96,15 +104,16 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * @return the text field.
      */
+    @NotNull
     private TextField getNameField() {
-        return nameField;
+        return requireNonNull(nameField);
     }
 
     /**
      * @return the function for validation name.
      */
     @Nullable
-    public Function<String, Boolean> getValidator() {
+    private Function<String, Boolean> getValidator() {
         return validator;
     }
 
@@ -133,7 +142,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     /**
      * Validate a new name.
      */
-    private void validateName(final String name) {
+    private void validateName(@NotNull final String name) {
         final Function<String, Boolean> validator = getValidator();
         final Button okButton = getOkButton();
         okButton.setDisable(!(validator == null || validator.apply(name)));
@@ -149,14 +158,6 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     @Override
     protected String getButtonOkLabel() {
         return Messages.RENAME_DIALOG_BUTTON_OK;
-    }
-
-    @Override
-    protected void processKey(@NotNull final KeyEvent event) {
-        super.processKey(event);
-        if (event.getCode() == KeyCode.ENTER) {
-            processOk();
-        }
     }
 
     /**

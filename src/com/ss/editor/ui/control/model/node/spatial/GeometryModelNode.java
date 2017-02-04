@@ -4,20 +4,17 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.GenerateLoDAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.tree.node.ModelNodeFactory;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -28,7 +25,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
 
-    public GeometryModelNode(final T element, final long objectId) {
+    public GeometryModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
@@ -40,7 +37,8 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        if (!(nodeTree instanceof ModelNodeTree)) return ModelNode.EMPTY_ARRAY;
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
 
@@ -53,15 +51,15 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
         return result;
     }
 
+    @Nullable
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    protected Menu createToolMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
 
         final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
-        toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this), new GenerateLoDAction(nodeTree, this));
+        toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this),
+                        new GenerateLoDAction(nodeTree, this));
 
-        items.add(toolActions);
-
-        super.fillContextMenu(nodeTree, items);
+        return toolActions;
     }
 
     @Override

@@ -49,9 +49,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
             geometry.setMaterial(material);
 
         } else {
-
-            assetManager.deleteFromCache(materialKey);
-
             final Material material = assetManager.loadAsset(materialKey);
             geometry.setMaterial(material);
         }
@@ -89,7 +86,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         return INSTANCE;
     }
 
-    public GeometryPropertyBuilder() {
+    private GeometryPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 

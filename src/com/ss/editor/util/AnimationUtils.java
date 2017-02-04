@@ -1,7 +1,6 @@
 package com.ss.editor.util;
 
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.BoneTrack;
@@ -9,14 +8,12 @@ import com.jme3.animation.Track;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FromAnyThread;
-
 import org.jetbrains.annotations.NotNull;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 /**
  * The utility class to work with animations.
@@ -25,10 +22,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class AnimationUtils {
 
-    @NotNull
     private static final Field ANIMATIONS_MAP_FIELD;
-
-    @NotNull
     private static final Field ANIMATION_NAME_FIELD;
 
     static {
@@ -87,7 +81,8 @@ public class AnimationUtils {
      * @return the extracted bone track.
      */
     @NotNull
-    protected static BoneTrack extractBoneTrack(@NotNull final BoneTrack boneTrack, final int startFrame, final int endFrame) {
+    private static BoneTrack extractBoneTrack(@NotNull final BoneTrack boneTrack, final int startFrame,
+                                              final int endFrame) {
 
         final float[] sourceTimes = boneTrack.getTimes();
 
@@ -129,13 +124,11 @@ public class AnimationUtils {
             final Map<String, Animation> animationMap = unsafeCast(ANIMATIONS_MAP_FIELD.get(control));
 
             if (!animationMap.containsKey(oldName)) {
-                throw new IllegalArgumentException("Given animation does not exist "
-                        + "in this AnimControl");
+                throw new IllegalArgumentException("Given animation does not exist " + "in this AnimControl");
             }
 
             if (animationMap.containsKey(newName)) {
-                throw new IllegalArgumentException("The same animation exist "
-                        + "in this AnimControl");
+                throw new IllegalArgumentException("The same animation exist " + "in this AnimControl");
             }
 
             ANIMATION_NAME_FIELD.set(animation, newName);

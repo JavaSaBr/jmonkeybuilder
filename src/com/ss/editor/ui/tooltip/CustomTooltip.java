@@ -19,7 +19,7 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     @NotNull
     private final R root;
 
-    public CustomTooltip() {
+    CustomTooltip() {
         this.root = createRoot();
 
         final Scene scene = getScene();

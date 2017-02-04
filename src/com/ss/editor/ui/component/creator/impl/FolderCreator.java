@@ -13,12 +13,13 @@ import java.nio.file.Path;
 import rlib.util.StringUtils;
 
 /**
- * Реализация создателя новых папок.
+ * The creator to create a folder.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FolderCreator extends AbstractFileCreator {
 
+    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
     static {
@@ -52,7 +53,6 @@ public class FolderCreator extends AbstractFileCreator {
         super.processCreate();
 
         final Path fileToCreate = getFileToCreate();
-
         try {
             Files.createDirectory(fileToCreate);
         } catch (final IOException e) {

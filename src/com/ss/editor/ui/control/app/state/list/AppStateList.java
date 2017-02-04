@@ -11,11 +11,6 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -24,8 +19,11 @@ import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
+
+import java.util.function.Consumer;
 
 /**
  * The component to show and to edit app states.
@@ -113,6 +111,14 @@ public class AppStateList extends VBox {
         if (selected != null && appStates.contains(selected)) {
             selectionModel.select(selected);
         }
+    }
+
+    /**
+     * Clear selection.
+     */
+    public void clearSelection() {
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
+        selectionModel.select(null);
     }
 
     /**

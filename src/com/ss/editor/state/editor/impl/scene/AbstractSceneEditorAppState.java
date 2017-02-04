@@ -3,6 +3,7 @@ package com.ss.editor.state.editor.impl.scene;
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 import static java.util.Objects.requireNonNull;
 
+import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
@@ -64,7 +65,7 @@ import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
+ * The base implementation of the {@link AppState} for the editor.
  *
  * @author JavaSaBr
  */
@@ -658,11 +659,13 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
             final Spatial shape = selectionShape.get(spatial);
             if (shape == null) return;
 
-            state.updateTransformNode(spatial.getWorldTransform());
-
             if (spatial instanceof EditorLightNode) {
                 spatial = ((EditorLightNode) spatial).getModel();
+            } else if (spatial instanceof EditorAudioNode) {
+                spatial = ((EditorAudioNode) spatial).getModel();
             }
+
+            state.updateTransformNode(spatial.getWorldTransform());
 
             requireNonNull(spatial);
 
@@ -1403,8 +1406,9 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         final Quaternion rotation = new Quaternion();
         rotation.lookAt(audio.getDirection(), camera.getUp());
 
-        audioModel.setLocalRotation(rotation);
-        audioModel.setLocalTranslation(audio.getLocalTranslation());
+        final Node editedNode = audioModel.getEditedNode();
+        editedNode.setLocalRotation(rotation);
+        editedNode.setLocalTranslation(audio.getLocalTranslation());
 
         final Node audioNode = getAudioNode();
         audioNode.attachChild(audioModel);

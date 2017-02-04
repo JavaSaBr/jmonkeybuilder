@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 /**
- * The implementation of the Node Selector dialog to select a geometry.
+ * The implementation of node selector dialog to select a geometry.
  *
  * @author JavaSaBr
  */

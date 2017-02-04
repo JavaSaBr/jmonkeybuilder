@@ -4,16 +4,15 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to create a {@link MotionEvent}.
@@ -40,7 +39,7 @@ public class CreateMotionControlAction extends AbstractCreateControlAction {
 
     @NotNull
     @Override
-    protected Control createControl() {
+    protected Control createControl(@NotNull final Spatial parent) {
 
         final MotionPath motionPath = new MotionPath();
         motionPath.addWayPoint(Vector3f.ZERO.clone());

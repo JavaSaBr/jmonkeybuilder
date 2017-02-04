@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The interface for implementing a control of a scene editor.
+ * The interface to implement a control of a scene editor.
  *
  * @author JavaSaBr
  */
 public interface SceneEditorControl {
 
-    public static final String LOADED_MODEL_KEY = SceneEditorControl.class.getName() + ".loadedModel";
+    String LOADED_MODEL_KEY = SceneEditorControl.class.getName() + ".loadedModel";
 
     enum TransformType {
         MOVE_TOOL,

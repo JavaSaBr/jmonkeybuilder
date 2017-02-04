@@ -42,7 +42,7 @@ public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> 
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
 
-        final PlayParametersDialog dialog = new PlayParametersDialog(getNodeTree(), (AnimationControlModelNode) getNode());
+        final PlayParametersDialog dialog = new PlayParametersDialog((AnimationControlModelNode) getNode());
         dialog.show(scene.getWindow());
     }
 }

@@ -20,7 +20,7 @@ import rlib.util.array.ArrayFactory;
  */
 public abstract class ModelNode<T> implements UObject {
 
-    private static final Array<ModelNode<?>> EMPTY_ARRAY = ArrayFactory.newArray(ModelNode.class);
+    public static final Array<ModelNode<?>> EMPTY_ARRAY = ArrayFactory.newArray(ModelNode.class);
 
     protected static final Editor EDITOR = Editor.getInstance();
 
@@ -57,7 +57,7 @@ public abstract class ModelNode<T> implements UObject {
      */
     @NotNull
     public String getName() {
-        return "null";
+        return "unknown name";
     }
 
     /**
@@ -65,6 +65,13 @@ public abstract class ModelNode<T> implements UObject {
      */
     public boolean hasChildren() {
         return false;
+    }
+
+    /**
+     * @return true of this node has any children.
+     */
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return hasChildren();
     }
 
     /**

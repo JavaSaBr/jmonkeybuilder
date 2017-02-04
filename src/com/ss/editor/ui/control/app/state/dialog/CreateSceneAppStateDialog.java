@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.app.state.dialog;
 
 import static java.util.Objects.requireNonNull;
 import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
-
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ResourceManager;
@@ -16,26 +15,23 @@ import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableSkySceneAppState;
+import com.ss.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
 import com.ss.extension.scene.filter.SceneFilter;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-import java.net.URLClassLoader;
-
 import javafx.geometry.Insets;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.ObjectDictionary;
+
+import java.awt.*;
+import java.net.URLClassLoader;
 
 /**
  * The dialog to create a scene app state.
@@ -55,6 +51,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     static {
         register(new EditableLightingSceneAppState());
         register(new EditableSkySceneAppState());
+        register(new EditableBulletSceneAppState());
     }
 
     private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();

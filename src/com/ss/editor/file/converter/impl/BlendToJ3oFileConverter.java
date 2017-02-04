@@ -10,12 +10,13 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of {@link AbstractFileConverter} for converting .blend file to .j3o.
+ * The implementation of {@link AbstractFileConverter} to convert .blend file to .j3o.
  *
  * @author JavaSaBr
  */
 public class BlendToJ3oFileConverter extends AbstractFileConverter {
 
+    @NotNull
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -23,6 +24,7 @@ public class BlendToJ3oFileConverter extends AbstractFileConverter {
         EXTENSIONS.asUnsafe().trimToSize();
     }
 
+    @NotNull
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
 
     static {

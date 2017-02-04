@@ -4,6 +4,7 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.audio.PlayAudioNodeAction;
 import com.ss.editor.ui.control.model.tree.action.audio.StopAudioNodeAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -28,6 +29,7 @@ public class AudioModelNode extends NodeModelNode<AudioNode> {
 
     @Override
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+        if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final AudioNode element = getElement();
         final AudioData audioData = element.getAudioData();

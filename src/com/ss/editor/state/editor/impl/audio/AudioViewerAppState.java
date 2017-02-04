@@ -30,16 +30,19 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
     /**
      * The audio node.
      */
+    @Nullable
     private AudioNode audioNode;
 
     /**
      * The audio data.
      */
+    @Nullable
     private AudioData audioData;
 
     /**
      * The audio key.
      */
+    @Nullable
     private AudioKey audioKey;
 
     /**

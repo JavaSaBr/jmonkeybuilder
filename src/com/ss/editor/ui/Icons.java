@@ -1,8 +1,8 @@
 package com.ss.editor.ui;
 
 import com.ss.editor.manager.FileIconManager;
-
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The interface with all icons of this application.
@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
  */
 public interface Icons {
 
+    @NotNull
     FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/save.png", 16);
@@ -24,7 +25,7 @@ public interface Icons {
     Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
     Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/node.png");
     Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particles.png");
-    Image PARTICLE_GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particle_geometry.png");
+    Image PARTICLE_GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particle-geometry.png");
     Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/geometry.png");
     Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/mesh.png");
     Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/edit.png");
@@ -35,7 +36,7 @@ public interface Icons {
     Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/play.png");
     Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/stop.png");
     Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/animation.png");
-    Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim_channel.png");
+    Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim-channel.png");
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/bone.png");
     Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/audio.png");
@@ -56,6 +57,20 @@ public interface Icons {
     Image SKY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sky.png");
     Image INVISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/invisible.png");
     Image VISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/visible.png");
+    Image STATIC_RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/static-rigid-body.png");
+    Image RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rigid-body.png");
+    Image REPLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/reply.png");
+    Image CHARACTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/character.png");
+    Image SKELETON_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/skeleton.png");
+    Image VEHICLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/vehicle.png");
+    Image ATOM_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/atom.png");
+    Image PHYSICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/physics.png");
+    Image DOLL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/doll.png");
+    Image CAPSULE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/capsule.png");
+    Image CONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cone.png");
+    Image CYLINDER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cylinder.png");
+    Image TERRAIN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/terrain.png");
+    Image WHEEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/wheel.svg");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);

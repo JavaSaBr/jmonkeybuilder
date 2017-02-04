@@ -15,17 +15,19 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.jetbrains.annotations.NotNull;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of {@link AssetLocator} for loading the data from asset folder.
+ * The implementation of {@link AssetLocator} to load data from an asset folder.
  *
  * @author JavaSaBr
  */
 public class FolderAssetLocator implements AssetLocator {
 
+    @NotNull
     private static final Array<String> URL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -33,7 +35,7 @@ public class FolderAssetLocator implements AssetLocator {
     }
 
     @Override
-    public void setRootPath(String rootPath) {
+    public void setRootPath(@NotNull final String rootPath) {
     }
 
     @Override
@@ -53,14 +55,14 @@ public class FolderAssetLocator implements AssetLocator {
             try {
                 final URL url = resolve.toUri().toURL();
                 return UrlAssetInfo.create(manager, key, url);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
         try {
             return new StreamAssetInfo(manager, key, newInputStream(resolve));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }

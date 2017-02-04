@@ -8,11 +8,11 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.filter.property.control.BooleanFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.ColorFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.DirectionLightElementPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.DirectionLightElementFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.EnumFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.FloatFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.IntegerFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.PointLightElementPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.PointLightElementFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.StringFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector2fFilterPropertyControl;
 import com.ss.editor.ui.control.filter.property.control.Vector3fFilterPropertyControl;
@@ -164,8 +164,8 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                     final EditableProperty<DirectionalLight, ?> property = cast(editableProperty);
                     final DirectionalLight value = property.getValue();
 
-                    final DirectionLightElementPropertyControl<EditableProperty<DirectionalLight, ?>> propertyControl =
-                            new DirectionLightElementPropertyControl<>(value, property.getName(), changeConsumer);
+                    final DirectionLightElementFilterPropertyControl<EditableProperty<DirectionalLight, ?>> propertyControl =
+                            new DirectionLightElementFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;
@@ -175,8 +175,8 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                     final EditableProperty<PointLight, ?> property = cast(editableProperty);
                     final PointLight value = property.getValue();
 
-                    final PointLightElementPropertyControl<EditableProperty<PointLight, ?>> propertyControl =
-                            new PointLightElementPropertyControl<>(value, property.getName(), changeConsumer);
+                    final PointLightElementFilterPropertyControl<EditableProperty<PointLight, ?>> propertyControl =
+                            new PointLightElementFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

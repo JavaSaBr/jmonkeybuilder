@@ -70,7 +70,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
     @NotNull
     @Override
-    protected Parent buildSecondPart(final HBox container) {
+    protected Parent buildSecondPart(@NotNull final HBox container) {
 
         final GridPane settingsContainer = new GridPane();
         settingsContainer.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER);
@@ -183,8 +183,6 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
             }
 
             final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
-            assetManager.deleteFromCache(materialKey);
-
             final Material material = assetManager.loadAsset(materialKey);
             final MaterialDef materialDef = material.getMaterialDef();
 

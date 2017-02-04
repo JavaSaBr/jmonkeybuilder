@@ -9,7 +9,6 @@ import com.ss.editor.ui.component.editor.impl.MaterialDefinitionFileEditor;
 import com.ss.editor.ui.component.editor.impl.TextFileEditor;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
-import com.ss.editor.ui.component.editor.impl.post.filter.PostFilterEditor;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +65,6 @@ public class EditorRegistry {
      */
     private void loadDescriptions() {
         addDescription(TextFileEditor.DESCRIPTION);
-        addDescription(PostFilterEditor.DESCRIPTION);
         addDescription(MaterialFileEditor.DESCRIPTION);
         addDescription(ModelFileEditor.DESCRIPTION);
         addDescription(ImageViewerEditor.DESCRIPTION);

@@ -1,32 +1,37 @@
 package com.ss.editor.ui.event;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
-
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 /**
- * Менеджер слушателей событий UI JavaFX.
+ * The class to manage javaFX events.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FXEventManager {
 
+    @NotNull
     private static final FXEventManager INSTANCE = new FXEventManager();
 
+    @NotNull
     public static FXEventManager getInstance() {
         return INSTANCE;
     }
 
     /**
-     * Таблица обработчиков событий.
+     * The table of event handlers.
      */
+    @NotNull
     private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers;
 
     public FXEventManager() {
@@ -34,46 +39,52 @@ public class FXEventManager {
     }
 
     /**
-     * Добавление обработчика событий javaFX UI.
+     * Add a new event handler.
      *
-     * @param eventType    тип событий.
-     * @param eventHandler обработчик событий.
+     * @param eventType    the event type.
+     * @param eventHandler the event handler.
      */
-    public void addEventHandler(final EventType<? extends Event> eventType, final EventHandler<? super Event> eventHandler) {
+    @FXThread
+    public void addEventHandler(@NotNull final EventType<? extends Event> eventType,
+                                @NotNull final EventHandler<? super Event> eventHandler) {
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
         final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType, () -> ArrayFactory.newArray(EventHandler.class));
         handlers.add(eventHandler);
     }
 
     /**
-     * Удаление обработчика событий javaFX UI.
+     * Remove an old event handler.
      *
-     * @param eventType    тип событий.
-     * @param eventHandler обработчик событий.
+     * @param eventType    the event type.
+     * @param eventHandler the event handler.
      */
-    public void removeEventHandler(final EventType<? extends Event> eventType, final EventHandler<? super Event> eventHandler) {
+    @FXThread
+    public void removeEventHandler(@NotNull final EventType<? extends Event> eventType,
+                                   @NotNull final EventHandler<? super Event> eventHandler) {
 
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
-
-        Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
+        final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
         if (handlers == null) return;
 
         handlers.slowRemove(eventHandler);
     }
 
     /**
-     * @return словарь обработчиков событий.
+     * @return the table of event handlers.
      */
-    protected ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> getEventHandlers() {
+    @NotNull
+    @FXThread
+    private ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> getEventHandlers() {
         return eventHandlers;
     }
 
     /**
-     * Уведомление о событии javaFX UI.
+     * Notify about a new event.
      *
-     * @param event событие.
+     * @param event the new event.
      */
-    public void notify(final Event event) {
+    @FromAnyThread
+    public void notify(@NotNull final Event event) {
         if (Platform.isFxApplicationThread()) {
             notifyImpl(event);
         } else {
@@ -83,13 +94,15 @@ public class FXEventManager {
     }
 
     /**
-     * Реализация отправки события компонентам.
+     * The process of handling a new event.
      */
-    protected void notifyImpl(final Event event) {
+    @FXThread
+    private void notifyImpl(@NotNull final Event event) {
 
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
 
-        for (EventType<? extends Event> eventType = event.getEventType(); eventType != null; eventType = (EventType<? extends Event>) eventType.getSuperType()) {
+        for (EventType<? extends Event> eventType = event.getEventType();
+             eventType != null; eventType = (EventType<? extends Event>) eventType.getSuperType()) {
 
             final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
             if (handlers == null || handlers.isEmpty()) continue;
@@ -97,7 +110,7 @@ public class FXEventManager {
             handlers.forEach(event, EventHandler::handle);
         }
 
-        if (event instanceof ConsumeableEvent && !event.isConsumed()) {
+        if (event instanceof ConsumableEvent && !event.isConsumed()) {
             final ExecutorManager executorManager = ExecutorManager.getInstance();
             executorManager.addFXTask(() -> notifyImpl(event));
         }

@@ -6,6 +6,8 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.component.asset.tree.resource.FileElement;
+import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -137,7 +139,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         treeItem.setExpanded(expanded || level == 1);
 
         final ModelNode<?> element = treeItem.getValue();
-        if (!element.hasChildren()) return;
+        if (!element.hasChildren(this)) return;
 
         final ObservableList<TreeItem<ModelNode<?>>> items = treeItem.getChildren();
 
@@ -164,7 +166,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         items.clear();
 
         final ModelNode<?> element = treeItem.getValue();
-        if (!element.hasChildren()) return;
+        if (!element.hasChildren(this)) return;
 
         final Array<ModelNode<?>> children = element.getChildren(this);
         children.forEach(child -> items.add(new TreeItem<>(child)));
@@ -189,7 +191,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Get the context menu for the element.
      */
     @FXThread
-    public ContextMenu getContextMenu(@NotNull final ModelNode<?> modelNode) {
+    ContextMenu getContextMenu(@NotNull final ModelNode<?> modelNode) {
 
         final C changeConsumer = getChangeConsumer();
         if (changeConsumer == null) return null;
@@ -215,8 +217,8 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about moving the element.
      */
     @FXThread
-    public void notifyMoved(@Nullable final ModelNode<?> prevParent, @Nullable final ModelNode<?> newParent,
-                            @Nullable final ModelNode<?> node, final int index) {
+    private void notifyMoved(@Nullable final ModelNode<?> prevParent, @Nullable final ModelNode<?> newParent,
+                             @Nullable final ModelNode<?> node, final int index) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> prevParentItem = findItemForValue(treeView, prevParent);
@@ -252,7 +254,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about changed the element.
      */
     @FXThread
-    public void notifyChanged(@Nullable final ModelNode<?> modelNode) {
+    private void notifyChanged(@Nullable final ModelNode<?> modelNode) {
         if (modelNode == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
@@ -290,8 +292,8 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about replacing the element.
      */
     @FXThread
-    public void notifyReplace(@Nullable final ModelNode<?> parent, @Nullable final ModelNode<?> oldChild,
-                              @Nullable final ModelNode<?> newChild) {
+    private void notifyReplace(@Nullable final ModelNode<?> parent, @Nullable final ModelNode<?> oldChild,
+                               @Nullable final ModelNode<?> newChild) {
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> parentItem = findItemForValue(treeView, parent);
@@ -349,7 +351,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about adding the element.
      */
     @FXThread
-    public void notifyAdded(@Nullable final ModelNode<?> parent, @Nullable final ModelNode<?> child, final int index) {
+    private void notifyAdded(@Nullable final ModelNode<?> parent, @Nullable final ModelNode<?> child, final int index) {
         if (child == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
@@ -374,7 +376,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about removing the element.
      */
     @FXThread
-    public void notifyRemoved(@NotNull final Object parent, @NotNull final Object child) {
+    public void notifyRemoved(@Nullable final Object parent, @NotNull final Object child) {
         notifyRemoved(createFor(child));
     }
 
@@ -382,7 +384,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * Notify about removing the element.
      */
     @FXThread
-    public void notifyRemoved(@Nullable final ModelNode<?> modelNode) {
+    private void notifyRemoved(@Nullable final ModelNode<?> modelNode) {
         if (modelNode == null) return;
 
         final TreeItem<ModelNode<?>> treeItem = findItemForValue(getTreeView(), modelNode);

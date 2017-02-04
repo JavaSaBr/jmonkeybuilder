@@ -42,36 +42,40 @@ import rlib.util.os.OperatingSystem;
  */
 public class GAnalytics extends EditorThread {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(GAnalytics.class);
 
-    public static final String PARAM_PROTOCOL_VERSION = "v";
-    public static final String PARAM_TRACKING_ID = "tid";
-    public static final String PARAM_CLIENT_ID = "cid";
-    public static final String PARAM_HIT_TYPE = "t";
-    public static final String PARAM_EVENT_CATEGORY = "ec";
-    public static final String PARAM_EVENT_ACTION = "ea";
-    public static final String PARAM_EVENT_LABEL = "el";
-    public static final String PARAM_PAGE_VIEW_LOCATION = "dl";
-    public static final String PARAM_PAGE_VIEW_TITLE = "dt";
-    public static final String PARAM_PAGE_VIEW_PAGE = "dp";
-    public static final String PARAM_USER_TIMING_CATEGORY = "utc";
-    public static final String PARAM_USER_TIMING_VAR_NAME = "utv";
-    public static final String PARAM_USER_TIMING_TIME = "utt";
-    public static final String PARAM_USER_TIMING_LABEL = "utl";
-    public static final String PARAM_EXCEPTION_DESCRIPTION = "exd";
-    public static final String PARAM_IS_EXCEPTION_FATAL = "exf";
-    public static final String PARAM_CUSTOM_DIMENSION = "cd";
+    private static final String PARAM_PROTOCOL_VERSION = "v";
+    private static final String PARAM_TRACKING_ID = "tid";
+    private static final String PARAM_CLIENT_ID = "cid";
+    private static final String PARAM_HIT_TYPE = "t";
+    private static final String PARAM_EVENT_CATEGORY = "ec";
+    private static final String PARAM_EVENT_ACTION = "ea";
+    private static final String PARAM_EVENT_LABEL = "el";
+    private static final String PARAM_PAGE_VIEW_LOCATION = "dl";
+    private static final String PARAM_PAGE_VIEW_TITLE = "dt";
+    private static final String PARAM_PAGE_VIEW_PAGE = "dp";
+    private static final String PARAM_USER_TIMING_CATEGORY = "utc";
+    private static final String PARAM_USER_TIMING_VAR_NAME = "utv";
+    private static final String PARAM_USER_TIMING_TIME = "utt";
+    private static final String PARAM_USER_TIMING_LABEL = "utl";
+    private static final String PARAM_EXCEPTION_DESCRIPTION = "exd";
+    private static final String PARAM_IS_EXCEPTION_FATAL = "exf";
+    private static final String PARAM_CUSTOM_DIMENSION = "cd";
 
-    public static final String FIELD_OS = PARAM_CUSTOM_DIMENSION + "1";
-    public static final String FIELD_APP_VERSION = PARAM_CUSTOM_DIMENSION + "2";
-    public static final String FIELD_LOCALE = PARAM_CUSTOM_DIMENSION + "3";
-    public static final String FIELD_USER_ID = PARAM_CUSTOM_DIMENSION + "4";
+    private static final String FIELD_OS = PARAM_CUSTOM_DIMENSION + "1";
+    private static final String FIELD_APP_VERSION = PARAM_CUSTOM_DIMENSION + "2";
+    private static final String FIELD_LOCALE = PARAM_CUSTOM_DIMENSION + "3";
+    private static final String FIELD_USER_ID = PARAM_CUSTOM_DIMENSION + "4";
 
-    public static final String PROP_ANALYTICS_HOST = "http://www.google-analytics.com/collect";
-    public static final String PROP_TRACKING_ID = "UA-89459340-1";
-    public static final String PROP_CLIENT_ID = "89459340";
+    private static final String PROP_ANALYTICS_HOST = "http://www.google-analytics.com/collect";
+    private static final String PROP_TRACKING_ID = "UA-89459340-1";
+    private static final String PROP_CLIENT_ID = "89459340";
 
+    @NotNull
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
+    @NotNull
     private static final GAnalytics INSTANCE = new GAnalytics();
 
     @NotNull
@@ -200,7 +204,7 @@ public class GAnalytics extends EditorThread {
      * @param hitType    the hit type.
      * @param parameters the parameters.
      */
-    private static void send(final HitType hitType, final Map<String, Object> parameters) {
+    private static void send(@NotNull final HitType hitType, @NotNull final Map<String, Object> parameters) {
         parameters.put(PARAM_HIT_TYPE, hitType.toString());
         send(parameters);
     }
@@ -210,7 +214,7 @@ public class GAnalytics extends EditorThread {
      *
      * @param parameters the parameters.
      */
-    private static void send(final Map<String, Object> parameters) {
+    private static void send(@NotNull final Map<String, Object> parameters) {
         if (!EDITOR_CONFIG.isAnalytics()) return;
         getInstance().addTask(() -> doSend(parameters));
     }
@@ -220,7 +224,7 @@ public class GAnalytics extends EditorThread {
      *
      * @param parameters the parameters.
      */
-    private static void doSend(final Map<String, Object> parameters) {
+    private static void doSend(@NotNull final Map<String, Object> parameters) {
 
         final OperatingSystem operatingSystem = Config.OPERATING_SYSTEM;
 
@@ -265,13 +269,13 @@ public class GAnalytics extends EditorThread {
         }
     }
 
-    private static String buildParameters(final Map<String, Object> parameters) {
+    private static String buildParameters(@NotNull final Map<String, Object> parameters) {
         final StringBuilder builder = new StringBuilder();
         parameters.forEach((key, value) -> appendParam(builder, key, value));
         return builder.toString();
     }
 
-    private static void appendParam(final StringBuilder builder, final String key, final Object value) {
+    private static void appendParam(@NotNull final StringBuilder builder, @NotNull final String key, @Nullable final Object value) {
         if (value == null) return;
         else if (builder.length() > 1) {
             builder.append('&');
@@ -322,7 +326,7 @@ public class GAnalytics extends EditorThread {
 
     @Override
     public void run() {
-        for (; ; ) {
+        while(true) {
 
             Runnable next;
 

@@ -10,6 +10,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.Editor;
 import com.ss.editor.util.LocalObjects;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -19,7 +20,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EditorAudioNode extends Node {
 
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
+
+    /**
+     * The node to edit.
+     */
+    @NotNull
+    private final Node editedNode;
 
     /**
      * The audio node.
@@ -32,6 +40,11 @@ public class EditorAudioNode extends Node {
      */
     @Nullable
     private Node model;
+
+    public EditorAudioNode() {
+        this.editedNode = new Node("EditedNode");
+        attachChild(editedNode);
+    }
 
     /**
      * Set a audio node.
@@ -71,15 +84,24 @@ public class EditorAudioNode extends Node {
         this.model = model;
     }
 
+    /**
+     * @return the edited node.
+     */
+    @NotNull
+    public Node getEditedNode() {
+        return editedNode;
+    }
+
     @Override
     public void updateGeometricState() {
 
         final AudioNode audioNode = getAudioNode();
 
         if (audioNode != null) {
-            final Quaternion rotation = getLocalRotation();
+            final Node editedNode = getEditedNode();
+            final Quaternion rotation = editedNode.getLocalRotation();
             audioNode.setDirection(getDirection(rotation, audioNode.getDirection()));
-            audioNode.setLocalTranslation(getLocalTranslation());
+            audioNode.setLocalTranslation(editedNode.getLocalTranslation());
         }
 
         super.updateGeometricState();
@@ -90,18 +112,25 @@ public class EditorAudioNode extends Node {
      */
     public void updateModel() {
 
+        final AudioNode audioNode = getAudioNode();
         final Node model = getModel();
-        if (model == null) return;
+        if (model == null || audioNode == null) return;
 
+        final Node parent = audioNode.getParent();
+        if (parent != null) {
+            setLocalTranslation(parent.getWorldTranslation());
+        }
+
+        final Node editedNode = getEditedNode();
         final Camera camera = EDITOR.getCamera();
         final LocalObjects local = LocalObjects.get();
         final Vector3f positionOnCamera = local.getNextVector();
-        positionOnCamera.set(getLocalTranslation()).subtractLocal(camera.getLocation());
+        positionOnCamera.set(editedNode.getWorldTranslation()).subtractLocal(camera.getLocation());
         positionOnCamera.normalizeLocal();
         positionOnCamera.multLocal(camera.getFrustumNear() + 0.4f);
         positionOnCamera.addLocal(camera.getLocation());
 
         model.setLocalTranslation(positionOnCamera);
-        model.setLocalRotation(getLocalRotation());
+        model.setLocalRotation(editedNode.getLocalRotation());
     }
 }

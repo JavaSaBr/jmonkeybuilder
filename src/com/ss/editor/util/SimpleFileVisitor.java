@@ -1,5 +1,8 @@
 package com.ss.editor.util;
 
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -14,25 +17,29 @@ import java.nio.file.attribute.BasicFileAttributes;
 public interface SimpleFileVisitor extends FileVisitor<Path> {
 
     @Override
-    default FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+    default FileVisitResult preVisitDirectory(@NotNull final Path dir, @NotNull final BasicFileAttributes attrs)
+            throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    default FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+    default FileVisitResult visitFile(@NotNull final Path file, @NotNull final BasicFileAttributes attrs)
+            throws IOException {
         visit(file, attrs);
         return FileVisitResult.CONTINUE;
     }
 
-    void visit(final Path file, final BasicFileAttributes attrs);
+    void visit(@NotNull final Path file, @NotNull final BasicFileAttributes attrs);
 
     @Override
-    default FileVisitResult visitFileFailed(final Path file, final IOException exc) throws IOException {
+    default FileVisitResult visitFileFailed(@NotNull final Path file, @Nullable final IOException exc)
+            throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    default FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
+    default FileVisitResult postVisitDirectory(@NotNull final Path dir, @Nullable final IOException exc)
+            throws IOException {
         return FileVisitResult.CONTINUE;
     }
 }

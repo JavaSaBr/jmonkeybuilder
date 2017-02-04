@@ -1,24 +1,23 @@
 package com.ss.editor.ui.control.model.node.control.anim;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Bone;
 import com.jme3.animation.BoneTrack;
 import com.jme3.animation.Skeleton;
 import com.ss.editor.ui.Icons;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javafx.scene.image.Image;
-
 /**
- * The implementation of node for showing {@link BoneTrack}.
+ * The implementation of node to show {@link BoneTrack}.
  *
  * @author JavaSaBr
  */
 public class AnimationBoneTrackModelNode extends AnimationTrackModelNode<BoneTrack> {
 
-    public AnimationBoneTrackModelNode(final BoneTrack element, final long objectId) {
+    public AnimationBoneTrackModelNode(@NotNull final BoneTrack element, final long objectId) {
         super(element, objectId);
     }
 
@@ -26,10 +25,10 @@ public class AnimationBoneTrackModelNode extends AnimationTrackModelNode<BoneTra
     @Override
     protected String computeName() {
         final BoneTrack boneTrack = getElement();
-        final AnimControl control = getControl();
+        final AnimControl control = requireNonNull(getControl());
         final Skeleton skeleton = control.getSkeleton();
         final Bone bone = skeleton.getBone(boneTrack.getTargetBoneIndex());
-        return "BoneTrack : " + bone.getName();
+        return "Bone track : " + bone.getName();
     }
 
     @Nullable

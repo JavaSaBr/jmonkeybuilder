@@ -2,10 +2,8 @@ package com.ss.extension.scene.app.state;
 
 import com.ss.extension.property.EditableProperty;
 import com.ss.extension.scene.filter.SceneFilter;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -16,6 +14,7 @@ import rlib.util.array.ArrayFactory;
  */
 public interface EditableSceneAppState extends SceneAppState {
 
+    @NotNull
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
 
     /**

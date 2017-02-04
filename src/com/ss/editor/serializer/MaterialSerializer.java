@@ -11,17 +11,18 @@ import com.jme3.math.Vector4f;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 /**
- * Реализация сериализатора материала.
+ * The implementation of a material serializer.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class MaterialSerializer {
 
-    public static String serializeToString(final Material material) {
+    public static String serializeToString(@NotNull final Material material) {
 
         final MaterialDef materialDef = material.getMaterialDef();
         final Collection<MatParam> params = material.getParams();
@@ -68,7 +69,7 @@ public class MaterialSerializer {
         return builder.toString();
     }
 
-    private static String toString(final VarType varType, final Object value) {
+    private static String toString(@NotNull final VarType varType, @NotNull final Object value) {
 
         switch (varType) {
             case Int:

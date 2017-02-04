@@ -1,8 +1,10 @@
 package com.ss.editor.manager;
 
 import static java.awt.Image.SCALE_DEFAULT;
-
+import static java.util.Objects.requireNonNull;
+import static rlib.util.Util.get;
 import com.ss.editor.FileExtensions;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.file.reader.TGAReader;
 import com.ss.editor.ui.Icons;
@@ -10,11 +12,25 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.sun.jimi.core.Jimi;
 import com.sun.jimi.core.JimiReader;
-
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+import rlib.manager.InitializeManager;
+import rlib.util.FileUtils;
+import rlib.util.StringUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
+import rlib.util.dictionary.DictionaryFactory;
+import rlib.util.dictionary.ObjectDictionary;
 
-import java.awt.Graphics2D;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,43 +39,32 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.stream.ImageInputStream;
-
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.manager.InitializeManager;
-import rlib.util.FileUtils;
-import rlib.util.StringUtils;
-import rlib.util.Util;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
-
 /**
- * The manager for creating preview for image files.
+ * The class to manage previews of images to JavaFX
  *
  * @author JavaSaBr
  */
 public class JavaFXImageManager {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(JavaFXImageManager.class);
 
-    public static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    @NotNull
+    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
+    @NotNull
     private static final String PREVIEW_CACHE_FOLDER = "preview-cache";
 
+    @NotNull
     private static final Array<String> FX_FORMATS = ArrayFactory.newArray(String.class);
+
+    @NotNull
     private static final Array<String> JIMI_FORMATS = ArrayFactory.newArray(String.class);
+
+    @NotNull
     private static final Array<String> IMAGE_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
-
         FX_FORMATS.add(FileExtensions.IMAGE_PNG);
         FX_FORMATS.add(FileExtensions.IMAGE_JPG);
         FX_FORMATS.add(FileExtensions.IMAGE_JPEG);
@@ -83,8 +88,10 @@ public class JavaFXImageManager {
         return IMAGE_FORMATS.contains(extension);
     }
 
+    @Nullable
     private static JavaFXImageManager instance;
 
+    @NotNull
     public static JavaFXImageManager getInstance() {
         if (instance == null) instance = new JavaFXImageManager();
         return instance;
@@ -93,14 +100,16 @@ public class JavaFXImageManager {
     /**
      * The metadatas cache.
      */
+    @NotNull
     private final ObjectDictionary<Path, IIOMetadata> iioMetadatas;
 
     /**
      * The cache folder.
      */
+    @NotNull
     private final Path cacheFolder;
 
-    public JavaFXImageManager() {
+    private JavaFXImageManager() {
         InitializeManager.valid(getClass());
         final Path appFolder = Config.getAppFolderInUserHome();
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
@@ -112,6 +121,7 @@ public class JavaFXImageManager {
     /**
      * @return the cache folder.
      */
+    @NotNull
     private Path getCacheFolder() {
         return cacheFolder;
     }
@@ -124,6 +134,8 @@ public class JavaFXImageManager {
      * @param height the required height.
      * @return the image.
      */
+    @NotNull
+    @FXThread
     public Image getTexturePreview(@Nullable final Path file, final int width, final int height) {
         if (file == null || !Files.exists(file)) return Icons.IMAGE_512;
 
@@ -194,7 +206,8 @@ public class JavaFXImageManager {
 
             try {
 
-                final byte[] content = Util.get(file, Files::readAllBytes);
+                final byte[] content = requireNonNull(get(file, Files::readAllBytes));
+
                 final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
                 if (awtImage == null) return Icons.IMAGE_512;
 
@@ -270,8 +283,8 @@ public class JavaFXImageManager {
         return Icons.IMAGE_512;
     }
 
-    private void processEvent(final DeletedFileEvent event) {
-
+    private void processEvent(@NotNull final DeletedFileEvent event) {
+        //TODO need to add remove from cache
     }
 
     @Nullable

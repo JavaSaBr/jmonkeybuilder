@@ -3,6 +3,7 @@ package com.ss.editor.ui.scene;
 import static com.ss.editor.ui.util.UIUtils.fillComponents;
 import static rlib.util.ClassUtils.unsafeCast;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
 
@@ -61,14 +62,15 @@ public class EditorFXScene extends Scene {
     private final VBox loadingLayer;
 
     /**
-     * THe loading counter.
+     * The loading counter.
      */
     @NotNull
     private final AtomicInteger loadingCount;
 
     /**
-     * THe indicator of loading.
+     * The indicator of loading.
      */
+    @Nullable
     private ProgressIndicator progressIndicator;
 
     public EditorFXScene(@NotNull final Group root) {
@@ -109,6 +111,7 @@ public class EditorFXScene extends Scene {
      * @return the view for drawing JME.
      */
     @NotNull
+    @FXThread
     public Canvas getCanvas() {
         return canvas;
     }
@@ -120,6 +123,7 @@ public class EditorFXScene extends Scene {
      * @return the component or null.
      */
     @Nullable
+    @FXThread
     public <T extends ScreenComponent> T findComponent(@NotNull final String id) {
         final Array<ScreenComponent> components = getComponents();
         return unsafeCast(components.search(id, (component, toCheck) -> StringUtils.equals(toCheck, component.getComponentId())));
@@ -129,6 +133,7 @@ public class EditorFXScene extends Scene {
      * @return the list of components.
      */
     @NotNull
+    @FXThread
     public Array<ScreenComponent> getComponents() {
         return components;
     }
@@ -137,6 +142,7 @@ public class EditorFXScene extends Scene {
      * @return the container of this scene.
      */
     @NotNull
+    @FXThread
     public StackPane getContainer() {
         return container;
     }
@@ -145,6 +151,7 @@ public class EditorFXScene extends Scene {
      * @return the loading layer.
      */
     @NotNull
+    @FXThread
     private VBox getLoadingLayer() {
         return loadingLayer;
     }
@@ -153,6 +160,7 @@ public class EditorFXScene extends Scene {
      * @return the hide layer.
      */
     @NotNull
+    @FXThread
     public StackPane getHideLayer() {
         return hideLayer;
     }
@@ -160,6 +168,7 @@ public class EditorFXScene extends Scene {
     /**
      * Increase the loading counter.
      */
+    @FXThread
     public synchronized void incrementLoading() {
         if (loadingCount.incrementAndGet() == 1) {
             showLoading();
@@ -169,6 +178,7 @@ public class EditorFXScene extends Scene {
     /**
      * Decrease the loading counter.
      */
+    @FXThread
     public synchronized void decrementLoading() {
         if (loadingCount.decrementAndGet() == 0) {
             hideLoading();
@@ -178,6 +188,7 @@ public class EditorFXScene extends Scene {
     /**
      * Show the loading process.
      */
+    @FXThread
     private void showLoading() {
 
         final VBox loadingLayer = getLoadingLayer();
@@ -196,6 +207,7 @@ public class EditorFXScene extends Scene {
     /**
      * Hide the loading process.
      */
+    @FXThread
     private void hideLoading() {
 
         final VBox loadingLayer = getLoadingLayer();
@@ -211,6 +223,7 @@ public class EditorFXScene extends Scene {
     /**
      * Notify all components about finished building.
      */
+    @FXThread
     public void notifyFinishBuild() {
         final Array<ScreenComponent> components = getComponents();
         fillComponents(components, getContainer());

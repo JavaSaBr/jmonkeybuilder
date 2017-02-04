@@ -1,29 +1,26 @@
 package com.ss.editor.ui.control.model.node.control.anim;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
-
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.action.animation.PlaySettingsAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.control.ControlModelNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import java.util.Collection;
+
 /**
- * The implementation of node for showing {@link AnimControl}.
+ * The implementation of node to show {@link AnimControl}.
  *
  * @author JavaSaBr
  */
@@ -40,14 +37,15 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
      */
     private float speed;
 
-    public AnimationControlModelNode(final AnimControl element, final long objectId) {
+    public AnimationControlModelNode(@NotNull final AnimControl element, final long objectId) {
         super(element, objectId);
         this.loopMode = LoopMode.Loop;
         this.speed = 1.0F;
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+                                @NotNull final ObservableList<MenuItem> items) {
         items.add(new PlaySettingsAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }

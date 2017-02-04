@@ -37,7 +37,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      * The array of custom skies.
      */
     @NotNull
-    protected final Array<Spatial> customSky;
+    private final Array<Spatial> customSky;
 
     /**
      * The node for the placement of custom sky.
@@ -48,6 +48,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
     /**
      * The current fast sky.
      */
+    @Nullable
     private Spatial currentFastSky;
 
     /**

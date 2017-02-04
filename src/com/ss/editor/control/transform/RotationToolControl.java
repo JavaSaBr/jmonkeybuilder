@@ -1,5 +1,7 @@
 package com.ss.editor.control.transform;
 
+import static com.ss.editor.control.transform.TransformConstraint.constraintValue;
+import static com.ss.editor.control.transform.TransformConstraint.getRotateConstraint;
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.collision.CollisionResult;
@@ -25,45 +27,51 @@ import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 
 /**
- * Реализация контролера манипулятора вращения.
+ * The implementation of the rotating control.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RotationToolControl extends AbstractControl implements TransformControl {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
-    public static final String NODE_ROTATION_X = "rot_x";
-    public static final String NODE_ROTATION_Y = "rot_y";
-    public static final String NODE_ROTATION_Z = "rot_z";
+    private static final String NODE_ROTATION_X = "rot_x";
+    private static final String NODE_ROTATION_Y = "rot_y";
+    private static final String NODE_ROTATION_Z = "rot_z";
 
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Контролер редактора сцены.
+     * The scene editor controller.
      */
+    @NotNull
     private final SceneEditorControl editorControl;
 
     /**
-     * Поскость для определения перемещения.
+     * The collision plane.
      */
+    @NotNull
     private final Node collisionPlane;
 
-    public RotationToolControl(final SceneEditorControl editorControl) {
+    public RotationToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
-        this.collisionPlane = editorControl.getCollisionPlane();
+        this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());
     }
 
     /**
-     * @return плоскость для определения перемещения.
+     * @return the collision plane.
      */
+    @NotNull
     private Node getCollisionPlane() {
         return collisionPlane;
     }
 
     /**
-     * @return контролер редактора сцены.
+     * @return the scene editor controller.
      */
+    @NotNull
     private SceneEditorControl getEditorControl() {
         return editorControl;
     }
@@ -141,7 +149,7 @@ public class RotationToolControl extends AbstractControl implements TransformCon
         // rotate according to angle
         final Vector2f vec1 = selectedCoords.subtract(cursorPos).normalizeLocal();
         float angle = vec1.angleBetween(new Vector2f(deltaVector.getX(), deltaVector.getY()));
-        angle = TransformConstraint.constraintValue(FastMath.RAD_TO_DEG * angle, TransformConstraint.getRotateConstraint()) * FastMath.DEG_TO_RAD;
+        angle = constraintValue(FastMath.RAD_TO_DEG * angle, getRotateConstraint()) * FastMath.DEG_TO_RAD;
 
         final Quaternion transformRotation = transformCenter.getRotation();
         final Vector3f axisToRotate = transformRotation.mult(pickedVec);
@@ -162,6 +170,6 @@ public class RotationToolControl extends AbstractControl implements TransformCon
     }
 
     @Override
-    protected void controlRender(final RenderManager renderManager, final ViewPort viewPort) {
+    protected void controlRender(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
     }
 }

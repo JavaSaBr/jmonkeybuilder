@@ -1,5 +1,7 @@
 package com.ss.editor;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,6 +13,8 @@ import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
 /**
+ * The class to load message files.
+ *
  * @author JavaSaBr
  */
 public class ResourceControl extends Control {
@@ -22,7 +26,10 @@ public class ResourceControl extends Control {
     }
 
     @Override
-    public ResourceBundle newBundle(final String baseName, final Locale locale, final String format, final ClassLoader loader, final boolean reload) throws IllegalAccessException, InstantiationException, IOException {
+    public ResourceBundle newBundle(@NotNull final String baseName, @NotNull final Locale locale,
+                                    @NotNull final String format, @NotNull final ClassLoader loader,
+                                    final boolean reload)
+            throws IllegalAccessException, InstantiationException, IOException {
 
         // The below is a copy of the default implementation.
         final String bundleName = toBundleName(baseName, locale);
@@ -34,13 +41,11 @@ public class ResourceControl extends Control {
         if (reload) {
 
             final URL url = loader.getResource(resourceName);
+            final URLConnection connection = url == null ? null : url.openConnection();
 
-            if (url != null) {
-                final URLConnection connection = url.openConnection();
-                if (connection != null) {
-                    connection.setUseCaches(false);
-                    stream = connection.getInputStream();
-                }
+            if (connection != null) {
+                connection.setUseCaches(false);
+                stream = connection.getInputStream();
             }
 
         } else {

@@ -1,9 +1,9 @@
 package com.ss.editor.control.transform;
 
 /**
- * @author Ronn
+ * @author JavaSaBr
  */
-public class TransformConstraint {
+class TransformConstraint {
 
     private static final float MOVE_CONSTRAINT, ROTATE_CONSTRAINT, SCALE_CONSTRAINT;
 
@@ -13,19 +13,19 @@ public class TransformConstraint {
         SCALE_CONSTRAINT = 1;
     }
 
-    public static float constraintValue(float value, float constraintValue) {
+    static float constraintValue(float value, float constraintValue) {
         return value * constraintValue;
     }
 
-    public static float getMoveConstraint() {
+    static float getMoveConstraint() {
         return MOVE_CONSTRAINT;
     }
 
-    public static float getRotateConstraint() {
+    static float getRotateConstraint() {
         return ROTATE_CONSTRAINT;
     }
 
-    public static float getScaleConstraint() {
+    static float getScaleConstraint() {
         return SCALE_CONSTRAINT;
     }
 }

@@ -2,20 +2,18 @@ package com.ss.editor.ui.control.model.node.control.anim;
 
 import com.jme3.animation.AudioTrack;
 import com.ss.editor.ui.Icons;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javafx.scene.image.Image;
-
 /**
- * The implementation of node for showing {@link AudioTrack}.
+ * The implementation of node to show {@link AudioTrack}.
  *
  * @author JavaSaBr
  */
 public class AnimationAudioTrackModelNode extends AnimationTrackModelNode<AudioTrack> {
 
-    public AnimationAudioTrackModelNode(final AudioTrack element, final long objectId) {
+    public AnimationAudioTrackModelNode(@NotNull final AudioTrack element, final long objectId) {
         super(element, objectId);
     }
 
@@ -23,7 +21,7 @@ public class AnimationAudioTrackModelNode extends AnimationTrackModelNode<AudioT
     @Override
     protected String computeName() {
         final AudioTrack audioTrack = getElement();
-        return "AudioTrack : " + audioTrack.getAudio().getName();
+        return "Audio track : " + audioTrack.getAudio().getName();
     }
 
     @Nullable

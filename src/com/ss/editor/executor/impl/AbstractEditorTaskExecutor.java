@@ -23,32 +23,38 @@ import rlib.util.array.ArrayFactory;
  */
 public abstract class AbstractEditorTaskExecutor extends EditorThread implements EditorTaskExecutor, Lockable {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorTaskExecutor.class);
 
     /**
      * The array of task to execute for each iteration.
      */
+    @NotNull
     protected final Array<Runnable> execute;
 
     /**
      * The array of executed task of the iteration.
      */
-    protected final Array<Runnable> executed;
+    @NotNull
+    final Array<Runnable> executed;
 
     /**
      * The array of task to execute.
      */
-    protected final Array<Runnable> waitTasks;
+    @NotNull
+    final Array<Runnable> waitTasks;
 
     /**
      * Is this executor waiting new tasks.
      */
-    protected final AtomicBoolean wait;
+    @NotNull
+    final AtomicBoolean wait;
 
     /**
      * The synchronizer.
      */
-    protected final Lock lock;
+    @NotNull
+    private final Lock lock;
 
     public AbstractEditorTaskExecutor() {
         this.execute = createExecuteArray();
@@ -58,7 +64,8 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
         this.wait = new AtomicBoolean(false);
     }
 
-    protected Array<Runnable> createExecuteArray() {
+    @NotNull
+    private Array<Runnable> createExecuteArray() {
         return ArrayFactory.newArray(Runnable.class);
     }
 
@@ -84,7 +91,7 @@ public abstract class AbstractEditorTaskExecutor extends EditorThread implements
     /**
      * Execute the array of tasks.
      */
-    protected abstract void doExecute(final Array<Runnable> execute, final Array<Runnable> executed);
+    protected abstract void doExecute(@NotNull final Array<Runnable> execute, @NotNull final Array<Runnable> executed);
 
     @Override
     public void run() {

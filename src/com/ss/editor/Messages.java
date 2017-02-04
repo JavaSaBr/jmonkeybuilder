@@ -1,12 +1,12 @@
 package com.ss.editor;
 
+import static java.util.ResourceBundle.getBundle;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import rlib.util.ReflectionUtils;
 
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import rlib.util.ReflectionUtils;
 
 /**
  * The class with all messages of this application.
@@ -135,6 +135,25 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_LIGHT_PROBE;
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
+    public static final String MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CONE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_CYLINDER_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_GIMPACT_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_HEIGHT_FIELD_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_HULL_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE;
+    public static final String MODEL_FILE_EDITOR_NODE_WHEEL;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -199,9 +218,21 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL;
+    public static final String MODEL_NODE_TREE_ACTION_REACTIVATE;
+    public static final String MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -263,6 +294,25 @@ public class Messages {
     public static final String CONTROL_PROPERTY_INITIAL_DURATION;
     public static final String CONTROL_PROPERTY_SPEED;
     public static final String CONTROL_PROPERTY_TIME;
+    public static final String CONTROL_PROPERTY_MARGIN;
+    public static final String CONTROL_PROPERTY_LOCATION;
+    public static final String CONTROL_PROPERTY_HALF_EXTENTS;
+    public static final String CONTROL_PROPERTY_RADIUS;
+    public static final String CONTROL_PROPERTY_HEIGHT;
+    public static final String CONTROL_PROPERTY_AXIS;
+    public static final String CONTROL_PROPERTY_SCALE;
+    public static final String CONTROL_PROPERTY_OBJECT_ID;
+    public static final String CONTROL_PROPERTY_AXLE;
+    public static final String CONTROL_PROPERTY_REST_LENGTH;
+    public static final String CONTROL_PROPERTY_FRONT;
+    public static final String CONTROL_PROPERTY_DAMPING_COMPRESSION;
+    public static final String CONTROL_PROPERTY_FRICTION_SLIP;
+    public static final String CONTROL_PROPERTY_MAX_SUSPENSION_FORCE;
+    public static final String CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM;
+    public static final String CONTROL_PROPERTY_DAMPING_RELAXATION;
+    public static final String CONTROL_PROPERTY_SUSPENSION_STIFFNESS;
+    public static final String CONTROL_PROPERTY_ROLL_INFLUENCE;
+    public static final String CONTROL_PROPERTY_WHEEL_SPATIAL;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -321,6 +371,7 @@ public class Messages {
     public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
     public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
 
+    public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE;
     public static final String MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
     public static final String ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
     public static final String LAYER_PROPERTY_CONTROL_NO_LAYER;
@@ -434,32 +485,41 @@ public class Messages {
 
     public static final String ANALYTICS_CONFIRM_DIALOG_MESSAGE;
 
+    public static final String CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
+    public static final String ADD_VEHICLE_WHEEL_DIALOG_TITLE;
+
     static {
 
         final Locale locale = Locale.getDefault();
         final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
-        final ResourceBundle controlBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+        final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 locale, classLoader, ResourceControl.getInstance());
 
-        final ResourceBundle overrideBundle = ResourceBundle.getBundle("com/sun/javafx/scene/control/skin/resources/controls",
+        final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 ResourceControl.getInstance());
 
         final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
         final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
-        //noinspection unchecked
+
+        //noinspection ConstantConditions,ConstantConditions,unchecked
         original.putAll(override);
 
-        final ResourceBundle bundle = ResourceBundle.getBundle(BUNDLE_NAME, ResourceControl.getInstance());
+        final ResourceBundle bundle = getBundle(BUNDLE_NAME, ResourceControl.getInstance());
 
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
+
         EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponentAssetOpenAssetDirectoryChooser");
+
         EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponentAssetReopen");
         EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponentAssetClose");
 
         EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
-
         EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
@@ -571,6 +631,25 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
         MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
+        MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeStaticRigidBodyControl");
+        MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeRigidBodyControl");
+        MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL = bundle.getString("ModelFileEditorNodeCharacterControl");
+        MODEL_FILE_EDITOR_NODE_SKELETON_CONTROL = bundle.getString("ModelFileEditorNodeSkeletonControl");
+        MODEL_FILE_EDITOR_NODE_VEHICLE_CONTROL = bundle.getString("ModelFileEditorNodeVehicleControl");
+        MODEL_FILE_EDITOR_NODE_RAGDOLL_CONTROL = bundle.getString("ModelFileEditorNodeRagDollControl");
+        MODEL_FILE_EDITOR_NODE_BOX_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeBoxCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CAPSULE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeCapsuleCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CHILD_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeChildCollisionShape");
+        MODEL_FILE_EDITOR_NODE_COMPUTED_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeComputedCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CONE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeConeCollisionShape");
+        MODEL_FILE_EDITOR_NODE_CYLINDER_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeCylinderCollisionShape");
+        MODEL_FILE_EDITOR_NODE_GIMPACT_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeGImpactCollisionShape");
+        MODEL_FILE_EDITOR_NODE_HEIGHT_FIELD_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeHeightFieldCollisionShape");
+        MODEL_FILE_EDITOR_NODE_HULL_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeHullCollisionShape");
+        MODEL_FILE_EDITOR_NODE_MESH_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeMeshCollisionShape");
+        MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodePlaneCollisionShape");
+        MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeSphereCollisionShape");
+        MODEL_FILE_EDITOR_NODE_WHEEL = bundle.getString("ModelFileEditorNodeWheel");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -635,9 +714,21 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlRigidBody");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_STATIC_RIGID_BODY = bundle.getString("ModelNodeTreeActionAddControlStaticRigidBody");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_NOTION = bundle.getString("ModelNodeTreeActionAddControlMotion");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CHARACTER = bundle.getString("ModelNodeTreeActionAddControlCharacter");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL_CUSTOM = bundle.getString("ModelNodeTreeActionAddControlCustom");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_VEHICLE = bundle.getString("ModelNodeTreeActionAddControlVehicle");
+        MODEL_NODE_TREE_ACTION_ADD_CONTROL_KINEMATIC_RAGDOLL = bundle.getString("ModelNodeTreeActionAddControlKinematicRagdoll");
+        MODEL_NODE_TREE_ACTION_REACTIVATE = bundle.getString("ModelNodeTreeActionReactivate");
+        MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionChangeCollisionShape");
+        MODEL_NODE_TREE_ACTION_GENERATE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionGenerateCollisionShape");
+        MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionBoxCollisionShape");
+        MODEL_NODE_TREE_ACTION_CAPSULE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionCapsuleCollisionShape");
+        MODEL_NODE_TREE_ACTION_CONE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionConeCollisionShape");
+        MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionCylinderCollisionShape");
+        MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
+        MODEL_NODE_TREE_ACTION_ADD_WHEEL = bundle.getString("ModelNodeTreeActionAddWheel");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -699,6 +790,25 @@ public class Messages {
         CONTROL_PROPERTY_INITIAL_DURATION = bundle.getString("ControlPropertyInitialDuration");
         CONTROL_PROPERTY_SPEED = bundle.getString("ControlPropertySpeed");
         CONTROL_PROPERTY_TIME = bundle.getString("ControlPropertyTime");
+        CONTROL_PROPERTY_MARGIN = bundle.getString("ControlPropertyMargin");
+        CONTROL_PROPERTY_LOCATION = bundle.getString("ControlPropertyLocation");
+        CONTROL_PROPERTY_HALF_EXTENTS = bundle.getString("ControlPropertyHalfExtents");
+        CONTROL_PROPERTY_RADIUS = bundle.getString("ControlPropertyRadius");
+        CONTROL_PROPERTY_HEIGHT = bundle.getString("ControlPropertyHeight");
+        CONTROL_PROPERTY_AXIS = bundle.getString("ControlPropertyAxis");
+        CONTROL_PROPERTY_SCALE = bundle.getString("ControlPropertyScale");
+        CONTROL_PROPERTY_OBJECT_ID = bundle.getString("ControlPropertyObjectId");
+        CONTROL_PROPERTY_AXLE = bundle.getString("ControlPropertyObjectId");
+        CONTROL_PROPERTY_REST_LENGTH = bundle.getString("ControlPropertyObjectId");
+        CONTROL_PROPERTY_FRONT = bundle.getString("ControlPropertyFront");
+        CONTROL_PROPERTY_DAMPING_COMPRESSION = bundle.getString("ControlPropertyDampingCompression");
+        CONTROL_PROPERTY_FRICTION_SLIP = bundle.getString("ControlPropertyFrictionSlip");
+        CONTROL_PROPERTY_MAX_SUSPENSION_FORCE = bundle.getString("ControlPropertyMaxSuspensionForce");
+        CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM = bundle.getString("ControlPropertyMaxSuspensionTravelCm");
+        CONTROL_PROPERTY_DAMPING_RELAXATION = bundle.getString("ControlPropertyDampingRelaxation");
+        CONTROL_PROPERTY_SUSPENSION_STIFFNESS = bundle.getString("ControlPropertySuspensionStiffness");
+        CONTROL_PROPERTY_ROLL_INFLUENCE = bundle.getString("ControlPropertyRollInfluence");
+        CONTROL_PROPERTY_WHEEL_SPATIAL = bundle.getString("ControlPropertyWheelSpatial");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -757,6 +867,7 @@ public class Messages {
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST = bundle.getString("ParticleEmitterInfluencerGeometryList");
         PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
 
+        MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
         ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT = bundle.getString("AbstractElementPropertyControlNoElement");
         LAYER_PROPERTY_CONTROL_NO_LAYER = bundle.getString("LayerPropertyControlNoLayer");
@@ -869,5 +980,12 @@ public class Messages {
         CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD = bundle.getString("CreateCustomControlDialogCustomField");
 
         ANALYTICS_CONFIRM_DIALOG_MESSAGE = bundle.getString("AnalyticsConfirmDialogMessage");
+
+        CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateBoxCollisionShapeDialogTitle");
+        CREATE_SPHERE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateSphereCollisionShapeDialogTitle");
+        CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCylinderCollisionShapeDialogTitle");
+        CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateConeCollisionShapeDialogTitle");
+        CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCapsuleCollisionShapeDialogTitle");
+        ADD_VEHICLE_WHEEL_DIALOG_TITLE = bundle.getString("AddVehicleWheelDialogTitle");
     }
 }

@@ -1,53 +1,64 @@
 package com.ss.editor.ui.event.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.ui.event.SceneEvent;
+import javafx.event.Event;
+import javafx.event.EventType;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.event.EventType;
-
 /**
- * Событие об запроса на конвертирование файла.
+ * The event about request to covert a file.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class RequestedConvertFileEvent extends SceneEvent {
 
-    public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RequestedConvertFileEvent.class.getSimpleName());
+    @NotNull
+    public static final EventType<SceneEvent> EVENT_TYPE;
 
-    public static final String FILE = "file";
-    public static final String CONVERTER = "converter";
+    static {
+        synchronized (Event.class) {
+            EVENT_TYPE = new EventType<>(SceneEvent.EVENT_TYPE, RequestedConvertFileEvent.class.getSimpleName());
+        }
+    }
+
+    private static final String FILE = "file";
+    private static final String CONVERTER = "converter";
 
     public RequestedConvertFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
-     * @return описание конвертера.
+     * @return the converter description.
      */
+    @NotNull
     public FileConverterDescription getDescription() {
-        return get(CONVERTER);
+        return requireNonNull(get(CONVERTER));
     }
 
     /**
-     * @param description описание конвертера.
+     * @param description the converter description.
      */
-    public void setDescription(final FileConverterDescription description) {
+    public void setDescription(@NotNull final FileConverterDescription description) {
         set(CONVERTER, description);
     }
 
     /**
-     * @return конвертируемый файл.
+     * @return the file to convert.
      */
+    @NotNull
     public Path getFile() {
-        return get(FILE);
+        return requireNonNull(get(FILE));
     }
 
     /**
-     * @param file конвертируемый файл.
+     * @param file the file to convert.
      */
-    public void setFile(final Path file) {
+    public void setFile(@NotNull final Path file) {
         set(FILE, file);
     }
 }

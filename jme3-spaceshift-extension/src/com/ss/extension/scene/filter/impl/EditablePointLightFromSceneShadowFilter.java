@@ -4,12 +4,10 @@ import com.jme3.shadow.AbstractShadowRenderer;
 import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
-
 import org.jetbrains.annotations.NotNull;
+import rlib.util.array.Array;
 
 import java.util.logging.Level;
-
-import rlib.util.array.Array;
 
 /**
  * The editable implementation of a {@link EditablePointLightShadowFilter} which uses the light from a scene.
@@ -19,7 +17,8 @@ import rlib.util.array.Array;
 public class EditablePointLightFromSceneShadowFilter extends EditablePointLightShadowFilter {
 
     static {
-        java.util.logging.Logger.getLogger(AbstractShadowRenderer.class.getName()).setLevel(Level.OFF);
+        java.util.logging.Logger.getLogger(AbstractShadowRenderer.class.getName())
+                                .setLevel(Level.OFF);
     }
 
     public EditablePointLightFromSceneShadowFilter() {
@@ -37,7 +36,8 @@ public class EditablePointLightFromSceneShadowFilter extends EditablePointLightS
 
         final Array<EditableProperty<?, ?>> result = super.getEditableProperties();
         result.add(new SimpleProperty<>(EditablePropertyType.POINT_LIGHT_FROM_SCENE, "Point light", this,
-                EditablePointLightShadowFilter::getLight, EditablePointLightShadowFilter::setLight));
+                                        EditablePointLightShadowFilter::getLight,
+                                        EditablePointLightShadowFilter::setLight));
 
         return result;
     }

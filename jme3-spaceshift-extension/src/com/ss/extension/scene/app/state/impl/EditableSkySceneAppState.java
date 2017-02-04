@@ -7,10 +7,8 @@ import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.property.SimpleProperty;
 import com.ss.extension.scene.app.state.EditableSceneAppState;
 import com.ss.extension.scene.app.state.SceneAppState;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -45,68 +43,98 @@ public class EditableSkySceneAppState extends SkyState implements EditableSceneA
         final Array<EditableProperty<?, ?>> result = ArrayFactory.newArray(EditableProperty.class);
 
         result.add(new SimpleProperty<>(EditablePropertyType.BOOLEAN, "Flat shaded", this,
-                SkyState::isFlatShaded, SkyState::setFlatShaded));
+                                        SkyState::isFlatShaded,
+                                        SkyState::setFlatShaded));
 
         result.add(new SimpleProperty<>(EditablePropertyType.BOOLEAN, "Show ground", this,
-                SkyState::isShowGroundGeometry, SkyState::setShowGroundGeometry));
+                                        SkyState::isShowGroundGeometry,
+                                        SkyState::setShowGroundGeometry));
 
         result.add(new SimpleProperty<>(EditablePropertyType.COLOR, "Ground color", this,
-                SkyState::getGroundColor, SkyState::setGroundColor));
+                                        SkyState::getGroundColor,
+                                        SkyState::setGroundColor));
 
         result.add(new SimpleProperty<>(EditablePropertyType.COLOR, "Flat color", this,
-                SkyState::getFlatColor, SkyState::setFlatColor));
+                                        SkyState::getFlatColor,
+                                        SkyState::setFlatColor));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Rayleigh constant", 0.005F, 0, 1, this,
-                state -> state.getAtmosphericParameters().getRayleighConstant(),
-                (state, value) -> state.getAtmosphericParameters().setRayleighConstant(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getRayleighConstant(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setRayleighConstant(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Mie constant", 0.01F, 0, 1, this,
-                state -> state.getAtmosphericParameters().getMieConstant(),
-                (state, value) -> state.getAtmosphericParameters().setMieConstant(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getMieConstant(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setMieConstant(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Blue wave length", 0.005F, 0, 1, this,
-                state -> state.getAtmosphericParameters().getBlueWaveLength(),
-                (state, value) -> state.getAtmosphericParameters().setBlueWaveLength(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getBlueWaveLength(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setBlueWaveLength(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Red wave length", 0.005F, 0, 1, this,
-                state -> state.getAtmosphericParameters().getRedWaveLength(),
-                (state, value) -> state.getAtmosphericParameters().setRedWaveLength(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getRedWaveLength(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setRedWaveLength(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Green wave length", 0.005F, 0, 1, this,
-                state -> state.getAtmosphericParameters().getGreenWaveLength(),
-                (state, value) -> state.getAtmosphericParameters().setGreenWaveLength(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getGreenWaveLength(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setGreenWaveLength(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Average density scale", this,
-                state -> state.getAtmosphericParameters().getAverageDensityScale(),
-                (state, value) -> state.getAtmosphericParameters().setAverageDensityScale(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getAverageDensityScale(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setAverageDensityScale(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Ground exposure", this,
-                state -> state.getAtmosphericParameters().getGroundExposure(),
-                (state, value) -> state.getAtmosphericParameters().setGroundExposure(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getGroundExposure(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setGroundExposure(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Light intensity", this,
-                state -> state.getAtmosphericParameters().getLightIntensity(),
-                (state, value) -> state.getAtmosphericParameters().setLightIntensity(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getLightIntensity(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setLightIntensity(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "MPA factor", 0.01F, -1.5F, 0.0F, this,
-                state -> state.getAtmosphericParameters().getMiePhaseAsymmetryFactor(),
-                (state, value) -> state.getAtmosphericParameters().setMiePhaseAsymmetryFactor(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getMiePhaseAsymmetryFactor(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setMiePhaseAsymmetryFactor(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Sky exposure", 0.01F, 0, 10, this,
-                state -> state.getAtmosphericParameters().getSkyExposure(),
-                (state, value) -> state.getAtmosphericParameters().setSkyExposure(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getSkyExposure(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setSkyExposure(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Planet radius", this,
-                state -> state.getAtmosphericParameters().getPlanetRadius(),
-                (state, value) -> state.getAtmosphericParameters().setPlanetRadius(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getPlanetRadius(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setPlanetRadius(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Sky flattening", 0.01F, 0, 1, this,
-                state -> state.getAtmosphericParameters().getSkyFlattening(),
-                (state, value) -> state.getAtmosphericParameters().setSkyFlattening(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getSkyFlattening(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setSkyFlattening(value)));
 
         result.add(new SimpleProperty<>(EditablePropertyType.FLOAT, "Sky dome radius", this,
-                state -> state.getAtmosphericParameters().getSkyDomeRadius(),
-                (state, value) -> state.getAtmosphericParameters().setSkyDomeRadius(value)));
+                                        state -> state.getAtmosphericParameters()
+                                                      .getSkyDomeRadius(),
+                                        (state, value) -> state.getAtmosphericParameters()
+                                                               .setSkyDomeRadius(value)));
 
         return result;
     }

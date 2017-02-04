@@ -8,7 +8,6 @@ import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeImporter;
 import com.jme3.export.Savable;
 import com.jme3.export.binary.BinaryImporter;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -40,12 +39,14 @@ public class SceneLoader implements JmeImporter {
 
     @NotNull
     public static AssetManager tryToGetAssetManager() {
-        return Objects.requireNonNull(application).getAssetManager();
+        return Objects.requireNonNull(application)
+                      .getAssetManager();
     }
 
     @NotNull
     public static AppStateManager tryToGetStateManager() {
-        return Objects.requireNonNull(application).getStateManager();
+        return Objects.requireNonNull(application)
+                      .getStateManager();
     }
 
     @NotNull

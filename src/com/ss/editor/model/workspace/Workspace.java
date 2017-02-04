@@ -1,15 +1,21 @@
 package com.ss.editor.model.workspace;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+import rlib.util.StringUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -26,14 +32,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.StringUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-
 /**
- * The workspace.
+ * The workspace of an editor.
  *
  * @author JavaSaBr
  */
@@ -41,37 +41,44 @@ public class Workspace implements Serializable {
 
     public static final long serialVersionUID = 63;
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(Workspace.class);
 
     /**
      * The changes counter.
      */
+    @NotNull
     private final AtomicInteger changes;
 
     /**
      * The asset folder of this workspace.
      */
-    private transient Path assetFolder;
+    @Nullable
+    private volatile transient Path assetFolder;
 
     /**
      * The list of expanded folders.
      */
+    @Nullable
     private volatile List<String> expandedFolders;
 
     /**
      * The table of opened files.
      */
+    @Nullable
     private volatile Map<String, String> openedFiles;
 
     /**
      * The table with states of editors.
      */
+    @Nullable
     private volatile Map<String, EditorState> editorStateMap;
 
     /**
      * The current edited file.
      */
-    private String currentEditedFile;
+    @Nullable
+    private volatile String currentEditedFile;
 
     public Workspace() {
         this.changes = new AtomicInteger();
@@ -106,7 +113,7 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Update the current edited file.
+     * Update a current edited file.
      *
      * @param file the current edited file.
      */
@@ -117,8 +124,8 @@ public class Workspace implements Serializable {
             return;
         }
 
-        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        this.currentEditedFile = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = getAssetFile(getAssetFolder(), file);
+        this.currentEditedFile = toAssetPath(assetFile);
     }
 
     /**
@@ -126,26 +133,38 @@ public class Workspace implements Serializable {
      */
     @NotNull
     private Map<String, EditorState> getEditorStateMap() {
-        return editorStateMap;
+        return requireNonNull(editorStateMap);
     }
 
     /**
      * @return the list of expanded folders.
      */
-    public synchronized Array<Path> getExpandedFolders() {
+    @NotNull
+    private List<String> getExpandedFolders() {
+        return requireNonNull(expandedFolders);
+    }
+
+    /**
+     * @return the list of expanded absolute folders.
+     */
+    @NotNull
+    public synchronized Array<Path> getExpandedAbsoluteFolders() {
 
         final Array<Path> result = ArrayFactory.newArray(Path.class);
         final Path assetFolder = getAssetFolder();
 
+        final List<String> expandedFolders = getExpandedFolders();
         expandedFolders.forEach(path -> result.add(assetFolder.resolve(path)));
 
         return result;
     }
 
     /**
-     * Update the list of expanded folders.
+     * Update a list of expanded folders.
      */
-    public synchronized void updateExpandedFolders(final Array<Path> folders) {
+    public synchronized void updateExpandedFolders(@NotNull final Array<Path> folders) {
+
+        final List<String> expandedFolders = getExpandedFolders();
         expandedFolders.clear();
 
         final Path assetFolder = getAssetFolder();
@@ -155,30 +174,22 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Get the editor state for the file.
-     *
-     * @param file the edited file.
-     * @return the state of the editor or null.
-     */
-    public synchronized <T extends EditorState> T getEditorState(@NotNull final Path file) {
-        return getEditorState(file, null);
-    }
-
-    /**
-     * Get the editor state for the file.
+     * Get an editor state for a file.
      *
      * @param file         the edited file.
      * @param stateFactory the state factory.
-     * @return the state of the editor or null.
+     * @return the state of the editor.
      */
-    public synchronized <T extends EditorState> T getEditorState(@NotNull final Path file, @Nullable Supplier<EditorState> stateFactory) {
+    @NotNull
+    public synchronized <T extends EditorState> T getEditorState(@NotNull final Path file,
+                                                                 @NotNull final Supplier<EditorState> stateFactory) {
 
-        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = getAssetFile(getAssetFolder(), file);
+        final String assetPath = toAssetPath(assetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
 
-        if (stateFactory != null && !editorStateMap.containsKey(assetPath)) {
+        if (!editorStateMap.containsKey(assetPath)) {
             final EditorState editorState = stateFactory.get();
             editorState.setChangeHandler(this::incrementChanges);
             editorStateMap.put(assetPath, editorState);
@@ -189,12 +200,15 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Update the editor state.
+     * Update an editor state of a file.
+     *
+     * @param editorState the editor state.
+     * @param file        the file.
      */
     public synchronized void updateEditorState(@NotNull final Path file, @NotNull final EditorState editorState) {
 
-        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = getAssetFile(getAssetFolder(), file);
+        final String assetPath = toAssetPath(assetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
         editorStateMap.put(assetPath, editorState);
@@ -203,12 +217,14 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Remove the editor state.
+     * Remove an editor state of a file.
+     *
+     * @param file the file.
      */
     public synchronized void removeEditorState(@NotNull final Path file) {
 
-        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = getAssetFile(getAssetFolder(), file);
+        final String assetPath = toAssetPath(assetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
         if (editorStateMap.remove(assetPath) == null) return;
@@ -217,19 +233,22 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Update the editor state for moved/renamed file.
+     * Update an editor state for moved/renamed file.
+     *
+     * @param prevFile the previous file.
+     * @param newFile  the new file.
      */
     public synchronized void updateEditorState(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
-        final Path prevAssetFile = EditorUtil.getAssetFile(getAssetFolder(), prevFile);
-        final String prevAssetPath = EditorUtil.toAssetPath(prevAssetFile);
+        final Path prevAssetFile = getAssetFile(getAssetFolder(), prevFile);
+        final String prevAssetPath = toAssetPath(prevAssetFile);
 
         final Map<String, EditorState> editorStateMap = getEditorStateMap();
         final EditorState editorState = editorStateMap.remove(prevAssetPath);
         if (editorState == null) return;
 
-        final Path newAssetFile = EditorUtil.getAssetFile(getAssetFolder(), newFile);
-        final String newAssetPath = EditorUtil.toAssetPath(newAssetFile);
+        final Path newAssetFile = getAssetFile(getAssetFolder(), newFile);
+        final String newAssetPath = toAssetPath(newAssetFile);
 
         editorStateMap.put(newAssetPath, editorState);
         incrementChanges();
@@ -247,7 +266,7 @@ public class Workspace implements Serializable {
      */
     @NotNull
     public Map<String, String> getOpenedFiles() {
-        return openedFiles;
+        return requireNonNull(openedFiles);
     }
 
     /**
@@ -258,8 +277,8 @@ public class Workspace implements Serializable {
      */
     public synchronized void addOpenedFile(@NotNull final Path file, @NotNull final FileEditor fileEditor) {
 
-        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = getAssetFile(getAssetFolder(), file);
+        final String assetPath = toAssetPath(assetFile);
 
         final EditorDescription description = fileEditor.getDescription();
 
@@ -271,12 +290,14 @@ public class Workspace implements Serializable {
     }
 
     /**
-     * Remove the opened file.
+     * Remove an opened file.
+     *
+     * @param file the removed file.
      */
     public synchronized void removeOpenedFile(@NotNull final Path file) {
 
-        final Path assetFile = EditorUtil.getAssetFile(getAssetFolder(), file);
-        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final Path assetFile = getAssetFile(getAssetFolder(), file);
+        final String assetPath = toAssetPath(assetFile);
 
         final Map<String, String> openedFiles = getOpenedFiles();
         openedFiles.remove(assetPath);
@@ -289,11 +310,11 @@ public class Workspace implements Serializable {
      */
     @NotNull
     public Path getAssetFolder() {
-        return assetFolder;
+        return requireNonNull(assetFolder);
     }
 
     /**
-     * Increase the counter of changes.
+     * Increase a counter of changes.
      */
     private void incrementChanges() {
         changes.incrementAndGet();

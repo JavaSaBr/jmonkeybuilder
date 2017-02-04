@@ -12,6 +12,7 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 
+import com.ss.editor.ui.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +55,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
 
     private static final Insets VISIBLE_ICON_OFFSET = new Insets(0, 0, 0, 2);
 
-    public final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
+    private final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
 
         @Override
         public String toString(@NotNull final ModelNode<?> object) {
@@ -178,28 +179,20 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
             setIgnoreUpdate(false);
         }
 
-        final javafx.scene.Node graphic = getGraphic();
-
-        if (graphic instanceof HBox) {
-            final HBox hbox = (HBox) graphic;
-            hbox.setAlignment(Pos.CENTER_LEFT);
-            hbox.setMinHeight(getMinHeight());
-        } else if (graphic instanceof Control) {
-            ((Control) graphic).setMinHeight(getMinHeight());
-        }
+        UIUtils.updateEditedCell(this);
     }
 
     /**
      * @return true if need to ignore update.
      */
-    public boolean isIgnoreUpdate() {
+    private boolean isIgnoreUpdate() {
         return ignoreUpdate;
     }
 
     /**
      * @param ignoreUpdate the flag of ignoring updates.
      */
-    public void setIgnoreUpdate(final boolean ignoreUpdate) {
+    private void setIgnoreUpdate(final boolean ignoreUpdate) {
         this.ignoreUpdate = ignoreUpdate;
     }
 
@@ -212,7 +205,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     }
 
     @Override
-    public void commitEdit(final ModelNode<?> newValue) {
+    public void commitEdit(@NotNull final ModelNode<?> newValue) {
         super.commitEdit(newValue);
         final TreeItem<ModelNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
@@ -280,7 +273,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     /**
      * Handle a mouse click.
      */
-    private void processClick(final MouseEvent event) {
+    private void processClick(@NotNull final MouseEvent event) {
 
         final ModelNode<?> item = getItem();
         if (item == null) return;
@@ -298,7 +291,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     /**
      * Handle stopping dragging.
      */
-    private void stopDrag(final DragEvent event) {
+    private void stopDrag(@NotNull final DragEvent event) {
         setId(CSSIds.MODEL_NODE_TREE_CELL);
         setCursor(Cursor.DEFAULT);
         event.consume();
@@ -307,7 +300,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     /**
      * Handle starting dragging.
      */
-    private void startDrag(final MouseEvent mouseEvent) {
+    private void startDrag(@NotNull final MouseEvent mouseEvent) {
 
         final ModelNode<?> item = getItem();
         if (item == null) return;
@@ -335,7 +328,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     /**
      * Handle dropping a dragged element.
      */
-    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
@@ -383,14 +376,11 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     /**
      * Handle entering a dragged element.
      */
-    private void dragOver(final DragEvent dragEvent) {
+    private void dragOver(@NotNull final DragEvent dragEvent) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
-
-        if (objectId == null) {
-            return;
-        }
+        if (objectId == null) return;
 
         final TreeView<ModelNode<?>> treeView = getTreeView();
         final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
@@ -412,7 +402,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     /**
      * Handle exiting a dragged element.
      */
-    private void dragExited(final DragEvent dragEvent) {
+    private void dragExited(@NotNull final DragEvent dragEvent) {
         setId(CSSIds.MODEL_NODE_TREE_CELL);
     }
 }

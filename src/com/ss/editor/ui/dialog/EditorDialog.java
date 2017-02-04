@@ -2,7 +2,6 @@ package com.ss.editor.ui.dialog;
 
 import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.scene.text.TextAlignment.LEFT;
-
 import com.ss.editor.Editor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -11,13 +10,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.time.Duration;
-import java.time.LocalTime;
-
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -27,15 +19,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.hanlder.WindowDragHandler;
 import rlib.ui.util.FXUtils;
 import rlib.ui.window.popup.dialog.AbstractPopupDialog;
+
+import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * The base implementation of the {@link AbstractPopupDialog} for using dialogs in the {@link Editor}.
@@ -44,13 +42,16 @@ import rlib.ui.window.popup.dialog.AbstractPopupDialog;
  */
 public class EditorDialog extends AbstractPopupDialog {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
-    private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    @NotNull
+    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * The handler for handling changing a focus of the window.
      */
+    @NotNull
     private final EventHandler<? super Event> hideEventHandler = event -> {
         final WindowChangeFocusEvent focusEvent = (WindowChangeFocusEvent) event;
         if (!focusEvent.isFocused()) {
@@ -63,6 +64,7 @@ public class EditorDialog extends AbstractPopupDialog {
     /**
      * The handler for handling changing a focus of the window from JavaFX.
      */
+    @NotNull
     private final ChangeListener<Boolean> hideListener = (observable, oldValue, newValue) -> {
         if (newValue == Boolean.FALSE) {
             super.hide();
@@ -85,21 +87,31 @@ public class EditorDialog extends AbstractPopupDialog {
 
     public EditorDialog() {
         this.showedTime = LocalTime.now();
-        final VBox container = getContainer();
-        container.setOnKeyReleased(Event::consume);
     }
 
     @Override
-    protected void createControls(final VBox root) {
-        super.createControls(root);
+    protected void createControls(@NotNull final VBox root) {
         root.setId(CSSIds.EDITOR_DIALOG_BACKGROUND);
+
+        super.createControls(root);
+
         createHeader(root);
-        createContent(root);
+
+        if (isGridStructure()) {
+            final GridPane gridPane = new GridPane();
+            createContent(gridPane);
+            FXUtils.addToPane(gridPane, root);
+        } else {
+            createContent(root);
+        }
+
         createActions(root);
+
         addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
 
     protected void processKey(@NotNull final KeyEvent event) {
+        event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
             hide();
         }
@@ -199,6 +211,19 @@ public class EditorDialog extends AbstractPopupDialog {
      * Create the content of this dialog.
      */
     protected void createContent(@NotNull final VBox root) {
+    }
+
+    /**
+     * Create the content of this dialog.
+     */
+    protected void createContent(@NotNull final GridPane root) {
+    }
+
+    /**
+     * @return true if this dialog has grid structure.
+     */
+    protected boolean isGridStructure() {
+        return false;
     }
 
     /**

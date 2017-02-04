@@ -1,7 +1,10 @@
 package com.ss.editor.util;
 
+import static java.lang.Math.acos;
+import static java.lang.Math.toDegrees;
+import static java.lang.ThreadLocal.withInitial;
+import static rlib.util.ClassUtils.cast;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -9,30 +12,10 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.apache.commons.lang3.SystemUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.io.StringWriter;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
@@ -40,10 +23,23 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
+import org.apache.commons.lang3.SystemUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.ClassUtils;
 import rlib.util.StringUtils;
+import rlib.util.array.Array;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The class with utility methods for the Editor.
@@ -52,11 +48,14 @@ import rlib.util.StringUtils;
  */
 public abstract class EditorUtil {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
 
+    @NotNull
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
-    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
+    @NotNull
+    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
 
     /**
      * @param path the path to resource.
@@ -75,7 +74,8 @@ public abstract class EditorUtil {
      * @param second the second point.
      * @return the angle between these points.
      */
-    public static float getAngle(@NotNull final Vector2f center, @NotNull final Vector2f first, @NotNull final Vector2f second) {
+    public static float getAngle(@NotNull final Vector2f center, @NotNull final Vector2f first,
+                                 @NotNull final Vector2f second) {
 
         final float x = center.getX();
         final float y = center.getY();
@@ -93,13 +93,14 @@ public abstract class EditorUtil {
             return 180.0F;
         }
 
-        return (float) Math.toDegrees(Math.acos(delta));
+        return (float) toDegrees(acos(delta));
     }
 
     /**
      * @param path the path to resource.
      * @return the input stream of the resource or null.
      */
+    @NotNull
     public static InputStream getInputStream(@NotNull final String path) {
         return Object.class.getResourceAsStream(path);
     }
@@ -109,6 +110,7 @@ public abstract class EditorUtil {
      *
      * @return the user name.
      */
+    @NotNull
     public static String getUserName() {
         return System.getProperty("user.name");
     }
@@ -141,7 +143,8 @@ public abstract class EditorUtil {
      * @param store  the container of the result.
      * @param length the distance.
      */
-    public static void movePoint(@NotNull final Vector3f first, @NotNull final Vector3f second, final @NotNull Vector3f store, final int length) {
+    public static void movePoint(@NotNull final Vector3f first, @NotNull final Vector3f second,
+                                 final @NotNull Vector3f store, final int length) {
         store.x = first.x + (second.x - first.x) * length;
         store.y = first.y + (second.y - first.y) * length;
         store.z = first.z + (second.z - first.z) * length;
@@ -153,6 +156,7 @@ public abstract class EditorUtil {
      * @param time the unix time.
      * @return the string presentation.
      */
+    @NotNull
     public static String timeFormat(final long time) {
         final SimpleDateFormat format = LOCATE_DATE_FORMAT.get();
         return format.format(new Date(time));
@@ -234,14 +238,16 @@ public abstract class EditorUtil {
     /**
      * Handle exception.
      */
-    public static void handleException(@Nullable final Logger logger, @Nullable final Object owner, @NotNull final Exception e) {
+    public static void handleException(@Nullable final Logger logger, @Nullable final Object owner,
+                                       @NotNull final Exception e) {
         handleException(logger, owner, e, null);
     }
 
     /**
      * Handle exception.
      */
-    public static void handleException(@Nullable Logger logger, @Nullable final Object owner, @NotNull final Exception e, @Nullable final Runnable callback) {
+    public static void handleException(@Nullable Logger logger, @Nullable final Object owner,
+                                       @NotNull final Exception e, @Nullable final Runnable callback) {
         if (logger == null) logger = LOGGER;
 
         if (owner == null) {
@@ -288,7 +294,9 @@ public abstract class EditorUtil {
     /**
      * Create a dialog for showing the exception.
      */
-    private static Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage, @Nullable final String stackTrace) {
+    @NotNull
+    private static Alert createErrorAlert(@NotNull final Exception e, @Nullable final String localizedMessage,
+                                          @Nullable final String stackTrace) {
 
         final TextArea textArea = new TextArea(stackTrace);
         textArea.setEditable(false);
@@ -414,8 +422,62 @@ public abstract class EditorUtil {
         scene.decrementLoading();
     }
 
+    /**
+     * Get an array of available enum values by an enum value.
+     *
+     * @param value the enum value.
+     * @return the array of enum values.
+     */
+    @NotNull
     public static <E extends Enum<?>> E[] getAvailableValues(@NotNull final E value) {
-        final Enum<?>[] enumConstants = value.getClass().getEnumConstants();
+        final Class<? extends Enum> valueClass = value.getClass();
+        if (!valueClass.isEnum()) throw new RuntimeException("The class " + valueClass + " isn't enum.");
+        final Enum<?>[] enumConstants = valueClass.getEnumConstants();
         return ClassUtils.unsafeCast(enumConstants);
+    }
+
+    /**
+     * Try to create an user object using asset classpath and additional classpath.
+     *
+     * @param owner      the requester.
+     * @param className  the classname.
+     * @param resultType the result type.
+     * @return the new instance or null.
+     */
+    @Nullable
+    public static <T> T tryToCreateUserObject(@NotNull final Object owner, @NotNull final String className,
+                                              @NotNull final Class<T> resultType) {
+
+        final ResourceManager resourceManager = ResourceManager.getInstance();
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+
+        Object newExample = null;
+        try {
+            newExample = ClassUtils.newInstance(className);
+        } catch (final RuntimeException e) {
+
+            final Array<URLClassLoader> classLoaders = resourceManager.getClassLoaders();
+
+            for (final URLClassLoader classLoader : classLoaders) {
+                try {
+                    final Class<?> targetClass = classLoader.loadClass(className);
+                    newExample = ClassUtils.newInstance(targetClass);
+                } catch (final ClassNotFoundException ex) {
+                    LOGGER.warning(owner, e);
+                }
+            }
+
+            final URLClassLoader additionalCL = classpathManager.getAdditionalCL();
+            if (additionalCL != null) {
+                try {
+                    final Class<?> targetClass = additionalCL.loadClass(className);
+                    newExample = ClassUtils.newInstance(targetClass);
+                } catch (final ClassNotFoundException ex) {
+                    LOGGER.warning(owner, e);
+                }
+            }
+        }
+
+        return cast(resultType, newExample);
     }
 }

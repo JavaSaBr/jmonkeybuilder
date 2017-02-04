@@ -4,7 +4,6 @@ import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KE
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Node;
@@ -13,6 +12,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -23,16 +23,16 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-
+import com.ss.extension.scene.SceneLayer;
+import com.ss.extension.scene.SceneNode;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
-
-import javafx.scene.image.Image;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link AbstractNodeAction} for loading the {@link Spatial} to the editor.
@@ -82,6 +82,12 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
     protected void processOpen(@NotNull final Path file) {
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+
+        final SceneNode sceneNode = consumer instanceof SceneChangeConsumer ?
+                ((SceneChangeConsumer) consumer).getCurrentModel() : null;
+
+        final SceneLayer defaultLayer = sceneNode == null ? null : sceneNode.getLayers().first();
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
@@ -89,15 +95,15 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         final ModelKey modelKey = new ModelKey(assetPath);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(modelKey);
-
         final Spatial loadedModel = assetManager.loadModel(modelKey);
         loadedModel.setUserData(LOADED_MODEL_KEY, true);
 
+        if (defaultLayer != null) {
+            SceneLayer.setLayer(defaultLayer, loadedModel);
+        }
+
         final ModelNode<?> modelNode = getNode();
         final Node parent = (Node) modelNode.getElement();
-
-        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         consumer.execute(new AddChildOperation(loadedModel, parent));
     }
 }

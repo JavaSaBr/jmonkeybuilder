@@ -2,15 +2,12 @@ package com.ss.editor.ui.event;
 
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
-
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.*;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The class for redirecting stage events to JME.
@@ -22,21 +19,25 @@ public class EventRedirector {
     /**
      * The editor area.
      */
+    @NotNull
     private final EditorAreaComponent editorAreaComponent;
 
     /**
      * The view for showing 3D.
      */
+    @NotNull
     private final Node destination;
 
     /**
      * The stage.
      */
+    @NotNull
     private final Stage stage;
 
     /**
      * The flag of pressing mouse.
      */
+    @NotNull
     private final boolean[] mousePressed;
 
     /**
@@ -49,7 +50,8 @@ public class EventRedirector {
      */
     private double sceneY;
 
-    public EventRedirector(final EditorAreaComponent editorAreaComponent, final Node destination, final Stage stage) {
+    public EventRedirector(@NotNull final EditorAreaComponent editorAreaComponent, @NotNull final Node destination,
+                           @NotNull final Stage stage) {
         this.editorAreaComponent = editorAreaComponent;
         this.destination = destination;
         this.stage = stage;
@@ -125,44 +127,35 @@ public class EventRedirector {
             Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
         });
 
-        stage.addEventHandler(ScrollEvent.ANY, event -> {
+        stage.addEventHandler(ScrollEvent.ANY, this::redirect);
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, this::redirect);
+        stage.addEventHandler(KeyEvent.KEY_RELEASED, this::redirect);
+    }
 
-            final EventTarget target = event.getTarget();
-            if (target == destination) return;
+    private void redirect(@NotNull final GestureEvent event) {
 
-            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
-                return;
-            }
+        final EventTarget target = event.getTarget();
+        if (target == destination) return;
 
-            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
-        });
+        final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+        if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
+            return;
+        }
 
-        stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+        Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
+    }
 
-            final EventTarget target = event.getTarget();
-            if (target == destination) return;
+    private void redirect(@NotNull final InputEvent event) {
 
-            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-            if (currentEditor == null || !currentEditor.isInside(getSceneX(), getSceneY())) {
-                return;
-            }
+        final EventTarget target = event.getTarget();
+        if (target == destination) return;
 
-            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
-        });
+        final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+        if (currentEditor == null || !currentEditor.isInside(getSceneX(), getSceneY())) {
+            return;
+        }
 
-        stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-
-            final EventTarget target = event.getTarget();
-            if (target == destination) return;
-
-            final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-            if (currentEditor == null || !currentEditor.isInside(getSceneX(), getSceneY())) {
-                return;
-            }
-
-            Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
-        });
+        Event.fireEvent(destination, event.copyFor(event.getSource(), destination));
     }
 
     /**
