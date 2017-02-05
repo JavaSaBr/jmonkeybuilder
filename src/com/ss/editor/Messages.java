@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import static java.util.ResourceBundle.getBundle;
+import static rlib.util.ReflectionUtils.getUnsafeFieldValue;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import rlib.util.ReflectionUtils;
 
@@ -503,8 +504,8 @@ public class Messages {
         final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 ResourceControl.getInstance());
 
-        final Map override = ReflectionUtils.getFieldValue(overrideBundle, "lookup");
-        final Map original = ReflectionUtils.getFieldValue(controlBundle, "lookup");
+        final Map override = getUnsafeFieldValue(overrideBundle, "lookup");
+        final Map original = getUnsafeFieldValue(controlBundle, "lookup");
 
         //noinspection ConstantConditions,ConstantConditions,unchecked
         original.putAll(override);
