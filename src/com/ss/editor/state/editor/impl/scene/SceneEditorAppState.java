@@ -12,9 +12,7 @@ import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.SceneFilter;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.array.Array;
 
 /**
@@ -24,8 +22,21 @@ import rlib.util.array.Array;
  */
 public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEditor, SceneNode> {
 
+    /**
+     * The flag of showing light models.
+     */
+    private boolean lightShowed;
+
+    /**
+     * The flag of showing audio models.
+     */
+    private boolean audioShowed;
+
     public SceneEditorAppState(@NotNull final SceneFileEditor fileEditor) {
         super(fileEditor);
+
+        this.lightShowed = true;
+        this.audioShowed = true;
 
         final Node stateNode = getStateNode();
         stateNode.attachChild(getModelNode());
@@ -154,5 +165,83 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
     private void removeFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         postProcessor.removeFilter(sceneFilter.get());
+    }
+
+    /**
+     * @return true if need to show light models.
+     */
+    private boolean isLightShowed() {
+        return lightShowed;
+    }
+
+    /**
+     * @param lightShowed true if need to show light models.
+     */
+    private void setLightShowed(final boolean lightShowed) {
+        this.lightShowed = lightShowed;
+    }
+
+    /**
+     * @return true if need to show audio models.
+     */
+    private boolean isAudioShowed() {
+        return audioShowed;
+    }
+
+    /**
+     * @param audioShowed true if need to show audio models.
+     */
+    private void setAudioShowed(final boolean audioShowed) {
+        this.audioShowed = audioShowed;
+    }
+
+    /**
+     * Change light showing.
+     */
+    public void updateLightShowed(final boolean showed) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightShowedImpl(showed));
+    }
+
+    /**
+     * The process to change light showing.
+     */
+    private void updateLightShowedImpl(final boolean showed) {
+        if (showed == isLightShowed()) return;
+
+        final Node lightNode = getLightNode();
+        final Node modelNode = getModelNode();
+
+        if (showed) {
+            modelNode.attachChild(lightNode);
+        } else {
+            modelNode.detachChild(lightNode);
+        }
+
+        setLightShowed(showed);
+    }
+
+    /**
+     * Change audio showing.
+     */
+    public void updateAudioShowed(final boolean showed) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateAudioShowedImpl(showed));
+    }
+
+    /**
+     * The process to change audio showing.
+     */
+    private void updateAudioShowedImpl(final boolean showed) {
+        if (showed == isAudioShowed()) return;
+
+        final Node audioNode = getAudioNode();
+        final Node modelNode = getModelNode();
+
+        if (showed) {
+            modelNode.attachChild(audioNode);
+        } else {
+            modelNode.detachChild(audioNode);
+        }
+
+        setAudioShowed(showed);
     }
 }

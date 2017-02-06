@@ -19,7 +19,7 @@ public interface Icons {
     Image ROTATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rotation.png", 16);
     Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
     Image MOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/move.png", 16);
-    Image LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/light.png", 16);
+    Image LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/idea.svg");
     Image INFLUENCER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/influencer.png");
     Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");
     Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
@@ -39,7 +39,7 @@ public interface Icons {
     Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim-channel.png");
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/bone.png");
-    Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/audio.png");
+    Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/audio-volume.svg");
     Image SETTINGS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/settings.png");
     Image PASTE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/paste.png");
     Image VIEW_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/view.png");
@@ -79,7 +79,7 @@ public interface Icons {
 
     Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png", 24);
     Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png", 24);
-    Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/light.png", 24);
+    Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/idea.svg", 24);
     Image ROTATION_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/rotation.png", 24);
     Image MOVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/move.png", 24);
     Image SCALE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/scale.png", 24);

@@ -90,9 +90,9 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The table with models to present lights on a scene.
      */
-    protected static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
+    private static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
 
-    protected static final Node AUDIO_NODE_MODEL;
+    private static final Node AUDIO_NODE_MODEL;
 
     static {
 
@@ -110,31 +110,31 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * The map with cached light nodes.
      */
     @NotNull
-    protected final ObjectDictionary<Light, EditorLightNode> cachedLights;
+    private final ObjectDictionary<Light, EditorLightNode> cachedLights;
 
     /**
      * The map with cached audio nodes.
      */
     @NotNull
-    protected final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes;
+    private final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes;
 
     /**
      * The array of light nodes.
      */
     @NotNull
-    protected final Array<EditorLightNode> lightNodes;
+    private final Array<EditorLightNode> lightNodes;
 
     /**
      * The array of audio nodes.
      */
     @NotNull
-    protected final Array<EditorAudioNode> audioNodes;
+    private final Array<EditorAudioNode> audioNodes;
 
     /**
      * The selection models of selected models.
      */
     @NotNull
-    protected final ObjectDictionary<Spatial, Spatial> selectionShape;
+    private final ObjectDictionary<Spatial, Spatial> selectionShape;
 
     /**
      * The array of selected models.
@@ -175,61 +175,73 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The nodes for the placement of model controls.
      */
+    @Nullable
     private Node moveTool, rotateTool, scaleTool;
 
     /**
      * Center of transformation.
      */
+    @Nullable
     private Transform transformCenter;
 
     /**
      * The original transformation.
      */
+    @Nullable
     private Transform originalTransform;
 
     /**
      * Object to transform.
      */
+    @Nullable
     private Spatial toTransform;
 
     /**
      * Current display model.
      */
+    @Nullable
     private M currentModel;
 
     /**
      * Material for selection.
      */
+    @Nullable
     private Material selectionMaterial;
 
     /**
      * The current type of transformation.
      */
+    @Nullable
     private TransformType transformType;
 
     /**
      * The current direction of transformation.
      */
+    @Nullable
     private PickedAxis pickedAxis;
 
     /**
      * The difference between the previous point of transformation and new.
      */
+    @Nullable
     private Vector3f deltaVector;
 
     /**
      * The plane for calculation transforms.
      */
+    @Nullable
     private Node collisionPlane;
 
     /**
      * The node on which the camera is looking.
      */
+    @Nullable
     private Node cameraNode;
 
     /**
      * Grid of the scene.
      */
+    @Nullable
     private Node grid;
 
     /**
@@ -309,8 +321,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the node on which the camera is looking.
      */
     @NotNull
-    protected Node getCameraNode() {
-        return cameraNode;
+    private Node getCameraNode() {
+        return requireNonNull(cameraNode);
     }
 
     @Override
@@ -322,7 +334,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the node for the placement of lights.
      */
     @NotNull
-    protected Node getLightNode() {
+    Node getLightNode() {
         return lightNode;
     }
 
@@ -330,7 +342,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the node for the placement of audio nodes.
      */
     @NotNull
-    public Node getAudioNode() {
+    Node getAudioNode() {
         return audioNode;
     }
 
@@ -374,7 +386,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     @NotNull
-    protected Node createGrid() {
+    private Node createGrid() {
 
         final Node gridNode = new Node("GridNode");
 
@@ -537,7 +549,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @NotNull
     @Override
     public PickedAxis getPickedAxis() {
-        return pickedAxis;
+        return requireNonNull(pickedAxis);
     }
 
     @Nullable
@@ -577,7 +589,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getGrid() {
-        return grid;
+        return requireNonNull(grid);
     }
 
     /**
@@ -585,7 +597,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getMoveTool() {
-        return moveTool;
+        return requireNonNull(moveTool);
     }
 
     /**
@@ -593,7 +605,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getRotateTool() {
-        return rotateTool;
+        return requireNonNull(rotateTool);
     }
 
     /**
@@ -601,7 +613,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getScaleTool() {
-        return scaleTool;
+        return requireNonNull(scaleTool);
     }
 
     /**
@@ -695,7 +707,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Update the transformation node.
      */
-    protected void updateTransformNode(@Nullable final Transform transform) {
+    private void updateTransformNode(@Nullable final Transform transform) {
         if (transform == null) return;
 
         final Vector3f location = transform.getTranslation();
@@ -741,7 +753,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the array of light nodes.
      */
     @NotNull
-    protected Array<EditorLightNode> getLightNodes() {
+    private Array<EditorLightNode> getLightNodes() {
         return lightNodes;
     }
 
@@ -749,7 +761,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the array of audio nodes.
      */
     @NotNull
-    public Array<EditorAudioNode> getAudioNodes() {
+    private Array<EditorAudioNode> getAudioNodes() {
         return audioNodes;
     }
 
@@ -757,7 +769,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the map with cached light nodes.
      */
     @NotNull
-    protected ObjectDictionary<Light, EditorLightNode> getCachedLights() {
+    private ObjectDictionary<Light, EditorLightNode> getCachedLights() {
         return cachedLights;
     }
 
@@ -765,7 +777,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the map with cached audio nodes.
      */
     @NotNull
-    public ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
+    private ObjectDictionary<AudioNode, EditorAudioNode> getCachedAudioNodes() {
         return cachedAudioNodes;
     }
 
@@ -1081,7 +1093,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         return closestCollision.getGeometry();
     }
 
-    protected void notifySelected(@Nullable final Object object) {
+    private void notifySelected(@Nullable final Object object) {
         getFileEditor().notifySelected(object);
     }
 

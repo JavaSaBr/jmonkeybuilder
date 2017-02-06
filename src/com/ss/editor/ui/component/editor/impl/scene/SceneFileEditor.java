@@ -10,7 +10,9 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
@@ -22,6 +24,7 @@ import com.ss.editor.ui.control.layer.LayerNodeTree;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.extension.property.EditableProperty;
@@ -32,6 +35,9 @@ import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -77,6 +83,18 @@ public class SceneFileEditor extends
      */
     @Nullable
     private LayerNodeTree layerNodeTree;
+
+    /**
+     * The light toggle.
+     */
+    @Nullable
+    private ToggleButton lightButton;
+
+    /**
+     * The audio toggle.
+     */
+    @Nullable
+    private ToggleButton audioButton;
 
     /**
      * The property container of app states.
@@ -206,6 +224,53 @@ public class SceneFileEditor extends
     }
 
     @Override
+    protected void createToolbar(@NotNull final HBox container) {
+        super.createToolbar(container);
+
+        lightButton = new ToggleButton();
+        lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
+        lightButton.setSelected(true);
+        lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
+
+        audioButton = new ToggleButton();
+        audioButton.setGraphic(new ImageView(Icons.AUDIO_16));
+        audioButton.setSelected(true);
+        audioButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeAudio(newValue));
+
+        FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(audioButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(audioButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+
+        FXUtils.addToPane(lightButton, container);
+        FXUtils.addToPane(audioButton, container);
+    }
+
+    /**
+     * Handle changing light models visibility.
+     */
+    private void changeLight(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        final SceneEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateLightShowed(newValue);
+
+        if (editorState != null) editorState.setShowedLight(newValue);
+    }
+
+    /**
+     * Handle changing audio models visibility.
+     */
+    private void changeAudio(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        final SceneEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateAudioShowed(newValue);
+
+        if (editorState != null) editorState.setShowedAudio(newValue);
+    }
+
+    @Override
     protected void createContent(@NotNull final StackPane root) {
         super.createContent(root);
 
@@ -268,6 +333,31 @@ public class SceneFileEditor extends
                 break;
             }
         }
+    }
+
+    /**
+     * @return the light toggle.
+     */
+    @NotNull
+    public ToggleButton getLightButton() {
+        return requireNonNull(lightButton);
+    }
+
+    /**
+     * @return the audio toggle.
+     */
+    @NotNull
+    public ToggleButton getAudioButton() {
+        return requireNonNull(audioButton);
+    }
+
+    @Override
+    protected void loadState() {
+        super.loadState();
+
+        final SceneFileEditorState editorState = requireNonNull(getEditorState());
+        getLightButton().setSelected(editorState.isShowedLight());
+        getAudioButton().setSelected(editorState.isShowedAudio());
     }
 
     /**

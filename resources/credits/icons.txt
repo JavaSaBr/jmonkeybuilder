@@ -1,1 +1,3 @@
-ui/icons/actions/svg/wheel.svg Icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/wheel.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/audio-volume.svg icon made by http://www.flaticon.com/authors/silviu-runceanu from www.flaticon.com
+ui/icons/actions/svg/idea.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
