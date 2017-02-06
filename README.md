@@ -6,6 +6,7 @@
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.9.3 ##
+* [Video](https://www.youtube.com/watch?v=FdGnkPj_qX0&feature=youtu.be)
 * -Added a bullet app state to scene editor.
 * -Added supporting debug physics to a bullet app state.
 * -Added supporting editing rigid/vehicle/character controls.
