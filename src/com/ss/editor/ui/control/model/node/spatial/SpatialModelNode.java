@@ -49,7 +49,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
-    SpatialModelNode(@NotNull final T element, final long objectId) {
+    protected SpatialModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
