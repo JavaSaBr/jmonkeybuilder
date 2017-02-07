@@ -875,7 +875,7 @@
 
 #AbstractNodeTreeContainer {
     -fx-background-color: -fx-background-background;
-    -fx-padding: 4 2 0 0;
+    -fx-padding: 0 0 0 0;
 }
 
 #AbstractNodeTreeTransparentContainer {
