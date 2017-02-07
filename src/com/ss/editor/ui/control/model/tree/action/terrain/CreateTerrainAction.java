@@ -33,7 +33,7 @@ public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer>
     @NotNull
     @Override
     protected String getName() {
-        return "Terrain";
+        return Messages.MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
     }
 
     @Override

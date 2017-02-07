@@ -234,6 +234,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_ADD_WHEEL;
+    public static final String MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
 
     public static final String MODEL_PROPERTY_CULL_HINT;
     public static final String MODEL_PROPERTY_SHADOW_MODE;
@@ -492,7 +493,26 @@ public class Messages {
     public static final String CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE;
     public static final String CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE;
     public static final String CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE;
+
     public static final String ADD_VEHICLE_WHEEL_DIALOG_TITLE;
+
+    public static final String CREATE_TERRAIN_DIALOG_TITLE;
+    public static final String CREATE_TERRAIN_DIALOG_BASE_TEXTURE;
+    public static final String CREATE_TERRAIN_DIALOG_FOLDER_ALPHA_TEXTURE;
+    public static final String CREATE_TERRAIN_DIALOG_TOTAL_SIZE;
+    public static final String CREATE_TERRAIN_DIALOG_PATCH_SIZE;
+    public static final String CREATE_TERRAIN_DIALOG_ALPHA_BLEND_TEXTURE_SIZE;
+    public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE;
+    public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT;
+    public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED;
+    public static final String CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL;
+    public static final String CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE;
+    public static final String CREATE_TERRAIN_DIALOG_HEIGHT_SMOOTH;
+    public static final String CREATE_TERRAIN_DIALOG_HEIGHT_SCALE;
+    public static final String CREATE_TERRAIN_DIALOG_ITERATIONS;
+    public static final String CREATE_TERRAIN_DIALOG_FLATTENING;
+    public static final String CREATE_TERRAIN_DIALOG_MIN_RADIUS;
+    public static final String CREATE_TERRAIN_DIALOG_MAX_RADIUS;
 
     static {
 
@@ -731,6 +751,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CYLINDER_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionCylinderCollisionShape");
         MODEL_NODE_TREE_ACTION_SPHERE_COLLISION_SHAPE = bundle.getString("ModelNodeTreeActionSphereCollisionShape");
         MODEL_NODE_TREE_ACTION_ADD_WHEEL = bundle.getString("ModelNodeTreeActionAddWheel");
+        MODEL_NODE_TREE_ACTION_ADD_TERRAIN = bundle.getString("ModelNodeTreeActionAddTerrain");
 
         MODEL_PROPERTY_CULL_HINT = bundle.getString("ModelPropertyCullHint");
         MODEL_PROPERTY_SHADOW_MODE = bundle.getString("ModelPropertyShadowMode");
@@ -990,5 +1011,23 @@ public class Messages {
         CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateConeCollisionShapeDialogTitle");
         CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCapsuleCollisionShapeDialogTitle");
         ADD_VEHICLE_WHEEL_DIALOG_TITLE = bundle.getString("AddVehicleWheelDialogTitle");
+
+        CREATE_TERRAIN_DIALOG_TITLE = bundle.getString("CreateTerrainDialogTitle");
+        CREATE_TERRAIN_DIALOG_BASE_TEXTURE = bundle.getString("CreateTerrainDialogBaseTexture");
+        CREATE_TERRAIN_DIALOG_FOLDER_ALPHA_TEXTURE = bundle.getString("CreateTerrainDialogFolderAlphaTexture");
+        CREATE_TERRAIN_DIALOG_TOTAL_SIZE = bundle.getString("CreateTerrainDialogTotalSize");
+        CREATE_TERRAIN_DIALOG_PATCH_SIZE = bundle.getString("CreateTerrainDialogPatchSize");
+        CREATE_TERRAIN_DIALOG_ALPHA_BLEND_TEXTURE_SIZE = bundle.getString("CreateTerrainDialogAlphaBlendTextureSize");
+        CREATE_TERRAIN_DIALOG_TERRAIN_TYPE = bundle.getString("CreateTerrainDialogTerrainType");
+        CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT = bundle.getString("CreateTerrainDialogTerrainTypeFlat");
+        CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED = bundle.getString("CreateTerrainDialogTerrainTypeImageBased");
+        CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL = bundle.getString("CreateTerrainDialogTerrainTypeHill");
+        CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE = bundle.getString("CreateTerrainDialogHeightMapImage");
+        CREATE_TERRAIN_DIALOG_HEIGHT_SMOOTH = bundle.getString("CreateTerrainDialogHeightSmooth");
+        CREATE_TERRAIN_DIALOG_HEIGHT_SCALE = bundle.getString("CreateTerrainDialogHeightScale");
+        CREATE_TERRAIN_DIALOG_ITERATIONS = bundle.getString("CreateTerrainDialogIterations");
+        CREATE_TERRAIN_DIALOG_FLATTENING = bundle.getString("CreateTerrainDialogFlattening");
+        CREATE_TERRAIN_DIALOG_MIN_RADIUS = bundle.getString("CreateTerrainDialogMinRadius");
+        CREATE_TERRAIN_DIALOG_MAX_RADIUS = bundle.getString("CreateTerrainDialogMaxRadius");
     }
 }

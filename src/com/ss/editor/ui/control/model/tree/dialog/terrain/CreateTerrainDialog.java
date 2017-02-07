@@ -20,6 +20,7 @@ import com.jme3.terrain.heightmap.ImageBasedHeightMap;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
@@ -85,9 +86,9 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     protected static final Editor EDITOR = Editor.getInstance();
 
     private enum HeightMapType {
-        FLAT("Flat"),
-        IMAGE_BASED("Image based"),
-        HILL("Hill");
+        FLAT(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT),
+        IMAGE_BASED(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED),
+        HILL(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL);
 
         private static final HeightMapType[] VALUES = values();
 
@@ -274,21 +275,21 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
         settingsRoot = new VBox();
 
-        final Label baseTextureLabel = new Label("Base texture:");
+        final Label baseTextureLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_BASE_TEXTURE + ":");
         baseTextureLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         baseTextureLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
         baseTextureControl = new ChooseTextureControl();
         baseTextureControl.setChangeHandler(this::validate);
 
-        final Label alphaTextureFolderLabel = new Label("Folder for alpha textures:");
+        final Label alphaTextureFolderLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_FOLDER_ALPHA_TEXTURE + ":");
         alphaTextureFolderLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         alphaTextureFolderLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
         alphaTextureFolderControl = new ChooseFolderControl();
         alphaTextureFolderControl.setChangeHandler(this::validate);
 
-        final Label totalSizeLabel = new Label("Total size:");
+        final Label totalSizeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_TOTAL_SIZE + ":");
         totalSizeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         totalSizeLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
@@ -297,7 +298,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         totalSizeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
         totalSizeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePathSizeValues());
 
-        final Label pathSizeLabel = new Label("Path size:");
+        final Label pathSizeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_PATCH_SIZE + ":");
         pathSizeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         pathSizeLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
@@ -305,7 +306,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         patchSizeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         patchSizeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
 
-        final Label alphaBlendTextureSizeLabel = new Label("Alpha-blend texture size:");
+        final Label alphaBlendTextureSizeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_ALPHA_BLEND_TEXTURE_SIZE + ":");
         alphaBlendTextureSizeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         alphaBlendTextureSizeLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
@@ -313,7 +314,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         alphaBlendTextureSizeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         alphaBlendTextureSizeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
 
-        final Label heightMapTypeLabel = new Label("HeightMap type:");
+        final Label heightMapTypeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE + ":");
         heightMapTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapTypeLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
@@ -344,14 +345,14 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         flatSettings.setAlignment(Pos.CENTER_LEFT);
         flatSettings.setVgap(2);
 
-        final Label heightMapImageControlLabel = new Label("Heightmap image:");
+        final Label heightMapImageControlLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE + ":");
         heightMapImageControlLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapImageControlLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         heightMapImageControl = new ChooseTextureControl();
         heightMapImageControl.setChangeHandler(this::validate);
 
-        final Label heightMapSmoothLabel = new Label("Height smooth:");
+        final Label heightMapSmoothLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_SMOOTH + ":");
         heightMapSmoothLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapSmoothLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
@@ -362,7 +363,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         heightMapSmoothField.setScrollPower(1F);
         heightMapSmoothField.setValue(0.5F);
 
-        final Label heightMapScaleLabel = new Label("Height scale:");
+        final Label heightMapScaleLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_SCALE + ":");
         heightMapScaleLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapScaleLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
@@ -381,7 +382,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         heightMapSettings.add(heightMapScaleLabel, 0, 2);
         heightMapSettings.add(heightMapScaleField, 1, 2);
 
-        final Label hillIterationsLabel = new Label("Iterations:");
+        final Label hillIterationsLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_ITERATIONS + ":");
         hillIterationsLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillIterationsLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
@@ -391,7 +392,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         hillIterationsField.setMinMax(0, 10000);
         hillIterationsField.setValue(2000);
 
-        final Label hillFlatteningLabel = new Label("Flattening:");
+        final Label hillFlatteningLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_FLATTENING + ":");
         hillFlatteningLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillFlatteningLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
@@ -401,7 +402,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         hillFlatteningField.setMinMax(0, 127);
         hillFlatteningField.setValue(4);
 
-        final Label hillMinRadiusLabel = new Label("Min radius:");
+        final Label hillMinRadiusLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_MIN_RADIUS + ":");
         hillMinRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillMinRadiusLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
@@ -412,7 +413,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         hillMinRadiusField.setValue(20);
         hillMinRadiusField.addChangeListener((observable, oldValue, newValue) -> validate());
 
-        final Label hillMaxRadiusLabel = new Label("Max radius:");
+        final Label hillMaxRadiusLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_MAX_RADIUS + ":");
         hillMaxRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillMaxRadiusLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
@@ -837,7 +838,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return "Create terrain";
+        return Messages.CREATE_TERRAIN_DIALOG_TITLE;
     }
 
     /**
