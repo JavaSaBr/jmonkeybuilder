@@ -69,7 +69,7 @@ public interface Icons {
     Image CAPSULE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/capsule.png");
     Image CONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cone.png");
     Image CYLINDER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cylinder.png");
-    Image TERRAIN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/terrain.png");
+    Image TERRAIN_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/terrain.svg");
     Image WHEEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/wheel.svg");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);

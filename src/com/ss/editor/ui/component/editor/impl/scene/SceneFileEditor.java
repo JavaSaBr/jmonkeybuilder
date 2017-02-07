@@ -339,7 +339,7 @@ public class SceneFileEditor extends
      * @return the light toggle.
      */
     @NotNull
-    public ToggleButton getLightButton() {
+    private ToggleButton getLightButton() {
         return requireNonNull(lightButton);
     }
 
@@ -347,7 +347,7 @@ public class SceneFileEditor extends
      * @return the audio toggle.
      */
     @NotNull
-    public ToggleButton getAudioButton() {
+    private ToggleButton getAudioButton() {
         return requireNonNull(audioButton);
     }
 

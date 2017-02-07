@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Path;
 
 /**
@@ -9,7 +11,7 @@ import java.nio.file.Path;
  */
 public class FileElement extends ResourceElement {
 
-    public FileElement(final Path file) {
+    FileElement(@NotNull final Path file) {
         super(file);
     }
 }

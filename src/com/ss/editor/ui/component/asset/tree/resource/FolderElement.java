@@ -1,30 +1,29 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
-
 import org.jetbrains.annotations.NotNull;
+import rlib.util.FileUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-
 /**
- * The folder presentation.
+ * The presentation of a folder.
  *
  * @author JavaSaBr
  */
 public class FolderElement extends ResourceElement {
 
-    public FolderElement(@NotNull final Path file) {
+    FolderElement(@NotNull final Path file) {
         super(file);
     }
 
-    public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter) {
+    @Override
+    public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
         if (!Files.isDirectory(file)) return null;
 
         final Array<ResourceElement> elements = ArrayFactory.newArray(ResourceElement.class);
@@ -41,6 +40,8 @@ public class FolderElement extends ResourceElement {
                     return;
                 }
 
+                if (onlyFolders) return;
+
                 final String extension = FileUtils.getExtension(child);
 
                 if (extensionFilter.isEmpty() || extensionFilter.contains(extension)) {
@@ -56,7 +57,7 @@ public class FolderElement extends ResourceElement {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final Array<String> extensionFilter) {
+    public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
         return true;
     }
 }

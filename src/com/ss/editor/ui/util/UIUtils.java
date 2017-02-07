@@ -427,7 +427,7 @@ public class UIUtils {
         final JFXApplication jfxApplication = JFXApplication.getInstance();
         final EditorFXScene scene = jfxApplication.getScene();
 
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(handler);
+        final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
         dialog.setExtensionFilter(extensions);
         dialog.setActionTester(actionTester);
         dialog.show(scene.getWindow());

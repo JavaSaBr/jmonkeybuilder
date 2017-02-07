@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
  *
  * @author JavaSaBr
  */
-public class OpenFileByEditorAction extends MenuItem {
+class OpenFileByEditorAction extends MenuItem {
 
     @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -33,7 +33,7 @@ public class OpenFileByEditorAction extends MenuItem {
     @NotNull
     private final EditorDescription description;
 
-    public OpenFileByEditorAction(@NotNull final ResourceElement element, @NotNull final EditorDescription description) {
+    OpenFileByEditorAction(@NotNull final ResourceElement element, @NotNull final EditorDescription description) {
         this.element = element;
         this.description = description;
 

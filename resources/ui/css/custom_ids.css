@@ -234,6 +234,13 @@
     -fx-padding: 0 6 0 0;
 }
 
+#EditorDialogField {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
+}
+
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
     -fx-padding: 0 0 10 0;
@@ -546,8 +553,17 @@
     -fx-fit-to-width: 122;
 }
 
-#ChooseTextureControlTextureLabel {
+#ChooseResourceControlButton {
     -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#ChooseTextureControlTextureLabel {
+    -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 250;
@@ -557,14 +573,24 @@
 }
 
 #ChooseTextureControlPreview {
-    -fx-min-height: 30;
+    -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 30;
+    -fx-min-width: 24;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-border-color: -fx-color-panel-50;
     -fx-border-width: 1;
+}
+
+#ChooseFolderControlFolderLabel {
+    -fx-min-height: 25;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 279;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-left;
 }
 
 #CreateSkyDialogLabel {

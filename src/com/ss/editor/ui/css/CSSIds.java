@@ -53,6 +53,7 @@ public interface CSSIds {
     String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
     String EDITOR_DIALOG_SHORT_LABEL = "EditorDialogShortLabel";
     String EDITOR_DIALOG_DYNAMIC_LABEL = "EditorDialogDynamicLabel";
+    String EDITOR_DIALOG_FIELD = "EditorDialogField";
 
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     String ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER = "AssetEditorDialogResourcesContainer";
@@ -102,8 +103,12 @@ public interface CSSIds {
     String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
     String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
 
+    String CHOOSE_RESOURCE_CONTROL_BUTTON = "ChooseResourceControlButton";
+
     String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "ChooseTextureControlTextureLabel";
     String CHOOSE_TEXTURE_CONTROL_PREVIEW = "ChooseTextureControlPreview";
+
+    String CHOOSE_FOLDER_CONTROL_FOLDER_LABEL = "ChooseFolderControlFolderLabel";
 
     String CREATE_SKY_DIALOG_LABEL = "CreateSkyDialogLabel";
     String CREATE_SKY_DIALOG_COMBO_BOX = "CreateSkyDialogComboBox";

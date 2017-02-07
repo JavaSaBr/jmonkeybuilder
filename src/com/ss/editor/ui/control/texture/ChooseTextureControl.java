@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.dialog.sky;
+package com.ss.editor.ui.control.texture;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static java.util.Objects.requireNonNull;
@@ -39,7 +39,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The control for choosing textures.
+ * The control to choose textures.
  *
  * @author JavaSaBr.
  */
@@ -81,7 +81,7 @@ public class ChooseTextureControl extends HBox {
     private ImageView texturePreview;
 
     /**
-     * The label for the path of texture.
+     * The label for of path to a texture.
      */
     @Nullable
     private Label textureLabel;
@@ -98,9 +98,10 @@ public class ChooseTextureControl extends HBox {
     @Nullable
     private Runnable changeHandler;
 
-    ChooseTextureControl() {
+    public ChooseTextureControl() {
         setAlignment(Pos.CENTER_LEFT);
         createComponents();
+        reload();
     }
 
     /**
@@ -135,12 +136,12 @@ public class ChooseTextureControl extends HBox {
         Tooltip.install(texturePreview, textureTooltip);
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
+        addButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_18));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.CREATE_SKY_DIALOG_BUTTON);
+        removeButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
         removeButton.setOnAction(event -> processRemove());
 
@@ -150,7 +151,7 @@ public class ChooseTextureControl extends HBox {
         FXUtils.addToPane(addButton, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassTo(textureLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(textureLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
 
@@ -162,7 +163,7 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
-     * @return the label for the path of texture.
+     * @return the label for the path to a texture.
      */
     @NotNull
     private Label getTextureLabel() {
@@ -188,7 +189,7 @@ public class ChooseTextureControl extends HBox {
      * @return the selected file.
      */
     @Nullable
-    Path getTextureFile() {
+    public Path getTextureFile() {
         return textureFile;
     }
 

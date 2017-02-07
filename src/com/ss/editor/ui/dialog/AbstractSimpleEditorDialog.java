@@ -6,19 +6,15 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
-
-import java.util.Objects;
 
 /**
  * The simple implementation of the dialog.
@@ -42,7 +38,20 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     @Nullable
     private Button okButton;
 
+    /**
+     * True if this dialog is ready.
+     */
+    private boolean ready;
+
     public AbstractSimpleEditorDialog() {
+        ready = true;
+    }
+
+    /**
+     * @return true if this dialog is ready.
+     */
+    protected boolean isReady() {
+        return ready;
     }
 
     @Override

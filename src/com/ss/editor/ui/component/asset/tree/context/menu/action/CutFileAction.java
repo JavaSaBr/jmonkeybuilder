@@ -13,6 +13,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The action to cut a file.
@@ -24,9 +25,10 @@ public class CutFileAction extends MenuItem {
     /**
      * The action element.
      */
+    @NotNull
     private final ResourceElement element;
 
-    public CutFileAction(final ResourceElement element) {
+    public CutFileAction(@NotNull final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_CUT_FILE);
         setOnAction(event -> processCut());

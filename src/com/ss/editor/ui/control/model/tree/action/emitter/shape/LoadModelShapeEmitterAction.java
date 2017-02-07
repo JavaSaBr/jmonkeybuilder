@@ -3,9 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.emitter.shape;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.asset.AssetManager;
-import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
@@ -19,21 +17,17 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeEmitterShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.NodeUtils;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.file.Path;
-import java.util.function.Predicate;
-
-import javafx.scene.image.Image;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.ParticleEmitterNode;
+
+import java.nio.file.Path;
+import java.util.function.Predicate;
 
 /**
  * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link Spatial}.
@@ -70,11 +64,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
 
     @Override
     protected void process() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
-        dialog.setExtensionFilter(MODEL_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
@@ -87,8 +77,6 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
-
-        final ModelKey modelKey = new ModelKey(assetPath);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(assetPath);

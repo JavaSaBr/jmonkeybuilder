@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import java.nio.file.Paths;
+
 /**
  * The implementing of resource element to show loading process.
  *
@@ -13,7 +15,7 @@ public class ResourceLoadingElement extends ResourceElement {
         return INSTANCE;
     }
 
-    public ResourceLoadingElement() {
-        super(null);
+    private ResourceLoadingElement() {
+        super(Paths.get("./"));
     }
 }

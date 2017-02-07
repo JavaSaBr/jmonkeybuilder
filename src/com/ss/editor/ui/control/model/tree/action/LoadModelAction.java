@@ -23,6 +23,8 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 import javafx.scene.image.Image;
@@ -69,11 +71,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
     @Override
     protected void process() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
-        dialog.setExtensionFilter(MODEL_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**

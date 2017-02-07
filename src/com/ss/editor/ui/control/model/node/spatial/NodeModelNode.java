@@ -19,6 +19,7 @@ import com.ss.editor.ui.control.model.tree.action.light.CreateAmbientLightAction
 import com.ss.editor.ui.control.model.tree.action.light.CreateDirectionLightAction;
 import com.ss.editor.ui.control.model.tree.action.light.CreatePointLightAction;
 import com.ss.editor.ui.control.model.tree.action.light.CreateSpotLightAction;
+import com.ss.editor.ui.control.model.tree.action.terrain.CreateTerrainAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.util.GeomUtils;
@@ -72,7 +73,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new LoadModelAction(nodeTree, this),
                 new CreateSkyAction(nodeTree, this), new CreateTonegodEmitterAction(nodeTree, this),
                 new CreateTonegodSoftEmitterAction(nodeTree, this), new CreateAudioNodeAction(nodeTree, this),
-                createPrimitiveMenu, addLightMenu);
+                new CreateTerrainAction(nodeTree, this), createPrimitiveMenu, addLightMenu);
 
         return menu;
     }

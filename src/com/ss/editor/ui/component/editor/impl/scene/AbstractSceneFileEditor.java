@@ -683,7 +683,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             element = object;
         }
 
-        if (element instanceof SceneLayer || element instanceof SceneNode) {
+        if (element instanceof SceneLayer) {
             element = null;
         }
 

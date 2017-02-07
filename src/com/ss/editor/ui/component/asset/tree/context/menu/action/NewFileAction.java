@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
 import rlib.util.array.Array;
 
 /**
@@ -19,15 +20,10 @@ import rlib.util.array.Array;
  */
 public class NewFileAction extends Menu {
 
+    @NotNull
     private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
 
-    /**
-     * The action element.
-     */
-    private final ResourceElement element;
-
-    public NewFileAction(final ResourceElement element) {
-        this.element = element;
+    public NewFileAction(@NotNull final ResourceElement element) {
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE);
         setGraphic(new ImageView(Icons.NEW_FILE_16));
 

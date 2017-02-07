@@ -1,14 +1,10 @@
 package com.ss.editor.ui.control.material;
 
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
+import static com.ss.editor.Messages.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.MatParamTexture;
@@ -28,21 +24,9 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -53,10 +37,18 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link MaterialParamControl} for editing textures.
@@ -229,7 +221,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      * @return the checkbox for editing repeat property.
      */
     @NotNull
-    public ImageChannelPreview getTextureTooltip() {
+    private ImageChannelPreview getTextureTooltip() {
         return textureTooltip;
     }
 
@@ -289,13 +281,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      * The process of adding a new texture.
      */
     private void processAdd() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addTexture);
-        dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::addTexture, TEXTURE_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
@@ -375,7 +361,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * @return the preview of the texture.
      */
-    public ImageView getTexturePreview() {
+    private ImageView getTexturePreview() {
         return texturePreview;
     }
 

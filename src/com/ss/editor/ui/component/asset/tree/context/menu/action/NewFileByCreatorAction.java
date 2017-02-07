@@ -17,8 +17,9 @@ import javafx.scene.image.ImageView;
  *
  * @author JavaSaBr
  */
-public class NewFileByCreatorAction extends MenuItem {
+class NewFileByCreatorAction extends MenuItem {
 
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
@@ -33,7 +34,7 @@ public class NewFileByCreatorAction extends MenuItem {
     @NotNull
     private final FileCreatorDescription description;
 
-    public NewFileByCreatorAction(@NotNull final ResourceElement element, @NotNull final FileCreatorDescription description) {
+    NewFileByCreatorAction(@NotNull final ResourceElement element, @NotNull final FileCreatorDescription description) {
         this.element = element;
         this.description = description;
         final Image icon = description.getIcon();
