@@ -62,7 +62,7 @@ import java.nio.file.Paths;
 public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
     private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-    private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 81, 0);
+    private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 106, 0);
     private static final Insets HEIGHTMAP_CONTAINER_OFFSET = new Insets(0, 0, 27, 0);
 
     private static final Integer DEFAULT_BLEND_TEXTURE_SIZE = 256;
@@ -73,7 +73,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     private static final float DEFAULT_TEXTURE_SCALE = 16.0625f;
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(580, 340);
+    private static final Point DIALOG_SIZE = new Point(580, 365);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -343,8 +343,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         flatSettings = new GridPane();
         flatSettings.setAlignment(Pos.CENTER_LEFT);
         flatSettings.setVgap(2);
-        flatSettings.add(alphaBlendTextureSizeLabel, 0, 0);
-        flatSettings.add(alphaBlendTextureSizeComboBox, 1, 0);
 
         final Label heightMapImageControlLabel = new Label("Heightmap image:");
         heightMapImageControlLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
