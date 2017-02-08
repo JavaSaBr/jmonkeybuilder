@@ -6,6 +6,7 @@ import com.jme3.util.clone.JmeCloneable;
 import com.ss.extension.scene.app.state.SceneAppState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.util.HasName;
 import rlib.util.array.Array;
 
 /**
@@ -14,7 +15,7 @@ import rlib.util.array.Array;
  * @author JavaSaBr
  */
 @SuppressWarnings("NullableProblems")
-public interface SceneFilter<T extends Filter> extends Savable, JmeCloneable, Cloneable {
+public interface SceneFilter<T extends Filter> extends Savable, HasName, JmeCloneable, Cloneable {
 
     /**
      * Get a filter. It is usually return this.
@@ -22,12 +23,6 @@ public interface SceneFilter<T extends Filter> extends Savable, JmeCloneable, Cl
      * @return the filter.
      */
     T get();
-
-    /**
-     * @return the name of this filter.
-     */
-    @NotNull
-    String getName();
 
     /**
      * Enable or disable this filter

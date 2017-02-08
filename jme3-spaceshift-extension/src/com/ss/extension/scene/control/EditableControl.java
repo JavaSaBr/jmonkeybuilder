@@ -3,6 +3,7 @@ package com.ss.extension.scene.control;
 import com.jme3.scene.control.Control;
 import com.ss.extension.property.EditableProperty;
 import org.jetbrains.annotations.NotNull;
+import rlib.util.HasName;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -11,7 +12,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public interface EditableControl extends Control {
+public interface EditableControl extends Control, HasName {
 
     @NotNull
     Array<EditableProperty<?, ?>> EMPTY_PROPERTIES = ArrayFactory.newArray(EditableProperty.class);
