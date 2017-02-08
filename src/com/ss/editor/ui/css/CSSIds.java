@@ -157,4 +157,5 @@ public interface CSSIds {
     String ABSTRACT_NODE_TREE_CONTAINER = "AbstractNodeTreeContainer";
     String ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER = "AbstractNodeTreeTransparentContainer";
 
+    String EDITING_CONTAINER = "EditingContainer";
 }

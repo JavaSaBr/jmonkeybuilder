@@ -1,7 +1,11 @@
 package com.ss.editor.ui.component.editing;
 
+import rlib.util.HasName;
+
 /**
- * Created by ronn on 08.02.17.
+ * The interface to implement editing component.
+ *
+ * @author JavaSaBr
  */
-public interface EditingComponent {
+public interface EditingComponent extends HasName {
 }

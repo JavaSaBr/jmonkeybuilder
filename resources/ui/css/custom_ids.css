@@ -882,3 +882,7 @@
     -fx-background-color: transparent;
     -fx-padding: 4 2 0 0;
 }
+
+#EditingContainer {
+    -fx-background-color: -fx-background-background;
+}

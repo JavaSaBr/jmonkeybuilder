@@ -1,7 +1,16 @@
 package com.ss.editor.ui.component.editing;
 
+import com.ss.editor.ui.css.CSSIds;
+import javafx.scene.layout.VBox;
+
 /**
- * Created by ronn on 07.02.17.
+ * The class container of editing components.
+ *
+ * @author JavaSaBr
  */
-public class EditingContainer {
+public class EditingContainer extends VBox {
+
+    public EditingContainer() {
+        setId(CSSIds.EDITING_CONTAINER);
+    }
 }

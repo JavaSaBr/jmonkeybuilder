@@ -717,7 +717,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
                 heightmap = new FlatHeightmap(totalSize);
                 break;
             }
-            case HILL: {
+            case IMAGE_BASED: {
 
                 final Path heightMapTextureFile = requireNonNull(heightMapImageControl.getTextureFile());
                 final Path assetFile = requireNonNull(getAssetFile(heightMapTextureFile));
@@ -726,7 +726,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
                 heightmap = new ImageBasedHeightMap(texture.getImage(), heightMapScaleField.getValue());
                 break;
             }
-            case IMAGE_BASED: {
+            case HILL: {
 
                 final int iterations = hillIterationsField.getValue();
                 final float minRadius = hillMinRadiusField.getValue();
