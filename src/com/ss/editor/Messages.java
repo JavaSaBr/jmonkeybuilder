@@ -3,6 +3,7 @@ package com.ss.editor;
 import static java.util.ResourceBundle.getBundle;
 import static rlib.util.ReflectionUtils.getUnsafeFieldValue;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
+import rlib.util.PropertyLoader;
 import rlib.util.ReflectionUtils;
 
 import java.util.Locale;
@@ -205,16 +206,6 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ALPHA;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_COLOR;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_DESTINATION;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_GRAVITY;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_IMPULSE;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_PHYSICS;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_RADIAL_VELOCITY;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_LAYER;
     public static final String MODEL_NODE_TREE_ACTION_ADD_USER_DATA;
     public static final String MODEL_NODE_TREE_ACTION_ADD_CONTROL;
@@ -520,10 +511,10 @@ public class Messages {
         final ClassLoader classLoader = ControlResources.class.getClassLoader();
 
         final ResourceBundle controlBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                locale, classLoader, ResourceControl.getInstance());
+                locale, classLoader, PropertyLoader.getInstance());
 
         final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
-                ResourceControl.getInstance());
+                PropertyLoader.getInstance());
 
         final Map override = getUnsafeFieldValue(overrideBundle, "lookup");
         final Map original = getUnsafeFieldValue(controlBundle, "lookup");
@@ -531,7 +522,7 @@ public class Messages {
         //noinspection ConstantConditions,ConstantConditions,unchecked
         original.putAll(override);
 
-        final ResourceBundle bundle = getBundle(BUNDLE_NAME, ResourceControl.getInstance());
+        final ResourceBundle bundle = getBundle(BUNDLE_NAME, PropertyLoader.getInstance());
 
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
@@ -722,16 +713,6 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshPoint");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshImpostor");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshModel");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ALPHA = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerAlpha");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_COLOR = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerColor");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_DESTINATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerDestination");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_GRAVITY = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerGravity");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_IMPULSE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerImpulse");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_PHYSICS = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerPhysics");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_RADIAL_VELOCITY = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRadialVelocity");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_ROTATION = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerRotation");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SIZE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSize");
-        MODEL_NODE_TREE_ACTION_EMITTER_CREATE_INFLUENCER_SPRITE = bundle.getString("ModelNodeTreeActionEmitterCreateInfluencerSprite");
         MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
