@@ -240,6 +240,7 @@
             <fx:platform >
                 <fx:jvmarg value="-Xms1024m"/>
                 <fx:jvmarg value="-Xmx2048m"/>
+                <fx:jvmarg value="-XX:MaxDirectMemorySize=4096m"/>
                 <fx:jvmarg value="-XX:+AggressiveOpts"/>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
                 <fx:jvmarg value="-XX:+UseTLAB"/>
