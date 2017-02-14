@@ -19,7 +19,7 @@ import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
+import java.util.function.BiConsumer;
 
 import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
@@ -28,7 +28,6 @@ import tonegod.emitter.EmissionPoint;
 import tonegod.emitter.EmitterMesh.DirectionType;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.material.ParticlesMaterial;
-import tonegod.emitter.node.ParticleNode;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleEmitterNode}
@@ -38,11 +37,82 @@ import tonegod.emitter.node.ParticleNode;
  */
 public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
+
+    @NotNull
     private static final EmissionPoint[] PARTICLE_EMISSION_POINTS = EmissionPoint.values();
 
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Boolean> FOLLOW_EMITTER_HANDLER = (node, result) -> {
+        node.setParticlesFollowEmitter(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Boolean> VELOCITY_STRETCHING_HANDLER = (node, result) -> {
+        node.setVelocityStretching(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Boolean> RANDOM_EMISSION_POINT_HANDLER = (node, result) -> {
+        node.setRandomEmissionPoint(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Boolean> SEQUENTIAL_EMISSION_FACE_HANDLER = (node, result) -> {
+        node.setSequentialEmissionFace(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, DirectionType> DIRECTION_TYPE_HANDLER = (node, result) -> {
+        node.setDirectionType(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Boolean> SEQUENTIAL_SKIP_PATTERN_HANDLER = (node, result) -> {
+        node.setSequentialSkipPattern(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, EmissionPoint> EMISSION_POINT_HANDLER = (node, result) -> {
+        node.setEmissionPoint(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Integer> EMISSIONS_PER_SECOND_HANDLER = (node, result) -> {
+        node.setEmissionsPerSecond(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Integer> PARTICLES_PER_EMISSION_HANDLER = (node, result) -> {
+        node.setParticlesPerEmission(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Vector2f> FORCE_MIN_MAX_HANDLER = (node, result) -> {
+        node.setForceMinMax(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
+    private static final BiConsumer<ParticleEmitterNode, Vector2f> LIFE_MIN_MAX_HANDLER = (node, result) -> {
+        node.setLifeMinMax(result);
+        node.killAllParticles();
+    };
+
+    @NotNull
     private static final PropertyBuilder INSTANCE = new ParticlesPropertyBuilder();
 
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -104,43 +174,43 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
 
         final BooleanModelPropertyControl<ParticleEmitterNode> particlesFollowEmitControl =
                 new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_FOLLOW_EMITTER, changeConsumer);
-        particlesFollowEmitControl.setApplyHandler(ParticleEmitterNode::setParticlesFollowEmitter);
+        particlesFollowEmitControl.setApplyHandler(FOLLOW_EMITTER_HANDLER);
         particlesFollowEmitControl.setSyncHandler(ParticleEmitterNode::isParticlesFollowEmitter);
         particlesFollowEmitControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> particlesStretchingControl =
                 new BooleanModelPropertyControl<>(velocityStretching, Messages.PARTICLE_EMITTER_STRETCHING, changeConsumer);
-        particlesStretchingControl.setApplyHandler(ParticleEmitterNode::setVelocityStretching);
+        particlesStretchingControl.setApplyHandler(VELOCITY_STRETCHING_HANDLER);
         particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isVelocityStretching);
         particlesStretchingControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> randomPointControl =
                 new BooleanModelPropertyControl<>(randomEmissionPoint, Messages.PARTICLE_EMITTER_RANDOM_POINT, changeConsumer);
-        randomPointControl.setApplyHandler(ParticleEmitterNode::setRandomEmissionPoint);
+        randomPointControl.setApplyHandler(RANDOM_EMISSION_POINT_HANDLER);
         randomPointControl.setSyncHandler(ParticleEmitterNode::isRandomEmissionPoint);
         randomPointControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> sequentialFaceControl =
                 new BooleanModelPropertyControl<>(sequentialEmissionFace, Messages.PARTICLE_EMITTER_SEQUENTIAL_FACE, changeConsumer);
-        sequentialFaceControl.setApplyHandler(ParticleEmitterNode::setSequentialEmissionFace);
+        sequentialFaceControl.setApplyHandler(SEQUENTIAL_EMISSION_FACE_HANDLER);
         sequentialFaceControl.setSyncHandler(ParticleEmitterNode::isSequentialEmissionFace);
         sequentialFaceControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> skipPatternControl =
                 new BooleanModelPropertyControl<>(skipPattern, Messages.PARTICLE_EMITTER_SKIP_PATTERN, changeConsumer);
-        skipPatternControl.setApplyHandler(ParticleEmitterNode::setSequentialSkipPattern);
+        skipPatternControl.setApplyHandler(SEQUENTIAL_SKIP_PATTERN_HANDLER);
         skipPatternControl.setSyncHandler(ParticleEmitterNode::isSequentialSkipPattern);
         skipPatternControl.setEditObject(emitterNode);
 
         final EnumModelPropertyControl<ParticleEmitterNode, DirectionType> directionTypeControl =
                 new EnumModelPropertyControl<>(directionType, Messages.PARTICLE_EMITTER_DIRECTION_TYPE, changeConsumer, DIRECTION_TYPES);
-        directionTypeControl.setApplyHandler(ParticleEmitterNode::setDirectionType);
+        directionTypeControl.setApplyHandler(DIRECTION_TYPE_HANDLER);
         directionTypeControl.setSyncHandler(ParticleEmitterNode::getDirectionType);
         directionTypeControl.setEditObject(emitterNode);
 
         final EnumModelPropertyControl<ParticleEmitterNode, EmissionPoint> emissionPointControl =
                 new EnumModelPropertyControl<>(emissionPoint, Messages.PARTICLE_EMITTER_EMISSION_POINT, changeConsumer, PARTICLE_EMISSION_POINTS);
-        emissionPointControl.setApplyHandler(ParticleEmitterNode::setEmissionPoint);
+        emissionPointControl.setApplyHandler(EMISSION_POINT_HANDLER);
         emissionPointControl.setSyncHandler(ParticleEmitterNode::getEmissionPoint);
         emissionPointControl.setEditObject(emitterNode);
 
@@ -158,13 +228,13 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
 
         final IntegerModelPropertyControl<ParticleEmitterNode> emissionPerSecControl =
                 new IntegerModelPropertyControl<>(emissionsPerSecond, Messages.PARTICLE_EMITTER_EMISSION_PER_SECOND, changeConsumer);
-        emissionPerSecControl.setApplyHandler(ParticleEmitterNode::setEmissionsPerSecond);
+        emissionPerSecControl.setApplyHandler(EMISSIONS_PER_SECOND_HANDLER);
         emissionPerSecControl.setSyncHandler(ParticleEmitterNode::getEmissionsPerSecond);
         emissionPerSecControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> particlesPerEmissionControl =
                 new IntegerModelPropertyControl<>(particlesPerEmission, Messages.PARTICLE_EMITTER_PARTICLES_PER_SECOND, changeConsumer);
-        particlesPerEmissionControl.setApplyHandler(ParticleEmitterNode::setParticlesPerEmission);
+        particlesPerEmissionControl.setApplyHandler(PARTICLES_PER_EMISSION_HANDLER);
         particlesPerEmissionControl.setSyncHandler(ParticleEmitterNode::getParticlesPerEmission);
         particlesPerEmissionControl.setEditObject(emitterNode);
 
@@ -189,13 +259,13 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
 
         final MinMaxModelPropertyControl<ParticleEmitterNode> forceMinMaxControl =
                 new MinMaxModelPropertyControl<>(forceMinMax, Messages.PARTICLE_EMITTER_INITIAL_FORCE, changeConsumer);
-        forceMinMaxControl.setApplyHandler(ParticleEmitterNode::setForceMinMax);
+        forceMinMaxControl.setApplyHandler(FORCE_MIN_MAX_HANDLER);
         forceMinMaxControl.setSyncHandler(ParticleEmitterNode::getForceMinMax);
         forceMinMaxControl.setEditObject(emitterNode);
 
         final MinMaxModelPropertyControl<ParticleEmitterNode> lifeMinMaxControl =
                 new MinMaxModelPropertyControl<>(lifeMinMax, Messages.PARTICLE_EMITTER_LIFE, changeConsumer);
-        lifeMinMaxControl.setApplyHandler(ParticleEmitterNode::setLifeMinMax);
+        lifeMinMaxControl.setApplyHandler(LIFE_MIN_MAX_HANDLER);
         lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
         lifeMinMaxControl.setEditObject(emitterNode);
 
