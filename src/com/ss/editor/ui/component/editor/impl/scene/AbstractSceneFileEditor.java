@@ -36,6 +36,7 @@ import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.EditingContainer;
+import com.ss.editor.ui.component.editing.impl.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
@@ -93,8 +94,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         MA extends AbstractSceneEditorAppState<IM, M>, ES extends AbstractModelFileEditorState>
         extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer {
 
-    protected static final int OBJECTS_TOOL = 0;
-    public static final int EDITING_TOOL = 1;
+    private static final int OBJECTS_TOOL = 0;
+    private static final int EDITING_TOOL = 1;
 
     /**
      * The 3D part of this editor.
@@ -231,6 +232,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         addEditorState(editorAppState);
+
+        //FIXME need to remove late
+        processChangeTool(OBJECTS_TOOL);
     }
 
     @NotNull
@@ -270,8 +274,16 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the model property editor.
      */
     @NotNull
-    ModelPropertyEditor getModelPropertyEditor() {
+    protected ModelPropertyEditor getModelPropertyEditor() {
         return requireNonNull(modelPropertyEditor);
+    }
+
+    /**
+     * @return the container of editing components.
+     */
+    @NotNull
+    private EditingContainer getEditingContainer() {
+        return requireNonNull(editingContainer);
     }
 
     /**
@@ -749,6 +761,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
+
+        final EditingContainer editingContainer = getEditingContainer();
+        editingContainer.showComponentFor(element);
     }
 
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
@@ -956,7 +971,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 
-        editingContainer = new EditingContainer();
+        editingContainer = new EditingContainer(this);
+        editingContainer.addComponent(new TerrainEditingComponent());
 
         final SplitPane objectsSplitContainer = new SplitPane(modelNodeTreeObjectsContainer, propertyEditorObjectsContainer);
         objectsSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
@@ -973,9 +989,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
-        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(newValue));
         editorToolComponent.addComponent(objectsSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
         editorToolComponent.addComponent(editingSplitContainer, "Editing");
+        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(newValue));
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
@@ -989,7 +1005,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the editor tool component.
      */
     @NotNull
-    EditorToolComponent getEditorToolComponent() {
+    protected EditorToolComponent getEditorToolComponent() {
         return requireNonNull(editorToolComponent);
     }
 
@@ -1008,14 +1024,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.removeFromParent(modelNodeTree, modelNodeTreeParent);
         }
 
-        if (newValue.intValue() == OBJECTS_TOOL) {
+        final int index = newValue.intValue();
+
+        if (index == OBJECTS_TOOL) {
             FXUtils.addToPane(modelPropertyEditor, getPropertyEditorObjectsContainer());
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
-        } else if (newValue.intValue() == EDITING_TOOL) {
+        } else if (index == EDITING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
         }
 
-        //TODO id tool == 1 need to enable editing mode.
+        final MA editorAppState = getEditorAppState();
+        editorAppState.changeEditingMode(index == EDITING_TOOL);
     }
 
     private void dragExited(@NotNull final DragEvent dragEvent) {

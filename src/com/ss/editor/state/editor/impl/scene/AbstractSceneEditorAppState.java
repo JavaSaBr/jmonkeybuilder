@@ -2,7 +2,6 @@ package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
@@ -21,12 +20,7 @@ import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
-import com.jme3.math.Transform;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
+import com.jme3.math.*;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
@@ -38,11 +32,7 @@ import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
-import com.ss.editor.control.transform.MoveToolControl;
-import com.ss.editor.control.transform.RotationToolControl;
-import com.ss.editor.control.transform.ScaleToolControl;
-import com.ss.editor.control.transform.SceneEditorControl;
-import com.ss.editor.control.transform.TransformControl;
+import com.ss.editor.control.transform.*;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.scene.EditorAudioNode;
@@ -51,11 +41,9 @@ import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.NodeUtils;
-
+import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.input.KeyCode;
 import rlib.function.BooleanFloatConsumer;
 import rlib.geom.util.AngleUtils;
 import rlib.util.array.Array;
@@ -259,6 +247,11 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     private boolean activeTransform;
 
+    /**
+     * The flag of editing mode.
+     */
+    private boolean editingMode;
+
     public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
@@ -334,7 +327,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the node for the placement of lights.
      */
     @NotNull
-    Node getLightNode() {
+    protected Node getLightNode() {
         return lightNode;
     }
 
@@ -342,7 +335,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the node for the placement of audio nodes.
      */
     @NotNull
-    Node getAudioNode() {
+    protected Node getAudioNode() {
         return audioNode;
     }
 
@@ -677,10 +670,9 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
                 spatial = ((EditorAudioNode) spatial).getModel();
             }
 
-            state.updateTransformNode(spatial.getWorldTransform());
-
             requireNonNull(spatial);
 
+            state.updateTransformNode(spatial.getWorldTransform());
             shape.setLocalTranslation(spatial.getWorldTranslation());
             shape.setLocalRotation(spatial.getWorldRotation());
             shape.setLocalScale(spatial.getWorldScale());
@@ -699,7 +691,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
         if (selected.isEmpty()) {
             toolNode.detachChild(transformToolNode);
-        } else {
+        } else if (!isEditingMode()) {
             toolNode.attachChild(transformToolNode);
         }
     }
@@ -933,14 +925,14 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Build selection grid for the geometry.
      */
-    private Spatial buildGeometrySelection(@NotNull final Geometry spatial) {
+    private Spatial buildGeometrySelection(@NotNull final Geometry geom) {
 
-        final Mesh mesh = spatial.getMesh();
+        final Mesh mesh = geom.getMesh();
         if (mesh == null) return null;
 
         final Geometry geometry = new Geometry("SelectionShape", mesh);
         geometry.setMaterial(getSelectionMaterial());
-        geometry.setLocalTransform(spatial.getWorldTransform());
+        geometry.setLocalTransform(geom.getWorldTransform());
 
         return geometry;
     }
@@ -1506,5 +1498,46 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                                        final float vRotation, final float targetDistance) {
         EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    }
+
+    /**
+     * @param editingMode the flag of editing mode.
+     */
+    private void setEditingMode(final boolean editingMode) {
+        this.editingMode = editingMode;
+    }
+
+    /**
+     * @return true if editing mode is enabled.
+     */
+    public boolean isEditingMode() {
+        return editingMode;
+    }
+
+    /**
+     * Change enabling of editing mode.
+     *
+     * @param editingMode true if editing mode is enabled.
+     */
+    public void changeEditingMode(final boolean editingMode) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeEditingModeImpl(editingMode));
+    }
+
+    /**
+     * Change enabling of editing mode.
+     *
+     * @param editingMode true if editing mode is enabled.
+     */
+    private void changeEditingModeImpl(final boolean editingMode) {
+        setEditingMode(editingMode);
+
+        final Node toolNode = getToolNode();
+        final Node transformToolNode = getTransformToolNode();
+
+        if (isEditingMode()) {
+            toolNode.detachChild(transformToolNode);
+        } else {
+            toolNode.attachChild(transformToolNode);
+        }
     }
 }
