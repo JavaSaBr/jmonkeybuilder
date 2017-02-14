@@ -147,12 +147,6 @@ public class ModelNodeFactory {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, objectId));
         } else if (element instanceof ParticleInfluencer) {
             return unsafeCast(new ParticleInfluencerModelNode((ParticleInfluencer) element, objectId));
-        } else if (element instanceof EmitterMesh) {
-            return unsafeCast(new ParticleEmitterMeshModelNode((EmitterMesh) element, objectId));
-        } else if (element instanceof ParticleNode) {
-            return unsafeCast(new ParticleNodeModelNode((ParticleNode) element, objectId));
-        } else if (element instanceof ParticleGeometry) {
-            return unsafeCast(new ParticleGeometryModelNode((ParticleGeometry) element, objectId));
         } else if (element instanceof Mesh) {
             return unsafeCast(new MeshModelNode((Mesh) element, objectId));
         } else if (element instanceof Geometry) {

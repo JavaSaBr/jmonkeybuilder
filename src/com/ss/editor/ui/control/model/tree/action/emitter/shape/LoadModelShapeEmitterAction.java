@@ -49,7 +49,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.ADD_18;
+        return Icons.OPEN_FILE_16;
     }
 
     public LoadModelShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {

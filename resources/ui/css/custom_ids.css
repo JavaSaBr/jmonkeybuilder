@@ -731,11 +731,12 @@
 }
 
 #AbstractParamControlParamName {
-    -fx-min-height: 16;
+    -fx-min-height: 18;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-alignment: center;
     -fx-text-alignment: center;
+    -fx-padding: 2 0 0 0;
 }
 
 #AbstractParamControlParamNameSingleRow {

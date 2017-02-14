@@ -9,6 +9,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
@@ -19,7 +20,9 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.ParticleEmitterNode;
@@ -49,6 +52,12 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
 
     public LoadModelParticlesMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
+    }
+
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.OPEN_FILE_16;
     }
 
     @NotNull
@@ -85,9 +94,10 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         }
 
         final ModelNode<?> modelNode = getNode();
-        final ParticleGeometry element = (ParticleGeometry) modelNode.getElement();
+        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) modelNode.getElement();
+        final ParticleGeometry particleGeometry = emitterNode.getParticleGeometry();
         final ParticleDataMeshInfo meshInfo = new ParticleDataMeshInfo(ParticleDataTemplateMesh.class, geometry.getMesh());
 
-        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, element));
+        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, particleGeometry));
     }
 }
