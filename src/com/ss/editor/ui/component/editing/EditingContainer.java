@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.editing;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.model.undo.editor.Editing3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.collections.ObservableList;
@@ -25,6 +27,12 @@ public class EditingContainer extends ScrollPane {
     private final ModelChangeConsumer changeConsumer;
 
     /**
+     * The provider to edit 3D.
+     */
+    @NotNull
+    private final Editing3DProvider editingProvider;
+
+    /**
      * The list of editing components.
      */
     @NotNull
@@ -36,8 +44,10 @@ public class EditingContainer extends ScrollPane {
     @NotNull
     private final VBox container;
 
-    public EditingContainer(@NotNull final ModelChangeConsumer changeConsumer) {
+    public EditingContainer(@NotNull final ModelChangeConsumer changeConsumer,
+                            @NotNull final Editing3DProvider editingProvider) {
         this.changeConsumer = changeConsumer;
+        this.editingProvider = editingProvider;
         setId(CSSIds.EDITING_CONTAINER);
         this.components = ArrayFactory.newArray(EditingComponent.class);
         this.container = new VBox();
@@ -49,8 +59,10 @@ public class EditingContainer extends ScrollPane {
      *
      * @param editingComponent the editing component.
      */
+    @FXThread
     public void addComponent(@NotNull final EditingComponent editingComponent) {
         components.add(editingComponent);
+        editingComponent.initFor(this);
     }
 
     /**
@@ -74,6 +86,7 @@ public class EditingContainer extends ScrollPane {
      *
      * @param element the element to edit.
      */
+    @FXThread
     public void showComponentFor(@Nullable final Object element) {
 
         final VBox container = getContainer();
@@ -86,5 +99,43 @@ public class EditingContainer extends ScrollPane {
         if (editingComponent == null) return;
 
         children.add((Node) editingComponent);
+
+        editingComponent.startEditing(element);
+    }
+
+    /**
+     * Notify about showed this container.
+     */
+    @FXThread
+    public void notifyShowed() {
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> ((EditingComponent) node).notifyShowed());
+    }
+
+    /**
+     * Notify about hided this container.
+     */
+    @FXThread
+    public void notifyHided() {
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> ((EditingComponent) node).notifyHided());
+    }
+
+    /**
+     * @return the provider to edit 3D.
+     */
+    @NotNull
+    public Editing3DProvider getEditingProvider() {
+        return editingProvider;
+    }
+
+    /**
+     * @return the change consumer.
+     */
+    @NotNull
+    public ModelChangeConsumer getChangeConsumer() {
+        return changeConsumer;
     }
 }

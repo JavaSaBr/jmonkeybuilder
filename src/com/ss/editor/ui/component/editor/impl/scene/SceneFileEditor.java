@@ -313,17 +313,18 @@ public class SceneFileEditor extends
     }
 
     @Override
-    protected void processChangeTool(@NotNull final Number newValue) {
-        super.processChangeTool(newValue);
+    protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
+        super.processChangeTool(oldValue, newValue);
 
-        if (newValue.intValue() < 1) return;
+        final int newIndex = newValue.intValue();
+        if (newIndex < 1) return;
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         final VBox appStateContainer = getPropertyEditorAppStateContainer();
         final VBox filtersContainer = getPropertyEditorFiltersContainer();
         final VBox layersContainer = getPropertyEditorLayersContainer();
 
-        switch (newValue.intValue()) {
+        switch (newIndex) {
             case LAYERS_TOOL: {
                 FXUtils.addToPane(modelPropertyEditor, layersContainer);
                 break;

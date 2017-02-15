@@ -21,6 +21,7 @@ import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
@@ -689,6 +690,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     /**
      * Create terrain in background.
      */
+    @BackgroundThread
     private void createTerrainInBackground() throws Exception {
 
         final AssetManager assetManager = EDITOR.getAssetManager();

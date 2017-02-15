@@ -30,13 +30,14 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.model.undo.editor.ModelEditingProvider;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.EditingContainer;
-import com.ss.editor.ui.component.editing.impl.TerrainEditingComponent;
+import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
@@ -92,7 +93,7 @@ import java.util.function.Supplier;
  */
 public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
         MA extends AbstractSceneEditorAppState<IM, M>, ES extends AbstractModelFileEditorState>
-        extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer {
+        extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
     private static final int EDITING_TOOL = 1;
@@ -234,7 +235,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         addEditorState(editorAppState);
 
         //FIXME need to remove late
-        processChangeTool(OBJECTS_TOOL);
+        processChangeTool(-1, OBJECTS_TOOL);
     }
 
     @NotNull
@@ -971,7 +972,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 
-        editingContainer = new EditingContainer(this);
+        editingContainer = new EditingContainer(this, this);
         editingContainer.addComponent(new TerrainEditingComponent());
 
         final SplitPane objectsSplitContainer = new SplitPane(modelNodeTreeObjectsContainer, propertyEditorObjectsContainer);
@@ -991,7 +992,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
         editorToolComponent.addComponent(objectsSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
         editorToolComponent.addComponent(editingSplitContainer, "Editing");
-        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(newValue));
+        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
@@ -1009,10 +1010,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         return requireNonNull(editorToolComponent);
     }
 
-    protected void processChangeTool(@NotNull final Number newValue) {
+    protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
+        final EditingContainer editingContainer = getEditingContainer();
+
         final VBox propertyEditorParent = (VBox) modelPropertyEditor.getParent();
         final VBox modelNodeTreeParent = (VBox) modelNodeTree.getParent();
 
@@ -1024,17 +1027,23 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.removeFromParent(modelNodeTree, modelNodeTreeParent);
         }
 
-        final int index = newValue.intValue();
+        final int oldIndex = oldValue == null? -1 : oldValue.intValue();
+        final int newIndex = newValue.intValue();
 
-        if (index == OBJECTS_TOOL) {
+        if (newIndex == OBJECTS_TOOL) {
             FXUtils.addToPane(modelPropertyEditor, getPropertyEditorObjectsContainer());
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
-        } else if (index == EDITING_TOOL) {
+        } else if (newIndex == EDITING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
+            editingContainer.notifyShowed();
+        }
+
+        if (oldIndex == EDITING_TOOL) {
+            editingContainer.notifyHided();
         }
 
         final MA editorAppState = getEditorAppState();
-        editorAppState.changeEditingMode(index == EDITING_TOOL);
+        editorAppState.changeEditingMode(newIndex == EDITING_TOOL);
     }
 
     private void dragExited(@NotNull final DragEvent dragEvent) {
@@ -1226,6 +1235,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(toUpdate);
+    }
+
+    @NotNull
+    @Override
+    public Node getCursorNode() {
+        return getEditorAppState().getCursorNode();
     }
 }
 
