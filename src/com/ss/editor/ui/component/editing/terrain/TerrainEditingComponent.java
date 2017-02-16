@@ -20,7 +20,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      * The control to raise terrain.
      */
     @NotNull
-    private final RaiseTerrainToolControl raiseTerrainToolControl;
+    private final RaiseLowerTerrainToolControl raiseLowerTerrainToolControl;
 
     /**
      * The button to enable/disable raise terrain mode.
@@ -29,7 +29,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     private ToggleButton raiseTerrainButton;
 
     public TerrainEditingComponent() {
-        this.raiseTerrainToolControl = new RaiseTerrainToolControl(this);
+        this.raiseLowerTerrainToolControl = new RaiseLowerTerrainToolControl(this);
     }
 
     @Override
@@ -67,13 +67,13 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     @Override
     public void notifyShowed() {
         super.notifyShowed();
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().addControl(raiseTerrainToolControl));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().addControl(raiseLowerTerrainToolControl));
     }
 
     @Override
     public void notifyHided() {
         super.notifyHided();
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().removeControl(raiseTerrainToolControl));
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().removeControl(raiseLowerTerrainToolControl));
     }
 
     @NotNull

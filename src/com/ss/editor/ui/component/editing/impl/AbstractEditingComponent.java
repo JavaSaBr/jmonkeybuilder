@@ -5,6 +5,7 @@ import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.scene.Node;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.Editing3DProvider;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.EditingComponent;
 import com.ss.editor.ui.component.editing.EditingContainer;
 import javafx.scene.layout.VBox;
@@ -51,8 +52,17 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
      * @return the parent container.
      */
     @NotNull
-    protected EditingContainer getEditingContainer() {
+    public EditingContainer getEditingContainer() {
         return requireNonNull(editingContainer);
+    }
+
+    /**
+     * @return the change consumer.
+     */
+    @NotNull
+    public ModelChangeConsumer getChangeConsumer() {
+        final EditingContainer editingContainer = getEditingContainer();
+        return editingContainer.getChangeConsumer();
     }
 
     /**

@@ -26,10 +26,21 @@ public interface EditingControl extends Control {
     /**
      * Start editing.
      *
+     * @param editingInput the type of input.
      * @param contactPoint the contact point.
      */
     @EditorThread
-    default void startEditing(@NotNull final Vector3f contactPoint) {
+    default void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
+    }
+
+    /**
+     * Get a current editing input.
+     *
+     * @return the current editing input.
+     */
+    @Nullable
+    default EditingInput getCurrentInput() {
+        return null;
     }
 
     /**

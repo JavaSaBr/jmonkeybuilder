@@ -35,6 +35,7 @@ import com.jme3.scene.shape.Quad;
 import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.editing.EditingControl;
+import com.ss.editor.control.editing.EditingInput;
 import com.ss.editor.control.transform.*;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -1040,12 +1041,17 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @Override
     protected void onActionImpl(@NotNull final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
-        if (MOUSE_RIGHT_CLICK.equals(name) && !isPressed) {
-            processSelect();
+        if (MOUSE_RIGHT_CLICK.equals(name)) {
+            if(isEditingMode()) {
+                if (isPressed) startEditing(EditingInput.MOUSE_SECONDARY);
+                else finishEditing(EditingInput.MOUSE_SECONDARY);
+            } else if(!isPressed) {
+                processSelect();
+            }
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
             if(isEditingMode()) {
-                if (isPressed) startEditing();
-                else finishEditing();
+                if (isPressed) startEditing(EditingInput.MOUSE_PRIMARY);
+                else finishEditing(EditingInput.MOUSE_PRIMARY);
             } else {
                 if (isPressed) startTransform();
                 else endTransform();
@@ -1280,36 +1286,30 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * Start editing.
      */
     @EditorThread
-    private void startEditing() {
-
+    private void startEditing(@NotNull final EditingInput editingInput) {
         final Node cursorNode = getCursorNode();
         final EditingControl control = EditingUtils.getEditingControl(cursorNode);
         final Spatial editedModel = EditingUtils.getEditedModel(getCursorNode());
-        if (control == null || editedModel == null) return;
-
-        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel);
-
-        if (contactPoint != null) {
-            control.startEditing(contactPoint);
-        }
+        if (control == null || editedModel == null || control.isStartedEditing()) return;
+        control.startEditing(editingInput, cursorNode.getLocalTranslation());
     }
 
     /**
      * Finish editing.
      */
     @EditorThread
-    private void finishEditing() {
+    private void finishEditing(@NotNull final EditingInput editingInput) {
 
         final Node cursorNode = getCursorNode();
         final EditingControl control = EditingUtils.getEditingControl(cursorNode);
         final Spatial editedModel = EditingUtils.getEditedModel(control);
-        if (control == null || editedModel == null) return;
 
-        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel);
-
-        if (contactPoint != null) {
-            control.finishEditing(contactPoint);
+        if (control == null || editedModel == null || !control.isStartedEditing() ||
+                control.getCurrentInput() != editingInput) {
+            return;
         }
+
+        control.finishEditing(cursorNode.getLocalTranslation());
     }
 
     /**
