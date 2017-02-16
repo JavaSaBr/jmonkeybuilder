@@ -44,6 +44,11 @@ public class EditingContainer extends ScrollPane {
     @NotNull
     private final VBox container;
 
+    /**
+     * Is showed this component.
+     */
+    protected boolean showed;
+
     public EditingContainer(@NotNull final ModelChangeConsumer changeConsumer,
                             @NotNull final Editing3DProvider editingProvider) {
         this.changeConsumer = changeConsumer;
@@ -91,6 +96,8 @@ public class EditingContainer extends ScrollPane {
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
+        children.forEach(node -> ((EditingComponent) node).notifyHided());
+        children.forEach(node -> ((EditingComponent) node).stopEditing());
         children.clear();
 
         if (element == null) return;
@@ -101,6 +108,10 @@ public class EditingContainer extends ScrollPane {
         children.add((Node) editingComponent);
 
         editingComponent.startEditing(element);
+
+        if (isShowed()) {
+            editingComponent.notifyShowed();
+        }
     }
 
     /**
@@ -108,6 +119,8 @@ public class EditingContainer extends ScrollPane {
      */
     @FXThread
     public void notifyShowed() {
+        setShowed(true);
+
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> ((EditingComponent) node).notifyShowed());
@@ -118,6 +131,8 @@ public class EditingContainer extends ScrollPane {
      */
     @FXThread
     public void notifyHided() {
+        setShowed(false);
+
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
         children.forEach(node -> ((EditingComponent) node).notifyHided());
@@ -138,4 +153,19 @@ public class EditingContainer extends ScrollPane {
     public ModelChangeConsumer getChangeConsumer() {
         return changeConsumer;
     }
+
+    /**
+     * @return true if this component is showed.
+     */
+    protected boolean isShowed() {
+        return showed;
+    }
+
+    /**
+     * @param showed true if this component is showed.
+     */
+    protected void setShowed(final boolean showed) {
+        this.showed = showed;
+    }
+
 }

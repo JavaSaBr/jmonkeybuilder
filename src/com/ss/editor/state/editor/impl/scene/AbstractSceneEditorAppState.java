@@ -34,6 +34,7 @@ import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.control.editing.EditingControl;
 import com.ss.editor.control.transform.*;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -42,6 +43,8 @@ import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
+import com.ss.editor.util.EditingUtils;
+import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
@@ -256,6 +259,11 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     private boolean activeTransform;
 
     /**
+     * The flag of existing active editing.
+     */
+    private boolean activeEditing;
+
+    /**
      * The flag of editing mode.
      */
     private boolean editingMode;
@@ -285,7 +293,6 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
         modelNode.attachChild(lightNode);
         modelNode.attachChild(audioNode);
-        toolNode.attachChild(cursorNode);
 
         createCollisionPlane();
         createToolElements();
@@ -620,7 +627,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
-     * @param activeTransform the flag of existing active transformation.
+     * @param activeTransform true of we have active transformation.
      */
     private void setActiveTransform(final boolean activeTransform) {
         this.activeTransform = activeTransform;
@@ -631,6 +638,20 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     private boolean isActiveTransform() {
         return activeTransform;
+    }
+
+    /**
+     * @return true if we have active editing.
+     */
+    private boolean isActiveEditing() {
+        return activeEditing;
+    }
+
+    /**
+     * @param activeEditing true of we have active editing.
+     */
+    private void setActiveEditing(final boolean activeEditing) {
+        this.activeEditing = activeEditing;
     }
 
     @Override
@@ -704,6 +725,29 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
             toolNode.detachChild(transformToolNode);
         } else if (!isEditingMode()) {
             toolNode.attachChild(transformToolNode);
+        }
+
+        if (isEditingMode()) {
+            updateEditingNodes();
+            updateEditing();
+        }
+    }
+
+    /**
+     * Update editing nodes.
+     */
+    private void updateEditingNodes() {
+        if (!isEditingMode()) return;
+
+        final Node cursorNode = getCursorNode();
+        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final Spatial editedModel = EditingUtils.getEditedModel(control);
+        if (editedModel == null) return;
+
+        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel);
+
+        if (contactPoint != null) {
+            cursorNode.setLocalTranslation(contactPoint);
         }
     }
 
@@ -996,51 +1040,34 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @Override
     protected void onActionImpl(@NotNull final String name, final boolean isPressed, final float tpf) {
         super.onActionImpl(name, isPressed, tpf);
-        if (MOUSE_RIGHT_CLICK.equals(name)) {
-            processClick(isPressed);
+        if (MOUSE_RIGHT_CLICK.equals(name) && !isPressed) {
+            processSelect();
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
-            if (isPressed) startTransform();
-            else endTransform();
+            if(isEditingMode()) {
+                if (isPressed) startEditing();
+                else finishEditing();
+            } else {
+                if (isPressed) startTransform();
+                else endTransform();
+            }
         }
     }
 
     /**
-     * Handling a click in the area of the ditor.
+     * Handling a click in the area of the editor.
      */
     @EditorThread
-    private void processClick(final boolean isPressed) {
-        if (!isPressed) return;
+    private void processSelect() {
+        if (isEditingMode()) return;
 
-        final Camera camera = EDITOR.getCamera();
+        final Geometry geometry = GeomUtils.getGeometryFromCursor(getModelNode());
 
-        final InputManager inputManager = EDITOR.getInputManager();
-        final Vector2f cursor = inputManager.getCursorPosition();
-        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
-        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f).subtractLocal(click3d).normalizeLocal();
-
-        final Ray ray = new Ray();
-        ray.setOrigin(click3d);
-        ray.setDirection(dir);
-
-        final CollisionResults results = new CollisionResults();
-
-        final Node modelNode = getModelNode();
-        modelNode.updateModelBound();
-        modelNode.collideWith(ray, results);
-
-        if (results.size() < 1) {
+        if (geometry == null) {
             EXECUTOR_MANAGER.addFXTask(() -> notifySelected(null));
             return;
         }
 
-        final CollisionResult collision = results.getClosestCollision();
-
-        if (collision == null) {
-            EXECUTOR_MANAGER.addFXTask(() -> notifySelected(null));
-            return;
-        }
-
-        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(this, collision.getGeometry())));
+        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(this, geometry)));
     }
 
     /**
@@ -1247,6 +1274,54 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
         setActiveTransform(true);
         return true;
+    }
+
+    /**
+     * Start editing.
+     */
+    @EditorThread
+    private void startEditing() {
+
+        final Node cursorNode = getCursorNode();
+        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final Spatial editedModel = EditingUtils.getEditedModel(getCursorNode());
+        if (control == null || editedModel == null) return;
+
+        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel);
+
+        if (contactPoint != null) {
+            control.startEditing(contactPoint);
+        }
+    }
+
+    /**
+     * Finish editing.
+     */
+    @EditorThread
+    private void finishEditing() {
+
+        final Node cursorNode = getCursorNode();
+        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final Spatial editedModel = EditingUtils.getEditedModel(control);
+        if (control == null || editedModel == null) return;
+
+        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel);
+
+        if (contactPoint != null) {
+            control.finishEditing(contactPoint);
+        }
+    }
+
+    /**
+     * Update editing.
+     */
+    @EditorThread
+    private void updateEditing() {
+        final Node cursorNode = getCursorNode();
+        final EditingControl control = EditingUtils.getEditingControl(cursorNode);
+        final Spatial editedModel = EditingUtils.getEditedModel(control);
+        if (control == null || editedModel == null || !control.isStartedEditing()) return;
+        control.updateEditing(cursorNode.getLocalTranslation());
     }
 
     /**
@@ -1580,12 +1655,15 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     private void changeEditingModeImpl(final boolean editingMode) {
         setEditingMode(editingMode);
 
+        final Node cursorNode = getCursorNode();
         final Node toolNode = getToolNode();
         final Node transformToolNode = getTransformToolNode();
 
         if (isEditingMode()) {
+            toolNode.attachChild(cursorNode);
             toolNode.detachChild(transformToolNode);
         } else {
+            toolNode.detachChild(cursorNode);
             toolNode.attachChild(transformToolNode);
         }
     }

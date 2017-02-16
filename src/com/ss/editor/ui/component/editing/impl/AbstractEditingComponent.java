@@ -2,20 +2,14 @@ package com.ss.editor.ui.component.editing.impl;
 
 import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
-import com.jme3.export.JmeExporter;
-import com.jme3.export.JmeImporter;
-import com.jme3.renderer.RenderManager;
-import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
-import com.jme3.scene.control.Control;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.Editing3DProvider;
 import com.ss.editor.ui.component.editing.EditingComponent;
 import com.ss.editor.ui.component.editing.EditingContainer;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
 
 /**
  * The base implementation of an editing component.
@@ -24,6 +18,9 @@ import java.io.IOException;
  */
 public abstract class AbstractEditingComponent<T> extends VBox implements EditingComponent {
 
+    @NotNull
+    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
      * The parent container.
      */
@@ -31,16 +28,15 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     protected EditingContainer editingContainer;
 
     /**
-     * The cursor node.
-     */
-    @Nullable
-    protected Node cursorNode;
-
-    /**
      * The edited object.
      */
     @Nullable
     protected T editedObject;
+
+    /**
+     * Is showed this component.
+     */
+    protected boolean showed;
 
     public AbstractEditingComponent() {
         createComponents();
@@ -63,7 +59,7 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
      * @return the edited object.
      */
     @NotNull
-    protected T getEditedObject() {
+    public T getEditedObject() {
         return requireNonNull(editedObject);
     }
 
@@ -73,34 +69,41 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     }
 
     protected void createComponents() {
+    }
 
+    /**
+     * Get a cursor node.
+     *
+     * @return the cursor node.
+     */
+    @NotNull
+    protected Node getCursorNode() {
+        final EditingContainer editingContainer = getEditingContainer();
+        final Editing3DProvider editingProvider = editingContainer.getEditingProvider();
+        return editingProvider.getCursorNode();
     }
 
     @Override
-    public Control cloneForSpatial(final Spatial spatial) {
-        throw new RuntimeException("unsupported");
+    public void notifyShowed() {
+        setShowed(true);
     }
 
     @Override
-    public void setSpatial(final Spatial spatial) {
-
+    public void notifyHided() {
+        setShowed(false);
     }
 
-    @Override
-    public void update(final float tpf) {
-
+    /**
+     * @return true if this component is showed.
+     */
+    protected boolean isShowed() {
+        return showed;
     }
 
-    @Override
-    public void render(@NotNull final RenderManager renderManager, @NotNull final ViewPort viewPort) {
-
-    }
-
-    @Override
-    public void write(@NotNull final JmeExporter ex) throws IOException {
-    }
-
-    @Override
-    public void read(@NotNull final JmeImporter im) throws IOException {
+    /**
+     * @param showed true if this component is showed.
+     */
+    protected void setShowed(final boolean showed) {
+        this.showed = showed;
     }
 }

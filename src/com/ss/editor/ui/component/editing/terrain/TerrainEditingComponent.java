@@ -1,6 +1,5 @@
 package com.ss.editor.ui.component.editing.terrain;
 
-import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.ui.component.editing.impl.AbstractEditingComponent;
 import javafx.event.ActionEvent;
@@ -18,10 +17,20 @@ import rlib.ui.util.FXUtils;
 public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQuad> {
 
     /**
+     * The control to raise terrain.
+     */
+    @NotNull
+    private final RaiseTerrainToolControl raiseTerrainToolControl;
+
+    /**
      * The button to enable/disable raise terrain mode.
      */
     @Nullable
     private ToggleButton raiseTerrainButton;
+
+    public TerrainEditingComponent() {
+        this.raiseTerrainToolControl = new RaiseTerrainToolControl(this);
+    }
 
     @Override
     protected void createComponents() {
@@ -41,8 +50,30 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     @Override
+    public void stopEditing() {
+        super.stopEditing();
+    }
+
+    @Override
+    public void startEditing(@NotNull final Object object) {
+        super.startEditing(object);
+    }
+
+    @Override
     public boolean isSupport(@NotNull final Object object) {
         return object instanceof TerrainQuad;
+    }
+
+    @Override
+    public void notifyShowed() {
+        super.notifyShowed();
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().addControl(raiseTerrainToolControl));
+    }
+
+    @Override
+    public void notifyHided() {
+        super.notifyHided();
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().removeControl(raiseTerrainToolControl));
     }
 
     @NotNull
