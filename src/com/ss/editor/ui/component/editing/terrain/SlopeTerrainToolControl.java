@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editing.terrain;
 
-import static com.ss.editor.util.EditingUtils.isContains;
 import static java.util.Objects.requireNonNull;
+import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -16,20 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The implementation of terrain tool to raise/lowe heights.
+ * The implementation of terrain tool to make sloops.
  *
  * @author JavaSaBr
  */
-public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl {
+public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
 
-    public RaiseLowerTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public SlopeTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
     }
 
     @NotNull
     @Override
     protected ColorRGBA getBrushColor() {
-        return ColorRGBA.Green;
+        return ColorRGBA.White;
     }
 
     @Override
@@ -86,6 +86,9 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final Vector3f worldScale = terrainNode.getWorldScale();
 
         final Geometry brush = getBrush();
+        brush.updateModelBound();
+
+        final BoundingVolume worldBound = brush.getWorldBound();
 
         final float brushSize = getBrushSize();
         final float brushPower = editingInput == EditingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
@@ -107,7 +110,10 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
                 float locX = contactPoint.getX() + (x * xStepAmount);
                 float locZ = contactPoint.getZ() + (z * zStepAmount);
 
-                if (!isContains(brush, locX - contactPoint.getX(), locZ - contactPoint.getZ())) {
+                point.setX(locX);
+                point.setZ(locZ);
+
+                if (!worldBound.contains(point)) {
                     continue;
                 }
 

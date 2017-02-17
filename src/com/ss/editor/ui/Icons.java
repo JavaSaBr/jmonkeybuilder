@@ -78,6 +78,12 @@ public interface Icons {
     Image TORUS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/circle.svg");
     Image POINTS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/because-mathematical-symbol.svg");
     Image IMPOSTOR_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/plus.svg");
+    Image TERRAIN_LEVEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-level.png", 16);
+    Image TERRAIN_PAINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-paint-circle.png", 16);
+    Image TERRAIN_ROUGH_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-rough.png", 16);
+    Image TERRAIN_SLOPE_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-slope.png", 16);
+    Image TERRAIN_SMOOTH_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-smooth.png", 16);
+    Image TERRAIN_UP_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-up.png", 16);
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);

@@ -51,11 +51,14 @@ public class EditingContainer extends ScrollPane {
 
     public EditingContainer(@NotNull final ModelChangeConsumer changeConsumer,
                             @NotNull final Editing3DProvider editingProvider) {
+        setId(CSSIds.EDITING_CONTAINER);
+
         this.changeConsumer = changeConsumer;
         this.editingProvider = editingProvider;
-        setId(CSSIds.EDITING_CONTAINER);
         this.components = ArrayFactory.newArray(EditingComponent.class);
         this.container = new VBox();
+        this.container.prefWidthProperty().bind(widthProperty());
+
         setContent(container);
     }
 

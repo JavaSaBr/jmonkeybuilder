@@ -970,7 +970,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelPropertyEditor.prefHeightProperty().bind(root.heightProperty());
 
         propertyEditorObjectsContainer = new VBox();
-
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 

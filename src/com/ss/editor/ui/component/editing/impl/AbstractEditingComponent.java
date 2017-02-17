@@ -46,6 +46,7 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     @Override
     public void initFor(@NotNull final EditingContainer container) {
         this.editingContainer = container;
+        prefWidthProperty().bind(widthProperty());
     }
 
     /**

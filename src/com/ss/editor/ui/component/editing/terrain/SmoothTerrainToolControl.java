@@ -9,27 +9,26 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
-import com.ss.editor.util.EditingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The implementation of terrain tool to raise/lowe heights.
+ * The implementation of terrain tool to smooth heights.
  *
  * @author JavaSaBr
  */
-public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl {
+public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
 
-    public RaiseLowerTerrainToolControl(@NotNull final TerrainEditingComponent component) {
+    public SmoothTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
     }
 
     @NotNull
     @Override
     protected ColorRGBA getBrushColor() {
-        return ColorRGBA.Green;
+        return ColorRGBA.Yellow;
     }
 
     @Override
@@ -37,10 +36,9 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         super.startEditing(editingInput, contactPoint);
 
         switch (editingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
+            case MOUSE_PRIMARY: {
                 startChange();
-                modifyHeight(editingInput, contactPoint);
+                modifyHeight(contactPoint);
             }
         }
     }
@@ -51,9 +49,8 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final EditingInput editingInput = requireNonNull(getCurrentInput());
 
         switch (editingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
-                modifyHeight(editingInput, contactPoint);
+            case MOUSE_PRIMARY: {
+                modifyHeight(contactPoint);
             }
         }
     }
@@ -65,9 +62,8 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final EditingInput editingInput = requireNonNull(getCurrentInput());
 
         switch (editingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
-                modifyHeight(editingInput, contactPoint);
+            case MOUSE_PRIMARY: {
+                modifyHeight(contactPoint);
                 commitChanges();
             }
         }
@@ -76,27 +72,24 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
     /**
      * Modify height of terrain points.
      *
-     * @param editingInput the type of input.
      * @param contactPoint the contact point.
      */
-    private void modifyHeight(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
+    private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
         final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f worldScale = terrainNode.getWorldScale();
+        final Vector3f localScale = terrainNode.getLocalScale();
 
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
-        final float brushPower = editingInput == EditingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
+        final float brushPower = getBrushPower();
 
-        final int radiusStepsX = (int) (brushSize / worldScale.getX());
-        final int radiusStepsZ = (int) (brushSize / worldScale.getY());
+        final int radiusStepsX = (int) (brushSize / localScale.getX());
+        final int radiusStepsZ = (int) (brushSize / localScale.getZ());
 
-        final float xStepAmount = worldScale.getX();
-        final float zStepAmount = worldScale.getZ();
-
-        final Vector3f point = new Vector3f(contactPoint);
+        final float xStepAmount = localScale.getX();
+        final float zStepAmount = localScale.getZ();
 
         final List<Vector2f> locs = new ArrayList<>();
         final List<Float> heights = new ArrayList<>();
@@ -111,14 +104,44 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
                     continue;
                 }
 
-                point.setX(locX - contactPoint.getX());
-                point.setZ(locZ - contactPoint.getZ());
+                final Vector2f terrainLoc = new Vector2f(locX, locZ);
 
                 // adjust height based on radius of the tool
-                float newHeight = EditingUtils.calculateHeight(brushSize, brushPower, point.getX(), point.getZ());
-                // increase the height
-                locs.add(new Vector2f(locX, locZ));
-                heights.add(newHeight);
+                final float center = terrain.getHeightmapHeight(terrainLoc);
+                final float left = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x - 1, terrainLoc.y));
+                final float right = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x + 1, terrainLoc.y));
+                final float up = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x, terrainLoc.y + 1));
+                final float down = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x, terrainLoc.y - 1));
+
+                int count = 1;
+
+                float amount = center;
+
+                if (!isNaN(left)) {
+                    amount += left;
+                    count++;
+                }
+                if (!isNaN(right)) {
+                    amount += right;
+                    count++;
+                }
+                if (!isNaN(up)) {
+                    amount += up;
+                    count++;
+                }
+                if (!isNaN(down)) {
+                    amount += down;
+                    count++;
+                }
+
+                amount /= count; // take average
+
+                // weigh it
+                float diff = amount - center;
+                diff *= brushPower;
+
+                locs.add(terrainLoc);
+                heights.add(diff);
             }
         }
 
@@ -127,5 +150,9 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         // do the actual height adjustment
         terrain.adjustHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
+    }
+
+    private boolean isNaN(float val) {
+        return val != val;
     }
 }

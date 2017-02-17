@@ -1,8 +1,12 @@
 package com.ss.editor.util;
 
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Sphere;
 import com.ss.editor.control.editing.EditingControl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +53,29 @@ public class EditingUtils {
     }
 
     /**
+     * Check that a point is contains in a geometry.
+     *
+     * @param geometry the geometry.
+     * @param x    the X coord.
+     * @param y    the Y coord.
+     * @return true of the mesh contains the point.
+     */
+    public static boolean isContains(@NotNull final Geometry geometry, final float x, final float y) {
+
+        final Mesh mesh = geometry.getMesh();
+        final Vector3f localScale = geometry.getLocalScale();
+
+        if (mesh instanceof Sphere) {
+            final float radius = ((Sphere) mesh).getRadius() * localScale.getX();
+            final Vector2f point = new Vector2f(x, y);
+            // return true if the distance is less than equal to the radius
+            return Math.abs(point.length()) <= radius;
+        }
+
+        return false;
+    }
+
+    /**
      * Interpolate the height value based on its distance from the center (how far along
      * the radius it is).
      * The farther from the center, the less the height will be.
@@ -70,5 +97,17 @@ public class EditingUtils {
         float val = Math.abs(point.length()) / radius;
         val = 1f - val;
         return val;
+    }
+
+    public static boolean floatEquals(float a, float b, float epsilon) {
+        return a == b ? true : Math.abs(a - b) < epsilon;
+    }
+
+    public static boolean floatLessThan(float a, float b, float epsilon) {
+        return b - a > epsilon;
+    }
+
+    public static boolean floatGreaterThan(float a, float b, float epsilon) {
+        return a - b > epsilon;
     }
 }
