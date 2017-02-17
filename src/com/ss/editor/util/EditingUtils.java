@@ -100,7 +100,7 @@ public class EditingUtils {
     }
 
     public static boolean floatEquals(float a, float b, float epsilon) {
-        return a == b ? true : Math.abs(a - b) < epsilon;
+        return a == b || Math.abs(a - b) < epsilon;
     }
 
     public static boolean floatLessThan(float a, float b, float epsilon) {

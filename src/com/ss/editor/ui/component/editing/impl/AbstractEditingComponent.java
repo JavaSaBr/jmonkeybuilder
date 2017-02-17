@@ -88,10 +88,22 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
      * @return the cursor node.
      */
     @NotNull
-    protected Node getCursorNode() {
+    public Node getCursorNode() {
         final EditingContainer editingContainer = getEditingContainer();
         final Editing3DProvider editingProvider = editingContainer.getEditingProvider();
         return editingProvider.getCursorNode();
+    }
+
+    /**
+     * Get a node to place some markers in 3D editor.
+     *
+     * @return the markers node..
+     */
+    @NotNull
+    public Node getMarkersNode() {
+        final EditingContainer editingContainer = getEditingContainer();
+        final Editing3DProvider editingProvider = editingContainer.getEditingProvider();
+        return editingProvider.getMarkersNode();
     }
 
     @Override

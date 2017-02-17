@@ -19,4 +19,13 @@ public interface Editing3DProvider {
     @NotNull
     @EditorThread
     Node getCursorNode();
+
+    /**
+     * Get a node to place some markers in 3D editor.
+     *
+     * @return the markers node.
+     */
+    @NotNull
+    @EditorThread
+    Node getMarkersNode();
 }

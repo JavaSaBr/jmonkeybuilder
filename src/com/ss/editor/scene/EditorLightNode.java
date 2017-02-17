@@ -109,7 +109,7 @@ public class EditorLightNode extends Node {
 
         final Camera camera = EDITOR.getCamera();
         final LocalObjects local = LocalObjects.get();
-        final Vector3f positionOnCamera = local.getNextVector();
+        final Vector3f positionOnCamera = local.nextVector();
         positionOnCamera.set(getLocalTranslation()).subtractLocal(camera.getLocation());
         positionOnCamera.normalizeLocal();
         positionOnCamera.multLocal(camera.getFrustumNear() + 0.4f);

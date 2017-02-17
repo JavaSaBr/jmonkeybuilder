@@ -1,7 +1,6 @@
 package com.ss.editor.ui.component.editor.area;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
-
 import com.jme3.app.state.AppStateManager;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
@@ -24,24 +23,9 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
-import com.ss.editor.ui.event.impl.MovedFileEvent;
-import com.ss.editor.ui.event.impl.RenamedFileEvent;
-import com.ss.editor.ui.event.impl.RequestedConvertFileEvent;
-import com.ss.editor.ui.event.impl.RequestedCreateFileEvent;
-import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
+import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -50,6 +34,8 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.concurrent.util.ThreadUtils;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
@@ -60,6 +46,12 @@ import rlib.util.dictionary.ConcurrentObjectDictionary;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.DictionaryUtils;
 import rlib.util.dictionary.ObjectDictionary;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * The component for containing editors.
@@ -270,7 +262,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Handle the request for closing an Editor..
+     * Handle the request for closing an Editor.
      */
     private void processChangeTabs(@NotNull final ListChangeListener.Change<? extends Tab> change) {
         if (!change.next()) return;
@@ -388,6 +380,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             EXECUTOR_MANAGER.addFXTask(() -> {
                 final EditorFXScene scene = JFX_APPLICATION.getScene();
                 scene.decrementLoading();
+                editor.notifyClosed();
             });
             return;
         } finally {

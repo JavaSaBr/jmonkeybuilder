@@ -1,12 +1,10 @@
 package com.ss.editor.ui.component.editing.terrain;
 
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
-import com.ss.editor.Editor;
 import com.ss.editor.control.editing.impl.AbstractEditingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +16,6 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class TerrainToolControl extends AbstractEditingControl {
-
-    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The editing component.
@@ -45,13 +41,8 @@ public class TerrainToolControl extends AbstractEditingControl {
 
     public TerrainToolControl(@NotNull final TerrainEditingComponent component) {
         this.component = component;
-
-        final Material material = new Material(EDITOR.getAssetManager(), "Common/MatDefs/Misc/Unshaded.j3md");
-        material.getAdditionalRenderState().setWireframe(true);
-        material.setColor("Color", getBrushColor());
-
         this.brush = new Geometry("Brush", new Sphere(8, 8, 1));
-        this.brush.setMaterial(material);
+        this.brush.setMaterial(createWireframeMaterial(getBrushColor()));
 
         //FIXME need to remove
         setBrushSize(8);
@@ -67,18 +58,15 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     @Override
-    public void setSpatial(final Spatial spatial) {
+    protected void onAttached(@NotNull final Node node) {
+        super.onAttached(node);
+        node.attachChild(brush);
+    }
 
-        final Spatial prev = getSpatial();
-        if (prev instanceof Node) {
-            ((Node) prev).detachChild(brush);
-        }
-
-        super.setSpatial(spatial);
-
-        if (spatial instanceof Node) {
-            ((Node) spatial).attachChild(brush);
-        }
+    @Override
+    protected void onDetached(@NotNull final Node node) {
+        super.onDetached(node);
+        node.detachChild(brush);
     }
 
     @Nullable

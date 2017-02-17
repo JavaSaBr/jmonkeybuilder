@@ -1243,5 +1243,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     public Node getCursorNode() {
         return getEditorAppState().getCursorNode();
     }
+
+    @NotNull
+    @Override
+    public Node getMarkersNode() {
+        return getEditorAppState().getMarkersNode();
+    }
 }
 

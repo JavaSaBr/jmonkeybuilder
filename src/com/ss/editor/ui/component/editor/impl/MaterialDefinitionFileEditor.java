@@ -1,18 +1,20 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static java.util.Collections.singleton;
-
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
+import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,11 +23,6 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
 
 /**
  * The implementation of editor for editing material definition files.
@@ -49,7 +46,8 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
 
     private static final String[] VALUE_TYPES = {
             "Texture2D", "Float", "Boolean", "Int", "Color", "Vector3", "TextureCubeMap", "Matrix4", "Vector4", "Vector2",
-            "VertexShader", "FragmentShader", "LightMode", "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
+            "VertexShader", "TessellationEvaluationShader ", "TessellationControlShader", "FragmentShader", "LightMode",
+            "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
             "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
             "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix",
             "IntArray", "FloatArray", "Vector2Array", "Vector3Array", "Vector4Array", "Matrix3",
@@ -59,7 +57,7 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
     private static final String[] VALUE_VALUES = {
             "true", "false", "Off", "On", "True", "False", "Disable", "SinglePass", "MultiPass",
             "SinglePassAndImageBased", "FixedPipeline", "StaticPass", "InPass", "PostPass", "World", "View",
-            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150"
+            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";

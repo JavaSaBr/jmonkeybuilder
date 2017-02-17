@@ -1,29 +1,69 @@
 package com.ss.editor.ui.component.editing.terrain;
 
+import static com.ss.editor.util.EditingUtils.*;
+import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
-import com.jme3.bounding.BoundingVolume;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Plane;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Line;
+import com.jme3.scene.shape.Sphere;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
-import com.ss.editor.util.EditingUtils;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The implementation of terrain tool to make sloops.
+ * The implementation of terrain tool to make slopes.
  *
  * @author JavaSaBr
  */
 public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
 
+    /**
+     * The base marker.
+     */
+    @NotNull
+    private final Geometry baseMarker;
+
+    /**
+     * The base marker.
+     */
+    @NotNull
+    private final Geometry targetMarker;
+
+    /**
+     * The line between markers.
+     */
+    @NotNull
+    private final Geometry line;
+
+    /**
+     * The flag of using precision changing.
+     */
+    private boolean precision;
+
+    /**
+     * The flag of locking.
+     */
+    private boolean lock;
+
     public SlopeTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
+
+        this.baseMarker = new Geometry("BaseMarker", new Sphere(8, 8, 1));
+        this.baseMarker.setMaterial(createMaterial(ColorRGBA.Red));
+        this.targetMarker = new Geometry("TargetMarker", new Sphere(8, 8, 1));
+        this.targetMarker.setMaterial(createMaterial(ColorRGBA.Blue));
+        this.line = new Geometry("line", new Line(Vector3f.ZERO, Vector3f.ZERO));
+        this.line.setMaterial(createMaterial(ColorRGBA.White));
     }
 
     @NotNull
@@ -33,14 +73,58 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     @Override
+    protected void onAttached(@NotNull final Node node) {
+        super.onAttached(node);
+
+        final Spatial editedModel = requireNonNull(getEditedModel());
+
+        final Node markersNode = component.getMarkersNode();
+        markersNode.attachChild(baseMarker);
+        markersNode.attachChild(targetMarker);
+        markersNode.attachChild(line);
+
+        baseMarker.setLocalTranslation(editedModel.getWorldTranslation());
+        targetMarker.setLocalTranslation(editedModel.getWorldTranslation());
+    }
+
+    @Override
+    protected void onDetached(@NotNull final Node node) {
+        super.onDetached(node);
+
+        final Node markersNode = component.getMarkersNode();
+        markersNode.detachChild(baseMarker);
+        markersNode.detachChild(targetMarker);
+        markersNode.detachChild(line);
+    }
+
+    @Override
+    protected void controlUpdate(final float tpf) {
+        super.controlUpdate(tpf);
+
+        final Vector3f firstPoint = baseMarker.getLocalTranslation();
+        final Vector3f secondPoint = targetMarker.getLocalTranslation();
+
+        final Line mesh = (Line) line.getMesh();
+        mesh.updatePoints(firstPoint, secondPoint);
+    }
+
+    @Override
     public void startEditing(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
         super.startEditing(editingInput, contactPoint);
 
         switch (editingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
+            case MOUSE_PRIMARY: {
                 startChange();
-                modifyHeight(editingInput, contactPoint);
+                modifyHeight(contactPoint);
+                break;
+            }
+            case MOUSE_SECONDARY: {
+                baseMarker.setLocalTranslation(contactPoint);
+                break;
+            }
+            case MOUSE_SECONDARY_WITH_CTRL: {
+                targetMarker.setLocalTranslation(contactPoint);
+                break;
             }
         }
     }
@@ -51,9 +135,17 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         final EditingInput editingInput = requireNonNull(getCurrentInput());
 
         switch (editingInput) {
-            case MOUSE_PRIMARY:
+            case MOUSE_PRIMARY: {
+                modifyHeight(contactPoint);
+                break;
+            }
             case MOUSE_SECONDARY: {
-                modifyHeight(editingInput, contactPoint);
+                baseMarker.setLocalTranslation(contactPoint);
+                break;
+            }
+            case MOUSE_SECONDARY_WITH_CTRL: {
+                targetMarker.setLocalTranslation(contactPoint);
+                break;
             }
         }
     }
@@ -65,10 +157,18 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         final EditingInput editingInput = requireNonNull(getCurrentInput());
 
         switch (editingInput) {
-            case MOUSE_PRIMARY:
-            case MOUSE_SECONDARY: {
-                modifyHeight(editingInput, contactPoint);
+            case MOUSE_PRIMARY: {
+                modifyHeight(contactPoint);
                 commitChanges();
+                break;
+            }
+            case MOUSE_SECONDARY: {
+                baseMarker.setLocalTranslation(contactPoint);
+                break;
+            }
+            case MOUSE_SECONDARY_WITH_CTRL: {
+                targetMarker.setLocalTranslation(contactPoint);
+                break;
             }
         }
     }
@@ -76,30 +176,55 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     /**
      * Modify height of terrain points.
      *
-     * @param editingInput the type of input.
      * @param contactPoint the contact point.
      */
-    private void modifyHeight(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
+    private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
+        final LocalObjects local = LocalObjects.get();
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
+        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+
+        final Vector3f firstPoint = baseMarker.getLocalTranslation();
+        final Vector3f secondPoint = targetMarker.getLocalTranslation();
+        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+
+        Vector3f higher, lower;
+
+        // Make sure we go for the right direction, or we could be creating a slope to the oposite side
+        if (firstPoint.getY() > secondPoint.getY()) {
+            higher = firstPoint.subtract(worldTranslation, local.nextVector());
+            lower = secondPoint.subtract(worldTranslation, local.nextVector());
+        } else {
+            higher = secondPoint.subtract(worldTranslation, local.nextVector());
+            lower = firstPoint.subtract(worldTranslation, local.nextVector());
+        }
+
+        final Vector3f subtract = higher.subtract(lower, local.nextVector());
+        final Vector3f normal = lower.subtract(higher, local.nextVector()).normalize();
+        final Vector3f firstSide = local.nextVector();
+        final Vector3f secondSide = local.nextVector();
+        final Vector3f targetPoint = local.nextVector();
+        final Vector2f terrainLoc = local.nextVector2f();
+
         final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f worldScale = terrainNode.getWorldScale();
+        final Vector3f localScale = terrainNode.getLocalScale();
 
         final Geometry brush = getBrush();
-        brush.updateModelBound();
-
-        final BoundingVolume worldBound = brush.getWorldBound();
 
         final float brushSize = getBrushSize();
-        final float brushPower = editingInput == EditingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
+        final float brushPower = getBrushPower();
 
-        final int radiusStepsX = (int) (brushSize / worldScale.getX());
-        final int radiusStepsZ = (int) (brushSize / worldScale.getY());
+        final int radiusStepsX = (int) (brushSize / localScale.getX());
+        final int radiusStepsZ = (int) (brushSize / localScale.getY());
 
-        final float xStepAmount = worldScale.getX();
-        final float zStepAmount = worldScale.getZ();
+        final float xStepAmount = localScale.getX();
+        final float zStepAmount = localScale.getZ();
 
-        final Vector3f point = new Vector3f(contactPoint);
+        final Plane firstPlane = local.nextPlane();
+        firstPlane.setOriginNormal(lower, normal);
+
+        final Plane secondPlane = local.nextPlane();
+        secondPlane.setOriginNormal(higher, normal);
 
         final List<Vector2f> locs = new ArrayList<>();
         final List<Float> heights = new ArrayList<>();
@@ -107,31 +232,97 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
             for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
-                float locX = contactPoint.getX() + (x * xStepAmount);
-                float locZ = contactPoint.getZ() + (z * zStepAmount);
+                float locX = localPoint.getX() + (x * xStepAmount);
+                float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                point.setX(locX);
-                point.setZ(locZ);
-
-                if (!worldBound.contains(point)) {
+                if (!isContains(brush, locX - localPoint.getX(), locZ - localPoint.getZ())) {
                     continue;
                 }
 
-                point.setX(locX - contactPoint.getX());
-                point.setZ(locZ - contactPoint.getZ());
+                terrainLoc.set(locX, locZ);
 
                 // adjust height based on radius of the tool
-                float newHeight = EditingUtils.calculateHeight(brushSize, brushPower, point.getX(), point.getZ());
-                // increase the height
-                locs.add(new Vector2f(locX, locZ));
-                heights.add(newHeight);
+                float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
+
+                targetPoint.set(locX, currentHeight, locZ)
+                        .subtractLocal(lower)
+                        .projectLocal(subtract)
+                        .addLocal(lower);
+
+                final float lowerDist = lower.distance(targetPoint);
+                final float higherDist = higher.distance(targetPoint);
+                final float maxDistance = lower.distance(higher);
+
+                float distance;
+
+                if(lowerDist < higherDist && higherDist > maxDistance) {
+                    distance = 0F;
+                } else {
+                    distance = lower.distance(targetPoint) / max(lower.distance(higher), 0.00001F);
+                }
+
+                final float desiredHeight = lower.getY() + (higher.getY() - lower.getY()) * distance;
+
+                firstSide.set(locX, 0f, locZ);
+                secondSide.set(locX, 0f, locZ);
+
+                if (isLock() && firstPlane.whichSide(firstSide) == secondPlane.whichSide(secondSide)) {
+                    continue;
+                }
+
+                if (!isPrecision()) {
+
+                    // rounding error for snapping
+                    float epsilon = 0.0001f * brushPower;
+                    float adj = 0;
+
+                    if (currentHeight < desiredHeight) adj = 1;
+                    else if (currentHeight > desiredHeight) adj = -1;
+
+                    adj *= brushPower;
+                    adj *= calculateRadiusPercent(brushSize, locX - localPoint.getX(), locZ - localPoint.getZ());
+
+                    // test if adjusting too far and then cap it
+                    if ((adj > 0) && floatGreaterThan((currentHeight + adj), desiredHeight, epsilon)) {
+                        adj = desiredHeight - currentHeight;
+                    } else if (adj < 0 && floatLessThan((currentHeight + adj), desiredHeight, epsilon)) {
+                        adj = desiredHeight - currentHeight;
+                    }
+
+                    if (!floatEquals(adj, 0, 0.001f)) {
+                        locs.add(terrainLoc.clone());
+                        heights.add(currentHeight + adj);
+                    }
+
+                } else {
+                    locs.add(terrainLoc.clone());
+                    heights.add(desiredHeight / localScale.getY());
+                }
             }
         }
 
         locs.forEach(this::change);
 
         // do the actual height adjustment
-        terrain.adjustHeight(locs, heights);
+        terrain.setHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
+    }
+
+    /**
+     * @return true if using precision changing.
+     */
+    public boolean isPrecision() {
+        return precision;
+    }
+
+    /**
+     * @param precision the flag of using precision changing.
+     */
+    public void setPrecision(final boolean precision) {
+        this.precision = precision;
+    }
+
+    public boolean isLock() {
+        return lock;
     }
 }

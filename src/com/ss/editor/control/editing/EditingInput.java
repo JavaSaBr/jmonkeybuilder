@@ -8,4 +8,5 @@ package com.ss.editor.control.editing;
 public enum EditingInput {
     MOUSE_PRIMARY,
     MOUSE_SECONDARY,
+    MOUSE_SECONDARY_WITH_CTRL,
 }

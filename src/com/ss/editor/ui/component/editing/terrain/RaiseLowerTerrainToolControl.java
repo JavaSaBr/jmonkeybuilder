@@ -83,18 +83,18 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
 
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
         final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f worldScale = terrainNode.getWorldScale();
+        final Vector3f localScale = terrainNode.getLocalScale();
 
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
         final float brushPower = editingInput == EditingInput.MOUSE_PRIMARY ? getBrushPower() : getBrushPower() * -1F;
 
-        final int radiusStepsX = (int) (brushSize / worldScale.getX());
-        final int radiusStepsZ = (int) (brushSize / worldScale.getY());
+        final int radiusStepsX = (int) (brushSize / localScale.getX());
+        final int radiusStepsZ = (int) (brushSize / localScale.getY());
 
-        final float xStepAmount = worldScale.getX();
-        final float zStepAmount = worldScale.getZ();
+        final float xStepAmount = localScale.getX();
+        final float zStepAmount = localScale.getZ();
 
         final Vector3f point = new Vector3f(contactPoint);
 

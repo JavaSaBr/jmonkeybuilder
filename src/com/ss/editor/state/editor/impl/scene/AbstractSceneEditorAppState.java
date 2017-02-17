@@ -48,6 +48,7 @@ import com.ss.editor.util.EditingUtils;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.function.BooleanFloatConsumer;
@@ -173,6 +174,12 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     private final Node cursorNode;
 
     /**
+     * The markers node.
+     */
+    @NotNull
+    private final Node markersNode;
+
+    /**
      * The nodes for the placement of model controls.
      */
     @Nullable
@@ -284,6 +291,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         this.lightNode = new Node("Lights");
         this.audioNode = new Node("Audio nodes");
         this.cursorNode = new Node("Cursor node");
+        this.markersNode = new Node("Markers node");
 
         final EditorCamera editorCamera = requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
@@ -1043,20 +1051,39 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         super.onActionImpl(name, isPressed, tpf);
         if (MOUSE_RIGHT_CLICK.equals(name)) {
             if(isEditingMode()) {
-                if (isPressed) startEditing(EditingInput.MOUSE_SECONDARY);
-                else finishEditing(EditingInput.MOUSE_SECONDARY);
+                if (isPressed) startEditing(getEditingInput(MouseButton.SECONDARY));
+                else finishEditing(getEditingInput(MouseButton.SECONDARY));
             } else if(!isPressed) {
                 processSelect();
             }
         } else if (MOUSE_LEFT_CLICK.equals(name)) {
             if(isEditingMode()) {
-                if (isPressed) startEditing(EditingInput.MOUSE_PRIMARY);
-                else finishEditing(EditingInput.MOUSE_PRIMARY);
+                if (isPressed) startEditing(getEditingInput(MouseButton.PRIMARY));
+                else finishEditing(getEditingInput(MouseButton.PRIMARY));
             } else {
                 if (isPressed) startTransform();
                 else endTransform();
             }
         }
+    }
+
+    @NotNull
+    protected EditingInput getEditingInput(final MouseButton mouseButton) {
+        switch (mouseButton) {
+            case SECONDARY: {
+
+                if(isControlDown()) {
+                    return EditingInput.MOUSE_SECONDARY_WITH_CTRL;
+                }
+
+                return EditingInput.MOUSE_SECONDARY;
+            }
+            case PRIMARY: {
+                return EditingInput.MOUSE_PRIMARY;
+            }
+        }
+
+        return EditingInput.MOUSE_PRIMARY;
     }
 
     /**
@@ -1656,14 +1683,17 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         setEditingMode(editingMode);
 
         final Node cursorNode = getCursorNode();
+        final Node markersNode = getMarkersNode();
         final Node toolNode = getToolNode();
         final Node transformToolNode = getTransformToolNode();
 
         if (isEditingMode()) {
             toolNode.attachChild(cursorNode);
+            toolNode.attachChild(markersNode);
             toolNode.detachChild(transformToolNode);
         } else {
             toolNode.detachChild(cursorNode);
+            toolNode.detachChild(markersNode);
             toolNode.attachChild(transformToolNode);
         }
     }
@@ -1675,5 +1705,14 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @EditorThread
     public Node getCursorNode() {
         return cursorNode;
+    }
+
+    /**
+     * @return the markers node.
+     */
+    @NotNull
+    @EditorThread
+    public Node getMarkersNode() {
+        return markersNode;
     }
 }

@@ -14,13 +14,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.time.Duration;
-import java.time.LocalTime;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
@@ -33,11 +26,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalTime;
 
 /**
  * The base implementation of an editor.
@@ -83,7 +81,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     private R root;
 
     /**
-     * Rge edit file.
+     * The edited file.
      */
     private Path file;
 

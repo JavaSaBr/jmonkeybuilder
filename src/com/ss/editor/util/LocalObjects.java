@@ -1,15 +1,9 @@
 package com.ss.editor.util;
 
 import static java.lang.Thread.currentThread;
-
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector3f;
+import com.jme3.math.*;
 import com.ss.editor.EditorThread;
-
 import org.jetbrains.annotations.NotNull;
-
 import rlib.util.CycleBuffer;
 
 /**
@@ -19,7 +13,7 @@ import rlib.util.CycleBuffer;
  */
 public class LocalObjects {
 
-    private static final int SIZE = 20;
+    private static final int SIZE = 50;
 
     @NotNull
     public static LocalObjects get() {
@@ -31,6 +25,18 @@ public class LocalObjects {
      */
     @NotNull
     private final CycleBuffer<Vector3f> vectorBuffer;
+
+    /**
+     * The buffer of vectors.
+     */
+    @NotNull
+    private final CycleBuffer<Vector2f> vector2fBuffer;
+
+    /**
+     * The buffer of planes.
+     */
+    @NotNull
+    private final CycleBuffer<Plane> planeBuffer;
 
     /**
      * The buffer of rotation.
@@ -59,6 +65,8 @@ public class LocalObjects {
     @SuppressWarnings("unchecked")
     public LocalObjects() {
         this.vectorBuffer = new CycleBuffer<>(Vector3f.class, SIZE, Vector3f::new);
+        this.vector2fBuffer = new CycleBuffer<>(Vector2f.class, SIZE, Vector2f::new);
+        this.planeBuffer = new CycleBuffer<>(Plane.class, SIZE, Plane::new);
         this.rotationBuffer = new CycleBuffer<>(Quaternion.class, SIZE, Quaternion::new);
         this.rayBuffer = new CycleBuffer<>(Ray.class, SIZE, Ray::new);
         this.matrix3fBuffer = new CycleBuffer<>(Matrix3f.class, SIZE, Matrix3f::new);
@@ -69,7 +77,7 @@ public class LocalObjects {
      * @return the next free matrix.
      */
     @NotNull
-    public Matrix3f getNextMatrix3f() {
+    public Matrix3f nextMatrix3f() {
         return matrix3fBuffer.next();
     }
 
@@ -77,7 +85,7 @@ public class LocalObjects {
      * @return the next free matrix float array.
      */
     @NotNull
-    public float[] getNextMatrixFloat() {
+    public float[] nextMatrixFloat() {
         return matrixFloatBuffer.next();
     }
 
@@ -85,7 +93,7 @@ public class LocalObjects {
      * @return the next free ray.
      */
     @NotNull
-    public Ray getNextRay() {
+    public Ray nextRay() {
         return rayBuffer.next();
     }
 
@@ -93,7 +101,7 @@ public class LocalObjects {
      * @return the next free rotation.
      */
     @NotNull
-    public Quaternion getNextRotation() {
+    public Quaternion nextRotation() {
         return rotationBuffer.next();
     }
 
@@ -101,7 +109,23 @@ public class LocalObjects {
      * @return the next free vector.
      */
     @NotNull
-    public Vector3f getNextVector() {
+    public Vector3f nextVector() {
         return vectorBuffer.next();
+    }
+
+    /**
+     * @return the next free vector.
+     */
+    @NotNull
+    public Vector2f nextVector2f() {
+        return vector2fBuffer.next();
+    }
+
+    /**
+     * @return the next free plane.
+     */
+    @NotNull
+    public Plane nextPlane() {
+        return planeBuffer.next();
     }
 }
