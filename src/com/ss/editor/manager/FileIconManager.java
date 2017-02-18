@@ -183,4 +183,17 @@ public class FileIconManager {
         final Image image = imageCache.get(url, () -> new Image(url, size, size, false, true));
         return Objects.requireNonNull(image);
     }
+
+    /**
+     * Get an image by an URL without cache.
+     *
+     * @param url  the url.
+     * @param size the size.
+     * @return the image.
+     */
+    @NotNull
+    @FXThread
+    public Image getImageWithoutCache(@NotNull final String url, final int size) {
+        return new Image(url, size, size, false, true);
+    }
 }

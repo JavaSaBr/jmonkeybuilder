@@ -234,6 +234,15 @@
     -fx-max-width: -fx-min-width;
 }
 
+.editing-toggle-button-big {
+    -fx-min-height: 32;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 32;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
 /** Drawer button */
 
 .drawer-button {

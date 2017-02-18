@@ -78,12 +78,6 @@ public interface Icons {
     Image TORUS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/circle.svg");
     Image POINTS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/because-mathematical-symbol.svg");
     Image IMPOSTOR_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/plus.svg");
-    Image TERRAIN_LEVEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-level.png", 16);
-    Image TERRAIN_PAINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-paint-circle.png", 16);
-    Image TERRAIN_ROUGH_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-rough.png", 16);
-    Image TERRAIN_SLOPE_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-slope.png", 16);
-    Image TERRAIN_SMOOTH_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-smooth.png", 16);
-    Image TERRAIN_UP_16 = ICON_MANAGER.getImage("/ui/icons/actions/24/terrain-up.png", 16);
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
@@ -105,6 +99,13 @@ public interface Icons {
     Image EDIT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/edit.png", 24);
     Image FROM_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/from_fullscreen.png", 24);
     Image TO_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/to_fullscreen.png", 24);
+
+    Image TERRAIN_LEVEL_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/level_terrain.svg", 32);
+    Image TERRAIN_PAINT_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/paint_terrain.svg", 32);
+    Image TERRAIN_ROUGH_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/rough_terrain.svg", 32);
+    Image TERRAIN_SLOPE_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/slope_terrain.svg", 32);
+    Image TERRAIN_SMOOTH_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/smooth_terrain.svg", 32);
+    Image TERRAIN_UP_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/raise_terrain.svg", 32);
 
     Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/play.png", 128);
     Image PAUSE_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/pause.png", 128);

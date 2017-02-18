@@ -409,22 +409,22 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     protected void createComponents() {
         super.createComponents();
 
-        raiseLowerButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_UP_16));
+        raiseLowerButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_UP_32));
         raiseLowerButton.setOnAction(this::switchMode);
 
-        smoothButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_SMOOTH_16));
+        smoothButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_SMOOTH_32));
         smoothButton.setOnAction(this::switchMode);
 
-        roughButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_ROUGH_16));
+        roughButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_ROUGH_32));
         roughButton.setOnAction(this::switchMode);
 
-        levelButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_LEVEL_16));
+        levelButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_LEVEL_32));
         levelButton.setOnAction(this::switchMode);
 
-        slopeButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_SLOPE_16));
+        slopeButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_SLOPE_32));
         slopeButton.setOnAction(this::switchMode);
 
-        paintButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_PAINT_16));
+        paintButton = new ToggleButton(StringUtils.EMPTY, new ImageView(Icons.TERRAIN_PAINT_32));
         paintButton.setOnAction(this::switchMode);
 
         final GridPane buttonsContainer = new GridPane();
@@ -478,17 +478,17 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         paintControlSettings = new VBox();
 
         FXUtils.addClassTo(raiseLowerButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(raiseLowerButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(raiseLowerButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
         FXUtils.addClassTo(smoothButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(smoothButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(smoothButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
         FXUtils.addClassTo(roughButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(roughButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(roughButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
         FXUtils.addClassTo(levelButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(levelButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(levelButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
         FXUtils.addClassTo(slopeButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(slopeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(slopeButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
         FXUtils.addClassTo(paintButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(paintButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(paintButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
 
         FXUtils.addClassTo(brushSizeLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(brushSizeField, CSSClasses.SPECIAL_FONT_13);

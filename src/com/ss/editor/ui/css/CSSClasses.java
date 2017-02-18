@@ -42,6 +42,8 @@ public interface CSSClasses {
 
     String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
 
+    String EDITING_TOGGLE_BUTTON_BIG = "editing-toggle-button-big";
+
     String MATERIAL_PARAM_CONTROL = "material-param-control";
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
 }
