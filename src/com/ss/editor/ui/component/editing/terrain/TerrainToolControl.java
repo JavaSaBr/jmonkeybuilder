@@ -43,10 +43,6 @@ public class TerrainToolControl extends AbstractEditingControl {
         this.component = component;
         this.brush = new Geometry("Brush", new Sphere(8, 8, 1));
         this.brush.setMaterial(createWireframeMaterial(getBrushColor()));
-
-        //FIXME need to remove
-        setBrushSize(8);
-        setBrushPower(2);
     }
 
     /**

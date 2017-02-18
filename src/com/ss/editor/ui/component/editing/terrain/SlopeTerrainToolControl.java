@@ -362,7 +362,17 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         this.precision = precision;
     }
 
-    public boolean isLock() {
+    /**
+     * @return true if can edit only between markers.
+     */
+    private boolean isLock() {
         return lock;
+    }
+
+    /**
+     * @param lock the flag of locking.
+     */
+    public void setLock(final boolean lock) {
+        this.lock = lock;
     }
 }

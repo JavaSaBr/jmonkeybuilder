@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editing.terrain;
 
 import static java.util.Objects.requireNonNull;
 import com.jme3.math.Vector2f;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.terrain.Terrain;
@@ -22,11 +23,43 @@ import java.util.List;
  */
 public class ChangeHeightTerrainToolControl extends TerrainToolControl {
 
+    private static class HeightPoint {
+
+        private final float x;
+        private final float y;
+
+        private final int xIndex;
+        private final int yIndex;
+
+        public HeightPoint(final float x, final float y, final int xIndex, final int yIndex) {
+            this.x = x;
+            this.y = y;
+            this.xIndex = xIndex;
+            this.yIndex = yIndex;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            final HeightPoint that = (HeightPoint) o;
+            if (xIndex != that.xIndex) return false;
+            return yIndex == that.yIndex;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = xIndex;
+            result = 31 * result + yIndex;
+            return result;
+        }
+    }
+
     /**
      * The table of original heights.
      */
     @NotNull
-    private final ObjectDictionary<Vector2f, Float> originalHeight;
+    private final ObjectDictionary<HeightPoint, Float> originalHeight;
 
     /**
      * The copy of an original terrain.
@@ -43,7 +76,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      * @return the table of original heights.
      */
     @NotNull
-    private ObjectDictionary<Vector2f, Float> getOriginalHeight() {
+    private ObjectDictionary<HeightPoint, Float> getOriginalHeight() {
         return originalHeight;
     }
 
@@ -52,7 +85,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void startChange() {
 
-        final ObjectDictionary<Vector2f, Float> originalHeight = getOriginalHeight();
+        final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
         originalHeight.clear();
 
         copiedTerrain = requireNonNull(getEditedModel()).clone();
@@ -65,13 +98,22 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void change(@NotNull final Vector2f point) {
 
-        final ObjectDictionary<Vector2f, Float> originalHeight = getOriginalHeight();
-        if(originalHeight.containsKey(point)) return;
-
         final Terrain terrain = (Terrain) requireNonNull(copiedTerrain);
+        final Node terrainNode = (Node) requireNonNull(getEditedModel());
+        final Vector3f scale = terrainNode.getWorldScale();
+
+        final int halfSize = terrain.getTerrainSize() / 2;
+        final int x = Math.round((point.x / scale.x) + halfSize);
+        final int z = Math.round((point.y / scale.z) + halfSize);
+
+        final HeightPoint heightPoint = new HeightPoint(point.getX(), point.getY(), x, z);
+
+        final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
+        if(originalHeight.containsKey(heightPoint)) return;
+
         final float height = terrain.getHeightmapHeight(point);
 
-        originalHeight.put(point, height);
+        originalHeight.put(heightPoint, height);
     }
 
     /**
@@ -79,14 +121,16 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void commitChanges() {
 
-        final ObjectDictionary<Vector2f, Float> originalHeight = getOriginalHeight();
-
-        final ObjectDictionary<Vector2f, Float> oldValues = DictionaryFactory.newObjectDictionary();
-        oldValues.put(originalHeight);
-
-        final ObjectDictionary<Vector2f, Float> newValues = DictionaryFactory.newObjectDictionary();
         final Terrain terrain = (Terrain) requireNonNull(getEditedModel());
-        originalHeight.forEach((point, value) -> newValues.put(point, terrain.getHeightmapHeight(point)));
+        final ObjectDictionary<Vector2f, Float> oldValues = DictionaryFactory.newObjectDictionary();
+        final ObjectDictionary<Vector2f, Float> newValues = DictionaryFactory.newObjectDictionary();
+
+        final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
+        originalHeight.forEach((heightPoint, height) -> oldValues.put(new Vector2f(heightPoint.x, heightPoint.y), height));
+        originalHeight.forEach((heightPoint, value) -> {
+            final Vector2f point = new Vector2f(heightPoint.x, heightPoint.y);
+            newValues.put(point, terrain.getHeightmapHeight(point));
+        });
 
         final ModelPropertyOperation<Terrain, ObjectDictionary<Vector2f, Float>> operation =
                 new ModelPropertyOperation<>(terrain, "Heightmap", newValues, oldValues);

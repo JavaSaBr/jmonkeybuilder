@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.editing.terrain;
 
 import static com.ss.editor.util.EditingUtils.isContains;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.util.Objects.requireNonNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -32,12 +34,11 @@ import java.util.List;
  */
 public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
 
-    private float roughness = 1.2f;
-    private float frequency = 0.2f;
-    private float amplitude = 1.0f;
-    private float lacunarity = 2.12f;
-    private float octaves = 8;
-    private float scale = 1.0f;
+    private float roughness;
+    private float frequency;
+    private float lacunarity;
+    private float octaves;
+    private float scale;
 
     public RoughTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
@@ -168,23 +169,12 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     private Basis createFractalGenerator() {
 
         final FractalSum fractalSum = new FractalSum();
-        fractalSum.setRoughness(roughness);
-        fractalSum.setFrequency(frequency);
+        fractalSum.setRoughness(getRoughness());
+        fractalSum.setFrequency(getFrequency());
         fractalSum.setAmplitude(getBrushPower());
-        fractalSum.setLacunarity(lacunarity <= 1 ? 1.1f : lacunarity); // make it greater than 1.0f
-        fractalSum.setOctaves(octaves);
-
-        float scale = this.scale;
-
-        if (scale > 1.0f) {
-            scale = 1.0f;
-        }
-
-        if (scale < 0) {
-            scale = 0;
-        }
-
-        fractalSum.setScale(scale);//0.02125f
+        fractalSum.setLacunarity(getLacunarity()); // make it greater than 1.0f
+        fractalSum.setOctaves(getOctaves());
+        fractalSum.setScale(max(min(getScale(), 1.0F), 0F)); //0.02125f
         fractalSum.addModulator((NoiseModulator) in -> ShaderUtils.clamp(in[0] * 0.5f + 0.5f, 0, 1));
 
         final FilteredBasis ground = new FilteredBasis(fractalSum);
@@ -209,5 +199,45 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
         ground.addPreFilter(iterate);
 
         return ground;
+    }
+
+    public void setOctaves(final float octaves) {
+        this.octaves = octaves;
+    }
+
+    public float getOctaves() {
+        return octaves;
+    }
+
+    public void setFrequency(final float frequency) {
+        this.frequency = frequency;
+    }
+
+    public float getFrequency() {
+        return frequency;
+    }
+
+    public void setLacunarity(final float lacunarity) {
+        this.lacunarity = lacunarity;
+    }
+
+    public float getLacunarity() {
+        return lacunarity;
+    }
+
+    public void setRoughness(final float roughness) {
+        this.roughness = roughness;
+    }
+
+    public float getRoughness() {
+        return roughness;
+    }
+
+    public void setScale(final float scale) {
+        this.scale = scale;
+    }
+
+    public float getScale() {
+        return scale;
     }
 }

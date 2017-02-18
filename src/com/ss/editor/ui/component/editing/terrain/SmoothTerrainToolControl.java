@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editing.terrain;
 
 import static com.ss.editor.util.EditingUtils.isContains;
 import static java.lang.Float.isNaN;
+import static java.lang.Math.min;
 import static java.util.Objects.requireNonNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -156,7 +157,7 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
 
                 // weigh it
                 float diff = amount - center;
-                diff *= brushPower;
+                diff *= min(brushPower, 2F);
 
                 terrain.setHeight(terrainLoc, center + diff);
                 locs.add(terrainLoc.clone());
