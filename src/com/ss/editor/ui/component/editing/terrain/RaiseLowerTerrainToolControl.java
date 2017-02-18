@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editing.terrain;
 
+import static com.ss.editor.util.EditingUtils.calculateHeight;
 import static com.ss.editor.util.EditingUtils.isContains;
 import static java.util.Objects.requireNonNull;
 import com.jme3.math.ColorRGBA;
@@ -9,7 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
-import com.ss.editor.util.EditingUtils;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -81,10 +82,16 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
      */
     private void modifyHeight(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
 
+        final LocalObjects local = LocalObjects.get();
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
-        final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f localScale = terrainNode.getLocalScale();
 
+        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+        final Vector3f localScale = terrainNode.getLocalScale();
+        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+        final Vector2f terrainLoc = local.nextVector2f();
+        final Vector2f effectPoint = local.nextVector2f();
+
+        final Terrain terrain = (Terrain) terrainNode;
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
@@ -96,36 +103,37 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
         final float xStepAmount = localScale.getX();
         final float zStepAmount = localScale.getZ();
 
-        final Vector3f point = new Vector3f(contactPoint);
-
         final List<Vector2f> locs = new ArrayList<>();
         final List<Float> heights = new ArrayList<>();
 
         for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
             for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
-                float locX = contactPoint.getX() + (x * xStepAmount);
-                float locZ = contactPoint.getZ() + (z * zStepAmount);
+                float locX = localPoint.getX() + (x * xStepAmount);
+                float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                if (!isContains(brush, locX - contactPoint.getX(), locZ - contactPoint.getZ())) {
+                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+
+                if (!isContains(brush, effectPoint.getX(), effectPoint.getY())) {
                     continue;
                 }
 
-                point.setX(locX - contactPoint.getX());
-                point.setZ(locZ - contactPoint.getZ());
+                terrainLoc.set(locX, locZ);
 
+                final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
                 // adjust height based on radius of the tool
-                float newHeight = EditingUtils.calculateHeight(brushSize, brushPower, point.getX(), point.getZ());
+                final float newHeight = calculateHeight(brushSize, brushPower, effectPoint.getX(), effectPoint.getY());
+
                 // increase the height
-                locs.add(new Vector2f(locX, locZ));
-                heights.add(newHeight);
+                locs.add(terrainLoc.clone());
+                heights.add(currentHeight + newHeight);
             }
         }
 
         locs.forEach(this::change);
 
         // do the actual height adjustment
-        terrain.adjustHeight(locs, heights);
+        terrain.setHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
     }
 }

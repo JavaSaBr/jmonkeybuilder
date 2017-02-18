@@ -34,7 +34,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     private final Geometry baseMarker;
 
     /**
-     * The base marker.
+     * The target marker.
      */
     @NotNull
     private final Geometry targetMarker;
@@ -77,6 +77,9 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         super.onAttached(node);
 
         final Spatial editedModel = requireNonNull(getEditedModel());
+        final Geometry baseMarker = getBaseMarker();
+        final Geometry targetMarker = getTargetMarker();
+        final Geometry line = getLine();
 
         final Node markersNode = component.getMarkersNode();
         markersNode.attachChild(baseMarker);
@@ -91,6 +94,10 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     protected void onDetached(@NotNull final Node node) {
         super.onDetached(node);
 
+        final Geometry baseMarker = getBaseMarker();
+        final Geometry targetMarker = getTargetMarker();
+        final Geometry line = getLine();
+
         final Node markersNode = component.getMarkersNode();
         markersNode.detachChild(baseMarker);
         markersNode.detachChild(targetMarker);
@@ -100,6 +107,10 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     @Override
     protected void controlUpdate(final float tpf) {
         super.controlUpdate(tpf);
+
+        final Geometry baseMarker = getBaseMarker();
+        final Geometry targetMarker = getTargetMarker();
+        final Geometry line = getLine();
 
         final Vector3f firstPoint = baseMarker.getLocalTranslation();
         final Vector3f secondPoint = targetMarker.getLocalTranslation();
@@ -182,8 +193,11 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
 
         final LocalObjects local = LocalObjects.get();
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
-        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+        final Geometry baseMarker = getBaseMarker();
+        final Geometry targetMarker = getTargetMarker();
 
+        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+        final Vector3f localScale = terrainNode.getLocalScale();
         final Vector3f firstPoint = baseMarker.getLocalTranslation();
         final Vector3f secondPoint = targetMarker.getLocalTranslation();
         final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
@@ -205,9 +219,9 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         final Vector3f secondSide = local.nextVector();
         final Vector3f targetPoint = local.nextVector();
         final Vector2f terrainLoc = local.nextVector2f();
+        final Vector2f effectPoint = local.nextVector2f();
 
         final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f localScale = terrainNode.getLocalScale();
 
         final Geometry brush = getBrush();
 
@@ -235,7 +249,9 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
                 float locX = localPoint.getX() + (x * xStepAmount);
                 float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                if (!isContains(brush, locX - localPoint.getX(), locZ - localPoint.getZ())) {
+                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+
+                if (!isContains(brush, effectPoint.getX(), effectPoint.getY())) {
                     continue;
                 }
 
@@ -280,7 +296,7 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
                     else if (currentHeight > desiredHeight) adj = -1;
 
                     adj *= brushPower;
-                    adj *= calculateRadiusPercent(brushSize, locX - localPoint.getX(), locZ - localPoint.getZ());
+                    adj *= calculateRadiusPercent(brushSize, effectPoint.getX(), effectPoint.getY());
 
                     // test if adjusting too far and then cap it
                     if ((adj > 0) && floatGreaterThan((currentHeight + adj), desiredHeight, epsilon)) {
@@ -306,6 +322,30 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
         // do the actual height adjustment
         terrain.setHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
+    }
+
+    /**
+     * @return the line between markers.
+     */
+    @NotNull
+    private Geometry getLine() {
+        return line;
+    }
+
+    /**
+     * @return the base marker.
+     */
+    @NotNull
+    private Geometry getBaseMarker() {
+        return baseMarker;
+    }
+
+    /**
+     * @return the target marker.
+     */
+    @NotNull
+    private Geometry getTargetMarker() {
+        return targetMarker;
     }
 
     /**

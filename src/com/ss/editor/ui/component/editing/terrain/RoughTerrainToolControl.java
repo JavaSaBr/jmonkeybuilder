@@ -18,6 +18,7 @@ import com.jme3.terrain.noise.filter.SmoothFilter;
 import com.jme3.terrain.noise.fractal.FractalSum;
 import com.jme3.terrain.noise.modulator.NoiseModulator;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.FloatBuffer;
@@ -93,25 +94,29 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
+        final LocalObjects local = LocalObjects.get();
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
-        final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f worldScale = terrainNode.getWorldScale();
 
+        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+        final Vector3f localScale = terrainNode.getLocalScale();
+        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+        final Vector2f terrainLoc = local.nextVector2f();
+        final Vector2f effectPoint = local.nextVector2f();
+
+        final Terrain terrain = (Terrain) terrainNode;
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
         final int twoBrushSize = (int) (brushSize * 2);
 
         final Basis fractalFilter = createFractalGenerator();
-        final FloatBuffer buffer = fractalFilter.getBuffer(contactPoint.x, contactPoint.z, 0, twoBrushSize);
+        final FloatBuffer buffer = fractalFilter.getBuffer(terrainLoc.getX(), terrainLoc.getY(), 0, twoBrushSize);
 
-        final int radiusStepsX = (int) (brushSize / worldScale.getX());
-        final int radiusStepsZ = (int) (brushSize / worldScale.getY());
+        final int radiusStepsX = (int) (brushSize / localScale.getX());
+        final int radiusStepsZ = (int) (brushSize / localScale.getY());
 
-        final float xStepAmount = worldScale.getX();
-        final float zStepAmount = worldScale.getZ();
-
-        final Vector3f point = new Vector3f(contactPoint);
+        final float xStepAmount = localScale.getX();
+        final float zStepAmount = localScale.getZ();
 
         final List<Vector2f> locs = new ArrayList<>();
         final List<Float> heights = new ArrayList<>();
@@ -119,45 +124,43 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
         for (int z = -radiusStepsZ, yfb = 0; z < radiusStepsZ; z++, yfb++) {
             for (int x = -radiusStepsX, xfb = 0; x < radiusStepsX; x++, xfb++) {
 
-                final float locX = contactPoint.getX() + (x * xStepAmount);
-                final float locZ = contactPoint.getZ() + (z * zStepAmount);
-                final float height = buffer.get(yfb * twoBrushSize + xfb);
+                final float locX = localPoint.getX() + (x * xStepAmount);
+                final float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                point.setX(locX);
-                point.setZ(locZ);
+                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
 
-                if (!isContains(brush, locX - contactPoint.getX(), locZ - contactPoint.getZ())) {
+                if (!isContains(brush, effectPoint.getX(), effectPoint.getX())) {
                     continue;
                 }
 
-                point.setX(locX - contactPoint.getX());
-                point.setZ(locZ - contactPoint.getZ());
+                final float height = buffer.get(yfb * twoBrushSize + xfb);
 
+                terrainLoc.set(locX, locZ);
+
+                final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
                 // see if it is in the radius of the tool
-                float newHeight = calculateHeight(brushSize, height, point.getX(), point.getZ());
-                locs.add(new Vector2f(locX, locZ));
-                heights.add(newHeight);
+                final float newHeight = calculateHeight(brushSize, height, effectPoint);
+
+                locs.add(terrainLoc.clone());
+                heights.add(currentHeight + newHeight);
             }
         }
 
         locs.forEach(this::change);
 
         // do the actual height adjustment
-        terrain.adjustHeight(locs, heights);
+        terrain.setHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
     }
 
-    private float calculateHeight(float radius, float heightFactor, float x, float z) {
+    private float calculateHeight(final float radius, final float heightFactor, @NotNull final Vector2f point) {
 
         // find percentage for each 'unit' in radius
-        final Vector2f point = new Vector2f(x, z);
 
         float val = point.length() / radius;
         val = 1 - val;
 
-        if (val <= 0) {
-            val = 0;
-        }
+        if (val <= 0) val = 0;
 
         return heightFactor * val * 0.1f; // 0.1 scales it down a bit to lower the impact of the tool
     }

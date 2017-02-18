@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editing.terrain;
 
 import static com.ss.editor.util.EditingUtils.isContains;
+import static java.lang.Float.isNaN;
 import static java.util.Objects.requireNonNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -9,6 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -76,10 +78,20 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
+        final LocalObjects local = LocalObjects.get();
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
-        final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f localScale = terrainNode.getLocalScale();
 
+        final Vector3f localScale = terrainNode.getLocalScale();
+        final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+        final Vector2f terrainLoc = local.nextVector2f();
+        final Vector2f terrainLocLeft = local.nextVector2f();
+        final Vector2f terrainLocRight = local.nextVector2f();
+        final Vector2f terrainLocUp = local.nextVector2f();
+        final Vector2f terrainLocDown = local.nextVector2f();
+        final Vector2f effectPoint = local.nextVector2f();
+
+        final Terrain terrain = (Terrain) terrainNode;
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
@@ -97,21 +109,27 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
         for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
             for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
-                float locX = contactPoint.getX() + (x * xStepAmount);
-                float locZ = contactPoint.getZ() + (z * zStepAmount);
+                float locX = localPoint.getX() + (x * xStepAmount);
+                float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                if (!isContains(brush, locX - contactPoint.getX(), locZ - contactPoint.getZ())) {
+                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+
+                if (!isContains(brush, effectPoint.getX(), effectPoint.getY())) {
                     continue;
                 }
 
-                final Vector2f terrainLoc = new Vector2f(locX, locZ);
+                terrainLoc.set(locX, locZ);
+                terrainLocLeft.set(terrainLoc.getX() - 1, terrainLoc.getY());
+                terrainLocRight.set(terrainLoc.getX() + 1, terrainLoc.getY());
+                terrainLocUp.set(terrainLoc.getX(), terrainLoc.getY() + 1);
+                terrainLocDown.set(terrainLoc.getX(), terrainLoc.getY() - 1);
 
                 // adjust height based on radius of the tool
                 final float center = terrain.getHeightmapHeight(terrainLoc);
-                final float left = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x - 1, terrainLoc.y));
-                final float right = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x + 1, terrainLoc.y));
-                final float up = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x, terrainLoc.y + 1));
-                final float down = terrain.getHeightmapHeight(new Vector2f(terrainLoc.x, terrainLoc.y - 1));
+                final float left = terrain.getHeightmapHeight(terrainLocLeft);
+                final float right = terrain.getHeightmapHeight(terrainLocRight);
+                final float up = terrain.getHeightmapHeight(terrainLocUp);
+                final float down = terrain.getHeightmapHeight(terrainLocDown);
 
                 int count = 1;
 
@@ -140,19 +158,13 @@ public class SmoothTerrainToolControl extends ChangeHeightTerrainToolControl {
                 float diff = amount - center;
                 diff *= brushPower;
 
-                locs.add(terrainLoc);
-                heights.add(diff);
+                terrain.setHeight(terrainLoc, center + diff);
+                locs.add(terrainLoc.clone());
             }
         }
 
         locs.forEach(this::change);
 
-        // do the actual height adjustment
-        terrain.adjustHeight(locs, heights);
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
-    }
-
-    private boolean isNaN(float val) {
-        return val != val;
     }
 }

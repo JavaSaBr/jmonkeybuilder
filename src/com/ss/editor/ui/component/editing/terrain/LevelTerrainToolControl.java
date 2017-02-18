@@ -11,7 +11,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
-import com.ss.editor.util.EditingUtils;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -50,11 +50,6 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
 
         this.levelMarker = new Geometry("LevelMarker", new Sphere(8, 8, 1));
         this.levelMarker.setMaterial(createMaterial(getBrushColor()));
-
-        //FIXME need to remove
-        //setUseMarker(true);
-        setLevel(2);
-        setPrecision(true);
     }
 
     @Override
@@ -62,20 +57,27 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
         super.onAttached(node);
 
         final Spatial editedModel = requireNonNull(getEditedModel());
+        final Geometry levelMarker = getLevelMarker();
 
-        component.getMarkersNode().attachChild(levelMarker);
+        final Node markersNode = component.getMarkersNode();
+        markersNode.attachChild(levelMarker);
+
         levelMarker.setLocalTranslation(editedModel.getWorldTranslation());
     }
 
     @Override
     protected void onDetached(@NotNull final Node node) {
         super.onDetached(node);
-        component.getMarkersNode().detachChild(levelMarker);
+
+        final Node markersNode = component.getMarkersNode();
+        markersNode.detachChild(getLevelMarker());
     }
 
     @Override
     protected void controlUpdate(final float tpf) {
         super.controlUpdate(tpf);
+
+        final Geometry levelMarker = getLevelMarker();
         levelMarker.setCullHint(isUseMarker() ? Spatial.CullHint.Never : Spatial.CullHint.Always);
     }
 
@@ -145,15 +147,18 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private void modifyHeight(@NotNull final Vector3f contactPoint) {
 
+        final LocalObjects local = LocalObjects.get();
         final Node terrainNode = (Node) requireNonNull(getEditedModel());
         final Geometry levelMarker = getLevelMarker();
 
         final Vector3f markerTranslation = levelMarker.getLocalTranslation();
         final Vector3f worldTranslation = terrainNode.getWorldTranslation();
+        final Vector3f localScale = terrainNode.getLocalScale();
+        final Vector3f localPoint = contactPoint.subtract(worldTranslation, local.nextVector());
+        final Vector2f terrainLoc = local.nextVector2f();
+        final Vector2f effectPoint = local.nextVector2f();
 
         final Terrain terrain = (Terrain) terrainNode;
-        final Vector3f localScale = terrainNode.getLocalScale();
-
         final Geometry brush = getBrush();
 
         final float brushSize = getBrushSize();
@@ -174,42 +179,44 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
         for (int z = -radiusStepsZ; z < radiusStepsZ; z++) {
             for (int x = -radiusStepsX; x < radiusStepsX; x++) {
 
-                float locX = contactPoint.getX() + (x * xStepAmount);
-                float locZ = contactPoint.getZ() + (z * zStepAmount);
+                float locX = localPoint.getX() + (x * xStepAmount);
+                float locZ = localPoint.getZ() + (z * zStepAmount);
 
-                if (!isContains(brush, locX - contactPoint.getX(), locZ - contactPoint.getZ())) {
+                effectPoint.set(locX - localPoint.getX(), locZ - localPoint.getZ());
+
+                if (!isContains(brush, effectPoint.getX(), effectPoint.getY())) {
                     continue;
                 }
 
-                final Vector2f terrainLoc = new Vector2f(locX, locZ);
+                terrainLoc.set(locX, locZ);
 
                 // adjust height based on radius of the tool
                 final float currentHeight = terrain.getHeightmapHeight(terrainLoc) * localScale.getY();
 
                 if (isPrecision()) {
-                    locs.add(terrainLoc);
+                    locs.add(terrainLoc.clone());
                     heights.add(desiredHeight / localScale.getY());
                 } else {
 
-                    float epsilon = 0.001f * brushPower; // rounding error for snapping
+                    float epsilon = 0.0001f * brushPower; // rounding error for snapping
                     float adj = 0;
 
                     if (currentHeight < desiredHeight) adj = 1;
                     else if (currentHeight > desiredHeight) adj = -1;
 
                     adj *= brushPower;
-                    adj *= EditingUtils.calculateRadiusPercent(brushSize, locX - contactPoint.x, locZ - contactPoint.z);
+                    adj *= calculateRadiusPercent(brushSize, effectPoint.getX(), effectPoint.getY());
 
                     // test if adjusting too far and then cap it
                     if (adj > 0 && floatGreaterThan((currentHeight + adj), desiredHeight, epsilon)) {
                         adj = desiredHeight - currentHeight;
                     } else if (adj < 0 && floatLessThan((currentHeight + adj), desiredHeight, epsilon)) {
-                        adj = currentHeight - desiredHeight;
+                        adj = desiredHeight - currentHeight;
                     }
 
                     if (!floatEquals(adj, 0, 0.001f)) {
-                        locs.add(terrainLoc);
-                        heights.add(adj);
+                        locs.add(terrainLoc.clone());
+                        heights.add(currentHeight + adj);
                     }
                 }
             }
@@ -218,11 +225,7 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
         locs.forEach(this::change);
 
         // do the actual height adjustment
-        if (isPrecision()) {
-            terrain.setHeight(locs, heights);
-        } else {
-            terrain.adjustHeight(locs, heights);
-        }
+        terrain.setHeight(locs, heights);
 
         terrainNode.updateModelBound(); // or else we won't collide with it where we just edited
     }
