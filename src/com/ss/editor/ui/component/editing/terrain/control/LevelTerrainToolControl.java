@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.editing.terrain.control;
 
 import static com.ss.editor.util.EditingUtils.*;
 import static java.util.Objects.requireNonNull;
@@ -11,6 +11,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 

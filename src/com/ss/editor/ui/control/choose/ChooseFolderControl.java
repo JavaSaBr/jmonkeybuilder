@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.texture;
+package com.ss.editor.ui.control.choose;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static java.util.Objects.requireNonNull;
@@ -13,7 +13,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -31,7 +30,7 @@ import java.util.function.Predicate;
 /**
  * The control to choose folder.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class ChooseFolderControl extends HBox {
 

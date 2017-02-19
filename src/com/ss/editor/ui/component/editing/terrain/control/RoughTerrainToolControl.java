@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.editing.terrain.control;
 
 import static com.ss.editor.util.EditingUtils.isContains;
 import static java.lang.Math.max;
@@ -20,6 +20,7 @@ import com.jme3.terrain.noise.filter.SmoothFilter;
 import com.jme3.terrain.noise.fractal.FractalSum;
 import com.jme3.terrain.noise.modulator.NoiseModulator;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.editing.terrain.control;
 
 import static com.ss.editor.util.EditingUtils.calculateHeight;
 import static com.ss.editor.util.EditingUtils.isContains;
@@ -10,6 +10,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 

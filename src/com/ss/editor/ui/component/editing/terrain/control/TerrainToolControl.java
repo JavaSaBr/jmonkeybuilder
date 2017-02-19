@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.editing.terrain.control;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
@@ -7,6 +7,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.control.editing.impl.AbstractEditingControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -6,6 +6,7 @@ import com.jme3.scene.Node;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.impl.AbstractEditingComponent;
+import com.ss.editor.ui.component.editing.terrain.control.*;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.collections.ObservableList;

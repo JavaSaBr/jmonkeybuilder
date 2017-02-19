@@ -54,6 +54,7 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.extension.scene.SceneLayer;
@@ -63,7 +64,9 @@ import javafx.scene.Cursor;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -76,13 +79,10 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -98,6 +98,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     private static final int OBJECTS_TOOL = 0;
     private static final int EDITING_TOOL = 1;
+
+    private static final Array<String> ACCEPTED_FILES = ArrayFactory.newArray(String.class);
+
+    static {
+        ACCEPTED_FILES.add(FileExtensions.JME_MATERIAL);
+        ACCEPTED_FILES.add(FileExtensions.JME_OBJECT);
+    }
 
     /**
      * The 3D part of this editor.
@@ -423,17 +430,21 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
 
         switch (transformType) {
-            case MOVE_TOOL:
+            case MOVE_TOOL: {
                 moveToolButton.setSelected(true);
                 break;
-            case ROTATE_TOOL:
+            }
+            case ROTATE_TOOL: {
                 rotationToolButton.setSelected(true);
                 break;
-            case SCALE_TOOL:
+            }
+            case SCALE_TOOL: {
                 scaleToolButton.setSelected(true);
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
 
         final MA editorAppState = getEditorAppState();
@@ -960,7 +971,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAreaPane.setId(CSSIds.FILE_EDITOR_EDITOR_AREA);
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
-        editorAreaPane.setOnDragExited(this::dragExited);
         editorAreaPane.setCursor(Cursor.CROSSHAIR);
 
         modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
@@ -1047,65 +1057,19 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAppState.changeEditingMode(newIndex == EDITING_TOOL);
     }
 
-    private void dragExited(@NotNull final DragEvent dragEvent) {
-    }
-
     /**
      * Handle dropped files to editor.
      */
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.isEmpty()) {
-            return;
-        }
-
-        for (final File file : files) {
-
-            final String name = file.getName();
-
-            if (name.endsWith(FileExtensions.JME_OBJECT)) {
-                addNewModel(dragEvent, file.toPath());
-            } else if (name.endsWith(FileExtensions.JME_MATERIAL)) {
-                applyMaterial(dragEvent, file.toPath());
-            }
-        }
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this, dragEvent, AbstractSceneFileEditor::addNewModel);
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this, dragEvent, AbstractSceneFileEditor::applyMaterial);
     }
 
     /**
      * Handle drag over.
      */
     private void dragOver(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.isEmpty()) {
-            return;
-        }
-
-        int count = 0;
-
-        for (final File file : files) {
-
-            final String name = file.getName();
-
-            if (name.endsWith(FileExtensions.JME_OBJECT)) {
-                count++;
-            } else if (name.endsWith(FileExtensions.JME_MATERIAL)) {
-                count++;
-            }
-        }
-
-        if (count < 1) return;
-
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
+        UIUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
     }
 
     /**

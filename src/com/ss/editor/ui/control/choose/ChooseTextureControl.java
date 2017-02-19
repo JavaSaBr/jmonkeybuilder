@@ -1,9 +1,8 @@
-package com.ss.editor.ui.control.texture;
+package com.ss.editor.ui.control.choose;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static java.util.Objects.requireNonNull;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.Icons;
@@ -12,24 +11,15 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.editor.util.EditorUtil;
-
-import java.nio.file.Path;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -38,10 +28,13 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import java.nio.file.Path;
+import java.util.function.Predicate;
+
 /**
  * The control to choose textures.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class ChooseTextureControl extends HBox {
 
@@ -101,7 +94,23 @@ public class ChooseTextureControl extends HBox {
     public ChooseTextureControl() {
         setAlignment(Pos.CENTER_LEFT);
         createComponents();
+        setOnDragOver(this::dragOver);
+        setOnDragDropped(this::dragDropped);
         reload();
+    }
+
+    /**
+     * Handle dropped files to editor.
+     */
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
+        UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, ChooseTextureControl::setTextureFile);
+    }
+
+    /**
+     * Handle drag over.
+     */
+    private void dragOver(@NotNull final DragEvent dragEvent) {
+        UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     /**

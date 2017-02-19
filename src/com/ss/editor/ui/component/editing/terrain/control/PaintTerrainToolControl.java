@@ -1,8 +1,9 @@
-package com.ss.editor.ui.component.editing.terrain;
+package com.ss.editor.ui.component.editing.terrain.control;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.ss.editor.control.editing.EditingInput;
+import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import org.jetbrains.annotations.NotNull;
 
 /**
