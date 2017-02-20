@@ -2,11 +2,16 @@ package com.ss.editor.ui.component.editing.terrain;
 
 import static java.util.Objects.requireNonNull;
 import static rlib.util.array.ArrayFactory.toArray;
+import com.jme3.material.Material;
+import com.jme3.material.MaterialDef;
 import com.jme3.scene.Node;
+import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.impl.AbstractEditingComponent;
 import com.ss.editor.ui.component.editing.terrain.control.*;
+import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
+import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.collections.ObservableList;
@@ -30,6 +35,8 @@ import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
+import java.util.function.Function;
+
 /**
  * The implementation of a terrain editor.
  *
@@ -37,8 +44,43 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQuad> {
 
-    public static final double LABEL_PERCENT = 0.6;
-    public static final double FIELD_PERCENT = 0.4;
+    public static final double LABEL_PERCENT = 1D - AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
+    public static final double FIELD_PERCENT = AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
+
+    private static final Function<Integer, String> LAYER_TO_SCALE_NAME = layer -> {
+        return "DiffuseMap_" + layer + "_scale";
+    };
+
+    private static final Function<Integer, String> LAYER_TO_ALPHA_NAME = layer -> {
+
+        final int alphaIdx = layer / 4; // 4 = rgba = 4 textures
+
+        if (alphaIdx == 0) {
+            return "AlphaMap";
+        } else if (alphaIdx == 1) {
+            return "AlphaMap_1";
+        } else if (alphaIdx == 2) {
+            return "AlphaMap_2";
+        } else {
+            return null;
+        }
+    };
+
+    private static final Function<Integer, String> LAYER_TO_DIFFUSE_NAME = layer -> {
+        if (layer == 0) {
+            return "DiffuseMap";
+        } else {
+            return "DiffuseMap_" + layer;
+        }
+    };
+
+    private static final Function<Integer, String> LAYER_TO_NORMAL_NAME = layer -> {
+        if (layer == 0) {
+            return "NormalMap";
+        } else {
+            return "NormalMap_" + layer;
+        }
+    };
 
     /**
      * The list of all tool controls.
@@ -232,8 +274,11 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     @Nullable
     private CheckBox slopeControlLimited;
 
+    /**
+     * The settings of painting control.
+     */
     @Nullable
-    private VBox paintControlSettings;
+    private TextureLayerSettings textureLayerSettings;
 
     /**
      * The current tool control.
@@ -266,7 +311,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         buttonToSettings.put(getSlopeButton(), slopeControlSettings);
         buttonToSettings.put(getLevelButton(), levelControlSettings);
         buttonToSettings.put(getRoughButton(), roughControlSettings);
-        buttonToSettings.put(getPaintButton(), paintControlSettings);
+        buttonToSettings.put(getPaintButton(), textureLayerSettings);
 
         getLevelControlLevelField().setValue(1);
         getLevelControlUseMarker().setSelected(false);
@@ -476,7 +521,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         createSlopeControlSettings();
         createRoughControlSettings();
 
-        paintControlSettings = new VBox();
+        textureLayerSettings = new TextureLayerSettings(this);
 
         FXUtils.addClassTo(raiseLowerButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(raiseLowerButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
@@ -860,6 +905,14 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     /**
+     * @return the settings of painting control.
+     */
+    @NotNull
+    public TextureLayerSettings getTextureLayerSettings() {
+        return requireNonNull(textureLayerSettings);
+    }
+
+    /**
      * Switch editing mode.
      */
     private void switchMode(@NotNull final ActionEvent event) {
@@ -905,6 +958,22 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     @Override
     public void startEditing(@NotNull final Object object) {
         super.startEditing(object);
+
+        final TextureLayerSettings settings = getTextureLayerSettings();
+
+        final Terrain terrain = (Terrain) object;
+        final Material material = terrain.getMaterial();
+        final MaterialDef materialDef = material.getMaterialDef();
+
+        if (materialDef.getAssetName().equals("Common/MatDefs/Terrain/TerrainLighting.j3md")) {
+            settings.setLayerToScaleName(LAYER_TO_SCALE_NAME);
+            settings.setLayerToAlphaName(LAYER_TO_ALPHA_NAME);
+            settings.setLayerToDiffuseName(LAYER_TO_DIFFUSE_NAME);
+            settings.setLayerToNormalName(LAYER_TO_NORMAL_NAME);
+            settings.setMaxLevels(12);
+        }
+
+        settings.refresh();
     }
 
     @Override

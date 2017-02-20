@@ -885,27 +885,37 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Switch transformation mode.
      */
     private void updateTransformTool(@NotNull final TransformType transformType, @NotNull final Boolean newValue) {
-        if (newValue != Boolean.TRUE) return;
 
+        final MA editorAppState = getEditorAppState();
         final ToggleButton scaleToolButton = getScaleToolButton();
         final ToggleButton moveToolButton = getMoveToolButton();
         final ToggleButton rotationToolButton = getRotationToolButton();
 
-        final MA editorAppState = getEditorAppState();
+        if (newValue != Boolean.TRUE) {
+            if (editorAppState.getTransformType() == transformType) {
+                if (transformType == TransformType.MOVE_TOOL) {
+                    moveToolButton.setSelected(true);
+                } else if (transformType == TransformType.ROTATE_TOOL) {
+                    rotationToolButton.setSelected(true);
+                } else if (transformType == TransformType.SCALE_TOOL) {
+                    scaleToolButton.setSelected(true);
+                }
+            }
+            return;
+        }
+
         final ES editorState = getEditorState();
+        editorAppState.setTransformType(transformType);
 
         if (transformType == TransformType.MOVE_TOOL) {
             rotationToolButton.setSelected(false);
             scaleToolButton.setSelected(false);
-            editorAppState.setTransformType(transformType);
         } else if (transformType == TransformType.ROTATE_TOOL) {
             moveToolButton.setSelected(false);
             scaleToolButton.setSelected(false);
-            editorAppState.setTransformType(transformType);
         } else if (transformType == TransformType.SCALE_TOOL) {
             rotationToolButton.setSelected(false);
             moveToolButton.setSelected(false);
-            editorAppState.setTransformType(transformType);
         }
 
         if (editorState != null) {

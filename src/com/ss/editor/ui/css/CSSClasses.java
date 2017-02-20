@@ -33,6 +33,8 @@ public interface CSSClasses {
     String TRANSPARENT_LIST_VIEW = "transparent-list-view";
     String TRANSPARENT_LIST_CELL = "transparent-list-cell";
 
+    String LIST_CELL_WITHOUT_PADDING = "list-cell-without-padding";
+
     String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
 
     String TRANSPARENT_COMBO_BOX = "transparent-combo-box";

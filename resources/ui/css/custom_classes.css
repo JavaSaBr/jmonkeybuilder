@@ -185,6 +185,14 @@
     -fx-text-fill: -fx-font-color;
 }
 
+.list-cell-without-padding {
+    -fx-padding: 0;
+}
+
+.list-cell-without-padding:filled:selected {
+    -fx-padding: 0;
+}
+
 /** Toolbar Button */
 
 .toolbar-button,

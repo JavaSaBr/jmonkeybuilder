@@ -175,7 +175,7 @@ public class ChooseTextureControl extends HBox {
      * @return the label for the path to a texture.
      */
     @NotNull
-    private Label getTextureLabel() {
+    protected Label getTextureLabel() {
         return requireNonNull(textureLabel);
     }
 
@@ -205,7 +205,7 @@ public class ChooseTextureControl extends HBox {
     /**
      * @param textureFile the selected file.
      */
-    private void setTextureFile(@Nullable final Path textureFile) {
+    public void setTextureFile(@Nullable final Path textureFile) {
         this.textureFile = textureFile;
 
         reload();

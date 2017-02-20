@@ -219,7 +219,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * The current type of transformation.
      */
     @Nullable
-    private TransformType transformType;
+    private volatile TransformType transformType;
 
     /**
      * The current direction of transformation.
@@ -534,6 +534,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * @param transformType the current type of the transform.
      */
+    @FromAnyThread
     public void setTransformType(@Nullable final TransformType transformType) {
         this.transformType = transformType;
     }
@@ -550,7 +551,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the current type of transformation.
      */
     @Nullable
-    private TransformType getTransformType() {
+    @FromAnyThread
+    public TransformType getTransformType() {
         return transformType;
     }
 

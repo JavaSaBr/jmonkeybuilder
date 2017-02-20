@@ -131,32 +131,6 @@
     -fx-background-color: -fx-background-background;
 }
 
-#PostFilterEditorMaterialListContainer {
-    -fx-background-color: -fx-color-panel-200;
-    -fx-alignment: top-left;
-    -fx-min-width: 300;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#PostFilterEditorAddMaterialButton {
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 30;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#PostFilterEditorCellRemoveButton {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
 #EditorDialogBackground {
     -fx-alignment: top-center;
     -fx-background-color: -fx-background-dialogs;
@@ -622,15 +596,6 @@
     -fx-max-width: -fx-min-width;
 }
 
-#CreateSkyDialogButton {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
 #JmePreviewManagerImageView {
 }
 
@@ -886,4 +851,8 @@
 
 #EditingContainer {
     -fx-background-color: -fx-background-background;
+}
+
+#TerrainEditingTextureLayerSettings {
+    -fx-vgap: 2px;
 }
