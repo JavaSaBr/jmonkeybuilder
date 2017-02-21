@@ -171,4 +171,18 @@ public class EditingContainer extends ScrollPane {
         this.showed = showed;
     }
 
+    /**
+     * Notify about changed property.
+     */
+    @FXThread
+    public void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+
+        final VBox container = getContainer();
+        final ObservableList<Node> children = container.getChildren();
+        if (children.isEmpty()) return;
+
+        children.stream().map(node -> (EditingComponent) node)
+                .filter(editingComponent -> editingComponent.getEditedObject() == object)
+                .forEach(editingComponent -> editingComponent.notifyChangeProperty(object, propertyName));
+    }
 }

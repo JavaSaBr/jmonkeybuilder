@@ -69,4 +69,10 @@ public interface EditingComponent extends HasName {
     @FXThread
     default void notifyHided() {
     }
+
+    /**
+     * Notify about changed property.
+     */
+    @FXThread
+    void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);
 }

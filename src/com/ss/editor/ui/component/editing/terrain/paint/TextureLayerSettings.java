@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editing.terrain.paint;
 
+import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.TERRAIN_PARAM;
 import static java.util.Objects.requireNonNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
@@ -7,17 +8,19 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.texture.Texture;
-import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.NodeUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.image.ImageView;
@@ -26,6 +29,8 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+import rlib.util.array.Array;
+import rlib.util.array.ArrayFactory;
 
 import java.util.function.Function;
 
@@ -40,6 +45,12 @@ public class TextureLayerSettings extends VBox {
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final int CELL_HEIGHT = 102;
+
+    /**
+     * The list of cells.
+     */
+    @NotNull
+    private final Array<TextureLayerCell> cells;
 
     /**
      * The editing component.
@@ -78,12 +89,19 @@ public class TextureLayerSettings extends VBox {
     private ListView<TextureLayer> listView;
 
     /**
+     * The button to add a new layer.
+     */
+    @Nullable
+    private Button addButton;
+
+    /**
      * The max count of texture levels.
      */
     private int maxLevels;
 
     public TextureLayerSettings(@NotNull final TerrainEditingComponent editingComponent) {
         setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS);
+        this.cells = ArrayFactory.newArray(TextureLayerCell.class);
         this.editingComponent = editingComponent;
         createComponents();
     }
@@ -91,13 +109,13 @@ public class TextureLayerSettings extends VBox {
     private void createComponents() {
 
         this.listView = new ListView<>();
-        this.listView.setCellFactory(param -> new TextureLayerCell(widthProperty(), widthProperty()));
+        this.listView.setCellFactory(param -> newCell());
         this.listView.setEditable(false);
         this.listView.prefWidthProperty().bind(widthProperty());
 
         final MultipleSelectionModel<TextureLayer> selectionModel = listView.getSelectionModel();
 
-        final Button addButton = new Button();
+        addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_16));
         addButton.setOnAction(event -> addLayer());
 
@@ -115,15 +133,17 @@ public class TextureLayerSettings extends VBox {
         FXUtils.addClassTo(listView, CSSClasses.LIST_VIEW_WITHOUT_SCROLL);
     }
 
+    @NotNull
+    private ListCell<TextureLayer> newCell() {
+        final TextureLayerCell cell = new TextureLayerCell(widthProperty(), widthProperty());
+        cells.add(cell);
+        return cell;
+    }
+
     /**
      * Add a new layer.
      */
     private void addLayer() {
-
-        final ListView<TextureLayer> listView = getListView();
-        final MultipleSelectionModel<TextureLayer> selectionModel = listView.getSelectionModel();
-        final TextureLayer selectedItem = selectionModel.getSelectedItem();
-
         final int maxLevels = getMaxLevels() - 1;
 
         for (int i = 0; i < maxLevels; i++) {
@@ -131,34 +151,10 @@ public class TextureLayerSettings extends VBox {
             final float scale = getTextureScale(i);
 
             if (scale == -1F) {
-                final int targetIndex = i;
                 setTextureScale(1F, i);
-                EXECUTOR_MANAGER.addEditorThreadTask(() -> processAddLayer(selectedItem, targetIndex));
-                break;
+                return;
             }
         }
-    }
-
-    /**
-     * Process add a new layer after adding it  to a material in an editor thread.
-     *
-     * @param selectedItem the prev selected layer.
-     * @param targetIndex  the index of added layer.
-     */
-    private void processAddLayer(@Nullable final TextureLayer selectedItem, final int targetIndex) {
-        EXECUTOR_MANAGER.addFXTask(() -> {
-
-            final ListView<TextureLayer> listView = getListView();
-            final MultipleSelectionModel<TextureLayer> selectionModel = listView.getSelectionModel();
-
-            final ObservableList<TextureLayer> items = listView.getItems();
-            items.add(new TextureLayer(this, targetIndex));
-            items.sort(TextureLayer::compareTo);
-
-            selectionModel.select(selectedItem);
-
-            refreshHeight();
-        });
     }
 
     /**
@@ -170,13 +166,7 @@ public class TextureLayerSettings extends VBox {
         final MultipleSelectionModel<TextureLayer> selectionModel = listView.getSelectionModel();
         final TextureLayer textureLayer = selectionModel.getSelectedItem();
 
-        setDiffuse(null, textureLayer.getLayer());
-        setNormal(null, textureLayer.getLayer());
         setTextureScale(-1F, textureLayer.getLayer());
-
-        listView.getItems().remove(textureLayer);
-
-        refreshHeight();
     }
 
     /**
@@ -283,6 +273,19 @@ public class TextureLayerSettings extends VBox {
         }
 
         refreshHeight();
+        refreshAddButton();
+    }
+
+    /**
+     * Refresh the add button.
+     */
+    private void refreshAddButton() {
+
+        final ListView<TextureLayer> listView = getListView();
+        final ObservableList<TextureLayer> items = listView.getItems();
+
+        final Button addButton = getAddButton();
+        addButton.setDisable(items.size() >= getMaxLevels());
     }
 
     /**
@@ -348,18 +351,30 @@ public class TextureLayerSettings extends VBox {
      * @param texture the new texture.
      * @param layer   the layer.
      */
-    @EditorThread
+    @FromAnyThread
     public void setDiffuse(@Nullable final Texture texture, final int layer) {
 
         final Function<Integer, String> layerToDiffuseName = getLayerToDiffuseName();
         if (layerToDiffuseName == null) return;
 
+        final Terrain terrain = getTerrain();
+        final Material material = terrain.getMaterial();
+        final String paramName = layerToDiffuseName.apply(layer);
+        final MatParam matParam = material.getParam(paramName);
+        final Texture current = matParam == null ? null : (Texture) matParam.getValue();
+
         if (texture != null) {
             texture.setWrap(Texture.WrapMode.Repeat);
         }
 
-        final String paramName = layerToDiffuseName.apply(layer);
-        NodeUtils.visitGeometry(getTerrainNode(), geometry -> updateTexture(texture, paramName, geometry));
+        final ModelPropertyOperation<Node, Texture> operation =
+                new ModelPropertyOperation<>(getTerrainNode(), TERRAIN_PARAM, texture, current);
+
+        operation.setApplyHandler((node, newTexture) ->
+                NodeUtils.visitGeometry(node, geometry -> updateTexture(newTexture, paramName, geometry)));
+
+        final ModelChangeConsumer changeConsumer = editingComponent.getChangeConsumer();
+        changeConsumer.execute(operation);
     }
 
     private void updateTexture(@Nullable final Texture texture, @NotNull final String paramName,
@@ -406,18 +421,30 @@ public class TextureLayerSettings extends VBox {
      * @param texture the normal texture.
      * @param layer   the layer.
      */
-    @EditorThread
+    @FromAnyThread
     public void setNormal(@Nullable final Texture texture, final int layer) {
 
         final Function<Integer, String> layerToNormalName = getLayerToNormalName();
         if (layerToNormalName == null) return;
 
+        final Terrain terrain = getTerrain();
+        final Material material = terrain.getMaterial();
+        final String paramName = layerToNormalName.apply(layer);
+        final MatParam matParam = material.getParam(paramName);
+        final Texture current = matParam == null ? null : (Texture) matParam.getValue();
+
         if (texture != null) {
             texture.setWrap(Texture.WrapMode.Repeat);
         }
 
-        final String paramName = layerToNormalName.apply(layer);
-        NodeUtils.visitGeometry(getTerrainNode(), geometry -> updateTexture(texture, paramName, geometry));
+        final ModelPropertyOperation<Node, Texture> operation =
+                new ModelPropertyOperation<>(getTerrainNode(), TERRAIN_PARAM, texture, current);
+
+        operation.setApplyHandler((node, newTexture) ->
+                NodeUtils.visitGeometry(node, geometry -> updateTexture(newTexture, paramName, geometry)));
+
+        final ModelChangeConsumer changeConsumer = editingComponent.getChangeConsumer();
+        changeConsumer.execute(operation);
     }
 
     /**
@@ -444,23 +471,36 @@ public class TextureLayerSettings extends VBox {
      * @param scale the texture scale.
      * @param layer the layer.
      */
-    @EditorThread
+    @FromAnyThread
     public void setTextureScale(final float scale, final int layer) {
 
         final Function<Integer, String> layerToScaleName = getLayerToScaleName();
         if (layerToScaleName == null) return;
 
-        NodeUtils.visitGeometry(getTerrainNode(), geometry -> {
-            final Material material = geometry.getMaterial();
-            final String paramName = layerToScaleName.apply(layer);
-            final MatParam matParam = material.getParam(paramName);
-            if (matParam == null && scale == -1F) return;
-            if (scale == -1F) {
-                material.clearParam(matParam.getName());
-            } else {
-                material.setFloat(paramName, scale);
-            }
+        final Terrain terrain = getTerrain();
+        final Material material = terrain.getMaterial();
+        final String paramName = layerToScaleName.apply(layer);
+        final MatParam matParam = material.getParam(paramName);
+        final Float current = matParam == null ? null : (Float) matParam.getValue();
+
+        final ModelPropertyOperation<Node, Float> operation =
+                new ModelPropertyOperation<>(getTerrainNode(), TERRAIN_PARAM, scale, current);
+
+        operation.setApplyHandler((node, newScale) -> {
+            NodeUtils.visitGeometry(getTerrainNode(), geometry -> {
+                final Material geometryMaterial = geometry.getMaterial();
+                final MatParam param = geometryMaterial.getParam(paramName);
+                if (param == null && (newScale == null || newScale == -1F)) return;
+                if (newScale == null || newScale == -1F) {
+                    geometryMaterial.clearParam(paramName);
+                } else {
+                    geometryMaterial.setFloat(paramName, newScale);
+                }
+            });
         });
+
+        final ModelChangeConsumer changeConsumer = editingComponent.getChangeConsumer();
+        changeConsumer.execute(operation);
     }
 
     /**
@@ -500,5 +540,46 @@ public class TextureLayerSettings extends VBox {
      */
     private int getMaxLevels() {
         return maxLevels;
+    }
+
+    /**
+     * @return the list of cells.
+     */
+    @NotNull
+    private Array<TextureLayerCell> getCells() {
+        return cells;
+    }
+
+    /**
+     * @return the button to add a new layer.
+     */
+    @NotNull
+    private Button getAddButton() {
+        return requireNonNull(addButton);
+    }
+
+    /**
+     * Notify about changed property.
+     */
+    @FXThread
+    public void notifyChangeProperty() {
+
+        final ListView<TextureLayer> listView = getListView();
+        final ObservableList<TextureLayer> items = listView.getItems();
+
+        final int maxLevels = getMaxLevels() - 1;
+        int newCount = 0;
+
+        for (int i = 0; i < maxLevels; i++) {
+            final float scale = getTextureScale(i);
+            if (scale == -1F) continue;
+            newCount++;
+        }
+
+        if (newCount != items.size()) {
+            refresh();
+        } else {
+            getCells().forEach(TextureLayerCell::refresh);
+        }
     }
 }

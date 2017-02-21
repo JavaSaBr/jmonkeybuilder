@@ -612,13 +612,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object, @NotNull final String propertyName) {
+    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+                                     @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(object);
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyChanged(parent, object);
+
+        final EditingContainer editingContainer = getEditingContainer();
+        editingContainer.notifyChangeProperty(object, propertyName);
     }
 
     @Override

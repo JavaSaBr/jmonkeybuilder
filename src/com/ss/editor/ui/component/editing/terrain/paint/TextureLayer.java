@@ -6,7 +6,6 @@ import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.ExecutorManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,13 +19,10 @@ import java.nio.file.Path;
 public class TextureLayer implements Comparable<TextureLayer> {
 
     @NotNull
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * The reference to settings.
+     * The settings.
      */
     @NotNull
     private final TextureLayerSettings settings;
@@ -75,7 +71,7 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     @FromAnyThread
     public void setScale(final float scale) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> settings.setTextureScale(scale, getLayer()));
+        settings.setTextureScale(scale, getLayer());
     }
 
     /**
@@ -97,13 +93,11 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     @FromAnyThread
     public void setDiffuseFile(@Nullable final Path diffuseFile) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-            final AssetManager assetManager = EDITOR.getAssetManager();
-            final Path assetFile = diffuseFile == null ? null : getAssetFile(diffuseFile);
-            final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
-            final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
-            settings.setDiffuse(texture, getLayer());
-        });
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Path assetFile = diffuseFile == null ? null : getAssetFile(diffuseFile);
+        final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
+        final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
+        settings.setDiffuse(texture, getLayer());
     }
 
     @FromAnyThread
@@ -121,13 +115,11 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     @FromAnyThread
     public void setNormalFile(@Nullable final Path normalFile) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-            final AssetManager assetManager = EDITOR.getAssetManager();
-            final Path assetFile = normalFile == null ? null : getAssetFile(normalFile);
-            final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
-            final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
-            settings.setNormal(texture, getLayer());
-        });
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Path assetFile = normalFile == null ? null : getAssetFile(normalFile);
+        final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
+        final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
+        settings.setNormal(texture, getLayer());
     }
 
     @Override

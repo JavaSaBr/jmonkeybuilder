@@ -83,6 +83,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         scaleField = new FloatTextField();
         scaleField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         scaleField.setMinMax(0.0001F, Integer.MAX_VALUE);
+        scaleField.setScrollPower(3F);
         scaleField.addChangeListener((observable, oldValue, newValue) -> updateScale(newValue));
         scaleField.prefWidthProperty().bind(settingContainer.widthProperty().multiply(FIELD_PERCENT));
 
@@ -193,6 +194,18 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
             return;
         }
 
+        refresh();
+        setGraphic(getSettingContainer());
+    }
+
+    /**
+     * Refresh this cell.
+     */
+    protected void refresh() {
+
+        final TextureLayer item = getItem();
+        if (item == null) return;
+
         setIgnoreListeners(true);
         try {
 
@@ -211,7 +224,5 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         } finally {
             setIgnoreListeners(false);
         }
-
-        setGraphic(getSettingContainer());
     }
 }
