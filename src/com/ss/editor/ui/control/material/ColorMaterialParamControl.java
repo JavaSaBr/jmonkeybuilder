@@ -58,7 +58,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         final Button removeButton = new Button();
         removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(COLOR_MATERIAL_PARAM_CONTROL_REMOVE));
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
         removeButton.disableProperty().bind(colorPicker.valueProperty().isNull());
 

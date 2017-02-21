@@ -35,6 +35,8 @@ public interface CSSClasses {
 
     String LIST_CELL_WITHOUT_PADDING = "list-cell-without-padding";
 
+    String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
+
     String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
 
     String TRANSPARENT_COMBO_BOX = "transparent-combo-box";

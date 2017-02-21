@@ -6,10 +6,8 @@ import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import rlib.ui.control.input.FloatTextField;
@@ -46,7 +44,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
      * The layer field.
      */
     @NotNull
-    private final TextField layerField;
+    private final Label layerField;
 
     /**
      * The settings container.
@@ -61,21 +59,16 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
     public TextureLayerCell(@NotNull final ReadOnlyDoubleProperty prefWidth,
                             @NotNull final ReadOnlyDoubleProperty maxWidth) {
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
         settingContainer = new GridPane();
         settingContainer.setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS);
         settingContainer.prefWidthProperty().bind(prefWidth);
         settingContainer.maxWidthProperty().bind(maxWidth);
+        settingContainer.heightProperty().addListener((observable, oldValue, newValue) -> System.out.println(newValue));
 
-        final Label layerLabel = new Label("Layer:");
-        layerLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        layerLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
-
-        layerField = new TextField();
-        layerField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
-        layerField.setEditable(false);
-        layerField.prefWidthProperty().bind(settingContainer.widthProperty().multiply(FIELD_PERCENT));
+        layerField = new Label();
+        layerField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
+        layerField.prefWidthProperty().bind(settingContainer.widthProperty());
 
         diffuseTextureControl = new NamedChooseTextureControl("Diffuse");
         diffuseTextureControl.setChangeHandler(this::updateDiffuse);
@@ -93,8 +86,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         scaleField.addChangeListener((observable, oldValue, newValue) -> updateScale(newValue));
         scaleField.prefWidthProperty().bind(settingContainer.widthProperty().multiply(FIELD_PERCENT));
 
-        settingContainer.add(layerLabel, 0, 0);
-        settingContainer.add(layerField, 1, 0);
+        settingContainer.add(layerField, 0, 0, 2, 1);
         settingContainer.add(diffuseTextureControl, 0, 1, 2, 1);
         settingContainer.add(normalTextureControl, 0, 2, 2, 1);
         settingContainer.add(scaleLabel, 0, 3);
@@ -102,7 +94,6 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_LIST_CELL);
         FXUtils.addClassTo(this, CSSClasses.LIST_CELL_WITHOUT_PADDING);
-        FXUtils.addClassTo(layerLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(layerField, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(scaleLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(scaleField, CSSClasses.SPECIAL_FONT_13);
@@ -136,7 +127,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
      * @return the layer field.
      */
     @NotNull
-    private TextField getLayerField() {
+    private Label getLayerField() {
         return layerField;
     }
 
@@ -171,9 +162,14 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
     }
 
+    /**
+     * Update a normal texture.
+     */
     private void updateNormal() {
         if (isIgnoreListeners()) return;
-
+        final NamedChooseTextureControl normalTextureControl = getNormalTextureControl();
+        final Path textureFile = normalTextureControl.getTextureFile();
+        getItem().setNormalFile(textureFile);
     }
 
     /**
@@ -209,8 +205,8 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
             final NamedChooseTextureControl diffuseTextureControl = getDiffuseTextureControl();
             diffuseTextureControl.setTextureFile(item.getDiffuseFile());
 
-            final TextField layerField = getLayerField();
-            layerField.setText(String.valueOf(item.getLayer()));
+            final Label layerField = getLayerField();
+            layerField.setText("Layer #" + (item.getLayer() + 1));
 
         } finally {
             setIgnoreListeners(false);

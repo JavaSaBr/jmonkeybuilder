@@ -146,12 +146,12 @@ public class ChooseTextureControl extends HBox {
 
         final Button addButton = new Button();
         addButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();
         removeButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
         FXUtils.addToPane(textureLabel, this);

@@ -144,7 +144,8 @@
     -fx-rotate: 90;
 }
 
-/* Transparent ListView */
+/* transparent list view */
+
 .transparent-list-view {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
@@ -172,7 +173,23 @@
     -fx-text-fill: -fx-font-color;
 }
 
-/* Transparent ListCell */
+/* list view without scrolls */
+
+.list-view-without-scroll .scroll-bar:vertical,
+.list-view-without-scroll .scroll-bar:horizontal,
+.list-view-without-scroll .scroll-bar:vertical .increment-arrow,
+.list-view-without-scroll .scroll-bar:vertical .decrement-arrow,
+.list-view-without-scroll .scroll-bar:vertical .increment-button,
+.list-view-without-scroll .scroll-bar:vertical .decrement-button,
+.list-view-without-scroll .scroll-bar:horizontal .increment-arrow,
+.list-view-without-scroll .scroll-bar:horizontal .decrement-arrow,
+.list-view-without-scroll .scroll-bar:horizontal .increment-button,
+.list-view-without-scroll .scroll-bar:horizontal .decrement-button {
+    -fx-padding: 0;
+}
+
+/* transparent list cell */
+
 .transparent-list-cell {
     -fx-background: transparent;
     -fx-background-color: -fx-background;
@@ -184,6 +201,8 @@
     -fx-table-cell-border-color: transparent;
     -fx-text-fill: -fx-font-color;
 }
+
+/* list cell without any padding */
 
 .list-cell-without-padding {
     -fx-padding: 0;

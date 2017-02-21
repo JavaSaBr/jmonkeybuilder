@@ -76,11 +76,11 @@ public class FilterList extends VBox {
                 selectHandler.accept(newValue));
 
         final Button addButton = new Button();
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> addFilter());
 
         final Button removeButton = new Button();
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> removeFilter());
         removeButton.disableProperty().bind(selectionModel.selectedItemProperty().isNull());
 

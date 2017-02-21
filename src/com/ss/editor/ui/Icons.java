@@ -14,6 +14,9 @@ public interface Icons {
     @NotNull
     FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
+    Image REMOVE_12 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horizontal-line-remove-button.svg", 12, false);
+    Image ADD_12 = ICON_MANAGER.getImage("/ui/icons/actions/svg/add-plus-button.svg", 12, false);
+
     Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/save.png", 16);
     Image SCALE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scale.png", 16);
     Image ROTATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rotation.png", 16);
@@ -78,10 +81,10 @@ public interface Icons {
     Image TORUS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/circle.svg");
     Image POINTS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/because-mathematical-symbol.svg");
     Image IMPOSTOR_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/plus.svg");
+    Image REMOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horizontal-line-remove-button.svg", 16, false);
+    Image ADD_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/add-plus-button.svg", 16, false);
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
-    Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
-    Image ADD_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/add.png", 18);
     Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);
 
     Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png", 24);

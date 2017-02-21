@@ -154,5 +154,8 @@ public interface CSSIds {
     String EDITING_CONTAINER = "EditingContainer";
 
 
+    String TERRAIN_EDITING_CONTROL_SETTINGS = "TerrainEditingTextureControlSettings";
     String TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS = "TerrainEditingTextureLayerSettings";
+    String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS = "TerrainEditingTextureLayersSettings";
+    String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS = "TerrainEditingTextureLayersSettingsButtons";
 }

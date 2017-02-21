@@ -34,7 +34,7 @@ public class DeleteFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
         setOnAction(event -> processDelete());
-        setGraphic(new ImageView(Icons.REMOVE_18));
+        setGraphic(new ImageView(Icons.REMOVE_12));
     }
 
     /**

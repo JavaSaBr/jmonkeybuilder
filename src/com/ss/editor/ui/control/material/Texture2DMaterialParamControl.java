@@ -112,7 +112,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Button addButton = new Button();
         addButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         addButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD));
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         repeatButton = new CheckBox();
@@ -128,7 +128,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Button removeButton = new Button();
         removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE));
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
         FXUtils.addToPane(texturePreview, previewContainer);

@@ -838,7 +838,6 @@
     -fx-background-color: -fx-background-background;
 }
 
-
 #AbstractNodeTreeContainer {
     -fx-background-color: -fx-background-background;
     -fx-padding: 0 0 0 0;
@@ -855,4 +854,17 @@
 
 #TerrainEditingTextureLayerSettings {
     -fx-vgap: 2px;
+    -fx-padding: 2 0 2 0;
+}
+
+#TerrainEditingTextureControlSettings {
+    -fx-padding: 0 10 0 0;
+}
+
+#TerrainEditingTextureLayersSettings {
+    -fx-padding: 10 0 0 0;
+}
+
+#TerrainEditingTextureLayersSettingsButtons {
+    -fx-alignment: center;
 }

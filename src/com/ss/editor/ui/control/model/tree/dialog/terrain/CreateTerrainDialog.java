@@ -72,7 +72,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     private static final Integer DEFAULT_PATH_SIZE = 64;
 
     private static final int NUM_ALPHA_TEXTURES = 3;
-    private static final float DEFAULT_TEXTURE_SCALE = 16.0625f;
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(580, 365);
@@ -811,7 +810,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         baseTexture.setWrap(Texture.WrapMode.Repeat);
 
         terrainMaterial.setTexture("DiffuseMap", baseTexture);
-        terrainMaterial.setFloat("DiffuseMap_0_scale", DEFAULT_TEXTURE_SCALE);
+        terrainMaterial.setFloat("DiffuseMap_0_scale", 1);
         terrainMaterial.setFloat("Shininess", 0.01f);
         terrainMaterial.setBoolean("WardIso", true);
 

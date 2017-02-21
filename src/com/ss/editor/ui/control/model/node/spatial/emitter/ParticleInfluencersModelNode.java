@@ -93,7 +93,7 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
         final ParticleInfluencers element = getElement();
         final ParticleEmitterNode emitterNode = element.getEmitterNode();
 
-        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
+        final Menu createMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
         final ObservableList<MenuItem> createItems = createMenu.getItems();
 
         CONSTRUCTORS.forEach((type, constructor) -> {

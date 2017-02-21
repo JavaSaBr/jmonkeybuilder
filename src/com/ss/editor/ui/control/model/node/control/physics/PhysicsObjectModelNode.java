@@ -54,7 +54,7 @@ public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> 
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE, new ImageView(Icons.ADD_18));
+        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CHANGE_COLLISION_SHAPE, new ImageView(Icons.ADD_12));
         changeShapeMenu.getItems().addAll(new GenerateCollisionShapeAction(nodeTree, this),
                 new CreateBoxCollisionShapeAction(nodeTree, this),
                 new CreateCapsuleCollisionShapeAction(nodeTree, this),

@@ -17,11 +17,13 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class TextureLayer {
+public class TextureLayer implements Comparable<TextureLayer> {
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-    public static final Editor EDITOR = Editor.getInstance();
+
+    @NotNull
+    private static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The reference to settings.
@@ -37,6 +39,11 @@ public class TextureLayer {
     public TextureLayer(@NotNull final TextureLayerSettings settings, final int layer) {
         this.settings = settings;
         this.layer = layer;
+    }
+
+    @Override
+    public int compareTo(@NotNull final TextureLayer textureLayer) {
+        return layer - textureLayer.layer;
     }
 
     @Override
@@ -105,6 +112,22 @@ public class TextureLayer {
         final AssetKey assetKey = normal == null ? null : normal.getKey();
         if (normal == null || assetKey == null) return null;
         return getRealFile(assetKey.getName());
+    }
+
+    /**
+     * Set a new normal texture.
+     *
+     * @param normalFile the file to normal texture or null.
+     */
+    @FromAnyThread
+    public void setNormalFile(@Nullable final Path normalFile) {
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+            final AssetManager assetManager = EDITOR.getAssetManager();
+            final Path assetFile = normalFile == null ? null : getAssetFile(normalFile);
+            final String assetPath = assetFile == null ? null : toAssetPath(assetFile);
+            final Texture texture = assetPath == null ? null : assetManager.loadTexture(assetPath);
+            settings.setNormal(texture, getLayer());
+        });
     }
 
     @Override

@@ -78,7 +78,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
 
         final Button removeButton = new Button();
         removeButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
         final HBox buttonContainer = new HBox(addButton, removeButton);

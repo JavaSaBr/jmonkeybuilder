@@ -33,7 +33,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsum
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.REMOVE_18;
+        return Icons.REMOVE_12;
     }
 
     @NotNull

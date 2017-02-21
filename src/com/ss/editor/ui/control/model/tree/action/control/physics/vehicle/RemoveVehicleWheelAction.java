@@ -35,7 +35,7 @@ public class RemoveVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.REMOVE_18;
+        return Icons.REMOVE_12;
     }
 
     @Override

@@ -60,12 +60,12 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         if (menu == null) return null;
 
         final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE,
-                new ImageView(Icons.ADD_18));
+                new ImageView(Icons.ADD_12));
         createPrimitiveMenu.getItems()
                 .addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this),
                         new CreateQuadAction(nodeTree, this));
 
-        final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT, new ImageView(Icons.ADD_18));
+        final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT, new ImageView(Icons.ADD_12));
         addLightMenu.getItems()
                 .addAll(new CreateSpotLightAction(nodeTree, this), new CreatePointLightAction(nodeTree, this),
                         new CreateAmbientLightAction(nodeTree, this), new CreateDirectionLightAction(nodeTree, this));

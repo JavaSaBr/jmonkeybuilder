@@ -47,10 +47,10 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     public static final double LABEL_PERCENT = 1D - AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
     public static final double FIELD_PERCENT = AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
 
-    private static final Function<Integer, String> LAYER_TO_SCALE_NAME = layer -> {
-        return "DiffuseMap_" + layer + "_scale";
-    };
+    @NotNull
+    private static final Function<Integer, String> LAYER_TO_SCALE_NAME = layer -> "DiffuseMap_" + layer + "_scale";
 
+    @NotNull
     private static final Function<Integer, String> LAYER_TO_ALPHA_NAME = layer -> {
 
         final int alphaIdx = layer / 4; // 4 = rgba = 4 textures
@@ -66,6 +66,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         }
     };
 
+    @NotNull
     private static final Function<Integer, String> LAYER_TO_DIFFUSE_NAME = layer -> {
         if (layer == 0) {
             return "DiffuseMap";
@@ -74,6 +75,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         }
     };
 
+    @NotNull
     private static final Function<Integer, String> LAYER_TO_NORMAL_NAME = layer -> {
         if (layer == 0) {
             return "NormalMap";
@@ -278,7 +280,25 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      * The settings of painting control.
      */
     @Nullable
+    private GridPane paintControlSettings;
+
+    /**
+     * The settings of texture layers.
+     */
+    @Nullable
     private TextureLayerSettings textureLayerSettings;
+
+    /**
+     * The box to use tri-planar.
+     */
+    @Nullable
+    private CheckBox triPlanarCheckBox;
+
+    /**
+     * The shininess field.
+     */
+    @Nullable
+    private FloatTextField shininessField;
 
     /**
      * The current tool control.
@@ -297,8 +317,10 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         this.paintToolControl = new PaintTerrainToolControl(this);
         this.toolControls = ArrayFactory.newArray(TerrainToolControl.class);
         this.toggleButtons = ArrayFactory.newArray(ToggleButton.class);
-        this.toolControls.addAll(toArray(raiseLowerToolControl, smoothToolControl, roughToolControl, levelToolControl, slopeToolControl, paintToolControl));
-        this.toggleButtons.addAll(toArray(raiseLowerButton, smoothButton, roughButton, levelButton, slopeButton, paintButton));
+        this.toolControls.addAll(toArray(raiseLowerToolControl, smoothToolControl, roughToolControl,
+                levelToolControl, slopeToolControl, paintToolControl));
+        this.toggleButtons.addAll(toArray(raiseLowerButton, smoothButton, roughButton, levelButton,
+                slopeButton, paintButton));
 
         final ToggleButton raiseLowerButton = getRaiseLowerButton();
 
@@ -311,7 +333,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         buttonToSettings.put(getSlopeButton(), slopeControlSettings);
         buttonToSettings.put(getLevelButton(), levelControlSettings);
         buttonToSettings.put(getRoughButton(), roughControlSettings);
-        buttonToSettings.put(getPaintButton(), textureLayerSettings);
+        buttonToSettings.put(getPaintButton(), paintControlSettings);
 
         getLevelControlLevelField().setValue(1);
         getLevelControlUseMarker().setSelected(false);
@@ -505,12 +527,14 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         brushPowerField.addChangeListener((observable, oldValue, newValue) -> changeBrushPower(newValue));
 
         final GridPane brushSettingsContainer = new GridPane();
+        brushSettingsContainer.setId(CSSIds.TERRAIN_EDITING_CONTROL_SETTINGS);
         brushSettingsContainer.add(brushSizeLabel, 0, 0);
         brushSettingsContainer.add(brushSizeField, 1, 0);
         brushSettingsContainer.add(brushPowerLabel, 0, 1);
         brushSettingsContainer.add(brushPowerField, 1, 1);
 
         controlSettings = new VBox();
+        controlSettings.setId(CSSIds.TERRAIN_EDITING_CONTROL_SETTINGS);
         controlSettings.prefWidthProperty().bind(widthProperty());
 
         FXUtils.addToPane(buttonsContainer, this);
@@ -520,8 +544,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         createLevelControlSettings();
         createSlopeControlSettings();
         createRoughControlSettings();
-
-        textureLayerSettings = new TextureLayerSettings(this);
+        createPaintControlSettings();
 
         FXUtils.addClassTo(raiseLowerButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(raiseLowerButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
@@ -554,8 +577,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         slopeControlSmoothly = new CheckBox();
         slopeControlSmoothly.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         slopeControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeSlopeControlSmoothly(newValue));
+        slopeControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
 
         final Label limitedLabel = new Label("Limited:");
         limitedLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
@@ -564,8 +586,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         slopeControlLimited = new CheckBox();
         slopeControlLimited.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         slopeControlLimited.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlLimited.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeSlopeControlLimited(newValue));
+        slopeControlLimited.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlLimited(newValue));
 
         slopeControlSettings = new GridPane();
         slopeControlSettings.add(smoothlyLabel, 0, 0);
@@ -591,8 +612,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         levelControlSmoothly = new CheckBox();
         levelControlSmoothly.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         levelControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeLevelControlSmoothly(newValue));
+        levelControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
 
         final Label useMarkerLabel = new Label("Use marker:");
         useMarkerLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
@@ -601,8 +621,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         levelControlUseMarker = new CheckBox();
         levelControlUseMarker.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         levelControlUseMarker.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlUseMarker.selectedProperty().addListener((observable, oldValue, newValue) ->
-                changeLevelControlUseMarker(newValue));
+        levelControlUseMarker.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
 
         final Label levelLabel = new Label("Level:");
         levelLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
@@ -711,6 +730,45 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     /**
+     * Create settings of paint control.
+     */
+    private void createPaintControlSettings() {
+
+        final Label triPlanarLabelLabel = new Label("Tri-planar:");
+        triPlanarLabelLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        triPlanarLabelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+
+        triPlanarCheckBox = new CheckBox();
+        triPlanarCheckBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        triPlanarCheckBox.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
+        triPlanarCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
+
+        final Label shininessLabel = new Label("Shininess:");
+        shininessLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+
+        shininessField = new FloatTextField();
+        shininessField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        shininessField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
+        shininessField.setMinMax(0F, Integer.MAX_VALUE);
+        shininessField.addChangeListener((observable, oldValue, newValue) -> changePaintControlShininess(newValue));
+
+        textureLayerSettings = new TextureLayerSettings(this);
+
+        paintControlSettings = new GridPane();
+        paintControlSettings.add(triPlanarLabelLabel, 0, 0);
+        paintControlSettings.add(triPlanarCheckBox, 1, 0);
+        paintControlSettings.add(shininessLabel, 0, 1);
+        paintControlSettings.add(shininessField, 1, 1);
+        paintControlSettings.add(textureLayerSettings, 0, 2, 2, 1);
+
+        FXUtils.addClassTo(triPlanarLabelLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(triPlanarCheckBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(shininessLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(shininessField, CSSClasses.SPECIAL_FONT_13);
+    }
+
+    /**
      * @return the control to make some levels terrain.
      */
     @NotNull
@@ -735,72 +793,94 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     /**
+     * @return the control to paint textures.
+     */
+    @NotNull
+    private PaintTerrainToolControl getPaintToolControl() {
+        return paintToolControl;
+    }
+
+    /**
+     * Change the shininess value.
+     */
+    private void changePaintControlShininess(@NotNull final Float newValue) {
+
+    }
+
+    /**
+     * Change using tri-planar textures.
+     */
+    private void changePaintControlTriPlanar(@NotNull final Boolean newValue) {
+
+    }
+
+    /**
      * Change using smoothly editing.
      */
-    private void changeLevelControlSmoothly(final Boolean newValue) {
+    private void changeLevelControlSmoothly(@NotNull final Boolean newValue) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getLevelToolControl().setPrecision(!newValue));
     }
 
     /**
      * Change using marker for level control.
      */
-    private void changeLevelControlUseMarker(final Boolean newValue) {
+    private void changeLevelControlUseMarker(@NotNull final Boolean newValue) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getLevelToolControl().setUseMarker(newValue));
     }
 
     /**
      * Change a level of a level control.
      */
-    private void changeLevelControlLevel(final Float newLevel) {
+    private void changeLevelControlLevel(@NotNull final Float newLevel) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getLevelToolControl().setLevel(newLevel));
     }
 
     /**
      * Change using smoothly editing.
      */
-    private void changeSlopeControlSmoothly(final Boolean newValue) {
+    private void changeSlopeControlSmoothly(@NotNull final Boolean newValue) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getSlopeToolControl().setPrecision(!newValue));
     }
 
     /**
      * Change using limited editing.
      */
-    private void changeSlopeControlLimited(final Boolean newValue) {
+    private void changeSlopeControlLimited(@NotNull final Boolean newValue) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getSlopeToolControl().setLock(newValue));
     }
 
     /**
      * Change scale of a rough control.
      */
-    private void changeRoughControlScale(final Float newScale) {
+    private void changeRoughControlScale(@NotNull final Float newScale) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setScale(newScale));
     }
 
     /**
      * Change frequency of a rough control.
      */
-    private void changeRoughControlFrequency(final Float newFrequency) {
+    private void changeRoughControlFrequency(@NotNull final Float newFrequency) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setFrequency(newFrequency));
     }
 
     /**
      * Change lacunarity of a rough control.
      */
-    private void changeRoughControlLacunarity(final Float newLacunarity) {
+    private void changeRoughControlLacunarity(@NotNull final Float newLacunarity) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setLacunarity(newLacunarity));
     }
 
     /**
      * Change octaves of a rough control.
      */
-    private void changeRoughControlOctaves(final Float newOctaves) {
+    private void changeRoughControlOctaves(@NotNull final Float newOctaves) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setOctaves(newOctaves));
     }
 
     /**
      * Change roughness of a rough control.
      */
-    private void changeRoughControlRoughness(final Float newRoughness) {
+    private void changeRoughControlRoughness(@NotNull final Float newRoughness) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setRoughness(newRoughness));
     }
 
@@ -822,6 +902,22 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(power, TerrainToolControl::setBrushPower);
         });
+    }
+
+    /**
+     * @return the box to use tri-planar.
+     */
+    @NotNull
+    public CheckBox getTriPlanarCheckBox() {
+        return requireNonNull(triPlanarCheckBox);
+    }
+
+    /**
+     * @return the shininess field.
+     */
+    @NotNull
+    public FloatTextField getShininessField() {
+        return requireNonNull(shininessField);
     }
 
     /**
@@ -945,9 +1041,11 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
 
         if (!isShowed()) return;
 
-        final Node cursorNode = getCursorNode();
-        cursorNode.removeControl(TerrainToolControl.class);
-        cursorNode.addControl(toolControl);
+        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+            final Node cursorNode = getCursorNode();
+            cursorNode.removeControl(TerrainToolControl.class);
+            cursorNode.addControl(toolControl);
+        });
     }
 
     @Override

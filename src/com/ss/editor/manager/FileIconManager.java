@@ -180,20 +180,22 @@ public class FileIconManager {
     @NotNull
     @FXThread
     public Image getImage(@NotNull final String url, final int size) {
-        final Image image = imageCache.get(url, () -> new Image(url, size, size, false, true));
-        return Objects.requireNonNull(image);
+        return getImage(url, size, true);
     }
 
     /**
-     * Get an image by an URL without cache.
+     * Get an image by an URL.
      *
      * @param url  the url.
      * @param size the size.
+     * @param useCache true if need to use cache.
      * @return the image.
      */
     @NotNull
     @FXThread
-    public Image getImageWithoutCache(@NotNull final String url, final int size) {
-        return new Image(url, size, size, false, true);
+    public Image getImage(@NotNull final String url, final int size, final boolean useCache) {
+        if (!useCache) return new Image(url, size, size, false, true);
+        final Image image = imageCache.get(url, () -> new Image(url, size, size, false, true));
+        return Objects.requireNonNull(image);
     }
 }
