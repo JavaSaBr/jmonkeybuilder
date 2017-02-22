@@ -47,12 +47,9 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
         final ParticleEmitterNode emitterNode = findParent(geometry, spatial -> spatial instanceof ParticleEmitterNode);
         if (emitterNode == null) return;
 
-        final Node parentNode = geometry.getParent();
         final ParticleDataMeshInfo newInfo = prevInfo;
         prevInfo = emitterNode.getParticleMeshType();
         emitterNode.changeParticleMeshType(newInfo);
-
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(parentNode, geometry, geometry));
     }
 
     @Override

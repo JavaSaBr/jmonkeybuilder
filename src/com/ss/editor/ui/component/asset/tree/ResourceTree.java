@@ -151,6 +151,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private final boolean readOnly;
 
+    /**
+     * The flag of showing only folders.
+     */
+    private boolean onlyFolders;
+
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_FUNCTION, readOnly);
         this.extensionFilter = ArrayFactory.newArray(String.class, 0);
@@ -439,7 +444,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         fill(newRoot);
 
         final Array<String> extensionFilter = getExtensionFilter();
-        if (!extensionFilter.isEmpty()) cleanup(newRoot);
+        if (!extensionFilter.isEmpty() && !isOnlyFolders()) cleanup(newRoot);
 
         EXECUTOR_MANAGER.addFXTask(() -> {
             setRoot(newRoot);
@@ -521,11 +526,11 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         final ResourceElement element = treeItem.getValue();
         final Array<String> extensionFilter = getExtensionFilter();
-        if (!element.hasChildren(extensionFilter)) return;
+        if (!element.hasChildren(extensionFilter, isOnlyFolders())) return;
 
         final ObservableList<TreeItem<ResourceElement>> items = treeItem.getChildren();
 
-        final Array<ResourceElement> children = element.getChildren(extensionFilter);
+        final Array<ResourceElement> children = element.getChildren(extensionFilter, isOnlyFolders());
         children.sort(NAME_COMPARATOR);
         children.forEach(child -> items.add(new TreeItem<>(child)));
 
@@ -755,6 +760,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (treeItem == null) return;
 
         treeItem.setExpanded(true);
+    }
+
+    /**
+     * @param onlyFolders true if need to show only folders.
+     */
+    public void setOnlyFolders(final boolean onlyFolders) {
+        this.onlyFolders = onlyFolders;
+    }
+
+    /**
+     * @return true if need to show only folders.
+     */
+    private boolean isOnlyFolders() {
+        return onlyFolders;
     }
 
     /**

@@ -712,6 +712,10 @@
     -fx-effect: null;
 }
 
+.combo-box-base > .list-cell {
+    -fx-padding: 0 2 0 2;
+}
+
 .combo-box-base .arrow,
 .combo-box-base:hover .arrow {
     -fx-background-color: -fx-color-panel-50;

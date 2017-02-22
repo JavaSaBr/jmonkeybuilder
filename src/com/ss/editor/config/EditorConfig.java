@@ -2,7 +2,6 @@ package com.ss.editor.config;
 
 import static java.util.Objects.requireNonNull;
 import static rlib.util.Util.get;
-
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
@@ -12,13 +11,13 @@ import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
 
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
@@ -28,14 +27,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import javax.imageio.ImageIO;
-
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
 
 /**
  * The user configuration of this editor.
@@ -77,7 +70,7 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
     private static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
     private static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
-    private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion";
+    private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion" + Config.VERSION;
 
     @Nullable
     private static volatile EditorConfig instance;

@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
+import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
 
@@ -24,7 +25,7 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
  */
 public abstract class AbstractCreateParticleMeshAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public AbstractCreateParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    AbstractCreateParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -40,11 +41,12 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
         final AbstractNodeTree<?> nodeTree = getNodeTree();
 
         final ModelNode<?> modelNode = getNode();
-        final ParticleGeometry element = (ParticleGeometry) modelNode.getElement();
+        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) modelNode.getElement();
+        final ParticleGeometry geometry = emitterNode.getParticleGeometry();
         final ParticleDataMeshInfo meshInfo = createMeshInfo();
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, element));
+        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, geometry));
     }
 
     @NotNull

@@ -1,39 +1,25 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static java.util.Collections.singleton;
-
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-
-import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
-import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
-
 /**
- * The implementation of editor for editing material definition files.
+ * The implementation of editor to edit material definition files.
  *
  * @author JavaSaBr
  */
-public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
+public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
 
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -49,7 +35,8 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
 
     private static final String[] VALUE_TYPES = {
             "Texture2D", "Float", "Boolean", "Int", "Color", "Vector3", "TextureCubeMap", "Matrix4", "Vector4", "Vector2",
-            "VertexShader", "FragmentShader", "LightMode", "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
+            "VertexShader", "TessellationEvaluationShader ", "TessellationControlShader", "FragmentShader", "LightMode",
+            "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
             "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
             "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix",
             "IntArray", "FloatArray", "Vector2Array", "Vector3Array", "Vector4Array", "Matrix3",
@@ -59,7 +46,7 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
     private static final String[] VALUE_VALUES = {
             "true", "false", "Off", "On", "True", "False", "Disable", "SinglePass", "MultiPass",
             "SinglePassAndImageBased", "FixedPipeline", "StaticPass", "InPass", "PostPass", "World", "View",
-            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150"
+            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
@@ -140,106 +127,10 @@ public class MaterialDefinitionFileEditor extends AbstractFileEditor<VBox> {
         return spansBuilder.create();
     }
 
-    /**
-     * The original content of the opened file.
-     */
-    private String originalContent;
-
-    /**
-     * The code area.
-     */
-    private CodeArea codeArea;
-
     @NotNull
     @Override
-    protected VBox createRoot() {
-        return new VBox();
-    }
-
-    @Override
-    protected void createContent(@NotNull final VBox root) {
-
-        codeArea = new CodeArea();
-        codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
-        codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText())));
-        codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
-        codeArea.prefHeightProperty().bind(root.heightProperty());
-        codeArea.prefWidthProperty().bind(root.widthProperty());
-
-        FXUtils.addToPane(codeArea, root);
-        FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);
-    }
-
-    /**
-     * Обновление состояния измененности.
-     */
-    private void updateDirty(final String newContent) {
-        setDirty(!getOriginalContent().equals(newContent));
-    }
-
-    @Override
-    protected boolean needToolbar() {
-        return true;
-    }
-
-    @Override
-    protected void createToolbar(@NotNull final HBox container) {
-        super.createToolbar(container);
-        FXUtils.addToPane(createSaveAction(), container);
-    }
-
-    /**
-     * @return the code area.
-     */
-    private CodeArea getCodeArea() {
-        return codeArea;
-    }
-
-    @Override
-    public void openFile(@NotNull final Path file) {
-        super.openFile(file);
-
-        setOriginalContent(FileUtils.read(file));
-
-        final CodeArea codeArea = getCodeArea();
-        codeArea.appendText(getOriginalContent());
-
-        final UndoManager undoManager = codeArea.getUndoManager();
-        undoManager.forgetHistory();
-
-        setOriginalContent(codeArea.getText());
-        updateDirty(getOriginalContent());
-    }
-
-    /**
-     * @return the original content of the opened file.
-     */
-    public String getOriginalContent() {
-        return originalContent;
-    }
-
-    /**
-     * @param originalContent the original content of the opened file.
-     */
-    public void setOriginalContent(final String originalContent) {
-        this.originalContent = originalContent;
-    }
-
-    @Override
-    public void doSave() {
-        super.doSave();
-
-        final CodeArea codeArea = getCodeArea();
-        final String newContent = codeArea.getText();
-
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
-            out.print(newContent);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
-        }
-
-        setOriginalContent(newContent);
-        updateDirty(newContent);
+    protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
+        return computeHighlighting(text);
     }
 
     @NotNull

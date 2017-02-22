@@ -1,10 +1,7 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.getRealFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtil.*;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
@@ -19,24 +16,9 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.function.Predicate;
-
+import com.ss.editor.ui.util.UIUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,11 +28,22 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link ModelPropertyControl} for editing the {@link AudioData}.
@@ -63,14 +56,14 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
-    public static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
-    public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
+    private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
+    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     protected static final Editor EDITOR = Editor.getInstance();
 
-    protected static final Array<String> AUDIO_EXTENSIONS = ArrayFactory.newArray(String.class);
+    private static final Array<String> AUDIO_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
         AUDIO_EXTENSIONS.add(FileExtensions.AUDIO_MP3);
@@ -187,13 +180,7 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
      * Show dialog for choosing another audio key.
      */
     protected void processChange() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addAudioData);
-        dialog.setExtensionFilter(AUDIO_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, ACTION_TESTER);
     }
 
     private void addAudioData(@NotNull final Path file) {

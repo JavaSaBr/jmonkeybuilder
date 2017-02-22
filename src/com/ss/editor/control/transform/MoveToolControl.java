@@ -21,17 +21,13 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
-import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
-import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.LocalObjects;
 
 import org.jetbrains.annotations.NotNull;
 
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
-
-import java.util.Objects;
 
 /**
  * The implementation of the moving control.
@@ -274,8 +270,8 @@ public class MoveToolControl extends AbstractControl implements TransformControl
                                   @NotNull final Transform selectedCenter) {
 
         final LocalObjects local = LocalObjects.get();
-        final Vector3f temp = local.getNextVector();
-        final Vector3f mult = local.getNextVector();
+        final Vector3f temp = local.nextVector();
+        final Vector3f mult = local.nextVector();
         final Vector3f currentLocation = selectedCenter.getTranslation();
         final Quaternion currentRotation = selectedCenter.getRotation();
 

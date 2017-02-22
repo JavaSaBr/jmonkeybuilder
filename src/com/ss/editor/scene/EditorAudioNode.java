@@ -124,7 +124,7 @@ public class EditorAudioNode extends Node {
         final Node editedNode = getEditedNode();
         final Camera camera = EDITOR.getCamera();
         final LocalObjects local = LocalObjects.get();
-        final Vector3f positionOnCamera = local.getNextVector();
+        final Vector3f positionOnCamera = local.nextVector();
         positionOnCamera.set(editedNode.getWorldTranslation()).subtractLocal(camera.getLocation());
         positionOnCamera.normalizeLocal();
         positionOnCamera.multLocal(camera.getFrustumNear() + 0.4f);

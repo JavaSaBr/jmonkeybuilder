@@ -41,10 +41,6 @@ public interface CSSIds {
 
     String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
 
-    String POST_FILTER_EDITOR_MATERIAL_FILTER_CONTAINER = "PostFilterEditorMaterialListContainer";
-    String POST_FILTER_EDITOR_ADD_MATERIAL_BUTTON = "PostFilterEditorAddMaterialButton";
-    String POST_FILTER_EDITOR_CELL_REMOVE_BUTTON = "PostFilterEditorCellRemoveButton";
-
     String EDITOR_DIALOG_BACKGROUND = "EditorDialogBackground";
     String EDITOR_DIALOG_HEADER = "EditorDialogHeader";
     String EDITOR_DIALOG_HEADER_BUTTON_CLOSE = "EditorDialogHeaderButtonClose";
@@ -53,6 +49,7 @@ public interface CSSIds {
     String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
     String EDITOR_DIALOG_SHORT_LABEL = "EditorDialogShortLabel";
     String EDITOR_DIALOG_DYNAMIC_LABEL = "EditorDialogDynamicLabel";
+    String EDITOR_DIALOG_FIELD = "EditorDialogField";
 
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
     String ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER = "AssetEditorDialogResourcesContainer";
@@ -102,13 +99,16 @@ public interface CSSIds {
     String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
     String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
 
+    String CHOOSE_RESOURCE_CONTROL_BUTTON = "ChooseResourceControlButton";
+
     String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "ChooseTextureControlTextureLabel";
     String CHOOSE_TEXTURE_CONTROL_PREVIEW = "ChooseTextureControlPreview";
+
+    String CHOOSE_FOLDER_CONTROL_FOLDER_LABEL = "ChooseFolderControlFolderLabel";
 
     String CREATE_SKY_DIALOG_LABEL = "CreateSkyDialogLabel";
     String CREATE_SKY_DIALOG_COMBO_BOX = "CreateSkyDialogComboBox";
     String CREATE_SKY_DIALOG_SPINNER = "CreateSkyDialogSpinner";
-    String CREATE_SKY_DIALOG_BUTTON = "CreateSkyDialogButton";
 
     String AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER = "AudioViewerEditorButtonContainer";
     String AUDIO_VIEWER_EDITOR_BUTTON = "AudioViewerEditorButton";
@@ -129,7 +129,6 @@ public interface CSSIds {
 
     String ABSTRACT_PARAM_CONTROL_CONTAINER = "AbstractParamControlContainer";
     String ABSTRACT_PARAM_CONTROL_SPLIT_LINE = "AbstractParamControlSplitLine";
-
     String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "AbstractParamControlParamNameSingleRow";
     String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "AbstractParamControlParamName";
     String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "AbstractParamControlCheckbox";
@@ -152,4 +151,11 @@ public interface CSSIds {
     String ABSTRACT_NODE_TREE_CONTAINER = "AbstractNodeTreeContainer";
     String ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER = "AbstractNodeTreeTransparentContainer";
 
+    String EDITING_CONTAINER = "EditingContainer";
+
+
+    String TERRAIN_EDITING_CONTROL_SETTINGS = "TerrainEditingTextureControlSettings";
+    String TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS = "TerrainEditingTextureLayerSettings";
+    String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS = "TerrainEditingTextureLayersSettings";
+    String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS = "TerrainEditingTextureLayersSettingsButtons";
 }

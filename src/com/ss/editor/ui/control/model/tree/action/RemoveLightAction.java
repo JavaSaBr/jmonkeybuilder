@@ -30,7 +30,7 @@ public class RemoveLightAction extends AbstractNodeAction<ModelChangeConsumer> {
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.REMOVE_18;
+        return Icons.REMOVE_12;
     }
 
     @NotNull

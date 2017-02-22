@@ -1,14 +1,9 @@
 package com.ss.editor.ui.control.material;
 
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE;
-import static com.ss.editor.Messages.TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT;
+import static com.ss.editor.Messages.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.MatParamTexture;
@@ -18,7 +13,6 @@ import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
@@ -28,35 +22,24 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.nio.file.Path;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link MaterialParamControl} for editing textures.
@@ -80,7 +63,6 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -108,7 +90,6 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         super(changeHandler, material, parameterName);
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
-        setOnDragExited(this::dragExited);
     }
 
     @Override
@@ -131,7 +112,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Button addButton = new Button();
         addButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         addButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD));
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         repeatButton = new CheckBox();
@@ -147,7 +128,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Button removeButton = new Button();
         removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE));
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
         FXUtils.addToPane(texturePreview, previewContainer);
@@ -166,58 +147,17 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     }
 
     /**
-     * Handle grad exiting.
-     */
-    private void dragExited(@NotNull final DragEvent dragEvent) {
-
-    }
-
-    /**
      * Handle dropped files to editor.
      */
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName());
-
-        if (!TEXTURE_EXTENSIONS.contains(extension)) {
-            return;
-        }
-
-        addTexture(file.toPath());
+        UIUtils.handleDroppedFile(dragEvent, TEXTURE_EXTENSIONS, this, Texture2DMaterialParamControl::addTexture);
     }
 
     /**
      * Handle drag over.
      */
     private void dragOver(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName());
-
-        if (!TEXTURE_EXTENSIONS.contains(extension)) {
-            return;
-        }
-
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
+        UIUtils.acceptIfHasFile(dragEvent, TEXTURE_EXTENSIONS);
     }
 
     @Override
@@ -229,7 +169,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      * @return the checkbox for editing repeat property.
      */
     @NotNull
-    public ImageChannelPreview getTextureTooltip() {
+    private ImageChannelPreview getTextureTooltip() {
         return textureTooltip;
     }
 
@@ -289,13 +229,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      * The process of adding a new texture.
      */
     private void processAdd() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addTexture);
-        dialog.setExtensionFilter(TEXTURE_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::addTexture, TEXTURE_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
@@ -375,7 +309,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * @return the preview of the texture.
      */
-    public ImageView getTexturePreview() {
+    private ImageView getTexturePreview() {
         return texturePreview;
     }
 

@@ -53,10 +53,13 @@ import rlib.util.array.ArrayFactory;
  */
 public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditorAppState, ModelFileEditorState> {
 
+    @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
+    @NotNull
     private static final Insets LIGHT_BUTTON_OFFSET = new Insets(0, 4, 0, 4);
 
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -66,6 +69,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         DESCRIPTION.addExtension(FileExtensions.JME_OBJECT);
     }
 
+    @NotNull
     private static final Array<String> FAST_SKY_LIST = ArrayFactory.newArray(String.class);
 
     static {
@@ -109,6 +113,14 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         return requireNonNull(fastSkyComboBox);
     }
 
+    /**
+     * @return the light toggle.
+     */
+    @NotNull
+    private ToggleButton getLightButton() {
+        return requireNonNull(lightButton);
+    }
+
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
@@ -147,7 +159,12 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     protected void loadState() {
         super.loadState();
 
+        final ModelFileEditorState editorState = requireNonNull(getEditorState());
+
+        final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
         fastSkyComboBox.getSelectionModel().select(editorState.getSkyType());
+
+        final ToggleButton lightButton = getLightButton();
         lightButton.setSelected(editorState.isEnableLight());
     }
 
@@ -241,6 +258,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         editorAppState.changeFastSky(newFastSky);
 
+        final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
         final SingleSelectionModel<String> selectionModel = fastSkyComboBox.getSelectionModel();
         final int selectedIndex = selectionModel.getSelectedIndex();
 

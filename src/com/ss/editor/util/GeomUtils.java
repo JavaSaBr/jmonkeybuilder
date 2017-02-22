@@ -1,11 +1,17 @@
 package com.ss.editor.util;
 
+import com.jme3.collision.CollisionResult;
+import com.jme3.collision.CollisionResults;
+import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-
+import com.ss.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -172,5 +178,104 @@ public class GeomUtils {
         }
 
         return true;
+    }
+
+    /**
+     * Get a context point on spatial from cursor position.
+     *
+     * @param spatial the spatial.
+     * @return the contact point or null.
+     */
+    @Nullable
+    public static Vector3f getContactPointFromCursor(@NotNull final Spatial spatial) {
+
+        final Editor editor = Editor.getInstance();
+        final InputManager inputManager = editor.getInputManager();
+        final Vector2f cursor = inputManager.getCursorPosition();
+
+        return getContactPointFromScreenPos(spatial, cursor.getX(), cursor.getY());
+    }
+
+    /**
+     * Get a context point on spatial from screen position.
+     *
+     * @param spatial the spatial.
+     * @param screenX the screen X coord.
+     * @param screenY the screen Y coord.
+     * @return the contact point or null.
+     */
+    @Nullable
+    public static Vector3f getContactPointFromScreenPos(@NotNull final Spatial spatial, final float screenX,
+                                                        final float screenY) {
+        final CollisionResult collision = getCollisionFromScreenPos(spatial, screenX, screenY);
+        return collision == null ? null : collision.getContactPoint();
+    }
+
+    /**
+     * Get a geometry on spatial from cursor position.
+     *
+     * @param spatial the spatial.
+     * @return the geometry or null.
+     */
+    @Nullable
+    public static Geometry getGeometryFromCursor(@NotNull final Spatial spatial) {
+
+        final Editor editor = Editor.getInstance();
+        final InputManager inputManager = editor.getInputManager();
+        final Vector2f cursor = inputManager.getCursorPosition();
+
+        return getGeometryFromScreenPos(spatial, cursor.getX(), cursor.getY());
+    }
+
+    /**
+     * Get a geometry on spatial from screen position.
+     *
+     * @param spatial the spatial.
+     * @param screenX the screen X coord.
+     * @param screenY the screen Y coord.
+     * @return the geometry or null.
+     */
+    @Nullable
+    public static Geometry getGeometryFromScreenPos(@NotNull final Spatial spatial, final float screenX,
+                                                    final float screenY) {
+        final CollisionResult collision = getCollisionFromScreenPos(spatial, screenX, screenY);
+        return collision == null ? null : collision.getGeometry();
+    }
+
+    /**
+     * Get a collision on spatial from screen position.
+     *
+     * @param spatial the spatial.
+     * @param screenX the screen X coord.
+     * @param screenY the screen Y coord.
+     * @return the collision or null.
+     */
+    @Nullable
+    public static CollisionResult getCollisionFromScreenPos(@NotNull final Spatial spatial, final float screenX,
+                                                            final float screenY) {
+
+        final Editor editor = Editor.getInstance();
+        final Camera camera = editor.getCamera();
+
+        final Vector2f cursor = new Vector2f(screenX, screenY);
+        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
+        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f)
+                .subtractLocal(click3d)
+                .normalizeLocal();
+
+        final Ray ray = new Ray();
+        ray.setOrigin(click3d);
+        ray.setDirection(dir);
+
+        final CollisionResults results = new CollisionResults();
+
+        spatial.updateModelBound();
+        spatial.collideWith(ray, results);
+
+        if (results.size() < 1) {
+            return null;
+        }
+
+        return results.getClosestCollision();
     }
 }

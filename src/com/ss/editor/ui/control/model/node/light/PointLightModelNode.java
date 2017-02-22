@@ -24,7 +24,7 @@ public class PointLightModelNode extends LightModelNode<PointLight> {
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.POINT_16;
+        return Icons.POINT_LIGHT_16;
     }
 
     @NotNull

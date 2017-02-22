@@ -14,24 +14,27 @@ public interface Icons {
     @NotNull
     FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
+    Image REMOVE_12 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horizontal-line-remove-button.svg", 12, false);
+    Image ADD_12 = ICON_MANAGER.getImage("/ui/icons/actions/svg/add-plus-button.svg", 12, false);
+
     Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/save.png", 16);
     Image SCALE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scale.png", 16);
     Image ROTATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rotation.png", 16);
-    Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cube.png");
+    Image CUBE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/hollow-cube.svg");
     Image MOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/move.png", 16);
-    Image LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/light.png", 16);
+    Image LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/idea.svg");
     Image INFLUENCER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/influencer.png");
-    Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sphere.png");
+    Image SPHERE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/planet-sphere.svg");
     Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
     Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/node.png");
     Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particles.png");
     Image PARTICLE_GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particle-geometry.png");
-    Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/geometry.png");
-    Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/mesh.png");
+    Image GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/cube-divisions.svg");
+    Image MESH_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/grid.svg");
     Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/edit.png");
     Image AMBIENT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/ambient.png");
     Image LAMP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/lamp.png");
-    Image POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
+    Image POINT_LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
     Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
     Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/play.png");
     Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/stop.png");
@@ -39,7 +42,7 @@ public interface Icons {
     Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim-channel.png");
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
     Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/bone.png");
-    Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/audio.png");
+    Image AUDIO_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/audio-volume.svg");
     Image SETTINGS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/settings.png");
     Image PASTE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/paste.png");
     Image VIEW_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/view.png");
@@ -51,7 +54,7 @@ public interface Icons {
     Image GENERATE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/generate_16.png");
     Image SCENE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scene.png");
     Image LAYERS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/layers.png");
-    Image OPEN_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/open-file.png");
+    Image OPEN_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/open-folder-with-document.svg");
     Image BACKGROUND_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/background.png");
     Image EMITTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/emitter.png");
     Image SKY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sky.png");
@@ -68,23 +71,30 @@ public interface Icons {
     Image DOLL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/doll.png");
     Image CAPSULE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/capsule.png");
     Image CONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cone.png");
-    Image CYLINDER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cylinder.png");
-    Image TERRAIN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/terrain.png");
+    Image CYLINDER_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/cylinder.svg");
+    Image TERRAIN_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/terrain.svg");
     Image WHEEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/wheel.svg");
+    Image TRIANGLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/triangle.svg");
+    Image DOME_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/reichstag-dome.svg");
+    Image QUAD_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/basic-square.svg");
+    Image RHOMB_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/rhombus.svg");
+    Image TORUS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/circle.svg");
+    Image POINTS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/because-mathematical-symbol.svg");
+    Image IMPOSTOR_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/plus.svg");
+    Image REMOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horizontal-line-remove-button.svg", 16, false);
+    Image ADD_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/add-plus-button.svg", 16, false);
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
-    Image REMOVE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/remove.png", 18);
-    Image ADD_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/add.png", 18);
     Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);
 
     Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png", 24);
     Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png", 24);
-    Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/light.png", 24);
+    Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/idea.svg", 24);
     Image ROTATION_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/rotation.png", 24);
     Image MOVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/move.png", 24);
     Image SCALE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/scale.png", 24);
-    Image CUBE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/cube.png", 24);
-    Image SPHERE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/sphere.png", 24);
+    Image CUBE_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/hollow-cube.svg", 24);
+    Image SPHERE_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/planet-sphere.svg", 24);
     Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png", 24);
     Image ADD_CIRCLE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add_circle.png", 24);
     Image IMAGE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/image.png", 24);
@@ -92,6 +102,13 @@ public interface Icons {
     Image EDIT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/edit.png", 24);
     Image FROM_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/from_fullscreen.png", 24);
     Image TO_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/to_fullscreen.png", 24);
+
+    Image TERRAIN_LEVEL_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/level_terrain.svg", 32);
+    Image TERRAIN_PAINT_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/paint_terrain.svg", 32);
+    Image TERRAIN_ROUGH_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/rough_terrain.svg", 32);
+    Image TERRAIN_SLOPE_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/slope_terrain.svg", 32);
+    Image TERRAIN_SMOOTH_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/smooth_terrain.svg", 32);
+    Image TERRAIN_UP_32 = ICON_MANAGER.getImage("/ui/icons/actions/svg/raise_terrain.svg", 32);
 
     Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/play.png", 128);
     Image PAUSE_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/pause.png", 128);

@@ -36,7 +36,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.ADD_18;
+        return Icons.ADD_12;
     }
 
     @Override

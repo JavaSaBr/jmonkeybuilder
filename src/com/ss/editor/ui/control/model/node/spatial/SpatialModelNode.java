@@ -49,7 +49,7 @@ import rlib.util.array.ArrayFactory;
  */
 public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
-    SpatialModelNode(@NotNull final T element, final long objectId) {
+    protected SpatialModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
@@ -84,8 +84,8 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         final T element = getElement();
         final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
 
-        final Menu menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_18));
-        final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_18));
+        final Menu menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
+        final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_12));
 
         final ObservableList<MenuItem> items = createControlsMenu.getItems();
         items.add(new CreateCustomControlAction(nodeTree, this));

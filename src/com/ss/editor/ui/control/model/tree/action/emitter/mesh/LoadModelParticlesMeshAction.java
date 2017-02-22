@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.tree.action.emitter.mesh;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
@@ -10,6 +9,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
@@ -17,23 +17,21 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeParticleMeshOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.function.Predicate;
-
+import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;
 import tonegod.emitter.particle.ParticleDataTemplateMesh;
+
+import java.nio.file.Path;
+import java.util.function.Predicate;
 
 /**
  * The action for switching the emitter shape of the {@link ParticleEmitterNode} to {@link ParticleDataTemplateMesh}.
@@ -56,6 +54,12 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         super(nodeTree, node);
     }
 
+    @Nullable
+    @Override
+    protected Image getIcon() {
+        return Icons.OPEN_FILE_16;
+    }
+
     @NotNull
     @Override
     protected String getName() {
@@ -64,11 +68,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
 
     @Override
     protected void process() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::processOpen);
-        dialog.setExtensionFilter(MODEL_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
@@ -94,9 +94,10 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         }
 
         final ModelNode<?> modelNode = getNode();
-        final ParticleGeometry element = (ParticleGeometry) modelNode.getElement();
+        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) modelNode.getElement();
+        final ParticleGeometry particleGeometry = emitterNode.getParticleGeometry();
         final ParticleDataMeshInfo meshInfo = new ParticleDataMeshInfo(ParticleDataTemplateMesh.class, geometry.getMesh());
 
-        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, element));
+        changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, particleGeometry));
     }
 }

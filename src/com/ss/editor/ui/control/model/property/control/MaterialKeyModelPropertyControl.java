@@ -1,31 +1,24 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.getRealFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-
+import static com.ss.editor.util.EditorUtil.*;
 import com.jme3.asset.MaterialKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
-
+import com.ss.editor.ui.util.UIUtils;
+import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.util.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.function.Predicate;
-
-import javafx.scene.control.Label;
-import rlib.util.StringUtils;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link MaterialKey}.
@@ -45,13 +38,7 @@ public class MaterialKeyModelPropertyControl<T extends Spatial> extends Material
 
     @Override
     protected void processChange() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
-        final AssetEditorDialog dialog = new FileAssetEditorDialog(this::addMaterial);
-        dialog.setExtensionFilter(MATERIAL_EXTENSIONS);
-        dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        UIUtils.openAssetDialog(this::addMaterial, MATERIAL_EXTENSIONS, ACTION_TESTER);
     }
 
     @Override

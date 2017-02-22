@@ -6,19 +6,14 @@ import com.jme3.util.clone.JmeCloneable;
 import com.ss.extension.scene.SceneNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.util.HasName;
 
 /**
  * The interface to implement a scene app state.
  *
  * @author JavaSaBr
  */
-public interface SceneAppState extends AppState, Savable, Cloneable, JmeCloneable {
-
-    /**
-     * @return the name of this scene app state.
-     */
-    @NotNull
-    String getName();
+public interface SceneAppState extends AppState, Savable, HasName, Cloneable, JmeCloneable {
 
     /**
      * Set a scene node which is owner of this app state.

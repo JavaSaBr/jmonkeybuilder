@@ -33,7 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 
 import java.awt.*;
-import java.util.Objects;
 
 /**
  * The implementation of a dialog for generating lod levels.
@@ -181,11 +180,11 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         addRemoveButtonsContainer.maxWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
 
         final Button addButton = new Button();
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
         removeButton.disableProperty().bind(levelsList.getSelectionModel().selectedItemProperty().isNull());
 

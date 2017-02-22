@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.jme3.audio.AudioSource.Status.Playing;
-
+import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
@@ -17,12 +17,6 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.Objects;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -30,10 +24,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 
+import java.nio.file.Path;
+
 /**
- * The implementation of the {@link Editor} for viewing an audio.
+ * The implementation of the {@link Editor} to view audio files.
  *
  * @author JavaSaBr
  */
@@ -59,39 +57,46 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * The play button.
      */
+    @Nullable
     private Button playButton;
 
     /**
      * The stop button.
      */
+    @Nullable
     private Button stopButton;
 
     /**
      * The duration field.
      */
+    @Nullable
     private TextField durationField;
 
     /**
      * The bits per sample field.
      */
+    @Nullable
     private TextField bitsPerSampleField;
 
     /**
      * The channels field.
      */
+    @Nullable
     private TextField channelsField;
 
     /**
      * The data type field.
      */
+    @Nullable
     private TextField dataTypeField;
 
     /**
      * The sample rate field.
      */
+    @Nullable
     private TextField sampleRateField;
 
-    public AudioViewerEditor() {
+    private AudioViewerEditor() {
         this.editorAppState = new AudioViewerAppState(this);
         addEditorState(editorAppState);
     }
@@ -208,7 +213,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = Objects.requireNonNull(EditorUtil.getAssetFile(file));
+        final Path assetFile = requireNonNull(EditorUtil.getAssetFile(file));
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AudioKey audioKey = new AudioKey(assetPath);
@@ -242,7 +247,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     @FromAnyThread
-    public AudioViewerAppState getEditorAppState() {
+    private AudioViewerAppState getEditorAppState() {
         return editorAppState;
     }
 
@@ -283,7 +288,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private Button getPlayButton() {
-        return Objects.requireNonNull(playButton);
+        return requireNonNull(playButton);
     }
 
     /**
@@ -291,7 +296,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private Button getStopButton() {
-        return Objects.requireNonNull(stopButton);
+        return requireNonNull(stopButton);
     }
 
     /**
@@ -299,7 +304,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getChannelsField() {
-        return Objects.requireNonNull(channelsField);
+        return requireNonNull(channelsField);
     }
 
     /**
@@ -307,7 +312,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getDurationField() {
-        return Objects.requireNonNull(durationField);
+        return requireNonNull(durationField);
     }
 
     /**
@@ -315,7 +320,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getDataTypeField() {
-        return Objects.requireNonNull(dataTypeField);
+        return requireNonNull(dataTypeField);
     }
 
     /**
@@ -323,7 +328,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getSampleRateField() {
-        return Objects.requireNonNull(sampleRateField);
+        return requireNonNull(sampleRateField);
     }
 
     /**
@@ -331,7 +336,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getBitsPerSampleField() {
-        return Objects.requireNonNull(bitsPerSampleField);
+        return requireNonNull(bitsPerSampleField);
     }
 
     @Override

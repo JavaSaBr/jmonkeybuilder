@@ -71,7 +71,7 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
 
         final Button editButton = new Button();
         editButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
-        editButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        editButton.setGraphic(new ImageView(Icons.REMOVE_12));
         editButton.disableProperty().bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
         editButton.setOnAction(event -> processRemove());
 

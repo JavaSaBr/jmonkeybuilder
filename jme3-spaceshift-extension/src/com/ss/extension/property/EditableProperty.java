@@ -2,21 +2,14 @@ package com.ss.extension.property;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.util.HasName;
 
 /**
  * The interface for implementing editable property of generic object.
  *
  * @author JavaSabr
  */
-public interface EditableProperty<T, O> {
-
-    /**
-     * Get a name of this property.
-     *
-     * @return the name.
-     */
-    @NotNull
-    String getName();
+public interface EditableProperty<T, O> extends HasName {
 
     /**
      * Get the current value.

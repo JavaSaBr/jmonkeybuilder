@@ -7,14 +7,12 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
 import rlib.util.FileUtils;
+
+import java.nio.file.Path;
 
 /**
  * The action for deleting a file.
@@ -23,6 +21,7 @@ import rlib.util.FileUtils;
  */
 public class DeleteFileAction extends MenuItem {
 
+    @NotNull
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
@@ -35,7 +34,7 @@ public class DeleteFileAction extends MenuItem {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);
         setOnAction(event -> processDelete());
-        setGraphic(new ImageView(Icons.REMOVE_18));
+        setGraphic(new ImageView(Icons.REMOVE_12));
     }
 
     /**

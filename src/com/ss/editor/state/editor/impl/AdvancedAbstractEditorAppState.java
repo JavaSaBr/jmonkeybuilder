@@ -1,18 +1,12 @@
 package com.ss.editor.state.editor.impl;
 
 import static org.apache.commons.lang3.ArrayUtils.toArray;
-
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.input.controls.Trigger;
+import com.jme3.input.controls.*;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -21,10 +15,8 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import rlib.function.BooleanFloatConsumer;
 import rlib.function.FloatFloatConsumer;
 import rlib.util.dictionary.DictionaryFactory;
@@ -49,6 +41,10 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     protected static final String MOUSE_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseXAxisNegative";
     protected static final String MOUSE_Y_AXIS = "SSEditor.editorState.mouseYAxis";
     protected static final String MOUSE_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseYAxisNegative";
+    protected static final String MOVE_CAMERA_X_AXIS = "SSEditor.editorState.moveCameraXAxis";
+    protected static final String MOVE_CAMERA_X_AXIS_NEGATIVE = "SSEditor.editorState.moveCameraXAxisNegative";
+    protected static final String MOVE_CAMERA_Y_AXIS = "SSEditor.editorState.moveCameraYAxis";
+    protected static final String MOVE_CAMERA_Y_AXIS_NEGATIVE = "SSEditor.editorState.moveCameraYAxisNegative";
 
     protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
@@ -72,6 +68,10 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         TRIGGERS.put(MOUSE_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
         TRIGGERS.put(MOUSE_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
         TRIGGERS.put(MOUSE_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        TRIGGERS.put(MOVE_CAMERA_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        TRIGGERS.put(MOVE_CAMERA_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        TRIGGERS.put(MOVE_CAMERA_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        TRIGGERS.put(MOVE_CAMERA_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
 
         TRIGGERS.put(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -248,18 +248,38 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * Register analog handlers.
      */
     protected void registerAnalogHandlers(@NotNull final ObjectDictionary<String, FloatFloatConsumer> analogHandlers) {
-        analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXCamera(value * 30F));
-        analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXCamera(-value * 30F));
-        analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYCamera(-value * 30F));
-        analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYCamera(value * 30F));
+        analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
+        analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
+        analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYMouse(-value));
+        analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYMouse(value));
+        analogHandlers.put(MOVE_CAMERA_X_AXIS, (value, tpf) -> moveXCamera(value * 30F));
+        analogHandlers.put(MOVE_CAMERA_X_AXIS_NEGATIVE, (value, tpf) -> moveXCamera(-value * 30F));
+        analogHandlers.put(MOVE_CAMERA_Y_AXIS, (value, tpf) -> moveYCamera(-value * 30F));
+        analogHandlers.put(MOVE_CAMERA_Y_AXIS_NEGATIVE, (value, tpf) -> moveYCamera(value * 30F));
     }
 
     /**
      * Handle analog events.
      */
-    protected void onAnalogImpl(@NotNull final String name, final float value, final float tpf) {
+    private void onAnalogImpl(@NotNull final String name, final float value, final float tpf) {
         final FloatFloatConsumer handler = analogHandlers.get(name);
         if (handler != null) handler.accept(value, tpf);
+    }
+
+    /**
+     * Move a mouse on X axis.
+     *
+     * @param value the value to move.
+     */
+    protected void moveXMouse(final float value) {
+    }
+
+    /**
+     * Move a mouse on Y axis.
+     *
+     * @param value the value to move.
+     */
+    protected void moveYMouse(final float value) {
     }
 
     /**
@@ -267,8 +287,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      *
      * @param value the value to move.
      */
-    protected void moveXCamera(final float value) {
-        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
+    private void moveXCamera(final float value) {
+        if (!canCameraMove()) return;
 
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera == null) return;
@@ -288,8 +308,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      *
      * @param value the value to move.
      */
-    protected void moveYCamera(final float value) {
-        if (!needMovableCamera() || !isShiftDown() || !isButtonMiddleDown()) return;
+    private void moveYCamera(final float value) {
+        if (!canCameraMove()) return;
 
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera == null) return;
@@ -302,6 +322,10 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         up.addLocal(nodeForCamera.getLocalTranslation());
 
         nodeForCamera.setLocalTranslation(up);
+    }
+
+    private boolean canCameraMove() {
+        return needMovableCamera() && isShiftDown() && isButtonMiddleDown();
     }
 
     /**
@@ -487,7 +511,9 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * Register the analog listener.
      */
     protected void registerAnalogListener(@NotNull final InputManager inputManager) {
-        inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS, MOUSE_Y_AXIS_NEGATIVE);
+        inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS,
+                MOUSE_Y_AXIS_NEGATIVE, MOVE_CAMERA_X_AXIS, MOVE_CAMERA_X_AXIS_NEGATIVE, MOVE_CAMERA_Y_AXIS,
+                MOVE_CAMERA_Y_AXIS_NEGATIVE);
     }
 
     /**

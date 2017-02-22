@@ -137,8 +137,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         int count = 0;
 
         for (final String key : userDataKeys) {
-            if (SceneLayer.KEY.equals(key)) continue;
-            if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) continue;
+            if (isNeedSkip(key)) continue;
             count++;
         }
 
@@ -152,8 +151,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         sortedKeys.addAll(userDataKeys);
 
         for (final String key : sortedKeys) {
-            if (SceneLayer.KEY.equals(key)) continue;
-            if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) continue;
+            if (isNeedSkip(key)) continue;
 
             final Object data = spatial.getUserData(key);
 
@@ -235,6 +233,12 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
                 FXUtils.addToPane(control, container);
             }
         }
+    }
+
+    private boolean isNeedSkip(@NotNull final String key) {
+        if (SceneLayer.KEY.equals(key)) return true;
+        if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) return true;
+        return false;
     }
 
     private boolean canEditTransformation(@NotNull final Spatial spatial) {

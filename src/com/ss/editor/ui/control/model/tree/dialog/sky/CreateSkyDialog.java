@@ -19,6 +19,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
+import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
@@ -43,7 +44,7 @@ import java.awt.*;
 import java.nio.file.Path;
 
 /**
- * The dialog for creating a sky.
+ * The dialog to create sky.
  *
  * @author JavaSaBr
  */
@@ -553,6 +554,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * Validate the dialog.
      */
     private void validate() {
+        if (!isReady()) return;
 
         final ComboBox<SkyType> skyTypeComboBox = getSkyTypeComboBox();
         final SingleSelectionModel<SkyType> selectionModel = skyTypeComboBox.getSelectionModel();

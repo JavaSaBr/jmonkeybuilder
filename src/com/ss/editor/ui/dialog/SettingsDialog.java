@@ -276,11 +276,11 @@ public class SettingsDialog extends EditorDialog {
         additionalClasspathField.prefWidthProperty().bind(root.widthProperty());
 
         final Button addButton = new Button();
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAddCF());
 
         final Button removeButton = new Button();
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemoveCF());
 
         FXUtils.addToPane(label, container);
@@ -316,11 +316,11 @@ public class SettingsDialog extends EditorDialog {
         additionalEnvsField.prefWidthProperty().bind(root.widthProperty());
 
         final Button addButton = new Button();
-        addButton.setGraphic(new ImageView(Icons.ADD_18));
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAddEF());
 
         final Button removeButton = new Button();
-        removeButton.setGraphic(new ImageView(Icons.REMOVE_18));
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemoveEF());
 
         FXUtils.addToPane(label, container);

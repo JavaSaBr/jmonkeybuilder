@@ -11,6 +11,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
@@ -22,6 +23,7 @@ import com.ss.editor.ui.control.layer.LayerNodeTree;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.extension.property.EditableProperty;
@@ -32,6 +34,9 @@ import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +56,11 @@ public class SceneFileEditor extends
         AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditorAppState, SceneFileEditorState> implements
         SceneChangeConsumer {
 
+    private static final int LAYERS_TOOL = 2;
+    private static final int APP_STATES_TOOL = 3;
+    private static final int FILTERS_TOOL = 4;
+
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -79,22 +89,34 @@ public class SceneFileEditor extends
     private LayerNodeTree layerNodeTree;
 
     /**
-     * The property container of app states.
+     * The light toggle.
      */
     @Nullable
-    private VBox appStatePropertyContainer;
+    private ToggleButton lightButton;
 
     /**
-     * The property container of filters.
+     * The audio toggle.
      */
     @Nullable
-    private VBox filterPropertyContainer;
+    private ToggleButton audioButton;
 
     /**
-     * The property container from layers tree.
+     * The container of property editor in app states tool.
      */
     @Nullable
-    private VBox layerTreePropertyContainer;
+    private VBox propertyEditorAppStateContainer;
+
+    /**
+     * The container of property editor in filters tool.
+     */
+    @Nullable
+    private VBox propertyEditorFiltersContainer;
+
+    /**
+     * The container of property editor in layers tool.
+     */
+    @Nullable
+    private VBox propertyEditorLayersContainer;
 
     /**
      * The flag of sync selection.
@@ -182,27 +204,74 @@ public class SceneFileEditor extends
     }
 
     /**
-     * @return the property container from layers tree.
+     * @return the container of property editor in layers tool.
      */
     @NotNull
-    private VBox getLayerTreePropertyContainer() {
-        return requireNonNull(layerTreePropertyContainer);
+    private VBox getPropertyEditorLayersContainer() {
+        return requireNonNull(propertyEditorLayersContainer);
     }
 
     /**
-     * @return the property container of filters.
+     * @return the container of property editor in filters tool.
      */
     @NotNull
-    private VBox getFilterPropertyContainer() {
-        return requireNonNull(filterPropertyContainer);
+    private VBox getPropertyEditorFiltersContainer() {
+        return requireNonNull(propertyEditorFiltersContainer);
     }
 
     /**
-     * @return the property container of app states.
+     * @return the container of property editor in app states tool.
      */
     @NotNull
-    private VBox getAppStatePropertyContainer() {
-        return requireNonNull(appStatePropertyContainer);
+    private VBox getPropertyEditorAppStateContainer() {
+        return requireNonNull(propertyEditorAppStateContainer);
+    }
+
+    @Override
+    protected void createToolbar(@NotNull final HBox container) {
+        super.createToolbar(container);
+
+        lightButton = new ToggleButton();
+        lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
+        lightButton.setSelected(true);
+        lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
+
+        audioButton = new ToggleButton();
+        audioButton.setGraphic(new ImageView(Icons.AUDIO_16));
+        audioButton.setSelected(true);
+        audioButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeAudio(newValue));
+
+        FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(audioButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(audioButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+
+        FXUtils.addToPane(lightButton, container);
+        FXUtils.addToPane(audioButton, container);
+    }
+
+    /**
+     * Handle changing light models visibility.
+     */
+    private void changeLight(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        final SceneEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateLightShowed(newValue);
+
+        if (editorState != null) editorState.setShowedLight(newValue);
+    }
+
+    /**
+     * Handle changing audio models visibility.
+     */
+    private void changeAudio(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        final SceneEditorAppState editorAppState = getEditorAppState();
+        editorAppState.updateAudioShowed(newValue);
+
+        if (editorState != null) editorState.setShowedAudio(newValue);
     }
 
     @Override
@@ -210,25 +279,25 @@ public class SceneFileEditor extends
         super.createContent(root);
 
         appStateList = new AppStateList(this::selectAppStateFromList, this);
-        appStatePropertyContainer = new VBox();
+        propertyEditorAppStateContainer = new VBox();
 
         filterList = new FilterList(this::selectFilterFromList, this);
-        filterPropertyContainer = new VBox();
+        propertyEditorFiltersContainer = new VBox();
 
         layerNodeTree = new LayerNodeTree(this::selectNodeFromLayersTree, this);
-        layerTreePropertyContainer = new VBox();
+        propertyEditorLayersContainer = new VBox();
 
-        final SplitPane appStateSplitContainer = new SplitPane(appStateList, appStatePropertyContainer);
+        final SplitPane appStateSplitContainer = new SplitPane(appStateList, propertyEditorAppStateContainer);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
         appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane filtersSplitContainer = new SplitPane(filterList, filterPropertyContainer);
+        final SplitPane filtersSplitContainer = new SplitPane(filterList, propertyEditorFiltersContainer);
         filtersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         filtersSplitContainer.prefHeightProperty().bind(root.heightProperty());
         filtersSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, layerTreePropertyContainer);
+        final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, propertyEditorLayersContainer);
         layersSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
         layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
@@ -244,30 +313,56 @@ public class SceneFileEditor extends
     }
 
     @Override
-    protected void processChangeTool(@NotNull final Number newValue) {
-        super.processChangeTool(newValue);
+    protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
+        super.processChangeTool(oldValue, newValue);
 
-        if (newValue.intValue() < 1) return;
+        final int newIndex = newValue.intValue();
+        if (newIndex < 1) return;
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        final VBox appStatePropertyContainer = getAppStatePropertyContainer();
-        final VBox filterPropertyContainer = getFilterPropertyContainer();
-        final VBox layerTreePropertyContainer = getLayerTreePropertyContainer();
+        final VBox appStateContainer = getPropertyEditorAppStateContainer();
+        final VBox filtersContainer = getPropertyEditorFiltersContainer();
+        final VBox layersContainer = getPropertyEditorLayersContainer();
 
-        switch (newValue.intValue()) {
-            case 1: {
-                FXUtils.addToPane(modelPropertyEditor, layerTreePropertyContainer);
+        switch (newIndex) {
+            case LAYERS_TOOL: {
+                FXUtils.addToPane(modelPropertyEditor, layersContainer);
                 break;
             }
-            case 2: {
-                FXUtils.addToPane(modelPropertyEditor, appStatePropertyContainer);
+            case APP_STATES_TOOL: {
+                FXUtils.addToPane(modelPropertyEditor, appStateContainer);
                 break;
             }
-            case 3: {
-                FXUtils.addToPane(modelPropertyEditor, filterPropertyContainer);
+            case FILTERS_TOOL: {
+                FXUtils.addToPane(modelPropertyEditor, filtersContainer);
                 break;
             }
         }
+    }
+
+    /**
+     * @return the light toggle.
+     */
+    @NotNull
+    private ToggleButton getLightButton() {
+        return requireNonNull(lightButton);
+    }
+
+    /**
+     * @return the audio toggle.
+     */
+    @NotNull
+    private ToggleButton getAudioButton() {
+        return requireNonNull(audioButton);
+    }
+
+    @Override
+    protected void loadState() {
+        super.loadState();
+
+        final SceneFileEditorState editorState = requireNonNull(getEditorState());
+        getLightButton().setSelected(editorState.isShowedLight());
+        getAudioButton().setSelected(editorState.isShowedAudio());
     }
 
     /**

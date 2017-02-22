@@ -15,6 +15,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.Control;
+import com.jme3.terrain.geomipmap.TerrainGrid;
+import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.layer.node.LayersRootModelNode;
@@ -32,6 +34,8 @@ import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.emitter.*;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainGridModelNode;
+import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainQuadModelNode;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 import org.jetbrains.annotations.Nullable;
@@ -129,7 +133,11 @@ public class ModelNodeFactory {
             return unsafeCast(new PointLightModelNode((PointLight) element, objectId));
         }
 
-        if (element instanceof SceneNode) {
+        if (element instanceof TerrainGrid) {
+            return unsafeCast(new TerrainGridModelNode((TerrainGrid) element, objectId));
+        } else if (element instanceof TerrainQuad) {
+            return unsafeCast(new TerrainQuadModelNode((TerrainQuad) element, objectId));
+        } else if (element instanceof SceneNode) {
             return unsafeCast(new SceneNodeModelNode((SceneNode) element, objectId));
         } else if (element instanceof SceneLayer) {
             return unsafeCast(new SceneLayerModelNode((SceneLayer) element, objectId));
@@ -139,12 +147,6 @@ public class ModelNodeFactory {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, objectId));
         } else if (element instanceof ParticleInfluencer) {
             return unsafeCast(new ParticleInfluencerModelNode((ParticleInfluencer) element, objectId));
-        } else if (element instanceof EmitterMesh) {
-            return unsafeCast(new ParticleEmitterMeshModelNode((EmitterMesh) element, objectId));
-        } else if (element instanceof ParticleNode) {
-            return unsafeCast(new ParticleNodeModelNode((ParticleNode) element, objectId));
-        } else if (element instanceof ParticleGeometry) {
-            return unsafeCast(new ParticleGeometryModelNode((ParticleGeometry) element, objectId));
         } else if (element instanceof Mesh) {
             return unsafeCast(new MeshModelNode((Mesh) element, objectId));
         } else if (element instanceof Geometry) {

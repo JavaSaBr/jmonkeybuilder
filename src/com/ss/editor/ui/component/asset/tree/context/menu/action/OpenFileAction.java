@@ -6,6 +6,7 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 
 import javafx.scene.control.MenuItem;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The action to open a file.
@@ -14,14 +15,16 @@ import javafx.scene.control.MenuItem;
  */
 public class OpenFileAction extends MenuItem {
 
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * The action element.
      */
+    @NotNull
     private final ResourceElement element;
 
-    public OpenFileAction(final ResourceElement element) {
+    public OpenFileAction(@NotNull final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE);
         setOnAction(event -> processOpen());

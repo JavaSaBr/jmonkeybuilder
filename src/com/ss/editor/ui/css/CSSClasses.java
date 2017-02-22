@@ -33,6 +33,10 @@ public interface CSSClasses {
     String TRANSPARENT_LIST_VIEW = "transparent-list-view";
     String TRANSPARENT_LIST_CELL = "transparent-list-cell";
 
+    String LIST_CELL_WITHOUT_PADDING = "list-cell-without-padding";
+
+    String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
+
     String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
 
     String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
@@ -41,6 +45,8 @@ public interface CSSClasses {
     String DRAWER_BUTTON = "drawer-button";
 
     String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
+
+    String EDITING_TOGGLE_BUTTON_BIG = "editing-toggle-button-big";
 
     String MATERIAL_PARAM_CONTROL = "material-param-control";
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";

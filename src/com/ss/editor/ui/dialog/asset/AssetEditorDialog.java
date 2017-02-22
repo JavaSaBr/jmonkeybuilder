@@ -55,26 +55,26 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * The implementation of the {@link EditorDialog} for choosing the object from asset.
+ * The implementation of the {@link EditorDialog} to choose the object from asset.
  *
  * @author JavaSaBr
  */
 public class AssetEditorDialog<C> extends EditorDialog {
 
     @NotNull
-    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+    private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
 
     @NotNull
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
     @NotNull
-    protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
+    static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
 
     @NotNull
     protected static final Point DIALOG_SIZE = new Point(1204, 720);
 
     @NotNull
-    protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -86,13 +86,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull
-    protected final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
+    private final EventHandler<Event> createdFileHandler = event -> processEvent((CreatedFileEvent) event);
 
     @NotNull
-    protected final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
+    private final EventHandler<Event> selectFileHandle = event -> processEvent((RequestSelectFileEvent) event);
 
     @NotNull
-    protected final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
+    private final EventHandler<Event> deletedFileHandler = event -> processEvent((DeletedFileEvent) event);
 
     /**
      * The list of waited files to select.
@@ -116,31 +116,31 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * The function for validating the choose.
      */
     @Nullable
-    protected final Function<C, String> validator;
+    private final Function<C, String> validator;
 
     /**
      * The tree with all resources.
      */
     @Nullable
-    protected ResourceTree resourceTree;
+    private ResourceTree resourceTree;
 
     /**
      * The image preview.
      */
     @Nullable
-    protected ImageView imageView;
+    ImageView imageView;
 
     /**
      * The preview of text files.
      */
     @Nullable
-    protected TextArea textView;
+    TextArea textView;
 
     /**
      * The label with any warning.
      */
     @Nullable
-    protected Label warningLabel;
+    private Label warningLabel;
 
     /**
      * The OK button.
@@ -170,6 +170,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
         getResourceTree().setActionTester(actionTester);
+    }
+
+    /**
+     * @param onlyFolders true if need to show only folders.
+     */
+    void setOnlyFolders(final boolean onlyFolders) {
+        getResourceTree().setOnlyFolders(true);
     }
 
     @Override
@@ -306,7 +313,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @return the list of waited files to select.
      */
     @NotNull
-    protected Array<Path> getWaitedFilesToSelect() {
+    private Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
 
@@ -330,7 +337,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @return the function for validating the choose.
      */
     @Nullable
-    protected Function<C, String> getValidator() {
+    Function<C, String> getValidator() {
         return validator;
     }
 
@@ -364,7 +371,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      *
      * @param file the file for preview or null.
      */
-    protected void updatePreview(@Nullable final Path file) {
+    private void updatePreview(@Nullable final Path file) {
 
         final ImageView imageView = getImageView();
         final TextArea textView = getTextView();

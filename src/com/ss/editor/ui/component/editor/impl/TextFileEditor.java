@@ -1,31 +1,32 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import rlib.ui.util.FXUtils;
+import rlib.util.FileUtils;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
-
 /**
- * The implementation of editor for editing text files.
+ * The implementation of editor to edit text files.
  *
  * @author JavaSaBr
  */
 public class TextFileEditor extends AbstractFileEditor<VBox> {
 
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -38,11 +39,13 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * The original content of the opened file.
      */
+    @Nullable
     private String originalContent;
 
     /**
      * The text area.
      */
+    @Nullable
     private TextArea textArea;
 
     @NotNull
@@ -85,8 +88,9 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the text area.
      */
+    @NotNull
     private TextArea getTextArea() {
-        return textArea;
+        return requireNonNull(textArea);
     }
 
     @Override
@@ -102,14 +106,15 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the original content of the opened file.
      */
-    public String getOriginalContent() {
-        return originalContent;
+    @NotNull
+    private String getOriginalContent() {
+        return requireNonNull(originalContent);
     }
 
     /**
      * @param originalContent the original content of the opened file.
      */
-    public void setOriginalContent(final String originalContent) {
+    private void setOriginalContent(@NotNull final String originalContent) {
         this.originalContent = originalContent;
     }
 

@@ -6,22 +6,20 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.function.SixObjectConsumer;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
+
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * The base implementation of the property control.
@@ -32,7 +30,7 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
 
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractPropertyControl.class);
 
-    protected static final double CONTROL_WIDTH_PERCENT = 0.4;
+    public static final double CONTROL_WIDTH_PERCENT = 0.4;
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 

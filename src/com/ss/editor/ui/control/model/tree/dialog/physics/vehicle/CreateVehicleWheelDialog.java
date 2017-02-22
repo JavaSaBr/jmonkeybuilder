@@ -133,17 +133,17 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         locationLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.7));
 
         locationXField = new FloatTextField();
-        locationXField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        locationXField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         locationXField.prefWidthProperty().bind(root.widthProperty().multiply(0.3).multiply(0.33));
         locationXField.setValue(1);
 
         locationYField = new FloatTextField();
-        locationYField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        locationYField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         locationYField.prefWidthProperty().bind(root.widthProperty().multiply(0.3).multiply(0.33));
         locationYField.setValue(1);
 
         locationZField = new FloatTextField();
-        locationZField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        locationZField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         locationZField.prefWidthProperty().bind(root.widthProperty().multiply(0.3).multiply(0.33));
         locationZField.setValue(1);
 
@@ -157,15 +157,15 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         directionLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
 
         directionXField = new FloatTextField();
-        directionXField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        directionXField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         directionXField.setValue(0);
 
         directionYField = new FloatTextField();
-        directionYField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        directionYField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         directionYField.setValue(-1);
 
         directionZField = new FloatTextField();
-        directionZField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        directionZField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         directionZField.setValue(0);
 
         root.add(directionLabel, 0, 1);
@@ -178,15 +178,15 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         axleLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
 
         axleXField = new FloatTextField();
-        axleXField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        axleXField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         axleXField.setValue(-1);
 
         axleYField = new FloatTextField();
-        axleYField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        axleYField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         axleYField.setValue(0);
 
         axleZField = new FloatTextField();
-        axleZField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        axleZField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         axleZField.setValue(0);
 
         root.add(axleLabel, 0, 2);
@@ -199,7 +199,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         suspensionRestLengthLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
 
         restLengthField = new FloatTextField();
-        restLengthField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        restLengthField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         restLengthField.setValue(0.2F);
 
         root.add(suspensionRestLengthLabel, 0, 3);
@@ -210,7 +210,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         wheelRadiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
 
         wheelRadiusField = new FloatTextField();
-        wheelRadiusField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        wheelRadiusField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         wheelRadiusField.setValue(1);
 
         root.add(wheelRadiusLabel, 0, 4);

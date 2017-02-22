@@ -35,7 +35,7 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.REMOVE_18;
+        return Icons.REMOVE_12;
     }
 
     @NotNull
