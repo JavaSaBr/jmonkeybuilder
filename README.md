@@ -1,9 +1,18 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.3 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.4 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.4 ##
+* -Updated jME libraries.
+* -Added an action to switch off|on showing audio/light models in the scene editor.
+* -Added an action to create terrain.
+* -Implemented terrain editing.
+* -Updated the toneg0d.emitter library with some optimizations.
+* -Updated working with particle nodes.
+* -Fixed some bugs.
 
 ## ver. 0.9.3 ##
 * [Video](https://www.youtube.com/watch?v=FdGnkPj_qX0&feature=youtu.be)
