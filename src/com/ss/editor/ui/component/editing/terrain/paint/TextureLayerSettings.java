@@ -10,19 +10,16 @@ import com.jme3.terrain.Terrain;
 import com.jme3.texture.Texture;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
+import com.ss.editor.ui.component.editing.terrain.control.PaintTerrainToolControl;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.NodeUtils;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,9 +37,6 @@ import java.util.function.Function;
  * @author JavaSaBr
  */
 public class TextureLayerSettings extends VBox {
-
-    @NotNull
-    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     private static final int CELL_HEIGHT = 102;
 
@@ -114,6 +108,8 @@ public class TextureLayerSettings extends VBox {
         this.listView.prefWidthProperty().bind(widthProperty());
 
         final MultipleSelectionModel<TextureLayer> selectionModel = listView.getSelectionModel();
+        selectionModel.setSelectionMode(SelectionMode.SINGLE);
+        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> updateSelectedLayer(newValue));
 
         addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_16));
@@ -131,6 +127,21 @@ public class TextureLayerSettings extends VBox {
         FXUtils.addToPane(buttonContainer, this);
         FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
         FXUtils.addClassTo(listView, CSSClasses.LIST_VIEW_WITHOUT_SCROLL);
+    }
+
+    /**
+     * Update selected layer.
+     *
+     * @param newValue the selected layer.
+     */
+    private void updateSelectedLayer(@Nullable final TextureLayer newValue) {
+
+        final int layer = newValue == null ? -1 : newValue.getLayer();
+        final Texture alphaTexture = layer == -1 ? null : getAlpha(layer);
+
+        final PaintTerrainToolControl paintToolControl = editingComponent.getPaintToolControl();
+        paintToolControl.setAlphaTexture(alphaTexture);
+        paintToolControl.setLayer(layer);
     }
 
     @NotNull
@@ -270,6 +281,8 @@ public class TextureLayerSettings extends VBox {
 
         if (items.contains(selectedItem)) {
             selectionModel.select(selectedItem);
+        } else if (!items.isEmpty()) {
+            selectionModel.select(items.get(0));
         }
 
         refreshHeight();

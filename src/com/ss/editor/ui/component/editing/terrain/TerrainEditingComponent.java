@@ -535,6 +535,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         brushPowerField = new FloatTextField();
         brushPowerField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         brushPowerField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
+        brushPowerField.setScrollPower(3F);
         brushPowerField.setMinMax(0.0001F, Integer.MAX_VALUE);
         brushPowerField.addChangeListener((observable, oldValue, newValue) -> changeBrushPower(newValue));
 
@@ -808,7 +809,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      * @return the control to paint textures.
      */
     @NotNull
-    private PaintTerrainToolControl getPaintToolControl() {
+    public PaintTerrainToolControl getPaintToolControl() {
         return paintToolControl;
     }
 

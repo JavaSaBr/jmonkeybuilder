@@ -39,6 +39,7 @@ import com.ss.extension.loader.SceneLoader;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.Configuration;
 import rlib.logging.Logger;
 import rlib.logging.LoggerLevel;
 import rlib.logging.LoggerManager;
@@ -80,6 +81,7 @@ public class Editor extends JmeToJFXApplication {
 
     @NotNull
     static Editor prepareToStart() {
+        Configuration.MEMORY_ALLOCATOR.set("jemalloc");
 
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");

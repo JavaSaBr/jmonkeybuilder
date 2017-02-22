@@ -1,7 +1,8 @@
 package com.ss.editor.util;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtil.*;
+import static java.util.Objects.requireNonNull;
+import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.TextureKey;
@@ -9,16 +10,26 @@ import com.jme3.material.*;
 import com.jme3.scene.Spatial;
 import com.jme3.shader.Shader;
 import com.jme3.shader.VarType;
+import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import jme3tools.converters.ImageToAwt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.List;
 
 /**
  * The class with utility methods for working with {@link Material}.
@@ -82,7 +93,7 @@ public class MaterialUtils {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
-        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Can't get an asset file.");
+        final Path assetFile = requireNonNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
 
         return containsShader(materialDef, assetPath);
@@ -98,7 +109,7 @@ public class MaterialUtils {
     @Nullable
     private static String containsTexture(@NotNull final Material material, @NotNull final Path file) {
 
-        final Path assetFile = Objects.requireNonNull(getAssetFile(file), "Can't get an asset file.");
+        final Path assetFile = requireNonNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
 
         return containsTexture(material, assetPath) ? assetPath : null;
@@ -275,5 +286,41 @@ public class MaterialUtils {
         final Collection<MatParam> params = new ArrayList<>(material.getParams());
         params.stream().filter(param -> param.getValue() ==
                 null).forEach(matParam -> material.clearParam(matParam.getName()));
+    }
+
+    /**
+     * Save if need textures of a material.
+     *
+     * @param material the material.
+     */
+    public static void saveIfNeedTextures(@NotNull final Material material) {
+        final Collection<MatParam> params = material.getParams();
+        params.stream().filter(matParam -> matParam.getVarType() == VarType.Texture2D)
+                .map(MatParam::getValue)
+                .map(value -> (Texture) value)
+                .forEach(MaterialUtils::saveIfNeedTexture);
+    }
+
+    /**
+     * Save if need a texture.
+     *
+     * @param texture the texture.
+     */
+    private static void saveIfNeedTexture(@NotNull final Texture texture) {
+
+        final Image image = texture.getImage();
+        if (!image.isChanged()) return;
+
+        final AssetKey key = texture.getKey();
+        final Path file = requireNonNull(getRealFile(key.getName()));
+        final BufferedImage bufferedImage = ImageToAwt.convert(image, false, true, 0);
+
+        try (final OutputStream out = Files.newOutputStream(file)) {
+            ImageIO.write(bufferedImage, "png", out);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+
+        image.clearChanges();
     }
 }

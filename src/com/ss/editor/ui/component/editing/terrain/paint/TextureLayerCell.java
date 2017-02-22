@@ -64,7 +64,6 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         settingContainer.setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS);
         settingContainer.prefWidthProperty().bind(prefWidth);
         settingContainer.maxWidthProperty().bind(maxWidth);
-        settingContainer.heightProperty().addListener((observable, oldValue, newValue) -> System.out.println(newValue));
 
         layerField = new Label();
         layerField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME);

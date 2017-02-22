@@ -39,6 +39,12 @@ public class LocalObjects {
     private final CycleBuffer<Plane> planeBuffer;
 
     /**
+     * The buffer of colors.
+     */
+    @NotNull
+    private final CycleBuffer<ColorRGBA> colorBuffer;
+
+    /**
      * The buffer of rotation.
      */
     @NotNull
@@ -71,6 +77,7 @@ public class LocalObjects {
         this.rayBuffer = new CycleBuffer<>(Ray.class, SIZE, Ray::new);
         this.matrix3fBuffer = new CycleBuffer<>(Matrix3f.class, SIZE, Matrix3f::new);
         this.matrixFloatBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[16]);
+        this.colorBuffer = new CycleBuffer<>(ColorRGBA.class, SIZE, ColorRGBA::new);
     }
 
     /**
@@ -127,5 +134,13 @@ public class LocalObjects {
     @NotNull
     public Plane nextPlane() {
         return planeBuffer.next();
+    }
+
+    /**
+     * @return the next color.
+     */
+    @NotNull
+    public ColorRGBA nextColor() {
+        return colorBuffer.next();
     }
 }

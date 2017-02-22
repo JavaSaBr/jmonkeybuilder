@@ -3,6 +3,7 @@ package com.ss.editor.ui.component.editor.impl.scene;
 import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
@@ -830,6 +831,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final Path editFile = getEditFile();
         final M currentModel = getCurrentModel();
+
+        NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
 
