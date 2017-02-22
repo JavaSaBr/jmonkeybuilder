@@ -242,8 +242,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         addEditorState(editorAppState);
-
-        //FIXME need to remove late
         processChangeTool(-1, OBJECTS_TOOL);
     }
 
@@ -1019,7 +1017,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
         editorToolComponent.addComponent(objectsSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
-        editorToolComponent.addComponent(editingSplitContainer, "Editing");
+        editorToolComponent.addComponent(editingSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
         editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);

@@ -4,7 +4,6 @@ import static java.util.ResourceBundle.getBundle;
 import static rlib.util.ReflectionUtils.getUnsafeFieldValue;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import rlib.util.PropertyLoader;
-import rlib.util.ReflectionUtils;
 
 import java.util.Locale;
 import java.util.Map;
@@ -159,6 +158,7 @@ public class Messages {
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
+    public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
     public static final String SCENE_FILE_EDITOR_TOOL_LAYERS;
@@ -193,7 +193,6 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE;
@@ -505,6 +504,22 @@ public class Messages {
     public static final String CREATE_TERRAIN_DIALOG_MIN_RADIUS;
     public static final String CREATE_TERRAIN_DIALOG_MAX_RADIUS;
 
+    public static final String EDITING_COMPONENT_BRUSH_SIZE;
+    public static final String EDITING_COMPONENT_BRUSH_POWER;
+    public static final String EDITING_COMPONENT_SMOOTHLY;
+    public static final String EDITING_COMPONENT_LIMITED;
+    public static final String EDITING_COMPONENT_USE_MARKER;
+    public static final String EDITING_COMPONENT_LEVEL;
+    public static final String EDITING_COMPONENT_ROUGHNESS;
+    public static final String EDITING_COMPONENT_FREQUENCY;
+    public static final String EDITING_COMPONENT_LACUNARITY;
+    public static final String EDITING_COMPONENT_OCTAVES;
+    public static final String EDITING_COMPONENT_SCALE;
+    public static final String EDITING_COMPONENT_TRI_PLANAR;
+    public static final String EDITING_COMPONENT_SHININESS;
+    public static final String EDITING_COMPONENT_LAYER;
+
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -666,6 +681,7 @@ public class Messages {
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
+        SCENE_FILE_EDITOR_TOOL_EDITING = bundle.getString("SceneFileEditorToolEditing");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
         SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
         SCENE_FILE_EDITOR_TOOL_LAYERS = bundle.getString("SceneFileEditorToolLayers");
@@ -700,7 +716,6 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER = bundle.getString("ModelNodeTreeActionCreateSoftTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PRIMITIVE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePrimitiveShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeCylinderShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeDomeShape");
@@ -1010,5 +1025,20 @@ public class Messages {
         CREATE_TERRAIN_DIALOG_FLATTENING = bundle.getString("CreateTerrainDialogFlattening");
         CREATE_TERRAIN_DIALOG_MIN_RADIUS = bundle.getString("CreateTerrainDialogMinRadius");
         CREATE_TERRAIN_DIALOG_MAX_RADIUS = bundle.getString("CreateTerrainDialogMaxRadius");
+
+        EDITING_COMPONENT_BRUSH_SIZE = bundle.getString("EditingComponentBrushSize");
+        EDITING_COMPONENT_BRUSH_POWER = bundle.getString("EditingComponentBrushPower");
+        EDITING_COMPONENT_SMOOTHLY = bundle.getString("EditingComponentSmoothly");
+        EDITING_COMPONENT_LIMITED = bundle.getString("EditingComponentLimited");
+        EDITING_COMPONENT_USE_MARKER = bundle.getString("EditingComponentUseMarker");
+        EDITING_COMPONENT_LEVEL = bundle.getString("EditingComponentLevel");
+        EDITING_COMPONENT_ROUGHNESS = bundle.getString("EditingComponentRoughness");
+        EDITING_COMPONENT_FREQUENCY = bundle.getString("EditingComponentFrequency");
+        EDITING_COMPONENT_LACUNARITY = bundle.getString("EditingComponentLacunarity");
+        EDITING_COMPONENT_OCTAVES = bundle.getString("EditingComponentOctaves");
+        EDITING_COMPONENT_SCALE = bundle.getString("EditingComponentScale");
+        EDITING_COMPONENT_TRI_PLANAR = bundle.getString("EditingComponentTriPlanar");
+        EDITING_COMPONENT_SHININESS = bundle.getString("EditingComponentShininess");
+        EDITING_COMPONENT_LAYER = bundle.getString("EditingComponentLayer");
     }
 }

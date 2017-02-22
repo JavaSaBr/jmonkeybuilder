@@ -3,17 +3,14 @@ package com.ss.editor.config;
 import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import rlib.util.Util;
 import rlib.util.VarTable;
 import rlib.util.os.OperatingSystem;
+
+import java.awt.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * The configuration of this application.
@@ -25,7 +22,7 @@ public abstract class Config {
     private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.9.3";
+    public static final String VERSION = "v.0.9.4";
 
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 

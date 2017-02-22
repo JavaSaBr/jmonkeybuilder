@@ -8,6 +8,7 @@ import com.jme3.material.MaterialDef;
 import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -518,7 +519,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         buttonsContainer.add(paintButton, 5, 0);
         buttonsContainer.prefWidthProperty().bind(widthProperty());
 
-        final Label brushSizeLabel = new Label("Brush size:");
+        final Label brushSizeLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_SIZE + ":");
         brushSizeLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -528,7 +529,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         brushSizeField.setMinMax(0.0001F, Integer.MAX_VALUE);
         brushSizeField.addChangeListener((observable, oldValue, newValue) -> changeBrushSize(newValue));
 
-        final Label brushPowerLabel = new Label("Brush power:");
+        final Label brushPowerLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_POWER + ":");
         brushPowerLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         brushPowerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -583,7 +584,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      */
     private void createSlopeControlSettings() {
 
-        final Label smoothlyLabel = new Label("Smoothly:");
+        final Label smoothlyLabel = new Label(Messages.EDITING_COMPONENT_SMOOTHLY + ":");
         smoothlyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -592,7 +593,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         slopeControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         slopeControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
 
-        final Label limitedLabel = new Label("Limited:");
+        final Label limitedLabel = new Label(Messages.EDITING_COMPONENT_LIMITED + ":");
         limitedLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         limitedLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -618,7 +619,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      */
     private void createLevelControlSettings() {
 
-        final Label smoothlyLabel = new Label("Smoothly:");
+        final Label smoothlyLabel = new Label(Messages.EDITING_COMPONENT_SMOOTHLY + ":");
         smoothlyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -627,7 +628,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         levelControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         levelControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
 
-        final Label useMarkerLabel = new Label("Use marker:");
+        final Label useMarkerLabel = new Label(Messages.EDITING_COMPONENT_USE_MARKER + ":");
         useMarkerLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         useMarkerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -636,7 +637,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         levelControlUseMarker.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         levelControlUseMarker.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
 
-        final Label levelLabel = new Label("Level:");
+        final Label levelLabel = new Label(Messages.EDITING_COMPONENT_LEVEL + ":");
         levelLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         levelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -668,7 +669,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      */
     private void createRoughControlSettings() {
 
-        final Label roughnessLabel = new Label("Roughness:");
+        final Label roughnessLabel = new Label(Messages.EDITING_COMPONENT_ROUGHNESS + ":");
         roughnessLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         roughnessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -678,7 +679,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         roughControlRoughnessField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlRoughnessField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlRoughness(newValue));
 
-        final Label frequencyLabel = new Label("Frequency:");
+        final Label frequencyLabel = new Label(Messages.EDITING_COMPONENT_FREQUENCY + ":");
         frequencyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         frequencyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -688,7 +689,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         roughControlFrequencyField.setMinMax(0.1F, Integer.MAX_VALUE);
         roughControlFrequencyField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlFrequency(newValue));
 
-        final Label lacunarityLabel = new Label("Lacunarity:");
+        final Label lacunarityLabel = new Label(Messages.EDITING_COMPONENT_LACUNARITY + ":");
         lacunarityLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         lacunarityLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -698,7 +699,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         roughControlLacunarityField.setMinMax(1.1F, Integer.MAX_VALUE);
         roughControlLacunarityField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlLacunarity(newValue));
 
-        final Label octavesLabel = new Label("Octaves:");
+        final Label octavesLabel = new Label(Messages.EDITING_COMPONENT_OCTAVES + ":");
         octavesLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         octavesLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -708,7 +709,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         roughControlOctavesField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlOctavesField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlOctaves(newValue));
 
-        final Label scaleLabel = new Label("Scale:");
+        final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
         scaleLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         scaleLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -747,7 +748,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      */
     private void createPaintControlSettings() {
 
-        final Label triPlanarLabelLabel = new Label("Tri-planar:");
+        final Label triPlanarLabelLabel = new Label(Messages.EDITING_COMPONENT_TRI_PLANAR + ":");
         triPlanarLabelLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         triPlanarLabelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
@@ -756,7 +757,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         triPlanarCheckBox.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         triPlanarCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
 
-        final Label shininessLabel = new Label("Shininess:");
+        final Label shininessLabel = new Label(Messages.EDITING_COMPONENT_SHININESS + ":");
         shininessLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 

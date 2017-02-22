@@ -1,40 +1,30 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static java.util.Objects.requireNonNull;
-import com.ss.editor.Messages;
-import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.FileUtils;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 
 /**
- * The implementation of editor to edit text files.
+ * The implementation of editor to edit files with code.
  *
  * @author JavaSaBr
  */
-public class TextFileEditor extends AbstractFileEditor<VBox> {
-
-    @NotNull
-    public static final EditorDescription DESCRIPTION = new EditorDescription();
-
-    static {
-        DESCRIPTION.setConstructor(TextFileEditor::new);
-        DESCRIPTION.setEditorName(Messages.TEXT_FILE_EDITOR_NAME);
-        DESCRIPTION.setEditorId(TextFileEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(EditorRegistry.ALL_FORMATS);
-    }
+public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
 
     /**
      * The original content of the opened file.
@@ -43,10 +33,10 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     private String originalContent;
 
     /**
-     * The text area.
+     * The code area.
      */
     @Nullable
-    private TextArea textArea;
+    private CodeArea codeArea;
 
     @NotNull
     @Override
@@ -57,14 +47,20 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     @Override
     protected void createContent(@NotNull final VBox root) {
 
-        textArea = new TextArea();
-        textArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
-        textArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
-        textArea.prefHeightProperty().bind(root.heightProperty());
-        textArea.prefWidthProperty().bind(root.widthProperty());
+        codeArea = new CodeArea();
+        codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
+        codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
+        codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
+        codeArea.prefHeightProperty().bind(root.heightProperty());
+        codeArea.prefWidthProperty().bind(root.widthProperty());
 
-        FXUtils.addToPane(textArea, root);
-        FXUtils.addClassTo(textArea, CSSClasses.MAIN_FONT_13);
+        FXUtils.addToPane(codeArea, root);
+        FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);
+    }
+
+    @NotNull
+    protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
+        throw new RuntimeException("unsupported");
     }
 
     /**
@@ -86,11 +82,11 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     /**
-     * @return the text area.
+     * @return the code area.
      */
     @NotNull
-    private TextArea getTextArea() {
-        return requireNonNull(textArea);
+    private CodeArea getCodeArea() {
+        return requireNonNull(codeArea);
     }
 
     @Override
@@ -99,8 +95,14 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
         setOriginalContent(FileUtils.read(file));
 
-        final TextArea textArea = getTextArea();
-        textArea.setText(getOriginalContent());
+        final CodeArea codeArea = getCodeArea();
+        codeArea.appendText(getOriginalContent());
+
+        final UndoManager undoManager = codeArea.getUndoManager();
+        undoManager.forgetHistory();
+
+        setOriginalContent(codeArea.getText());
+        updateDirty(getOriginalContent());
     }
 
     /**
@@ -122,8 +124,8 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     public void doSave() {
         super.doSave();
 
-        final TextArea textArea = getTextArea();
-        final String newContent = textArea.getText();
+        final CodeArea codeArea = getCodeArea();
+        final String newContent = codeArea.getText();
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
             out.print(newContent);
@@ -133,11 +135,5 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
 
         setOriginalContent(newContent);
         updateDirty(newContent);
-    }
-
-    @NotNull
-    @Override
-    public EditorDescription getDescription() {
-        return DESCRIPTION;
     }
 }

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
@@ -33,6 +34,7 @@ import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import javax.annotation.Nullable;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -44,6 +46,7 @@ import java.time.LocalTime;
  */
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -78,11 +81,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * The root element of this editor.
      */
+    @Nullable
     private R root;
 
     /**
      * The edited file.
      */
+    @Nullable
     private Path file;
 
     public AbstractFileEditor() {
@@ -220,19 +225,22 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @NotNull
     @Override
     public Pane getPage() {
-        return (Pane) root.getParent().getParent();
+        final R pane = requireNonNull(root);
+        return (Pane) pane.getParent().getParent();
     }
 
     @NotNull
     @Override
     public Path getEditFile() {
-        return file;
+        return requireNonNull(file);
     }
 
     @NotNull
     @Override
     public String getFileName() {
-        return file.getFileName().toString();
+        final Path editFile = getEditFile();
+        final Path fileName = editFile.getFileName();
+        return fileName.toString();
     }
 
     @Override
@@ -276,24 +284,21 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @Override
     public void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
-
-        final Path editFile = getEditFile();
-
-        if (editFile.equals(prevFile)) {
-            setEditFile(newFile);
-            return;
-        }
-
-        if (!editFile.startsWith(prevFile)) return;
-
-        final Path relativeFile = editFile.subpath(prevFile.getNameCount(), editFile.getNameCount());
-        final Path resultFile = newFile.resolve(relativeFile);
-
-        setEditFile(resultFile);
+        notifyChangedEditedFile(prevFile, newFile);
     }
 
     @Override
     public void notifyMoved(@NotNull final Path prevFile, final @NotNull Path newFile) {
+        notifyChangedEditedFile(prevFile, newFile);
+    }
+
+    /**
+     * Notify about changed the edited file.
+     *
+     * @param prevFile the prev file.
+     * @param newFile  the new file.
+     */
+    private void notifyChangedEditedFile(final @NotNull Path prevFile, final @NotNull Path newFile) {
 
         final Path editFile = getEditFile();
 
@@ -363,7 +368,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @return the file changes listener.
      */
     @NotNull
-    protected EventHandler<Event> getFileChangedHandler() {
+    private EventHandler<Event> getFileChangedHandler() {
         return fileChangedHandler;
     }
 

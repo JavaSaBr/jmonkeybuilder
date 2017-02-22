@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -7,27 +8,28 @@ import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 
+import java.nio.file.Path;
+
 /**
- * The implementation of the {@link Editor} for viewing an image.
+ * The implementation of the {@link Editor} to view image files.
  *
  * @author JavaSaBr
  */
 public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
-    public static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
-    public static final int IMAGE_SIZE = 512;
+    private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+
+    private static final int IMAGE_SIZE = 512;
 
     static {
         DESCRIPTION.setConstructor(ImageViewerEditor::new);
@@ -45,6 +47,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * The image view.
      */
+    @Nullable
     private ImageView imageView;
 
     @NotNull
@@ -65,8 +68,9 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * @return the image view.
      */
+    @NotNull
     private ImageView getImageView() {
-        return imageView;
+        return requireNonNull(imageView);
     }
 
     @Override

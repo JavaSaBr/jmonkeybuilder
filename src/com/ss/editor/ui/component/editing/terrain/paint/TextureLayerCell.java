@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editing.terrain.paint;
 
 import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.FIELD_PERCENT;
 import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.LABEL_PERCENT;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -75,7 +76,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         normalTextureControl = new NamedChooseTextureControl("Normal");
         normalTextureControl.setChangeHandler(this::updateNormal);
 
-        final Label scaleLabel = new Label("Scale:");
+        final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
         scaleLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
 
@@ -218,7 +219,7 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
             diffuseTextureControl.setTextureFile(item.getDiffuseFile());
 
             final Label layerField = getLayerField();
-            layerField.setText("Layer #" + (item.getLayer() + 1));
+            layerField.setText(Messages.EDITING_COMPONENT_LAYER + " #" + (item.getLayer() + 1));
 
         } finally {
             setIgnoreListeners(false);
