@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.editor.impl.model;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
@@ -14,6 +13,7 @@ import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
 import com.ss.editor.ui.Icons;
@@ -27,12 +27,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.function.Supplier;
-
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
@@ -41,10 +35,14 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.nio.file.Path;
+import java.util.function.Supplier;
 
 /**
  * The implementation of the {@link AbstractFileEditor} for working with {@link Spatial}.
@@ -185,7 +183,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         if (!geometries.isEmpty()) {
             geometries.forEach(geometry -> {
-                if (geometry.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE) {
+                if (geometry.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE) {
                     editorState.addCustomSky(geometry);
                 }
             });
@@ -287,8 +285,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (added instanceof Spatial) {
 
             final Spatial spatial = (Spatial) added;
-
-            final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+            final boolean isSky = spatial.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE;
 
             if (isSky) {
                 editorAppState.addCustomSky(spatial);
@@ -306,8 +303,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (removed instanceof Spatial) {
 
             final Spatial spatial = (Spatial) removed;
-
-            final boolean isSky = spatial.getUserData(ModelNodeTree.USER_DATA_IS_SKY) == Boolean.TRUE;
+            final boolean isSky = spatial.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE;
 
             if (isSky) {
                 editorAppState.removeCustomSky(spatial);

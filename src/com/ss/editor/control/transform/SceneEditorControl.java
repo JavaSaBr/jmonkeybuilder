@@ -4,7 +4,6 @@ import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public interface SceneEditorControl {
 
     String LOADED_MODEL_KEY = SceneEditorControl.class.getName() + ".loadedModel";
+    String SKY_NODE_KEY = SceneEditorControl.class.getName() + ".isSkyNode";
 
     enum TransformType {
         MOVE_TOOL,

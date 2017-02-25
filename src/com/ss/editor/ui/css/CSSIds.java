@@ -106,10 +106,6 @@ public interface CSSIds {
 
     String CHOOSE_FOLDER_CONTROL_FOLDER_LABEL = "ChooseFolderControlFolderLabel";
 
-    String CREATE_SKY_DIALOG_LABEL = "CreateSkyDialogLabel";
-    String CREATE_SKY_DIALOG_COMBO_BOX = "CreateSkyDialogComboBox";
-    String CREATE_SKY_DIALOG_SPINNER = "CreateSkyDialogSpinner";
-
     String AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER = "AudioViewerEditorButtonContainer";
     String AUDIO_VIEWER_EDITOR_BUTTON = "AudioViewerEditorButton";
     String AUDIO_VIEWER_EDITOR_PARAM_CONTAINER = "AudioViewerEditorParamContainer";
@@ -151,8 +147,9 @@ public interface CSSIds {
     String ABSTRACT_NODE_TREE_CONTAINER = "AbstractNodeTreeContainer";
     String ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER = "AbstractNodeTreeTransparentContainer";
 
-    String EDITING_CONTAINER = "EditingContainer";
+    String ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER = "AbstractDialogGridSettingsContainer";
 
+    String EDITING_CONTAINER = "EditingContainer";
 
     String TERRAIN_EDITING_CONTROL_SETTINGS = "TerrainEditingTextureControlSettings";
     String TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS = "TerrainEditingTextureLayerSettings";

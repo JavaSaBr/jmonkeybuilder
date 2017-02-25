@@ -567,35 +567,6 @@
     -fx-alignment: center-left;
 }
 
-#CreateSkyDialogLabel {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 200;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-    -fx-padding: 0 2 0 0;
-}
-
-#CreateSkyDialogComboBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 250;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#CreateSkyDialogSpinner {
-    -fx-min-height: 22;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 70;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
 #JmePreviewManagerImageView {
 }
 
@@ -867,4 +838,10 @@
 
 #TerrainEditingTextureLayersSettingsButtons {
     -fx-alignment: center;
+}
+
+#AbstractDialogGridSettingsContainer {
+    -fx-alignment: center-left;
+    -fx-vgap: 2;
+    -fx-hgap: 2;
 }

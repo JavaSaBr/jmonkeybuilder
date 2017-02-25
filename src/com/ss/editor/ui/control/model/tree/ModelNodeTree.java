@@ -16,9 +16,6 @@ import java.util.function.Consumer;
  */
 public class ModelNodeTree extends AbstractNodeTree<ModelChangeConsumer> {
 
-    @NotNull
-    public static final String USER_DATA_IS_SKY = ModelNodeTree.class.getName() + ".isSky";
-
     public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer consumer) {
         super(selectionHandler, consumer);
     }

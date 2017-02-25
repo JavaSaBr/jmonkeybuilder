@@ -23,10 +23,9 @@ import rlib.ui.util.FXUtils;
  */
 public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
-    @NotNull
-    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+    protected static final double DEFAULT_LABEL_W_PERCENT = 0.4;
 
-    @NotNull
+    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
     @NotNull
