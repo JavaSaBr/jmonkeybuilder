@@ -12,30 +12,19 @@ import com.ss.editor.Messages;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.LayerModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.QuaternionModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.StringModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.util.Collection;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Spatial} objects.
@@ -238,6 +227,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     private boolean isNeedSkip(@NotNull final String key) {
         if (SceneLayer.KEY.equals(key)) return true;
         if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) return true;
+        if (SceneEditorControl.SKY_NODE_KEY.equals(key)) return true;
         return false;
     }
 

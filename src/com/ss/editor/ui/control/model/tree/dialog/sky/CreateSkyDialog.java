@@ -210,6 +210,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         getNormalScaleXField().setValue(1F);
         getNormalScaleYField().setValue(1F);
         getNormalScaleZField().setValue(1F);
+        getFlipYCheckBox().setSelected(true);
     }
 
     /**
