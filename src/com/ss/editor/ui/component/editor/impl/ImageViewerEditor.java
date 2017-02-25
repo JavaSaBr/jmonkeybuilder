@@ -42,6 +42,8 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         DESCRIPTION.addExtension(FileExtensions.IMAGE_TGA);
         DESCRIPTION.addExtension(FileExtensions.IMAGE_JPG);
         DESCRIPTION.addExtension(FileExtensions.IMAGE_TIFF);
+        DESCRIPTION.addExtension(FileExtensions.IMAGE_DDS);
+        DESCRIPTION.addExtension(FileExtensions.IMAGE_HDR);
     }
 
     /**

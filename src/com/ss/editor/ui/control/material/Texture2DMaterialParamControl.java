@@ -8,9 +8,11 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.MatParamTexture;
 import com.jme3.material.Material;
+import com.jme3.texture.Texture;
 import com.jme3.texture.Texture.WrapAxis;
 import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
+import com.jme3.texture.Texture3D;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.manager.JavaFXImageManager;
@@ -60,6 +62,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_JPEG);
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_TGA);
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_DDS);
+        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_HDR);
     }
 
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
@@ -336,14 +339,20 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        final Texture2D texture2D = (Texture2D) param.getValue();
-        final TextureKey textureKey = (TextureKey) texture2D.getKey();
-
         final CheckBox flipButton = getFlipButton();
-        flipButton.setSelected(textureKey.isFlipY());
-
         final CheckBox repeatButton = getRepeatButton();
-        repeatButton.setSelected(texture2D.getWrap(WrapAxis.S) == WrapMode.Repeat);
+        final Texture value = (Texture) param.getValue();
+        final TextureKey textureKey = (TextureKey) value.getKey();
+
+        if (value instanceof Texture2D) {
+            final Texture2D texture2D = (Texture2D) value;
+            flipButton.setSelected(textureKey.isFlipY());
+            repeatButton.setSelected(texture2D.getWrap(WrapAxis.S) == WrapMode.Repeat);
+        } else if (value instanceof Texture3D) {
+            final Texture3D texture2D = (Texture3D) value;
+            flipButton.setSelected(textureKey.isFlipY());
+            repeatButton.setSelected(texture2D.getWrap(WrapAxis.S) == WrapMode.Repeat);
+        }
 
         final Path realFile = EditorUtil.getRealFile(textureKey.getName());
 

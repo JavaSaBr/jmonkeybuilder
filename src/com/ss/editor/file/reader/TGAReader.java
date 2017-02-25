@@ -1,6 +1,7 @@
 package com.ss.editor.file.reader;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -12,6 +13,7 @@ import java.awt.image.BufferedImage;
  */
 public class TGAReader {
 
+    @Nullable
     public static Image getImage(@NotNull final byte[] buffer) {
         return decode(buffer);
     }
@@ -24,16 +26,11 @@ public class TGAReader {
         return btoi(buffer[offset]);
     }
 
-    public static Image decode(@NotNull final byte[] buffer) {
+    @Nullable
+    private static Image decode(@NotNull final byte[] buffer) {
 
         int offset = 0;
 
-        // Reading header bytes
-        // buffer[2]=image type code 0x02=uncompressed BGR or BGRA
-        // buffer[12]+[13]=width
-        // buffer[14]+[15]=height
-        // buffer[16]=image pixel size 0x20=32bit, 0x18=24bit
-        // buffer{17]=Image Descriptor Byte=0x28 (00101000)=32bit/origin upperleft/non-interleaved
         for (int i = 0; i < 12; i++) {
             read(offset++, buffer);
         }

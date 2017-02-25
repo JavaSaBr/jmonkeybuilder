@@ -1,19 +1,24 @@
 package com.ss.editor.manager;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.awt.Image.SCALE_DEFAULT;
 import static java.util.Objects.requireNonNull;
-import static rlib.util.Util.get;
+import com.jme3.asset.AssetManager;
+import com.jme3.texture.Texture;
+import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.Config;
+import com.ss.editor.file.reader.DDSReader;
 import com.ss.editor.file.reader.TGAReader;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
-import com.sun.jimi.core.Jimi;
-import com.sun.jimi.core.JimiReader;
+import com.ss.editor.util.EditorUtil;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import jme3tools.converters.ImageToAwt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.logging.Logger;
@@ -21,6 +26,7 @@ import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
+import rlib.util.Util;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
@@ -59,7 +65,10 @@ public class JavaFXImageManager {
     private static final Array<String> FX_FORMATS = ArrayFactory.newArray(String.class);
 
     @NotNull
-    private static final Array<String> JIMI_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
+
+    @NotNull
+    private static final Array<String> IMAGE_IO_FORMATS = ArrayFactory.newArray(String.class);
 
     @NotNull
     private static final Array<String> IMAGE_FORMATS = ArrayFactory.newArray(String.class);
@@ -70,12 +79,15 @@ public class JavaFXImageManager {
         FX_FORMATS.add(FileExtensions.IMAGE_JPEG);
         FX_FORMATS.add(FileExtensions.IMAGE_GIF);
 
-        JIMI_FORMATS.add(FileExtensions.IMAGE_TGA);
-        JIMI_FORMATS.add(FileExtensions.IMAGE_BMP);
-        JIMI_FORMATS.add(FileExtensions.IMAGE_TIFF);
+        JME_FORMATS.add(FileExtensions.IMAGE_BMP);
+
+        IMAGE_IO_FORMATS.add(FileExtensions.IMAGE_HDR);
+        IMAGE_IO_FORMATS.add(FileExtensions.IMAGE_TIFF);
 
         IMAGE_FORMATS.addAll(FX_FORMATS);
-        IMAGE_FORMATS.addAll(JIMI_FORMATS);
+        IMAGE_FORMATS.addAll(JME_FORMATS);
+        IMAGE_FORMATS.addAll(IMAGE_IO_FORMATS);
+        IMAGE_FORMATS.add(FileExtensions.IMAGE_TGA);
         IMAGE_FORMATS.add(FileExtensions.IMAGE_DDS);
     }
 
@@ -202,65 +214,27 @@ public class JavaFXImageManager {
 
             return image;
 
-        } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
+        } else if (JME_FORMATS.contains(extension)) {
+
+            final Path assetFile = requireNonNull(getAssetFile(file));
+            final String assetPath = toAssetPath(assetFile);
+
+            final Editor editor = Editor.getInstance();
+            final AssetManager assetManager = editor.getAssetManager();
+            final Texture texture = assetManager.loadTexture(assetPath);
+            final BufferedImage textureImage;
 
             try {
-
-                final byte[] content = requireNonNull(get(file, Files::readAllBytes));
-
-                final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
-                if (awtImage == null) return Icons.IMAGE_512;
-
-                final int imageWidth = awtImage.getWidth();
-                final int imageHeight = awtImage.getHeight();
-
-                java.awt.Image newImage = awtImage;
-
-                if (imageWidth > width || imageHeight > height) {
-                    if (imageWidth == imageHeight) {
-                        newImage = awtImage.getScaledInstance(width, height, SCALE_DEFAULT);
-                    } else if (imageWidth > imageHeight) {
-                        float mod = imageHeight * 1F / imageWidth;
-                        newImage = awtImage.getScaledInstance(width, (int) (height * mod), SCALE_DEFAULT);
-                    } else if (imageHeight > imageWidth) {
-                        float mod = imageWidth * 1F / imageHeight;
-                        newImage = awtImage.getScaledInstance((int) (width * mod), height, SCALE_DEFAULT);
-                    }
-                }
-
-                final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-                final Graphics2D g2d = bufferedImage.createGraphics();
-                g2d.drawImage(newImage, 0, 0, null);
-                g2d.dispose();
-
-                Image javaFXImage;
-
-                try (final OutputStream out = Files.newOutputStream(cacheFile)) {
-                    ImageIO.write(bufferedImage, "png", out);
-                    javaFXImage = new Image(cacheFile.toUri().toString());
-                }
-
-                return javaFXImage;
-
-            } catch (final IOException e) {
-                LOGGER.warning("can't read " + file);
-            }
-
-        } else if (!JIMI_FORMATS.contains(extension)) {
-            return Icons.IMAGE_512;
-        }
-
-        try {
-
-            final JimiReader reader = Jimi.createJimiReader(file.toString());
-            final java.awt.Image awtImage = reader.getImage();
-
-            if (awtImage == null) {
+                textureImage = ImageToAwt.convert(texture.getImage(), false, true, 0);
+            } catch (final UnsupportedOperationException e) {
+                EditorUtil.handleException(LOGGER, this, e);
                 return Icons.IMAGE_512;
             }
 
-            final java.awt.Image newImage = awtImage.getScaledInstance(width, height, java.awt.Image.SCALE_FAST);
+            final int imageWidth = textureImage.getWidth();
+            final int imageHeight = textureImage.getHeight();
+
+            final java.awt.Image newImage = scaleImage(width, height, textureImage, imageWidth, imageHeight);
             final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
             final Graphics2D g2d = bufferedImage.createGraphics();
@@ -272,15 +246,126 @@ public class JavaFXImageManager {
             try (final OutputStream out = Files.newOutputStream(cacheFile)) {
                 ImageIO.write(bufferedImage, "png", out);
                 javaFXImage = new Image(cacheFile.toUri().toString());
+            } catch (final IOException e) {
+                LOGGER.warning(e);
+                javaFXImage = Icons.IMAGE_512;
             }
 
             return javaFXImage;
 
-        } catch (final Exception e) {
-            LOGGER.warning("can't read " + file);
+        } else if (IMAGE_IO_FORMATS.contains(extension)) {
+
+            final BufferedImage read;
+            try {
+                read = ImageIO.read(file.toFile());
+            } catch (final IOException e) {
+                EditorUtil.handleException(LOGGER, this, e);
+                return Icons.IMAGE_512;
+            }
+
+            final int imageWidth = read.getWidth();
+            final int imageHeight = read.getHeight();
+
+            final java.awt.Image newImage = scaleImage(width, height, read, imageWidth, imageHeight);
+            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+            final Graphics2D g2d = bufferedImage.createGraphics();
+            g2d.drawImage(newImage, 0, 0, null);
+            g2d.dispose();
+
+            Image javaFXImage;
+
+            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+                ImageIO.write(bufferedImage, "png", out);
+                javaFXImage = new Image(cacheFile.toUri().toString());
+            } catch (final IOException e) {
+                LOGGER.warning(e);
+                javaFXImage = Icons.IMAGE_512;
+            }
+
+            return javaFXImage;
+
+        } else if (FileExtensions.IMAGE_DDS.equals(extension)) {
+
+            final byte[] content = requireNonNull(Util.get(file, Files::readAllBytes));
+            final int[] pixels = DDSReader.read(content, DDSReader.ARGB, 0);
+            final int currentWidth = DDSReader.getWidth(content);
+            final int currentHeight = DDSReader.getHeight(content);
+
+            final BufferedImage read = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
+            read.setRGB(0, 0, currentWidth, currentHeight, pixels, 0, currentWidth);
+
+            final java.awt.Image newImage = scaleImage(width, height, read, currentWidth, currentHeight);
+            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+            final Graphics2D g2d = bufferedImage.createGraphics();
+            g2d.drawImage(newImage, 0, 0, null);
+            g2d.dispose();
+
+            Image javaFXImage;
+
+            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+                ImageIO.write(bufferedImage, "png", out);
+                javaFXImage = new Image(cacheFile.toUri().toString());
+            } catch (final IOException e) {
+                LOGGER.warning(e);
+                javaFXImage = Icons.IMAGE_512;
+            }
+
+            return javaFXImage;
+
+        } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
+
+            final byte[] content = requireNonNull(Util.get(file, Files::readAllBytes));
+
+            final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
+            if (awtImage == null) return Icons.IMAGE_512;
+
+            final int imageWidth = awtImage.getWidth();
+            final int imageHeight = awtImage.getHeight();
+
+            final java.awt.Image newImage = scaleImage(width, height, awtImage, imageWidth, imageHeight);
+            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+            final Graphics2D g2d = bufferedImage.createGraphics();
+            g2d.drawImage(newImage, 0, 0, null);
+            g2d.dispose();
+
+            Image javaFXImage;
+
+            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+                ImageIO.write(bufferedImage, "png", out);
+                javaFXImage = new Image(cacheFile.toUri().toString());
+            } catch (final IOException e) {
+                LOGGER.warning(e);
+                javaFXImage = Icons.IMAGE_512;
+            }
+
+            return javaFXImage;
         }
 
         return Icons.IMAGE_512;
+    }
+
+    @NotNull
+    private java.awt.Image scaleImage(final int width, final int height, @NotNull final BufferedImage read,
+                                      final int imageWidth, final int imageHeight) {
+
+        java.awt.Image newImage = read;
+
+        if (imageWidth > width || imageHeight > height) {
+            if (imageWidth == imageHeight) {
+                newImage = read.getScaledInstance(width, height, SCALE_DEFAULT);
+            } else if (imageWidth > imageHeight) {
+                float mod = imageHeight * 1F / imageWidth;
+                newImage = read.getScaledInstance(width, (int) (height * mod), SCALE_DEFAULT);
+            } else if (imageHeight > imageWidth) {
+                float mod = imageWidth * 1F / imageHeight;
+                newImage = read.getScaledInstance((int) (width * mod), height, SCALE_DEFAULT);
+            }
+        }
+
+        return newImage;
     }
 
     private void processEvent(@NotNull final DeletedFileEvent event) {
