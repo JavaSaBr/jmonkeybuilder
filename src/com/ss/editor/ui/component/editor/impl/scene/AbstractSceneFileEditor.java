@@ -64,6 +64,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
@@ -933,29 +934,34 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addToPane(createSaveAction(), container);
 
         selectionButton = new ToggleButton();
+        selectionButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_SELECTION));
         selectionButton.setGraphic(new ImageView(Icons.CUBE_16));
         selectionButton.setSelected(true);
         selectionButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeSelectionVisible(newValue));
 
         gridButton = new ToggleButton();
+        gridButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_GRID));
         gridButton.setGraphic(new ImageView(Icons.PLANE_16));
         gridButton.setSelected(true);
         gridButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeGridVisible(newValue));
 
         moveToolButton = new ToggleButton();
+        moveToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_MOVE_TOOL + " (G)"));
         moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
         moveToolButton.setSelected(true);
         moveToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 updateTransformTool(TransformType.MOVE_TOOL, newValue));
 
         rotationToolButton = new ToggleButton();
+        rotationToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL + " (R)"));
         rotationToolButton.setGraphic(new ImageView(Icons.ROTATION_16));
         rotationToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 updateTransformTool(TransformType.ROTATE_TOOL, newValue));
 
         scaleToolButton = new ToggleButton();
+        scaleToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_SCALE_TOOL + " (S)"));
         scaleToolButton.setGraphic(new ImageView(Icons.SCALE_16));
         scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 updateTransformTool(TransformType.SCALE_TOOL, newValue));

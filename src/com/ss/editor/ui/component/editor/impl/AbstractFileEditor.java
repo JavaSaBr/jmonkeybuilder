@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.manager.ExecutorManager;
@@ -20,6 +21,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -90,7 +92,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Nullable
     private Path file;
 
-    public AbstractFileEditor() {
+    protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
         this.editorStates = ArrayFactory.newArray(EditorAppState.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
@@ -182,9 +184,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected Button createSaveAction() {
 
         Button action = new Button();
-        action.setGraphic(new ImageView(Icons.SAVE_16));
         action.setOnAction(event -> processSave());
+        action.setGraphic(new ImageView(Icons.SAVE_16));
         action.disableProperty().bind(dirtyProperty().not());
+        action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
 
         FXUtils.addClassTo(action, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(action, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);

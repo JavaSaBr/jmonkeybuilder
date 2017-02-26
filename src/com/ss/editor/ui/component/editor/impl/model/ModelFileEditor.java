@@ -29,10 +29,7 @@ import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
@@ -201,6 +198,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         super.createToolbar(container);
 
         lightButton = new ToggleButton();
+        lightButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
         lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));

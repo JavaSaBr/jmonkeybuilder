@@ -35,6 +35,7 @@ import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -232,11 +233,13 @@ public class SceneFileEditor extends
         super.createToolbar(container);
 
         lightButton = new ToggleButton();
+        lightButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS));
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
         lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
         audioButton = new ToggleButton();
+        audioButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO));
         audioButton.setGraphic(new ImageView(Icons.AUDIO_16));
         audioButton.setSelected(true);
         audioButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeAudio(newValue));

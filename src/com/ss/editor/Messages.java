@@ -40,6 +40,15 @@ public class Messages {
 
     public static final String FILE_EDITOR_ACTION_SAVE;
 
+    public static final String SCENE_FILE_EDITOR_ACTION_SELECTION;
+    public static final String SCENE_FILE_EDITOR_ACTION_GRID;
+    public static final String SCENE_FILE_EDITOR_ACTION_MOVE_TOOL;
+    public static final String SCENE_FILE_EDITOR_ACTION_SCALE_TOOL;
+    public static final String SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL;
+    public static final String SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT;
+    public static final String SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS;
+    public static final String SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO;
+
     public static final String POST_FILTER_EDITOR_MATERIAL_LABEL;
 
     public static final String ASSET_EDITOR_DIALOG_TITLE;
@@ -563,6 +572,15 @@ public class Messages {
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE = bundle.getString("AssetComponentResourceTreeContextMenuRenameFile");
 
         FILE_EDITOR_ACTION_SAVE = bundle.getString("FileEditorActionSave");
+
+        SCENE_FILE_EDITOR_ACTION_SELECTION = bundle.getString("SceneFileEditorActionSelection");
+        SCENE_FILE_EDITOR_ACTION_GRID = bundle.getString("SceneFileEditorActionGrid");
+        SCENE_FILE_EDITOR_ACTION_MOVE_TOOL = bundle.getString("SceneFileEditorActionMoveTool");
+        SCENE_FILE_EDITOR_ACTION_SCALE_TOOL = bundle.getString("SceneFileEditorActionScaleTool");
+        SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL = bundle.getString("SceneFileEditorActionRotationTool");
+        SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT = bundle.getString("SceneFileEditorActionCameraLight");
+        SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS = bundle.getString("SceneFileEditorActionShowLights");
+        SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO = bundle.getString("SceneFileEditorActionShowAudio");
 
         POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
