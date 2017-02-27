@@ -1,10 +1,8 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
-import static java.lang.Float.parseFloat;
+import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
-import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.CENTER_LEFT;
-
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
@@ -15,11 +13,7 @@ import com.ss.editor.ui.component.editor.impl.material.operation.RenderStateOper
 import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
-import java.util.function.Consumer;
-
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -27,7 +21,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
+
+import java.util.function.Consumer;
 
 /**
  * The component for editing material other properties.
@@ -42,90 +40,100 @@ public class MaterialRenderParamsComponent extends VBox {
     /**
      * The changes handler.
      */
+    @NotNull
     private final Consumer<EditorOperation> changeHandler;
 
     /**
      * The combo box to choose FaceCullMode.
      */
+    @Nullable
     private ComboBox<FaceCullMode> faceCullModeComboBox;
 
     /**
      * The combo box to choose BlendMode.
      */
+    @Nullable
     private ComboBox<BlendMode> blendModeComboBox;
 
     /**
-     * Установка factor для смещения.
+     * The poly offset factor field.
      */
-    private TextField polyOffsetFactorField;
+    @Nullable
+    private FloatTextField polyOffsetFactorField;
 
     /**
-     * Установка units для смещения.
+     * The poly offset units field.
      */
-    private TextField polyOffsetUnitsField;
+    @Nullable
+    private FloatTextField polyOffsetUnitsField;
 
     /**
-     * Активация записи в буффер глубины.
+     * The depth write check box.
      */
+    @Nullable
     private CheckBox depthWriteCheckBox;
 
     /**
-     * Активация записи результата фрагментского шейдера в буффер цвета.
+     * The color write check box.
      */
+    @Nullable
     private CheckBox colorWriteCheckBox;
 
     /**
-     * Активация тестирования глубины для этого материала.
+     * The depth test check box.
      */
+    @Nullable
     private CheckBox depthTestCheckBox;
 
     /**
-     * Активация режима рендера wireframe.
+     * The wireframe check box.
      */
+    @Nullable
     private CheckBox wireframeCheckBox;
 
     /**
-     * Текущий отображаемый материал.
+     * The current material.
      */
+    @Nullable
     private Material currentMaterial;
 
     /**
-     * Флаг игнорирования слушателей.
+     * The flag of change ignoring.
      */
     private boolean ignoreListeners;
 
-    //FIXME переделать на использование пропертей
     MaterialRenderParamsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         setId(CSSIds.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
         this.changeHandler = changeHandler;
-        createContent();
+        createControls();
     }
 
     /**
-     * @return флаг игнорирования слушателей.
+     * @return true if need to ignore changes.
      */
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
 
     /**
-     * @param ignoreListeners флаг игнорирования слушателей.
+     * @param ignoreListeners true if need to ignore changes.
      */
     private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
 
     /**
-     * @return обработчик внесения изменений.
+     * @return the changes handler.
      */
+    @NotNull
     private Consumer<EditorOperation> getChangeHandler() {
         return changeHandler;
     }
 
     /**
-     * Создание контролов.
+     * Create controls.
      */
-    private void createContent() {
+    private void createControls() {
 
         final VBox container = new VBox();
 
@@ -151,19 +159,21 @@ public class MaterialRenderParamsComponent extends VBox {
         polyOffsetFactorLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         polyOffsetFactorLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
-        polyOffsetFactorField = new TextField();
+        polyOffsetFactorField = new FloatTextField();
         polyOffsetFactorField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
-        polyOffsetFactorField.textProperty().addListener((observable, oldValue, newValue) -> processChangeFactor(newValue));
+        polyOffsetFactorField.addChangeListener((observable, oldValue, newValue) -> processChangeFactor(newValue));
         polyOffsetFactorField.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
+        polyOffsetFactorField.setScrollPower(5F);
 
         final Label polyOffsetUnitsLabel = new Label(Messages.MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS + ":");
         polyOffsetUnitsLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         polyOffsetUnitsLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
-        polyOffsetUnitsField = new TextField();
+        polyOffsetUnitsField = new FloatTextField();
         polyOffsetUnitsField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
-        polyOffsetUnitsField.textProperty().addListener((observable, oldValue, newValue) -> processChangeUnits(newValue));
+        polyOffsetUnitsField.addChangeListener((observable, oldValue, newValue) -> processChangeUnits(newValue));
         polyOffsetUnitsField.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
+        polyOffsetUnitsField.setScrollPower(5F);
 
         final Label depthWriteLabel = new Label(Messages.MATERIAL_RENDER_STATE_DEPTH_WRITE + ":");
         depthWriteLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
@@ -235,8 +245,6 @@ public class MaterialRenderParamsComponent extends VBox {
         FXUtils.addToPane(wireframeContainer, container);
         FXUtils.addToPane(container, this);
 
-        container.setPadding(new Insets(0, 6, 0, 0));
-
         FXUtils.addClassTo(faceCullModeLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(faceCullModeComboBox, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(blendModeLabel, CSSClasses.SPECIAL_FONT_13);
@@ -252,229 +260,180 @@ public class MaterialRenderParamsComponent extends VBox {
     }
 
     /**
-     * Обработка смены Wireframe.
+     * Handle changing wireframe flag.
      */
-    private void processChangeWireframe(final Boolean newValue) {
+    private void processChangeWireframe(@Nullable final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
         final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isWireframe()) {
-
-            @Override
-            protected void apply(final RenderState renderState, final Boolean value) {
-                renderState.setWireframe(value);
-            }
-        });
+        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isWireframe(), RenderState::setWireframe));
     }
 
     /**
-     * Обработка смены DepthTest.
+     * Handle changing depth test flag.
      */
-    private void processChangeDepthTest(final Boolean newValue) {
+    private void processChangeDepthTest(@Nullable final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
         final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isDepthTest()) {
-
-            @Override
-            protected void apply(final RenderState renderState, final Boolean value) {
-                renderState.setDepthTest(value);
-            }
-        });
+        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isDepthTest(), RenderState::setDepthTest));
     }
 
     /**
-     * Обработка смены ColorWrite.
+     * Handle changing color write flag.
      */
-    private void processChangeColorWrite(final Boolean newValue) {
+    private void processChangeColorWrite(@Nullable final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
         final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isColorWrite()) {
-
-            @Override
-            protected void apply(final RenderState renderState, final Boolean value) {
-                renderState.setColorWrite(value);
-            }
-        });
+        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isColorWrite(), RenderState::setColorWrite));
     }
 
     /**
-     * Обработка смены DepthWrite.
+     * Handle changing depth write flag.
      */
-    private void pointChangeDepthWrite(final Boolean newValue) {
+    private void pointChangeDepthWrite(@Nullable final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
         final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<Boolean>(newValue, renderState.isDepthWrite()) {
-
-            @Override
-            protected void apply(final RenderState renderState, final Boolean value) {
-                renderState.setDepthWrite(value);
-            }
-        });
-    }
-
-    private void processChangeUnits(final String newUnits) {
-        if (isIgnoreListeners()) return;
-
-        try {
-
-            final float polyOffsetUnits = parseFloat(newUnits);
-
-            final Material currentMaterial = getCurrentMaterial();
-            final RenderState renderState = currentMaterial.getAdditionalRenderState();
-
-            final Consumer<EditorOperation> changeHandler = getChangeHandler();
-            changeHandler.accept(new RenderStateOperation<Float>(polyOffsetUnits, renderState.getPolyOffsetUnits()) {
-
-                @Override
-                protected void apply(final RenderState renderState, final Float value) {
-                    renderState.setPolyOffset(renderState.getPolyOffsetFactor(), value);
-                }
-            });
-
-        } catch (final NumberFormatException ignored) {
-        }
-    }
-
-
-    /**
-     * Обработка смены PolyOffset Factor.
-     */
-    private void processChangeFactor(final String newFactor) {
-        if (isIgnoreListeners()) return;
-
-        try {
-
-            final float polyOffsetFactor = parseFloat(newFactor);
-
-            final Material currentMaterial = getCurrentMaterial();
-            final RenderState renderState = currentMaterial.getAdditionalRenderState();
-
-            final Consumer<EditorOperation> changeHandler = getChangeHandler();
-            changeHandler.accept(new RenderStateOperation<Float>(polyOffsetFactor, renderState.getPolyOffsetFactor()) {
-
-                @Override
-                protected void apply(final RenderState renderState, final Float value) {
-                    renderState.setPolyOffset(value, renderState.getPolyOffsetUnits());
-                }
-            });
-
-        } catch (final NumberFormatException ignored) {
-        }
+        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isDepthWrite(), RenderState::setDepthWrite));
     }
 
     /**
-     * Обработка смены Blend Mode.
+     * Handle changing poly offset units.
      */
-    private void processChange(final BlendMode blendMode) {
+    private void processChangeUnits(@NotNull final Float newUnits) {
         if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
         final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<BlendMode>(blendMode, renderState.getBlendMode()) {
-
-            @Override
-            protected void apply(final RenderState renderState, final BlendMode value) {
-                renderState.setBlendMode(value);
-            }
-        });
+        changeHandler.accept(new RenderStateOperation<>(newUnits, renderState.getPolyOffsetUnits(),
+                (state, value) -> state.setPolyOffset(state.getPolyOffsetFactor(), value)));
     }
 
     /**
-     * Обработка смены FaceCull Mode.
+     * Handle changing poly offset factor.
      */
-    private void processChange(final FaceCullMode faceCullMode) {
+    private void processChangeFactor(@NotNull final Float newFactor) {
         if (isIgnoreListeners()) return;
 
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
         final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<FaceCullMode>(faceCullMode, renderState.getFaceCullMode()) {
+        changeHandler.accept(new RenderStateOperation<>(newFactor, renderState.getPolyOffsetFactor(),
+                (state, value) -> state.setPolyOffset(value, state.getPolyOffsetUnits())));
 
-            @Override
-            protected void apply(final RenderState renderState, final FaceCullMode value) {
-                renderState.setFaceCullMode(value);
-            }
-        });
     }
 
     /**
-     * @return активация записи результата фрагментского шейдера в буффер цвета.
+     * Handle changing blend mode.
      */
+    private void processChange(@NotNull final BlendMode blendMode) {
+        if (isIgnoreListeners()) return;
+
+        final Material currentMaterial = getCurrentMaterial();
+        final RenderState renderState = currentMaterial.getAdditionalRenderState();
+
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<>(blendMode, renderState.getBlendMode(), RenderState::setBlendMode));
+    }
+
+    /**
+     * Handle changing face cull mode.
+     */
+    private void processChange(@NotNull final FaceCullMode faceCullMode) {
+        if (isIgnoreListeners()) return;
+
+        final Material currentMaterial = getCurrentMaterial();
+        final RenderState renderState = currentMaterial.getAdditionalRenderState();
+
+        final Consumer<EditorOperation> changeHandler = getChangeHandler();
+        changeHandler.accept(new RenderStateOperation<>(faceCullMode, renderState.getFaceCullMode(), RenderState::setFaceCullMode));
+    }
+
+    /**
+     * @return the color write check box.
+     */
+    @NotNull
     private CheckBox getColorWriteCheckBox() {
-        return colorWriteCheckBox;
+        return requireNonNull(colorWriteCheckBox);
     }
 
     /**
-     * @return активация тестирования глубины для этого материала.
+     * @return the depth test check box.
      */
+    @NotNull
     private CheckBox getDepthTestCheckBox() {
-        return depthTestCheckBox;
+        return requireNonNull(depthTestCheckBox);
     }
 
     /**
-     * @return активация записи в буффер глубины.
+     * @return the depth write check box.
      */
+    @NotNull
     private CheckBox getDepthWriteCheckBox() {
-        return depthWriteCheckBox;
+        return requireNonNull(depthWriteCheckBox);
     }
 
     /**
-     * @return активация режима рендера wireframe.
+     * @return the wireframe check box.
      */
+    @NotNull
     private CheckBox getWireframeCheckBox() {
-        return wireframeCheckBox;
+        return requireNonNull(wireframeCheckBox);
     }
 
     /**
-     * @return выбор режима BlendMode.
+     * @return the combo box to choose BlendMode.
      */
+    @NotNull
     private ComboBox<BlendMode> getBlendModeComboBox() {
-        return blendModeComboBox;
+        return requireNonNull(blendModeComboBox);
     }
 
     /**
-     * @return выбор режима FaceCullMode.
+     * @return the combo box to choose FaceCullMode.
      */
+    @NotNull
     private ComboBox<FaceCullMode> getFaceCullModeComboBox() {
-        return faceCullModeComboBox;
+        return requireNonNull(faceCullModeComboBox);
     }
 
     /**
-     * @return установка factor для смещения.
+     * @return the poly offset factor field.
      */
-    private TextField getPolyOffsetFactorField() {
-        return polyOffsetFactorField;
+    @NotNull
+    private FloatTextField getPolyOffsetFactorField() {
+        return requireNonNull(polyOffsetFactorField);
     }
 
     /**
-     * @return установка units для смещения.
+     * @return the poly offset units field.
      */
-    private TextField getPolyOffsetUnitsField() {
-        return polyOffsetUnitsField;
+    @NotNull
+    private FloatTextField getPolyOffsetUnitsField() {
+        return requireNonNull(polyOffsetUnitsField);
     }
 
     /**
-     * Построение настроек для материала.
+     * Update settings for a material.
      */
-    public void buildFor(final Material material) {
+    public void buildFor(@NotNull final Material material) {
         setCurrentMaterial(material);
 
         final RenderState renderState = material.getAdditionalRenderState();
@@ -512,16 +471,17 @@ public class MaterialRenderParamsComponent extends VBox {
     }
 
     /**
-     * @return текущий отображаемый материал.
+     * @return the current material.
      */
+    @NotNull
     private Material getCurrentMaterial() {
-        return currentMaterial;
+        return requireNonNull(currentMaterial);
     }
 
     /**
-     * @param currentMaterial текущий отображаемый материал.
+     * @param currentMaterial the current material.
      */
-    private void setCurrentMaterial(final Material currentMaterial) {
+    private void setCurrentMaterial(@NotNull final Material currentMaterial) {
         this.currentMaterial = currentMaterial;
     }
 }

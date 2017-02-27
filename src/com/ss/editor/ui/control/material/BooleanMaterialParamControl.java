@@ -1,18 +1,18 @@
 package com.ss.editor.ui.control.material;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.BooleanMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import javafx.scene.control.CheckBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
-
-import javafx.scene.control.CheckBox;
-import rlib.ui.util.FXUtils;
 
 /**
  * The implementation of a control for editing boolean properties.
@@ -22,13 +22,13 @@ import rlib.ui.util.FXUtils;
 public class BooleanMaterialParamControl extends MaterialParamControl {
 
     /**
-     * THe check box.
+     * The check box.
      */
+    @Nullable
     private CheckBox checkBox;
 
     public BooleanMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
-                                       @NotNull final Material material,
-                                       @NotNull final String parameterName) {
+                                       @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -51,6 +51,14 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
     }
 
     /**
+     * @return the check box.
+     */
+    @NotNull
+    private CheckBox getCheckBox() {
+        return requireNonNull(checkBox);
+    }
+
+    /**
      * Update a value.
      */
     private void processChange(@NotNull final Boolean newValue) {
@@ -70,14 +78,13 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
 
         final Material material = getMaterial();
         final MatParam param = material.getParam(getParameterName());
+        final CheckBox checkBox = getCheckBox();
 
         if (param == null) {
             checkBox.setSelected(false);
             return;
         }
 
-        final Boolean value = (Boolean) param.getValue();
-
-        checkBox.setSelected(value);
+        checkBox.setSelected((Boolean) param.getValue());
     }
 }

@@ -6,45 +6,52 @@ import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Базовая реализация операции по смене параметра материала.
+ * The base implementation of an editor operation to change material parameter.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
 
     /**
-     * Название изменяемого параметра.
+     * The parameter name.
      */
+    @NotNull
     private final String paramName;
 
     /**
-     * Новое значение.
+     * The new value.
      */
+    @Nullable
     private final T newValue;
 
     /**
-     * Старое значение.
+     * The prev value.
      */
+    @Nullable
     private final T oldValue;
 
-    public AbstractMaterialParamOperation(final String paramName, final T newValue, final T oldValue) {
+    public AbstractMaterialParamOperation(@NotNull final String paramName, @Nullable final T newValue,
+                                          @Nullable final T oldValue) {
         this.paramName = paramName;
         this.newValue = newValue;
         this.oldValue = oldValue;
     }
 
     /**
-     * @return название изменяемого параметра.
+     * @return The parameter name..
      */
+    @NotNull
     protected String getParamName() {
         return paramName;
     }
 
     /**
-     * @return тип параметраю
+     * @return the parameter type.
      */
+    @NotNull
     protected abstract VarType getVarType();
 
     @Override

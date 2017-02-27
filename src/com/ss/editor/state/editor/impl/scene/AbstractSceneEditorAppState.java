@@ -67,10 +67,10 @@ import rlib.util.dictionary.ObjectDictionary;
 public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
         extends AdvancedAbstractEditorAppState<T> implements SceneEditorControl {
 
-    protected static final String KEY_S = "SSEditor.editorState.S";
-    protected static final String KEY_G = "SSEditor.editorState.G";
-    protected static final String KEY_R = "SSEditor.editorState.R";
-    protected static final String KEY_DEL = "SSEditor.editorState.Del";
+    private static final String KEY_S = "SSEditor.sceneEditorState.S";
+    private static final String KEY_G = "SSEditor.sceneEditorState.G";
+    private static final String KEY_R = "SSEditor.sceneEditorState.R";
+    private static final String KEY_DEL = "SSEditor.sceneEditorState.Del";
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(45);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(15);
@@ -85,6 +85,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The table with models to present lights on a scene.
      */
+    @NotNull
     private static final ObjectDictionary<Light.Type, Node> LIGHT_MODEL_TABLE;
 
     private static final Node AUDIO_NODE_MODEL;

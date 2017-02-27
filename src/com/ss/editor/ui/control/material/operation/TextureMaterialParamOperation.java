@@ -10,13 +10,13 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Базовая реализация операции по смене текстуры материала.
+ * The operation to change texture parameters.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class TextureMaterialParamOperation extends AbstractEditorOperation<MaterialChangeConsumer> {
 
@@ -24,31 +24,39 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Название изменяемого параметра.
+     * The parameter name.
      */
+    @NotNull
     private final String paramName;
 
     /**
-     * Новый ключ текстуры..
+     * The new texture key.
      */
+    @Nullable
     private final TextureKey newTextureKey;
 
     /**
-     * Режим врапинга.
+     * The new wrap mode.
      */
+    @Nullable
     private final Texture.WrapMode newWrapMode;
 
     /**
-     * Старое ключ текстуры.
+     * The old texture key.
      */
+    @Nullable
     private final TextureKey oldTextureKey;
 
     /**
-     * Старый режим врапинга.
+     * The old wrap mode.
      */
+    @Nullable
     private final Texture.WrapMode oldWrapModel;
 
-    public TextureMaterialParamOperation(final String paramName, final TextureKey newTextureKey, final Texture.WrapMode newWrapMode, final TextureKey oldTextureKey, final Texture.WrapMode oldWrapModel) {
+    public TextureMaterialParamOperation(@NotNull final String paramName, @Nullable final TextureKey newTextureKey,
+                                         @Nullable final Texture.WrapMode newWrapMode,
+                                         @Nullable final TextureKey oldTextureKey,
+                                         @Nullable final Texture.WrapMode oldWrapModel) {
         this.paramName = paramName;
         this.newTextureKey = newTextureKey;
         this.newWrapMode = newWrapMode;
@@ -57,8 +65,9 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
     }
 
     /**
-     * @return название изменяемого параметра.
+     * @return The parameter name.
      */
+    @NotNull
     protected String getParamName() {
         return paramName;
     }
@@ -76,7 +85,6 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
                 final AssetManager assetManager = EDITOR.getAssetManager();
 
                 final Texture texture;
-
                 try {
                     texture = assetManager.loadTexture(newTextureKey);
                 } catch (final Exception e) {

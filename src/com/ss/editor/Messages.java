@@ -49,6 +49,11 @@ public class Messages {
     public static final String SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS;
     public static final String SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO;
 
+    public static final String MATERIAL_FILE_EDITOR_ACTION_CUBE;
+    public static final String MATERIAL_FILE_EDITOR_ACTION_SPHERE;
+    public static final String MATERIAL_FILE_EDITOR_ACTION_PLANE;
+    public static final String MATERIAL_FILE_EDITOR_ACTION_LIGHT;
+
     public static final String POST_FILTER_EDITOR_MATERIAL_LABEL;
 
     public static final String ASSET_EDITOR_DIALOG_TITLE;
@@ -581,6 +586,11 @@ public class Messages {
         SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT = bundle.getString("SceneFileEditorActionCameraLight");
         SCENE_FILE_EDITOR_ACTION_SHOW_LIGHTS = bundle.getString("SceneFileEditorActionShowLights");
         SCENE_FILE_EDITOR_ACTION_SHOW_AUDIO = bundle.getString("SceneFileEditorActionShowAudio");
+
+        MATERIAL_FILE_EDITOR_ACTION_CUBE = bundle.getString("MaterialFileEditorActionCube");
+        MATERIAL_FILE_EDITOR_ACTION_SPHERE = bundle.getString("MaterialFileEditorActionSphere");
+        MATERIAL_FILE_EDITOR_ACTION_PLANE = bundle.getString("MaterialFileEditorActionPlane");
+        MATERIAL_FILE_EDITOR_ACTION_LIGHT = bundle.getString("MaterialFileEditorActionLight");
 
         POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");

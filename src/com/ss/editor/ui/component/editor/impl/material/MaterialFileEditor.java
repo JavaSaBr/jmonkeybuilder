@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.editor.impl.material;
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static java.util.Objects.requireNonNull;
-import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
@@ -40,6 +39,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -55,14 +55,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
- * The implementation of the Editor for editing materials.
+ * The implementation of the Editor to edit materials.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements UndoableEditor, MaterialChangeConsumer {
 
@@ -155,25 +154,25 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private Material currentMaterial;
 
     /**
-     * The button for using a cube.
+     * The button to use a cube.
      */
     @Nullable
     private ToggleButton cubeButton;
 
     /**
-     * The button for using a sphere.
+     * The button to use a sphere.
      */
     @Nullable
     private ToggleButton sphereButton;
 
     /**
-     * The button for using a plane.
+     * The button to use a plane.
      */
     @Nullable
     private ToggleButton planeButton;
 
     /**
-     * The button for using a light.
+     * The button to use a light.
      */
     @Nullable
     private ToggleButton lightButton;
@@ -299,17 +298,43 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     protected void processKeyReleased(@NotNull final KeyEvent event) {
         super.processKeyReleased(event);
 
-        if (!event.isControlDown()) return;
-
         final KeyCode code = event.getCode();
 
-        if (code == KeyCode.Z) {
-            undo();
-            event.consume();
-        } else if (code == KeyCode.Y) {
-            redo();
+        if (handleKeyActionImpl(code, false, event.isControlDown())) {
             event.consume();
         }
+    }
+
+    @Override
+    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
+                                          final boolean isControlDown) {
+        if (isPressed) return false;
+
+        if (isControlDown && keyCode == KeyCode.Z) {
+            undo();
+            return true;
+        } else if (isControlDown && keyCode == KeyCode.Y) {
+            redo();
+            return true;
+        } else if (keyCode == KeyCode.C) {
+            final ToggleButton cubeButton = getCubeButton();
+            cubeButton.setSelected(true);
+            return true;
+        } else if (keyCode == KeyCode.S) {
+            final ToggleButton sphereButton = getSphereButton();
+            sphereButton.setSelected(true);
+            return true;
+        } else if (keyCode == KeyCode.P) {
+            final ToggleButton planeButton = getPlaneButton();
+            planeButton.setSelected(true);
+            return true;
+        } else if (keyCode == KeyCode.L) {
+            final ToggleButton lightButton = getLightButton();
+            lightButton.setSelected(!lightButton.isSelected());
+            return true;
+        }
+
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown);
     }
 
     /**
@@ -488,7 +513,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Reload the material.
      */
-    private void reload(final Material material) {
+    private void reload(@NotNull final Material material) {
         setCurrentMaterial(material);
 
         setIgnoreListeners(true);
@@ -544,18 +569,22 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     protected void createToolbar(@NotNull final HBox container) {
 
         cubeButton = new ToggleButton();
+        cubeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_CUBE + " (C)"));
         cubeButton.setGraphic(new ImageView(Icons.CUBE_16));
         cubeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.BOX, newValue));
 
         sphereButton = new ToggleButton();
+        sphereButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_SPHERE + " (S)"));
         sphereButton.setGraphic(new ImageView(Icons.SPHERE_16));
         sphereButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.SPHERE, newValue));
 
         planeButton = new ToggleButton();
+        planeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_PLANE + " (P)"));
         planeButton.setGraphic(new ImageView(Icons.PLANE_16));
         planeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.QUAD, newValue));
 
         lightButton = new ToggleButton();
+        lightButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_LIGHT + " (L)"));
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
         lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
@@ -609,7 +638,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the bucket type.
      */
-    private void changeBucketType(final RenderQueue.Bucket newValue) {
+    private void changeBucketType(@NotNull final RenderQueue.Bucket newValue) {
 
         final MaterialEditorAppState editorAppState = getEditorAppState();
         editorAppState.changeBucketType(newValue);
@@ -621,7 +650,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the type.
      */
-    private void changeType(final String newType) {
+    private void changeType(@NotNull final String newType) {
         if (isIgnoreListeners()) return;
         processChangeTypeImpl(newType);
     }
@@ -629,9 +658,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the type.
      */
-    private void processChangeTypeImpl(final String newType) {
-
-        final AssetKey<MaterialDef> materialDefKey = new AssetKey<>(newType);
+    private void processChangeTypeImpl(@NotNull final String newType) {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Material newMaterial = new Material(assetManager, newType);
@@ -642,14 +669,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         operationControl.clear();
 
         incrementChange();
-
         reload(newMaterial);
     }
 
     /**
      * Handle changing the light enabling.
      */
-    private void changeLight(final Boolean newValue) {
+    private void changeLight(@NotNull final Boolean newValue) {
 
         final MaterialEditorAppState editorAppState = getEditorAppState();
         editorAppState.updateLightEnabled(newValue);
@@ -659,7 +685,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @return the button for using a cube.
+     * @return the button to use a cube.
      */
     @NotNull
     private ToggleButton getCubeButton() {
@@ -667,7 +693,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @return the button for using a plane.
+     * @return the button to use a plane.
      */
     @NotNull
     private ToggleButton getPlaneButton() {
@@ -675,7 +701,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
-     * @return the button for using a sphere.
+     * @return the button to use a sphere.
      */
     @NotNull
     private ToggleButton getSphereButton() {
@@ -683,9 +709,17 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
+     * @return the button to use a light.
+     */
+    @NotNull
+    private ToggleButton getLightButton() {
+        return requireNonNull(lightButton);
+    }
+
+    /**
      * Handle changing model type.
      */
-    private void changeModelType(@NotNull final ModelType modelType, final Boolean newValue) {
+    private void changeModelType(@NotNull final ModelType modelType, @NotNull final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
         final MaterialEditorAppState editorAppState = getEditorAppState();

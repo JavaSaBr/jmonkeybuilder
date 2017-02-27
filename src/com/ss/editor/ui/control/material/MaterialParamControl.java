@@ -6,16 +6,14 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
-
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.ui.util.FXUtils;
+
+import java.util.function.Consumer;
 
 /**
  * The base implementation of control for editing material parameter.
@@ -24,6 +22,7 @@ import rlib.ui.util.FXUtils;
  */
 public class MaterialParamControl extends HBox {
 
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MaterialParamControl.class);
 
     public static final double LABEL_PERCENT_WIDTH = 0.4;
@@ -62,8 +61,8 @@ public class MaterialParamControl extends HBox {
      */
     private boolean ignoreListeners;
 
-    public MaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler, @NotNull final Material material,
-                                @NotNull final String parameterName) {
+    protected MaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler, @NotNull final Material material,
+                         @NotNull final String parameterName) {
         this.changeHandler = changeHandler;
         this.material = material;
         this.parameterName = parameterName;
@@ -108,6 +107,7 @@ public class MaterialParamControl extends HBox {
 
         paramNameLabel = new Label(getParameterName() + ":");
         paramNameLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
+
         bindParamNameLabel();
 
         FXUtils.addClassTo(paramNameLabel, CSSClasses.SPECIAL_FONT_13);

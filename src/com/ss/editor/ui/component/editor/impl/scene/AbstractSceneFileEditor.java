@@ -22,7 +22,6 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
@@ -296,7 +295,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
-     * @return the container of property editor in objects tool..
+     * @return the container of property editor in objects tool.
      */
     @NotNull
     private VBox getPropertyEditorObjectsContainer() {
@@ -481,28 +480,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
     }
 
-    /**
-     * Handle a key code.
-     *
-     * @param isPressed     true if key is pressed.
-     * @param isControlDown true if control is down.
-     * @param keyCode       the key code.
-     */
-    @FromAnyThread
-    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown) {
-        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown));
-    }
-
-    /**
-     * Handle a key code.
-     *
-     * @param keyCode       the key code.
-     * @param isPressed     true if key is pressed.
-     * @param isControlDown true if control is down.
-     * @return true if can consume an event.
-     */
-    @EditorThread
-    private boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
+    @Override
+    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                         final boolean isControlDown) {
         if (isPressed) return false;
 
@@ -548,9 +527,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return true;
         }
 
-        return false;
+        return super.handleKeyActionImpl(keyCode, false, isControlDown);
     }
-
 
     /**
      * Redo the last operation.

@@ -1,18 +1,22 @@
 package com.ss.editor.ui.control.material.operation;
 
 import com.jme3.shader.VarType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Операция по изменению int числа в параметрах материала.
+ * The operation to change integer parameters.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class IntegerMaterialParamOperation extends AbstractMaterialParamOperation<Integer> {
 
-    public IntegerMaterialParamOperation(final String paramName, final Integer newValue, final Integer oldValue) {
+    public IntegerMaterialParamOperation(@NotNull final String paramName, @Nullable final Integer newValue,
+                                         @Nullable final Integer oldValue) {
         super(paramName, newValue, oldValue);
     }
 
+    @NotNull
     @Override
     protected VarType getVarType() {
         return VarType.Int;

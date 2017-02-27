@@ -7,6 +7,8 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.EditorThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorAppState;
 import com.ss.editor.ui.Icons;
@@ -166,6 +168,32 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Handle a key code.
+     *
+     * @param isPressed     true if key is pressed.
+     * @param isControlDown true if control is down.
+     * @param keyCode       the key code.
+     */
+    @FromAnyThread
+    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown) {
+        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown));
+    }
+
+    /**
+     * Handle a key code.
+     *
+     * @param keyCode       the key code.
+     * @param isPressed     true if key is pressed.
+     * @param isControlDown true if control is down.
+     * @return true if can consume an event.
+     */
+    @EditorThread
+    protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
+                                        final boolean isControlDown) {
+        return false;
+    }
+
+    /**
      * Handle the key pressed event.
      */
     protected void processKeyPressed(@NotNull final KeyEvent event) {
@@ -184,10 +212,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected Button createSaveAction() {
 
         Button action = new Button();
+        action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
         action.setOnAction(event -> processSave());
         action.setGraphic(new ImageView(Icons.SAVE_16));
         action.disableProperty().bind(dirtyProperty().not());
-        action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
 
         FXUtils.addClassTo(action, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(action, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);

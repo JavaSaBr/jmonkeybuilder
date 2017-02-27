@@ -1,18 +1,22 @@
 package com.ss.editor.ui.control.material.operation;
 
 import com.jme3.shader.VarType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Операция по изменению float числа в параметрах материала.
+ * The operation to change float parameters.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class FloatMaterialParamOperation extends AbstractMaterialParamOperation<Float> {
 
-    public FloatMaterialParamOperation(final String paramName, final Float newValue, final Float oldValue) {
+    public FloatMaterialParamOperation(@NotNull final String paramName, @Nullable final Float newValue,
+                                       @Nullable final Float oldValue) {
         super(paramName, newValue, oldValue);
     }
 
+    @NotNull
     @Override
     protected VarType getVarType() {
         return VarType.Float;

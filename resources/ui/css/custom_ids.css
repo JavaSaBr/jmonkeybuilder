@@ -306,7 +306,7 @@
 #MaterialFileEditorPropertiesComponent {
     -fx-background-color: -fx-background-background;
     -fx-alignment: top-left;
-    -fx-padding: 0 0 0 4;
+    -fx-padding: 0 5 0 4;
 }
 
 #MaterialParamControlParamName {

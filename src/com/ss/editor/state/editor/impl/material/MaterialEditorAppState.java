@@ -5,6 +5,9 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
@@ -24,9 +27,12 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
+import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.function.BooleanFloatConsumer;
 import rlib.geom.util.AngleUtils;
+import rlib.util.dictionary.ObjectDictionary;
 
 /**
  * The implementation the 3D part of the {@link MaterialFileEditor}.
@@ -40,6 +46,18 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(75);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(25);
+
+    private static final String KEY_C = "SSEditor.materialEditorState.C";
+    private static final String KEY_S = "SSEditor.materialEditorState.S";
+    private static final String KEY_P = "SSEditor.materialEditorState.P";
+    private static final String KEY_L = "SSEditor.materialEditorState.L";
+
+    static {
+        TRIGGERS.put(KEY_C, new KeyTrigger(KeyInput.KEY_C));
+        TRIGGERS.put(KEY_S, new KeyTrigger(KeyInput.KEY_S));
+        TRIGGERS.put(KEY_P, new KeyTrigger(KeyInput.KEY_P));
+        TRIGGERS.put(KEY_L, new KeyTrigger(KeyInput.KEY_L));
+    }
 
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
@@ -90,7 +108,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      */
     private int frame;
 
-    public MaterialEditorAppState(final MaterialFileEditor fileEditor) {
+    public MaterialEditorAppState(@NotNull final MaterialFileEditor fileEditor) {
         super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
@@ -116,6 +134,24 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         final EditorCamera editorCamera = requireNonNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
+    }
+
+    @Override
+    protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
+        super.registerActionHandlers(actionHandlers);
+
+        final MaterialFileEditor fileEditor = getFileEditor();
+
+        actionHandlers.put(KEY_S, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.S, isPressed, isControlDown()));
+        actionHandlers.put(KEY_C, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.C, isPressed, isControlDown()));
+        actionHandlers.put(KEY_P, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.P, isPressed, isControlDown()));
+        actionHandlers.put(KEY_L, (isPressed, tpf) -> fileEditor.handleKeyAction(KeyCode.L, isPressed, isControlDown()));
+    }
+
+    @Override
+    protected void registerActionListener(@NotNull final InputManager inputManager) {
+        super.registerActionListener(inputManager);
+        inputManager.addListener(actionListener, KEY_S, KEY_C, KEY_P, KEY_L);
     }
 
     /**
@@ -239,8 +275,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
 
-        final ModelType currentModelType = getCurrentModelType();
-        if (currentModelType != null) changeModeImpl(currentModelType);
+        changeModeImpl(getCurrentModelType());
 
         frame = 0;
     }

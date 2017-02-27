@@ -5,12 +5,10 @@ import com.jme3.material.Material;
 import com.jme3.shader.VarType;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.ColorMaterialParamControl;
-
 import org.jetbrains.annotations.NotNull;
+import rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
-
-import rlib.ui.util.FXUtils;
 
 /**
  * The component for editing material color properties.
@@ -19,7 +17,7 @@ import rlib.ui.util.FXUtils;
  */
 public class MaterialColorsComponent extends AbstractMaterialPropertiesComponent {
 
-    public MaterialColorsComponent(final Consumer<EditorOperation> changeHandler) {
+    public MaterialColorsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         super(changeHandler);
     }
 

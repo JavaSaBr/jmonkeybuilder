@@ -6,18 +6,15 @@ import com.jme3.material.MaterialDef;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import rlib.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The component for editing material properties.
@@ -29,6 +26,7 @@ public abstract class AbstractMaterialPropertiesComponent extends VBox {
     /**
      * The changes handler.
      */
+    @NotNull
     private final Consumer<EditorOperation> changeHandler;
 
     public AbstractMaterialPropertiesComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
@@ -54,14 +52,12 @@ public abstract class AbstractMaterialPropertiesComponent extends VBox {
         children.clear();
 
         final List<MatParam> materialParams = new ArrayList<>(materialDef.getMaterialParams());
-
-        Collections.sort(materialParams, (first, second) -> StringUtils.compareIgnoreCase(first.getName(), second.getName()));
-
+        materialParams.sort((first, second) -> StringUtils.compareIgnoreCase(first.getName(), second.getName()));
         materialParams.forEach(matParam -> buildFor(matParam, material));
     }
 
     /**
-     * Build a control dor editing the material parameter.
+     * Build a control to edit the material parameter.
      */
     protected void buildFor(@NotNull final MatParam matParam, @NotNull final Material material) {
     }

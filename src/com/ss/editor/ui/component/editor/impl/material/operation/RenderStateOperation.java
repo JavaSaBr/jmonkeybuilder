@@ -5,31 +5,44 @@ import com.jme3.material.RenderState;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BiConsumer;
 
 /**
- * Базовая реализация операции по изменению рендера материала.
+ * The implementation of an editor operation to edit material render params.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
-public abstract class RenderStateOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
+@SuppressWarnings("Duplicates")
+public class RenderStateOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * Новое значение параметра.
+     * The apply handler.
      */
+    @NotNull
+    private final BiConsumer<RenderState, T> applyHandler;
+
+    /**
+     * The new value.
+     */
+    @Nullable
     private final T newValue;
 
     /**
-     * Старое значение параметра.
+     * The old value.
      */
+    @Nullable
     private final T oldValue;
 
-    public RenderStateOperation(final T newValue, final T oldValue) {
+    public RenderStateOperation(@Nullable final T newValue, @Nullable final T oldValue,
+                                   @NotNull final BiConsumer<RenderState, T> applyHandler) {
         this.newValue = newValue;
         this.oldValue = oldValue;
+        this.applyHandler = applyHandler;
     }
 
     @Override
@@ -39,13 +52,11 @@ public abstract class RenderStateOperation<T> extends AbstractEditorOperation<Ma
             final Material currentMaterial = editor.getCurrentMaterial();
             final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-            apply(renderState, newValue);
+            applyHandler.accept(renderState, newValue);
 
             EXECUTOR_MANAGER.addFXTask(editor::notifyChangedRenderState);
         });
     }
-
-    protected abstract void apply(final RenderState renderState, final T value);
 
     @Override
     protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
@@ -54,7 +65,7 @@ public abstract class RenderStateOperation<T> extends AbstractEditorOperation<Ma
             final Material currentMaterial = editor.getCurrentMaterial();
             final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-            apply(renderState, oldValue);
+            applyHandler.accept(renderState, oldValue);
 
             EXECUTOR_MANAGER.addFXTask(editor::notifyChangedRenderState);
         });

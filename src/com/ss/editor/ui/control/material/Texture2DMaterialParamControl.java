@@ -35,6 +35,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
@@ -71,21 +72,25 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * The channels preview of the texture.
      */
+    @Nullable
     private ImageChannelPreview textureTooltip;
 
     /**
      * The preview of the texture.
      */
+    @Nullable
     private ImageView texturePreview;
 
     /**
      * The checkbox for editing repeat property.
      */
+    @Nullable
     private CheckBox repeatButton;
 
     /**
      * The checkbox for editing flip property.
      */
+    @Nullable
     private CheckBox flipButton;
 
     public Texture2DMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
@@ -173,7 +178,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private ImageChannelPreview getTextureTooltip() {
-        return textureTooltip;
+        return requireNonNull(textureTooltip);
     }
 
     /**
@@ -298,22 +303,25 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * @return the checkbox for editing repeat property.
      */
+    @NotNull
     private CheckBox getRepeatButton() {
-        return repeatButton;
+        return requireNonNull(repeatButton);
     }
 
     /**
      * @return the checkbox for editing flip property.
      */
+    @NotNull
     private CheckBox getFlipButton() {
-        return flipButton;
+        return requireNonNull(flipButton);
     }
 
     /**
      * @return the preview of the texture.
      */
+    @NotNull
     private ImageView getTexturePreview() {
-        return texturePreview;
+        return requireNonNull(texturePreview);
     }
 
     @Override

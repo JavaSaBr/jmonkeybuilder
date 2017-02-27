@@ -1,21 +1,18 @@
 package com.ss.editor.ui.control.material;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.FloatMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
-
-import javafx.geometry.Insets;
-import javafx.scene.layout.HBox;
 import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
+
+import java.util.function.Consumer;
 
 /**
  * The base implementation of control for editing float material parameter.
@@ -24,16 +21,14 @@ import rlib.ui.util.FXUtils;
  */
 public class FloatMaterialParamControl extends MaterialParamControl {
 
-    public static final Insets FIELD_OFFSET = new Insets(0, 6, 0, 0);
-
     /**
      * The float field.
      */
+    @Nullable
     private FloatTextField floatField;
 
     public FloatMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
-                                     @NotNull final Material material,
-                                     @NotNull final String parameterName) {
+                                     @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
     }
 
@@ -49,13 +44,19 @@ public class FloatMaterialParamControl extends MaterialParamControl {
 
         FXUtils.addToPane(floatField, this);
         FXUtils.addClassTo(floatField, CSSClasses.SPECIAL_FONT_13);
-
-        HBox.setMargin(floatField, FIELD_OFFSET);
     }
 
     @Override
     protected double getLabelPercentWidth() {
         return LABEL_PERCENT_WIDTH2;
+    }
+
+    /**
+     * @return the float field.
+     */
+    @NotNull
+    private FloatTextField getFloatField() {
+        return requireNonNull(floatField);
     }
 
     /**
@@ -79,6 +80,7 @@ public class FloatMaterialParamControl extends MaterialParamControl {
 
         final Material material = getMaterial();
         final MatParam param = material.getParam(getParameterName());
+        final FloatTextField floatField = getFloatField();
 
         if (param == null) {
             floatField.setValue(0F);

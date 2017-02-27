@@ -1,20 +1,18 @@
 package com.ss.editor.ui.control.material;
 
+import static java.util.Objects.requireNonNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.IntegerMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
-
-import javafx.geometry.Insets;
-import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.IntegerTextField;
 import rlib.ui.util.FXUtils;
+
+import java.util.function.Consumer;
 
 /**
  * The base implementation of control for editing integer material parameter.
@@ -23,11 +21,10 @@ import rlib.ui.util.FXUtils;
  */
 public class IntegerMaterialParamControl extends MaterialParamControl {
 
-    public static final Insets FIELD_OFFSET = new Insets(0, 6, 0, 0);
-
     /**
-     * The integer integerField.
+     * The integer field.
      */
+    @Nullable
     private IntegerTextField integerField;
 
     public IntegerMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
@@ -45,8 +42,6 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
 
         FXUtils.addToPane(integerField, this);
         FXUtils.addClassTo(integerField, CSSClasses.SPECIAL_FONT_13);
-
-        HBox.setMargin(integerField, FIELD_OFFSET);
     }
 
     @Override
@@ -68,12 +63,21 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
         execute(new IntegerMaterialParamOperation(parameterName, newValue, oldValue));
     }
 
+    /**
+     * @return The integer field.
+     */
+    @NotNull
+    private IntegerTextField getIntegerField() {
+        return requireNonNull(integerField);
+    }
+
     @Override
     public void reload() {
         super.reload();
 
         final Material material = getMaterial();
         final MatParam param = material.getParam(getParameterName());
+        final IntegerTextField integerField = getIntegerField();
 
         if (param == null) {
             integerField.setValue(0);
