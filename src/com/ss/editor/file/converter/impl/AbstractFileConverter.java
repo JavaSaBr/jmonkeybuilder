@@ -1,13 +1,6 @@
 package com.ss.editor.file.converter.impl;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static java.util.Objects.requireNonNull;
 import static rlib.util.FileUtils.containsExtensions;
-
-import com.jme3.asset.AssetManager;
-import com.jme3.asset.ModelKey;
-import com.jme3.export.binary.BinaryExporter;
-import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
@@ -15,30 +8,24 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Objects;
-
 import rlib.logging.Logger;
 import rlib.logging.LoggerManager;
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 /**
  * The base implementation of a file converter.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public abstract class AbstractFileConverter implements FileConverter {
 
@@ -48,19 +35,10 @@ public abstract class AbstractFileConverter implements FileConverter {
     @NotNull
     private static final Array<String> EMPTY_ARRAY = ArrayFactory.newArray(String.class);
 
-    @NotNull
-    private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
-
-    @NotNull
+    protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @Override
@@ -91,7 +69,17 @@ public abstract class AbstractFileConverter implements FileConverter {
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
-                convertImpl(source, destination, Files.exists(destination));
+
+                final boolean overwrite = Files.exists(destination);
+
+                convertImpl(source, destination, overwrite);
+
+                if (overwrite) {
+                    notifyFileChanged(destination);
+                } else {
+                    notifyFileCreated(destination);
+                }
+
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
                 EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(null));
@@ -99,33 +87,14 @@ public abstract class AbstractFileConverter implements FileConverter {
         });
     }
 
-    private void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite) {
-
-        final Path assetFile = requireNonNull(getAssetFile(source), "Not found asset file for " + source);
-        final ModelKey modelKey = new ModelKey(assetFile.toString());
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.clearAssetEventListeners();
-
-        final Spatial model = assetManager.loadAsset(modelKey);
-
-        if (EDITOR_CONFIG.isAutoTangentGenerating()) {
-            TangentGenerator.useMikktspaceGenerator(model);
-        }
-
-        final BinaryExporter exporter = BinaryExporter.getInstance();
-
-        try (final OutputStream out = Files.newOutputStream(destination)) {
-            exporter.save(model, out);
-        } catch (final IOException e) {
-            LOGGER.warning(this, e);
-        }
-
-        if (overwrite) {
-            notifyFileChanged(destination);
-        } else {
-            notifyFileCreated(destination);
-        }
+    /**
+     * Implementation of converting a file.
+     *
+     * @param source      the source file.
+     * @param destination the target file.
+     * @param overwrite   is need to overwrite.
+     */
+    protected void convertImpl(@NotNull final Path source, @NotNull final Path destination, final boolean overwrite) {
     }
 
     /**
@@ -148,7 +117,7 @@ public abstract class AbstractFileConverter implements FileConverter {
      * @param file the changed file.
      */
     @FromAnyThread
-    private void notifyFileChanged(@NotNull final Path file) {
+    protected void notifyFileChanged(@NotNull final Path file) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileChangedImpl(file));
     }
 
@@ -164,7 +133,7 @@ public abstract class AbstractFileConverter implements FileConverter {
      * @param file the created file.
      */
     @FromAnyThread
-    private void notifyFileCreated(@Nullable final Path file) {
+    protected void notifyFileCreated(@Nullable final Path file) {
         EXECUTOR_MANAGER.addFXTask(() -> notifyFileCreatedImpl(file));
     }
 

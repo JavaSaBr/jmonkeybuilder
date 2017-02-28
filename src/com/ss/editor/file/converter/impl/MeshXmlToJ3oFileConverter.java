@@ -3,21 +3,19 @@ package com.ss.editor.file.converter.impl;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.file.converter.FileConverterDescription;
-
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-
 import rlib.util.FileUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
+
+import java.nio.file.Path;
 
 /**
  * The implementation of {@link AbstractFileConverter} to convert .mesh.xml file to .j3o.
  *
  * @author JavaSaBr
  */
-public class MeshXmlToJ3oFileConverter extends AbstractFileConverter {
+public class MeshXmlToJ3oFileConverter extends AbstractModelFileConverter {
 
     @NotNull
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);

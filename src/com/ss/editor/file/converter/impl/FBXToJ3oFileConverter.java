@@ -14,7 +14,7 @@ import rlib.util.array.ArrayFactory;
  *
  * @author JavaSaBr
  */
-public class FBXToJ3oFileConverter extends AbstractFileConverter {
+public class FBXToJ3oFileConverter extends AbstractModelFileConverter {
 
     @NotNull
     private static final Array<String> EXTENSIONS = ArrayFactory.newArray(String.class);

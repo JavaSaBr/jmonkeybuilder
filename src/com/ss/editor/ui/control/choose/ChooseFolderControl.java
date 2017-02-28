@@ -142,7 +142,7 @@ public class ChooseFolderControl extends HBox {
     /**
      * @param folder the selected folder.
      */
-    private void setFolder(@Nullable final Path folder) {
+    public void setFolder(@Nullable final Path folder) {
         this.folder = folder;
 
         reload();

@@ -533,6 +533,13 @@ public class Messages {
     public static final String EDITING_COMPONENT_SHININESS;
     public static final String EDITING_COMPONENT_LAYER;
 
+    public static final String MODEL_CONVERTER_DIALOG_TITLE;
+    public static final String MODEL_CONVERTER_DIALOG_RESULT_NAME;
+    public static final String MODEL_CONVERTER_DIALOG_DESTINATION_FOLDER;
+    public static final String MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS;
+    public static final String MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER;
+    public static final String MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS;
+    public static final String MODEL_CONVERTER_DIALOG_BUTTON_OK;
 
     static {
 
@@ -1068,5 +1075,13 @@ public class Messages {
         EDITING_COMPONENT_TRI_PLANAR = bundle.getString("EditingComponentTriPlanar");
         EDITING_COMPONENT_SHININESS = bundle.getString("EditingComponentShininess");
         EDITING_COMPONENT_LAYER = bundle.getString("EditingComponentLayer");
+
+        MODEL_CONVERTER_DIALOG_TITLE = bundle.getString("ModelConverterDialogTitle");
+        MODEL_CONVERTER_DIALOG_RESULT_NAME = bundle.getString("ModelConverterDialogResultName");
+        MODEL_CONVERTER_DIALOG_DESTINATION_FOLDER = bundle.getString("ModelConverterDialogDestinationFolder");
+        MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS = bundle.getString("ModelConverterDialogExportMaterials");
+        MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER = bundle.getString("ModelConverterDialogMaterialsFolder");
+        MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS = bundle.getString("ModelConverterDialogOverwriteMaterials");
+        MODEL_CONVERTER_DIALOG_BUTTON_OK = bundle.getString("ModelConverterDialogButtonOk");
     }
 }
