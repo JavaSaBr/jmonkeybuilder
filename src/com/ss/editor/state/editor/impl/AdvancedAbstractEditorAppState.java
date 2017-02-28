@@ -1,5 +1,6 @@
 package com.ss.editor.state.editor.impl;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.commons.lang3.ArrayUtils.toArray;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
@@ -15,6 +16,7 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.function.BooleanFloatConsumer;
@@ -41,10 +43,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     protected static final String MOUSE_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseXAxisNegative";
     protected static final String MOUSE_Y_AXIS = "SSEditor.editorState.mouseYAxis";
     protected static final String MOUSE_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseYAxisNegative";
-    protected static final String MOVE_CAMERA_X_AXIS = "SSEditor.editorState.moveCameraXAxis";
-    protected static final String MOVE_CAMERA_X_AXIS_NEGATIVE = "SSEditor.editorState.moveCameraXAxisNegative";
-    protected static final String MOVE_CAMERA_Y_AXIS = "SSEditor.editorState.moveCameraYAxis";
-    protected static final String MOVE_CAMERA_Y_AXIS_NEGATIVE = "SSEditor.editorState.moveCameraYAxisNegative";
+
+    protected static final String MOUSE_MOVE_CAMERA_X_AXIS = "SSEditor.editorState.mouseMoveCameraXAxis";
+    protected static final String MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraXAxisNegative";
+    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS = "SSEditor.editorState.mouseMoveCameraYAxis";
+    protected static final String MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraYAxisNegative";
 
     protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
@@ -52,6 +55,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     protected static final String KEY_CTRL_S = "SSEditor.editorState.Ctrl.S";
     protected static final String KEY_CTRL_Z = "SSEditor.editorState.Ctrl.Z";
     protected static final String KEY_CTRL_Y = "SSEditor.editorState.Ctrl.Y";
+
+    protected static final String KEY_FLY_CAMERA_W = "SSEditor.editorState.keyFlyCameraW";
+    protected static final String KEY_FLY_CAMERA_S = "SSEditor.editorState.keyFlyCameraS";
+    protected static final String KEY_FLY_CAMERA_A = "SSEditor.editorState.keyFlyCameraA";
+    protected static final String KEY_FLY_CAMERA_D = "SSEditor.editorState.keyFlyCameraD";
 
     protected static final String KEY_NUM_1 = "SSEditor.editorState.num1";
     protected static final String KEY_NUM_2 = "SSEditor.editorState.num2";
@@ -68,10 +76,10 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         TRIGGERS.put(MOUSE_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
         TRIGGERS.put(MOUSE_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
         TRIGGERS.put(MOUSE_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
-        TRIGGERS.put(MOVE_CAMERA_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        TRIGGERS.put(MOVE_CAMERA_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        TRIGGERS.put(MOVE_CAMERA_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        TRIGGERS.put(MOVE_CAMERA_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        TRIGGERS.put(MOUSE_MOVE_CAMERA_X_AXIS, new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        TRIGGERS.put(MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        TRIGGERS.put(MOUSE_MOVE_CAMERA_Y_AXIS, new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        TRIGGERS.put(MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE, new MouseAxisTrigger(MouseInput.AXIS_Y, true));
 
         TRIGGERS.put(MOUSE_RIGHT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
         TRIGGERS.put(MOUSE_LEFT_CLICK, new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
@@ -84,6 +92,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         TRIGGERS.put(KEY_CTRL_S, new KeyTrigger(KeyInput.KEY_S));
         TRIGGERS.put(KEY_CTRL_Z, new KeyTrigger(KeyInput.KEY_Z));
         TRIGGERS.put(KEY_CTRL_Y, new KeyTrigger(KeyInput.KEY_Y));
+
+        TRIGGERS.put(KEY_FLY_CAMERA_W, new KeyTrigger(KeyInput.KEY_W));
+        TRIGGERS.put(KEY_FLY_CAMERA_S, new KeyTrigger(KeyInput.KEY_S));
+        TRIGGERS.put(KEY_FLY_CAMERA_A, new KeyTrigger(KeyInput.KEY_A));
+        TRIGGERS.put(KEY_FLY_CAMERA_D, new KeyTrigger(KeyInput.KEY_D));
 
         TRIGGERS.put(KEY_NUM_1, new KeyTrigger(KeyInput.KEY_NUMPAD1));
         TRIGGERS.put(KEY_NUM_2, new KeyTrigger(KeyInput.KEY_NUMPAD2));
@@ -139,6 +152,12 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     private final Vector3f prevCameraLocation;
 
     /**
+     * The state of camera keys.
+     */
+    @NotNull
+    private final boolean[] cameraKeysState;
+
+    /**
      * The current state manager.
      */
     protected AppStateManager stateManager;
@@ -157,6 +176,16 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * The previous horizontal camera rotation.
      */
     private float prevHRotation;
+
+    /**
+     * The camera speed.
+     */
+    private float cameraSpeed;
+
+    /**
+     * The flag of moving camera.
+     */
+    private int cameraMoving;
 
     /**
      * Is control pressed.
@@ -193,6 +222,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
         this.prevCameraLocation = new Vector3f();
+        this.cameraKeysState = new boolean[4];
+        this.cameraSpeed = 1F;
 
         if (lightForCamera != null) {
             final Node stateNode = getStateNode();
@@ -213,10 +244,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      */
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
-        actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> setControlDown(isPressed));
-        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> setShiftDown(isPressed));
         actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> setButtonLeftDown(isPressed));
-        actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> setButtonMiddleDown(isPressed));
         actionHandlers.put(MOUSE_RIGHT_CLICK, (isPressed, tpf) -> setButtonRightDown(isPressed));
         actionHandlers.put(KEY_NUM_1, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.BACK, isPressed));
         actionHandlers.put(KEY_NUM_3, (isPressed, tpf) -> rotateTo(EditorCamera.Perspective.RIGHT, isPressed));
@@ -227,11 +255,43 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         actionHandlers.put(KEY_NUM_4, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.LEFT, isPressed));
         actionHandlers.put(KEY_NUM_6, (isPressed, tpf) -> rotateTo(EditorCamera.Direction.RIGHT, isPressed));
 
+        actionHandlers.put(MOUSE_MIDDLE_CLICK, (isPressed, tpf) -> {
+            setButtonMiddleDown(isPressed);
+            if (isCameraMoving() && !isPressed) finishCameraMoving(0, true);
+        });
+
+        actionHandlers.put(KEY_CTRL, (isPressed, tpf) -> {
+            setControlDown(isPressed);
+            if (isCameraMoving() && isPressed && cameraSpeed > 0) {
+                cameraSpeed = Math.max(cameraSpeed - 0.4F, 0.1F);
+            }
+        });
+
+        actionHandlers.put(KEY_SHIFT, (isPressed, tpf) -> {
+            setShiftDown(isPressed);
+            if (isCameraMoving() && isPressed && cameraSpeed > 0) {
+                cameraSpeed += 0.4F;
+            }
+        });
+
         actionHandlers.put(KEY_CTRL_Z, (isPressed, tpf) -> {
             if (!isPressed && isControlDown()) undo();
         });
         actionHandlers.put(KEY_CTRL_Y, (isPressed, tpf) -> {
             if (!isPressed && isControlDown()) redo();
+        });
+
+        actionHandlers.put(KEY_FLY_CAMERA_A, (isPressed, tpf) -> {
+            if (isButtonMiddleDown()) moveSideCamera(tpf, true, isPressed, 0);
+        });
+        actionHandlers.put(KEY_FLY_CAMERA_D, (isPressed, tpf) -> {
+            if (isButtonMiddleDown()) moveSideCamera(-tpf, true, isPressed, 1);
+        });
+        actionHandlers.put(KEY_FLY_CAMERA_W, (isPressed, tpf) -> {
+            if (isButtonMiddleDown()) moveDirectionCamera(tpf, true, isPressed, 2);
+        });
+        actionHandlers.put(KEY_FLY_CAMERA_S, (isPressed, tpf) -> {
+            if (isButtonMiddleDown()) moveDirectionCamera(-tpf, true, isPressed, 3);
         });
 
         actionHandlers.put(KEY_CTRL_S, (isPressed, tpf) -> {
@@ -252,10 +312,6 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         analogHandlers.put(MOUSE_X_AXIS_NEGATIVE, (value, tpf) -> moveXMouse(-value));
         analogHandlers.put(MOUSE_Y_AXIS, (value, tpf) -> moveYMouse(-value));
         analogHandlers.put(MOUSE_Y_AXIS_NEGATIVE, (value, tpf) -> moveYMouse(value));
-        analogHandlers.put(MOVE_CAMERA_X_AXIS, (value, tpf) -> moveXCamera(value * 30F));
-        analogHandlers.put(MOVE_CAMERA_X_AXIS_NEGATIVE, (value, tpf) -> moveXCamera(-value * 30F));
-        analogHandlers.put(MOVE_CAMERA_Y_AXIS, (value, tpf) -> moveYCamera(-value * 30F));
-        analogHandlers.put(MOVE_CAMERA_Y_AXIS_NEGATIVE, (value, tpf) -> moveYCamera(value * 30F));
     }
 
     /**
@@ -283,12 +339,73 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
-     * Move a camera on X axis.
+     * @return true if the camera is moving now.
+     */
+    private boolean isCameraMoving() {
+        return cameraMoving != 0;
+    }
+
+    /**
+     * @return the state of camera keys.
+     */
+    @NotNull
+    private boolean[] getCameraKeysState() {
+        return cameraKeysState;
+    }
+
+    /**
+     * Start to move the camera.
+     */
+    private void startCameraMoving(final int key) {
+
+        if (cameraMoving == 0) {
+
+            final Camera camera = EDITOR.getCamera();
+            final Node nodeForCamera = getNodeForCamera();
+            nodeForCamera.setLocalTranslation(camera.getLocation());
+
+            final EditorCamera editorCamera = requireNonNull(getEditorCamera());
+            editorCamera.setTargetDistance(0);
+        }
+
+        final boolean[] cameraKeysState = getCameraKeysState();
+
+        if (!cameraKeysState[key]) {
+            cameraKeysState[key] = true;
+            cameraMoving++;
+        }
+    }
+
+    /**
+     * Finish to move the camera.
+     */
+    private void finishCameraMoving(final int key, final boolean force) {
+
+        final boolean[] cameraKeysState = getCameraKeysState();
+        cameraKeysState[key] = false;
+
+        if (cameraMoving == 0) return;
+
+        if (force) {
+            cameraMoving = 0;
+            for (int i = 0; i < cameraKeysState.length; i++) {
+                cameraKeysState[i] = false;
+            }
+        } else {
+            cameraMoving--;
+        }
+    }
+
+    /**
+     * Move a camera to direction.
      *
      * @param value the value to move.
      */
-    private void moveXCamera(final float value) {
+    private void moveDirectionCamera(final float value, final boolean isAction, final boolean isPressed, final int key) {
         if (!canCameraMove()) return;
+        if (isAction && isPressed) startCameraMoving(key);
+        else if (isAction) finishCameraMoving(key, false);
+        if (!isCameraMoving() || isAction) return;
 
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera == null) return;
@@ -296,36 +413,41 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         final Camera camera = EDITOR.getCamera();
         final Node nodeForCamera = getNodeForCamera();
 
-        final Vector3f left = camera.getLeft();
-        left.multLocal(value * (float) Math.sqrt(editorCamera.getTargetDistance()));
+        final LocalObjects local = LocalObjects.get();
+        final Vector3f direction = camera.getDirection(local.nextVector());
+        direction.multLocal(value * cameraSpeed);
+        direction.addLocal(nodeForCamera.getLocalTranslation());
+
+        nodeForCamera.setLocalTranslation(direction);
+    }
+
+    /**
+     * Move a camera to side.
+     *
+     * @param value the value to move.
+     */
+    private void moveSideCamera(final float value, final boolean isAction, final boolean isPressed, final int key) {
+        if (!canCameraMove()) return;
+        if (isAction && isPressed) startCameraMoving(key);
+        else if (isAction) finishCameraMoving(key, false);
+        if (!isCameraMoving() || isAction) return;
+
+        final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera == null) return;
+
+        final Camera camera = EDITOR.getCamera();
+        final Node nodeForCamera = getNodeForCamera();
+
+        final LocalObjects local = LocalObjects.get();
+        final Vector3f left = camera.getLeft(local.nextVector());
+        left.multLocal(value * cameraSpeed);
         left.addLocal(nodeForCamera.getLocalTranslation());
 
         nodeForCamera.setLocalTranslation(left);
     }
 
-    /**
-     * Move a camera on Y axis.
-     *
-     * @param value the value to move.
-     */
-    private void moveYCamera(final float value) {
-        if (!canCameraMove()) return;
-
-        final EditorCamera editorCamera = getEditorCamera();
-        if (editorCamera == null) return;
-
-        final Camera camera = EDITOR.getCamera();
-        final Node nodeForCamera = getNodeForCamera();
-
-        final Vector3f up = camera.getUp();
-        up.multLocal(value * (float) Math.sqrt(editorCamera.getTargetDistance()));
-        up.addLocal(nodeForCamera.getLocalTranslation());
-
-        nodeForCamera.setLocalTranslation(up);
-    }
-
     private boolean canCameraMove() {
-        return needMovableCamera() && isShiftDown() && isButtonMiddleDown();
+        return needMovableCamera() && isButtonMiddleDown();
     }
 
     /**
@@ -512,8 +634,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      */
     protected void registerAnalogListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS,
-                MOUSE_Y_AXIS_NEGATIVE, MOVE_CAMERA_X_AXIS, MOVE_CAMERA_X_AXIS_NEGATIVE, MOVE_CAMERA_Y_AXIS,
-                MOVE_CAMERA_Y_AXIS_NEGATIVE);
+                MOUSE_Y_AXIS_NEGATIVE, MOUSE_MOVE_CAMERA_X_AXIS, MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE,
+                MOUSE_MOVE_CAMERA_Y_AXIS, MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE);
     }
 
     /**
@@ -522,7 +644,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
         inputManager.addListener(actionListener, KEY_CTRL, KEY_SHIFT, KEY_ALT, KEY_CTRL_S, KEY_CTRL_Z, KEY_CTRL_Y, KEY_NUM_1,
-                KEY_NUM_2, KEY_NUM_3, KEY_NUM_4, KEY_NUM_5, KEY_NUM_6, KEY_NUM_7, KEY_NUM_8, KEY_NUM_9);
+                KEY_NUM_2, KEY_NUM_3, KEY_NUM_4, KEY_NUM_5, KEY_NUM_6, KEY_NUM_7, KEY_NUM_8, KEY_NUM_9, KEY_FLY_CAMERA_W,
+                KEY_FLY_CAMERA_S, KEY_FLY_CAMERA_A, KEY_FLY_CAMERA_D);
     }
 
     @Override
@@ -573,6 +696,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
         final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
         editorCamera.setMaxDistance(10000);
+        editorCamera.setMinDistance(0.01F);
         editorCamera.setSmoothMotion(false);
         editorCamera.setRotationSensitivity(1);
         editorCamera.setZoomSensitivity(0.2F);
@@ -660,6 +784,24 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         final EditorCamera editorCamera = getEditorCamera();
 
         if (editorCamera != null) {
+
+            final boolean[] cameraKeysState = getCameraKeysState();
+
+            if (isCameraMoving()) {
+                if (cameraKeysState[0]) {
+                    moveSideCamera(tpf * 30, false, false, 0);
+                }
+                if (cameraKeysState[1]) {
+                    moveSideCamera(-tpf * 30, false, false, 1);
+                }
+                if (cameraKeysState[2]) {
+                    moveDirectionCamera(tpf * 30, false, false, 2);
+                }
+                if (cameraKeysState[3]) {
+                    moveDirectionCamera(-tpf * 30, false, false, 3);
+                }
+            }
+
             checkCameraChanges(editorCamera);
         }
 

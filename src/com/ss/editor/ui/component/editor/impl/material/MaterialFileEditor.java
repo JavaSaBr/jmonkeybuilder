@@ -11,6 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.undo.EditorOperation;
@@ -300,14 +301,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         final KeyCode code = event.getCode();
 
-        if (handleKeyActionImpl(code, false, event.isControlDown())) {
+        if (handleKeyActionImpl(code, false, event.isControlDown(), false)) {
             event.consume();
         }
     }
 
     @Override
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                          final boolean isControlDown) {
+                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
         if (isPressed) return false;
 
         if (isControlDown && keyCode == KeyCode.Z) {
@@ -316,30 +317,31 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         } else if (isControlDown && keyCode == KeyCode.Y) {
             redo();
             return true;
-        } else if (keyCode == KeyCode.C) {
+        } else if (keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton cubeButton = getCubeButton();
             cubeButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.S) {
+        } else if (keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton sphereButton = getSphereButton();
             sphereButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.P) {
+        } else if (keyCode == KeyCode.P && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton planeButton = getPlaneButton();
             planeButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.L) {
+        } else if (keyCode == KeyCode.L && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton lightButton = getLightButton();
             lightButton.setSelected(!lightButton.isSelected());
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
     }
 
     /**
      * Redo the last operation.
      */
+    @FromAnyThread
     public void redo() {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.redo();
@@ -348,6 +350,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Undo the last operation.
      */
+    @FromAnyThread
     public void undo() {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.undo();

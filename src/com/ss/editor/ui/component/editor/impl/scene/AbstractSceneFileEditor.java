@@ -475,14 +475,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final KeyCode code = event.getCode();
 
-        if (handleKeyActionImpl(code, false, event.isControlDown())) {
+        if (handleKeyActionImpl(code, false, event.isControlDown(), isButtonMiddleDown())) {
             event.consume();
         }
     }
 
     @Override
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                        final boolean isControlDown) {
+                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
         if (isPressed) return false;
 
         if (isControlDown && keyCode == KeyCode.Z) {
@@ -491,15 +491,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         } else if (isControlDown && keyCode == KeyCode.Y) {
             redo();
             return true;
-        } else if (keyCode == KeyCode.G) {
+        } else if (keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton moveToolButton = getMoveToolButton();
             moveToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.R) {
+        } else if (keyCode == KeyCode.R && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton rotationToolButton = getRotationToolButton();
             rotationToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.S) {
+        } else if (keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton scaleToolButton = getScaleToolButton();
             scaleToolButton.setSelected(true);
             return true;
@@ -527,7 +527,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, false, isControlDown);
+        return super.handleKeyActionImpl(keyCode, false, isControlDown, isButtonMiddleDown);
     }
 
     /**

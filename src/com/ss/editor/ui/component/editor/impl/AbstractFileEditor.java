@@ -7,7 +7,7 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
-import com.ss.editor.annotation.EditorThread;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.EditorAppState;
@@ -27,6 +27,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -94,6 +95,21 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @Nullable
     private Path file;
 
+    /**
+     * Is left button pressed.
+     */
+    private boolean buttonLeftDown;
+
+    /**
+     * Is right button pressed.
+     */
+    private boolean buttonRightDown;
+
+    /**
+     * Is middle button pressed.
+     */
+    private boolean buttonMiddleDown;
+
     protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
         this.editorStates = ArrayFactory.newArray(EditorAppState.class);
@@ -141,6 +157,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         root = createRoot();
         root.setOnKeyPressed(this::processKeyPressed);
         root.setOnKeyReleased(this::processKeyReleased);
+        root.setOnMouseReleased(this::processMouseReleased);
+        root.setOnMousePressed(this::processMousePressed);
 
         createContent(root);
 
@@ -153,6 +171,24 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root.prefWidthProperty().bind(container.widthProperty());
+    }
+
+    /**
+     * Handle the mouse released event.
+     */
+    private void processMouseReleased(@NotNull final MouseEvent mouseEvent) {
+        setButtonLeftDown(mouseEvent.isPrimaryButtonDown());
+        setButtonMiddleDown(mouseEvent.isMiddleButtonDown());
+        setButtonRightDown(mouseEvent.isSecondaryButtonDown());
+    }
+
+    /**
+     * Handle the mouse pressed event.
+     */
+    private void processMousePressed(@NotNull final MouseEvent mouseEvent) {
+        setButtonLeftDown(mouseEvent.isPrimaryButtonDown());
+        setButtonMiddleDown(mouseEvent.isMiddleButtonDown());
+        setButtonRightDown(mouseEvent.isSecondaryButtonDown());
     }
 
     /**
@@ -170,32 +206,36 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Handle a key code.
      *
-     * @param isPressed     true if key is pressed.
-     * @param isControlDown true if control is down.
-     * @param keyCode       the key code.
+     * @param keyCode            the key code.
+     * @param isPressed          true if key is pressed.
+     * @param isControlDown      true if control is down.
+     * @param isButtonMiddleDown true if mouse middle button is pressed.
      */
     @FromAnyThread
-    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown) {
-        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown));
+    public void handleKeyAction(@NotNull final KeyCode keyCode, final boolean isPressed, final boolean isControlDown,
+                                final boolean isButtonMiddleDown) {
+        EXECUTOR_MANAGER.addFXTask(() -> handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown));
     }
 
     /**
      * Handle a key code.
      *
-     * @param keyCode       the key code.
-     * @param isPressed     true if key is pressed.
-     * @param isControlDown true if control is down.
+     * @param keyCode            the key code.
+     * @param isPressed          true if key is pressed.
+     * @param isControlDown      true if control is down.
+     * @param isButtonMiddleDown true if mouse middle button is pressed.
      * @return true if can consume an event.
      */
-    @EditorThread
+    @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
-                                        final boolean isControlDown) {
+                                          final boolean isControlDown, final boolean isButtonMiddleDown) {
         return false;
     }
 
     /**
      * Handle the key pressed event.
      */
+    @FXThread
     protected void processKeyPressed(@NotNull final KeyEvent event) {
     }
 
@@ -226,6 +266,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * The process of saving this file.
      */
+    @FXThread
     protected void processSave() {
         final long stamp = EDITOR.asyncLock();
         try {
@@ -329,6 +370,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param prevFile the prev file.
      * @param newFile  the new file.
      */
+    @FXThread
     private void notifyChangedEditedFile(final @NotNull Path prevFile, final @NotNull Path newFile) {
 
         final Path editFile = getEditFile();
@@ -349,6 +391,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Notify about changing editor camera.
      */
+    @FXThread
     public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                                     final float vRotation, final float targetDistance) {
     }
@@ -410,4 +453,47 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
                 ", file=" + file +
                 '}';
     }
+
+    /**
+     * @param buttonLeftDown the left button is pressed.
+     */
+    protected void setButtonLeftDown(final boolean buttonLeftDown) {
+        this.buttonLeftDown = buttonLeftDown;
+    }
+
+    /**
+     * @param buttonMiddleDown the middle button is pressed.
+     */
+    protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
+        this.buttonMiddleDown = buttonMiddleDown;
+    }
+
+    /**
+     * @param buttonRightDown the right button is pressed.
+     */
+    protected void setButtonRightDown(final boolean buttonRightDown) {
+        this.buttonRightDown = buttonRightDown;
+    }
+
+    /**
+     * @return true if left button is pressed.
+     */
+    protected boolean isButtonLeftDown() {
+        return buttonLeftDown;
+    }
+
+    /**
+     * @return true if middle button is pressed.
+     */
+    protected boolean isButtonMiddleDown() {
+        return buttonMiddleDown;
+    }
+
+    /**
+     * @return true if right button is pressed.
+     */
+    protected boolean isButtonRightDown() {
+        return buttonRightDown;
+    }
+
 }

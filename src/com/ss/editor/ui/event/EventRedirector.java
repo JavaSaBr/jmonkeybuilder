@@ -4,6 +4,7 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import javafx.event.Event;
 import javafx.event.EventTarget;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
@@ -71,7 +72,7 @@ public class EventRedirector {
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null) return;
 
-            if (!isMousePressed(event.getButton()) && !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
+            if (!isMousePressed(event.getButton())) {
                 return;
             }
 
@@ -150,8 +151,10 @@ public class EventRedirector {
         final EventTarget target = event.getTarget();
         if (target == destination) return;
 
+        final EventType<? extends InputEvent> eventType = event.getEventType();
+
         final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-        if (currentEditor == null || !currentEditor.isInside(getSceneX(), getSceneY())) {
+        if (currentEditor == null || eventType != KeyEvent.KEY_RELEASED && !currentEditor.isInside(getSceneX(), getSceneY())) {
             return;
         }
 
