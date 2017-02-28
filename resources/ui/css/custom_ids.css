@@ -779,22 +779,6 @@
     -fx-stroke-width: 2;
 }
 
-#AddUserDataDialogLabel {
-    -fx-alignment: center-right;
-    -fx-min-width: 120;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#AddUserDataDialogField {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
 #ImageViewEditorContainer {
     -fx-alignment: center;
     -fx-background-color: -fx-background-background;

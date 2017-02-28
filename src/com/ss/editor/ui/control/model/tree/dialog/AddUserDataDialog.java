@@ -14,12 +14,11 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,11 +33,7 @@ import java.awt.*;
  */
 public class AddUserDataDialog extends AbstractSimpleEditorDialog {
 
-    @NotNull
-    private static final Insets NAME_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-
-    @NotNull
-    private static final Insets DATA_TYPE_OFFSET = new Insets(4, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Insets CONTAINER_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 168);
@@ -94,41 +89,37 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
-        final HBox nameContainer = new HBox();
-        nameContainer.setAlignment(Pos.CENTER_LEFT);
-
         final Label nameLabel = new Label(Messages.ADD_USER_DATA_DIALOG_NAME + ":");
-        nameLabel.setId(CSSIds.ADD_USER_DATA_DIALOG_LABEL);
+        nameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        nameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         nameField = new TextField();
-        nameField.setId(CSSIds.ADD_USER_DATA_FIELD);
+        nameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         nameField.prefWidthProperty().bind(root.widthProperty());
 
-        FXUtils.addToPane(nameLabel, nameContainer);
-        FXUtils.addToPane(nameField, nameContainer);
-        FXUtils.addToPane(nameContainer, root);
-
-        final HBox dataTypeContainer = new HBox();
-        dataTypeContainer.setAlignment(Pos.CENTER_LEFT);
-
         final Label dataTypeLabel = new Label(Messages.ADD_USER_DATA_DIALOG_DATA_TYPE + ":");
-        dataTypeLabel.setId(CSSIds.ADD_USER_DATA_DIALOG_LABEL);
+        dataTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        dataTypeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         dataTypeComboBox = new ComboBox<>(DATA_TYPES);
-        dataTypeComboBox.setId(CSSIds.ADD_USER_DATA_FIELD);
+        dataTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         dataTypeComboBox.prefWidthProperty().bind(root.widthProperty());
 
-        FXUtils.addToPane(dataTypeLabel, dataTypeContainer);
-        FXUtils.addToPane(dataTypeComboBox, dataTypeContainer);
-        FXUtils.addToPane(dataTypeContainer, root);
+        final GridPane settingsContainer = new GridPane();
+        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
+        settingsContainer.add(nameLabel, 0, 0);
+        settingsContainer.add(nameField, 1, 0);
+        settingsContainer.add(dataTypeLabel, 0, 1);
+        settingsContainer.add(dataTypeComboBox, 1, 1);
+
+        VBox.setMargin(settingsContainer, CONTAINER_OFFSET);
+
+        FXUtils.addToPane(settingsContainer, root);
 
         FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(dataTypeLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(dataTypeComboBox, CSSClasses.SPECIAL_FONT_14);
-
-        VBox.setMargin(nameContainer, NAME_OFFSET);
-        VBox.setMargin(dataTypeContainer, DATA_TYPE_OFFSET);
     }
 
     /**

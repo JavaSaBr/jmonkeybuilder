@@ -138,9 +138,6 @@ public interface CSSIds {
     String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "AbstractParamControlElementLabel";
     String ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON = "AbstractParamControlElementButton";
 
-    String ADD_USER_DATA_DIALOG_LABEL = "AddUserDataDialogLabel";
-    String ADD_USER_DATA_FIELD = "AddUserDataDialogField";
-
     String IMAGE_VIEW_EDITOR_CONTAINER = "ImageViewEditorContainer";
     String AUDIO_VIEW_EDITOR_CONTAINER = "AudioViewEditorContainer";
 
