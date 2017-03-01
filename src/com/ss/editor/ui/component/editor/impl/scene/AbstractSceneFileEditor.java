@@ -60,7 +60,6 @@ import com.ss.editor.util.NodeUtils;
 import com.ss.extension.scene.SceneLayer;
 import com.ss.extension.scene.SceneNode;
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
@@ -970,7 +969,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAreaPane.setId(CSSIds.FILE_EDITOR_EDITOR_AREA);
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
-        editorAreaPane.setCursor(Cursor.CROSSHAIR);
 
         modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
         modelNodeTree.prefHeightProperty().bind(root.heightProperty());

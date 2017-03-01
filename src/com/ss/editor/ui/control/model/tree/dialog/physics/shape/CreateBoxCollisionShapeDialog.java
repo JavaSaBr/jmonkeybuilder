@@ -108,7 +108,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
      * @return the x size.
      */
     @NotNull
-    FloatTextField getXField() {
+    protected FloatTextField getXField() {
         return requireNonNull(xField);
     }
 
@@ -116,7 +116,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
      * @return the y size.
      */
     @NotNull
-    FloatTextField getYField() {
+    protected FloatTextField getYField() {
         return requireNonNull(yField);
     }
 
@@ -124,7 +124,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
      * @return the z size.
      */
     @NotNull
-    FloatTextField getZField() {
+    protected FloatTextField getZField() {
         return requireNonNull(zField);
     }
 

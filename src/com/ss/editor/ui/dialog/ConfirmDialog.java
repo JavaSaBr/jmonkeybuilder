@@ -18,7 +18,7 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 /**
- * The implementation of a dialog for asking questions.
+ * The implementation of a dialog to ask questions.
  *
  * @author JavaSaBr
  */
@@ -28,7 +28,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     private static final Point DIALOG_SIZE = new Point(600, 130);
 
     /**
-     * The handler pf an answer.
+     * The handler of an answer.
      */
     @NotNull
     private final Consumer<Boolean> handler;
@@ -49,7 +49,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
      * @return the label.
      */
     @NotNull
-    protected Label getQuestionLabel() {
+    private Label getQuestionLabel() {
         return requireNonNull(questionLabel);
     }
 

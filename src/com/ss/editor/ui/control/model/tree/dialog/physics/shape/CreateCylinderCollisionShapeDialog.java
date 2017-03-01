@@ -26,6 +26,7 @@ import java.awt.*;
  */
 public class CreateCylinderCollisionShapeDialog extends CreateBoxCollisionShapeDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 198);
 
     /**

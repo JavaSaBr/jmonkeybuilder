@@ -645,27 +645,6 @@
     -fx-max-height: -fx-min-height;
 }
 
-#CreateSceneAppStateDialogLabel {
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 150;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-    -fx-text-alignment: right;
-}
-
-#CreateSceneAppStateDialogControl {
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 250;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-padding: 2px;
-}
-
 #AbstractParamControlParamName {
     -fx-min-height: 18;
     -fx-pref-height: -fx-min-height;

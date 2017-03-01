@@ -24,6 +24,7 @@ import java.awt.*;
  */
 public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShapeDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 150);
 
     /**
@@ -68,7 +69,7 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
      * @return the height size.
      */
     @NotNull
-    FloatTextField getHeightField() {
+    protected FloatTextField getHeightField() {
         return requireNonNull(heightField);
     }
 

@@ -1,11 +1,9 @@
 package com.ss.editor.ui.control.filter.dialog;
 
+import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
-
 import com.ss.editor.Messages;
-import com.ss.editor.manager.ClasspathManager;
-import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.filter.operation.AddSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -15,39 +13,22 @@ import com.ss.extension.scene.SceneNode;
 import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
-import com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter;
-import com.ss.extension.scene.filter.impl.EditableColorOverlayFilter;
-import com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter;
-import com.ss.extension.scene.filter.impl.EditableDirectionLightFromSceneShadowFilter;
-import com.ss.extension.scene.filter.impl.EditableFXAAFilter;
-import com.ss.extension.scene.filter.impl.EditableFogFilter;
-import com.ss.extension.scene.filter.impl.EditableLightingStateShadowFilter;
-import com.ss.extension.scene.filter.impl.EditableObjectsBloomFilter;
-import com.ss.extension.scene.filter.impl.EditablePointLightFromSceneShadowFilter;
-import com.ss.extension.scene.filter.impl.EditablePosterizationFilter;
-import com.ss.extension.scene.filter.impl.EditableRadialBlurFilter;
-import com.ss.extension.scene.filter.impl.EditableSceneAndObjectsBloomFilter;
-import com.ss.extension.scene.filter.impl.EditableSceneBloomFilter;
-import com.ss.extension.scene.filter.impl.EditableToneMapFilter;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.awt.Point;
-import java.net.URLClassLoader;
-
+import com.ss.extension.scene.filter.impl.*;
 import javafx.geometry.Insets;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.ObjectDictionary;
+
+import java.awt.*;
 
 /**
  * The dialog to create a {@link SceneFilter}.
@@ -56,10 +37,11 @@ import rlib.util.dictionary.ObjectDictionary;
  */
 public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 184);
 
-    private static final Insets THE_FIRST_OFFSET = new Insets(10, 0, 0, 0);
-    private static final Insets THE_SECOND_OFFSET = new Insets(0, 0, 10, 0);
+    @NotNull
+    private static final Insets SETTINGS_CONTAINER = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     private static final ObjectDictionary<String, SceneFilter<?>> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
@@ -81,9 +63,6 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableLightingStateShadowFilter());
     }
 
-    private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();
-    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
-
     private static void register(@NotNull final SceneFilter<?> sceneFilter) {
         BUILT_IN.put(sceneFilter.getName(), sceneFilter);
         BUILT_IN_NAMES.add(sceneFilter.getName());
@@ -92,16 +71,19 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of built in filters.
      */
+    @Nullable
     private ComboBox<String> builtInBox;
 
     /**
      * The check box to chose an option of creating filter.
      */
+    @Nullable
     private CheckBox customCheckBox;
 
     /**
      * The full class name of creating filter.
      */
+    @Nullable
     private TextField filterNameField;
 
     /**
@@ -124,37 +106,44 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
+        final Label customBoxLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX + ":");
+        customBoxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        customBoxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
+
         customCheckBox = new CheckBox();
-        customCheckBox.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
+        customCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        customCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label builtInLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_BUILT_IN + ":");
-        builtInLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
+        builtInLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        builtInLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         builtInBox = new ComboBox<>();
+        builtInBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         builtInBox.disableProperty().bind(customCheckBox.selectedProperty());
-        builtInBox.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
         builtInBox.getItems().addAll(BUILT_IN_NAMES);
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
-
-        final HBox buildInContainer = new HBox(builtInLabel, builtInBox);
-
-        final Label customBoxLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX + ":");
-        customBoxLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
-
-        final HBox customBoxContainer = new HBox(customBoxLabel, customCheckBox);
+        builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label customNameLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
+        customNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         filterNameField = new TextField();
+        filterNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         filterNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
-        filterNameField.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
+        filterNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
-        final HBox customNameContainer = new HBox(customNameLabel, filterNameField);
+        final GridPane settingsContainer = new GridPane();
+        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
+        settingsContainer.add(builtInLabel, 0, 0);
+        settingsContainer.add(builtInBox, 1, 0);
+        settingsContainer.add(customBoxLabel, 0, 1);
+        settingsContainer.add(customCheckBox, 1, 1);
+        settingsContainer.add(customNameLabel, 0, 2);
+        settingsContainer.add(filterNameField, 1, 2);
 
-        FXUtils.addToPane(buildInContainer, root);
-        FXUtils.addToPane(customBoxContainer, root);
-        FXUtils.addToPane(customNameContainer, root);
+        FXUtils.addToPane(settingsContainer, root);
 
         FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
@@ -162,8 +151,31 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(filterNameField, CSSClasses.SPECIAL_FONT_14);
 
-        VBox.setMargin(customBoxContainer, THE_FIRST_OFFSET);
-        VBox.setMargin(customNameContainer, THE_SECOND_OFFSET);
+        VBox.setMargin(settingsContainer, SETTINGS_CONTAINER);
+    }
+
+    /**
+     * @return the check box to chose an option of creating filter.
+     */
+    @NotNull
+    private CheckBox getCustomCheckBox() {
+        return requireNonNull(customCheckBox);
+    }
+
+    /**
+     * @return the full class name of creating filter.
+     */
+    @NotNull
+    private TextField getFilterNameField() {
+        return requireNonNull(filterNameField);
+    }
+
+    /**
+     * @return the list of built in filters.
+     */
+    @NotNull
+    private ComboBox<String> getBuiltInBox() {
+        return requireNonNull(builtInBox);
     }
 
     @Override
@@ -173,34 +185,13 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         final Array<SceneAppState> appStates = currentModel.getAppStates();
         final Array<SceneFilter<?>> filters = currentModel.getFilters();
 
+        final CheckBox customCheckBox = getCustomCheckBox();
+        final TextField filterNameField = getFilterNameField();
+        final ComboBox<String> builtInBox = getBuiltInBox();
+
         if (customCheckBox.isSelected()) {
 
-            SceneFilter<?> newExample = null;
-            try {
-                newExample = ClassUtils.newInstance(filterNameField.getText());
-            } catch (final RuntimeException e) {
-
-                final Array<URLClassLoader> classLoaders = RESOURCE_MANAGER.getClassLoaders();
-
-                for (final URLClassLoader classLoader : classLoaders) {
-                    try {
-                        final Class<?> targetClass = classLoader.loadClass(filterNameField.getText());
-                        newExample = ClassUtils.newInstance(targetClass);
-                    } catch (final ClassNotFoundException ex) {
-                        LOGGER.warning(this, e);
-                    }
-                }
-
-                final URLClassLoader additionalCL = CLASSPATH_MANAGER.getAdditionalCL();
-                if (additionalCL != null) {
-                    try {
-                        final Class<?> targetClass = additionalCL.loadClass(filterNameField.getText());
-                        newExample = ClassUtils.newInstance(targetClass);
-                    } catch (final ClassNotFoundException ex) {
-                        LOGGER.warning(this, e);
-                    }
-                }
-            }
+            final SceneFilter<?> newExample = tryToCreateUserObject(this, filterNameField.getText(), SceneFilter.class);
 
             if (newExample == null) {
                 throw new RuntimeException("Can't create a state of the class " + filterNameField.getText());

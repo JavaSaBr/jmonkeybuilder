@@ -120,9 +120,6 @@ public interface CSSIds {
     String SCENE_APP_STATE_CONTAINER = "SceneAppStateContainer";
     String SCENE_APP_STATE_LIST_CELL = "SceneAppStateListCell";
 
-    String CREATE_SCENE_APP_STATE_DIALOG_LABEL = "CreateSceneAppStateDialogLabel";
-    String CREATE_SCENE_APP_STATE_DIALOG_CONTROL = "CreateSceneAppStateDialogControl";
-
     String ABSTRACT_PARAM_CONTROL_CONTAINER = "AbstractParamControlContainer";
     String ABSTRACT_PARAM_CONTROL_SPLIT_LINE = "AbstractParamControlSplitLine";
     String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "AbstractParamControlParamNameSingleRow";

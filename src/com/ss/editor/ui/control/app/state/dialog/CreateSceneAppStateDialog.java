@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.app.state.dialog;
 
+import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.ss.editor.Messages;
@@ -21,9 +22,10 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
@@ -31,7 +33,6 @@ import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.ObjectDictionary;
 
 import java.awt.*;
-import java.net.URLClassLoader;
 
 /**
  * The dialog to create a scene app state.
@@ -40,10 +41,11 @@ import java.net.URLClassLoader;
  */
 public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 184);
 
-    private static final Insets THE_FIRST_OFFSET = new Insets(10, 0, 0, 0);
-    private static final Insets THE_SECOND_OFFSET = new Insets(0, 0, 10, 0);
+    @NotNull
+    private static final Insets SETTINGS_CONTAINER = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     private static final ObjectDictionary<String, EditableSceneAppState> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
@@ -65,16 +67,19 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     /**
      * The list of built in states.
      */
+    @Nullable
     private ComboBox<String> builtInBox;
 
     /**
      * The check box to chose an option of creating state.
      */
+    @Nullable
     private CheckBox customCheckBox;
 
     /**
      * The full class name of creating state.
      */
+    @Nullable
     private TextField stateNameField;
 
     /**
@@ -97,37 +102,44 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
+        final Label customBoxLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX + ":");
+        customBoxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        customBoxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
+
         customCheckBox = new CheckBox();
-        customCheckBox.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
+        customCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        customCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label builtInLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN + ":");
-        builtInLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
+        builtInLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        builtInLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         builtInBox = new ComboBox<>();
+        builtInBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         builtInBox.disableProperty().bind(customCheckBox.selectedProperty());
-        builtInBox.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
         builtInBox.getItems().addAll(BUILT_IN_NAMES);
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
-
-        final HBox buildInContainer = new HBox(builtInLabel, builtInBox);
-
-        final Label customBoxLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX + ":");
-        customBoxLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
-
-        final HBox customBoxContainer = new HBox(customBoxLabel, customCheckBox);
+        builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label customNameLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
+        customNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         stateNameField = new TextField();
+        stateNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         stateNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
-        stateNameField.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
+        stateNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
-        final HBox customNameContainer = new HBox(customNameLabel, stateNameField);
+        final GridPane settingsContainer = new GridPane();
+        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
+        settingsContainer.add(builtInLabel, 0, 0);
+        settingsContainer.add(builtInBox, 1, 0);
+        settingsContainer.add(customBoxLabel, 0, 1);
+        settingsContainer.add(customCheckBox, 1, 1);
+        settingsContainer.add(customNameLabel, 0, 2);
+        settingsContainer.add(stateNameField, 1, 2);
 
-        FXUtils.addToPane(buildInContainer, root);
-        FXUtils.addToPane(customBoxContainer, root);
-        FXUtils.addToPane(customNameContainer, root);
+        FXUtils.addToPane(settingsContainer, root);
 
         FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
@@ -135,48 +147,48 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(stateNameField, CSSClasses.SPECIAL_FONT_14);
 
-        VBox.setMargin(customBoxContainer, THE_FIRST_OFFSET);
-        VBox.setMargin(customNameContainer, THE_SECOND_OFFSET);
+        VBox.setMargin(settingsContainer, SETTINGS_CONTAINER);
+    }
+
+    /**
+     * @return the check box to chose an option of creating state.
+     */
+    @NotNull
+    private CheckBox getCustomCheckBox() {
+        return requireNonNull(customCheckBox);
+    }
+
+    /**
+     * @return the full class name of creating state.
+     */
+    @NotNull
+    private TextField getStateNameField() {
+        return requireNonNull(stateNameField);
+    }
+
+    /**
+     * @return the list of built in states.
+     */
+    @NotNull
+    private ComboBox<String> getBuiltInBox() {
+        return requireNonNull(builtInBox);
     }
 
     @Override
     protected void processOk() {
 
+        final CheckBox customCheckBox = getCustomCheckBox();
         final SceneNode currentModel = changeConsumer.getCurrentModel();
         final Array<SceneAppState> appStates = currentModel.getAppStates();
         final Array<SceneFilter<?>> filters = currentModel.getFilters();
 
         if (customCheckBox.isSelected()) {
 
-            SceneAppState newExample = null;
-            try {
-                newExample = ClassUtils.newInstance(stateNameField.getText());
-            } catch (final RuntimeException e) {
-
-                final Array<URLClassLoader> classLoaders = RESOURCE_MANAGER.getClassLoaders();
-
-                for (final URLClassLoader classLoader : classLoaders) {
-                    try {
-                        final Class<?> targetClass = classLoader.loadClass(stateNameField.getText());
-                        newExample = ClassUtils.newInstance(targetClass);
-                    } catch (final ClassNotFoundException ex) {
-                        LOGGER.warning(this, e);
-                    }
-                }
-
-                final URLClassLoader additionalCL = CLASSPATH_MANAGER.getAdditionalCL();
-                if (additionalCL != null) {
-                    try {
-                        final Class<?> targetClass = additionalCL.loadClass(stateNameField.getText());
-                        newExample = ClassUtils.newInstance(targetClass);
-                    } catch (final ClassNotFoundException ex) {
-                        LOGGER.warning(this, e);
-                    }
-                }
-            }
+            final TextField stateNameField = getStateNameField();
+            final SceneAppState newExample = tryToCreateUserObject(this, stateNameField.getText(), SceneAppState.class);
 
             if (newExample == null) {
-                throw new RuntimeException("Can't create a state of the class " + stateNameField.getText());
+                throw new RuntimeException("Can't create a state of the class " + this.stateNameField.getText());
             }
 
             check(appStates, filters, newExample);
@@ -185,6 +197,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
         } else {
 
+            final ComboBox<String> builtInBox = getBuiltInBox();
             final SingleSelectionModel<String> selectionModel = builtInBox.getSelectionModel();
             final String name = selectionModel.getSelectedItem();
 

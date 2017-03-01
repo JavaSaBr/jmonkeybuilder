@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**

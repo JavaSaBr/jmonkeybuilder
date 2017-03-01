@@ -6,8 +6,6 @@ import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.ClasspathManager;
-import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -19,7 +17,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,10 +40,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     private static final Point DIALOG_SIZE = new Point(415, 184);
 
     @NotNull
-    private static final Insets THE_FIRST_OFFSET = new Insets(10, 0, 0, 0);
-
-    @NotNull
-    private static final Insets THE_SECOND_OFFSET = new Insets(0, 0, 10, 0);
+    private static final Insets SETTINGS_CONTAINER = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     @NotNull
     private static final ObjectDictionary<String, EditableControl> BUILT_IN = newObjectDictionary();
@@ -132,37 +127,44 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
+        final Label customBoxLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX + ":");
+        customBoxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        customBoxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
+
         customCheckBox = new CheckBox();
-        customCheckBox.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
+        customCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        customCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label builtInLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN + ":");
-        builtInLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
+        builtInLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        builtInLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         builtInBox = new ComboBox<>();
+        builtInBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         builtInBox.disableProperty().bind(customCheckBox.selectedProperty());
-        builtInBox.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
         builtInBox.getItems().addAll(BUILT_IN_NAMES);
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
-
-        final HBox buildInContainer = new HBox(builtInLabel, builtInBox);
-
-        final Label customBoxLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX + ":");
-        customBoxLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
-
-        final HBox customBoxContainer = new HBox(customBoxLabel, customCheckBox);
+        builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label customNameLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_LABEL);
+        customNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         controlNameField = new TextField();
+        controlNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         controlNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
-        controlNameField.setId(CSSIds.CREATE_SCENE_APP_STATE_DIALOG_CONTROL);
+        controlNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
-        final HBox customNameContainer = new HBox(customNameLabel, controlNameField);
+        final GridPane settingsContainer = new GridPane();
+        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
+        settingsContainer.add(builtInLabel, 0, 0);
+        settingsContainer.add(builtInBox, 1, 0);
+        settingsContainer.add(customBoxLabel, 0, 1);
+        settingsContainer.add(customCheckBox, 1, 1);
+        settingsContainer.add(customNameLabel, 0, 2);
+        settingsContainer.add(controlNameField, 1, 2);
 
-        FXUtils.addToPane(buildInContainer, root);
-        FXUtils.addToPane(customBoxContainer, root);
-        FXUtils.addToPane(customNameContainer, root);
+        FXUtils.addToPane(settingsContainer, root);
 
         FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
@@ -170,8 +172,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(controlNameField, CSSClasses.SPECIAL_FONT_14);
 
-        VBox.setMargin(customBoxContainer, THE_FIRST_OFFSET);
-        VBox.setMargin(customNameContainer, THE_SECOND_OFFSET);
+        VBox.setMargin(settingsContainer, SETTINGS_CONTAINER);
     }
 
     @Override

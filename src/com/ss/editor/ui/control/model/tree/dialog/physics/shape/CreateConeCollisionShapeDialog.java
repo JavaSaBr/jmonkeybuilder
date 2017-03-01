@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.tree.dialog.physics.shape;
 
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
-import com.google.protobuf.Message;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.ConeCollisionShape;
@@ -28,6 +27,7 @@ import java.awt.*;
  */
 public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeDialog {
 
+    @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 174);
 
     /**
