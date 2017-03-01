@@ -540,6 +540,8 @@ public class Messages {
     public static final String MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS;
     public static final String MODEL_CONVERTER_DIALOG_BUTTON_OK;
 
+    public static final String FILE_DELETE_HANDLER_DELETE_MATERIALS;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -1081,5 +1083,7 @@ public class Messages {
         MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER = bundle.getString("ModelConverterDialogMaterialsFolder");
         MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS = bundle.getString("ModelConverterDialogOverwriteMaterials");
         MODEL_CONVERTER_DIALOG_BUTTON_OK = bundle.getString("ModelConverterDialogButtonOk");
+
+        FILE_DELETE_HANDLER_DELETE_MATERIALS = bundle.getString("FileDeleteHandlerDeleteMaterials");
     }
 }

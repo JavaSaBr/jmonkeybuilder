@@ -3,21 +3,11 @@ package com.ss.editor.ui.component.asset.tree;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static java.util.Objects.requireNonNull;
-
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.ConvertFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.CopyFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.CutFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileByExternalEditorAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.PasteFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.resource.FileElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -25,26 +15,15 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.nio.file.Path;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.function.IntObjectConsumer;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
@@ -53,10 +32,15 @@ import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
 import rlib.util.array.ConcurrentArray;
 
+import java.nio.file.Path;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
 /**
  * THe implementation of a tree with resources of an asset folder.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class ResourceTree extends TreeView<ResourceElement> {
 
@@ -257,7 +241,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the context menu for the element.
      */
-    ContextMenu getContextMenu(@NotNull final ResourceElement element) {
+    protected ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();

@@ -3,6 +3,8 @@ package com.ss.editor.ui.component.asset.tree.context.menu.action;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.file.delete.handler.FileDeleteHandler;
+import com.ss.editor.file.delete.handler.FileDeleteHandlerFactory;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.ConfirmDialog;
@@ -11,6 +13,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import rlib.util.FileUtils;
+import rlib.util.array.Array;
 
 import java.nio.file.Path;
 
@@ -66,6 +69,9 @@ public class DeleteFileAction extends MenuItem {
      */
     private void handle(@NotNull final Path file, @NotNull final Boolean result) {
         if (!result) return;
+        final Array<FileDeleteHandler> handlers = FileDeleteHandlerFactory.findFor(file);
+        handlers.forEach(file, FileDeleteHandler::preDelete);
         FileUtils.delete(file);
+        handlers.forEach(file, FileDeleteHandler::postDelete);
     }
 }
