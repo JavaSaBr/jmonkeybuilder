@@ -24,7 +24,7 @@ import java.awt.*;
  */
 public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog {
 
-    private static final Point DIALOG_SIZE = new Point(400, 124);
+    private static final Point DIALOG_SIZE = new Point(400, 130);
 
     /**
      * The radius field.
@@ -42,14 +42,15 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
         super.createContent(root);
 
         final Label radiusLabel = new Label(Messages.CONTROL_PROPERTY_RADIUS + ":");
-        radiusLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        radiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        radiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         radiusField = new FloatTextField();
-        radiusField.prefWidthProperty().bind(widthProperty());
-        radiusField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        radiusField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         radiusField.setMinMax(0, Integer.MAX_VALUE);
         radiusField.setScrollPower(10F);
         radiusField.setValue(1);
+        radiusField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(radiusLabel, 0, 0);
         root.add(radiusField, 1, 0);

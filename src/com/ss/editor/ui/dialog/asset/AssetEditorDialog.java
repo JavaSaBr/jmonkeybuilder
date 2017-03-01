@@ -62,27 +62,20 @@ import java.util.function.Predicate;
 public class AssetEditorDialog<C> extends EditorDialog {
 
     @NotNull
-    private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
 
     @NotNull
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
     @NotNull
-    static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
+    protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
 
     @NotNull
-    protected static final Point DIALOG_SIZE = new Point(1204, 720);
+    protected static final Point DIALOG_SIZE = new Point(1204, 721);
 
-    @NotNull
-    private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
-
-    @NotNull
+    protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
-
-    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull

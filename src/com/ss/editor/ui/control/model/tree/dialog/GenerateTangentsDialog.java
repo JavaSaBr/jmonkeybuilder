@@ -7,7 +7,6 @@ import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -15,16 +14,11 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
@@ -42,13 +36,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(530, 154);
-
-    @NotNull
-    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-
-    @NotNull
-    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(), CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Point DIALOG_SIZE = new Point(530, 157);
 
     public enum AlgorithmType {
         STANDARD,
@@ -81,8 +69,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox splitMirroredCheckBox;
 
-    public GenerateTangentsDialog(@NotNull final AbstractNodeTree<?> nodeTree,
-                                  @NotNull final ModelNode<?> node) {
+    public GenerateTangentsDialog(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
     }
@@ -110,47 +97,43 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        root.setAlignment(Pos.CENTER_LEFT);
-
-        final HBox algorithmTypeContainer = new HBox();
-
         final Label algorithmTypeLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL + ":");
-        algorithmTypeLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+        algorithmTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        algorithmTypeLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         algorithmTypeComboBox = new ComboBox<>(GenerateTangentsDialog.ALGORITHM_TYPES);
-        algorithmTypeComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        algorithmTypeComboBox.prefWidthProperty().bind(root.widthProperty());
+        algorithmTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        algorithmTypeComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final SingleSelectionModel<AlgorithmType> selectionModel = algorithmTypeComboBox.getSelectionModel();
         selectionModel.select(AlgorithmType.STANDARD);
 
-        FXUtils.addToPane(algorithmTypeLabel, algorithmTypeContainer);
-        FXUtils.addToPane(algorithmTypeComboBox, algorithmTypeContainer);
-        FXUtils.addToPane(algorithmTypeContainer, root);
-
-        final HBox splitMirroredContainer = new HBox();
-
         final Label splitMirroredLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED + ":");
-        splitMirroredLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+        splitMirroredLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        splitMirroredLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         splitMirroredCheckBox = new CheckBox();
-        splitMirroredCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        splitMirroredCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         splitMirroredCheckBox.disableProperty().bind(selectionModel.selectedItemProperty().isNotEqualTo(AlgorithmType.STANDARD));
+        splitMirroredCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
-        FXUtils.addToPane(splitMirroredLabel, splitMirroredContainer);
-        FXUtils.addToPane(splitMirroredCheckBox, splitMirroredContainer);
-        FXUtils.addToPane(splitMirroredContainer, root);
+        root.add(algorithmTypeLabel, 0, 0);
+        root.add(algorithmTypeComboBox, 1, 0);
+        root.add(splitMirroredLabel, 0, 1);
+        root.add(splitMirroredCheckBox, 1, 1);
 
         FXUtils.addClassTo(algorithmTypeLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(algorithmTypeComboBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(splitMirroredLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(algorithmTypeContainer, FIELD_OFFSET);
-        VBox.setMargin(splitMirroredContainer, LAST_FIELD_OFFSET);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

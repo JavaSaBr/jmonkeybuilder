@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.creator.impl;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
-
+import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
@@ -12,37 +12,32 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.editor.util.EditorUtil;
-
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rlib.ui.util.FXUtils;
+import rlib.util.array.Array;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
-
 /**
- * The creator for creating a new material.
+ * The creator to create a new material.
  *
  * @author JavaSaBr
  */
 public class MaterialFileCreator extends AbstractFileCreator {
 
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
-    public static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
-    public static final String PBR_MAT_DEF = "Common/MatDefs/Light/PBRLighting.j3md";
-    public static final String LIGHTING_MAT_DEF = "Common/MatDefs/Light/Lighting.j3md";
+    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
+
+    private static final String PBR_MAT_DEF = "Common/MatDefs/Light/PBRLighting.j3md";
+    private static final String LIGHTING_MAT_DEF = "Common/MatDefs/Light/Lighting.j3md";
 
     static {
         DESCRIPTION.setFileDescription(Messages.MATERIAL_FILE_CREATOR_FILE_DESCRIPTION);
@@ -52,14 +47,16 @@ public class MaterialFileCreator extends AbstractFileCreator {
     /**
      * The list of available definitions.
      */
+    @Nullable
     private Array<String> definitions;
 
     /**
      * The combo box.
      */
+    @Nullable
     private ComboBox<String> materialTypeComboBox;
 
-    public MaterialFileCreator() {
+    private MaterialFileCreator() {
         super();
     }
 
@@ -78,25 +75,25 @@ public class MaterialFileCreator extends AbstractFileCreator {
     /**
      * @return the combo box.
      */
-    public ComboBox<String> getMaterialTypeComboBox() {
-        return materialTypeComboBox;
+    @NotNull
+    private ComboBox<String> getMaterialTypeComboBox() {
+        return requireNonNull(materialTypeComboBox);
     }
 
     @Override
-    protected void createSettings(@NotNull final VBox root) {
+    protected void createSettings(@NotNull final GridPane root) {
         super.createSettings(root);
 
-        final HBox materialTypeContainer = new HBox();
-
         final Label materialTypeLabel = new Label(Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL + ":");
-        materialTypeLabel.setId(CSSIds.FILE_CREATOR_LABEL);
+        materialTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        materialTypeLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         materialTypeComboBox = new ComboBox<>();
-        materialTypeComboBox.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
-        materialTypeComboBox.prefWidthProperty().bind(root.widthProperty());
+        materialTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        materialTypeComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final TextField editor = materialTypeComboBox.getEditor();
-        editor.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
+        editor.setId(CSSIds.EDITOR_DIALOG_FIELD);
 
         AutoCompleteComboBoxListener.install(materialTypeComboBox);
 
@@ -115,17 +112,15 @@ public class MaterialFileCreator extends AbstractFileCreator {
             selectionModel.select(definitions.first());
         }
 
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFileName());
+        selectionModel.selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> validateFileName());
 
-        FXUtils.addToPane(materialTypeLabel, materialTypeContainer);
-        FXUtils.addToPane(materialTypeComboBox, materialTypeContainer);
-        FXUtils.addToPane(materialTypeContainer, root);
+        root.add(materialTypeLabel, 0, 1);
+        root.add(materialTypeComboBox, 1, 1);
 
         FXUtils.addClassTo(materialTypeComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
         FXUtils.addClassTo(materialTypeLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(materialTypeComboBox, CSSClasses.SPECIAL_FONT_14);
-
-        VBox.setMargin(materialTypeContainer, FILE_NAME_CONTAINER_OFFSET);
     }
 
     @Override
@@ -149,8 +144,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processCreate() {
-        super.processCreate();
+    protected void processOk() {
+        super.processOk();
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 

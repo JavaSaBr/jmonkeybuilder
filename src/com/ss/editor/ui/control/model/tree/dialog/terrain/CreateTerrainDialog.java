@@ -73,7 +73,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     private static final int NUM_ALPHA_TEXTURES = 3;
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(580, 365);
+    private static final Point DIALOG_SIZE = new Point(580, 367);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();

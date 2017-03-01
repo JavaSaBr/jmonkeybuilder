@@ -15,12 +15,9 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.editor.util.EditorUtil;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.IntegerTextField;
@@ -37,12 +34,6 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(390, 184);
-
-    @NotNull
-    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-
-    @NotNull
-    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(), CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -121,49 +112,39 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        root.setAlignment(Pos.CENTER_LEFT);
-
-        final HBox nameContainer = new HBox();
-
         final Label nameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_NAME + ":");
-        nameLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        nameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        nameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         nameField = new TextField();
-        nameField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        nameField.prefWidthProperty().bind(root.widthProperty());
-
-        FXUtils.addToPane(nameLabel, nameContainer);
-        FXUtils.addToPane(nameField, nameContainer);
-        FXUtils.addToPane(nameContainer, root);
-
-        final HBox startFrameContainer = new HBox();
+        nameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        nameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label startFrameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME + ":");
-        startFrameLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        startFrameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        startFrameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         startFrameField = new IntegerTextField();
-        startFrameField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        startFrameField.prefWidthProperty().bind(root.widthProperty());
-
-        FXUtils.addToPane(startFrameLabel, startFrameContainer);
-        FXUtils.addToPane(startFrameField, startFrameContainer);
-        FXUtils.addToPane(startFrameContainer, root);
-
-        final HBox endFrameContainer = new HBox();
+        startFrameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        startFrameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label endFrameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME + ":");
-        endFrameLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        endFrameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        endFrameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         endFrameField = new IntegerTextField();
-        endFrameField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        endFrameField.prefWidthProperty().bind(root.widthProperty());
+        endFrameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        endFrameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addToPane(endFrameLabel, endFrameContainer);
-        FXUtils.addToPane(endFrameField, endFrameContainer);
-        FXUtils.addToPane(endFrameContainer, root);
+        root.add(nameLabel, 0, 0);
+        root.add(nameField, 1, 0);
+        root.add(startFrameLabel, 0, 1);
+        root.add(startFrameField, 1, 1);
+        root.add(endFrameLabel, 0, 2);
+        root.add(endFrameField, 1, 2);
 
         FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
@@ -171,10 +152,11 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(startFrameField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(endFrameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(endFrameField, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(nameContainer, FIELD_OFFSET);
-        VBox.setMargin(startFrameContainer, FIELD_OFFSET);
-        VBox.setMargin(endFrameContainer, LAST_FIELD_OFFSET);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

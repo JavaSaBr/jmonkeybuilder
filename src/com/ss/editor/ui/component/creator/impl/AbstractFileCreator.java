@@ -1,11 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_CANCEL;
-import static com.ss.editor.Messages.FILE_CREATOR_BUTTON_OK;
-import static com.ss.editor.ui.css.CSSIds.*;
 import static java.util.Objects.requireNonNull;
-import static javafx.geometry.Pos.CENTER_LEFT;
-import static javafx.geometry.Pos.TOP_CENTER;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
@@ -16,18 +11,16 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.EditorDialog;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -44,18 +37,16 @@ import java.nio.file.Path;
 /**
  * The base implementation of a file creator.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
-public abstract class AbstractFileCreator extends EditorDialog implements FileCreator {
+public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog implements FileCreator {
 
     protected static final Logger LOGGER = LoggerManager.getLogger(FileCreator.class);
 
-    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-    protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-    protected static final Insets FILE_NAME_CONTAINER_OFFSET = new Insets(15, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
+    protected static final Insets SETTINGS_CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 10, 0);
     protected static final Insets RESOURCE_TREE_OFFSET = new Insets(3, 0, 0, 0);
 
-    protected static final Point DIALOG_SIZE = new Point(900, 400);
+    protected static final Point DIALOG_SIZE = new Point(900, 401);
 
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
@@ -65,26 +56,24 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     /**
      * The resources tree.
      */
+    @Nullable
     private ResourceTree resourceTree;
 
     /**
      * The filed with new file name.
      */
+    @Nullable
     private TextField fileNameField;
-
-    /**
-     * The creation button.
-     */
-    private Button okButton;
 
     /**
      * The init file.
      */
+    @Nullable
     private Path initFile;
 
     @Override
     public void start(@NotNull final Path file) {
-        setInitFile(file);
+        this.initFile = file;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = requireNonNull(editorConfig.getCurrentAsset());
@@ -101,63 +90,45 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         validateFileName();
     }
 
-    protected void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
-                          @NotNull final Boolean finished) {
+    private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
+                        @NotNull final Boolean finished) {
         if (finished) resourceTree.expandTo(file, true);
     }
 
     /**
      * @return the resources tree.
      */
-    protected ResourceTree getResourceTree() {
-        return resourceTree;
+    @NotNull
+    private ResourceTree getResourceTree() {
+        return requireNonNull(resourceTree);
     }
 
     /**
      * @param initFile the init file.
      */
-    private void setInitFile(final Path initFile) {
+    private void setInitFile(@NotNull final Path initFile) {
         this.initFile = initFile;
     }
 
     /**
      * @return the init file.
      */
+    @NotNull
     private Path getInitFile() {
-        return initFile;
+        return requireNonNull(initFile);
     }
 
+    @NotNull
     @Override
-    protected void createActions(@NotNull final VBox root) {
-        super.createActions(root);
-
-        final HBox container = new HBox();
-        container.setId(ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
-
-        okButton = new Button(FILE_CREATOR_BUTTON_OK);
-        okButton.setId(EDITOR_DIALOG_BUTTON_OK);
-        okButton.setOnAction(event -> processCreate());
-
-        final Button cancelButton = new Button(FILE_CREATOR_BUTTON_CANCEL);
-        cancelButton.setId(EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setOnAction(event -> hide());
-
-        FXUtils.addToPane(okButton, container);
-        FXUtils.addToPane(cancelButton, container);
-        FXUtils.addToPane(container, root);
-
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
+    protected String getButtonOkLabel() {
+        return Messages.FILE_CREATOR_BUTTON_OK;
     }
 
     /**
      * @return the selected file in the resources tree.
      */
     @NotNull
-    protected Path getSelectedFile() {
+    private Path getSelectedFile() {
 
         final ResourceTree resourceTree = getResourceTree();
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
@@ -166,13 +137,6 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
 
         final ResourceElement element = selectedItem.getValue();
         return element.getFile();
-    }
-
-    /**
-     * The process of creation.
-     */
-    protected void processCreate() {
-        hide();
     }
 
     /**
@@ -219,12 +183,15 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         super.createContent(root);
 
         final HBox container = new HBox();
-        container.setAlignment(CENTER_LEFT);
+        container.setId(CSSIds.FILE_CREATOR_DIALOG_CONTAINER);
 
-        final VBox settingsContainer = new VBox();
-        settingsContainer.setAlignment(TOP_CENTER);
+        final GridPane settingsContainer = new GridPane();
+        settingsContainer.setId(CSSIds.FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER);
+        settingsContainer.prefHeightProperty().bind(container.heightProperty());
+        settingsContainer.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
 
         resourceTree = new ResourceTree(null, true);
+        resourceTree.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
 
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFileName());
@@ -235,55 +202,38 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
         FXUtils.addToPane(settingsContainer, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.bindFixedWidth(resourceTree, root.widthProperty().divide(2));
-        FXUtils.bindFixedWidth(settingsContainer, root.widthProperty().divide(2));
-
         HBox.setMargin(resourceTree, RESOURCE_TREE_OFFSET);
-
-        root.setOnKeyReleased(this::processEnter);
-    }
-
-    protected void processEnter(@NotNull final KeyEvent event) {
-
-        final Button okButton = getOkButton();
-
-        if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
-            processCreate();
-        }
+        HBox.setMargin(settingsContainer, SETTINGS_CONTAINER_OFFSET);
     }
 
     /**
      * @return the filed with new file name.
      */
     @NotNull
-    protected TextField getFileNameField() {
-        return fileNameField;
+    private TextField getFileNameField() {
+        return requireNonNull(fileNameField);
     }
 
     /**
      * Create settings of the creating file.
      */
-    protected void createSettings(@NotNull final VBox root) {
-
-        final HBox fileNameContainer = new HBox();
-        fileNameContainer.setAlignment(Pos.CENTER_LEFT);
+    protected void createSettings(@NotNull final GridPane root) {
 
         final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
-        fileNameLabel.setId(CSSIds.FILE_CREATOR_LABEL);
+        fileNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        fileNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         fileNameField = new TextField();
-        fileNameField.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
+        fileNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         fileNameField.prefWidthProperty().bind(root.widthProperty());
         fileNameField.textProperty().addListener((observable, oldValue, newValue) -> validateFileName());
+        fileNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addToPane(fileNameLabel, fileNameContainer);
-        FXUtils.addToPane(fileNameField, fileNameContainer);
-        FXUtils.addToPane(fileNameContainer, root);
+        root.add(fileNameLabel, 0, 0);
+        root.add(fileNameField, 1, 0);
 
         FXUtils.addClassTo(fileNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(fileNameField, CSSClasses.SPECIAL_FONT_14);
-
-        VBox.setMargin(fileNameContainer, FILE_NAME_CONTAINER_OFFSET);
     }
 
     /**
@@ -292,14 +242,6 @@ public abstract class AbstractFileCreator extends EditorDialog implements FileCr
     @NotNull
     protected String getFileNameLabelText() {
         return Messages.FILE_CREATOR_FILE_NAME_LABEL;
-    }
-
-    /**
-     * @return the creation button.
-     */
-    @NotNull
-    public Button getOkButton() {
-        return okButton;
     }
 
     /**

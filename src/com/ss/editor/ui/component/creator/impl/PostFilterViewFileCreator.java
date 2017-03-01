@@ -28,7 +28,7 @@ public class PostFilterViewFileCreator extends AbstractFileCreator {
         DESCRIPTION.setConstructor(PostFilterViewFileCreator::new);
     }
 
-    public PostFilterViewFileCreator() {
+    private PostFilterViewFileCreator() {
     }
 
     @NotNull
@@ -44,8 +44,8 @@ public class PostFilterViewFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processCreate() {
-        super.processCreate();
+    protected void processOk() {
+        super.processOk();
 
         final String materialContent = "";
         final Path fileToCreate = getFileToCreate();

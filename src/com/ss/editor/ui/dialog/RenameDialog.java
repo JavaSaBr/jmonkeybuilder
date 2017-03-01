@@ -4,26 +4,18 @@ import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.Point;
-import java.util.Objects;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
+
+import java.awt.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * The implementation of a dialog for renaming.
@@ -31,9 +23,6 @@ import rlib.ui.util.FXUtils;
  * @author JavaSaBr
  */
 public class RenameDialog extends AbstractSimpleEditorDialog {
-
-    @NotNull
-    private static final Insets NAME_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 140);
@@ -57,28 +46,28 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     private TextField nameField;
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final HBox nameContainer = new HBox();
-        nameContainer.setAlignment(Pos.CENTER_LEFT);
-
         final Label nameLabel = new Label(Messages.RENAME_DIALOG_NEW_NAME_LABEL + ":");
-        nameLabel.setId(CSSIds.RENAME_DIALOG_LABEL);
+        nameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        nameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         nameField = new TextField();
-        nameField.setId(CSSIds.RENAME_DIALOG_TEXT_FIELD);
-        nameField.prefWidthProperty().bind(root.widthProperty());
+        nameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> validateName(newValue));
+        nameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addToPane(nameLabel, nameContainer);
-        FXUtils.addToPane(nameField, nameContainer);
-        FXUtils.addToPane(nameContainer, root);
+        root.add(nameLabel, 0, 0);
+        root.add(nameField, 1, 0);
 
         FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(nameContainer, NAME_OFFSET);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     @Override

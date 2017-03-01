@@ -9,6 +9,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
@@ -28,7 +29,10 @@ import java.awt.*;
 public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(400, 174);
+    private static final Point DIALOG_SIZE = new Point(400, 184);
+
+    @NotNull
+    private static final ObservableList<String> AXIS = observableArrayList("x", "y", "z");
 
     /**
      * The axis box.
@@ -46,12 +50,13 @@ public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeD
         super.createContent(root);
 
         final Label axisLabel = new Label(Messages.CONTROL_PROPERTY_AXIS + ":");
-        axisLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        axisLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        axisLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
-        axisBox = new ComboBox<>(observableArrayList("X", "Y", "Z"));
-        axisBox.prefWidthProperty().bind(widthProperty());
-        axisBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        axisBox = new ComboBox<>(AXIS);
+        axisBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         axisBox.getSelectionModel().select(0);
+        axisBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(axisLabel, 0, 2);
         root.add(axisBox, 1, 2);

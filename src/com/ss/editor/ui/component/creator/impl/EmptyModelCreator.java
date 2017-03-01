@@ -41,8 +41,8 @@ public class EmptyModelCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processCreate() {
-        super.processCreate();
+    protected void processOk() {
+        super.processOk();
 
         final Path fileToCreate = getFileToCreate();
 

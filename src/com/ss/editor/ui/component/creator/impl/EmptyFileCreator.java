@@ -4,15 +4,12 @@ import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
+import rlib.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
-
-import rlib.util.StringUtils;
 
 /**
  * The creator to create an empty file.
@@ -42,8 +39,8 @@ public class EmptyFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processCreate() {
-        super.processCreate();
+    protected void processOk() {
+        super.processOk();
 
         final Path fileToCreate = requireNonNull(getFileToCreate());
         try {

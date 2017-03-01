@@ -93,7 +93,6 @@ public class Messages {
     public static final String MATERIAL_EDITOR_NAME;
 
     public static final String FILE_CREATOR_BUTTON_OK;
-    public static final String FILE_CREATOR_BUTTON_CANCEL;
     public static final String FILE_CREATOR_FILE_NAME_LABEL;
 
     public static final String MATERIAL_FILE_CREATOR_TITLE;
@@ -637,7 +636,6 @@ public class Messages {
         MATERIAL_EDITOR_NAME = bundle.getString("MaterialFileEditorName");
 
         FILE_CREATOR_BUTTON_OK = bundle.getString("FileCreatorButtonOk");
-        FILE_CREATOR_BUTTON_CANCEL = bundle.getString("FileCreatorButtonCancel");
         FILE_CREATOR_FILE_NAME_LABEL = bundle.getString("FileCreatorFileNameLabel");
 
         MATERIAL_FILE_CREATOR_TITLE = bundle.getString("MaterialFileCreatorTitle");

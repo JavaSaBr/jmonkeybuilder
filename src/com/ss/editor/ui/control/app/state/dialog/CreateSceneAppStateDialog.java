@@ -4,8 +4,6 @@ import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static java.util.Objects.requireNonNull;
 import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.ClasspathManager;
-import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
@@ -18,12 +16,10 @@ import com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState;
 import com.ss.extension.scene.app.state.impl.EditableSkySceneAppState;
 import com.ss.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
 import com.ss.extension.scene.filter.SceneFilter;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
@@ -44,9 +40,6 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 184);
 
-    @NotNull
-    private static final Insets SETTINGS_CONTAINER = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-
     private static final ObjectDictionary<String, EditableSceneAppState> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
 
@@ -55,9 +48,6 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         register(new EditableSkySceneAppState());
         register(new EditableBulletSceneAppState());
     }
-
-    private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();
-    private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     private static void register(@NotNull final EditableSceneAppState appState) {
         BUILT_IN.put(appState.getName(), appState);
@@ -99,7 +89,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         final Label customBoxLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX + ":");
@@ -131,13 +121,12 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         stateNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        settingsContainer.add(builtInLabel, 0, 0);
-        settingsContainer.add(builtInBox, 1, 0);
-        settingsContainer.add(customBoxLabel, 0, 1);
-        settingsContainer.add(customCheckBox, 1, 1);
-        settingsContainer.add(customNameLabel, 0, 2);
-        settingsContainer.add(stateNameField, 1, 2);
+        root.add(builtInLabel, 0, 0);
+        root.add(builtInBox, 1, 0);
+        root.add(customBoxLabel, 0, 1);
+        root.add(customCheckBox, 1, 1);
+        root.add(customNameLabel, 0, 2);
+        root.add(stateNameField, 1, 2);
 
         FXUtils.addToPane(settingsContainer, root);
 
@@ -146,8 +135,11 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(customBoxLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(stateNameField, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(settingsContainer, SETTINGS_CONTAINER);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

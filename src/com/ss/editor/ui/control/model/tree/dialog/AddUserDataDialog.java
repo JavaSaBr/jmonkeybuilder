@@ -13,13 +13,11 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
@@ -33,10 +31,8 @@ import java.awt.*;
  */
 public class AddUserDataDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(400, 168);
+    private static final Point DIALOG_SIZE = new Point(400, 157);
 
     private enum DataType {
         FLOAT,
@@ -86,7 +82,7 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         final Label nameLabel = new Label(Messages.ADD_USER_DATA_DIALOG_NAME + ":");
@@ -105,21 +101,20 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
         dataTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         dataTypeComboBox.prefWidthProperty().bind(root.widthProperty());
 
-        final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        settingsContainer.add(nameLabel, 0, 0);
-        settingsContainer.add(nameField, 1, 0);
-        settingsContainer.add(dataTypeLabel, 0, 1);
-        settingsContainer.add(dataTypeComboBox, 1, 1);
-
-        VBox.setMargin(settingsContainer, CONTAINER_OFFSET);
-
-        FXUtils.addToPane(settingsContainer, root);
+        root.add(nameLabel, 0, 0);
+        root.add(nameField, 1, 0);
+        root.add(dataTypeLabel, 0, 1);
+        root.add(dataTypeComboBox, 1, 1);
 
         FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(dataTypeLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(dataTypeComboBox, CSSClasses.SPECIAL_FONT_14);
+    }
+
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

@@ -7,20 +7,14 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.Point;
-import java.util.Objects;
+import java.awt.*;
 import java.util.function.Consumer;
-
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
 
 /**
  * The implementation of a dialog to select an object from a model.
@@ -30,7 +24,7 @@ import rlib.ui.util.FXUtils;
 public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, 450);
+    private static final Point DIALOG_SIZE = new Point(600, 451);
 
     @NotNull
     private static final Insets TREE_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
@@ -70,7 +64,9 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
         this.model = model;
         this.type = type;
         this.handler = handler;
-        this.nodeTree.fill(getModel());
+
+        final ModelNodeTree nodeTree = getNodeTree();
+        nodeTree.fill(getModel());
 
         final Button okButton = getOkButton();
         okButton.setDisable(true);
@@ -91,15 +87,20 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         nodeTree = new ModelNodeTree(this::processSelect, null);
         nodeTree.setId(CSSIds.ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER);
         nodeTree.prefHeightProperty().bind(heightProperty());
+        nodeTree.prefWidthProperty().bind(widthProperty());
 
-        FXUtils.addToPane(nodeTree, root);
-        VBox.setMargin(nodeTree, TREE_OFFSET);
+        root.add(nodeTree, 0, 0);
+    }
+
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

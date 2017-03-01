@@ -6,13 +6,11 @@ import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
@@ -30,10 +28,7 @@ import java.util.function.Consumer;
 public class ModelConverterDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Insets CONTAINER_OFFSET = new Insets(20, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-
-    @NotNull
-    private static final Point DIALOG_SIZE = new Point(570, 250);
+    private static final Point DIALOG_SIZE = new Point(570, 238);
 
     /**
      * The callback.
@@ -79,7 +74,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
+        super.createContent(root);
 
         final Label filenameLabel = new Label(Messages.MODEL_CONVERTER_DIALOG_RESULT_NAME + ":");
         filenameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
@@ -126,20 +122,17 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         overwriteMaterialsCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         overwriteMaterialsCheckBox.disableProperty().bind(exportMaterialsCheckBox.selectedProperty().not());
 
-        final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        settingsContainer.add(filenameLabel, 0, 0);
-        settingsContainer.add(filenameField, 1, 0);
-        settingsContainer.add(destinationLabel, 0, 1);
-        settingsContainer.add(destinationControl, 1, 1);
-        settingsContainer.add(exportMaterialsLabel, 0, 2);
-        settingsContainer.add(exportMaterialsCheckBox, 1, 2);
-        settingsContainer.add(materialsFolderLabel, 0, 3);
-        settingsContainer.add(materialsFolderControl, 1, 3);
-        settingsContainer.add(overwiteMaterials, 0, 4);
-        settingsContainer.add(overwriteMaterialsCheckBox, 1, 4);
-
-        FXUtils.addToPane(settingsContainer, root);
+        root.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
+        root.add(filenameLabel, 0, 0);
+        root.add(filenameField, 1, 0);
+        root.add(destinationLabel, 0, 1);
+        root.add(destinationControl, 1, 1);
+        root.add(exportMaterialsLabel, 0, 2);
+        root.add(exportMaterialsCheckBox, 1, 2);
+        root.add(materialsFolderLabel, 0, 3);
+        root.add(materialsFolderControl, 1, 3);
+        root.add(overwiteMaterials, 0, 4);
+        root.add(overwriteMaterialsCheckBox, 1, 4);
 
         FXUtils.addClassTo(filenameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(filenameField, CSSClasses.SPECIAL_FONT_14);
@@ -147,8 +140,11 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(exportMaterialsLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(materialsFolderLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(overwiteMaterials, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(settingsContainer, CONTAINER_OFFSET);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

@@ -10,11 +10,9 @@ import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
@@ -29,9 +27,7 @@ import java.awt.*;
  */
 public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-
-    private static final Point DIALOG_SIZE = new Point(400, 260);
+    private static final Point DIALOG_SIZE = new Point(400, 265);
 
     /**
      * The node tree.
@@ -125,8 +121,6 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
     @Override
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
-        root.setHgap(2);
-        root.setVgap(2);
 
         final Label locationLabel = new Label(Messages.CONTROL_PROPERTY_LOCATION + ":");
         locationLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
@@ -245,8 +239,6 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(wheelRadiusField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(frontLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(frontBox, CSSClasses.SPECIAL_FONT_14);
-
-        VBox.setMargin(root, CONTAINER_OFFSET);
     }
 
     @NotNull

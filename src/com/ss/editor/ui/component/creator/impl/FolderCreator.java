@@ -3,14 +3,12 @@ package com.ss.editor.ui.component.creator.impl;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
+import rlib.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import rlib.util.StringUtils;
 
 /**
  * The creator to create a folder.
@@ -27,7 +25,7 @@ public class FolderCreator extends AbstractFileCreator {
         DESCRIPTION.setConstructor(FolderCreator::new);
     }
 
-    public FolderCreator() {
+    private FolderCreator() {
     }
 
     @NotNull
@@ -49,8 +47,8 @@ public class FolderCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processCreate() {
-        super.processCreate();
+    protected void processOk() {
+        super.processOk();
 
         final Path fileToCreate = getFileToCreate();
         try {

@@ -392,22 +392,6 @@
     -fx-max-height: -fx-min-height;
 }
 
-#FileCreatorLabel {
-    -fx-alignment: center-right;
-    -fx-min-width: 120;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#FileCreatorTextField {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
 #SettingsDialogMessageLabel {
     -fx-alignment: center;
     -fx-min-height: 35;
@@ -485,22 +469,6 @@
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#RenameDialogLabel {
-    -fx-alignment: center-right;
-    -fx-min-width: 120;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#RenameDialogTextField {
-    -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
 }
@@ -805,6 +773,16 @@
 
 #AbstractDialogGridSettingsContainer {
     -fx-alignment: center-left;
+    -fx-vgap: 2;
+    -fx-hgap: 2;
+}
+
+#FileCreatorDialogContainer {
+    -fx-alignment: center-left;
+}
+
+#FileCreatorDialogGridSettingsContainer {
+    -fx-alignment: top-left;
     -fx-vgap: 2;
     -fx-hgap: 2;
 }

@@ -25,7 +25,7 @@ import java.awt.*;
  */
 public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
 
-    private static final Point DIALOG_SIZE = new Point(400, 174);
+    private static final Point DIALOG_SIZE = new Point(400, 184);
 
     /**
      * The x size.
@@ -55,33 +55,37 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         super.createContent(root);
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        xLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        xLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         xField = new FloatTextField();
-        xField.prefWidthProperty().bind(widthProperty());
-        xField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        xField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         xField.setMinMax(0, Integer.MAX_VALUE);
         xField.setScrollPower(5F);
         xField.setValue(1);
+        xField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        yLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        yLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         yField = new FloatTextField();
-        yField.prefWidthProperty().bind(widthProperty());
-        yField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        yField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         yField.setMinMax(0, Integer.MAX_VALUE);
         yField.setScrollPower(5F);
         yField.setValue(1);
+        yField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        zLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        zLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         zField = new FloatTextField();
-        zField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        zField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         zField.setMinMax(0, Integer.MAX_VALUE);
         zField.setScrollPower(5F);
         zField.setValue(1);
+        zField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(xLabel, 0, 0);
         root.add(xField, 1, 0);

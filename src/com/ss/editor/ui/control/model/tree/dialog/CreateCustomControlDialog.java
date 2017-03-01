@@ -13,12 +13,10 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.extension.scene.control.EditableControl;
 import com.ss.extension.scene.control.impl.EditableBillboardControl;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
@@ -38,9 +36,6 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 184);
-
-    @NotNull
-    private static final Insets SETTINGS_CONTAINER = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     @NotNull
     private static final ObjectDictionary<String, EditableControl> BUILT_IN = newObjectDictionary();
@@ -124,7 +119,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         final Label customBoxLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX + ":");
@@ -156,13 +151,12 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         controlNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        settingsContainer.add(builtInLabel, 0, 0);
-        settingsContainer.add(builtInBox, 1, 0);
-        settingsContainer.add(customBoxLabel, 0, 1);
-        settingsContainer.add(customCheckBox, 1, 1);
-        settingsContainer.add(customNameLabel, 0, 2);
-        settingsContainer.add(controlNameField, 1, 2);
+        root.add(builtInLabel, 0, 0);
+        root.add(builtInBox, 1, 0);
+        root.add(customBoxLabel, 0, 1);
+        root.add(customCheckBox, 1, 1);
+        root.add(customNameLabel, 0, 2);
+        root.add(controlNameField, 1, 2);
 
         FXUtils.addToPane(settingsContainer, root);
 
@@ -171,8 +165,11 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(customBoxLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(controlNameField, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(settingsContainer, SETTINGS_CONTAINER);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     @Override

@@ -76,9 +76,6 @@ public interface CSSIds {
 
     String MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD = "MaterialRenderStatePolyOffsetField";
 
-    String FILE_CREATOR_LABEL = "FileCreatorLabel";
-    String FILE_CREATOR_TEXT_FIELD = "FileCreatorTextField";
-
     String SETTINGS_DIALOG_MESSAGE_LABEL = "SettingsDialogMessageLabel";
     String SETTINGS_DIALOG_TAB_PANE = "SettingsDialogTabPane";
     String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
@@ -92,9 +89,6 @@ public interface CSSIds {
     String MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT = "ModelParamControlInfluencerElement";
     String MODEL_PARAM_CONTROL_INFLUENCER_CONTROL = "ModelParamControlInfluencerControl";
     String MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON = "ModelParamControlInfluencerIconButton";
-
-    String RENAME_DIALOG_LABEL = "RenameDialogLabel";
-    String RENAME_DIALOG_TEXT_FIELD = "RenameDialogTextField";
 
     String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
     String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
@@ -149,4 +143,7 @@ public interface CSSIds {
     String TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS = "TerrainEditingTextureLayerSettings";
     String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS = "TerrainEditingTextureLayersSettings";
     String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS = "TerrainEditingTextureLayersSettingsButtons";
+
+    String FILE_CREATOR_DIALOG_CONTAINER = "FileCreatorDialogContainer";
+    String FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER = "FileCreatorDialogGridSettingsContainer";
 }

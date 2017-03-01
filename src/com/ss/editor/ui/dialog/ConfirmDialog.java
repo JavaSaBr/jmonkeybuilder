@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     private static final Insets QUESTION_PADDING = new Insets(10, 0, 10, 0);
-    private static final Point DIALOG_SIZE = new Point(600, 130);
+    private static final Point DIALOG_SIZE = new Point(600, 131);
 
     /**
      * The handler of an answer.

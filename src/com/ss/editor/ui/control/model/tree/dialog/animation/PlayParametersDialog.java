@@ -9,22 +9,16 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.control.input.FloatTextField;
 import rlib.ui.util.FXUtils;
 
 import java.awt.*;
-import java.util.Objects;
 
 /**
  * The implementation of a dialog with play animation parameters.
@@ -34,13 +28,7 @@ import java.util.Objects;
 public class PlayParametersDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(400, 154);
-
-    @NotNull
-    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
-
-    @NotNull
-    private static final Insets LAST_FIELD_OFFSET = new Insets(FIELD_OFFSET.getTop(), CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Point DIALOG_SIZE = new Point(400, 157);
 
     /**
      * The list of loop modes.
@@ -92,46 +80,41 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        root.setAlignment(Pos.CENTER_LEFT);
-
-        final HBox loopModeContainer = new HBox();
-
         final Label loopModeLabel = new Label(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE + ":");
-        loopModeLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        loopModeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        loopModeLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         loopModeComboBox = new ComboBox<>(LOOP_MODES);
-        loopModeComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        loopModeComboBox.prefWidthProperty().bind(root.widthProperty());
-
-        FXUtils.addToPane(loopModeLabel, loopModeContainer);
-        FXUtils.addToPane(loopModeComboBox, loopModeContainer);
-        FXUtils.addToPane(loopModeContainer, root);
-
-        final HBox speedContainer = new HBox();
+        loopModeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        loopModeComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label speedLabel = new Label(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_SPEED + ":");
-        speedLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        speedLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        speedLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         speedField = new FloatTextField();
-        speedField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        speedField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         speedField.setMinMax(0.01F, 100F);
         speedField.setScrollPower(2F);
-        speedField.prefWidthProperty().bind(root.widthProperty());
+        speedField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addToPane(speedLabel, speedContainer);
-        FXUtils.addToPane(speedField, speedContainer);
-        FXUtils.addToPane(speedContainer, root);
+        root.add(loopModeLabel, 0, 0);
+        root.add(loopModeComboBox, 1, 0);
+        root.add(speedLabel, 0, 1);
+        root.add(speedField, 1, 1);
 
         FXUtils.addClassTo(loopModeLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(loopModeComboBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(speedLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(speedField, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(loopModeContainer, FIELD_OFFSET);
-        VBox.setMargin(speedContainer, LAST_FIELD_OFFSET);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

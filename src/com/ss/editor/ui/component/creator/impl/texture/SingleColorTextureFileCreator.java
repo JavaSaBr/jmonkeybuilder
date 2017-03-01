@@ -8,40 +8,31 @@ import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
-
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rlib.ui.control.input.IntegerTextField;
+import rlib.ui.util.FXUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
-
-import javax.imageio.ImageIO;
-
-import javafx.embed.swing.SwingFXUtils;
-import javafx.geometry.Insets;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import org.jetbrains.annotations.Nullable;
-import rlib.ui.control.input.IntegerTextField;
-import rlib.ui.util.FXUtils;
 
 /**
- * The creator for creating a texture which filled one color.
+ * The creator to create a texture which filled one color.
  *
  * @author JavaSaBr
  */
 public class SingleColorTextureFileCreator extends AbstractFileCreator {
-
-    @NotNull
-    private static final Insets CONTAINER_OFFSET = new Insets(1, CANCEL_BUTTON_OFFSET.getRight(), 0, 0);
 
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
@@ -82,51 +73,43 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void createSettings(@NotNull final VBox root) {
+    protected void createSettings(@NotNull final GridPane root) {
         super.createSettings(root);
 
-        final HBox widthContainer = new HBox();
-
         final Label widthLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH + ":");
-        widthLabel.setId(CSSIds.FILE_CREATOR_LABEL);
+        widthLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        widthLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         widthField = new IntegerTextField();
-        widthField.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
-        widthField.prefWidthProperty().bind(root.widthProperty());
+        widthField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         widthField.setMinMax(2, 1024);
         widthField.setValue(2);
-
-        FXUtils.addToPane(widthLabel, widthContainer);
-        FXUtils.addToPane(widthField, widthContainer);
-        FXUtils.addToPane(widthContainer, root);
-
-        final HBox heightContainer = new HBox();
+        widthField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label heightLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT + ":");
-        heightLabel.setId(CSSIds.FILE_CREATOR_LABEL);
+        heightLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        heightLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         heightField = new IntegerTextField();
-        heightField.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
-        heightField.prefWidthProperty().bind(root.widthProperty());
+        heightField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         heightField.setMinMax(2, 1024);
         heightField.setValue(2);
-
-        FXUtils.addToPane(heightLabel, heightContainer);
-        FXUtils.addToPane(heightField, heightContainer);
-        FXUtils.addToPane(heightContainer, root);
-
-        final HBox colorContainer = new HBox();
+        heightField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label colorLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR + ":");
-        colorLabel.setId(CSSIds.FILE_CREATOR_LABEL);
+        colorLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        colorLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         colorPicker = new ColorPicker(Color.GRAY);
-        colorPicker.setId(CSSIds.FILE_CREATOR_TEXT_FIELD);
-        colorPicker.prefWidthProperty().bind(root.widthProperty());
+        colorPicker.setId(CSSIds.EDITOR_DIALOG_FIELD);
+        colorPicker.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        FXUtils.addToPane(colorLabel, colorContainer);
-        FXUtils.addToPane(colorPicker, colorContainer);
-        FXUtils.addToPane(colorContainer, root);
+        root.add(widthLabel, 0, 1);
+        root.add(widthField, 1, 1);
+        root.add(heightLabel, 0, 2);
+        root.add(heightField, 1, 2);
+        root.add(colorLabel, 0, 3);
+        root.add(colorPicker, 1, 3);
 
         FXUtils.addClassTo(widthLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(widthField, CSSClasses.SPECIAL_FONT_14);
@@ -134,10 +117,6 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
         FXUtils.addClassTo(heightField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(colorLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_14);
-
-        VBox.setMargin(widthContainer, FILE_NAME_CONTAINER_OFFSET);
-        VBox.setMargin(heightContainer, CONTAINER_OFFSET);
-        VBox.setMargin(colorContainer, CONTAINER_OFFSET);
     }
 
     /**
@@ -165,8 +144,8 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processCreate() {
-        super.processCreate();
+    protected void processOk() {
+        super.processOk();
 
         final Path fileToCreate = getFileToCreate();
         try {

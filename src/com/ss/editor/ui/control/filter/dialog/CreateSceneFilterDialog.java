@@ -14,12 +14,10 @@ import com.ss.extension.scene.app.state.SceneAppState;
 import com.ss.extension.scene.filter.EditableSceneFilter;
 import com.ss.extension.scene.filter.SceneFilter;
 import com.ss.extension.scene.filter.impl.*;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
@@ -39,9 +37,6 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 184);
-
-    @NotNull
-    private static final Insets SETTINGS_CONTAINER = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     private static final ObjectDictionary<String, SceneFilter<?>> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
@@ -103,7 +98,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void createContent(@NotNull final VBox root) {
+    protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
         final Label customBoxLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX + ":");
@@ -134,24 +129,23 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         filterNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
         filterNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
-        final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        settingsContainer.add(builtInLabel, 0, 0);
-        settingsContainer.add(builtInBox, 1, 0);
-        settingsContainer.add(customBoxLabel, 0, 1);
-        settingsContainer.add(customCheckBox, 1, 1);
-        settingsContainer.add(customNameLabel, 0, 2);
-        settingsContainer.add(filterNameField, 1, 2);
-
-        FXUtils.addToPane(settingsContainer, root);
+        root.add(builtInLabel, 0, 0);
+        root.add(builtInBox, 1, 0);
+        root.add(customBoxLabel, 0, 1);
+        root.add(customCheckBox, 1, 1);
+        root.add(customNameLabel, 0, 2);
+        root.add(filterNameField, 1, 2);
 
         FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(customBoxLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(filterNameField, CSSClasses.SPECIAL_FONT_14);
+    }
 
-        VBox.setMargin(settingsContainer, SETTINGS_CONTAINER);
+    @Override
+    protected boolean isGridStructure() {
+        return true;
     }
 
     /**

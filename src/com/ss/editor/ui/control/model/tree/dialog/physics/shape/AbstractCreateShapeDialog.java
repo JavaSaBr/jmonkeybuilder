@@ -7,9 +7,6 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import javafx.geometry.Insets;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,9 +15,6 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDialog {
-
-    @NotNull
-    private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
      * The node tree component.
@@ -38,12 +32,6 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
                               @NotNull final PhysicsCollisionObject collisionObject) {
         this.nodeTree = nodeTree;
         this.collisionObject = collisionObject;
-    }
-
-    @Override
-    protected void createContent(@NotNull final GridPane root) {
-        super.createContent(root);
-        VBox.setMargin(root, CONTAINER_OFFSET);
     }
 
     /**

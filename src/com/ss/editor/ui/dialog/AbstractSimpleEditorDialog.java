@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+    protected static final Insets CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -65,6 +67,13 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
             processOk();
         }
+    }
+
+    @Override
+    protected void createContent(@NotNull final GridPane root) {
+        super.createContent(root);
+        root.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
+        VBox.setMargin(root, CONTAINER_OFFSET);
     }
 
     /**

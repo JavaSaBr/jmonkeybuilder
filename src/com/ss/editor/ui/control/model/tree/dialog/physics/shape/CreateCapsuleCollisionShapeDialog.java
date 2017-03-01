@@ -25,7 +25,7 @@ import java.awt.*;
 public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShapeDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(400, 150);
+    private static final Point DIALOG_SIZE = new Point(400, 157);
 
     /**
      * The height field.
@@ -43,14 +43,15 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
         super.createContent(root);
 
         final Label heightLabel = new Label(Messages.CONTROL_PROPERTY_HEIGHT + ":");
-        heightLabel.setId(CSSIds.EDITOR_DIALOG_SHORT_LABEL);
+        heightLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
+        heightLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         heightField = new FloatTextField();
-        heightField.prefWidthProperty().bind(widthProperty());
-        heightField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        heightField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         heightField.setMinMax(0, Integer.MAX_VALUE);
         heightField.setScrollPower(10F);
         heightField.setValue(1);
+        heightField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(heightLabel, 0, 1);
         root.add(heightField, 1, 1);
