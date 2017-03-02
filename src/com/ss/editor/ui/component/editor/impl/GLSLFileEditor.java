@@ -28,6 +28,7 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
         DESCRIPTION.setEditorId(GLSLFileEditor.class.getSimpleName());
         DESCRIPTION.addExtension(FileExtensions.GLSL_FRAGMENT);
         DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
+        DESCRIPTION.addExtension(FileExtensions.GLSL_GEOM);
         DESCRIPTION.addExtension(FileExtensions.GLSL_LIB);
     }
 

@@ -40,13 +40,13 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
             "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
             "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix",
             "IntArray", "FloatArray", "Vector2Array", "Vector3Array", "Vector4Array", "Matrix3",
-            "Matrix3Array", "Matrix4Array", "TextureBuffer", "Texture3D", "TextureArray"
+            "Matrix3Array", "Matrix4Array", "TextureBuffer", "Texture3D", "TextureArray", "GeometryShader"
     };
 
     private static final String[] VALUE_VALUES = {
             "true", "false", "Off", "On", "True", "False", "Disable", "SinglePass", "MultiPass",
             "SinglePassAndImageBased", "FixedPipeline", "StaticPass", "InPass", "PostPass", "World", "View",
-            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400"
+            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400", "GLSL330"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";

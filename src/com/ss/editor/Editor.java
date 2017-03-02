@@ -397,7 +397,7 @@ public class Editor extends JmeToJFXApplication {
             final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
             workspaceManager.clear();
             System.exit(1);
-        } catch (final RendererException | IllegalStateException e) {
+        } catch (final RendererException | IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
             GAnalytics.sendException(e, true);
             GAnalytics.waitForSend();

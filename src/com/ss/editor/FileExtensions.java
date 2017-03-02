@@ -32,6 +32,7 @@ public interface FileExtensions {
 
     String GLSL_VERTEX = "vert";
     String GLSL_FRAGMENT = "frag";
+    String GLSL_GEOM = "geom";
     String GLSL_LIB = "glsllib";
 
     String MODEL_BLENDER = "blend";
