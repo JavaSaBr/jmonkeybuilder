@@ -55,8 +55,13 @@
     -fx-background-color: transparent;
 }
 
-#GlobalToolComponent {
+#GlobalLeftToolComponent {
     -fx-min-width: 26;
+    -fx-tab-max-height: 18;
+}
+
+#GlobalBottomToolComponent {
+    -fx-min-height: 26;
     -fx-tab-max-height: 18;
 }
 

@@ -29,7 +29,8 @@ public interface CSSIds {
 
     String JME_PREVIEW_MANAGER_IMAGE_VIEW = "JmePreviewManagerImageView";
 
-    String GLOBAL_TOOL_COMPONENT = "GlobalToolComponent";
+    String GLOBAL_LEFT_TOOL_COMPONENT = "GlobalLeftToolComponent";
+    String GLOBAL_BOTTOM_TOOL_COMPONENT = "GlobalBottomToolComponent";
 
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 

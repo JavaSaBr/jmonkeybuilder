@@ -544,7 +544,6 @@
 }
 
 .tab-pane > .tab-header-area > .tab-header-background {
-    /* TODO should not be using text-box-border I think? */
     -fx-background-color: -fx-background-background;
 }
 
@@ -553,7 +552,7 @@
 }
 
 .tab-pane:bottom > .tab-header-area > .tab-header-background {
-    -fx-background-insets: 0, 1 0 0 0, 1;
+    -fx-background-insets: 0; /* 0, 0 1 0 0, 1 */
 }
 
 .tab-pane:left > .tab-header-area > .tab-header-background {
@@ -570,7 +569,7 @@
 }
 
 .tab-pane:bottom > .tab-header-area {
-    -fx-padding: 0 0.166667em 0.416667em 0.416667em; /* 0 2 5 5 */
+    -fx-padding: 0; /* 5 0 2 5 */
 }
 
 .tab-pane:left > .tab-header-area {

@@ -8,9 +8,9 @@ import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
 
 /**
- * The component for containing editor tool components.
+ * The component to contain editor tool components.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class EditorToolComponent extends TabToolComponent {
 

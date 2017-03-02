@@ -18,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 
 /**
- * The component for containing tool components.
+ * The component to contain tool components.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class TabToolComponent extends TabPane implements ScreenComponent {
 
@@ -31,10 +31,10 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     protected final SplitPane pane;
 
     /**
-     * Is collapsed.
+     * The collapsed property.
      */
     @NotNull
-    private final BooleanProperty collapsed;
+    protected final BooleanProperty collapsed;
 
     /**
      * The last expand position.
@@ -42,16 +42,23 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     private double expandPosition;
 
     /**
-     * Is changing tab.
+     * The flag of changing the tab.
      */
     private boolean changingTab;
 
-    TabToolComponent(@NotNull final SplitPane pane) {
+    protected TabToolComponent(@NotNull final SplitPane pane) {
         this.collapsed = new SimpleBooleanProperty(this, "collapsed", false);
-        this.collapsed.bind(widthProperty().lessThanOrEqualTo(minWidthProperty()));
         this.pane = pane;
+        bindCollapsedProperty();
         addEventHandler(MouseEvent.MOUSE_CLICKED, this::processMouseClick);
         getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changedTab(oldValue));
+    }
+
+    /**
+     * Bind collapsed property.
+     */
+    protected void bindCollapsedProperty() {
+        this.collapsed.bind(widthProperty().lessThanOrEqualTo(minWidthProperty()));
     }
 
     /**
@@ -108,10 +115,9 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
         tab.setContent(component);
         tab.setClosable(false);
 
-        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
-
         getTabs().add(tab);
 
+        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
         FXUtils.bindFixedHeight(component, heightProperty());
     }
 
@@ -128,6 +134,14 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
             setChangingTab(false);
             return;
         }
+
+        processExpandOrCollapse();
+    }
+
+    /**
+     * Process to calculate what need to expand or collapse,
+     */
+    protected void processExpandOrCollapse() {
 
         final double minWidth = getMinWidth();
         final double width = getWidth();
@@ -150,9 +164,20 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      * Collapse selected tab.
      */
     public void collapse() {
+        setCollapseSize();
         pane.setDividerPosition(getDividerIndex(), getCollapsePosition());
     }
 
+    /**
+     * Set collapse size.
+     */
+    protected void setCollapseSize() {
+        maxWidthProperty().bind(minWidthProperty());
+    }
+
+    /**
+     * @return the collapse position.
+     */
     protected int getCollapsePosition() {
         return 0;
     }
@@ -160,7 +185,7 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     /**
      * Expand selected tab.
      */
-    private void expand() {
+    protected void expand() {
 
         final int dividerIndex = getDividerIndex();
         final double position = getExpandPosition();
@@ -168,6 +193,9 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
         expand(dividerIndex, position);
     }
 
+    /**
+     * @return the divider index.
+     */
     private int getDividerIndex() {
         return 0;
     }
@@ -176,6 +204,15 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      * Expand selected tab.
      */
     private void expand(final int dividerIndex, final double position) {
+        setExpandSize();
         pane.setDividerPosition(dividerIndex, position);
+    }
+
+    /**
+     * Set collapse size.
+     */
+    protected void setExpandSize() {
+        maxWidthProperty().unbind();
+        setMaxWidth(USE_COMPUTED_SIZE);
     }
 }

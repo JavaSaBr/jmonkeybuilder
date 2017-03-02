@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.split.pane;
 
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.component.tab.GlobalToolComponent;
+import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -9,33 +9,33 @@ import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 
 /**
- * The implementation of the {@link SplitPane} for the {@link GlobalToolComponent}.
+ * The implementation of the {@link SplitPane} for the {@link GlobalLeftToolComponent}.
  *
  * @author JavaSaBr
  */
-public class GlobalToolSplitPane extends TabToolSplitPane<EditorConfig> {
+public class GlobalLeftToolSplitPane extends TabToolSplitPane<EditorConfig> {
 
-    public GlobalToolSplitPane(@NotNull final Scene scene) {
+    public GlobalLeftToolSplitPane(@NotNull final Scene scene) {
         super(scene, EditorConfig.getInstance());
     }
 
     @Override
     protected boolean loadCollapsed() {
-        return config.isGlobalToolCollapsed();
+        return getConfig().isGlobalLeftToolCollapsed();
     }
 
     @Override
     protected int loadWidth() {
-        return config.getGlobalToolWidth();
+        return getConfig().getGlobalLeftToolWidth();
     }
 
     @Override
     protected void saveCollapsed(final boolean collapsed) {
-        config.setGlobalToolCollapsed(collapsed);
+        getConfig().setGlobalLeftToolCollapsed(collapsed);
     }
 
     @Override
     protected void saveWidth(final int width) {
-        config.setGlobalToolWidth(width);
+        getConfig().setGlobalLeftToolWidth(width);
     }
 }

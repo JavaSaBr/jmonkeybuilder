@@ -12,13 +12,13 @@ import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 
 /**
- * The component for containing editor tool components.
+ * The component to contain editor tool components.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class ScrollableEditorToolComponent extends EditorToolComponent {
 
-    public ScrollableEditorToolComponent(final SplitPane pane, final int index) {
+    public ScrollableEditorToolComponent(@NotNull final SplitPane pane, final int index) {
         super(pane, index);
     }
 
@@ -32,10 +32,9 @@ public class ScrollableEditorToolComponent extends EditorToolComponent {
         tab.setContent(scrollPane);
         tab.setClosable(false);
 
-        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
-
         getTabs().add(tab);
 
+        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
         FXUtils.bindFixedHeight(scrollPane, heightProperty());
     }
 }

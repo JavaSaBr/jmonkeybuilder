@@ -1,18 +1,15 @@
 package com.ss.editor.ui.component.bar;
 
 import static javafx.util.Duration.millis;
-
 import com.ss.editor.JFXApplication;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.bar.action.CloseEditorAction;
 import com.ss.editor.ui.component.bar.action.OpenAssetAction;
 import com.ss.editor.ui.component.bar.action.OpenSettingsAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -173,7 +170,8 @@ public class EditorBarComponent extends StackPane implements ScreenComponent {
 
         updateFullscreenButton(stage.isMaximized());
 
-        StackPane.setMargin(drawerContainer, EditorFXSceneBuilder.BAR_OFFSET);
+        heightProperty().addListener((observable, oldValue, newValue) ->
+                StackPane.setMargin(drawerContainer, new Insets(newValue.doubleValue(), 0, 0, 0)));
     }
 
     /**

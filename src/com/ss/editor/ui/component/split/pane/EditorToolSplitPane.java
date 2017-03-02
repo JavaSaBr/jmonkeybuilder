@@ -1,18 +1,17 @@
 package com.ss.editor.ui.component.split.pane;
 
 import com.ss.editor.ui.component.editor.state.EditorToolConfig;
-import com.ss.editor.ui.component.tab.GlobalToolComponent;
+import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.component.tab.TabToolComponent;
-
-import org.jetbrains.annotations.NotNull;
-
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Region;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link SplitPane} for the {@link GlobalToolComponent}.
+ * The implementation of the {@link SplitPane} for the {@link GlobalLeftToolComponent}.
  *
  * @author JavaSaBr
  */
@@ -21,6 +20,7 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     /**
      * The root of the editor.
      */
+    @NotNull
     private final Region root;
 
     public EditorToolSplitPane(@NotNull final Scene scene, @NotNull final Region root) {
@@ -35,6 +35,12 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     }
 
     @Override
+    protected void handleSceneChanged(@NotNull final Number newWidth) {
+        super.handleSceneChanged(newWidth);
+        Platform.runLater(this::requestLayout);
+    }
+
+    @Override
     protected void bindToScene() {
     }
 
@@ -45,22 +51,22 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
 
     @Override
     protected boolean loadCollapsed() {
-        return config.isToolCollapsed();
+        return getConfig().isToolCollapsed();
     }
 
     @Override
     protected int loadWidth() {
-        return config.getToolWidth();
+        return getConfig().getToolWidth();
     }
 
     @Override
     protected void saveCollapsed(final boolean collapsed) {
-        config.setToolCollapsed(collapsed);
+        getConfig().setToolCollapsed(collapsed);
     }
 
     @Override
     protected void saveWidth(final int width) {
-        config.setToolWidth(width);
+        getConfig().setToolWidth(width);
     }
 
     @Override

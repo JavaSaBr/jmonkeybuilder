@@ -2,27 +2,27 @@ package com.ss.editor.ui.builder;
 
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
-
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import com.ss.editor.ui.component.log.LogView;
-import com.ss.editor.ui.component.split.pane.GlobalToolSplitPane;
-import com.ss.editor.ui.component.tab.GlobalToolComponent;
+import com.ss.editor.ui.component.split.pane.GlobalBottomToolSplitPane;
+import com.ss.editor.ui.component.split.pane.GlobalLeftToolSplitPane;
+import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
+import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
 
 /**
@@ -31,8 +31,6 @@ import rlib.ui.util.FXUtils;
  * @author JavaSaBr.
  */
 public class EditorFXSceneBuilder {
-
-    public static final Insets BAR_OFFSET = new Insets(34, 0, 0, 0);
 
     /**
      * The path to the base CSS styles.
@@ -92,25 +90,40 @@ public class EditorFXSceneBuilder {
 
         new EventRedirector(editorAreaComponent, canvas, stage);
 
-        final GlobalToolSplitPane splitContainer = new GlobalToolSplitPane(scene);
-        splitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
+        final GlobalLeftToolSplitPane leftSplitContainer = new GlobalLeftToolSplitPane(scene);
+        leftSplitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
-        final GlobalToolComponent globalToolComponent = new GlobalToolComponent(splitContainer);
-        globalToolComponent.addComponent(new AssetComponent(), Messages.EDITOR_TOOL_ASSET);
-        globalToolComponent.addComponent(LogView.getInstance(), Messages.LOG_VIEW_TITLE);
+        final GlobalBottomToolSplitPane bottomSplitContainer = new GlobalBottomToolSplitPane(scene);
+        bottomSplitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
 
-        splitContainer.initFor(globalToolComponent, editorAreaComponent);
+        final GlobalLeftToolComponent globalLeftToolComponent = new GlobalLeftToolComponent(leftSplitContainer);
+        globalLeftToolComponent.addComponent(new AssetComponent(), Messages.EDITOR_TOOL_ASSET);
 
-        FXUtils.addToPane(splitContainer, container);
+        final GlobalBottomToolComponent globalBottomToolComponent = new GlobalBottomToolComponent(bottomSplitContainer);
+        globalBottomToolComponent.addComponent(LogView.getInstance(), Messages.LOG_VIEW_TITLE);
+
+        leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
+        bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
+
+        FXUtils.addToPane(leftSplitContainer, container);
         FXUtils.addToPane(barComponent, container);
 
         barComponent.createDrawer(container, stage);
         barComponent.toFront();
 
-        FXUtils.bindFixedHeight(splitContainer, container.heightProperty().subtract(BAR_OFFSET.getTop()).add(2));
-        FXUtils.bindFixedWidth(splitContainer, container.widthProperty());
+        FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 
-        StackPane.setMargin(splitContainer, BAR_OFFSET);
+        barComponent.heightProperty().addListener((observable, oldValue, newValue) ->
+                updateLayout(container, leftSplitContainer, newValue));
+    }
+
+    private static void updateLayout(@NotNull final StackPane container,
+                                     @NotNull final GlobalLeftToolSplitPane leftSplitContainer,
+                                     @NotNull final Number newValue) {
+
+        StackPane.setMargin(leftSplitContainer, new Insets(newValue.doubleValue(), 0, 0, 0));
+        FXUtils.bindFixedHeight(leftSplitContainer, container.heightProperty().subtract(newValue.doubleValue()).add(2));
+        Platform.runLater(container::requestLayout);
     }
 }

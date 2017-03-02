@@ -64,8 +64,10 @@ public final class EditorConfig implements AssetEventListener {
 
     private static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
     private static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
-    private static final String PREF_GLOBAL_TOOL_WIDTH = ASSET_OTHER + "." + "globalToolWidth";
-    private static final String PREF_GLOBAL_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalToolCollapsed";
+    private static final String PREF_GLOBAL_LEFT_TOOL_WIDTH = ASSET_OTHER + "." + "globalLeftToolWidth";
+    private static final String PREF_GLOBAL_LEFT_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalLeftToolCollapsed";
+    private static final String PREF_GLOBAL_BOTTOM_TOOL_WIDTH = ASSET_OTHER + "." + "globalBottomToolWidth";
+    private static final String PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalBottomToolCollapsed";
     private static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
     private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
     private static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
@@ -145,14 +147,24 @@ public final class EditorConfig implements AssetEventListener {
     private volatile int screenHeight;
 
     /**
-     * The global tool width.
+     * The global left tool width.
      */
-    private volatile int globalToolWidth;
+    private volatile int globalLeftToolWidth;
 
     /**
-     * Flag is for collapsing the global tool.
+     * The global bottom tool width.
      */
-    private volatile boolean globalToolCollapsed;
+    private volatile int globalBottomToolWidth;
+
+    /**
+     * Flag is for collapsing the global left tool.
+     */
+    private volatile boolean globalLeftToolCollapsed;
+
+    /**
+     * Flag is for collapsing the global bottom tool.
+     */
+    private volatile boolean globalBottomToolCollapsed;
 
     /**
      * Flag is for enabling the FXAA.
@@ -444,35 +456,67 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @return the global tool width.
+     * @return the global left tool width.
      */
     @FromAnyThread
-    public int getGlobalToolWidth() {
-        return globalToolWidth;
+    public int getGlobalLeftToolWidth() {
+        return globalLeftToolWidth;
     }
 
     /**
-     * @param globalToolWidth the global tool width.
+     * @return the global bottom tool width.
      */
     @FromAnyThread
-    public void setGlobalToolWidth(final int globalToolWidth) {
-        this.globalToolWidth = globalToolWidth;
+    public int getGlobalBottomToolWidth() {
+        return globalBottomToolWidth;
     }
 
     /**
-     * @param globalToolCollapsed flag is for collapsing the global tool.
+     * @param globalLeftToolWidth the global left tool width.
      */
     @FromAnyThread
-    public void setGlobalToolCollapsed(final boolean globalToolCollapsed) {
-        this.globalToolCollapsed = globalToolCollapsed;
+    public void setGlobalLeftToolWidth(final int globalLeftToolWidth) {
+        this.globalLeftToolWidth = globalLeftToolWidth;
     }
 
     /**
-     * @return true if the global tool is collapsed.
+     * @param globalBottomToolWidth the global bottom tool width.
      */
     @FromAnyThread
-    public boolean isGlobalToolCollapsed() {
-        return globalToolCollapsed;
+    public void setGlobalBottomToolWidth(final int globalBottomToolWidth) {
+        this.globalBottomToolWidth = globalBottomToolWidth;
+    }
+
+    /**
+     * @param globalLeftToolCollapsed flag is for collapsing the global left tool.
+     */
+    @FromAnyThread
+    public void setGlobalLeftToolCollapsed(final boolean globalLeftToolCollapsed) {
+        this.globalLeftToolCollapsed = globalLeftToolCollapsed;
+    }
+
+    /**
+     * @param globalBottomToolCollapsed flag is for collapsing the global bottom tool.
+     */
+    @FromAnyThread
+    public void setGlobalBottomToolCollapsed(final boolean globalBottomToolCollapsed) {
+        this.globalBottomToolCollapsed = globalBottomToolCollapsed;
+    }
+
+    /**
+     * @return true if the global left tool is collapsed.
+     */
+    @FromAnyThread
+    public boolean isGlobalLeftToolCollapsed() {
+        return globalLeftToolCollapsed;
+    }
+
+    /**
+     * @return true if the global bottom tool is collapsed.
+     */
+    @FromAnyThread
+    public boolean isGlobalBottomToolCollapsed() {
+        return globalBottomToolCollapsed;
     }
 
     /**
@@ -631,8 +675,10 @@ public final class EditorConfig implements AssetEventListener {
         this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);
         this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 800);
         this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 1200);
-        this.globalToolWidth = prefs.getInt(PREF_GLOBAL_TOOL_WIDTH, 300);
-        this.globalToolCollapsed = prefs.getBoolean(PREF_GLOBAL_TOOL_COLLAPSED, false);
+        this.globalLeftToolWidth = prefs.getInt(PREF_GLOBAL_LEFT_TOOL_WIDTH, 300);
+        this.globalLeftToolCollapsed = prefs.getBoolean(PREF_GLOBAL_LEFT_TOOL_COLLAPSED, false);
+        this.globalBottomToolWidth = prefs.getInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
+        this.globalBottomToolCollapsed = prefs.getBoolean(PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
         this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
         this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
@@ -702,8 +748,10 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_SCREEN_HEIGHT, getScreenHeight());
         prefs.putInt(PREF_SCREEN_WIDTH, getScreenWidth());
         prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
-        prefs.putInt(PREF_GLOBAL_TOOL_WIDTH, getGlobalToolWidth());
-        prefs.putBoolean(PREF_GLOBAL_TOOL_COLLAPSED, isGlobalToolCollapsed());
+        prefs.putInt(PREF_GLOBAL_LEFT_TOOL_WIDTH, getGlobalLeftToolWidth());
+        prefs.putBoolean(PREF_GLOBAL_LEFT_TOOL_COLLAPSED, isGlobalLeftToolCollapsed());
+        prefs.putInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolWidth());
+        prefs.putBoolean(PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED, isGlobalBottomToolCollapsed());
         prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
         prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
