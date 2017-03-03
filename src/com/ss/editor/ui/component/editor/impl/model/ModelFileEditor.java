@@ -48,11 +48,10 @@ import java.util.function.Supplier;
  */
 public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditorAppState, ModelFileEditorState> {
 
-    @NotNull
-    private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
+    private static final Insets FAST_SKY_OFFSET = new Insets(0, 0, 0, 4);
 
     @NotNull
-    private static final Insets LIGHT_BUTTON_OFFSET = new Insets(0, 4, 0, 4);
+    private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
@@ -226,7 +225,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         FXUtils.addToPane(fastSkyLabel, container);
         FXUtils.addToPane(fastSkyComboBox, container);
 
-        HBox.setMargin(lightButton, LIGHT_BUTTON_OFFSET);
+        HBox.setMargin(fastSkyLabel, FAST_SKY_OFFSET);
     }
 
     /**

@@ -3,13 +3,11 @@ package com.ss.editor.ui.control.tree.node;
 import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
@@ -58,6 +56,19 @@ public abstract class ModelNode<T> implements UObject {
     @NotNull
     public String getName() {
         return "unknown name";
+    }
+
+    /**
+     * @param name the name.
+     */
+    public void setName(@NotNull final String name) {
+    }
+
+    /**
+     * @return true if need to save name.
+     */
+    public boolean isNeedToSaveName() {
+        return false;
     }
 
     /**

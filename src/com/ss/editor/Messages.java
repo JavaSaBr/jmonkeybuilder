@@ -168,6 +168,9 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE;
     public static final String MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE;
     public static final String MODEL_FILE_EDITOR_NODE_WHEEL;
+    public static final String MODEL_FILE_EDITOR_NODE_MOTION_CONTROL;
+    public static final String MODEL_FILE_EDITOR_NODE_MOTION_PATH;
+    public static final String MODEL_FILE_EDITOR_NODE_WAY_POINT;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -268,6 +271,7 @@ public class Messages {
     public static final String MODEL_PROPERTY_TRIANGLE_COUNT;
     public static final String MODEL_PROPERTY_LEVEL;
     public static final String MODEL_PROPERTY_LAYER;
+    public static final String MODEL_PROPERTY_VALUE;
 
     public static final String CONTROL_PROPERTY_ENABLED;
     public static final String CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED;
@@ -713,6 +717,9 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_PLANE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodePlaneCollisionShape");
         MODEL_FILE_EDITOR_NODE_SPHERE_COLLISION_SHAPE = bundle.getString("ModelFileEditorNodeSphereCollisionShape");
         MODEL_FILE_EDITOR_NODE_WHEEL = bundle.getString("ModelFileEditorNodeWheel");
+        MODEL_FILE_EDITOR_NODE_MOTION_CONTROL = bundle.getString("ModelFileEditorNodeMotionControl");
+        MODEL_FILE_EDITOR_NODE_MOTION_PATH = bundle.getString("ModelFileEditorNodeMotionPath");
+        MODEL_FILE_EDITOR_NODE_WAY_POINT = bundle.getString("ModelFileEditorNodeWayPoint");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -813,6 +820,7 @@ public class Messages {
         MODEL_PROPERTY_TRIANGLE_COUNT = bundle.getString("ModelPropertyTriangleCount");
         MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
         MODEL_PROPERTY_LAYER = bundle.getString("ModelPropertyLayer");
+        MODEL_PROPERTY_VALUE = bundle.getString("ModelPropertyValue");
 
         CONTROL_PROPERTY_ENABLED = bundle.getString("ControlPropertyEnabled");
         CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED = bundle.getString("ControlPropertyHardwareSkinningPreferred");

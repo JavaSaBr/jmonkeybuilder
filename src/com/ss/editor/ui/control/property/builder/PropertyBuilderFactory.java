@@ -33,6 +33,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(DefaultControlPropertyBuilder.getInstance());
         BUILDERS.add(EditableControlPropertyBuilder.getInstance());
         BUILDERS.add(CollisionShapePropertyBuilder.getInstance());
+        BUILDERS.add(PrimitivePropertyBuilder.getInstance());
     }
 
     /**

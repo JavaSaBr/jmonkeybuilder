@@ -83,6 +83,9 @@ public interface Icons {
     Image IMPOSTOR_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/plus.svg");
     Image REMOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horizontal-line-remove-button.svg", 16, false);
     Image ADD_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/add-plus-button.svg", 16, false);
+    Image MOTION_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horse-in-running-motion-silhouette.svg", 16, false);
+    Image PATH_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/map-location.svg", 16, false);
+    Image WAY_POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/placeholder.svg", 16, false);
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);

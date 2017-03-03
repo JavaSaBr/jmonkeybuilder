@@ -15,3 +15,8 @@ ui/icons/actions/svg/cube-divisions.svg icon made by http://www.flaticon.com/aut
 ui/icons/actions/svg/because-mathematical-symbol.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
 ui/icons/actions/svg/plus.svg icon made by http://www.flaticon.com/authors/icomoon from www.flaticon.com
 ui/icons/actions/svg/basic-square.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/horse-in-running-motion-silhouette.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/road-perspective.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/map-location.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/placeholder.svg icon made by http://www.flaticon.com/authors/madebyoliver from www.flaticon.com
+

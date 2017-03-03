@@ -3,7 +3,6 @@ package com.ss.editor;
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static java.nio.file.Files.newOutputStream;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
@@ -19,24 +18,20 @@ import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.Paths;
-
-import javax.imageio.ImageIO;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Paths;
 
 /**
  * The starter of the JavaFX application.
@@ -138,9 +133,7 @@ public class JFXApplication extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        final LogView logView = LogView.getInstance();
-        System.out.println("Initialized the " + logView);
-
+        LogView.getInstance();
         JFXApplication.instance = this;
         this.stage = stage;
 

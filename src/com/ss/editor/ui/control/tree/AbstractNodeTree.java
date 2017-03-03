@@ -2,30 +2,21 @@ package com.ss.editor.ui.control.tree;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
-
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.component.asset.tree.resource.FileElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
-
-import javafx.collections.ObservableList;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.array.Array;
+
+import java.util.function.Consumer;
 
 /**
  * The implementation of {@link TreeView} to present some structure.
@@ -270,6 +261,10 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
 
         final ModelNode<?> parent = parentItem.getValue();
         final ModelNode<?> old = treeItem.getValue();
+
+        if (modelNode.isNeedToSaveName()) {
+            modelNode.setName(old.getName());
+        }
 
         parent.notifyChildPreRemove(old);
         treeItem.setValue(null);
