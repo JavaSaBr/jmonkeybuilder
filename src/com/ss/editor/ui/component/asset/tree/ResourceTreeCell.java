@@ -3,41 +3,29 @@ package com.ss.editor.ui.component.asset.tree;
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static com.ss.editor.ui.css.CSSIds.ASSET_COMPONENT_RESOURCE_TREE_CELL;
 import static java.util.Collections.singletonList;
-
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 import com.ss.editor.ui.css.CSSClasses;
+import javafx.geometry.Side;
+import javafx.scene.Cursor;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
+import rlib.ui.util.FXUtils;
+import rlib.util.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
-import javafx.geometry.Side;
-import javafx.scene.Cursor;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeView;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
-import javafx.util.Callback;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
-
 /**
  * The implementation of the cell for {@link TreeView} for showing a resource.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
@@ -48,9 +36,9 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      */
     private final Tooltip tooltip;
 
-    public ResourceTreeCell() {
+    protected ResourceTreeCell() {
         setId(ASSET_COMPONENT_RESOURCE_TREE_CELL);
-        setMinHeight(15);
+        setMinHeight(FXConstants.CELL_SIZE);
         setOnMouseClicked(this::processClick);
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_CELL);

@@ -5,6 +5,7 @@ import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
@@ -58,6 +59,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
     protected void createComponents() {
 
         treeView = new TreeView<>();
+        treeView.setFixedCellSize(FXConstants.CELL_SIZE);
         treeView.setCellFactory(param -> createNodeTreeCell());
         treeView.setShowRoot(true);
         treeView.setEditable(true);

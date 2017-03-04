@@ -91,6 +91,7 @@
     -fx-border-color: transparent;
     -fx-padding: 0;
     -fx-effect: null;
+    -fx-cell-size: 10;
 }
 
 .transparent-tree-view:focused {
@@ -130,7 +131,7 @@
 }
 
 .transparent-tree-cell > .tree-disclosure-node {
-    -fx-padding: 4 6 4 8;
+    -fx-padding: 2 6 2 8;
     -fx-background-color: transparent;
 }
 

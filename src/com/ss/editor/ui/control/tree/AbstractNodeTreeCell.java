@@ -3,44 +3,30 @@ package com.ss.editor.ui.control.tree;
 import static com.ss.editor.ui.util.UIUtils.findItem;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static rlib.util.ClassUtils.unsafeCast;
-
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
 import com.ss.editor.ui.util.UIUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Set;
-
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
+
+import java.util.Set;
 
 /**
  * The implementation of {@link TreeCell} to show tree nodes.
@@ -120,6 +106,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
         this.visibleIcon.setPickOnBounds(true);
 
         setId(CSSIds.MODEL_NODE_TREE_CELL);
+        setMinHeight(FXConstants.CELL_SIZE);
         setOnMouseClicked(this::processClick);
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
