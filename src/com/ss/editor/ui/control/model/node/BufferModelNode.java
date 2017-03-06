@@ -30,14 +30,4 @@ public class BufferModelNode extends ModelNode<Buffer> {
     public String getName() {
         return getElement().getClass().getSimpleName();
     }
-
-    @Override
-    public boolean canMove() {
-        return false;
-    }
-
-    @Override
-    public boolean canCopy() {
-        return false;
-    }
 }

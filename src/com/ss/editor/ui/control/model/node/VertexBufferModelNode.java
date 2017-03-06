@@ -52,14 +52,4 @@ public class VertexBufferModelNode extends ModelNode<VertexBuffer> {
 
         return result;
     }
-
-    @Override
-    public boolean canMove() {
-        return false;
-    }
-
-    @Override
-    public boolean canCopy() {
-        return false;
-    }
 }
