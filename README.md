@@ -11,7 +11,7 @@
 * -Implemented image view/preview of .dds and .hdr images.
 * -Added tooltips for some actions in an editor toolbar.
 * -Small UI fixes for Material Editor.
-* -Implemented flying on a scene using WASD.
+* -Implemented flying on a scene using WASD + middle mouse button.
 * -Added a dialog with some settings of converting models.
 * -Moved the Log View to bottom.
 * -Some updates of representation a motion control.
