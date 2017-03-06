@@ -1,11 +1,26 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.4 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.5 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
+## ver. 0.9.5 ##
+* -Updated jME libraries.
+* -Updated styles of all dialogs.
+* -Implemented image view/preview of .dds and .hdr images.
+* -Added tooltips for some actions in an editor toolbar.
+* -Small UI fixes for Material Editor.
+* -Implemented flying on a scene using WASD.
+* -Added a dialog with some settings of converting models.
+* -Moved the Log View to bottom.
+* -Some updates of representation a motion control.
+* -Reduced cell height in the asset tree and the model tree.
+* -Added detail information about meshes.
+* -Implemented D&D models from the asset tree to the model tree.
+
 ## ver. 0.9.4 ##
+* [Video](https://www.youtube.com/watch?v=d-7HdPSl1BE&feature=youtu.be)
 * -Updated jME libraries.
 * -Added an action to switch off|on showing audio/light models in the scene editor.
 * -Added an action to create terrain.
