@@ -13,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import java.nio.Buffer;
+
 /**
  * The implementation of the {@link ModelNode} to represent the {@link VertexBuffer} in the editor.
  *
@@ -47,8 +49,11 @@ public class VertexBufferModelNode extends ModelNode<VertexBuffer> {
 
         final VertexBuffer vertexBuffer = getElement();
 
+        final Buffer data = vertexBuffer.getData();
+        if (data == null) return EMPTY_ARRAY;
+
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
-        result.add(createFor(vertexBuffer.getData()));
+        result.add(createFor(data));
 
         return result;
     }
