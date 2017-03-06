@@ -6,31 +6,20 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.filter.property.control.BooleanFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.ColorFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.DirectionLightElementFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.EnumFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.FloatFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.IntegerFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.PointLightElementFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.StringFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.Vector2fFilterPropertyControl;
-import com.ss.editor.ui.control.filter.property.control.Vector3fFilterPropertyControl;
+import com.ss.editor.ui.control.filter.property.control.*;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.scene.filter.EditableSceneFilter;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
+
+import java.util.Objects;
 
 /**
  * The iproperty builder to build property controls of editable scene app states.
@@ -39,8 +28,10 @@ import rlib.util.array.Array;
  */
 public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeConsumer> {
 
+    @NotNull
     private static final FilterPropertyBuilder INSTANCE = new FilterPropertyBuilder();
 
+    @NotNull
     public static FilterPropertyBuilder getInstance() {
         return INSTANCE;
     }

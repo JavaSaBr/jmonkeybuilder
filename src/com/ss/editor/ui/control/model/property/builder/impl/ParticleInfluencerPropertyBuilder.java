@@ -53,8 +53,10 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
     private static final RadialPullAlignment[] RADIAL_PULL_ALIGNMENTS = RadialPullAlignment.values();
     private static final RadialUpAlignment[] RADIAL_UP_ALIGNMENTS = RadialUpAlignment.values();
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new ParticleInfluencerPropertyBuilder();
 
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }

@@ -42,9 +42,4 @@ public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
         final ParticleInfluencer element = getElement();
         return element.getName();
     }
-
-    @Override
-    public boolean hasChildren() {
-        return false;
-    }
 }

@@ -87,7 +87,7 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
         final ParticleEmitterNode element = getElement();
         final Array<ModelNode<?>> children = ArrayFactory.newArray(ModelNode.class);
         children.add(createFor(new ParticleInfluencers(element)));

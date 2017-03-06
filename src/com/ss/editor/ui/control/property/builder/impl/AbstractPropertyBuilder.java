@@ -22,6 +22,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
 
     protected static final Insets SPLIT_LINE_OFFSET = new Insets(6, 0, 6, 0);
 
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull

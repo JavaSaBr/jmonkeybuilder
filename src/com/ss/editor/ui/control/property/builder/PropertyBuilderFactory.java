@@ -13,12 +13,13 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The builder to build controls for edit properties of objects.
+ * The factory to build property controls to edit an object.
  *
  * @author JavaSaBr
  */
 public class PropertyBuilderFactory {
 
+    @NotNull
     private static final Array<PropertyBuilder> BUILDERS = ArrayFactory.newArray(PropertyBuilder.class);
 
     static {
@@ -34,6 +35,7 @@ public class PropertyBuilderFactory {
         BUILDERS.add(EditableControlPropertyBuilder.getInstance());
         BUILDERS.add(CollisionShapePropertyBuilder.getInstance());
         BUILDERS.add(PrimitivePropertyBuilder.getInstance());
+        BUILDERS.add(MeshPropertyBuilder.getInstance());
     }
 
     /**

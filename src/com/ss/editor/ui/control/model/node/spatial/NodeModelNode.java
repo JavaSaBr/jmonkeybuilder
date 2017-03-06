@@ -5,6 +5,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
 import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
 import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
@@ -79,18 +80,18 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof ModelNodeTree;
     }
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final List<Spatial> children = getSpatials();
         children.forEach(spatial -> result.add(createFor(spatial)));
-        result.addAll(super.getChildren());
+        result.addAll(super.getChildren(nodeTree));
 
         return result;
     }

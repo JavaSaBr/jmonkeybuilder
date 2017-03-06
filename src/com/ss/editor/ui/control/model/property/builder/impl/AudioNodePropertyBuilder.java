@@ -14,14 +14,12 @@ import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyCont
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.editor.util.AudioNodeUtils;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.ui.util.FXUtils;
 
 import java.util.function.BiConsumer;
-
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link AudioNode} objects.
@@ -30,6 +28,7 @@ import rlib.ui.util.FXUtils;
  */
 public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final BiConsumer<AudioNode, AudioKey> AUDIO_APPLY_HANDLER = (audioNode, audioKey) -> {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -42,8 +41,10 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         }
     };
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new AudioNodePropertyBuilder();
 
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }

@@ -171,6 +171,7 @@ public class Messages {
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_CONTROL;
     public static final String MODEL_FILE_EDITOR_NODE_MOTION_PATH;
     public static final String MODEL_FILE_EDITOR_NODE_WAY_POINT;
+    public static final String MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER;
 
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
@@ -272,6 +273,22 @@ public class Messages {
     public static final String MODEL_PROPERTY_LEVEL;
     public static final String MODEL_PROPERTY_LAYER;
     public static final String MODEL_PROPERTY_VALUE;
+    public static final String MODEL_PROPERTY_ID;
+    public static final String MODEL_PROPERTY_INSTANCE_COUNT;
+    public static final String MODEL_PROPERTY_VERTEX_COUNT;
+    public static final String MODEL_PROPERTY_NUM_LOD_LEVELS;
+    public static final String MODEL_PROPERTY_MODE;
+    public static final String MODEL_PROPERTY_TYPE;
+    public static final String MODEL_PROPERTY_FORMAT;
+    public static final String MODEL_PROPERTY_USAGE;
+    public static final String MODEL_PROPERTY_UNIQ_ID;
+    public static final String MODEL_PROPERTY_BASE_INSTANCE_COUNT;
+    public static final String MODEL_PROPERTY_INSTANCE_SPAN;
+    public static final String MODEL_PROPERTY_NUM_COMPONENTS;
+    public static final String MODEL_PROPERTY_NUM_ELEMENTS;
+    public static final String MODEL_PROPERTY_OFFSET;
+    public static final String MODEL_PROPERTY_STRIDE;
+    public static final String MODEL_PROPERTY_CAPACITY;
 
     public static final String CONTROL_PROPERTY_ENABLED;
     public static final String CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED;
@@ -720,6 +737,7 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_MOTION_CONTROL = bundle.getString("ModelFileEditorNodeMotionControl");
         MODEL_FILE_EDITOR_NODE_MOTION_PATH = bundle.getString("ModelFileEditorNodeMotionPath");
         MODEL_FILE_EDITOR_NODE_WAY_POINT = bundle.getString("ModelFileEditorNodeWayPoint");
+        MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER = bundle.getString("ModelFileEditorNodeVertexBuffer");
 
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
@@ -821,6 +839,22 @@ public class Messages {
         MODEL_PROPERTY_LEVEL = bundle.getString("ModelPropertyLevel");
         MODEL_PROPERTY_LAYER = bundle.getString("ModelPropertyLayer");
         MODEL_PROPERTY_VALUE = bundle.getString("ModelPropertyValue");
+        MODEL_PROPERTY_ID = bundle.getString("ModelPropertyId");
+        MODEL_PROPERTY_INSTANCE_COUNT = bundle.getString("ModelPropertyInstanceCount");
+        MODEL_PROPERTY_VERTEX_COUNT = bundle.getString("ModelPropertyVertexCount");
+        MODEL_PROPERTY_NUM_LOD_LEVELS = bundle.getString("ModelPropertyNumLodLevels");
+        MODEL_PROPERTY_MODE = bundle.getString("ModelPropertyMode");
+        MODEL_PROPERTY_TYPE = bundle.getString("ModelPropertyType");
+        MODEL_PROPERTY_FORMAT = bundle.getString("ModelPropertyFormat");
+        MODEL_PROPERTY_USAGE = bundle.getString("ModelPropertyUsage");
+        MODEL_PROPERTY_UNIQ_ID = bundle.getString("ModelPropertyUniqId");
+        MODEL_PROPERTY_BASE_INSTANCE_COUNT = bundle.getString("ModelPropertyBaseInstanceCount");
+        MODEL_PROPERTY_INSTANCE_SPAN = bundle.getString("ModelPropertyInstanceSpan");
+        MODEL_PROPERTY_NUM_COMPONENTS = bundle.getString("ModelPropertyNumComponents");
+        MODEL_PROPERTY_NUM_ELEMENTS = bundle.getString("ModelPropertyNumElements");
+        MODEL_PROPERTY_OFFSET = bundle.getString("ModelPropertyOffset");
+        MODEL_PROPERTY_STRIDE = bundle.getString("ModelPropertyStride");
+        MODEL_PROPERTY_CAPACITY = bundle.getString("ModelPropertyCapacity");
 
         CONTROL_PROPERTY_ENABLED = bundle.getString("ControlPropertyEnabled");
         CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED = bundle.getString("ControlPropertyHardwareSkinningPreferred");

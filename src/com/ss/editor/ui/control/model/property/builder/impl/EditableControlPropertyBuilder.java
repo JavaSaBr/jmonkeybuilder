@@ -4,29 +4,20 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.ColorModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.EnumControlPropertyControl;
-import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.StringModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.Vector2fModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.extension.property.EditableProperty;
 import com.ss.extension.property.EditablePropertyType;
 import com.ss.extension.scene.control.EditableControl;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.ClassUtils;
 import rlib.util.array.Array;
+
+import java.util.Objects;
 
 /**
  * The property builder to build property controls of editable controls.
@@ -35,8 +26,10 @@ import rlib.util.array.Array;
  */
 public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final EditableControlPropertyBuilder INSTANCE = new EditableControlPropertyBuilder();
 
+    @NotNull
     public static EditableControlPropertyBuilder getInstance() {
         return INSTANCE;
     }

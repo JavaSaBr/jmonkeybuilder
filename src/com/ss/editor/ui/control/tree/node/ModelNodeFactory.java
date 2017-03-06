@@ -17,6 +17,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainQuad;
@@ -24,7 +25,9 @@ import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.layer.node.LayersRootModelNode;
 import com.ss.editor.ui.control.layer.node.SceneLayerModelNode;
+import com.ss.editor.ui.control.model.node.BufferModelNode;
 import com.ss.editor.ui.control.model.node.PositionModelNode;
+import com.ss.editor.ui.control.model.node.VertexBufferModelNode;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.node.control.SkeletonControlModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.*;
@@ -53,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
+import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -71,6 +75,10 @@ public class ModelNodeFactory {
 
         if (element instanceof Vector3f) {
             return unsafeCast(new PositionModelNode((Vector3f) element, objectId));
+        } else if (element instanceof VertexBuffer) {
+            return unsafeCast(new VertexBufferModelNode((VertexBuffer) element, objectId));
+        } else if (element instanceof Buffer) {
+            return unsafeCast(new BufferModelNode((Buffer) element, objectId));
         } else if (element instanceof VehicleWheel) {
             return unsafeCast(new VehicleWheelModelNode((VehicleWheel) element, objectId));
         } else if (element instanceof MotionPath) {

@@ -1,11 +1,10 @@
-package com.ss.editor.ui.control.model.node.spatial;
+package com.ss.editor.ui.control.model.node;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
-import com.jme3.util.IntMap;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
@@ -15,44 +14,43 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link ModelNode} to represent the {@link Mesh} in the editor.
+ * The implementation of the {@link ModelNode} to represent the {@link VertexBuffer} in the editor.
  *
  * @author JavaSaBr
  */
-public class MeshModelNode extends ModelNode<Mesh> {
+public class VertexBufferModelNode extends ModelNode<VertexBuffer> {
 
-    public MeshModelNode(@NotNull final Mesh element, final long objectId) {
+    public VertexBufferModelNode(@NotNull final VertexBuffer element, final long objectId) {
         super(element, objectId);
     }
 
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.MESH_16;
+        return Icons.VERTEX_16;
     }
 
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_MESH;
+        return Messages.MODEL_FILE_EDITOR_NODE_VERTEX_BUFFER + " [" + getElement().getBufferType() + "]";
+    }
+
+    @Override
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof ModelNodeTree;
     }
 
     @NotNull
     @Override
     public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
-        final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
+        final VertexBuffer vertexBuffer = getElement();
 
-        final Mesh element = getElement();
-        final IntMap<VertexBuffer> buffers = element.getBuffers();
-        buffers.forEach(entry -> result.add(createFor(entry.getValue())));
+        final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
+        result.add(createFor(vertexBuffer.getData()));
 
         return result;
-    }
-
-    @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
-        return true;
     }
 
     @Override
@@ -62,6 +60,6 @@ public class MeshModelNode extends ModelNode<Mesh> {
 
     @Override
     public boolean canCopy() {
-        return true;
+        return false;
     }
 }

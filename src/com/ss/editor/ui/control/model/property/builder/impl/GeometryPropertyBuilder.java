@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
 import static com.ss.editor.util.EditorUtil.clipNumber;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.bounding.BoundingBox;
@@ -18,17 +17,15 @@ import com.ss.editor.ui.control.model.property.control.MaterialKeyModelPropertyC
 import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-
-import javafx.scene.layout.VBox;
 import rlib.ui.util.FXUtils;
 import rlib.util.StringUtils;
 import tonegod.emitter.geometry.ParticleGeometry;
+
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Geometry} objects.
@@ -37,6 +34,7 @@ import tonegod.emitter.geometry.ParticleGeometry;
  */
 public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final BiConsumer<Geometry, MaterialKey> MATERIAL_APPLY_HANDLER = (geometry, materialKey) -> {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -54,11 +52,13 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         }
     };
 
+    @NotNull
     private static final Function<Geometry, MaterialKey> MATERIAL_SYNC_HANDLER = geometry -> {
         final Material material = geometry.getMaterial();
         return (MaterialKey) material.getKey();
     };
 
+    @NotNull
     private static final Function<BoundingVolume, String> BOUNDING_VOLUME_TO_STRING = boundingVolume -> {
 
         if (boundingVolume instanceof BoundingSphere) {
@@ -80,8 +80,10 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         return StringUtils.EMPTY;
     };
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new GeometryPropertyBuilder();
 
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }

@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
-import com.google.protobuf.Message;
 import com.jme3.bullet.collision.shapes.*;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.jme3.math.Matrix3f;
@@ -23,8 +22,10 @@ import rlib.ui.util.FXUtils;
  */
 public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new CollisionShapePropertyBuilder();
 
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }

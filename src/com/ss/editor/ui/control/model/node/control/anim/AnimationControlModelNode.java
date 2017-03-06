@@ -6,6 +6,7 @@ import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.animation.PlaySettingsAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -89,13 +90,13 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof ModelNodeTree;
     }
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
 
@@ -103,7 +104,7 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
         final Collection<String> animationNames = element.getAnimationNames();
         animationNames.forEach(name -> result.add(createFor(element.getAnim(name))));
 
-        result.addAll(super.getChildren());
+        result.addAll(super.getChildren(nodeTree));
 
         return result;
     }

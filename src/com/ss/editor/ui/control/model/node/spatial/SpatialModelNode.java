@@ -151,7 +151,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final Spatial element = getElement();

@@ -124,6 +124,10 @@ public class EditorFXSceneBuilder {
 
         StackPane.setMargin(leftSplitContainer, new Insets(newValue.doubleValue(), 0, 0, 0));
         FXUtils.bindFixedHeight(leftSplitContainer, container.heightProperty().subtract(newValue.doubleValue()).add(2));
-        Platform.runLater(container::requestLayout);
+
+        Platform.runLater(() -> {
+            container.requestLayout();
+            Platform.runLater(container::requestLayout);
+        });
     }
 }

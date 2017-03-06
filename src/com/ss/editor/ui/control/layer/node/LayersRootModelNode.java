@@ -4,6 +4,7 @@ import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.layer.LayerNodeTree;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.model.tree.action.scene.CreateSceneLayerAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -67,7 +68,7 @@ public class LayersRootModelNode extends ModelNode<LayersRoot> {
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof LayerNodeTree;
     }
 }

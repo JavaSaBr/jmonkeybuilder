@@ -7,6 +7,7 @@ import com.jme3.animation.Animation;
 import com.jme3.animation.Track;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.animation.ManualExtractSubAnimationAction;
 import com.ss.editor.ui.control.model.tree.action.animation.PlayAnimationAction;
@@ -77,9 +78,18 @@ public class AnimationModelNode extends ModelNode<Animation> {
         super.fillContextMenu(nodeTree, items);
     }
 
+    @Override
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+
+        final Animation element = getElement();
+        final Track[] tracks = element.getTracks();
+
+        return tracks != null && tracks.length > 0 && nodeTree instanceof ModelNodeTree;
+    }
+
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
         final Animation element = getElement();
         final Track[] tracks = element.getTracks();
@@ -107,13 +117,6 @@ public class AnimationModelNode extends ModelNode<Animation> {
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(operation);
-    }
-
-    @Override
-    public boolean hasChildren() {
-        final Animation element = getElement();
-        final Track[] tracks = element.getTracks();
-        return tracks != null && tracks.length > 0;
     }
 
     /**

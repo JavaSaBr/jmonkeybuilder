@@ -24,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 
-import java.util.function.BiConsumer;
-
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for default controls.
  *
@@ -33,19 +31,13 @@ import java.util.function.BiConsumer;
  */
 public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new DefaultControlPropertyBuilder();
 
     private static final MotionEvent.Direction[] DIRECTIONS = MotionEvent.Direction.values();
     private static final LoopMode[] LOOP_MODES = LoopMode.values();
 
-    private static final BiConsumer<MotionEvent, Boolean> MOTION_EVENT_APPLY_HANDLER = (motionEvent, value) -> {
-        if (value) {
-            motionEvent.play();
-        } else {
-            motionEvent.stop();
-        }
-    };
-
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }

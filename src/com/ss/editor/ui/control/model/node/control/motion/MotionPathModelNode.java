@@ -6,6 +6,7 @@ import com.jme3.cinematic.MotionPath;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.PositionModelNode;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
@@ -39,7 +40,7 @@ public class MotionPathModelNode extends ModelNode<MotionPath> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
 
         final MotionPath element = getElement();
         final int wayPoints = element.getNbWayPoints();
@@ -57,6 +58,6 @@ public class MotionPathModelNode extends ModelNode<MotionPath> {
 
     @Override
     public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
-        return true;
+        return nodeTree instanceof ModelNodeTree;
     }
 }

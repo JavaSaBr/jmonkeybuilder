@@ -86,6 +86,8 @@ public interface Icons {
     Image MOTION_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/horse-in-running-motion-silhouette.svg", 16, false);
     Image PATH_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/map-location.svg", 16, false);
     Image WAY_POINT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/placeholder.svg", 16, false);
+    Image VERTEX_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/graphene.svg", 16, false);
+    Image DATA_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/database.svg", 16, false);
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);

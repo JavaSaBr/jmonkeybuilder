@@ -19,7 +19,7 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The implementation of the {@link SpatialModelNode} for representing the {@link Geometry} in the editor.
+ * The implementation of the {@link SpatialModelNode} to represent the {@link Geometry} in the editor.
  *
  * @author JavaSaBr
  */
@@ -46,7 +46,7 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
         final Mesh mesh = geometry.getMesh();
         if (mesh != null) result.add(ModelNodeFactory.createFor(mesh));
 
-        result.addAll(super.getChildren());
+        result.addAll(super.getChildren(nodeTree));
 
         return result;
     }

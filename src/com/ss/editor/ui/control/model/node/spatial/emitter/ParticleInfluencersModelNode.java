@@ -3,49 +3,29 @@ package com.ss.editor.ui.control.model.node.spatial.emitter;
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static rlib.util.ClassUtils.getConstructor;
 import static rlib.util.ClassUtils.newInstance;
-
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateAlphaParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateColorParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateDestinationParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateGravityParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateImpulseParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreatePhysicsParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateRadialVelocityParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateRotationParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateSizeParticleInfluencerAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.CreateSpriteParticleInfluencerAction;
+import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.*;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Constructor;
-
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
 import rlib.util.dictionary.ObjectDictionary;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.impl.AlphaInfluencer;
-import tonegod.emitter.influencers.impl.ColorInfluencer;
-import tonegod.emitter.influencers.impl.DestinationInfluencer;
-import tonegod.emitter.influencers.impl.GravityInfluencer;
-import tonegod.emitter.influencers.impl.ImpulseInfluencer;
-import tonegod.emitter.influencers.impl.PhysicsInfluencer;
-import tonegod.emitter.influencers.impl.RadialVelocityInfluencer;
-import tonegod.emitter.influencers.impl.RotationInfluencer;
-import tonegod.emitter.influencers.impl.SizeInfluencer;
-import tonegod.emitter.influencers.impl.SpriteInfluencer;
+import tonegod.emitter.influencers.impl.*;
+
+import java.lang.reflect.Constructor;
 
 /**
  * The implementation of the {@link ModelNode} for representing the {@link ParticleInfluencers} in the editor.
@@ -108,7 +88,7 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren() {
+    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final ParticleInfluencers element = getElement();
         final Array<ParticleInfluencer> influencers = element.getInfluencers();
@@ -117,7 +97,7 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
     }
 
     @Override
-    public boolean hasChildren() {
-        return true;
+    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+        return nodeTree instanceof ModelNodeTree;
     }
 }

@@ -30,8 +30,10 @@ import rlib.ui.util.FXUtils;
  */
 public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new LightPropertyBuilder();
 
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }
