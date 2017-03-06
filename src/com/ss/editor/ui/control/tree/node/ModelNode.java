@@ -2,10 +2,12 @@ package com.ss.editor.ui.control.tree.node;
 
 import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
@@ -136,10 +138,23 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
-     * @return true of this node can have the child.
+     * @return true of this node can accept the child.
      */
     public boolean canAccept(@NotNull final ModelNode<?> child) {
         return false;
+    }
+
+    /**
+     * @return true if this node can accept external resource.
+     */
+    public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
+        return false;
+    }
+
+    /**
+     * Accept external resources to this node.
+     */
+    public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
     }
 
     /**

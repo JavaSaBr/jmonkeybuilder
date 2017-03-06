@@ -15,7 +15,11 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.extension.scene.SceneLayer;
+import com.ss.extension.scene.SceneNode;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
@@ -479,5 +483,22 @@ public abstract class EditorUtil {
         }
 
         return cast(resultType, newExample);
+    }
+
+    /**
+     * Get a default layer of the change consumer.
+     *
+     * @param consumer the change consumer.
+     * @return the default layer or null.
+     */
+    @Nullable
+    public static SceneLayer getDefaultLayer(@NotNull final ChangeConsumer consumer) {
+
+        if (!(consumer instanceof SceneChangeConsumer)) {
+            return null;
+        }
+
+        final SceneNode sceneNode = ((SceneChangeConsumer) consumer).getCurrentModel();
+        return sceneNode.getLayers().first();
     }
 }

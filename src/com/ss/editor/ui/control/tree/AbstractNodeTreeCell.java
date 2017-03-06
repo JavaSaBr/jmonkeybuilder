@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.tree;
 
 import static com.ss.editor.ui.util.UIUtils.findItem;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -317,27 +318,37 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
      */
     private void dragDropped(@NotNull final DragEvent dragEvent) {
 
+        final ModelNode<?> item = getItem();
+        if (item == null) return;
+
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
-        if (objectId == null) return;
 
-        final TreeView<ModelNode<?>> treeView = getTreeView();
-        final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
-        final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-        if (dragItem == null) return;
+        if (objectId != null) {
 
-        final ModelNode<?> item = getItem();
-        if (item == null || !item.canAccept(dragItem)) return;
+            final TreeView<ModelNode<?>> treeView = getTreeView();
+            final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
+            final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
+            if (dragItem == null || !item.canAccept(dragItem)) return;
 
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+            final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, item);
+            if (newParentItem == null) return;
 
-        final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, item);
-        if (newParentItem == null) return;
+            final Set<TransferMode> transferModes = dragboard.getTransferModes();
+            final boolean isCopy = transferModes.contains(TransferMode.COPY);
 
-        final Object element = dragItem.getElement();
 
-        if (processDragDropped(dragTreeItem, dragItem, item, isCopy, newParentItem, element)) return;
+            final Object element = dragItem.getElement();
+
+            if (processDragDropped(dragTreeItem, dragItem, item, isCopy, newParentItem, element)) return;
+
+        } else if (item.canAcceptExternal(dragboard)) {
+
+            final M nodeTree = getNodeTree();
+            final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+
+            item.acceptExternal(dragboard, changeConsumer);
+        }
 
         dragEvent.consume();
     }
@@ -345,18 +356,6 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     protected boolean processDragDropped(@NotNull final TreeItem<ModelNode<?>> dragTreeItem, @NotNull final ModelNode<?> dragItem,
                                          @NotNull final ModelNode<?> item, final boolean isCopy,
                                          @NotNull final TreeItem<ModelNode<?>> newParentItem, @NotNull final Object element) {
-//        FIXME if (isCopy) {
-//
-//            //TODO переделать на операцию
-//            final ModelNode<?> copy = item.copy();
-//            final ModelNode<?> newParent = newParentItem.getValue();
-//            newParent.add(dragItem);
-//
-//            final M nodeTree = getNodeTree();
-//            nodeTree.notifyAdded(newParent, copy, -1);
-//            return false;
-//        }
-
         return true;
     }
 
@@ -365,17 +364,22 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
      */
     private void dragOver(@NotNull final DragEvent dragEvent) {
 
+        final ModelNode<?> item = getItem();
+        if (item == null) return;
+
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
-        if (objectId == null) return;
 
-        final TreeView<ModelNode<?>> treeView = getTreeView();
-        final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
-        final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-        if (dragItem == null) return;
+        if (objectId != null) {
 
-        final ModelNode<?> item = getItem();
-        if (item == null || !item.canAccept(dragItem)) return;
+            final TreeView<ModelNode<?>> treeView = getTreeView();
+            final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
+            final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
+            if (dragItem == null || !item.canAccept(dragItem)) return;
+
+        } else if (!item.canAcceptExternal(dragboard)) {
+            return;
+        }
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);

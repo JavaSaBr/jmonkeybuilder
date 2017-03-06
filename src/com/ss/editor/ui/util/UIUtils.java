@@ -419,18 +419,7 @@ public class UIUtils {
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final Array<String> extensions) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), true);
-
-        if (!extensions.contains(extension)) {
-            return;
-        }
+        if (!isHasFile(dragboard, extensions)) return;
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);
@@ -438,6 +427,7 @@ public class UIUtils {
         dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();
     }
+
 
     /**
      * Accept a drag event if it has a file with required extension.
@@ -448,24 +438,56 @@ public class UIUtils {
     public static void acceptIfHasFile(@NotNull final DragEvent dragEvent, @NotNull final String targetExtension) {
 
         final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName(), false);
-
-        if (!targetExtension.equalsIgnoreCase(extension)) {
-            return;
-        }
+        if (!isHasFile(dragboard, targetExtension)) return;
 
         final Set<TransferMode> transferModes = dragboard.getTransferModes();
         final boolean isCopy = transferModes.contains(TransferMode.COPY);
 
         dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();
+    }
+
+
+    /**
+     * Check the dragboard.
+     *
+     * @param dragboard  the dragboard.
+     * @param extensions the extensions.
+     * @return true if there are required file.
+     */
+    public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final Array<String> extensions) {
+
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return false;
+        }
+
+        final File file = files.get(0);
+        final String extension = FileUtils.getExtension(file.getName(), true);
+
+        return extensions.contains(extension);
+    }
+
+    /**
+     * Check the dragboard.
+     *
+     * @param dragboard  the dragboard.
+     * @param targetExtension the target extension.
+     * @return true if there are required file.
+     */
+    public static boolean isHasFile(@NotNull final Dragboard dragboard, @NotNull final String targetExtension) {
+
+        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
+
+        if (files == null || files.size() != 1) {
+            return false;
+        }
+
+        final File file = files.get(0);
+        final String extension = FileUtils.getExtension(file.getName(), true);
+
+        return targetExtension.equalsIgnoreCase(extension);
     }
 
     /**
@@ -538,7 +560,23 @@ public class UIUtils {
                                                 @NotNull final S secondArg,
                                                 @NotNull final TriConsumer<F, S, Path> handler) {
 
-        final Dragboard dragboard = dragEvent.getDragboard();
+        handleDroppedFile(dragEvent.getDragboard(), targetExtension, firstArg, secondArg, handler);
+    }
+
+    /**
+     * Handle a first dropped file if it has required extensions.
+     *
+     * @param dragboard       the dragboard.
+     * @param targetExtension the extension.
+     * @param firstArg        the first argument.
+     * @param secondArg       the second argument.
+     * @param handler         the handler.
+     */
+    public static <F, S> void handleDroppedFile(@NotNull final Dragboard dragboard,
+                                                @NotNull final String targetExtension, @NotNull final F firstArg,
+                                                @NotNull final S secondArg,
+                                                @NotNull final TriConsumer<F, S, Path> handler) {
+
         final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
 
         if (files == null || files.size() != 1) {

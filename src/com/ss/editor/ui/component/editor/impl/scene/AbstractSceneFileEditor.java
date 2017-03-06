@@ -1,8 +1,7 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
 import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static java.util.Objects.requireNonNull;
@@ -58,7 +57,6 @@ import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.extension.scene.SceneLayer;
-import com.ss.extension.scene.SceneNode;
 import javafx.geometry.Point2D;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
@@ -1128,8 +1126,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
             final MA editorAppState = getEditorAppState();
-            final SceneLayer defaultLayer = currentModel instanceof SceneNode ?
-                    ((SceneNode) currentModel).getLayers().first() : null;
+            final SceneLayer defaultLayer = getDefaultLayer(this);
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);

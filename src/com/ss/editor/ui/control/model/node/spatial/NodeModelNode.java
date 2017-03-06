@@ -1,9 +1,15 @@
 package com.ss.editor.ui.control.model.node.spatial;
 
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
+import static com.ss.editor.util.EditorUtil.*;
+import static java.util.Objects.requireNonNull;
+import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
@@ -20,18 +26,23 @@ import com.ss.editor.ui.control.model.tree.action.light.CreateAmbientLightAction
 import com.ss.editor.ui.control.model.tree.action.light.CreateDirectionLightAction;
 import com.ss.editor.ui.control.model.tree.action.light.CreatePointLightAction;
 import com.ss.editor.ui.control.model.tree.action.light.CreateSpotLightAction;
+import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.action.terrain.CreateTerrainAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.GeomUtils;
+import com.ss.extension.scene.SceneLayer;
 import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -137,5 +148,30 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     @Override
     public Image getIcon() {
         return Icons.NODE_16;
+    }
+
+    @Override
+    public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
+        return UIUtils.isHasFile(dragboard, FileExtensions.JME_OBJECT);
+    }
+
+    @Override
+    public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
+        UIUtils.handleDroppedFile(dragboard, FileExtensions.JME_OBJECT, getElement(), consumer, (node, cons, path) -> {
+
+            final SceneLayer defaultLayer = getDefaultLayer(cons);
+            final Path assetFile = requireNonNull(getAssetFile(path), "Not found asset file for " + path);
+            final String assetPath = toAssetPath(assetFile);
+
+            final AssetManager assetManager = EDITOR.getAssetManager();
+            final Spatial loadedModel = assetManager.loadModel(assetPath);
+            loadedModel.setUserData(LOADED_MODEL_KEY, true);
+
+            if (defaultLayer != null) {
+                SceneLayer.setLayer(defaultLayer, loadedModel);
+            }
+
+            cons.execute(new AddChildOperation(loadedModel, node));
+        });
     }
 }
