@@ -15,6 +15,7 @@ import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -1130,14 +1131,18 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
-            loadedModel.setUserData(LOADED_MODEL_KEY, true);
-            loadedModel.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+
+            AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+            assetLinkNode.attachLinkedChild(loadedModel, modelKey);
+            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 
             if (defaultLayer != null) {
-                SceneLayer.setLayer(defaultLayer, loadedModel);
+                SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
+            assetLinkNode.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
 
-            execute(new AddChildOperation(loadedModel, (Node) currentModel));
+
+            execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
         });
     }
 
