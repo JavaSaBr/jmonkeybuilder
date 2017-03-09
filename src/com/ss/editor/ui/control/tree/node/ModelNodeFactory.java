@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.tree.node;
 
-import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.collision.shapes.*;
@@ -52,6 +51,8 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 
 import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * The factory to create the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
@@ -171,7 +172,7 @@ public class ModelNodeFactory {
             return unsafeCast(new AudioModelNode((AudioNode) element, objectId));
         } else if (element instanceof AssetLinkNode) {
             return unsafeCast(new AssetLinkNodeModelNode((AssetLinkNode) element, objectId));
-        }else if (element instanceof Node) {
+        } else if (element instanceof Node) {
             return unsafeCast(new NodeModelNode<>((Node) element, objectId));
         }
 

@@ -1,11 +1,5 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
-import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
-import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -85,6 +79,13 @@ import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
+import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static java.util.Objects.requireNonNull;
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * The base implementation of a model file editor.
@@ -1034,7 +1035,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.removeFromParent(modelNodeTree, modelNodeTreeParent);
         }
 
-        final int oldIndex = oldValue == null? -1 : oldValue.intValue();
+        final int oldIndex = oldValue == null ? -1 : oldValue.intValue();
         final int newIndex = newValue.intValue();
 
         if (newIndex == OBJECTS_TOOL) {
@@ -1132,7 +1133,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
 
-            AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+            final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
             assetLinkNode.attachLinkedChild(loadedModel, modelKey);
             assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 

@@ -93,7 +93,7 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial loadedModel = assetManager.loadModel(modelKey);
 
-        AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+        final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
         assetLinkNode.attachLinkedChild(loadedModel, modelKey);
         assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 
