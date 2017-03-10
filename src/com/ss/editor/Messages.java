@@ -192,6 +192,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD;
     public static final String MODEL_NODE_TREE_ACTION_LOAD_MODEL;
+    public static final String MODEL_NODE_TREE_ACTION_LINK_MODEL;
     public static final String MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR;
     public static final String MODEL_NODE_TREE_ACTION_LOD_GENERATOR;
     public static final String MODEL_NODE_TREE_ACTION_LIGHT;
@@ -758,6 +759,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE = bundle.getString("ModelNodeTreeActionCreatePrimitiveSphere");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_QUAD = bundle.getString("ModelNodeTreeActionCreatePrimitiveQuad");
         MODEL_NODE_TREE_ACTION_LOAD_MODEL = bundle.getString("ModelNodeTreeActionLoadModel");
+        MODEL_NODE_TREE_ACTION_LINK_MODEL = bundle.getString("ModelNodeTreeActionLinkModel");
         MODEL_NODE_TREE_ACTION_TANGENT_GENERATOR = bundle.getString("ModelNodeTreeActionTangentGenerator");
         MODEL_NODE_TREE_ACTION_LOD_GENERATOR = bundle.getString("ModelNodeTreeActionLoDGenerator");
         MODEL_NODE_TREE_ACTION_LIGHT = bundle.getString("ModelNodeTreeActionLight");

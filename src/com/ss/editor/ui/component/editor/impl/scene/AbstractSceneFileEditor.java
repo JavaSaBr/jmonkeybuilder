@@ -1,11 +1,5 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
-import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
-import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -15,6 +9,7 @@ import com.jme3.light.Light;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -84,6 +79,13 @@ import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
+import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static java.util.Objects.requireNonNull;
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * The base implementation of a model file editor.
@@ -1033,7 +1035,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.removeFromParent(modelNodeTree, modelNodeTreeParent);
         }
 
-        final int oldIndex = oldValue == null? -1 : oldValue.intValue();
+        final int oldIndex = oldValue == null ? -1 : oldValue.intValue();
         final int newIndex = newValue.intValue();
 
         if (newIndex == OBJECTS_TOOL) {
@@ -1130,14 +1132,18 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
-            loadedModel.setUserData(LOADED_MODEL_KEY, true);
-            loadedModel.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+
+            final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+            assetLinkNode.attachLinkedChild(loadedModel, modelKey);
+            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 
             if (defaultLayer != null) {
-                SceneLayer.setLayer(defaultLayer, loadedModel);
+                SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
+            assetLinkNode.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
 
-            execute(new AddChildOperation(loadedModel, (Node) currentModel));
+
+            execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
         });
     }
 
