@@ -13,7 +13,9 @@ import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.JMEFilePreviewManager;
+import com.ss.editor.task.CheckNewVersionTask;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.dialog.ConfirmDialog;
@@ -212,6 +214,9 @@ public class JFXApplication extends Application {
 
         GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
+
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addBackgroundTask(new CheckNewVersionTask());
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         if (editorConfig.isAnalyticsQuestion()) return;

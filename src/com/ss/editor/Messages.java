@@ -564,6 +564,10 @@ public class Messages {
 
     public static final String FILE_DELETE_HANDLER_DELETE_MATERIALS;
 
+    public static final String CHECK_NEW_VERSION_DIALOG_TITLE;
+    public static final String CHECK_NEW_VERSION_DIALOG_HYPERLINK;
+    public static final String CHECK_NEW_VERSION_DIALOG_HEADER_TEXT;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -1129,5 +1133,9 @@ public class Messages {
         MODEL_CONVERTER_DIALOG_BUTTON_OK = bundle.getString("ModelConverterDialogButtonOk");
 
         FILE_DELETE_HANDLER_DELETE_MATERIALS = bundle.getString("FileDeleteHandlerDeleteMaterials");
+
+        CHECK_NEW_VERSION_DIALOG_TITLE = bundle.getString("CheckNewVersionDialogTitle");
+        CHECK_NEW_VERSION_DIALOG_HYPERLINK = bundle.getString("CheckNewVersionDialogHyperText");
+        CHECK_NEW_VERSION_DIALOG_HEADER_TEXT = bundle.getString("CheckNewVersionDialogHeaderText");
     }
 }
