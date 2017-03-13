@@ -1,5 +1,11 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
+import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
+import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static java.util.Objects.requireNonNull;
+import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -79,13 +85,6 @@ import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
-import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
-import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * The base implementation of a model file editor.
@@ -1140,8 +1139,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             if (defaultLayer != null) {
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
-            assetLinkNode.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
 
+            assetLinkNode.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
 
             execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
         });

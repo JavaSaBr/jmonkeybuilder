@@ -6,6 +6,8 @@ import static com.ss.editor.util.EditorUtil.*;
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.ModelKey;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
@@ -161,16 +163,19 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
             final SceneLayer defaultLayer = getDefaultLayer(cons);
             final Path assetFile = requireNonNull(getAssetFile(path), "Not found asset file for " + path);
             final String assetPath = toAssetPath(assetFile);
+            final ModelKey modelKey = new ModelKey(assetPath);
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(assetPath);
-            loadedModel.setUserData(LOADED_MODEL_KEY, true);
+            final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+            assetLinkNode.attachLinkedChild(loadedModel, modelKey);
+            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 
             if (defaultLayer != null) {
                 SceneLayer.setLayer(defaultLayer, loadedModel);
             }
 
-            cons.execute(new AddChildOperation(loadedModel, node));
+            cons.execute(new AddChildOperation(assetLinkNode, node));
         });
     }
 }

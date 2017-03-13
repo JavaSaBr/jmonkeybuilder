@@ -3,6 +3,7 @@ package com.ss.editor.state.editor.impl.model;
 import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.NodeUtils.findParent;
 
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -21,7 +22,7 @@ import tonegod.emitter.geometry.ParticleGeometry;
 /**
  * The class with utilities methods for {@link ModelEditorAppState}.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class ModelEditorUtils {
 
@@ -45,6 +46,9 @@ public class ModelEditorUtils {
 
             final EditorAudioNode audioNode = parent == null ? null : state.getAudioNode(parent);
             if (audioNode != null) return audioNode;
+
+            parent = NodeUtils.findParent(spatial, p -> p instanceof AssetLinkNode);
+            if (parent != null) return parent;
 
             parent = NodeUtils.findParent(spatial, p -> p.getUserData(LOADED_MODEL_KEY) == Boolean.TRUE);
             if (parent != null) return parent;
