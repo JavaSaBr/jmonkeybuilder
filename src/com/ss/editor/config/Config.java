@@ -4,7 +4,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.Util;
+import rlib.util.Utils;
 import rlib.util.VarTable;
 import rlib.util.os.OperatingSystem;
 
@@ -72,7 +72,7 @@ public abstract class Config {
         GRAPHICS_DEVICE = device;
         OPERATING_SYSTEM = new OperatingSystem();
 
-        PROJECT_PATH = Util.getRootFolderFromClass(Editor.class).toString();
+        PROJECT_PATH = Utils.getRootFolderFromClass(Editor.class).toString();
     }
 
     /**
