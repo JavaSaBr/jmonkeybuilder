@@ -10,6 +10,7 @@ public interface CSSIds {
     String ROOT = "Root";
 
     String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+    String EDITOR_BAR_COMPONENT_OFFSET = "EditorBarComponentOffset";
     String EDITOR_BAR_COMPONENT_TITLE_LABEL = "EditorBarComponentTitleLabel";
     String EDITOR_BAR_COMPONENT_MENU_BUTTON = "EditorBarComponentMenuButton";
     String EDITOR_BAR_COMPONENT_FULLSCREEN_BUTTON = "EditorBarComponentFullscreenButton";

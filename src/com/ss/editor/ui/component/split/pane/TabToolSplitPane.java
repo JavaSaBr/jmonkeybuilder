@@ -107,7 +107,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     public void initFor(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
         this.toolComponent = toolComponent;
         addElements(toolComponent, other);
-        addWidthListener(toolComponent);
+        addListeners(toolComponent);
         bindToScene();
         update();
     }
@@ -115,7 +115,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     /**
      * Add with listener to handle width changes.
      */
-    protected void addWidthListener(@NotNull final TabToolComponent toolComponent) {
+    protected void addListeners(@NotNull final TabToolComponent toolComponent) {
         toolComponent.widthProperty()
                 .addListener((observable, oldValue, newValue) -> handleToolChanged(newValue));
     }

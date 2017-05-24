@@ -15,12 +15,12 @@ import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 import rlib.ui.util.FXUtils;
@@ -92,6 +92,7 @@ public class EditorFXSceneBuilder {
 
         final GlobalLeftToolSplitPane leftSplitContainer = new GlobalLeftToolSplitPane(scene);
         leftSplitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
+        leftSplitContainer.prefHeightProperty().bind(container.heightProperty());
 
         final GlobalBottomToolSplitPane bottomSplitContainer = new GlobalBottomToolSplitPane(scene);
         bottomSplitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
@@ -105,29 +106,17 @@ public class EditorFXSceneBuilder {
         leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
         bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
 
-        FXUtils.addToPane(leftSplitContainer, container);
+        final Pane editorBarOffset = new Pane();
+        editorBarOffset.setId(CSSIds.EDITOR_BAR_COMPONENT_OFFSET);
+
+        FXUtils.addToPane(new VBox(editorBarOffset, leftSplitContainer), container);
         FXUtils.addToPane(barComponent, container);
 
         barComponent.createDrawer(container, stage);
         barComponent.toFront();
 
+        FXUtils.bindFixedWidth(editorBarOffset, container.widthProperty());
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
-
-        barComponent.heightProperty().addListener((observable, oldValue, newValue) ->
-                updateLayout(container, leftSplitContainer, newValue));
-    }
-
-    private static void updateLayout(@NotNull final StackPane container,
-                                     @NotNull final GlobalLeftToolSplitPane leftSplitContainer,
-                                     @NotNull final Number newValue) {
-
-        StackPane.setMargin(leftSplitContainer, new Insets(newValue.doubleValue(), 0, 0, 0));
-        FXUtils.bindFixedHeight(leftSplitContainer, container.heightProperty().subtract(newValue.doubleValue()).add(2));
-
-        Platform.runLater(() -> {
-            container.requestLayout();
-            Platform.runLater(container::requestLayout);
-        });
     }
 }

@@ -8,6 +8,10 @@
     -fx-effect: -fx-material-shadow-panel;;
 }
 
+#EditorBarComponentOffset {
+    -fx-min-height: 34px;
+}
+
 #EditorBarComponentTitleLabel {
     -fx-padding: 0 0 0 20;
 }
