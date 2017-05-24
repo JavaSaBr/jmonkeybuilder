@@ -153,15 +153,17 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
     private void generateNames(@NotNull final ObjectDictionary<String, Geometry> mapping,
                                @NotNull final Geometry geometry) {
 
+        final Material material = geometry.getMaterial();
+        final String originalName = material.getName();
         final String name = StringUtils.isEmpty(geometry.getName()) ? "geom" : geometry.getName();
 
-        String resultName = "embedded-mat-" + name;
+        String resultName = StringUtils.isEmpty(originalName) ? "embedded-mat-" + name : originalName;
 
         if (!mapping.containsKey(resultName)) {
             mapping.put(resultName, geometry);
         } else {
             for (int i = 1; mapping.containsKey(resultName); i++) {
-                resultName = "embedded-mat-" + name + "_" + i;
+                resultName = (StringUtils.isEmpty(originalName) ? "embedded-mat-" : originalName) + name + "_" + i;
             }
             mapping.put(resultName, geometry);
         }
