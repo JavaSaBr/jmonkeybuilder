@@ -26,6 +26,11 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
      */
     private volatile boolean enableSelection;
 
+    /**
+     * Is enabled showing statistics.
+     */
+    private volatile boolean showStatistics;
+
     public AbstractModelFileEditorState() {
         this.enableGrid = true;
         this.enableSelection = true;
@@ -86,6 +91,25 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
         if (changed && changeHandler != null) {
             changeHandler.run();
         }
+    }
+
+    /**
+     * @param showStatistics true if the statistics is need to show.
+     */
+    public void setShowStatistics(final boolean showStatistics) {
+        final boolean changed = isShowStatistics() != showStatistics;
+        this.showStatistics = showStatistics;
+        final Runnable changeHandler = getChangeHandler();
+        if (changed && changeHandler != null) {
+            changeHandler.run();
+        }
+    }
+
+    /**
+     * @return true if the statistics is need to show.
+     */
+    public boolean isShowStatistics() {
+        return showStatistics;
     }
 
     @Override

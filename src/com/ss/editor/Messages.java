@@ -42,6 +42,7 @@ public class Messages {
 
     public static final String SCENE_FILE_EDITOR_ACTION_SELECTION;
     public static final String SCENE_FILE_EDITOR_ACTION_GRID;
+    public static final String SCENE_FILE_EDITOR_ACTION_STATISTICS;
     public static final String SCENE_FILE_EDITOR_ACTION_MOVE_TOOL;
     public static final String SCENE_FILE_EDITOR_ACTION_SCALE_TOOL;
     public static final String SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL;
@@ -614,6 +615,7 @@ public class Messages {
 
         SCENE_FILE_EDITOR_ACTION_SELECTION = bundle.getString("SceneFileEditorActionSelection");
         SCENE_FILE_EDITOR_ACTION_GRID = bundle.getString("SceneFileEditorActionGrid");
+        SCENE_FILE_EDITOR_ACTION_STATISTICS = bundle.getString("SceneFileEditorActionStatistics");
         SCENE_FILE_EDITOR_ACTION_MOVE_TOOL = bundle.getString("SceneFileEditorActionMoveTool");
         SCENE_FILE_EDITOR_ACTION_SCALE_TOOL = bundle.getString("SceneFileEditorActionScaleTool");
         SCENE_FILE_EDITOR_ACTION_ROTATION_TOOL = bundle.getString("SceneFileEditorActionRotationTool");

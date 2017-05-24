@@ -167,6 +167,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
         this.secondCounter = 0.0f;
         this.prevFps = -1;
         createComponents();
+        setEnabled(false);
     }
 
     /**

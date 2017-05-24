@@ -221,6 +221,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private ToggleButton gridButton;
 
     /**
+     * The statistics toggle.
+     */
+    @Nullable
+    private ToggleButton statisticsButton;
+
+    /**
      * The move tool toggle.
      */
     @Nullable
@@ -438,6 +444,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorState = currentWorkspace.getEditorState(getEditFile(), getStateConstructor());
         mainSplitContainer.updateFor(editorState);
         gridButton.setSelected(editorState.isEnableGrid());
+        statisticsButton.setSelected(editorState.isShowStatistics());
         selectionButton.setSelected(editorState.isEnableSelection());
 
         final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
@@ -939,6 +946,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         gridButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeGridVisible(newValue));
 
+        statisticsButton = new ToggleButton();
+        statisticsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_STATISTICS));
+        statisticsButton.setGraphic(new ImageView(Icons.STATISTICS_16));
+        statisticsButton.setSelected(true);
+        statisticsButton.selectedProperty().addListener((observable, oldValue, newValue) ->
+                changeStatisticsVisible(newValue));
+
         moveToolButton = new ToggleButton();
         moveToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_MOVE_TOOL + " (G)"));
         moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
@@ -962,6 +976,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addClassTo(selectionButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(statisticsButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(statisticsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(moveToolButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(moveToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(rotationToolButton, CSSClasses.TOOLBAR_BUTTON);
@@ -971,6 +987,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         FXUtils.addToPane(selectionButton, container);
         FXUtils.addToPane(gridButton, container);
+        FXUtils.addToPane(statisticsButton, container);
         FXUtils.addToPane(moveToolButton, container);
         FXUtils.addToPane(rotationToolButton, container);
         FXUtils.addToPane(scaleToolButton, container);
@@ -1197,6 +1214,19 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ES editorState = getEditorState();
         if (editorState != null) editorState.setEnableGrid(newValue);
     }
+
+    /**
+     * Handle changing statistics visibility.
+     */
+    private void changeStatisticsVisible(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        statsAppState.setEnabled(newValue);
+
+        final ES editorState = getEditorState();
+        if (editorState != null) editorState.setShowStatistics(newValue);
+    }
+
 
     /**
      * Notify about transformed the object.

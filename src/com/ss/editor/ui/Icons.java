@@ -90,6 +90,7 @@ public interface Icons {
     Image DATA_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/database.svg", 16, false);
     Image LINKNODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/linknode.png");
     Image LINK_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/link-folder-with-document.svg");
+    Image STATISTICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/bar-chart.svg");
 
     Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
     Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);
