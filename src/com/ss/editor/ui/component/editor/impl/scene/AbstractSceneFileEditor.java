@@ -34,6 +34,7 @@ import com.ss.editor.model.undo.editor.ModelEditingProvider;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
+import com.ss.editor.state.editor.impl.StatsAppState;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.EditingContainer;
@@ -112,6 +113,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private final MA editorAppState;
 
     /**
+     * The stats app state.
+     */
+    @NotNull
+    private final StatsAppState statsAppState;
+
+    /**
      * The operation control.
      */
     @NotNull
@@ -172,6 +179,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private VBox modelNodeTreeEditingContainer;
 
     /**
+     * The stats container.
+     */
+    @Nullable
+    private VBox statsContainer;
+
+    /**
      * The state of this editor.
      */
     @Nullable
@@ -193,7 +206,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The pane of editor area.
      */
     @Nullable
-    private Pane editorAreaPane;
+    private StackPane editorAreaPane;
 
     /**
      * The selection toggle.
@@ -239,7 +252,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.editorAppState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
+        this.statsAppState = new StatsAppState(statsContainer);
         addEditorState(editorAppState);
+        addEditorState(statsAppState);
+        statsAppState.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
     }
 
@@ -964,10 +980,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     protected void createContent(@NotNull final StackPane root) {
         this.selectionNodeHandler = this::selectNodeFromTree;
 
-        editorAreaPane = new Pane();
+        editorAreaPane = new StackPane();
         editorAreaPane.setId(CSSIds.FILE_EDITOR_EDITOR_AREA);
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
+
+        statsContainer = new VBox();
+        statsContainer.setId(CSSIds.SCENE_EDITOR_STATS_CONTAINER);
+        statsContainer.setMouseTransparent(true);
+        statsContainer.prefHeightProperty().bind(editorAreaPane.heightProperty());
 
         modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
         modelNodeTree.prefHeightProperty().bind(root.heightProperty());
@@ -1004,6 +1025,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
+        FXUtils.addToPane(statsContainer, editorAreaPane);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));

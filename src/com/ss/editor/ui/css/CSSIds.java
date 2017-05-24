@@ -148,4 +148,7 @@ public interface CSSIds {
 
     String FILE_CREATOR_DIALOG_CONTAINER = "FileCreatorDialogContainer";
     String FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER = "FileCreatorDialogGridSettingsContainer";
+
+    String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
+    String SCENE_EDITOR_STATS_CONTAINER = "SceneEditorStatsContainer";
 }
