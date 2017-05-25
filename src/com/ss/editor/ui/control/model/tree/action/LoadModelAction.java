@@ -12,7 +12,6 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -20,13 +19,9 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
-import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.extension.scene.SceneLayer;
-import com.ss.extension.scene.SceneNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,11 +76,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
-
-        final SceneNode sceneNode = consumer instanceof SceneChangeConsumer ?
-                ((SceneChangeConsumer) consumer).getCurrentModel() : null;
-
-        final SceneLayer defaultLayer = sceneNode == null ? null : sceneNode.getLayers().first();
+        final SceneLayer defaultLayer = EditorUtil.getDefaultLayer(consumer);
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);

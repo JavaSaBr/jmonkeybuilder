@@ -22,7 +22,6 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
-import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
@@ -139,8 +138,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
             final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
             fastSkyComboBox.getSelectionModel().select(FAST_SKY_LIST.first());
 
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.fill(model);
+            refreshTree();
 
         } finally {
             setIgnoreListeners(false);

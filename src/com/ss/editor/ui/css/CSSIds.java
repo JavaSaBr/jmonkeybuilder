@@ -10,6 +10,7 @@ public interface CSSIds {
     String ROOT = "Root";
 
     String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+    String EDITOR_BAR_COMPONENT_OFFSET = "EditorBarComponentOffset";
     String EDITOR_BAR_COMPONENT_TITLE_LABEL = "EditorBarComponentTitleLabel";
     String EDITOR_BAR_COMPONENT_MENU_BUTTON = "EditorBarComponentMenuButton";
     String EDITOR_BAR_COMPONENT_FULLSCREEN_BUTTON = "EditorBarComponentFullscreenButton";
@@ -147,4 +148,11 @@ public interface CSSIds {
 
     String FILE_CREATOR_DIALOG_CONTAINER = "FileCreatorDialogContainer";
     String FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER = "FileCreatorDialogGridSettingsContainer";
+
+    String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
+    String SCENE_EDITOR_STATS_CONTAINER = "SceneEditorStatsContainer";
+
+    String EDITOR_SCRIPTING_COMPONENT = "EditorScriptingComponent";
+    String EDITOR_SCRIPTING_COMPONENT_BUTTON_RUN = "EditorScriptingComponentButtonRun";
+    String GROOVY_EDITOR_COMPONENT = "GroovyEditorComponent";
 }

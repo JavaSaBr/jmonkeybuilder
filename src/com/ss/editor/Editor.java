@@ -3,7 +3,7 @@ package com.ss.editor;
 import static com.jme3.environment.LightProbeFactory.makeProbe;
 import static java.nio.file.Files.createDirectories;
 import static java.util.Objects.requireNonNull;
-import static rlib.util.Util.run;
+import static rlib.util.Utils.run;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -12,6 +12,7 @@ import com.jme3.bounding.BoundingSphere;
 import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
+import com.jme3.font.BitmapFont;
 import com.jme3.light.LightProbe;
 import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
@@ -567,5 +568,13 @@ public class Editor extends JmeToJFXApplication {
      */
     void setPaused(final boolean paused) {
         this.paused = paused;
+    }
+
+    /**
+     * @return the gui font.
+     */
+    @Nullable
+    public BitmapFont getGuiFont() {
+        return requireNonNull(guiFont);
     }
 }

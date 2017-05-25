@@ -1,7 +1,7 @@
 package com.ss.editor.config;
 
 import static java.util.Objects.requireNonNull;
-import static rlib.util.Util.get;
+import static rlib.util.Utils.get;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;

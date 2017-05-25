@@ -4,7 +4,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.Util;
+import rlib.util.Utils;
 import rlib.util.VarTable;
 import rlib.util.os.OperatingSystem;
 
@@ -22,7 +22,7 @@ public abstract class Config {
     private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.9.5";
+    public static final String VERSION = "v.0.9.6";
 
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
@@ -72,7 +72,7 @@ public abstract class Config {
         GRAPHICS_DEVICE = device;
         OPERATING_SYSTEM = new OperatingSystem();
 
-        PROJECT_PATH = Util.getRootFolderFromClass(Editor.class).toString();
+        PROJECT_PATH = Utils.getRootFolderFromClass(Editor.class).toString();
     }
 
     /**

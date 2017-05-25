@@ -4,7 +4,10 @@ import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KE
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.util.EditorUtil.*;
 import static java.util.Objects.requireNonNull;
+
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.ModelKey;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
@@ -12,10 +15,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.CreateNodeAction;
-import com.ss.editor.ui.control.model.tree.action.CreateSkyAction;
-import com.ss.editor.ui.control.model.tree.action.LoadModelAction;
-import com.ss.editor.ui.control.model.tree.action.OptimizeGeometryAction;
+import com.ss.editor.ui.control.model.tree.action.*;
 import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.CreateTonegodEmitterAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.CreateTonegodSoftEmitterAction;
@@ -83,9 +83,10 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
                         new CreateAmbientLightAction(nodeTree, this), new CreateDirectionLightAction(nodeTree, this));
 
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new LoadModelAction(nodeTree, this),
-                new CreateSkyAction(nodeTree, this), new CreateTonegodEmitterAction(nodeTree, this),
-                new CreateTonegodSoftEmitterAction(nodeTree, this), new CreateAudioNodeAction(nodeTree, this),
-                new CreateTerrainAction(nodeTree, this), createPrimitiveMenu, addLightMenu);
+                new LinkModelAction(nodeTree, this), new CreateSkyAction(nodeTree, this),
+                new CreateTonegodEmitterAction(nodeTree, this), new CreateTonegodSoftEmitterAction(nodeTree, this),
+                new CreateAudioNodeAction(nodeTree, this), new CreateTerrainAction(nodeTree, this),
+                createPrimitiveMenu, addLightMenu);
 
         return menu;
     }
@@ -162,16 +163,19 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
             final SceneLayer defaultLayer = getDefaultLayer(cons);
             final Path assetFile = requireNonNull(getAssetFile(path), "Not found asset file for " + path);
             final String assetPath = toAssetPath(assetFile);
+            final ModelKey modelKey = new ModelKey(assetPath);
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(assetPath);
-            loadedModel.setUserData(LOADED_MODEL_KEY, true);
+            final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+            assetLinkNode.attachLinkedChild(loadedModel, modelKey);
+            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 
             if (defaultLayer != null) {
                 SceneLayer.setLayer(defaultLayer, loadedModel);
             }
 
-            cons.execute(new AddChildOperation(loadedModel, node));
+            cons.execute(new AddChildOperation(assetLinkNode, node));
         });
     }
 }

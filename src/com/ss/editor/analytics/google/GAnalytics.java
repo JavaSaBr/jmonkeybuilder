@@ -2,12 +2,10 @@ package com.ss.editor.analytics.google;
 
 import static org.apache.http.impl.client.HttpClients.createMinimal;
 import static rlib.util.StringUtils.isEmpty;
-
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -15,6 +13,14 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import rlib.concurrent.util.ConcurrentUtils;
+import rlib.logging.Logger;
+import rlib.logging.LoggerManager;
+import rlib.util.StringUtils;
+import rlib.util.Utils;
+import rlib.util.linkedlist.LinkedList;
+import rlib.util.linkedlist.LinkedListFactory;
+import rlib.util.os.OperatingSystem;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,15 +31,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import rlib.concurrent.util.ConcurrentUtils;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.StringUtils;
-import rlib.util.Util;
-import rlib.util.linkedlist.LinkedList;
-import rlib.util.linkedlist.LinkedListFactory;
-import rlib.util.os.OperatingSystem;
 
 /**
  * The implementation to work with Google Analytics.
@@ -232,7 +229,7 @@ public class GAnalytics extends EditorThread {
         final String os = StringUtils.isEmpty(distribution) ? operatingSystem.getName() + " " + operatingSystem.getVersion() : distribution;
         final String appVersion = Config.VERSION;
         final String language = Locale.getDefault().toString();
-        final String userId = Util.getUserName();
+        final String userId = Utils.getUserName();
 
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;

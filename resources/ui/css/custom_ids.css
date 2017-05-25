@@ -8,6 +8,10 @@
     -fx-effect: -fx-material-shadow-panel;;
 }
 
+#EditorBarComponentOffset {
+    -fx-min-height: 34px;
+}
+
 #EditorBarComponentTitleLabel {
     -fx-padding: 0 0 0 20;
 }
@@ -790,4 +794,34 @@
     -fx-alignment: top-left;
     -fx-vgap: 2;
     -fx-hgap: 2;
+}
+
+#StatsAppStateStatsContainer {
+    -fx-padding: 5px;
+    -fx-vgap: 3px;
+    -fx-hgap: 3px;
+}
+
+#SceneEditorStatsContainer {
+    -fx-alignment: bottom-left;
+}
+
+#EditorScriptingComponent {
+    -fx-background-color: -fx-background-background;
+    -fx-padding: 5px;
+    -fx-vgap: 3px;
+}
+
+#EditorScriptingComponentButtonRun {
+    -fx-min-height: 32;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+#GroovyEditorComponent {
+    -fx-border-width: 1px;
+    -fx-border-color: black;
 }

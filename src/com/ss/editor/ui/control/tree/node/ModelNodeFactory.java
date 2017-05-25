@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.tree.node;
 
-import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.collision.shapes.*;
@@ -14,10 +13,7 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.*;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.Node;
-import com.jme3.scene.VertexBuffer;
+import com.jme3.scene.*;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainQuad;
@@ -40,10 +36,7 @@ import com.ss.editor.ui.control.model.node.control.physics.vehicle.VehicleContro
 import com.ss.editor.ui.control.model.node.control.physics.vehicle.VehicleWheelModelNode;
 import com.ss.editor.ui.control.model.node.light.*;
 import com.ss.editor.ui.control.model.node.physics.shape.*;
-import com.ss.editor.ui.control.model.node.spatial.AudioModelNode;
-import com.ss.editor.ui.control.model.node.spatial.GeometryModelNode;
-import com.ss.editor.ui.control.model.node.spatial.MeshModelNode;
-import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleEmitterNodeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencerModelNode;
 import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencersModelNode;
@@ -58,6 +51,8 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 
 import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static rlib.util.ClassUtils.unsafeCast;
 
 /**
  * The factory to create the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
@@ -175,6 +170,8 @@ public class ModelNodeFactory {
             return unsafeCast(new GeometryModelNode<>((Geometry) element, objectId));
         } else if (element instanceof AudioNode) {
             return unsafeCast(new AudioModelNode((AudioNode) element, objectId));
+        } else if (element instanceof AssetLinkNode) {
+            return unsafeCast(new AssetLinkNodeModelNode((AssetLinkNode) element, objectId));
         } else if (element instanceof Node) {
             return unsafeCast(new NodeModelNode<>((Node) element, objectId));
         }

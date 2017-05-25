@@ -8,19 +8,12 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.UpdatableControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -30,8 +23,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import rlib.ui.util.FXUtils;
 import tonegod.emitter.influencers.impl.PhysicsInfluencer;
+
+import java.util.function.BiConsumer;
 
 /**
  * The control for editing geometry list in the {@link PhysicsInfluencer}.
@@ -153,10 +150,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         if (isNeedRebuild(influencer, children.size())) {
             UIUtils.clear(root);
             fillControl(influencer, root);
-        } else {
-            children.stream()
-                    .map(node -> (InterpolationElement) node)
-                    .forEach(InterpolationElement::reload);
         }
     }
 

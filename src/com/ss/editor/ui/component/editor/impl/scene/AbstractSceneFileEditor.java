@@ -11,10 +11,14 @@ import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
+import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -33,11 +37,13 @@ import com.ss.editor.model.undo.editor.ModelEditingProvider;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
+import com.ss.editor.state.editor.impl.StatsAppState;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.EditingContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
@@ -111,6 +117,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private final MA editorAppState;
 
     /**
+     * The stats app state.
+     */
+    @NotNull
+    private final StatsAppState statsAppState;
+
+    /**
      * The operation control.
      */
     @NotNull
@@ -153,6 +165,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private EditingContainer editingContainer;
 
     /**
+     * The scripting component.
+     */
+    @NotNull
+    private EditorScriptingComponent scriptingComponent;
+
+    /**
      * The container of property editor in objects tool.
      */
     @Nullable
@@ -169,6 +187,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @Nullable
     private VBox modelNodeTreeEditingContainer;
+
+    /**
+     * The stats container.
+     */
+    @Nullable
+    private VBox statsContainer;
 
     /**
      * The state of this editor.
@@ -192,7 +216,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The pane of editor area.
      */
     @Nullable
-    private Pane editorAreaPane;
+    private StackPane editorAreaPane;
 
     /**
      * The selection toggle.
@@ -205,6 +229,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @Nullable
     private ToggleButton gridButton;
+
+    /**
+     * The statistics toggle.
+     */
+    @Nullable
+    private ToggleButton statisticsButton;
 
     /**
      * The move tool toggle.
@@ -238,7 +268,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.editorAppState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
+        this.statsAppState = new StatsAppState(statsContainer);
         addEditorState(editorAppState);
+        addEditorState(statsAppState);
+        statsAppState.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
     }
 
@@ -414,6 +447,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     protected void loadState() {
 
+        scriptingComponent.addVariable("root", getCurrentModel());
+        scriptingComponent.addImport(Spatial.class);
+        scriptingComponent.addImport(Geometry.class);
+        scriptingComponent.addImport(Control.class);
+        scriptingComponent.addImport(Light.class);
+        scriptingComponent.addImport(DirectionalLight.class);
+        scriptingComponent.addImport(PointLight.class);
+        scriptingComponent.addImport(SpotLight.class);
+        scriptingComponent.setExampleCode("root.attachChild(new Node(\"created from Groovy\"));");
+        scriptingComponent.buildHeader();
+
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
         final Workspace currentWorkspace = requireNonNull(workspaceManager.getCurrentWorkspace(),
                 "Current workspace can't be null.");
@@ -421,6 +465,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorState = currentWorkspace.getEditorState(getEditFile(), getStateConstructor());
         mainSplitContainer.updateFor(editorState);
         gridButton.setSelected(editorState.isEnableGrid());
+        statisticsButton.setSelected(editorState.isShowStatistics());
         selectionButton.setSelected(editorState.isEnableSelection());
 
         final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
@@ -922,6 +967,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         gridButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 changeGridVisible(newValue));
 
+        statisticsButton = new ToggleButton();
+        statisticsButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_STATISTICS));
+        statisticsButton.setGraphic(new ImageView(Icons.STATISTICS_16));
+        statisticsButton.setSelected(true);
+        statisticsButton.selectedProperty().addListener((observable, oldValue, newValue) ->
+                changeStatisticsVisible(newValue));
+
         moveToolButton = new ToggleButton();
         moveToolButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_MOVE_TOOL + " (G)"));
         moveToolButton.setGraphic(new ImageView(Icons.MOVE_16));
@@ -945,6 +997,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addClassTo(selectionButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(statisticsButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(statisticsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(moveToolButton, CSSClasses.TOOLBAR_BUTTON);
         FXUtils.addClassTo(moveToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(rotationToolButton, CSSClasses.TOOLBAR_BUTTON);
@@ -954,6 +1008,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         FXUtils.addToPane(selectionButton, container);
         FXUtils.addToPane(gridButton, container);
+        FXUtils.addToPane(statisticsButton, container);
         FXUtils.addToPane(moveToolButton, container);
         FXUtils.addToPane(rotationToolButton, container);
         FXUtils.addToPane(scaleToolButton, container);
@@ -963,10 +1018,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     protected void createContent(@NotNull final StackPane root) {
         this.selectionNodeHandler = this::selectNodeFromTree;
 
-        editorAreaPane = new Pane();
+        editorAreaPane = new StackPane();
         editorAreaPane.setId(CSSIds.FILE_EDITOR_EDITOR_AREA);
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
+
+        statsContainer = new VBox();
+        statsContainer.setId(CSSIds.SCENE_EDITOR_STATS_CONTAINER);
+        statsContainer.setMouseTransparent(true);
+        statsContainer.prefHeightProperty().bind(editorAreaPane.heightProperty());
 
         modelNodeTree = new ModelNodeTree(selectionNodeHandler, this);
         modelNodeTree.prefHeightProperty().bind(root.heightProperty());
@@ -980,6 +1040,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         editingContainer = new EditingContainer(this, this);
         editingContainer.addComponent(new TerrainEditingComponent());
+
+        scriptingComponent = new EditorScriptingComponent(this::refreshTree);
 
         final SplitPane objectsSplitContainer = new SplitPane(modelNodeTreeObjectsContainer, propertyEditorObjectsContainer);
         objectsSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
@@ -998,14 +1060,27 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
         editorToolComponent.addComponent(objectsSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
         editorToolComponent.addComponent(editingSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
+        editorToolComponent.addComponent(scriptingComponent, Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
         editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
+        FXUtils.addToPane(statsContainer, editorAreaPane);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));
+    }
+
+    /**
+     * Refresh tree.
+     */
+    protected void refreshTree() {
+
+        final M currentModel = getCurrentModel();
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.fill(currentModel);
     }
 
     /**
@@ -1033,7 +1108,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.removeFromParent(modelNodeTree, modelNodeTreeParent);
         }
 
-        final int oldIndex = oldValue == null? -1 : oldValue.intValue();
+        final int oldIndex = oldValue == null ? -1 : oldValue.intValue();
         final int newIndex = newValue.intValue();
 
         if (newIndex == OBJECTS_TOOL) {
@@ -1130,14 +1205,18 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
-            loadedModel.setUserData(LOADED_MODEL_KEY, true);
-            loadedModel.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+
+            final AssetLinkNode assetLinkNode = new AssetLinkNode(modelKey);
+            assetLinkNode.attachLinkedChild(loadedModel, modelKey);
+            assetLinkNode.setUserData(LOADED_MODEL_KEY, true);
 
             if (defaultLayer != null) {
-                SceneLayer.setLayer(defaultLayer, loadedModel);
+                SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            execute(new AddChildOperation(loadedModel, (Node) currentModel));
+            assetLinkNode.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+
+            execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
         });
     }
 
@@ -1170,6 +1249,19 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ES editorState = getEditorState();
         if (editorState != null) editorState.setEnableGrid(newValue);
     }
+
+    /**
+     * Handle changing statistics visibility.
+     */
+    private void changeStatisticsVisible(@NotNull final Boolean newValue) {
+        if (isIgnoreListeners()) return;
+
+        statsAppState.setEnabled(newValue);
+
+        final ES editorState = getEditorState();
+        if (editorState != null) editorState.setShowStatistics(newValue);
+    }
+
 
     /**
      * Notify about transformed the object.

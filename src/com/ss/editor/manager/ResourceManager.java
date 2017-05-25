@@ -1,9 +1,7 @@
 package com.ss.editor.manager;
 
 import static com.ss.editor.FileExtensions.*;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.getRealFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.editor.util.EditorUtil.*;
 import static java.lang.System.currentTimeMillis;
 import static java.nio.file.StandardWatchEventKinds.*;
 import static java.util.Objects.requireNonNull;
@@ -11,7 +9,7 @@ import static rlib.util.ArrayUtils.contains;
 import static rlib.util.ArrayUtils.move;
 import static rlib.util.FileUtils.getFiles;
 import static rlib.util.FileUtils.toUrl;
-import static rlib.util.Util.get;
+import static rlib.util.Utils.get;
 import static rlib.util.array.ArrayFactory.toArray;
 import static rlib.util.ref.ReferenceFactory.newRef;
 import com.jme3.asset.AssetEventListener;
@@ -36,7 +34,7 @@ import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
-import rlib.util.Util;
+import rlib.util.Utils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayComparator;
 import rlib.util.array.ArrayFactory;
@@ -567,7 +565,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      */
     @FromAnyThread
     private synchronized void registerWatchKey(@NotNull final Path path) {
-        Util.run(() -> getWatchKeys().add(path.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
+        Utils.run(() -> getWatchKeys().add(path.register(WATCH_SERVICE, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY)));
     }
 
     /**

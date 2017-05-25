@@ -26,7 +26,7 @@ import rlib.logging.LoggerManager;
 import rlib.manager.InitializeManager;
 import rlib.util.FileUtils;
 import rlib.util.StringUtils;
-import rlib.util.Util;
+import rlib.util.Utils;
 import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 import rlib.util.dictionary.DictionaryFactory;
@@ -287,7 +287,7 @@ public class JavaFXImageManager {
 
         } else if (FileExtensions.IMAGE_DDS.equals(extension)) {
 
-            final byte[] content = requireNonNull(Util.get(file, Files::readAllBytes));
+            final byte[] content = requireNonNull(Utils.get(file, Files::readAllBytes));
             final int[] pixels = DDSReader.read(content, DDSReader.ARGB, 0);
             final int currentWidth = DDSReader.getWidth(content);
             final int currentHeight = DDSReader.getHeight(content);
@@ -316,7 +316,7 @@ public class JavaFXImageManager {
 
         } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
 
-            final byte[] content = requireNonNull(Util.get(file, Files::readAllBytes));
+            final byte[] content = requireNonNull(Utils.get(file, Files::readAllBytes));
 
             final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
             if (awtImage == null) return Icons.IMAGE_512;

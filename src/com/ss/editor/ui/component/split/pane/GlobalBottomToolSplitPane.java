@@ -26,7 +26,7 @@ public class GlobalBottomToolSplitPane extends TabToolSplitPane<EditorConfig> {
     }
 
     @Override
-    protected void addWidthListener(@NotNull final TabToolComponent toolComponent) {
+    protected void addListeners(@NotNull final TabToolComponent toolComponent) {
         toolComponent.heightProperty().addListener((observable, oldValue, newValue) -> handleToolChanged(newValue));
     }
 
