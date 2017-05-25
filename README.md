@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.5 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.6 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
@@ -14,6 +14,7 @@
 * -Added a button to show/hide render statistics in the model/scene editors.
 * -Changed the logic of using material names in exporting materials during converting models.
 * -Implemented the first part of scripting. Added scripting panel to the model/scene editor.
+* -Fixed some bugs.
 
 ## ver. 0.9.5 ##
 * -Updated jME libraries.
