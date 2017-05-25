@@ -5,6 +5,16 @@
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
+## ver. 0.9.6 ##
+* -Updated jME libraries.
+* -Updated LWJGL libraries to 3.1.2 version.
+* -Added support the AssetLinkNode.
+* -Added DE language.
+* -Added auto checking new versions of the Editor on application start.
+* -Added a button to show/hide render statistics in the model/scene editors.
+* -Changed the logic of using material names in exporting materials during converting models.
+* -Implemented the first part of scripting. Added scripting panel to the model/scene editor.
+
 ## ver. 0.9.5 ##
 * -Updated jME libraries.
 * -Updated styles of all dialogs.
