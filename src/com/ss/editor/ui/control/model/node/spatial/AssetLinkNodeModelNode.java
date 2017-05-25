@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AssetLinkNodeModelNode extends NodeModelNode<AssetLinkNode> {
 
-    public AssetLinkNodeModelNode(@NotNull AssetLinkNode element, long objectId) {
+    public AssetLinkNodeModelNode(@NotNull final AssetLinkNode element, final long objectId) {
         super(element, objectId);
     }
 
@@ -23,5 +23,4 @@ public class AssetLinkNodeModelNode extends NodeModelNode<AssetLinkNode> {
     public Image getIcon() {
         return Icons.LINKNODE_16;
     }
-
 }

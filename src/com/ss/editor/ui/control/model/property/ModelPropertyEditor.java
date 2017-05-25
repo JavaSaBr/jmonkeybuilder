@@ -1,13 +1,12 @@
 package com.ss.editor.ui.control.model.property;
 
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyEditor;
-
 import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.node.ParticleNode;
 
@@ -32,5 +31,16 @@ public class ModelPropertyEditor extends AbstractPropertyEditor<ModelChangeConsu
         }
 
         return super.isNeedUpdate(object);
+    }
+
+    @Override
+    protected boolean canEdit(@NotNull final Object object) {
+
+        if (object instanceof Spatial) {
+            final Object parent = NodeUtils.findParent((Spatial) object, spatial -> spatial instanceof AssetLinkNode);
+            return parent == null || parent == object;
+        }
+
+        return super.canEdit(object);
     }
 }
