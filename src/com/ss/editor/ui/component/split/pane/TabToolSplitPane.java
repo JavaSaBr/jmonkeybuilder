@@ -221,6 +221,6 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      * Calculate an expand position.
      */
     protected double getExpandPosition(final double toolWidth, final double sceneWidth) {
-        return min(0.5, max(0.1, toolWidth / sceneWidth));
+        return min(1, max(0.1, toolWidth / sceneWidth));
     }
 }

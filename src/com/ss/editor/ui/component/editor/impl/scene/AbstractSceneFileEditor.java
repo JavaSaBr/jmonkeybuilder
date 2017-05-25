@@ -11,7 +11,10 @@ import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
+import com.jme3.light.PointLight;
+import com.jme3.light.SpotLight;
 import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -40,6 +43,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.EditingContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
+import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
@@ -159,6 +163,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @Nullable
     private EditingContainer editingContainer;
+
+    /**
+     * The scripting component.
+     */
+    @NotNull
+    private EditorScriptingComponent scriptingComponent;
 
     /**
      * The container of property editor in objects tool.
@@ -436,6 +446,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Load the saved state.
      */
     protected void loadState() {
+
+        scriptingComponent.addVariable("root", getCurrentModel());
+        scriptingComponent.addImport(Spatial.class);
+        scriptingComponent.addImport(Geometry.class);
+        scriptingComponent.addImport(Control.class);
+        scriptingComponent.addImport(Light.class);
+        scriptingComponent.addImport(DirectionalLight.class);
+        scriptingComponent.addImport(PointLight.class);
+        scriptingComponent.addImport(SpotLight.class);
+        scriptingComponent.setExampleCode("root.attachChild(new Node(\"created from Groovy\"));");
+        scriptingComponent.buildHeader();
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
         final Workspace currentWorkspace = requireNonNull(workspaceManager.getCurrentWorkspace(),
@@ -1020,6 +1041,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editingContainer = new EditingContainer(this, this);
         editingContainer.addComponent(new TerrainEditingComponent());
 
+        scriptingComponent = new EditorScriptingComponent(this::refreshTree);
+
         final SplitPane objectsSplitContainer = new SplitPane(modelNodeTreeObjectsContainer, propertyEditorObjectsContainer);
         objectsSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         objectsSplitContainer.prefHeightProperty().bind(root.heightProperty());
@@ -1037,6 +1060,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
         editorToolComponent.addComponent(objectsSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
         editorToolComponent.addComponent(editingSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
+        editorToolComponent.addComponent(scriptingComponent, Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
         editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
 
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
@@ -1046,6 +1070,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));
+    }
+
+    /**
+     * Refresh tree.
+     */
+    protected void refreshTree() {
+
+        final M currentModel = getCurrentModel();
+
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        modelNodeTree.fill(currentModel);
     }
 
     /**

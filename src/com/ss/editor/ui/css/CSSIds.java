@@ -151,4 +151,8 @@ public interface CSSIds {
 
     String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
     String SCENE_EDITOR_STATS_CONTAINER = "SceneEditorStatsContainer";
+
+    String EDITOR_SCRIPTING_COMPONENT = "EditorScriptingComponent";
+    String EDITOR_SCRIPTING_COMPONENT_BUTTON_RUN = "EditorScriptingComponentButtonRun";
+    String GROOVY_EDITOR_COMPONENT = "GroovyEditorComponent";
 }

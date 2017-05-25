@@ -177,6 +177,7 @@ public class Messages {
     public static final String SCENE_FILE_EDITOR_NAME;
     public static final String SCENE_FILE_EDITOR_TOOL_OBJECTS;
     public static final String SCENE_FILE_EDITOR_TOOL_EDITING;
+    public static final String SCENE_FILE_EDITOR_TOOL_SCRIPTING;
     public static final String SCENE_FILE_EDITOR_TOOL_APP_STATES;
     public static final String SCENE_FILE_EDITOR_TOOL_FILTERS;
     public static final String SCENE_FILE_EDITOR_TOOL_LAYERS;
@@ -569,6 +570,10 @@ public class Messages {
     public static final String CHECK_NEW_VERSION_DIALOG_HYPERLINK;
     public static final String CHECK_NEW_VERSION_DIALOG_HEADER_TEXT;
 
+    public static final String EDITOR_SCRIPTING_COMPONENT_HEADERS;
+    public static final String EDITOR_SCRIPTING_COMPONENT_BODY;
+    public static final String EDITOR_SCRIPTING_COMPONENT_RUN;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -749,6 +754,7 @@ public class Messages {
         SCENE_FILE_EDITOR_NAME = bundle.getString("SceneFileEditorName");
         SCENE_FILE_EDITOR_TOOL_OBJECTS = bundle.getString("SceneFileEditorToolObjects");
         SCENE_FILE_EDITOR_TOOL_EDITING = bundle.getString("SceneFileEditorToolEditing");
+        SCENE_FILE_EDITOR_TOOL_SCRIPTING = bundle.getString("SceneFileEditorToolScripting");
         SCENE_FILE_EDITOR_TOOL_APP_STATES = bundle.getString("SceneFileEditorToolAppStates");
         SCENE_FILE_EDITOR_TOOL_FILTERS = bundle.getString("SceneFileEditorToolFilters");
         SCENE_FILE_EDITOR_TOOL_LAYERS = bundle.getString("SceneFileEditorToolLayers");
@@ -1139,5 +1145,9 @@ public class Messages {
         CHECK_NEW_VERSION_DIALOG_TITLE = bundle.getString("CheckNewVersionDialogTitle");
         CHECK_NEW_VERSION_DIALOG_HYPERLINK = bundle.getString("CheckNewVersionDialogHyperText");
         CHECK_NEW_VERSION_DIALOG_HEADER_TEXT = bundle.getString("CheckNewVersionDialogHeaderText");
+
+        EDITOR_SCRIPTING_COMPONENT_HEADERS = bundle.getString("EditorScriptingComponentHeaders");
+        EDITOR_SCRIPTING_COMPONENT_BODY = bundle.getString("EditorScriptingComponentBody");
+        EDITOR_SCRIPTING_COMPONENT_RUN = bundle.getString("EditorScriptingComponentRun");
     }
 }

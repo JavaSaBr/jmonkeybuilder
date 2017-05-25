@@ -155,24 +155,28 @@ public class SceneFileEditor extends
         setCurrentModel(model);
         setIgnoreListeners(true);
         try {
-
-            final ModelNodeTree modelNodeTree = getModelNodeTree();
-            modelNodeTree.fill(model);
-
-            final AppStateList appStateList = getAppStateList();
-            appStateList.fill(model);
-
-            final FilterList filterList = getFilterList();
-            filterList.fill(model);
-
-            final LayerNodeTree layerNodeTree = getLayerNodeTree();
-            layerNodeTree.fill(new LayersRoot(this));
-
+            refreshTree();
         } finally {
             setIgnoreListeners(false);
         }
 
         EXECUTOR_MANAGER.addFXTask(this::loadState);
+    }
+
+    @Override
+    protected void refreshTree() {
+        super.refreshTree();
+
+        final SceneNode model = getCurrentModel();
+
+        final AppStateList appStateList = getAppStateList();
+        appStateList.fill(model);
+
+        final FilterList filterList = getFilterList();
+        filterList.fill(model);
+
+        final LayerNodeTree layerNodeTree = getLayerNodeTree();
+        layerNodeTree.fill(new LayersRoot(this));
     }
 
     private void updateVisibility(@NotNull final Spatial spatial) {
