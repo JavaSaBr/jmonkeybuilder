@@ -84,6 +84,7 @@ public class EditorScriptingComponent extends GridPane {
         FXUtils.addClassTo(scriptBodyLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(editorComponent, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(headerComponent, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(runButton, CSSClasses.SPECIAL_FONT_14);
 
         add(headersLabel, 0, 0, 1, 1);
         add(headerComponent, 0, 1, 1, 1);
