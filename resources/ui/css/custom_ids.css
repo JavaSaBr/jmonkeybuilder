@@ -5,7 +5,7 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-background-color: -fx-background-app-bar;
-    -fx-effect: -fx-material-shadow-panel;;
+    -fx-effect: -fx-material-shadow-panel;
 }
 
 #EditorBarComponentOffset {

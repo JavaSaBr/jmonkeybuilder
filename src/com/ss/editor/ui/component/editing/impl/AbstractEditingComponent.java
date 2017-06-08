@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static rlib.util.ClassUtils.unsafeCast;
 import com.jme3.scene.Node;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.model.undo.editor.Editing3DProvider;
+import com.ss.editor.model.editor.Editing3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.EditingComponent;
 import com.ss.editor.ui.component.editing.EditingContainer;
@@ -44,8 +44,8 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     }
 
     @Override
-    public void initFor(@NotNull final EditingContainer container) {
-        this.editingContainer = container;
+    public void initFor(@NotNull final Object container) {
+        this.editingContainer = (EditingContainer) container;
         prefWidthProperty().bind(widthProperty());
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     }
 
     @Override
-    public void startEditing(@NotNull final Object object) {
+    public void startWorkingWith(@NotNull final Object object) {
         this.editedObject = unsafeCast(object);
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     @NotNull
     public Node getCursorNode() {
         final EditingContainer editingContainer = getEditingContainer();
-        final Editing3DProvider editingProvider = editingContainer.getEditingProvider();
+        final Editing3DProvider editingProvider = editingContainer.getProvider();
         return editingProvider.getCursorNode();
     }
 
@@ -102,7 +102,7 @@ public abstract class AbstractEditingComponent<T> extends VBox implements Editin
     @NotNull
     public Node getMarkersNode() {
         final EditingContainer editingContainer = getEditingContainer();
-        final Editing3DProvider editingProvider = editingContainer.getEditingProvider();
+        final Editing3DProvider editingProvider = editingContainer.getProvider();
         return editingProvider.getMarkersNode();
     }
 

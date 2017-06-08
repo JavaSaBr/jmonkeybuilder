@@ -33,7 +33,7 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelEditingProvider;
+import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;

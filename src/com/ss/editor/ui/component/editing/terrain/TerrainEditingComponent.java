@@ -1110,13 +1110,8 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     @Override
-    public void stopEditing() {
-        super.stopEditing();
-    }
-
-    @Override
-    public void startEditing(@NotNull final Object object) {
-        super.startEditing(object);
+    public void startWorkingWith(@NotNull final Object object) {
+        super.startWorkingWith(object);
 
         final TextureLayerSettings settings = getTextureLayerSettings();
 

@@ -1,4 +1,4 @@
-package com.ss.editor.model.undo.editor;
+package com.ss.editor.model.editor;
 
 /**
  * The interface to implement a provider to edit models.
