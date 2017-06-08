@@ -451,6 +451,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
+        scriptingComponent.addImport(Node.class);
         scriptingComponent.addImport(Light.class);
         scriptingComponent.addImport(DirectionalLight.class);
         scriptingComponent.addImport(PointLight.class);

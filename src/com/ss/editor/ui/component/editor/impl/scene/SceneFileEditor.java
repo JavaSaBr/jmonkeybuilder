@@ -57,9 +57,9 @@ public class SceneFileEditor extends
         AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditorAppState, SceneFileEditorState> implements
         SceneChangeConsumer {
 
-    private static final int LAYERS_TOOL = 2;
-    private static final int APP_STATES_TOOL = 3;
-    private static final int FILTERS_TOOL = 4;
+    private static final int LAYERS_TOOL = 3;
+    private static final int APP_STATES_TOOL = 4;
+    private static final int FILTERS_TOOL = 5;
 
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
@@ -293,7 +293,7 @@ public class SceneFileEditor extends
 
         layerNodeTree = new LayerNodeTree(this::selectNodeFromLayersTree, this);
         propertyEditorLayersContainer = new VBox();
-
+        
         final SplitPane appStateSplitContainer = new SplitPane(appStateList, propertyEditorAppStateContainer);
         appStateSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
@@ -324,7 +324,7 @@ public class SceneFileEditor extends
         super.processChangeTool(oldValue, newValue);
 
         final int newIndex = newValue.intValue();
-        if (newIndex < 1) return;
+        if (newIndex < 2) return;
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         final VBox appStateContainer = getPropertyEditorAppStateContainer();
