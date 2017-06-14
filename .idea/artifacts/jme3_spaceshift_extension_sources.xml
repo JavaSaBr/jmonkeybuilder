@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="jme3-spaceshift-extension-sources">
     <output-path>$PROJECT_DIR$/libs/extensions</output-path>
-    <root id="archive" name="jme3-spaceshift-extension-sources.jar">
+    <root id="archive" name="jme3-spaceshift-extension-0.9.7-sources.jar">
       <element id="dir-copy" path="$PROJECT_DIR$/jme3-spaceshift-extension/src" />
     </root>
   </artifact>
