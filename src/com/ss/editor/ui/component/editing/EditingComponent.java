@@ -1,11 +1,11 @@
 package com.ss.editor.ui.component.editing;
 
-import com.ss.editor.ui.component.container.EditorComponent;
+import com.ss.editor.ui.component.container.ProcessingComponent;
 
 /**
  * The interface to implement editing component.
  *
  * @author JavaSaBr
  */
-public interface EditingComponent extends EditorComponent {
+public interface EditingComponent extends ProcessingComponent {
 }

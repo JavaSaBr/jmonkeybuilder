@@ -320,7 +320,7 @@ public class TextureLayerSettings extends VBox {
     @NotNull
     @FXThread
     private Terrain getTerrain() {
-        return editingComponent.getEditedObject();
+        return editingComponent.getProcessedObject();
     }
 
     /**
@@ -331,7 +331,7 @@ public class TextureLayerSettings extends VBox {
     @NotNull
     @FXThread
     private Node getTerrainNode() {
-        return editingComponent.getEditedObject();
+        return editingComponent.getProcessedObject();
     }
 
     /**

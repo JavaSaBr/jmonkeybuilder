@@ -139,8 +139,7 @@ public interface CSSIds {
 
     String ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER = "AbstractDialogGridSettingsContainer";
 
-    String EDITING_CONTAINER = "EditingContainer";
-    String PAINTING_CONTAINER = "PaintingContainer";
+    String PROCESSING_COMPONENT_CONTAINER = "ProcessingComponentContainer";
 
     String TERRAIN_EDITING_CONTROL_SETTINGS = "TerrainEditingTextureControlSettings";
     String TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS = "TerrainEditingTextureLayerSettings";

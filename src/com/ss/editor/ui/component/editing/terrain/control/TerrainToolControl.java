@@ -69,7 +69,7 @@ public class TerrainToolControl extends AbstractEditingControl {
     @Nullable
     @Override
     public Spatial getEditedModel() {
-        return component.getEditedObject();
+        return component.getProcessedObject();
     }
 
     /**

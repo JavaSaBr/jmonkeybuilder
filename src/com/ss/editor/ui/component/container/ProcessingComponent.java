@@ -5,26 +5,26 @@ import org.jetbrains.annotations.NotNull;
 import rlib.util.HasName;
 
 /**
- * The interface to implement an editor component.
+ * The interface to implement a processing component.
  *
  * @author JavaSaBr
  */
-public interface EditorComponent extends HasName {
+public interface ProcessingComponent extends HasName {
 
     /**
-     * Init this component to work in a container.
+     * Init this component to process in a container.
      *
      * @param container the container.
      */
     @FXThread
-    default void initFor(@NotNull final Object container) {
+    default void initFor(@NotNull Object container) {
     }
 
     /**
-     * Checks that an object can be edited using this component.
+     * Checks that an object can be processed using this component.
      *
      * @param object the object to check.
-     * @return true if this object can be edited.
+     * @return true if this object can be processed.
      */
     @FXThread
     default boolean isSupport(@NotNull Object object) {
@@ -32,28 +32,28 @@ public interface EditorComponent extends HasName {
     }
 
     /**
-     * Start working with an object.
+     * Start to process the object.
      *
-     * @param object the object ot work.
+     * @param object the object to process.
      */
     @FXThread
-    default void startWorkingWith(@NotNull Object object) {
+    default void startProcessing(@NotNull Object object) {
     }
 
     /**
-     * @return the working object.
+     * @return the processed object.
      */
     @NotNull
     @FXThread
-    default Object getWorkedObject() {
+    default Object getProcessedObject() {
         throw new RuntimeException("not implemented");
     }
 
     /**
-     * Stop working last object.
+     * Stop processing last object.
      */
     @FXThread
-    default void stopWorking() {
+    default void stopProcessing() {
     }
 
     /**

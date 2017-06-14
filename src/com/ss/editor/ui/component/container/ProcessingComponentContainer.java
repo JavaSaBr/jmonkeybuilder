@@ -1,7 +1,9 @@
 package com.ss.editor.ui.component.container;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.ui.css.CSSIds;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -12,11 +14,12 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 /**
- * The class container of components.
+ * The class container of processing components.
  *
  * @author JavaSaBr
  */
-public abstract class EditorComponentContainer<P, C extends EditorComponent> extends ScrollPane {
+public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C extends ProcessingComponent>
+        extends ScrollPane {
 
     /**
      * The change consumer.
@@ -25,43 +28,51 @@ public abstract class EditorComponentContainer<P, C extends EditorComponent> ext
     protected final ModelChangeConsumer changeConsumer;
 
     /**
-     * The provider.
+     * The editor 3D provider.
      */
     @NotNull
     protected final P provider;
 
     /**
-     * The list of components.
+     * The list of processing components.
      */
     @NotNull
     protected final Array<C> components;
 
     /**
-     * The container of painting components.
+     * The component type.
+     */
+    @NotNull
+    protected final Class<C> componentType;
+
+    /**
+     * The container of processing components.
      */
     @NotNull
     protected final VBox container;
 
     /**
-     * Is showed this component.
+     * The flag of showing this container.
      */
     protected boolean showed;
 
-    public EditorComponentContainer(@NotNull final ModelChangeConsumer changeConsumer, @NotNull final P provider,
-                                    @NotNull final Class<C> componentType) {
+    public ProcessingComponentContainer(@NotNull final ModelChangeConsumer changeConsumer, @NotNull final P provider,
+                                        @NotNull final Class<C> componentType) {
         this.changeConsumer = changeConsumer;
         this.provider = provider;
         this.components = ArrayFactory.newArray(componentType);
+        this.componentType = componentType;
         this.container = new VBox();
         this.container.prefWidthProperty().bind(widthProperty());
 
+        setId(CSSIds.PROCESSING_COMPONENT_CONTAINER);
         setContent(container);
     }
 
     /**
-     * Add a new component.
+     * Add a new processing component.
      *
-     * @param component the component.
+     * @param component the processing component.
      */
     @FXThread
     public void addComponent(@NotNull final C component) {
@@ -70,46 +81,48 @@ public abstract class EditorComponentContainer<P, C extends EditorComponent> ext
     }
 
     /**
-     * @return the container of components.
+     * @return the container of processing components.
      */
     @NotNull
-    private VBox getContainer() {
+    protected VBox getContainer() {
         return container;
     }
 
     /**
-     * @return the list of components.
+     * @return the list of processing components.
      */
     @NotNull
-    private Array<C> getComponents() {
+    protected Array<C> getComponents() {
         return components;
     }
 
     /**
-     * Show a component to work with an element.
+     * Show a processing component to process with the element.
      *
-     * @param element the element to work.
+     * @param element the element to process.
      */
     @FXThread
     public void showComponentFor(@Nullable final Object element) {
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
-        children.forEach(node -> ((C) node).notifyHided());
-        children.forEach(node -> ((C) node).stopWorking());
+        children.stream().filter(componentType::isInstance)
+                .map(componentType::cast)
+                .peek(ProcessingComponent::notifyHided)
+                .forEach(ProcessingComponent::stopProcessing);
         children.clear();
 
         if (element == null) return;
 
-        final C editingComponent = getComponents().search(element, C::isSupport);
-        if (editingComponent == null) return;
+        final C processingComponent = getComponents().search(element, C::isSupport);
+        if (processingComponent == null) return;
 
-        children.add((Node) editingComponent);
+        children.add((Node) processingComponent);
 
-        editingComponent.startWorkingWith(element);
+        processingComponent.startProcessing(element);
 
         if (isShowed()) {
-            editingComponent.notifyShowed();
+            processingComponent.notifyShowed();
         }
     }
 
@@ -122,7 +135,9 @@ public abstract class EditorComponentContainer<P, C extends EditorComponent> ext
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
-        children.forEach(node -> ((C) node).notifyShowed());
+        children.stream().filter(componentType::isInstance)
+                .map(componentType::cast)
+                .forEach(ProcessingComponent::notifyShowed);
     }
 
     /**
@@ -134,7 +149,9 @@ public abstract class EditorComponentContainer<P, C extends EditorComponent> ext
 
         final VBox container = getContainer();
         final ObservableList<Node> children = container.getChildren();
-        children.forEach(node -> ((C) node).notifyHided());
+        children.stream().filter(componentType::isInstance)
+                .map(componentType::cast)
+                .forEach(ProcessingComponent::notifyHided);
     }
 
     /**
@@ -177,7 +194,7 @@ public abstract class EditorComponentContainer<P, C extends EditorComponent> ext
         final ObservableList<Node> children = container.getChildren();
         if (children.isEmpty()) return;
 
-        children.stream().map(node -> (C) node).filter(editingComponent -> editingComponent.getWorkedObject() ==
+        children.stream().map(node -> (C) node).filter(editingComponent -> editingComponent.getProcessedObject() ==
                 object).forEach(editingComponent -> editingComponent.notifyChangeProperty(object, propertyName));
     }
 }

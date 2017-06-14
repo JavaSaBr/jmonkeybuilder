@@ -40,7 +40,7 @@ import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.StatsAppState;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editing.EditingContainer;
+import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
@@ -162,7 +162,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The container of editing components.
      */
     @Nullable
-    private EditingContainer editingContainer;
+    private EditingComponentContainer editingComponentContainer;
 
     /**
      * The scripting component.
@@ -320,8 +320,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the container of editing components.
      */
     @NotNull
-    private EditingContainer getEditingContainer() {
-        return requireNonNull(editingContainer);
+    private EditingComponentContainer getEditingComponentContainer() {
+        return requireNonNull(editingComponentContainer);
     }
 
     /**
@@ -642,8 +642,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyChanged(parent, object);
 
-        final EditingContainer editingContainer = getEditingContainer();
-        editingContainer.notifyChangeProperty(object, propertyName);
+        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        editingComponentContainer.notifyChangeProperty(object, propertyName);
     }
 
     @Override
@@ -800,8 +800,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
 
-        final EditingContainer editingContainer = getEditingContainer();
-        editingContainer.showComponentFor(element);
+        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        editingComponentContainer.showComponentFor(element);
     }
 
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
@@ -1039,8 +1039,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 
-        editingContainer = new EditingContainer(this, this);
-        editingContainer.addComponent(new TerrainEditingComponent());
+        editingComponentContainer = new EditingComponentContainer(this, this);
+        editingComponentContainer.addComponent(new TerrainEditingComponent());
 
         scriptingComponent = new EditorScriptingComponent(this::refreshTree);
 
@@ -1049,7 +1049,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         objectsSplitContainer.prefHeightProperty().bind(root.heightProperty());
         objectsSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane editingSplitContainer = new SplitPane(modelNodeTreeEditingContainer, editingContainer);
+        final SplitPane editingSplitContainer = new SplitPane(modelNodeTreeEditingContainer, editingComponentContainer);
         editingSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         editingSplitContainer.prefHeightProperty().bind(root.heightProperty());
         editingSplitContainer.prefWidthProperty().bind(root.widthProperty());
@@ -1096,7 +1096,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        final EditingContainer editingContainer = getEditingContainer();
+        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
 
         final VBox propertyEditorParent = (VBox) modelPropertyEditor.getParent();
         final VBox modelNodeTreeParent = (VBox) modelNodeTree.getParent();
@@ -1117,11 +1117,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
         } else if (newIndex == EDITING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
-            editingContainer.notifyShowed();
+            editingComponentContainer.notifyShowed();
         }
 
         if (oldIndex == EDITING_TOOL) {
-            editingContainer.notifyHided();
+            editingComponentContainer.notifyHided();
         }
 
         final MA editorAppState = getEditorAppState();
