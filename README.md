@@ -1,9 +1,12 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.6 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.7 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.7 ##
+* -Fixed some bugs.
 
 ## ver. 0.9.6 ##
 * -Updated jME libraries.
