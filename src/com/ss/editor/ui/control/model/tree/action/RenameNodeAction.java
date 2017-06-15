@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -34,6 +35,7 @@ public class RenameNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
         return Messages.MODEL_NODE_TREE_ACTION_RENAME;
     }
 
+    @FXThread
     @Override
     protected void process() {
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();

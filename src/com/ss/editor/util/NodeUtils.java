@@ -189,6 +189,26 @@ public class NodeUtils {
     }
 
     /**
+     * Visit spatials of the target type.
+     */
+    public static <T extends Spatial> void visitSpatial(@NotNull final Spatial spatial, @NotNull final Class<T> type,
+                                                        @NotNull final Consumer<T> consumer) {
+
+        if (type.isInstance(spatial)) {
+            consumer.accept(type.cast(spatial));
+            return;
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            visitSpatial(children, type, consumer);
+        }
+    }
+
+    /**
      * Collect all geometries.
      */
     public static void addGeometry(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container) {

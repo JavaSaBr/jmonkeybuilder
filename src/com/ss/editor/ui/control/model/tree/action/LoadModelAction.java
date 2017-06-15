@@ -10,6 +10,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -64,6 +65,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         return Messages.MODEL_NODE_TREE_ACTION_LOAD_MODEL;
     }
 
+    @FXThread
     @Override
     protected void process() {
         UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);

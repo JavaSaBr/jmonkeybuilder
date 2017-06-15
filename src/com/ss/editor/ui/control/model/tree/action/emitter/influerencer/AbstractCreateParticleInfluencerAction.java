@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.emitter.influerencer;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -34,6 +35,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
         return Icons.INFLUENCER_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

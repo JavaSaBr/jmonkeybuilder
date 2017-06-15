@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.control;
 import static java.util.Objects.requireNonNull;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
@@ -21,6 +22,7 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
         super(nodeTree, node);
     }
 
+    @FXThread
     @Override
     protected void process() {
 

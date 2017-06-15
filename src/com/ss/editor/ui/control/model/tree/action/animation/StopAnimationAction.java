@@ -4,6 +4,7 @@ import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -39,6 +40,7 @@ public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
         return Icons.STOP_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

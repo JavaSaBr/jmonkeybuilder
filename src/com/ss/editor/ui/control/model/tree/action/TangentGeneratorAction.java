@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.GenerateTangentsDialog;
@@ -36,6 +37,7 @@ public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsum
         return Icons.MESH_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
         final EditorFXScene scene = JFX_APPLICATION.getScene();

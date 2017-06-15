@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.control.physics.vehicle;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -37,6 +38,7 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
         return Icons.WHEEL_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

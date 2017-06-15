@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -39,6 +40,7 @@ public class RemoveNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
         return Icons.REMOVE_12;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

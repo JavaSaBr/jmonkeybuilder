@@ -5,6 +5,7 @@ import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -41,6 +42,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
         return Messages.MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

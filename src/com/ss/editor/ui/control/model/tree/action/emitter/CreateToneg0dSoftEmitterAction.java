@@ -14,9 +14,9 @@ import tonegod.emitter.SoftParticleEmitterNode;
  *
  * @author JavaSaBr
  */
-public class CreateTonegodSoftEmitterAction extends CreateTonegodEmitterAction {
+public class CreateToneg0dSoftEmitterAction extends CreateToneg0dEmitterAction {
 
-    public CreateTonegodSoftEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateToneg0dSoftEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

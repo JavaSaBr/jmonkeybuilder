@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -26,9 +27,9 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  *
  * @author JavaSaBr
  */
-public class CreateTonegodEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
+public class CreateToneg0dEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public CreateTonegodEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateToneg0dEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -44,6 +45,7 @@ public class CreateTonegodEmitterAction extends AbstractNodeAction<ModelChangeCo
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

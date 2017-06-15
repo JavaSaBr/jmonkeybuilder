@@ -4,6 +4,7 @@ import static rlib.util.ClassUtils.unsafeCast;
 
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
@@ -65,6 +66,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     /**
      * Execute this action.
      */
+    @FXThread
     protected abstract void process();
 
     /**

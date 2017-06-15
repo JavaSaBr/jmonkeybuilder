@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -40,6 +41,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsum
         return Messages.MODEL_NODE_TREE_ACTION_OPTIMIZE_GEOMETRY;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

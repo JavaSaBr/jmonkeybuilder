@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.sky.CreateSkyDialog;
@@ -36,6 +37,7 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
         return Messages.MODEL_NODE_TREE_ACTION_CREATE_SKY;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

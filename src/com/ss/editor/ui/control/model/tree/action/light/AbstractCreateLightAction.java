@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -24,6 +25,7 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
         super(nodeTree, node);
     }
 
+    @FXThread
     @Override
     protected void process() {
 
