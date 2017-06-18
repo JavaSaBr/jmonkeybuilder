@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.model.node.spatial.emitter;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
-import static rlib.util.ClassUtils.getConstructor;
-import static rlib.util.ClassUtils.newInstance;
+import static com.ss.rlib.util.ClassUtils.getConstructor;
+import static com.ss.rlib.util.ClassUtils.newInstance;
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
@@ -17,10 +17,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.influencers.impl.*;

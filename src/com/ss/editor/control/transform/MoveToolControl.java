@@ -26,8 +26,8 @@ import com.ss.editor.util.LocalObjects;
 
 import org.jetbrains.annotations.NotNull;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 /**
  * The implementation of the moving control.

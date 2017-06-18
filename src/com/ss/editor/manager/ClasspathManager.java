@@ -1,6 +1,6 @@
 package com.ss.editor.manager;
 
-import static rlib.util.array.ArrayFactory.toArray;
+import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
@@ -8,10 +8,10 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.manager.InitializeManager;
-import rlib.util.FileUtils;
-import rlib.util.Utils;
-import rlib.util.array.Array;
+import com.ss.rlib.manager.InitializeManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.array.Array;
 
 import java.net.URL;
 import java.net.URLClassLoader;

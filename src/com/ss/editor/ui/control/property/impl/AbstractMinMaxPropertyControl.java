@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-import rlib.function.SixObjectConsumer;
+import com.ss.rlib.function.SixObjectConsumer;
 
 /**
  * The implementation of the {@link AbstractVector2fPropertyControl} to edit min-max value range.

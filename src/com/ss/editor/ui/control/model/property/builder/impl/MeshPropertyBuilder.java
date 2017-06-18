@@ -10,7 +10,7 @@ import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Mesh} objects.

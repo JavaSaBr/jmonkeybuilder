@@ -11,7 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 import java.util.function.Consumer;

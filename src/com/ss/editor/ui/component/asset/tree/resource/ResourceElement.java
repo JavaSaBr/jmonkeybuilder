@@ -2,9 +2,9 @@ package com.ss.editor.ui.component.asset.tree.resource;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.array.Array;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.array.Array;
 
 import java.nio.file.Path;
 

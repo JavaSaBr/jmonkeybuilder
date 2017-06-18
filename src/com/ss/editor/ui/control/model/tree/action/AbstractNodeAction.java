@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
@@ -16,8 +16,8 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 /**
  * The base implementation of an action for an element in a node tree.

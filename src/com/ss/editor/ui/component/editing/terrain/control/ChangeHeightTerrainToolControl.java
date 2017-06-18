@@ -11,8 +11,8 @@ import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.util.ArrayList;
 import java.util.List;

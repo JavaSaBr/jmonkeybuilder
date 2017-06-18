@@ -2,19 +2,17 @@ package com.ss.editor.executor.impl;
 
 import com.ss.editor.EditorThread;
 import com.ss.editor.executor.EditorTaskExecutor;
-
+import com.ss.rlib.concurrent.lock.LockFactory;
+import com.ss.rlib.concurrent.lock.Lockable;
+import com.ss.rlib.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
-
-import rlib.concurrent.lock.LockFactory;
-import rlib.concurrent.lock.Lockable;
-import rlib.concurrent.util.ConcurrentUtils;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 /**
  * The base implementation of the {@link EditorThreadExecutor}.

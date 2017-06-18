@@ -10,13 +10,11 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RemoveAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-
-import javafx.scene.image.Image;
 
 /**
  * The implementation of the {@link AbstractNodeAction} to remove an animation from the {@link AnimControl}.

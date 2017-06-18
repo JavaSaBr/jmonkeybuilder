@@ -1,6 +1,6 @@
 package com.ss.editor.file.converter.impl;
 
-import static rlib.util.FileUtils.containsExtensions;
+import static com.ss.rlib.util.FileUtils.containsExtensions;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
@@ -13,11 +13,11 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

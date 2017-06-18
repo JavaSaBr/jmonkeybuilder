@@ -16,8 +16,8 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 import java.io.IOException;
 import java.io.InputStream;

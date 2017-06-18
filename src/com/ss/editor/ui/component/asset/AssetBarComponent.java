@@ -9,7 +9,7 @@ import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The toolbar of the {@link AssetComponent} with actions.

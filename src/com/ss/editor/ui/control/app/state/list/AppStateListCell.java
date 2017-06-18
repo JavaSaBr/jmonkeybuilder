@@ -6,7 +6,7 @@ import com.ss.editor.ui.control.app.state.operation.DisableAppStateOperation;
 import com.ss.editor.ui.control.app.state.operation.EnableAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.extension.scene.app.state.EditableSceneAppState;
+import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,8 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of list cell to present an editable scene app state.

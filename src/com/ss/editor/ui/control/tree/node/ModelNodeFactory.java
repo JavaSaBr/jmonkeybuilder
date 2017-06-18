@@ -43,8 +43,8 @@ import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencersMo
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainGridModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainQuadModelNode;
-import com.ss.extension.scene.SceneLayer;
-import com.ss.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
@@ -52,7 +52,7 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
 /**
  * The factory to create the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.

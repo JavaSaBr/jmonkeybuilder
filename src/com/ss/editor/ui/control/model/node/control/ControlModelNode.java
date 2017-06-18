@@ -5,7 +5,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.RemoveControlAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.extension.scene.control.EditableControl;
+import com.ss.editor.extension.scene.control.EditableControl;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

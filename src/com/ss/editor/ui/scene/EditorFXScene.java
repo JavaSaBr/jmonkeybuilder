@@ -1,17 +1,14 @@
 package com.ss.editor.ui.scene;
 
 import static com.ss.editor.ui.util.UIUtils.fillComponents;
-import static rlib.util.ClassUtils.unsafeCast;
-
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.concurrent.atomic.AtomicInteger;
-
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -19,10 +16,10 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The class implementation of the scene of JavaFX.
@@ -80,6 +77,7 @@ public class EditorFXScene extends Scene {
         this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
+        this.container.setId(CSSIds.ROOT_CONTAINER);
         this.container.setPickOnBounds(false);
         this.hideLayer = new StackPane();
         this.hideLayer.setVisible(false);

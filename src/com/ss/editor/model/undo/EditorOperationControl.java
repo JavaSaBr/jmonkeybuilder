@@ -7,8 +7,8 @@ import com.ss.editor.manager.ExecutorManager;
 import org.jetbrains.annotations.NotNull;
 
 import javafx.application.Platform;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of controller to support undo/redo operations.

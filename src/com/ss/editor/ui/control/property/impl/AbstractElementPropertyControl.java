@@ -21,8 +21,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import rlib.function.SixObjectConsumer;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit an elements from scene.

@@ -8,7 +8,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.Collection;
 import java.util.regex.Matcher;

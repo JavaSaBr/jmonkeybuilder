@@ -2,7 +2,7 @@ package com.ss.editor.model.node;
 
 import org.jetbrains.annotations.NotNull;
 
-import rlib.util.array.Array;
+import com.ss.rlib.util.array.Array;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 

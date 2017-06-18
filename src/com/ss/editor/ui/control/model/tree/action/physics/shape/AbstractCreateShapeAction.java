@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
 import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FXThread;

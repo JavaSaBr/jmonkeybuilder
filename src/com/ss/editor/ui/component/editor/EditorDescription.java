@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.Callable;
 
 import javafx.scene.image.Image;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The class to describe an editor.

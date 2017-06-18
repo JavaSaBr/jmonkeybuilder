@@ -30,7 +30,7 @@ import jme3tools.optimize.LodGenerator;
 import jme3tools.optimize.LodGenerator.TriangleReductionMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 

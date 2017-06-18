@@ -15,7 +15,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The component to contain tool components.

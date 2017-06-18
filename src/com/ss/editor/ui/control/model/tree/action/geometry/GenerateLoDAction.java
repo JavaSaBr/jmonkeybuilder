@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
-import rlib.util.ClassUtils;
+import com.ss.rlib.util.ClassUtils;
 
 /**
  * The action to generate levels of details for the geometry.

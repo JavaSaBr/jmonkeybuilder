@@ -15,8 +15,8 @@ import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

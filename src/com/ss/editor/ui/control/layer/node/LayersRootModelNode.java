@@ -9,8 +9,8 @@ import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.model.tree.action.scene.CreateSceneLayerAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.extension.scene.SceneLayer;
-import com.ss.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of {@link ModelNode} to present {@link LayersRoot}.

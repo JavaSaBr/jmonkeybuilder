@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiConsumer;
 
 import javafx.scene.layout.HBox;
-import rlib.function.SixObjectConsumer;
+import com.ss.rlib.function.SixObjectConsumer;
 
 /**
  * The default implementation of the property control.

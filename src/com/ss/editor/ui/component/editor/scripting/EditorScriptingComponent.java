@@ -10,11 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 /**
  * The component to work with scripts in an editor.

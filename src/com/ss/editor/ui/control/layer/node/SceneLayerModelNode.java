@@ -16,14 +16,14 @@ import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.tree.node.ModelNodeFactory;
-import com.ss.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneLayer;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link NodeModelNode} for representing the {@link SceneLayer} in the editor.

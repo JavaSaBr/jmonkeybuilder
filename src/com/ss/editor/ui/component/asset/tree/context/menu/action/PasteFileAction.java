@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
@@ -22,11 +22,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The action to paste a file.

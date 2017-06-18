@@ -1,9 +1,9 @@
 package com.ss.editor.model.undo.editor;
 
 import com.ss.editor.annotation.FXThread;
-import com.ss.extension.scene.SceneNode;
-import com.ss.extension.scene.app.state.SceneAppState;
-import com.ss.extension.scene.filter.SceneFilter;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.app.state.SceneAppState;
+import com.ss.editor.extension.scene.filter.SceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 

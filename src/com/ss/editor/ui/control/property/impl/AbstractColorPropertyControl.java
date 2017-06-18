@@ -17,8 +17,8 @@ import java.util.function.BiConsumer;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import rlib.function.SixObjectConsumer;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit a color values.

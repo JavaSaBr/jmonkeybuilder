@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.image.Image;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of {@link LightModelNode} to present point lights.

@@ -30,9 +30,9 @@ import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.function.BooleanFloatConsumer;
-import rlib.geom.util.AngleUtils;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.function.BooleanFloatConsumer;
+import com.ss.rlib.geom.util.AngleUtils;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 /**
  * The implementation the 3D part of the {@link MaterialFileEditor}.

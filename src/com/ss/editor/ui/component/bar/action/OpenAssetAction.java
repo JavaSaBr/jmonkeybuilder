@@ -8,19 +8,18 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
+import javafx.scene.control.MenuItem;
+import javafx.stage.DirectoryChooser;
 
 import java.io.File;
 import java.nio.file.Path;
 
-import javafx.scene.control.Button;
-import javafx.stage.DirectoryChooser;
-
 /**
  * The action for opening a new asset folder.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
-public class OpenAssetAction extends Button {
+public class OpenAssetAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();

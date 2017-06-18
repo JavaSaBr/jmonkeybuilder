@@ -6,12 +6,12 @@ import com.ss.editor.util.EditorUtil;
 
 import org.jetbrains.annotations.NotNull;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.ArrayUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-import rlib.util.array.ConcurrentArray;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.ConcurrentArray;
 
 /**
  * The executor to execute tasks in the editor thread.

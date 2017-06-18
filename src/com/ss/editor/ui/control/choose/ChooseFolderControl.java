@@ -21,8 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;

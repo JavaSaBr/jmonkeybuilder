@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-import rlib.function.SixObjectConsumer;
+import com.ss.rlib.function.SixObjectConsumer;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**

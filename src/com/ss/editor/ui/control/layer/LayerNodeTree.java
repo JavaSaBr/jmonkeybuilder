@@ -7,7 +7,7 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.AbstractNodeTreeCell;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

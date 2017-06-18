@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor;
 
-import static rlib.util.array.ArrayFactory.newArray;
+import static com.ss.rlib.util.array.ArrayFactory.newArray;
 
 import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
 import com.ss.editor.ui.component.editor.impl.GLSLFileEditor;
@@ -19,12 +19,12 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 /**
  * THe registry of editors.

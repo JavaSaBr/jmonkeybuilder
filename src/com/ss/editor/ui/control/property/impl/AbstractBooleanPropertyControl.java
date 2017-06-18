@@ -11,8 +11,8 @@ import java.util.function.BiConsumer;
 
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
-import rlib.function.SixObjectConsumer;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to change boolean values.

@@ -1,6 +1,6 @@
 package com.ss.editor.model.undo.impl;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
 import com.ss.editor.Editor;
 import com.ss.editor.manager.ExecutorManager;
@@ -9,8 +9,8 @@ import com.ss.editor.model.undo.UndoableEditor;
 
 import org.jetbrains.annotations.NotNull;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 /**
  * The base implementation of the {@link EditorOperation} to support a generic type of an editor.

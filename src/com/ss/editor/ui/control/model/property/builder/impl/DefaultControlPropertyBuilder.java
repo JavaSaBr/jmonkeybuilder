@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
+import com.jme3.animation.Animation;
 import com.jme3.animation.LoopMode;
 import com.jme3.animation.SkeletonControl;
 import com.jme3.bullet.control.CharacterControl;
@@ -19,10 +20,10 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for default controls.
@@ -54,6 +55,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
             build((AbstractCinematicEvent) object, container, changeConsumer);
         }  else if (object instanceof VehicleWheel) {
             build((VehicleWheel) object, container, changeConsumer);
+        } else if (object instanceof Animation) {
+            build((Animation) object, container, changeConsumer);
         }
 
         if (!(object instanceof Control)) return;
@@ -70,7 +73,7 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
             build((RigidBodyControl) object, container, changeConsumer);
         } else if (object instanceof VehicleControl) {
             build((VehicleControl) object, container, changeConsumer);
-        }else if (object instanceof MotionEvent) {
+        } else if (object instanceof MotionEvent) {
             build((MotionEvent) object, container, changeConsumer);
         }
 
@@ -79,8 +82,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         }
     }
 
-    private void build(final @NotNull AbstractCinematicEvent control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final AbstractCinematicEvent control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final LoopMode loopMode = control.getLoopMode();
 
@@ -122,8 +125,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(timeControl, container);
     }
 
-    private void build(final @NotNull AbstractControl control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final AbstractControl control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final boolean enabled = control.isEnabled();
 
@@ -137,8 +140,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(enabledControl, container);
     }
 
-    private void build(final @NotNull MotionEvent control, @NotNull final VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final MotionEvent control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final Vector3f direction = control.getDirection();
         final Quaternion rotation = control.getRotation();
@@ -174,8 +177,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(rotationControl, container);
     }
 
-    private void build(final @NotNull CharacterControl control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final CharacterControl control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final Vector3f viewDirection = control.getViewDirection();
         final Vector3f walkDirection = control.getWalkDirection();
@@ -266,8 +269,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(walkDirectionControl, container);
     }
 
-    private void build(final @NotNull SkeletonControl control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final SkeletonControl control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final boolean hardwareSkinningPreferred = control.isHardwareSkinningPreferred();
 
@@ -281,8 +284,23 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(hardwareSkinningPreferredControl, container);
     }
 
-    private void build(final @NotNull RigidBodyControl control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final Animation animation, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
+
+        final float length = animation.getLength();
+
+        final DefaultModelSinglePropertyControl<Animation, Float> lengthControl =
+                new DefaultModelSinglePropertyControl<>(length, Messages.CONTROL_PROPERTY_LENGTH, changeConsumer);
+
+        lengthControl.setSyncHandler(Animation::getLength);
+        lengthControl.setToStringFunction(value -> Float.toString(value));
+        lengthControl.setEditObject(animation);
+
+        FXUtils.addToPane(lengthControl, container);
+    }
+
+    private void build(@NotNull final RigidBodyControl control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
 
         final boolean kinematicSpatial = control.isKinematicSpatial();
@@ -306,8 +324,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(kinematicSpatialControl, container);
     }
 
-    private void build(final @NotNull VehicleControl control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final VehicleControl control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final boolean enabled = control.isEnabled();
         final boolean applyPhysicsLocal = control.isApplyPhysicsLocal();
@@ -330,8 +348,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(applyPhysicsLocalControl, container);
     }
 
-    private void build(final @NotNull VehicleWheel control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final VehicleWheel control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final Vector3f axle = control.getAxle();
         final Vector3f direction = control.getDirection();
@@ -487,8 +505,8 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(axleControl, container);
     }
 
-    private void build(final @NotNull PhysicsRigidBody control, final @NotNull VBox container,
-                       final @NotNull ModelChangeConsumer changeConsumer) {
+    private void build(@NotNull final PhysicsRigidBody control, @NotNull final VBox container,
+                       @NotNull final ModelChangeConsumer changeConsumer) {
 
         final Vector3f angularVelocity = control.getAngularVelocity();
         final Vector3f gravity = control.getGravity();

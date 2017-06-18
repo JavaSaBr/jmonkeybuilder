@@ -9,23 +9,20 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
-import com.ss.editor.ui.control.model.tree.action.animation.ManualExtractSubAnimationAction;
-import com.ss.editor.ui.control.model.tree.action.animation.PlayAnimationAction;
-import com.ss.editor.ui.control.model.tree.action.animation.RemoveAnimationAction;
-import com.ss.editor.ui.control.model.tree.action.animation.StopAnimationAction;
+import com.ss.editor.ui.control.model.tree.action.animation.*;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RenameAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.util.AnimationUtils;
+import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.ArrayUtils;
-import rlib.util.StringUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of node to show {@link Animation}.
@@ -47,10 +44,21 @@ public class AnimationModelNode extends ModelNode<Animation> {
     private AnimControl control;
 
     /**
+     * The speed.
+     */
+    private float speed;
+
+    /**
      * The index of playing animation.
      */
     private int channel;
 
+    /**
+     * Instantiates a new Animation model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationModelNode(@NotNull final Animation element, final long objectId) {
         super(element, objectId);
         this.channel = -1;
@@ -61,13 +69,20 @@ public class AnimationModelNode extends ModelNode<Animation> {
                                 @NotNull final ObservableList<MenuItem> items) {
 
         final Animation animation = getElement();
+        final AnimationControlModelNode controlModelNode = requireNonNull(getControlModelNode());
+        final AnimControl control = controlModelNode.getElement();
+
         final int frameCount = AnimationUtils.getFrameCount(animation);
 
-        if (getChannel() < 0) {
+        if (getChannel() < 0 && control.getNumChannels() < 1) {
             items.add(new PlayAnimationAction(nodeTree, this));
             items.add(new RemoveAnimationAction(nodeTree, this));
             items.add(new RenameNodeAction(nodeTree, this));
-        } else {
+        } else if (getChannel() >= 0 && control.getChannel(getChannel()).getSpeed() < 0.0001F) {
+            items.add(new PlayAnimationAction(nodeTree, this));
+            items.add(new StopAnimationAction(nodeTree, this));
+        } else if (getChannel() >= 0) {
+            items.add(new PauseAnimationAction(nodeTree, this));
             items.add(new StopAnimationAction(nodeTree, this));
         }
 
@@ -120,6 +135,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     /**
+     * Gets control model node.
+     *
      * @return the node of an animation control.
      */
     @Nullable
@@ -128,6 +145,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     /**
+     * Sets control model node.
+     *
      * @param controlModelNode the node of an animation control.
      */
     public void setControlModelNode(@Nullable final AnimationControlModelNode controlModelNode) {
@@ -135,6 +154,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     /**
+     * Gets control.
+     *
      * @return the animation control.
      */
     @Nullable
@@ -143,6 +164,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     /**
+     * Sets control.
+     *
      * @param control the animation control.
      */
     public void setControl(@Nullable final AnimControl control) {
@@ -156,6 +179,8 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     /**
+     * Gets channel.
+     *
      * @return the index of playing animation.
      */
     public int getChannel() {
@@ -163,16 +188,37 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     /**
+     * Sets channel.
+     *
      * @param channel the index of playing animation.
      */
     public void setChannel(final int channel) {
         this.channel = channel;
     }
 
+    /**
+     * Gets speed.
+     *
+     * @return the speed
+     */
+    public float getSpeed() {
+        return speed;
+    }
+
+    /**
+     * Sets speed.
+     *
+     * @param speed the speed
+     */
+    public void setSpeed(final float speed) {
+        this.speed = speed;
+    }
+
     @Nullable
     @Override
     public Image getIcon() {
-        return getChannel() < 0 ? Icons.PLAY_16 : Icons.STOP_16;
+        if (getChannel() < 0) return Icons.PLAY_16;
+        return getSpeed() < 0.0001F ? Icons.PAUSE_16 : Icons.STOP_16;
     }
 
     @Override

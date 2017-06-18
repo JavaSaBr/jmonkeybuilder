@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Light} objects.

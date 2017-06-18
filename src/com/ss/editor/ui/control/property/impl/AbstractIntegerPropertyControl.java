@@ -12,9 +12,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiConsumer;
 
 import javafx.scene.layout.HBox;
-import rlib.function.SixObjectConsumer;
-import rlib.ui.control.input.IntegerTextField;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.control.input.IntegerTextField;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit integer values.

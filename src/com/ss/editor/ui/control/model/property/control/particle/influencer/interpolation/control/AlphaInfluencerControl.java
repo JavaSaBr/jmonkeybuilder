@@ -7,8 +7,8 @@ import com.ss.editor.ui.control.model.property.control.particle.influencer.inter
 import org.jetbrains.annotations.NotNull;
 
 import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 

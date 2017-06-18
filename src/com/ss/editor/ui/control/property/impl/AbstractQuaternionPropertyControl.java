@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static rlib.geom.util.AngleUtils.degreeToRadians;
-import static rlib.geom.util.AngleUtils.radiansToDegree;
+import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
+import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
 
 import com.jme3.math.Quaternion;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -21,10 +21,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import rlib.function.SixObjectConsumer;
-import rlib.ui.control.input.FloatTextField;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit {@link Quaternion} values.

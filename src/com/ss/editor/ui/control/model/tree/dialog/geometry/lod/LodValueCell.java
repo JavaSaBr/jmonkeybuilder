@@ -8,12 +8,9 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 import org.jetbrains.annotations.NotNull;
 
-import javafx.geometry.Pos;
-import javafx.scene.control.Control;
 import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the list cell to edit LoD levels.

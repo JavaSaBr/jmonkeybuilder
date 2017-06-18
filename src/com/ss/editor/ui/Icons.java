@@ -36,8 +36,9 @@ public interface Icons {
     Image LAMP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/lamp.png");
     Image POINT_LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
     Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
-    Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/play.png");
-    Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/stop.png");
+    Image PLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/play-button.svg");
+    Image STOP_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/stop.svg");
+    Image PAUSE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/pause.svg");
     Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/animation.png");
     Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim-channel.png");
     Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");

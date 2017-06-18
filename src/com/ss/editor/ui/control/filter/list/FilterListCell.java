@@ -6,7 +6,7 @@ import com.ss.editor.ui.control.filter.operation.DisableSceneFilterOperation;
 import com.ss.editor.ui.control.filter.operation.EnableSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.extension.scene.filter.EditableSceneFilter;
+import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,8 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of list cell to present an editable scene filter.

@@ -22,12 +22,12 @@ import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
