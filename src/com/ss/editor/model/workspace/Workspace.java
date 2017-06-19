@@ -2,20 +2,20 @@ package com.ss.editor.model.workspace;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.util.EditorUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -334,6 +334,8 @@ public class Workspace implements Serializable {
         if (!force && changes.get() == 0) return;
 
         final Path assetFolder = getAssetFolder();
+        if (!Files.exists(assetFolder)) return;
+
         final Path workspaceFile = assetFolder.resolve(WorkspaceManager.FOLDER_EDITOR).resolve(WorkspaceManager.FILE_WORKSPACE);
 
         try {

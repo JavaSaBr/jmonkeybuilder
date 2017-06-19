@@ -31,12 +31,12 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     @Override
     public void initFor(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
         super.initFor(toolComponent, other);
-        root.widthProperty().addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneWidth()));
+        root.widthProperty().addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneSize()));
     }
 
     @Override
-    protected void handleSceneChanged(@NotNull final Number newWidth) {
-        super.handleSceneChanged(newWidth);
+    protected void handleSceneChanged(@NotNull final Number newSize) {
+        super.handleSceneChanged(newSize);
         Platform.runLater(this::requestLayout);
     }
 
@@ -55,7 +55,7 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     }
 
     @Override
-    protected int loadWidth() {
+    protected int loadSize() {
         return getConfig().getToolWidth();
     }
 
@@ -65,8 +65,8 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     }
 
     @Override
-    protected void saveWidth(final int width) {
-        getConfig().setToolWidth(width);
+    protected void saveSize(final int size) {
+        getConfig().setToolWidth(size);
     }
 
     @Override
@@ -75,13 +75,13 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     }
 
     @Override
-    protected double getSceneWidth() {
+    protected double getSceneSize() {
         final double width = root.getWidth();
         return width == 0 ? scene.getWidth() : width;
     }
 
     @Override
-    protected double getExpandPosition(final double toolWidth, final double sceneWidth) {
-        return 1D - super.getExpandPosition(toolWidth, sceneWidth);
+    protected double getExpandPosition(final double toolSize, final double sceneSize) {
+        return 1D - super.getExpandPosition(toolSize, sceneSize);
     }
 }

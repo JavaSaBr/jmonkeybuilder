@@ -25,7 +25,7 @@ public class GlobalLeftToolSplitPane extends TabToolSplitPane<EditorConfig> {
     }
 
     @Override
-    protected int loadWidth() {
+    protected int loadSize() {
         return getConfig().getGlobalLeftToolWidth();
     }
 
@@ -35,7 +35,7 @@ public class GlobalLeftToolSplitPane extends TabToolSplitPane<EditorConfig> {
     }
 
     @Override
-    protected void saveWidth(final int width) {
-        getConfig().setGlobalLeftToolWidth(width);
+    protected void saveSize(final int size) {
+        getConfig().setGlobalLeftToolWidth(size);
     }
 }
