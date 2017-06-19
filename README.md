@@ -2,7 +2,7 @@
 ## License: Apache Version 2.0 ##
 
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
-* [Official Jmonkey thread](https://hub.jmonkeyengine.org/t/jme3-spaceshift-editor/35179)
+* [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jme3-spaceshift-editor/35179)
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
