@@ -1,9 +1,17 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.7 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.8 #
 ## License: Apache Version 2.0 ##
 
 * Download: https://yadi.sk/d/UuKcJBNgqbV3a
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.8 ##
+* -Added an action to reset particle emitters.
+* -Updated toneg0d.emitter to 2.2.2, updated the integration with this lib.
+* -Updated UI.
+* -Added an action 'Pause' to animation nodes, added information about animation length.
+* -Started to use new extension library to integrate custom classes with the editor: https://github.com/JavaSaBr/jme3-spaceshift-extension
+* -Fixed some bugs.
 
 ## ver. 0.9.7 ##
 * -Fixed some bugs.
