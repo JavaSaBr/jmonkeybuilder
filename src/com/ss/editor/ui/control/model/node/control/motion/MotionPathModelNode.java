@@ -12,8 +12,8 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link ModelNode} to show a {@link MotionPath} in the tree.

@@ -4,7 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;

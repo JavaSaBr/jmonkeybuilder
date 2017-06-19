@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javafx.scene.control.Label;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.material.ParticlesMaterial;
 

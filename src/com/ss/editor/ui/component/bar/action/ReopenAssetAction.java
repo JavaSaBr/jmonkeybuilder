@@ -1,44 +1,44 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.Editor;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
+import javafx.scene.control.MenuItem;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 
-import javafx.scene.control.MenuItem;
-
 /**
- * Реализация действия по открытию папки с Asset.
+ * The action to reopen previous asset folder.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ReopenAssetAction extends MenuItem {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-    private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * Открываемый Asset.
+     * The asset folder.
      */
+    @NotNull
     private final Path assetFolder;
 
-    public ReopenAssetAction(final Path assetFolder) {
+    public ReopenAssetAction(@NotNull final Path assetFolder) {
         super(assetFolder.toString());
         this.assetFolder = assetFolder;
         setOnAction(event -> process());
     }
 
     /**
-     * @return открываемый Asset.
+     * @return the asset folder.
      */
+    @NotNull
     private Path getAssetFolder() {
         return assetFolder;
     }
 
     /**
-     * Процесс выбора папки Asset.
+     * The process of opening the asset folder.
      */
     private void process() {
 

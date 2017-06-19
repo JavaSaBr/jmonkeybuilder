@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The base implementation of the {@link PropertyBuilder}.

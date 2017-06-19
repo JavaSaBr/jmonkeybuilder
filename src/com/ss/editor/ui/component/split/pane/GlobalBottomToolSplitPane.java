@@ -31,13 +31,19 @@ public class GlobalBottomToolSplitPane extends TabToolSplitPane<EditorConfig> {
     }
 
     @Override
+    protected void bindToScene() {
+        scene.heightProperty()
+                .addListener((observableValue, oldValue, newValue) -> handleSceneChanged(getSceneSize()));
+    }
+
+    @Override
     protected boolean loadCollapsed() {
         return getConfig().isGlobalBottomToolCollapsed();
     }
 
     @Override
-    protected int loadWidth() {
-        return getConfig().getGlobalBottomToolWidth();
+    protected int loadSize() {
+        return getConfig().getGlobalBottomToolHeight();
     }
 
     @Override
@@ -46,8 +52,8 @@ public class GlobalBottomToolSplitPane extends TabToolSplitPane<EditorConfig> {
     }
 
     @Override
-    protected void saveWidth(final int width) {
-        getConfig().setGlobalBottomToolWidth(width);
+    protected void saveSize(final int size) {
+        getConfig().setGlobalBottomToolHeight(size);
     }
 
     @Override
@@ -56,13 +62,13 @@ public class GlobalBottomToolSplitPane extends TabToolSplitPane<EditorConfig> {
     }
 
     @Override
-    protected double getSceneWidth() {
+    protected double getSceneSize() {
         final double height = scene.getHeight();
         return height == 0 ? scene.getHeight() : height;
     }
 
     @Override
-    protected double getExpandPosition(final double toolWidth, final double sceneWidth) {
-        return 1D - super.getExpandPosition(toolWidth, sceneWidth);
+    protected double getExpandPosition(final double toolSize, final double sceneSize) {
+        return 1D - super.getExpandPosition(toolSize, sceneSize);
     }
 }

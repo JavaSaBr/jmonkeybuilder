@@ -1,7 +1,7 @@
 package com.ss.editor.config;
 
 import static java.util.Objects.requireNonNull;
-import static rlib.util.Utils.get;
+import static com.ss.rlib.util.Utils.get;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.TextureKey;
@@ -13,8 +13,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -66,7 +66,7 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
     private static final String PREF_GLOBAL_LEFT_TOOL_WIDTH = ASSET_OTHER + "." + "globalLeftToolWidth";
     private static final String PREF_GLOBAL_LEFT_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalLeftToolCollapsed";
-    private static final String PREF_GLOBAL_BOTTOM_TOOL_WIDTH = ASSET_OTHER + "." + "globalBottomToolWidth";
+    private static final String PREF_GLOBAL_BOTTOM_TOOL_WIDTH = ASSET_OTHER + "." + "globalBottomToolHeight";
     private static final String PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalBottomToolCollapsed";
     private static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
     private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
@@ -154,7 +154,7 @@ public final class EditorConfig implements AssetEventListener {
     /**
      * The global bottom tool width.
      */
-    private volatile int globalBottomToolWidth;
+    private volatile int globalBottomToolHeight;
 
     /**
      * Flag is for collapsing the global left tool.
@@ -185,11 +185,6 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is for maximizing a window.
      */
     private volatile boolean maximized;
-
-    /**
-     * Flag is for decorating a window.
-     */
-    private volatile boolean decorated;
 
     /**
      * Flag is of enabling analytics.
@@ -440,22 +435,6 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @return true if this windows needs to decorate.
-     */
-    @FromAnyThread
-    public boolean isDecorated() {
-        return decorated;
-    }
-
-    /**
-     * @param decorated flag is for decorating a window.
-     */
-    @FromAnyThread
-    public void setDecorated(final boolean decorated) {
-        this.decorated = decorated;
-    }
-
-    /**
      * @return the global left tool width.
      */
     @FromAnyThread
@@ -464,11 +443,11 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @return the global bottom tool width.
+     * @return the global bottom tool height.
      */
     @FromAnyThread
-    public int getGlobalBottomToolWidth() {
-        return globalBottomToolWidth;
+    public int getGlobalBottomToolHeight() {
+        return globalBottomToolHeight;
     }
 
     /**
@@ -480,11 +459,11 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * @param globalBottomToolWidth the global bottom tool width.
+     * @param globalBottomToolHeight the global bottom tool height.
      */
     @FromAnyThread
-    public void setGlobalBottomToolWidth(final int globalBottomToolWidth) {
-        this.globalBottomToolWidth = globalBottomToolWidth;
+    public void setGlobalBottomToolHeight(final int globalBottomToolHeight) {
+        this.globalBottomToolHeight = globalBottomToolHeight;
     }
 
     /**
@@ -677,9 +656,8 @@ public final class EditorConfig implements AssetEventListener {
         this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 1200);
         this.globalLeftToolWidth = prefs.getInt(PREF_GLOBAL_LEFT_TOOL_WIDTH, 300);
         this.globalLeftToolCollapsed = prefs.getBoolean(PREF_GLOBAL_LEFT_TOOL_COLLAPSED, false);
-        this.globalBottomToolWidth = prefs.getInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
+        this.globalBottomToolHeight = prefs.getInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
         this.globalBottomToolCollapsed = prefs.getBoolean(PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
-        this.decorated = prefs.getBoolean(PREF_SCREEN_DECORATED, true);
         this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
         this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
@@ -750,9 +728,8 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
         prefs.putInt(PREF_GLOBAL_LEFT_TOOL_WIDTH, getGlobalLeftToolWidth());
         prefs.putBoolean(PREF_GLOBAL_LEFT_TOOL_COLLAPSED, isGlobalLeftToolCollapsed());
-        prefs.putInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolWidth());
+        prefs.putInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolHeight());
         prefs.putBoolean(PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED, isGlobalBottomToolCollapsed());
-        prefs.putBoolean(PREF_SCREEN_DECORATED, isDecorated());
         prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
         prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());

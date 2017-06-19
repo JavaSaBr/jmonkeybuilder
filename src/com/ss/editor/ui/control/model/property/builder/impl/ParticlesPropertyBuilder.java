@@ -1,33 +1,24 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
-import static com.ss.editor.util.NodeUtils.findParent;
-
 import com.jme3.math.Vector2f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.BooleanModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.EnumModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.FloatModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.IntegerModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.MinMaxModelPropertyControl;
-import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
+import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.model.property.control.particle.MaterialEmitterPropertyControl;
 import com.ss.editor.ui.control.model.property.control.particle.ParticlesSpriteCountModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-
-import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
 import tonegod.emitter.BillboardMode;
 import tonegod.emitter.EmissionPoint;
 import tonegod.emitter.EmitterMesh.DirectionType;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.material.ParticlesMaterial;
+
+import java.util.function.BiConsumer;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleEmitterNode}
@@ -86,7 +77,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
     };
 
     @NotNull
-    private static final BiConsumer<ParticleEmitterNode, Integer> EMISSIONS_PER_SECOND_HANDLER = (node, result) -> {
+    private static final BiConsumer<ParticleEmitterNode, Float> EMISSIONS_PER_SECOND_HANDLER = (node, result) -> {
         node.setEmissionsPerSecond(result);
         node.killAllParticles();
     };
@@ -140,10 +131,11 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
         final boolean velocityStretching = emitterNode.isVelocityStretching();
 
         final int maxParticles = emitterNode.getMaxParticles();
-        final int emissionsPerSecond = emitterNode.getEmissionsPerSecond();
         final int particlesPerEmission = emitterNode.getParticlesPerEmission();
 
+        final float emissionsPerSecond = emitterNode.getEmissionsPerSecond();
         final float emitterLife = emitterNode.getEmitterLife();
+        final float emitterDelay = emitterNode.getEmitterDelay();
         final float stretchFactor = emitterNode.getVelocityStretchFactor();
 
         final DirectionType directionType = emitterNode.getDirectionType();
@@ -226,8 +218,8 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
         maxParticlesControl.setSyncHandler(ParticleEmitterNode::getMaxParticles);
         maxParticlesControl.setEditObject(emitterNode);
 
-        final IntegerModelPropertyControl<ParticleEmitterNode> emissionPerSecControl =
-                new IntegerModelPropertyControl<>(emissionsPerSecond, Messages.PARTICLE_EMITTER_EMISSION_PER_SECOND, changeConsumer);
+        final FloatModelPropertyControl<ParticleEmitterNode> emissionPerSecControl =
+                new FloatModelPropertyControl<>(emissionsPerSecond, Messages.PARTICLE_EMITTER_EMISSION_PER_SECOND, changeConsumer);
         emissionPerSecControl.setApplyHandler(EMISSIONS_PER_SECOND_HANDLER);
         emissionPerSecControl.setSyncHandler(ParticleEmitterNode::getEmissionsPerSecond);
         emissionPerSecControl.setEditObject(emitterNode);
@@ -243,6 +235,12 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
         emitterLifeControl.setApplyHandler(ParticleEmitterNode::setEmitterLife);
         emitterLifeControl.setSyncHandler(ParticleEmitterNode::getEmitterLife);
         emitterLifeControl.setEditObject(emitterNode);
+
+        final FloatModelPropertyControl<ParticleEmitterNode> emitterDelayControl =
+                new FloatModelPropertyControl<>(emitterDelay, Messages.PARTICLE_EMITTER_EMITTER_DELAY, changeConsumer);
+        emitterDelayControl.setApplyHandler(ParticleEmitterNode::setEmitterDelay);
+        emitterDelayControl.setSyncHandler(ParticleEmitterNode::getEmitterDelay);
+        emitterDelayControl.setEditObject(emitterNode);
 
         final FloatModelPropertyControl<ParticleEmitterNode> magnitudeControl =
                 new FloatModelPropertyControl<>(stretchFactor, Messages.PARTICLE_EMITTER_MAGNITUDE, changeConsumer);
@@ -290,6 +288,7 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
         FXUtils.addToPane(emissionPerSecControl, container);
         FXUtils.addToPane(particlesPerEmissionControl, container);
         FXUtils.addToPane(emitterLifeControl, container);
+        FXUtils.addToPane(emitterDelayControl, container);
         FXUtils.addToPane(magnitudeControl, container);
         FXUtils.addToPane(materialControl, container);
         FXUtils.addToPane(spriteCountControl, container);

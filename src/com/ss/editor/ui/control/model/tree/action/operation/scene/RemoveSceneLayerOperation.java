@@ -4,13 +4,13 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.ui.control.layer.LayersRoot;
-import com.ss.extension.scene.SceneLayer;
-import com.ss.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 
 import org.jetbrains.annotations.NotNull;
 
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to remove a layer from a scene.

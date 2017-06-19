@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import rlib.util.array.Array;
+import com.ss.rlib.util.array.Array;
 
 /**
  * The action to choose an editor to open a file.

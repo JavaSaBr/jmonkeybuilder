@@ -2,9 +2,9 @@ package com.ss.editor.ui.component.asset.tree.resource;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

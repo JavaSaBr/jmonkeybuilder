@@ -4,9 +4,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -14,8 +12,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 import tonegod.emitter.interpolation.InterpolationManager;
@@ -44,11 +41,8 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     protected static final ObservableList<Interpolation> INTERPOLATIONS;
 
     static {
-
         INTERPOLATIONS = FXCollections.observableArrayList();
-
-        final Array<Interpolation> available = InterpolationManager.getAvailable();
-        available.forEach(INTERPOLATIONS::add);
+        INTERPOLATIONS.addAll(InterpolationManager.getAvailable());
     }
 
     @NotNull

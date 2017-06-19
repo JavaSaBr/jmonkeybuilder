@@ -16,8 +16,8 @@ import java.nio.file.Path;
 
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import rlib.util.FileUtils;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The action to rename a file.

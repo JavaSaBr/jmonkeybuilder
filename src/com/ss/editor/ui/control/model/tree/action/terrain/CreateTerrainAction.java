@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.terrain;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -36,6 +37,7 @@ public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer>
         return Messages.MODEL_NODE_TREE_ACTION_ADD_TERRAIN;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

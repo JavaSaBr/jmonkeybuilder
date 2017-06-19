@@ -17,8 +17,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 
 import java.io.IOException;
 import java.io.PrintWriter;

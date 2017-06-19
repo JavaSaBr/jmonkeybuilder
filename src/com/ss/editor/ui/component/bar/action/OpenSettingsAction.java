@@ -4,15 +4,14 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.SettingsDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 
 /**
  * The action for opening the dialog with settings.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
-public class OpenSettingsAction extends Button {
+public class OpenSettingsAction extends MenuItem {
 
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 

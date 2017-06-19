@@ -1,6 +1,6 @@
 package com.ss.editor.util;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.asset.AssetKey;
 import com.jme3.audio.AudioNode;
 import com.jme3.light.Light;
@@ -11,8 +11,8 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.StringUtils;
-import rlib.util.array.Array;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -185,6 +185,26 @@ public class NodeUtils {
 
         for (final Spatial children : node.getChildren()) {
             visitGeometry(children, consumer);
+        }
+    }
+
+    /**
+     * Visit spatials of the target type.
+     */
+    public static <T extends Spatial> void visitSpatial(@NotNull final Spatial spatial, @NotNull final Class<T> type,
+                                                        @NotNull final Consumer<T> consumer) {
+
+        if (type.isInstance(spatial)) {
+            consumer.accept(type.cast(spatial));
+            return;
+        } else if (!(spatial instanceof Node)) {
+            return;
+        }
+
+        final Node node = (Node) spatial;
+
+        for (final Spatial children : node.getChildren()) {
+            visitSpatial(children, type, consumer);
         }
     }
 

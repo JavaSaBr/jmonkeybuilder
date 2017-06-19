@@ -4,7 +4,7 @@ import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 import javax.annotation.Nullable;
 

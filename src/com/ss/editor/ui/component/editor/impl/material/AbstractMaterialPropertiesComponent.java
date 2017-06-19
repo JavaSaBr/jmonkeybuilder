@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

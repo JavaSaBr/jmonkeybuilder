@@ -9,9 +9,9 @@ import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
 

@@ -7,15 +7,15 @@ import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.control.*;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.extension.property.EditableProperty;
-import com.ss.extension.property.EditablePropertyType;
-import com.ss.extension.scene.app.state.EditableSceneAppState;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
-import rlib.util.ClassUtils;
-import rlib.util.array.Array;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.array.Array;
 
 import java.util.Objects;
 

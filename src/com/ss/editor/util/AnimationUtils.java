@@ -1,6 +1,6 @@
 package com.ss.editor.util;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.BoneTrack;
@@ -8,9 +8,9 @@ import com.jme3.animation.Track;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 import java.lang.reflect.Field;
 import java.util.Map;

@@ -10,8 +10,8 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;

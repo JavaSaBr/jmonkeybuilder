@@ -2,8 +2,8 @@ package com.ss.editor.ui.control.app.state.operation;
 
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.extension.scene.SceneNode;
-import com.ss.extension.scene.app.state.SceneAppState;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.app.state.SceneAppState;
 
 import org.jetbrains.annotations.NotNull;
 

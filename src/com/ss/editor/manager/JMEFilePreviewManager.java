@@ -4,7 +4,7 @@ import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
-import static rlib.util.FileUtils.getExtension;
+import static com.ss.rlib.util.FileUtils.getExtension;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.DirectionalLight;
@@ -36,9 +36,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 

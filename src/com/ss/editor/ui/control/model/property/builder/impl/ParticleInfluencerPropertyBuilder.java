@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javafx.scene.layout.VBox;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;

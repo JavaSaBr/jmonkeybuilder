@@ -2,10 +2,9 @@ package com.ss.editor.ui.component.log;
 
 import static com.jme3x.jfx.util.JFXPlatform.runInFXThread;
 import static java.util.Collections.singleton;
-
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import com.ss.rlib.ui.util.FXUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
@@ -16,8 +15,6 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import rlib.ui.util.FXUtils;
 
 /**
  * Implement the view for showing log messages from the editor.
@@ -37,6 +34,10 @@ public class LogView extends CodeArea {
     @NotNull
     private static final String[] FRAMEWORKS = {
             "log4j",
+            "java.lang.",
+            "java.net.",
+            "com.jme3.asset.",
+            "com.jme3.export.",
             "com.jme3.util.",
             "com.jme3.material.",
             "com.ss.editor.ui.",

@@ -3,19 +3,18 @@ package com.ss.editor.ui.control.model.tree.action.animation;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RemoveAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-
-import javafx.scene.image.Image;
 
 /**
  * The implementation of the {@link AbstractNodeAction} to remove an animation from the {@link AnimControl}.
@@ -40,6 +39,7 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
         return Icons.REMOVE_12;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

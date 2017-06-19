@@ -13,8 +13,8 @@ import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**

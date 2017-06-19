@@ -6,6 +6,7 @@ import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
+import com.ss.editor.ui.control.model.tree.action.emitter.ResetToneg0dParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.CreateImpostorParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.CreatePointParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.emitter.mesh.CreateQuadParticleMeshAction;
@@ -20,8 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import tonegod.emitter.ParticleEmitterNode;
 
 /**
@@ -79,6 +80,7 @@ public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterN
                 jmePrimitivesMenu,
                 new LoadModelShapeEmitterAction(nodeTree, this));
 
+        items.add(new ResetToneg0dParticleEmittersAction(nodeTree, this));
         items.add(changeShapeMenu);
         items.add(changeMeshMenu);
 

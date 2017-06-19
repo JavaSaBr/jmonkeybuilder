@@ -1,7 +1,7 @@
 package com.ss.editor.analytics.google;
 
 import static org.apache.http.impl.client.HttpClients.createMinimal;
-import static rlib.util.StringUtils.isEmpty;
+import static com.ss.rlib.util.StringUtils.isEmpty;
 import com.ss.editor.EditorThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
@@ -13,14 +13,14 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.concurrent.util.ConcurrentUtils;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.util.StringUtils;
-import rlib.util.Utils;
-import rlib.util.linkedlist.LinkedList;
-import rlib.util.linkedlist.LinkedListFactory;
-import rlib.util.os.OperatingSystem;
+import com.ss.rlib.concurrent.util.ConcurrentUtils;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.linkedlist.LinkedList;
+import com.ss.rlib.util.linkedlist.LinkedListFactory;
+import com.ss.rlib.util.os.OperatingSystem;
 
 import java.io.IOException;
 import java.io.PrintWriter;

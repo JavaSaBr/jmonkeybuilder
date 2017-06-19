@@ -34,7 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 import tonegod.emitter.material.ParticlesMaterial;
 
 /**

@@ -15,13 +15,13 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.control.input.IntegerTextField;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.control.input.IntegerTextField;
-import rlib.ui.util.FXUtils;
 
 import java.awt.*;
 

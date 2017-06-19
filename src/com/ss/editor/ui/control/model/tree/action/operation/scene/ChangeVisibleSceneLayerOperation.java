@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.operation.scene;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneLayer;
 
 import org.jetbrains.annotations.NotNull;
 

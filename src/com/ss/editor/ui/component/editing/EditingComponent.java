@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editing;
 
 import com.ss.editor.annotation.FXThread;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.HasName;
+import com.ss.rlib.util.HasName;
 
 /**
  * The interface to implement editing component.

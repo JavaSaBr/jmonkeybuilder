@@ -9,7 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of autocomplete for combobox.

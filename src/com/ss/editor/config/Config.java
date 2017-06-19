@@ -4,9 +4,9 @@ import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.Utils;
-import rlib.util.VarTable;
-import rlib.util.os.OperatingSystem;
+import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.os.OperatingSystem;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -22,7 +22,7 @@ public abstract class Config {
     private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.9.7";
+    public static final String VERSION = "v.0.9.8";
 
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 

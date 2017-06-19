@@ -15,10 +15,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import rlib.function.SixObjectConsumer;
-import rlib.ui.util.FXUtils;
-import rlib.util.ArrayUtils;
-import rlib.util.StringUtils;
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit int array values.

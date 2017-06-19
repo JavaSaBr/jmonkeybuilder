@@ -1,6 +1,6 @@
 package com.ss.editor.ui.util;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
@@ -9,6 +9,10 @@ import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FileAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -22,10 +26,6 @@ import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactfx.util.TriConsumer;
-import rlib.util.ClassUtils;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

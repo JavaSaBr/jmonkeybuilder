@@ -8,9 +8,9 @@ import com.ss.editor.ui.control.filter.operation.RemoveSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.extension.scene.SceneNode;
-import com.ss.extension.scene.filter.EditableSceneFilter;
-import com.ss.extension.scene.filter.SceneFilter;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.filter.EditableSceneFilter;
+import com.ss.editor.extension.scene.filter.SceneFilter;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,8 +20,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 
 import java.util.function.Consumer;
 

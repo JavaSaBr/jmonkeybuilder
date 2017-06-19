@@ -17,8 +17,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.control.input.IntegerTextField;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.control.input.IntegerTextField;
+import com.ss.rlib.ui.util.FXUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

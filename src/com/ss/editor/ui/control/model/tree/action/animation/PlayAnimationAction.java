@@ -1,24 +1,19 @@
 package com.ss.editor.ui.control.model.tree.action.animation;
 
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
-import com.jme3.animation.AnimEventListener;
-import com.jme3.animation.Animation;
-import com.jme3.animation.LoopMode;
+import com.jme3.animation.*;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
-
+import com.ss.rlib.util.StringUtils;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
-import rlib.util.StringUtils;
 
 /**
  * The action to play an animation.
@@ -43,27 +38,36 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
         return Icons.PLAY_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
         final AnimationControlModelNode controlModelNode = modelNode.getControlModelNode();
-        if (controlModelNode == null || modelNode.getChannel() >= 0) return;
+        if (controlModelNode == null) return;
 
         final Animation element = modelNode.getElement();
         final AnimControl control = modelNode.getControl();
-        if (control == null || control.getNumChannels() > 0) return;
+        if (control == null) return;
 
-        modelNode.setChannel(control.getNumChannels());
+        modelNode.setSpeed(controlModelNode.getSpeed());
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
-            control.addListener(this);
-
-            final AnimChannel channel = control.createChannel();
-            channel.setAnim(element.getName());
-            channel.setLoopMode(controlModelNode.getLoopMode());
+        if (modelNode.getChannel() >= 0) {
+            final AnimChannel channel = control.getChannel(modelNode.getChannel());
             channel.setSpeed(controlModelNode.getSpeed());
-        });
+        } else {
+
+            modelNode.setChannel(control.getNumChannels());
+
+            EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+                control.addListener(this);
+
+                final AnimChannel channel = control.createChannel();
+                channel.setAnim(element.getName());
+                channel.setLoopMode(controlModelNode.getLoopMode());
+                channel.setSpeed(controlModelNode.getSpeed());
+            });
+        }
 
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.update(modelNode);
