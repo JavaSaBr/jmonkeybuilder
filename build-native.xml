@@ -68,6 +68,14 @@
             </fileset>
         </copy>
 
+        <mkdir dir="licenses"/>
+        <copy todir="licenses">
+            <fileset dir="../" >
+                <include name="*license*"/>
+                <include name="*LICENSE*"/>
+            </fileset>
+        </copy>
+
         <mkdir dir="projectRefs"/>
     </target>
 
@@ -142,6 +150,13 @@
 
         <mkdir dir="dist"/>
         <mkdir dir="dist/libs"/>
+        <mkdir dir="dist/licenses"/>
+
+        <copy todir="dist/licenses">
+            <fileset dir="licenses" >
+                <include name="*"/>
+            </fileset>
+        </copy>
 
         <copy todir="dist/libs">
             <fileset dir="externalLibs">
@@ -193,6 +208,7 @@
 
         <fx:resources id="appRes">
             <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
+            <fx:fileset dir="dist" includes="licenses/*"/>
             <fx:fileset dir="dist" includes="libs/*"/>
             <fx:fileset dir="dist" includes="libs/jME/*"/>
             <fx:fileset dir="dist" includes="libs/svg/*"/>
@@ -240,7 +256,7 @@
             <fx:platform >
                 <fx:jvmarg value="-Xms1024m"/>
                 <fx:jvmarg value="-Xmx2048m"/>
-                <fx:jvmarg value="-XX:MaxDirectMemorySize=4096m"/>
+                <fx:jvmarg value="-XX:MaxDirectMemorySize=2048m"/>
                 <fx:jvmarg value="-XX:+AggressiveOpts"/>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
                 <fx:jvmarg value="-XX:+UseTLAB"/>
