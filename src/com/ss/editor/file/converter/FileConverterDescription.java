@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import rlib.util.array.Array;
+import com.ss.rlib.util.array.Array;
 
 /**
  * The description of a file converter.

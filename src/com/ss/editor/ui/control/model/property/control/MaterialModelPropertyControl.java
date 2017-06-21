@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
@@ -32,9 +32,9 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
-import rlib.ui.util.FXUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link Material}.

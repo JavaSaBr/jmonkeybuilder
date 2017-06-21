@@ -1,16 +1,14 @@
 package com.ss.editor.ui.control.filter.property.control;
 
+import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.filter.operation.FilterPropertyOperation;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
-import com.ss.extension.scene.filter.EditableSceneFilter;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import com.ss.rlib.function.SixObjectConsumer;
 
 import java.util.function.BiConsumer;
-
-import rlib.function.SixObjectConsumer;
 
 /**
  * The base implementation of the property control for the {@link EditableSceneFilter}.

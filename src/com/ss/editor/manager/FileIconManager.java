@@ -8,12 +8,12 @@ import com.ss.editor.util.EditorUtil;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
-import rlib.manager.InitializeManager;
-import rlib.util.FileUtils;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.manager.InitializeManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.io.IOException;
 import java.nio.file.Files;

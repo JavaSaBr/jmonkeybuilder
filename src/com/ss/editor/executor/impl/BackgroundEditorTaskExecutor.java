@@ -1,7 +1,7 @@
 package com.ss.editor.executor.impl;
 
 import org.jetbrains.annotations.NotNull;
-import rlib.util.array.Array;
+import com.ss.rlib.util.array.Array;
 
 import static java.lang.Math.min;
 

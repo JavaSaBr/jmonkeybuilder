@@ -10,6 +10,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -21,12 +22,12 @@ import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
@@ -64,6 +65,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         return Messages.MODEL_NODE_TREE_ACTION_LOAD_MODEL;
     }
 
+    @FXThread
     @Override
     protected void process() {
         UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);

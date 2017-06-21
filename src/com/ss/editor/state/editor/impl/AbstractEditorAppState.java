@@ -10,8 +10,8 @@ import com.ss.editor.ui.component.editor.FileEditor;
 
 import org.jetbrains.annotations.NotNull;
 
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 /**
  * The base implementation of the {@link EditorAppState} for using inside {@link FileEditor}.

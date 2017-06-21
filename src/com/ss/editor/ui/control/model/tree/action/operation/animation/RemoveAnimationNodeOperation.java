@@ -4,7 +4,6 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

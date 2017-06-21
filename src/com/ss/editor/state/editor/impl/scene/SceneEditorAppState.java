@@ -9,11 +9,11 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
-import com.ss.extension.scene.SceneNode;
-import com.ss.extension.scene.app.state.SceneAppState;
-import com.ss.extension.scene.filter.SceneFilter;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.app.state.SceneAppState;
+import com.ss.editor.extension.scene.filter.SceneFilter;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.array.Array;
+import com.ss.rlib.util.array.Array;
 
 /**
  * The implementation of the {@link AbstractSceneEditorAppState} for the {@link SceneFileEditor}.

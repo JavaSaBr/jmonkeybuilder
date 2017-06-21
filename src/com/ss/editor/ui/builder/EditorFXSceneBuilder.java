@@ -1,6 +1,5 @@
 package com.ss.editor.ui.builder;
 
-import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -15,6 +14,8 @@ import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.rlib.ui.hanlder.WindowResizeHandler;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -23,7 +24,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
-import rlib.ui.util.FXUtils;
 
 /**
  * The scene builder for building a scene for the Editor.
@@ -70,7 +70,6 @@ public class EditorFXSceneBuilder {
         stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
 
         final StackPane container = scene.getContainer();
-        container.setAlignment(TOP_CENTER);
 
         build(scene, container, stage);
 
@@ -78,6 +77,8 @@ public class EditorFXSceneBuilder {
         //bindFixedSize(container, scene.widthProperty().divide(1.5), scene.heightProperty().divide(1.5));
 
         stage.setScene(scene);
+
+        WindowResizeHandler.install(stage, container);
 
         return scene;
     }
@@ -112,7 +113,6 @@ public class EditorFXSceneBuilder {
         FXUtils.addToPane(new VBox(editorBarOffset, leftSplitContainer), container);
         FXUtils.addToPane(barComponent, container);
 
-        barComponent.createDrawer(container, stage);
         barComponent.toFront();
 
         FXUtils.bindFixedWidth(editorBarOffset, container.widthProperty());

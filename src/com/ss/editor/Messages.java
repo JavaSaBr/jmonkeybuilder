@@ -1,9 +1,9 @@
 package com.ss.editor;
 
 import static java.util.ResourceBundle.getBundle;
-import static rlib.util.ReflectionUtils.getUnsafeFieldValue;
+import static com.ss.rlib.util.ReflectionUtils.getUnsafeFieldValue;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
-import rlib.util.PropertyLoader;
+import com.ss.rlib.util.PropertyLoader;
 
 import java.util.Locale;
 import java.util.Map;
@@ -22,8 +22,8 @@ public class Messages {
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET;
     public static final String EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER;
     public static final String EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER;
-    public static final String EDITOR_BAR_ASSET_CLOSE_EDITOR;
     public static final String EDITOR_BAR_SETTINGS;
+    public static final String EDITOR_BAR_OTHER;
     public static final String EDITOR_TOOL_ASSET;
 
     public static final String ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE;
@@ -111,7 +111,6 @@ public class Messages {
 
     public static final String SETTINGS_DIALOG_TITLE;
     public static final String SETTINGS_DIALOG_FXAA;
-    public static final String SETTINGS_DIALOG_DECORATED;
     public static final String SETTINGS_DIALOG_FRAME_RATE;
     public static final String SETTINGS_DIALOG_GAMMA_CORRECTION;
     public static final String SETTINGS_DIALOG_TONEMAP_FILTER;
@@ -210,6 +209,7 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_PLAY;
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
+    public static final String MODEL_NODE_TREE_ACTION_RESET_TEMITTERS;
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
@@ -342,6 +342,8 @@ public class Messages {
     public static final String CONTROL_PROPERTY_SUSPENSION_STIFFNESS;
     public static final String CONTROL_PROPERTY_ROLL_INFLUENCE;
     public static final String CONTROL_PROPERTY_WHEEL_SPATIAL;
+    public static final String CONTROL_PROPERTY_LENGTH;
+    public static final String CONTROL_PROPERTY_CURRENT_TIME;
 
     public static final String PARTICLE_EMITTER_TEST_MODE;
     public static final String PARTICLE_EMITTER_ENABLED;
@@ -354,6 +356,7 @@ public class Messages {
     public static final String PARTICLE_EMITTER_EMISSION_PER_SECOND;
     public static final String PARTICLE_EMITTER_PARTICLES_PER_SECOND;
     public static final String PARTICLE_EMITTER_EMITTER_LIFE;
+    public static final String PARTICLE_EMITTER_EMITTER_DELAY;
     public static final String PARTICLE_EMITTER_TEST_PARTICLES;
     public static final String PARTICLE_EMITTER_FOLLOW_EMITTER;
     public static final String PARTICLE_EMITTER_STRETCHING;
@@ -595,13 +598,11 @@ public class Messages {
 
         EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
         EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
-
         EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponentAssetOpenAssetDirectoryChooser");
-
         EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponentAssetReopen");
-        EDITOR_BAR_ASSET_CLOSE_EDITOR = bundle.getString("EditorBarComponentAssetClose");
+        EDITOR_BAR_OTHER = bundle.getString("EditorBarOther");
+        EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponentSettings");
 
-        EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponent.settings");
         EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
         ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_NEW_FILE = bundle.getString("AssetComponentResourceTreeContextMenuNewFile");
@@ -688,7 +689,6 @@ public class Messages {
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
-        SETTINGS_DIALOG_DECORATED = bundle.getString("SettingsDialogDecorated");
         SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
         SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
@@ -787,6 +787,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
         MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
+        MODEL_NODE_TREE_ACTION_RESET_TEMITTERS = bundle.getString("ModelNodeTreeActionResetTEmitters");
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER = bundle.getString("ModelNodeTreeActionCreateSoftTEmitter");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
@@ -919,6 +920,8 @@ public class Messages {
         CONTROL_PROPERTY_SUSPENSION_STIFFNESS = bundle.getString("ControlPropertySuspensionStiffness");
         CONTROL_PROPERTY_ROLL_INFLUENCE = bundle.getString("ControlPropertyRollInfluence");
         CONTROL_PROPERTY_WHEEL_SPATIAL = bundle.getString("ControlPropertyWheelSpatial");
+        CONTROL_PROPERTY_LENGTH = bundle.getString("ControlPropertyLength");
+        CONTROL_PROPERTY_CURRENT_TIME = bundle.getString("ControlPropertyCurrentTime");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -931,6 +934,7 @@ public class Messages {
         PARTICLE_EMITTER_EMISSION_PER_SECOND = bundle.getString("ParticleEmitterEmissionPerSecond");
         PARTICLE_EMITTER_PARTICLES_PER_SECOND = bundle.getString("ParticleEmitterParticlesPerSecond");
         PARTICLE_EMITTER_EMITTER_LIFE = bundle.getString("ParticleEmitterEmitterLife");
+        PARTICLE_EMITTER_EMITTER_DELAY = bundle.getString("ParticleEmitterEmitterDelay");
         PARTICLE_EMITTER_TEST_PARTICLES = bundle.getString("ParticleEmitterTestParticles");
         PARTICLE_EMITTER_FOLLOW_EMITTER = bundle.getString("ParticleEmitterFollowEmitter");
         PARTICLE_EMITTER_STRETCHING = bundle.getString("ParticleEmitterStretching");

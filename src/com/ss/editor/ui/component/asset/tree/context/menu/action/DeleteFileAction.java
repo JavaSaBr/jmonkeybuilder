@@ -12,8 +12,8 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.FileUtils;
-import rlib.util.array.Array;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
 
 import java.nio.file.Path;
 

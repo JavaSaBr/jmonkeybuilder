@@ -19,10 +19,10 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.function.BooleanFloatConsumer;
-import rlib.function.FloatFloatConsumer;
-import rlib.util.dictionary.DictionaryFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.function.BooleanFloatConsumer;
+import com.ss.rlib.function.FloatFloatConsumer;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**

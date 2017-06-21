@@ -6,8 +6,8 @@ import org.w3c.dom.Node;
 
 import java.io.InputStream;
 
-import rlib.data.AbstractStreamDocument;
-import rlib.util.VarTable;
+import com.ss.rlib.data.AbstractStreamDocument;
+import com.ss.rlib.util.VarTable;
 
 /**
  * The config reader.

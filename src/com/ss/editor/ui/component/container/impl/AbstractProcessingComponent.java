@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.container.impl;
 
 import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.scene.Node;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.editor.Editor3DProvider;

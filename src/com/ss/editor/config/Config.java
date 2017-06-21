@@ -4,9 +4,9 @@ import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.Utils;
-import rlib.util.VarTable;
-import rlib.util.os.OperatingSystem;
+import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.os.OperatingSystem;
 
 import java.awt.*;
 import java.nio.file.Path;

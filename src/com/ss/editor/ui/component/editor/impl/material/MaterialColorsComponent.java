@@ -6,7 +6,7 @@ import com.jme3.shader.VarType;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.ColorMaterialParamControl;
 import org.jetbrains.annotations.NotNull;
-import rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
 

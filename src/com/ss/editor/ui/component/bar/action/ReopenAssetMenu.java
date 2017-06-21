@@ -4,19 +4,18 @@ import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-
 /**
- * Реализация действия по переоткрытию папки с Asset.
+ * The action to reopen previous asset folder.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public class ReopenAssetMenu extends Menu {
 
@@ -29,7 +28,7 @@ public class ReopenAssetMenu extends Menu {
     }
 
     /**
-     * Обновление списка для переоткрытия.
+     * Update the list of asset folders.
      */
     public void update() {
 

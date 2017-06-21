@@ -1,9 +1,10 @@
 package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
 import static java.util.Objects.requireNonNull;
-import static rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.scene.Spatial;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -31,6 +32,7 @@ public abstract class AbstractCreateShapeAction<T extends PhysicsCollisionObject
         return Icons.GEOMETRY_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

@@ -4,7 +4,6 @@ import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KE
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.util.EditorUtil.*;
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.AssetLinkNode;
@@ -17,8 +16,9 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.*;
 import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateTonegodEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateTonegodSoftEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateToneg0dEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.CreateToneg0dSoftEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.emitter.ResetToneg0dParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateSphereAction;
@@ -32,15 +32,19 @@ import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.GeomUtils;
-import com.ss.extension.scene.SceneLayer;
+import com.ss.editor.util.NodeUtils;
+import com.ss.editor.extension.scene.SceneLayer;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import tonegod.emitter.ParticleEmitterNode;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -84,11 +88,26 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new LoadModelAction(nodeTree, this),
                 new LinkModelAction(nodeTree, this), new CreateSkyAction(nodeTree, this),
-                new CreateTonegodEmitterAction(nodeTree, this), new CreateTonegodSoftEmitterAction(nodeTree, this),
+                new CreateToneg0dEmitterAction(nodeTree, this), new CreateToneg0dSoftEmitterAction(nodeTree, this),
                 new CreateAudioNodeAction(nodeTree, this), new CreateTerrainAction(nodeTree, this),
                 createPrimitiveMenu, addLightMenu);
 
         return menu;
+    }
+
+    @Override
+    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+                                @NotNull final ObservableList<MenuItem> items) {
+        if (!(nodeTree instanceof ModelNodeTree)) return;
+
+        final T element = getElement();
+        final Spatial emitter = NodeUtils.findSpatial(element, spatial -> spatial instanceof ParticleEmitterNode);
+
+        if (emitter != null) {
+            items.add(new ResetToneg0dParticleEmittersAction(nodeTree, this));
+        }
+
+        super.fillContextMenu(nodeTree, items);
     }
 
     @Override

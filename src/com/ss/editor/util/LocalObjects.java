@@ -4,7 +4,7 @@ import static java.lang.Thread.currentThread;
 import com.jme3.math.*;
 import com.ss.editor.EditorThread;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.CycleBuffer;
+import com.ss.rlib.util.CycleBuffer;
 
 /**
  * The container with local objects.

@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.animation;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
@@ -38,6 +39,7 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
         return Icons.EXTRACT_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action;
 
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.AddUserDataDialog;
@@ -39,6 +40,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
         return Icons.ADD_12;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

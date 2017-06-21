@@ -15,26 +15,17 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.awt.Point;
-import java.io.File;
-import java.nio.file.Path;
-
+import com.ss.rlib.ui.control.input.IntegerTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
@@ -42,11 +33,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import rlib.ui.control.input.IntegerTextField;
-import rlib.ui.util.FXUtils;
-import rlib.util.StringUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
+import java.io.File;
+import java.nio.file.Path;
 
 /**
  * The dialog with settings.
@@ -117,11 +109,6 @@ public class SettingsDialog extends EditorDialog {
      * The FXAA checkbox.
      */
     private CheckBox fxaaFilterCheckBox;
-
-    /**
-     * The checkbox for enabling decorating.
-     */
-    private CheckBox decoratedCheckBox;
 
     /**
      * The checkbox for enabling google analytics.
@@ -241,7 +228,6 @@ public class SettingsDialog extends EditorDialog {
         createAdditionalClasspathControl(otherRoot);
         createAdditionalEnvsControl(otherRoot);
         createGoogleAnalyticsControl(otherRoot);
-        createDecoratedControl(otherRoot);
         createAutoTangentGeneratingControl(otherRoot);
         createUseFlippedTextureDefaultControl(otherRoot);
         createDefaultCameraLampEnabledControl(otherRoot);
@@ -579,31 +565,6 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the checkbox for configuring decorated windows.
-     */
-    private void createDecoratedControl(@NotNull final VBox root) {
-
-        final HBox decoratedContainer = new HBox();
-        decoratedContainer.setAlignment(Pos.CENTER_LEFT);
-
-        final Label decoratedLabel = new Label(Messages.SETTINGS_DIALOG_DECORATED + ":");
-        decoratedLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
-
-        decoratedCheckBox = new CheckBox();
-        decoratedCheckBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
-        decoratedCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
-
-        FXUtils.addToPane(decoratedLabel, decoratedContainer);
-        FXUtils.addToPane(decoratedCheckBox, decoratedContainer);
-        FXUtils.addToPane(decoratedContainer, root);
-
-        FXUtils.addClassTo(decoratedLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(decoratedCheckBox, CSSClasses.SPECIAL_FONT_14);
-
-        VBox.setMargin(decoratedContainer, FIELD_OFFSET);
-    }
-
-    /**
      * Create the checkbox for configuring enabling google analytics.
      */
     private void createGoogleAnalyticsControl(@NotNull final VBox root) {
@@ -729,8 +690,7 @@ public class SettingsDialog extends EditorDialog {
         VBox.setMargin(anisotropyContainer, FIELD_OFFSET);
 
         final ObservableList<Integer> items = anisotropyComboBox.getItems();
-
-        ANISOTROPYCS.forEach(items::add);
+        items.addAll(ANISOTROPYCS);
     }
 
     /**
@@ -858,14 +818,6 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return the checkbox for enabling decorating.
-     */
-    @NotNull
-    private CheckBox getDecoratedCheckBox() {
-        return decoratedCheckBox;
-    }
-
-    /**
      * @return the checkbox for enabling auto tangent generating.
      */
     @NotNull
@@ -901,7 +853,7 @@ public class SettingsDialog extends EditorDialog {
      * @return the message label.
      */
     @NotNull
-    public Label getMessageLabel() {
+    private Label getMessageLabel() {
         return messageLabel;
     }
 
@@ -918,7 +870,6 @@ public class SettingsDialog extends EditorDialog {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
-        final boolean currentDecorated = editorConfig.isDecorated();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -926,14 +877,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
 
-        final CheckBox decoratedCheckBox = getDecoratedCheckBox();
-        final boolean decorated = decoratedCheckBox.isSelected();
-
         if (currentAnisotropy != anisotropy) {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
-            needRestart++;
-        } else if (decorated != currentDecorated) {
             needRestart++;
         }
 
@@ -963,9 +909,6 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox toneMapFilterCheckBox = getToneMapFilterCheckBox();
         toneMapFilterCheckBox.setSelected(editorConfig.isToneMapFilter());
-
-        final CheckBox decoratedCheckBox = getDecoratedCheckBox();
-        decoratedCheckBox.setSelected(editorConfig.isDecorated());
 
         final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
         googleAnalyticsCheckBox.setSelected(editorConfig.isAnalytics());
@@ -1032,7 +975,7 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @param additionalEnvsFolder the additional envs folder.
      */
-    public void setAdditionalEnvsFolder(@Nullable final Path additionalEnvsFolder) {
+    private void setAdditionalEnvsFolder(@Nullable final Path additionalEnvsFolder) {
         this.additionalEnvsFolder = additionalEnvsFolder;
     }
 
@@ -1040,7 +983,7 @@ public class SettingsDialog extends EditorDialog {
      * @return the additional envs folder.
      */
     @Nullable
-    public Path getAdditionalEnvsFolder() {
+    private Path getAdditionalEnvsFolder() {
         return additionalEnvsFolder;
     }
 
@@ -1084,7 +1027,6 @@ public class SettingsDialog extends EditorDialog {
         final int currentCameraAngle = editorConfig.getCameraAngle();
 
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
-        final boolean currentDecorated = editorConfig.isDecorated();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
@@ -1097,9 +1039,6 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox toneMapFilterCheckBox = getToneMapFilterCheckBox();
         final boolean toneMapFilter = toneMapFilterCheckBox.isSelected();
-
-        final CheckBox decoratedCheckBox = getDecoratedCheckBox();
-        final boolean decorated = decoratedCheckBox.isSelected();
 
         final CheckBox googleAnalyticsCheckBox = getGoogleAnalyticsCheckBox();
         final boolean analytics = googleAnalyticsCheckBox.isSelected();
@@ -1129,15 +1068,12 @@ public class SettingsDialog extends EditorDialog {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
             needRestart++;
-        } else if (currentDecorated != decorated) {
-            needRestart++;
         } else if (frameRate != currentFrameRate) {
             needRestart++;
         }
 
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
-        editorConfig.setDecorated(decorated);
         editorConfig.setAnalytics(analytics);
         editorConfig.setGammaCorrection(gammaCorrection);
         editorConfig.setToneMapFilter(toneMapFilter);
@@ -1185,6 +1121,7 @@ public class SettingsDialog extends EditorDialog {
         return Messages.SETTINGS_DIALOG_TITLE;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

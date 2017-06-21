@@ -10,8 +10,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import rlib.ui.util.FXUtils;
-import rlib.util.FileUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 
 import javax.annotation.Nullable;
 import java.io.IOException;

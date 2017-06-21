@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.dialog;
 
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static java.util.Objects.requireNonNull;
-import static rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
+import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
@@ -11,19 +11,19 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.extension.scene.control.EditableControl;
-import com.ss.extension.scene.control.impl.EditableBillboardControl;
+import com.ss.editor.extension.scene.control.EditableControl;
+import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.ui.util.FXUtils;
-import rlib.util.ClassUtils;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
-import rlib.util.dictionary.ObjectDictionary;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.awt.*;
 

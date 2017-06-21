@@ -1,8 +1,10 @@
 package com.ss.editor.model;
 
-import static java.lang.Math.*;
-import static rlib.geom.util.AngleUtils.degreeToRadians;
-import static rlib.geom.util.AngleUtils.radiansToDegree;
+import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
+import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.sqrt;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;

@@ -12,7 +12,7 @@ import com.ss.editor.ui.util.UIUtils;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

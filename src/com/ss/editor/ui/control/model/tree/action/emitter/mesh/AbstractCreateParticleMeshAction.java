@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.emitter.mesh;
 
 import static java.util.Objects.requireNonNull;
 
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -35,6 +36,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
         return Icons.MESH_16;
     }
 
+    @FXThread
     @Override
     protected void process() {
 

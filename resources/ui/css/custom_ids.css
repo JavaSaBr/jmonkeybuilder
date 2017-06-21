@@ -1,7 +1,11 @@
 
+#RootContainer {
+    -fx-alignment: top-center;
+}
+
 #EditorBarComponent {
-    -fx-padding: 2px;
-    -fx-min-height: 36px;
+    -fx-padding: 0px;
+    -fx-min-height: 30px;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-background-color: -fx-background-app-bar;
@@ -9,36 +13,7 @@
 }
 
 #EditorBarComponentOffset {
-    -fx-min-height: 34px;
-}
-
-#EditorBarComponentTitleLabel {
-    -fx-padding: 0 0 0 20;
-}
-
-#EditorBarComponentMenuButton {
-    -fx-graphic: url("/ui/icons/actions/24/menu.png");
-}
-
-#EditorBarComponentFullscreenButton {
-}
-
-#EditorBarComponentCloseButton {
-    -fx-graphic: url("/ui/icons/actions/24/close.png");
-}
-
-#EditorBarDrawerContainer {
-    -fx-background-color: rgba(0, 0, 0, 0.2);
-    -fx-alignment: center-left;
-}
-
-#EditorBarDrawer {
-    -fx-padding: 1 0 0 0;
-    -fx-background-color: -fx-background-background;
-    -fx-alignment: top-left;
-    -fx-effect: -fx-material-shadow-panel;
-    -fx-pref-width: 200;
-    -fx-max-width: -fx-pref-width;
+    -fx-min-height: 28px;
 }
 
 #EditorLoadingLayer {

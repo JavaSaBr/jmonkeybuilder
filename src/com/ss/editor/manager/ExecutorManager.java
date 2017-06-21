@@ -7,9 +7,9 @@ import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.executor.impl.FXEditorTaskExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.concurrent.atomic.AtomicInteger;
-import rlib.logging.Logger;
-import rlib.logging.LoggerManager;
+import com.ss.rlib.concurrent.atomic.AtomicInteger;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

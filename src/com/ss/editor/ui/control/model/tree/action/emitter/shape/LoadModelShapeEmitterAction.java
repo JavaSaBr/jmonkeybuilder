@@ -8,6 +8,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -22,8 +23,8 @@ import com.ss.editor.util.NodeUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import tonegod.emitter.ParticleEmitterNode;
 
 import java.nio.file.Path;
@@ -62,6 +63,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE;
     }
 
+    @FXThread
     @Override
     protected void process() {
         UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);

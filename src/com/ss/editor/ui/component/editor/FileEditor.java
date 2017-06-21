@@ -10,8 +10,8 @@ import java.nio.file.Path;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Parent;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The interface for implementing file editor.

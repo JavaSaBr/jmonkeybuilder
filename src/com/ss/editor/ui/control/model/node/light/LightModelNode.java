@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import rlib.util.StringUtils;
+import com.ss.rlib.util.StringUtils;
 
 /**
  * The base implementation of {@link ModelNode} to present lights.
