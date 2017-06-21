@@ -22,12 +22,23 @@ import java.nio.file.Path;
  */
 public class WorkspaceManager {
 
+    /**
+     * The constant FOLDER_EDITOR.
+     */
     public static final String FOLDER_EDITOR = ".jme3-spaceshift-editor";
+    /**
+     * The constant FILE_WORKSPACE.
+     */
     public static final String FILE_WORKSPACE = "workspace";
 
     @Nullable
     private static WorkspaceManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static WorkspaceManager getInstance() {
         if (instance == null) instance = new WorkspaceManager();

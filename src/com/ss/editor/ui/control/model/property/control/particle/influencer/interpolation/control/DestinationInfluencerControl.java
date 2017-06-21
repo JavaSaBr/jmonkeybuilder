@@ -20,6 +20,13 @@ import tonegod.emitter.interpolation.Interpolation;
  */
 public class DestinationInfluencerControl extends AbstractInterpolationInfluencerControl<DestinationInfluencer> {
 
+    /**
+     * Instantiates a new Destination influencer control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public DestinationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
@@ -35,6 +42,12 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
         return 1;
     }
 
+    /**
+     * Request to change.
+     *
+     * @param newValue the new value
+     * @param index    the index
+     */
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
 
         final DestinationInfluencer influencer = getInfluencer();
@@ -43,6 +56,12 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
         execute(newValue, oldValue, (destinationInfluencer, destination) -> destinationInfluencer.updateDestination(destination, index));
     }
 
+    /**
+     * Request to change.
+     *
+     * @param newValue the new value
+     * @param index    the index
+     */
     public void requestToChange(@NotNull final Float newValue, final int index) {
 
         final DestinationInfluencer influencer = getInfluencer();

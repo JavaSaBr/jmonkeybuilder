@@ -15,6 +15,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GlobalBottomToolSplitPane extends TabToolSplitPane<EditorConfig> {
 
+    /**
+     * Instantiates a new Global bottom tool split pane.
+     *
+     * @param scene the scene
+     */
     public GlobalBottomToolSplitPane(@NotNull final Scene scene) {
         super(scene, EditorConfig.getInstance());
         setOrientation(Orientation.VERTICAL);

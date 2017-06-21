@@ -23,6 +23,11 @@ public class ReopenAssetAction extends MenuItem {
     @NotNull
     private final Path assetFolder;
 
+    /**
+     * Instantiates a new Reopen asset action.
+     *
+     * @param assetFolder the asset folder
+     */
     public ReopenAssetAction(@NotNull final Path assetFolder) {
         super(assetFolder.toString());
         this.assetFolder = assetFolder;

@@ -19,6 +19,11 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public class MaterialTexturesComponent extends AbstractMaterialPropertiesComponent {
 
+    /**
+     * Instantiates a new Material textures component.
+     *
+     * @param changeHandler the change handler
+     */
     public MaterialTexturesComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         super(changeHandler);
     }

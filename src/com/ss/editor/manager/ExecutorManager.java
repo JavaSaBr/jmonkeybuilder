@@ -33,6 +33,11 @@ public class ExecutorManager {
     @Nullable
     private static ExecutorManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static ExecutorManager getInstance() {
         if (instance == null) instance = new ExecutorManager();

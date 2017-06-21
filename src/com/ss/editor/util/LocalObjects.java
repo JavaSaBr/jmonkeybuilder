@@ -15,6 +15,11 @@ public class LocalObjects {
 
     private static final int SIZE = 50;
 
+    /**
+     * Get local objects.
+     *
+     * @return the local objects
+     */
     @NotNull
     public static LocalObjects get() {
         return ((EditorThread) currentThread()).getLocal();
@@ -68,6 +73,9 @@ public class LocalObjects {
     @NotNull
     private final CycleBuffer<float[]> matrixFloatBuffer;
 
+    /**
+     * Instantiates a new Local objects.
+     */
     @SuppressWarnings("unchecked")
     public LocalObjects() {
         this.vectorBuffer = new CycleBuffer<>(Vector3f.class, SIZE, Vector3f::new);
@@ -81,6 +89,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next matrix 3 f matrix 3 f.
+     *
      * @return the next free matrix.
      */
     @NotNull
@@ -89,6 +99,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next matrix float float [ ].
+     *
      * @return the next free matrix float array.
      */
     @NotNull
@@ -97,6 +109,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next ray ray.
+     *
      * @return the next free ray.
      */
     @NotNull
@@ -105,6 +119,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next rotation quaternion.
+     *
      * @return the next free rotation.
      */
     @NotNull
@@ -113,6 +129,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next vector vector 3 f.
+     *
      * @return the next free vector.
      */
     @NotNull
@@ -121,6 +139,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next vector 2 f vector 2 f.
+     *
      * @return the next free vector.
      */
     @NotNull
@@ -129,6 +149,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next plane plane.
+     *
      * @return the next free plane.
      */
     @NotNull
@@ -137,6 +159,8 @@ public class LocalObjects {
     }
 
     /**
+     * Next color color rgba.
+     *
      * @return the next color.
      */
     @NotNull

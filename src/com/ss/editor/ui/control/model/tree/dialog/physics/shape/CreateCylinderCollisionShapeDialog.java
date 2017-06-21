@@ -41,6 +41,12 @@ public class CreateCylinderCollisionShapeDialog extends CreateBoxCollisionShapeD
     @Nullable
     private ComboBox<String> axisBox;
 
+    /**
+     * Instantiates a new Create cylinder collision shape dialog.
+     *
+     * @param nodeTree        the node tree
+     * @param collisionObject the collision object
+     */
     public CreateCylinderCollisionShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                               @NotNull final PhysicsCollisionObject collisionObject) {
         super(nodeTree, collisionObject);

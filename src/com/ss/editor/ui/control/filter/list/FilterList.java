@@ -51,6 +51,12 @@ public class FilterList extends VBox {
      */
     private ListView<EditableSceneFilter<?>> listView;
 
+    /**
+     * Instantiates a new Filter list.
+     *
+     * @param selectHandler  the select handler
+     * @param changeConsumer the change consumer
+     */
     public FilterList(@NotNull final Consumer<EditableSceneFilter<?>> selectHandler,
                       @NotNull final SceneChangeConsumer changeConsumer) {
         setId(CSSIds.SCENE_APP_STATE_CONTAINER);
@@ -94,6 +100,8 @@ public class FilterList extends VBox {
 
     /**
      * Fill a list of filters.
+     *
+     * @param sceneNode the scene node
      */
     public void fill(@NotNull final SceneNode sceneNode) {
 
@@ -143,6 +151,8 @@ public class FilterList extends VBox {
     }
 
     /**
+     * Gets change consumer.
+     *
      * @return the changes consumer.
      */
     @NotNull

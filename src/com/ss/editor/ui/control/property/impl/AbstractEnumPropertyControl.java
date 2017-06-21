@@ -20,6 +20,9 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit {@link Enum} values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
+ * @param <E> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
@@ -30,6 +33,15 @@ public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E
      */
     private ComboBox<E> enumComboBox;
 
+    /**
+     * Instantiates a new Abstract enum property control.
+     *
+     * @param propertyValue   the property value
+     * @param propertyName    the property name
+     * @param changeConsumer  the change consumer
+     * @param availableValues the available values
+     * @param changeHandler   the change handler
+     */
     public AbstractEnumPropertyControl(@Nullable final E propertyValue, @NotNull final String propertyName,
                                        @NotNull final C changeConsumer, @NotNull final E[] availableValues,
                                        @NotNull final SixObjectConsumer<C, T, String, E, E, BiConsumer<T, E>> changeHandler) {

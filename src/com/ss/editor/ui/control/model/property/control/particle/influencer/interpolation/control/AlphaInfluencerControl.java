@@ -19,6 +19,13 @@ import tonegod.emitter.interpolation.Interpolation;
  */
 public class AlphaInfluencerControl extends AbstractInterpolationInfluencerControl<AlphaInfluencer> {
 
+    /**
+     * Instantiates a new Alpha influencer control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public AlphaInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final AlphaInfluencer influencer,
                                   @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
@@ -30,6 +37,12 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
         return Messages.PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION;
     }
 
+    /**
+     * Request to change.
+     *
+     * @param newValue the new value
+     * @param index    the index
+     */
     public void requestToChange(@NotNull final Float newValue, final int index) {
 
         final AlphaInfluencer influencer = getInfluencer();

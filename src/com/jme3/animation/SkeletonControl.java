@@ -182,23 +182,26 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
      * supported by GPU, it shall be enabled, if its not preferred, or not
      * supported by GPU, then it shall be disabled.
      *
-     * @see #isHardwareSkinningUsed()
+     * @param preferred the preferred
+     * @see #isHardwareSkinningUsed() #isHardwareSkinningUsed()
      */
     public void setHardwareSkinningPreferred(boolean preferred) {
         hwSkinningDesired = preferred;
     }
 
     /**
-     * @return True if hardware skinning is preferable to software skinning.
-     * Set to false by default.
+     * Is hardware skinning preferred boolean.
      *
-     * @see #setHardwareSkinningPreferred(boolean)
+     * @return True if hardware skinning is preferable to software skinning. Set to false by default.
+     * @see #setHardwareSkinningPreferred(boolean) #setHardwareSkinningPreferred(boolean)
      */
     public boolean isHardwareSkinningPreferred() {
         return hwSkinningDesired;
     }
 
     /**
+     * Is hardware skinning used boolean.
+     *
      * @return True is hardware skinning is activated and is currently used, false otherwise.
      */
     public boolean isHardwareSkinningUsed() {
@@ -327,6 +330,9 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
         wasMeshUpdated = false;
     }
 
+    /**
+     * Reset to bind.
+     */
     //only do this for software updates
     void resetToBind() {
         for (Geometry geometry : targets) {
@@ -484,7 +490,7 @@ public class SkeletonControl extends AbstractControl implements Cloneable, JmeCl
     /**
      * returns the skeleton of this control
      *
-     * @return
+     * @return skeleton
      */
     public Skeleton getSkeleton() {
         return skeleton;

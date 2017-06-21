@@ -157,6 +157,8 @@ public class MaterialUtils {
     }
 
     /**
+     * Is shader file boolean.
+     *
      * @param path the file path.
      * @return true if the file is shader.
      */
@@ -167,6 +169,8 @@ public class MaterialUtils {
     }
 
     /**
+     * Is texture file boolean.
+     *
      * @param path the file path.
      * @return true if the file is texture.
      */

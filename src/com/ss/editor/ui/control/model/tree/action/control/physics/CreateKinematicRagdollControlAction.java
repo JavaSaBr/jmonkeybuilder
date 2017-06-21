@@ -19,6 +19,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateKinematicRagdollControlAction extends AbstractCreateControlAction {
 
+    /**
+     * Instantiates a new Create kinematic ragdoll control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateKinematicRagdollControlAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                                @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

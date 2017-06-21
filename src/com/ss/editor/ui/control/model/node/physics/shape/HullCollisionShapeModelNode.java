@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class HullCollisionShapeModelNode extends CollisionShapeModelNode<HullCollisionShape> {
 
+    /**
+     * Instantiates a new Hull collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public HullCollisionShapeModelNode(@NotNull final HullCollisionShape element, final long objectId) {
         super(element, objectId);
     }

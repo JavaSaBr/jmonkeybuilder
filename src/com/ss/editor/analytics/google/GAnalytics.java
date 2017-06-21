@@ -75,6 +75,11 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private static final GAnalytics INSTANCE = new GAnalytics();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     @FromAnyThread
     public static GAnalytics getInstance() {
@@ -301,6 +306,9 @@ public class GAnalytics extends EditorThread {
     @NotNull
     private final AtomicInteger progressCount;
 
+    /**
+     * Instantiates a new G analytics.
+     */
     public GAnalytics() {
         setName("GAnalytics Thread");
         this.queue = LinkedListFactory.newLinkedList(Runnable.class);

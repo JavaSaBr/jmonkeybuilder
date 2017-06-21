@@ -62,6 +62,8 @@ import com.ss.rlib.util.dictionary.ObjectDictionary;
 /**
  * The base implementation of the {@link AppState} for the editor.
  *
+ * @param <T> the type parameter
+ * @param <M> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
@@ -277,6 +279,11 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     private boolean editingMode;
 
+    /**
+     * Instantiates a new Abstract scene editor app state.
+     *
+     * @param fileEditor the file editor
+     */
     public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
@@ -351,6 +358,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets light node.
+     *
      * @return the node for the placement of lights.
      */
     @NotNull
@@ -359,6 +368,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets audio node.
+     *
      * @return the node for the placement of audio nodes.
      */
     @NotNull
@@ -460,6 +471,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets grid size.
+     *
      * @return the grid size.
      */
     protected int getGridSize() {
@@ -533,6 +546,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Sets transform type.
+     *
      * @param transformType the current type of the transform.
      */
     @FromAnyThread
@@ -549,6 +564,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets transform type.
+     *
      * @return the current type of transformation.
      */
     @Nullable
@@ -599,6 +616,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets tool node.
+     *
      * @return the node for the placement of controls.
      */
     @NotNull
@@ -844,6 +863,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Update selected models.
+     *
+     * @param spatials the spatials
      */
     @FromAnyThread
     public void updateSelection(@NotNull final Array<Spatial> spatials) {
@@ -1043,6 +1064,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Update the showing selection.
+     *
+     * @param showSelection the show selection
      */
     @FromAnyThread
     public void updateShowSelection(final boolean showSelection) {
@@ -1070,6 +1093,12 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         }
     }
 
+    /**
+     * Gets editing input.
+     *
+     * @param mouseButton the mouse button
+     * @return the editing input
+     */
     @NotNull
     protected EditingInput getEditingInput(final MouseButton mouseButton) {
         switch (mouseButton) {
@@ -1197,6 +1226,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets model node.
+     *
      * @return the node for the placement of models.
      */
     @NotNull
@@ -1206,6 +1237,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Update the showing grid.
+     *
+     * @param showGrid the show grid
      */
     @FromAnyThread
     public void updateShowGrid(final boolean showGrid) {
@@ -1370,6 +1403,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Show the model in the scene.
+     *
+     * @param model the model
      */
     @FromAnyThread
     public void openModel(@NotNull final M model) {
@@ -1399,6 +1434,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets current model.
+     *
      * @return current display model.
      */
     @Nullable
@@ -1702,6 +1739,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets cursor node.
+     *
      * @return the cursor node.
      */
     @NotNull
@@ -1711,6 +1750,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets markers node.
+     *
      * @return the markers node.
      */
     @NotNull

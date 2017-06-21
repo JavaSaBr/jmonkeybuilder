@@ -31,6 +31,13 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
     @NotNull
     private final PhysicsCollisionObject collisionObject;
 
+    /**
+     * Instantiates a new Change collision shape operation.
+     *
+     * @param newShape        the new shape
+     * @param oldShape        the old shape
+     * @param collisionObject the collision object
+     */
     public ChangeCollisionShapeOperation(@NotNull final CollisionShape newShape, @NotNull final CollisionShape oldShape,
                                          @NotNull final PhysicsCollisionObject collisionObject) {
         this.newShape = newShape;

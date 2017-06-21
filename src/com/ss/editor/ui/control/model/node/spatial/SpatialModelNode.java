@@ -45,10 +45,17 @@ import com.ss.rlib.util.array.ArrayFactory;
 /**
  * The implementation of the {@link ModelNode} to represent a {@link Spatial} in an editor.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
+    /**
+     * Instantiates a new Spatial model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     protected SpatialModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
@@ -78,6 +85,12 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         return parent != null && parent.getUserData(SceneEditorControl.class.getName()) != Boolean.TRUE;
     }
 
+    /**
+     * Create creation menu menu.
+     *
+     * @param nodeTree the node tree
+     * @return the menu
+     */
     @Nullable
     protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
 
@@ -116,6 +129,12 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
         return menu;
     }
 
+    /**
+     * Create tool menu menu.
+     *
+     * @param nodeTree the node tree
+     * @return the menu
+     */
     @Nullable
     protected Menu createToolMenu(final @NotNull AbstractNodeTree<?> nodeTree) {
         return null;

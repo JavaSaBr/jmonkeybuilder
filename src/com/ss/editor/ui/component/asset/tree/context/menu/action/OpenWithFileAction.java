@@ -27,6 +27,11 @@ public class OpenWithFileAction extends Menu {
     @NotNull
     private final ResourceElement element;
 
+    /**
+     * Instantiates a new Open with file action.
+     *
+     * @param element the element
+     */
     public OpenWithFileAction(@NotNull final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_WITH_FILE);

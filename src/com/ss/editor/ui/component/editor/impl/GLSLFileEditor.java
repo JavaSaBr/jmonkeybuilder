@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
  */
 public class GLSLFileEditor extends CodeAreaFileEditor {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 

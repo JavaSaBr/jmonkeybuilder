@@ -17,6 +17,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PaintingComponentContainer extends ProcessingComponentContainer<Painting3DProvider, PaintingComponent> {
 
+    /**
+     * Instantiates a new Painting component container.
+     *
+     * @param changeConsumer     the change consumer
+     * @param painting3DProvider the painting 3 d provider
+     */
     public PaintingComponentContainer(@NotNull final ModelChangeConsumer changeConsumer,
                                       @NotNull final Painting3DProvider painting3DProvider) {
         super(changeConsumer, painting3DProvider, PaintingComponent.class);

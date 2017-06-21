@@ -15,6 +15,11 @@ import javafx.scene.control.SplitPane;
  */
 public class GlobalLeftToolSplitPane extends TabToolSplitPane<EditorConfig> {
 
+    /**
+     * Instantiates a new Global left tool split pane.
+     *
+     * @param scene the scene
+     */
     public GlobalLeftToolSplitPane(@NotNull final Scene scene) {
         super(scene, EditorConfig.getInstance());
     }

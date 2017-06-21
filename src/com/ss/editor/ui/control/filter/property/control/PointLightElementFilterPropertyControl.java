@@ -13,10 +13,18 @@ import javafx.scene.control.Label;
 /**
  * The implementation of the {@link AbstractElementFilterPropertyControl} to edit point light from a scene.
  *
+ * @param <D> the type parameter
  * @author JavaSaBr
  */
 public class PointLightElementFilterPropertyControl<D> extends AbstractElementFilterPropertyControl<D, PointLight> {
 
+    /**
+     * Instantiates a new Point light element filter property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public PointLightElementFilterPropertyControl(@Nullable final PointLight propertyValue,
                                                   @NotNull final String propertyName,
                                                   @NotNull final SceneChangeConsumer changeConsumer) {

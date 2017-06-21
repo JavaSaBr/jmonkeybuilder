@@ -22,6 +22,12 @@ import javafx.scene.image.Image;
  */
 public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Play settings action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public PlaySettingsAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final AnimationControlModelNode node) {
         super(nodeTree, node);
     }

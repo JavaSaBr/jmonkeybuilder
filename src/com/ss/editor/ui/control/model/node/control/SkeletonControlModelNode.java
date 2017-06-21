@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SkeletonControlModelNode extends ControlModelNode<SkeletonControl> {
 
+    /**
+     * Instantiates a new Skeleton control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public SkeletonControlModelNode(@NotNull final SkeletonControl element, final long objectId) {
         super(element, objectId);
     }

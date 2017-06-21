@@ -20,8 +20,14 @@ import java.util.Objects;
  */
 public abstract class AbstractEditorState implements EditorState, EditorToolConfig {
 
+    /**
+     * The constant serialVersionUID.
+     */
     public static final long serialVersionUID = 2;
 
+    /**
+     * The constant EDITOR_CONFIG.
+     */
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     /**
@@ -61,6 +67,9 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
      */
     protected volatile boolean toolCollapsed;
 
+    /**
+     * Instantiates a new Abstract editor state.
+     */
     public AbstractEditorState() {
         this.toolWidth = 250;
         this.toolCollapsed = false;
@@ -76,6 +85,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Gets change handler.
+     *
      * @return the change handler.
      */
     @Nullable
@@ -114,6 +125,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Sets camera h rotation.
+     *
      * @param cameraHRotation the new horizontal rotation.
      */
     public void setCameraHRotation(final float cameraHRotation) {
@@ -126,6 +139,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Gets camera h rotation.
+     *
      * @return the horizontal camera rotation.
      */
     public float getCameraHRotation() {
@@ -133,6 +148,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Sets camera location.
+     *
      * @param cameraLocation the new camera position.
      */
     public void setCameraLocation(@NotNull final Vector3f cameraLocation) {
@@ -145,6 +162,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Gets camera location.
+     *
      * @return the camera location.
      */
     @NotNull
@@ -154,6 +173,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Sets camera t distance.
+     *
      * @param cameraTDistance the new camera zoom.
      */
     public void setCameraTDistance(final float cameraTDistance) {
@@ -166,6 +187,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Gets camera t distance.
+     *
      * @return the camera zoom.
      */
     public float getCameraTDistance() {
@@ -173,6 +196,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Sets camera v rotation.
+     *
      * @param cameraVRotation the new vertical rotation.
      */
     public void setCameraVRotation(final float cameraVRotation) {
@@ -185,6 +210,8 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Gets camera v rotation.
+     *
      * @return the vertical camera rotation.
      */
     public float getCameraVRotation() {

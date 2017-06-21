@@ -11,10 +11,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link AbstractElementFilterPropertyControl} to edit spatial from a scene.
  *
+ * @param <D> the type parameter
  * @author JavaSaBr
  */
 public class SpatialElementModelPropertyControl<D> extends AbstractElementModelPropertyControl<D, Spatial> {
 
+    /**
+     * Instantiates a new Spatial element model property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     SpatialElementModelPropertyControl(@Nullable final Spatial propertyValue, @NotNull final String propertyName,
                                        @NotNull final ModelChangeConsumer changeConsumer) {
         super(Spatial.class, propertyValue, propertyName, changeConsumer);

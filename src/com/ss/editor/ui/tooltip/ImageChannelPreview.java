@@ -68,6 +68,9 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @Nullable
     private ImageView alphaView;
 
+    /**
+     * Instantiates a new Image channel preview.
+     */
     public ImageChannelPreview() {
         redImage = new WritableImage(120, 120);
         greenImage = new WritableImage(120, 120);
@@ -179,6 +182,8 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
 
     /**
      * Show the file.
+     *
+     * @param file the file
      */
     @FXThread
     public void showImage(@Nullable final Path file) {

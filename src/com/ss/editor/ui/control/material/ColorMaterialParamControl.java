@@ -41,6 +41,13 @@ public class ColorMaterialParamControl extends MaterialParamControl {
     @Nullable
     private ColorPicker colorPicker;
 
+    /**
+     * Instantiates a new Color material param control.
+     *
+     * @param changeHandler the change handler
+     * @param material      the material
+     * @param parameterName the parameter name
+     */
     public ColorMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
                                      @NotNull final Material material,
                                      @NotNull final String parameterName) {

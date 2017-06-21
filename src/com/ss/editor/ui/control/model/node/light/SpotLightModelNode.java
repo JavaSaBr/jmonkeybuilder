@@ -17,6 +17,12 @@ import com.ss.rlib.util.StringUtils;
  */
 public class SpotLightModelNode extends LightModelNode<SpotLight> {
 
+    /**
+     * Instantiates a new Spot light model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public SpotLightModelNode(@NotNull final SpotLight element, final long objectId) {
         super(element, objectId);
     }

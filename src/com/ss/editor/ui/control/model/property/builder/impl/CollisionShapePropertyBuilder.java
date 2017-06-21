@@ -25,6 +25,11 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
     @NotNull
     private static final PropertyBuilder INSTANCE = new CollisionShapePropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

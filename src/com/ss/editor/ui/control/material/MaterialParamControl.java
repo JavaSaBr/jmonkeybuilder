@@ -22,14 +22,32 @@ import java.util.function.Consumer;
  */
 public class MaterialParamControl extends HBox {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MaterialParamControl.class);
 
+    /**
+     * The constant LABEL_PERCENT_WIDTH.
+     */
     public static final double LABEL_PERCENT_WIDTH = 0.4;
+    /**
+     * The constant LABEL_PERCENT_WIDTH2.
+     */
     public static final double LABEL_PERCENT_WIDTH2 = 0.6;
+    /**
+     * The constant CONTROL_PERCENT_WIDTH.
+     */
     public static final double CONTROL_PERCENT_WIDTH = 0.6;
+    /**
+     * The constant CONTROL_PERCENT_WIDTH2.
+     */
     public static final double CONTROL_PERCENT_WIDTH2 = 0.4;
 
+    /**
+     * The constant EDITOR_CONFIG.
+     */
     @NotNull
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
@@ -61,6 +79,13 @@ public class MaterialParamControl extends HBox {
      */
     private boolean ignoreListeners;
 
+    /**
+     * Instantiates a new Material param control.
+     *
+     * @param changeHandler the change handler
+     * @param material      the material
+     * @param parameterName the parameter name
+     */
     protected MaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler, @NotNull final Material material,
                          @NotNull final String parameterName) {
         this.changeHandler = changeHandler;
@@ -79,6 +104,8 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
+     * Execute.
+     *
      * @param operation the new operation.
      */
     @FromAnyThread
@@ -87,6 +114,8 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
+     * Is ignore listeners boolean.
+     *
      * @return true if the listeners is ignored.
      */
     public boolean isIgnoreListeners() {
@@ -94,6 +123,8 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
+     * Sets ignore listeners.
+     *
      * @param ignoreListeners true if the listeners is ignored.
      */
     public void setIgnoreListeners(final boolean ignoreListeners) {
@@ -114,15 +145,25 @@ public class MaterialParamControl extends HBox {
         FXUtils.addToPane(paramNameLabel, this);
     }
 
+    /**
+     * Bind param name label.
+     */
     protected void bindParamNameLabel() {
         paramNameLabel.prefWidthProperty().bind(widthProperty().multiply(getLabelPercentWidth()));
     }
 
+    /**
+     * Gets label percent width.
+     *
+     * @return the label percent width
+     */
     protected double getLabelPercentWidth() {
         return LABEL_PERCENT_WIDTH;
     }
 
     /**
+     * Gets param name label.
+     *
      * @return the label with parameter name.
      */
     protected Label getParamNameLabel() {
@@ -136,6 +177,8 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
+     * Gets parameter name.
+     *
      * @return the parameter name.
      */
     @NotNull
@@ -144,6 +187,8 @@ public class MaterialParamControl extends HBox {
     }
 
     /**
+     * Gets material.
+     *
      * @return the current material.
      */
     @NotNull

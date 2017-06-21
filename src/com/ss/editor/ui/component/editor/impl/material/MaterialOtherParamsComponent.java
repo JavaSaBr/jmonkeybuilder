@@ -22,6 +22,11 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public class MaterialOtherParamsComponent extends AbstractMaterialPropertiesComponent {
 
+    /**
+     * Instantiates a new Material other params component.
+     *
+     * @param changeHandler the change handler
+     */
     public MaterialOtherParamsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         super(changeHandler);
     }

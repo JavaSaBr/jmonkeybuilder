@@ -21,6 +21,12 @@ import javafx.scene.image.Image;
  */
 public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create sky action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateSkyAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

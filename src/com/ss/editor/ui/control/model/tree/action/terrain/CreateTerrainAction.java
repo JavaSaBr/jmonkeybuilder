@@ -21,6 +21,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create terrain action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateTerrainAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

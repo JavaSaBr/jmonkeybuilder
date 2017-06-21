@@ -52,10 +52,17 @@ import java.util.List;
 /**
  * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the editor.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
+    /**
+     * Instantiates a new Node model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public NodeModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
@@ -127,6 +134,11 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         return result;
     }
 
+    /**
+     * Gets spatials.
+     *
+     * @return the spatials
+     */
     @NotNull
     protected List<Spatial> getSpatials() {
         final Node element = getElement();

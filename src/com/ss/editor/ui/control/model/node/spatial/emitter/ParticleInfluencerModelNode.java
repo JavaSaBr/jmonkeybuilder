@@ -20,6 +20,12 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  */
 public class ParticleInfluencerModelNode extends ModelNode<ParticleInfluencer> {
 
+    /**
+     * Instantiates a new Particle influencer model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ParticleInfluencerModelNode(@NotNull final ParticleInfluencer element, final long objectId) {
         super(element, objectId);
     }

@@ -26,6 +26,12 @@ public class AddControlOperation extends AbstractEditorOperation<ModelChangeCons
     @NotNull
     private final Spatial spatial;
 
+    /**
+     * Instantiates a new Add control operation.
+     *
+     * @param newControl the new control
+     * @param spatial    the spatial
+     */
     public AddControlOperation(@NotNull final Control newControl, @NotNull final Spatial spatial) {
         this.newControl = newControl;
         this.spatial = spatial;

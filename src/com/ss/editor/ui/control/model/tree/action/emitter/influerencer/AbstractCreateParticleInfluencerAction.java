@@ -25,6 +25,12 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  */
 public abstract class AbstractCreateParticleInfluencerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create particle influencer action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AbstractCreateParticleInfluencerAction(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -50,6 +56,11 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
         changeConsumer.execute(new AddParticleInfluencerOperation(influencer, emitterNode));
     }
 
+    /**
+     * Create influencer particle influencer.
+     *
+     * @return the particle influencer
+     */
     @NotNull
     protected abstract ParticleInfluencer createInfluencer();
 }

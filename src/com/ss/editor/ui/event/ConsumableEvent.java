@@ -8,6 +8,8 @@ package com.ss.editor.ui.event;
 public interface ConsumableEvent {
 
     /**
+     * Is consumed boolean.
+     *
      * @return true if this event was consumed.
      */
     boolean isConsumed();

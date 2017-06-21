@@ -21,6 +21,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateSphereCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
 
+    /**
+     * Instantiates a new Create sphere collision shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateSphereCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                             @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

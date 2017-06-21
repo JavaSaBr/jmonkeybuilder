@@ -7,6 +7,11 @@ package com.ss.editor.config;
  */
 public class CommandLineConfig {
 
+    /**
+     * Args.
+     *
+     * @param args the args
+     */
     public static void args(final String[] args) {
         for (final String arg : args) {
         }

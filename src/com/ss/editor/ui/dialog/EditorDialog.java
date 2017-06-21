@@ -42,9 +42,15 @@ import java.time.LocalTime;
  */
 public class EditorDialog extends AbstractPopupDialog {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
@@ -85,6 +91,9 @@ public class EditorDialog extends AbstractPopupDialog {
     @Nullable
     private Node focusOwner;
 
+    /**
+     * Instantiates a new Editor dialog.
+     */
     public EditorDialog() {
         this.showedTime = LocalTime.now();
     }
@@ -110,6 +119,11 @@ public class EditorDialog extends AbstractPopupDialog {
         addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
 
+    /**
+     * Process key.
+     *
+     * @param event the event
+     */
     protected void processKey(@NotNull final KeyEvent event) {
         event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
@@ -137,6 +151,11 @@ public class EditorDialog extends AbstractPopupDialog {
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
     }
 
+    /**
+     * Gets dialog id.
+     *
+     * @return the dialog id
+     */
     @NotNull
     protected String getDialogId() {
         return getClass().getSimpleName();
@@ -169,6 +188,8 @@ public class EditorDialog extends AbstractPopupDialog {
     }
 
     /**
+     * Is hide on lost focus boolean.
+     *
      * @return true if dialog will hide after losing a focus.
      */
     protected boolean isHideOnLostFocus() {
@@ -177,6 +198,8 @@ public class EditorDialog extends AbstractPopupDialog {
 
     /**
      * Create the header of this dialog.
+     *
+     * @param root the root
      */
     protected void createHeader(@NotNull final VBox root) {
 
@@ -209,17 +232,23 @@ public class EditorDialog extends AbstractPopupDialog {
 
     /**
      * Create the content of this dialog.
+     *
+     * @param root the root
      */
     protected void createContent(@NotNull final VBox root) {
     }
 
     /**
      * Create the content of this dialog.
+     *
+     * @param root the root
      */
     protected void createContent(@NotNull final GridPane root) {
     }
 
     /**
+     * Is grid structure boolean.
+     *
      * @return true if this dialog has grid structure.
      */
     protected boolean isGridStructure() {
@@ -228,11 +257,15 @@ public class EditorDialog extends AbstractPopupDialog {
 
     /**
      * Create the actions of this dialog.
+     *
+     * @param root the root
      */
     protected void createActions(@NotNull final VBox root) {
     }
 
     /**
+     * Gets title text.
+     *
      * @return the title of this dialog.
      */
     @NotNull

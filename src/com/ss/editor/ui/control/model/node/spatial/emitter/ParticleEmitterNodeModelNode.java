@@ -32,6 +32,12 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class ParticleEmitterNodeModelNode extends NodeModelNode<ParticleEmitterNode> {
 
+    /**
+     * Instantiates a new Particle emitter node model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ParticleEmitterNodeModelNode(@NotNull final ParticleEmitterNode element, final long objectId) {
         super(element, objectId);
     }

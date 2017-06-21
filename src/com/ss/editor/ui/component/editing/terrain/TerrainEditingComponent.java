@@ -53,9 +53,18 @@ import java.util.function.Function;
 public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer>
         implements EditingComponent {
 
+    /**
+     * The constant LABEL_PERCENT.
+     */
     public static final double LABEL_PERCENT = 1D - AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
+    /**
+     * The constant FIELD_PERCENT.
+     */
     public static final double FIELD_PERCENT = AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
 
+    /**
+     * The constant TERRAIN_PARAM.
+     */
     public static final String TERRAIN_PARAM = "terrainParam";
 
     @NotNull
@@ -322,6 +331,9 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     private boolean ignoreListeners;
 
+    /**
+     * Instantiates a new Terrain editing component.
+     */
     public TerrainEditingComponent() {
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
         this.buttonToSettings = DictionaryFactory.newObjectDictionary();
@@ -810,6 +822,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     }
 
     /**
+     * Gets paint tool control.
+     *
      * @return the control to paint textures.
      */
     @NotNull
@@ -969,6 +983,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     }
 
     /**
+     * Gets tri planar check box.
+     *
      * @return the box to use tri-planar.
      */
     @NotNull
@@ -977,6 +993,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     }
 
     /**
+     * Gets shininess field.
+     *
      * @return the shininess field.
      */
     @NotNull

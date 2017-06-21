@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 /**
  * The implementation of a dialog to select an object from a model.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
@@ -59,6 +60,13 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     @Nullable
     private T selected;
 
+    /**
+     * Instantiates a new Node selector dialog.
+     *
+     * @param model   the model
+     * @param type    the type
+     * @param handler the handler
+     */
     public NodeSelectorDialog(@NotNull final Spatial model, @NotNull final Class<T> type,
                               @NotNull final Consumer<T> handler) {
         this.model = model;
@@ -73,6 +81,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the model tree component.
      */
     @NotNull
@@ -104,6 +114,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets model.
+     *
      * @return the loaded model.
      */
     @NotNull
@@ -112,6 +124,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets type.
+     *
      * @return the type of selectable objects.
      */
     @NotNull

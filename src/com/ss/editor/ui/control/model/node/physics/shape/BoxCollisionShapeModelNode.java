@@ -11,6 +11,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BoxCollisionShapeModelNode extends CollisionShapeModelNode<BoxCollisionShape> {
 
+    /**
+     * Instantiates a new Box collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public BoxCollisionShapeModelNode(@NotNull final BoxCollisionShape element, final long objectId) {
         super(element, objectId);
     }

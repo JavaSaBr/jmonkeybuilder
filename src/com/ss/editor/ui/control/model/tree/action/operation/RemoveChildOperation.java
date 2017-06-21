@@ -31,6 +31,12 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
      */
     private final int childIndex;
 
+    /**
+     * Instantiates a new Remove child operation.
+     *
+     * @param child  the child
+     * @param parent the parent
+     */
     public RemoveChildOperation(@NotNull final Spatial child, @NotNull final Node parent) {
         this.child = child;
         this.parent = parent;

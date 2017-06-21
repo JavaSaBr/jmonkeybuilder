@@ -19,6 +19,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class VehicleControlModelNode extends PhysicsObjectModelNode<VehicleControl> {
 
+    /**
+     * Instantiates a new Vehicle control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public VehicleControlModelNode(@NotNull final VehicleControl element, final long objectId) {
         super(element, objectId);
     }

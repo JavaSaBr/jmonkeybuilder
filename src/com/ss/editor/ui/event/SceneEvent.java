@@ -19,6 +19,9 @@ public class SceneEvent extends Event {
 
     private static final long serialVersionUID = 6827900349094865635L;
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE = new EventType<>(SceneEvent.class.getSimpleName());
 
@@ -28,10 +31,21 @@ public class SceneEvent extends Event {
     @Nullable
     private ObjectDictionary<Object, Object> values;
 
+    /**
+     * Instantiates a new Scene event.
+     *
+     * @param source    the source
+     * @param eventType the event type
+     */
     public SceneEvent(@Nullable final Object source, @NotNull final EventType<? extends Event> eventType) {
         super(source, null, eventType);
     }
 
+    /**
+     * Instantiates a new Scene event.
+     *
+     * @param eventType the event type
+     */
     public SceneEvent(@NotNull final EventType<? extends Event> eventType) {
         super(eventType);
     }
@@ -50,6 +64,7 @@ public class SceneEvent extends Event {
     /**
      * Get a value by a key.
      *
+     * @param <T> the type parameter
      * @param key the key.
      * @return the value or null.
      */

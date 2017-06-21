@@ -45,6 +45,11 @@ public class JFXApplication extends Application {
     @Nullable
     private static JFXApplication instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     @FromAnyThread
     public static JFXApplication getInstance() {
@@ -63,6 +68,12 @@ public class JFXApplication extends Application {
         return instance == null ? null : instance.stage;
     }
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     * @throws IOException the io exception
+     */
     public static void main(final String[] args) throws IOException {
 
         // fix of the fonts render
@@ -97,6 +108,9 @@ public class JFXApplication extends Application {
         new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
     }
 
+    /**
+     * Start.
+     */
     @FromAnyThread
     public static void start() {
         launch();
@@ -178,6 +192,9 @@ public class JFXApplication extends Application {
         buildScene();
     }
 
+    /**
+     * On exit.
+     */
     @FXThread
     public void onExit() {
 

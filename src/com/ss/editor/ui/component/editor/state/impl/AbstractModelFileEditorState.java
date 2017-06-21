@@ -9,6 +9,9 @@ import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
  */
 public abstract class AbstractModelFileEditorState extends AbstractEditorState {
 
+    /**
+     * The constant serialVersionUID.
+     */
     public static final long serialVersionUID = 2;
 
     /**
@@ -31,12 +34,17 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
      */
     private volatile boolean showStatistics;
 
+    /**
+     * Instantiates a new Abstract model file editor state.
+     */
     public AbstractModelFileEditorState() {
         this.enableGrid = true;
         this.enableSelection = true;
     }
 
     /**
+     * Sets enable grid.
+     *
      * @param enableGrid true is the grid is enabled.
      */
     public void setEnableGrid(final boolean enableGrid) {
@@ -49,6 +57,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Is enable grid boolean.
+     *
      * @return true is the grid is enabled.
      */
     public boolean isEnableGrid() {
@@ -56,6 +66,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets enable selection.
+     *
      * @param enableSelection true if the selection is enabled.
      */
     public void setEnableSelection(final boolean enableSelection) {
@@ -68,6 +80,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Is enable selection boolean.
+     *
      * @return true if the selection is enabled.
      */
     public boolean isEnableSelection() {
@@ -75,6 +89,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Gets transformation type.
+     *
      * @return the transformation type.
      */
     public int getTransformationType() {
@@ -82,6 +98,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets transformation type.
+     *
      * @param transformationType the transformation type.
      */
     public void setTransformationType(final int transformationType) {
@@ -94,6 +112,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets show statistics.
+     *
      * @param showStatistics true if the statistics is need to show.
      */
     public void setShowStatistics(final boolean showStatistics) {
@@ -106,6 +126,8 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Is show statistics boolean.
+     *
      * @return true if the statistics is need to show.
      */
     public boolean isShowStatistics() {

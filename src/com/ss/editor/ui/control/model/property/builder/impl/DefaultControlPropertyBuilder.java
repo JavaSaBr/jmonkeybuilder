@@ -38,6 +38,11 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
     private static final MotionEvent.Direction[] DIRECTIONS = MotionEvent.Direction.values();
     private static final LoopMode[] LOOP_MODES = LoopMode.values();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

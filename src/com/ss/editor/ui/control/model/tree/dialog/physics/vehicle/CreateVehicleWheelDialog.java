@@ -113,6 +113,12 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox frontBox;
 
+    /**
+     * Instantiates a new Create vehicle wheel dialog.
+     *
+     * @param nodeTree the node tree
+     * @param control  the control
+     */
     public CreateVehicleWheelDialog(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final VehicleControl control) {
         this.nodeTree = nodeTree;
         this.control = control;
@@ -253,6 +259,8 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the node tree.
      */
     @NotNull

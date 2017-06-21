@@ -14,7 +14,7 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} for changing a particle mesh in the {@link
- * ParticleGeometry}.
+ * ParticleGeometry}*.
  *
  * @author JavaSaBr.
  */
@@ -32,6 +32,12 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
     @NotNull
     private volatile ParticleDataMeshInfo prevInfo;
 
+    /**
+     * Instantiates a new Change particle mesh operation.
+     *
+     * @param newInfo  the new info
+     * @param geometry the geometry
+     */
     public ChangeParticleMeshOperation(@NotNull final ParticleDataMeshInfo newInfo, @NotNull final ParticleGeometry geometry) {
         this.prevInfo = newInfo;
         this.geometry = geometry;

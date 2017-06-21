@@ -25,6 +25,12 @@ import com.ss.rlib.util.ClassUtils;
  */
 public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Generate lo d action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public GenerateLoDAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

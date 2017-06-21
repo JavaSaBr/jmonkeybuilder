@@ -160,6 +160,11 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
     private int fps;
     private int prevFps;
 
+    /**
+     * Instantiates a new Stats app state.
+     *
+     * @param parent the parent
+     */
     public StatsAppState(@NotNull final Pane parent) {
         this.parent = parent;
         this.statsContainer = new GridPane();

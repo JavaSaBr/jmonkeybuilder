@@ -24,17 +24,47 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT.
+     */
     protected static final double DEFAULT_LABEL_W_PERCENT = 0.4;
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT.
+     */
     protected static final double DEFAULT_FIELD_W_PERCENT = 0.6;
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT2.
+     */
     protected static final double DEFAULT_LABEL_W_PERCENT2 = 0.5;
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT2.
+     */
     protected static final double DEFAULT_FIELD_W_PERCENT2 = 0.5;
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT3.
+     */
     protected static final double DEFAULT_LABEL_W_PERCENT3 = 0.6;
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT3.
+     */
     protected static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
 
+    /**
+     * The constant OK_BUTTON_OFFSET.
+     */
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+    /**
+     * The constant CANCEL_BUTTON_OFFSET.
+     */
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
+    /**
+     * The constant CONTAINER_OFFSET.
+     */
     protected static final Insets CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -49,11 +79,16 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      */
     private boolean ready;
 
+    /**
+     * Instantiates a new Abstract simple editor dialog.
+     */
     public AbstractSimpleEditorDialog() {
         ready = true;
     }
 
     /**
+     * Is ready boolean.
+     *
      * @return true if this dialog is ready.
      */
     protected boolean isReady() {
@@ -77,6 +112,8 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     /**
+     * Gets ok button.
+     *
      * @return the ok button.
      */
     @NotNull
@@ -116,11 +153,21 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
+    /**
+     * Gets button cancel label.
+     *
+     * @return the button cancel label
+     */
     @NotNull
     protected String getButtonCancelLabel() {
         return Messages.SIMPLE_DIALOG_BUTTON_CANCEL;
     }
 
+    /**
+     * Gets button ok label.
+     *
+     * @return the button ok label
+     */
     @NotNull
     protected String getButtonOkLabel() {
         return Messages.SIMPLE_DIALOG_BUTTON_OK;

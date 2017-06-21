@@ -19,6 +19,9 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The default implementation of the property control.
  *
+ * @param <C> the type parameter
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D, T> extends AbstractPropertyControl<C, D, T> {
@@ -33,6 +36,14 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
      */
     private Function<T, String> toStringFunction;
 
+    /**
+     * Instantiates a new Abstract default property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractDefaultPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                           @NotNull final C changeConsumer,
                                           @NotNull final SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler) {
@@ -40,6 +51,8 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
     }
 
     /**
+     * Sets to string function.
+     *
      * @param toStringFunction the string function.
      */
     public void setToStringFunction(final Function<T, String> toStringFunction) {

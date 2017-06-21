@@ -23,6 +23,8 @@ import com.ss.rlib.util.StringUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit int array values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, T>
@@ -33,6 +35,14 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
      */
     private TextField valueField;
 
+    /**
+     * Instantiates a new Abstract int array property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractIntArrayPropertyControl(@Nullable final int[] propertyValue, @NotNull final String propertyName,
                                            @NotNull final C changeConsumer,
                                            @NotNull final SixObjectConsumer<C, T, String, int[], int[], BiConsumer<T, int[]>> changeHandler) {

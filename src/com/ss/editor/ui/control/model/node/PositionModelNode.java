@@ -20,6 +20,12 @@ public class PositionModelNode extends ModelNode<Vector3f> {
     @Nullable
     private String name;
 
+    /**
+     * Instantiates a new Position model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public PositionModelNode(@NotNull final Vector3f element, final long objectId) {
         super(element, objectId);
     }

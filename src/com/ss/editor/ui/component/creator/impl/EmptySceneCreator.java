@@ -21,6 +21,9 @@ import java.nio.file.Path;
  */
 public class EmptySceneCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 

@@ -16,6 +16,8 @@ import rlib.util.array.ArrayFactory;
 /**
  * The class container of processing components.
  *
+ * @param <P> the type parameter
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C extends ProcessingComponent>
@@ -56,6 +58,13 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
      */
     protected boolean showed;
 
+    /**
+     * Instantiates a new Processing component container.
+     *
+     * @param changeConsumer the change consumer
+     * @param provider       the provider
+     * @param componentType  the component type
+     */
     public ProcessingComponentContainer(@NotNull final ModelChangeConsumer changeConsumer, @NotNull final P provider,
                                         @NotNull final Class<C> componentType) {
         this.changeConsumer = changeConsumer;
@@ -81,6 +90,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     }
 
     /**
+     * Gets container.
+     *
      * @return the container of processing components.
      */
     @NotNull
@@ -89,6 +100,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     }
 
     /**
+     * Gets components.
+     *
      * @return the list of processing components.
      */
     @NotNull
@@ -155,6 +168,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     }
 
     /**
+     * Gets provider.
+     *
      * @return the provider.
      */
     @NotNull
@@ -163,6 +178,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     }
 
     /**
+     * Gets change consumer.
+     *
      * @return the change consumer.
      */
     @NotNull
@@ -171,6 +188,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     }
 
     /**
+     * Is showed boolean.
+     *
      * @return true if this component is showed.
      */
     protected boolean isShowed() {
@@ -178,6 +197,8 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
     }
 
     /**
+     * Sets showed.
+     *
      * @param showed true if this component is showed.
      */
     protected void setShowed(final boolean showed) {
@@ -186,6 +207,9 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
 
     /**
      * Notify about changed property.
+     *
+     * @param object       the object
+     * @param propertyName the property name
      */
     @FXThread
     public void notifyChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {

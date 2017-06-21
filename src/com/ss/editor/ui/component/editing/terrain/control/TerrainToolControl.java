@@ -40,6 +40,11 @@ public class TerrainToolControl extends AbstractEditingControl {
      */
     private float brushPower;
 
+    /**
+     * Instantiates a new Terrain tool control.
+     *
+     * @param component the component
+     */
     public TerrainToolControl(@NotNull final TerrainEditingComponent component) {
         this.component = component;
         this.brush = new Geometry("Brush", new Sphere(8, 8, 1));
@@ -47,6 +52,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Gets brush color.
+     *
      * @return the brush color.
      */
     @NotNull
@@ -73,6 +80,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Gets change consumer.
+     *
      * @return the change consumer.
      */
     @NotNull
@@ -81,6 +90,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Gets brush.
+     *
      * @return the brush geometry.
      */
     @NotNull
@@ -89,6 +100,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Sets brush size.
+     *
      * @param brushSize the brush size.
      */
     public void setBrushSize(final float brushSize) {
@@ -97,6 +110,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Gets brush size.
+     *
      * @return the brush size.
      */
     public float getBrushSize() {
@@ -104,6 +119,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Sets brush power.
+     *
      * @param brushPower the brush power.
      */
     public void setBrushPower(final float brushPower) {
@@ -111,6 +128,8 @@ public class TerrainToolControl extends AbstractEditingControl {
     }
 
     /**
+     * Gets brush power.
+     *
      * @return the brush power.
      */
     public float getBrushPower() {

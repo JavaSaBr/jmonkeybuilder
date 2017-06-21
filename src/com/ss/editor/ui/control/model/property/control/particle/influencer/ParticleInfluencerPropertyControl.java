@@ -16,10 +16,20 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 /**
  * The base implementation of the property control for the {@link ModelFileEditor}.
  *
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> extends AbstractPropertyControl<ModelChangeConsumer, D, T> {
 
+    /**
+     * New change handler six object consumer.
+     *
+     * @param <D>    the type parameter
+     * @param <T>    the type parameter
+     * @param parent the parent
+     * @return the six object consumer
+     */
     @NotNull
     public static <D extends ParticleInfluencer, T> SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler(@NotNull final Object parent) {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
@@ -32,6 +42,14 @@ public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> 
         };
     }
 
+    /**
+     * Instantiates a new Particle influencer property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param parent         the parent
+     */
     public ParticleInfluencerPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                              @NotNull final ModelChangeConsumer changeConsumer, @NotNull final Object parent) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler(parent));

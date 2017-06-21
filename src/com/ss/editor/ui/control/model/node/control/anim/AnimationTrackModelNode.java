@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 /**
  * The implementation of node to show {@link Track}.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode<T> {
@@ -26,11 +27,19 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     @Nullable
     private String cachedName;
 
+    /**
+     * Instantiates a new Animation track model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationTrackModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
 
     /**
+     * Sets control.
+     *
      * @param control the animation control.
      */
     public void setControl(@Nullable final AnimControl control) {
@@ -38,6 +47,11 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
         this.cachedName = computeName();
     }
 
+    /**
+     * Compute name string.
+     *
+     * @return the string
+     */
     @NotNull
     protected abstract String computeName();
 
@@ -48,6 +62,8 @@ public abstract class AnimationTrackModelNode<T extends Track> extends ModelNode
     }
 
     /**
+     * Gets control.
+     *
      * @return the animation control.
      */
     @Nullable

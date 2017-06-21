@@ -20,6 +20,12 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
+    /**
+     * Instantiates a new Create quad shape emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateQuadShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

@@ -11,10 +11,18 @@ import java.util.function.Consumer;
 /**
  * The implementation of the Node Selector dialog to select a light.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class LightSelectorDialog<T extends Light> extends NodeSelectorDialog<T> {
 
+    /**
+     * Instantiates a new Light selector dialog.
+     *
+     * @param model   the model
+     * @param type    the type
+     * @param handler the handler
+     */
     public LightSelectorDialog(@NotNull final Spatial model, @NotNull final Class<T> type, @NotNull final Consumer<T> handler) {
         super(model, type, handler);
     }

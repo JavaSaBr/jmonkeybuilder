@@ -15,6 +15,9 @@ import java.nio.file.Path;
  */
 public class RenamedFileEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
@@ -27,11 +30,16 @@ public class RenamedFileEvent extends SceneEvent {
     private static final String PREV_FILE = "prev_file";
     private static final String NEW_FILE = "new_file";
 
+    /**
+     * Instantiates a new Renamed file event.
+     */
     public RenamedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
+     * Gets new file.
+     *
      * @return the new file.
      */
     @NotNull
@@ -40,6 +48,8 @@ public class RenamedFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets new file.
+     *
      * @param file the new file.
      */
     public void setNewFile(@NotNull final Path file) {
@@ -47,6 +57,8 @@ public class RenamedFileEvent extends SceneEvent {
     }
 
     /**
+     * Gets prev file.
+     *
      * @return the previous file.
      */
     @NotNull
@@ -55,6 +67,8 @@ public class RenamedFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets prev file.
+     *
      * @param file the previous file.
      */
     public void setPrevFile(@NotNull final Path file) {

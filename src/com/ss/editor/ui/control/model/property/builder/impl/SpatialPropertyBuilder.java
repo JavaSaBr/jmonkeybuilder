@@ -39,6 +39,11 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
     private static final PropertyBuilder INSTANCE = new SpatialPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }

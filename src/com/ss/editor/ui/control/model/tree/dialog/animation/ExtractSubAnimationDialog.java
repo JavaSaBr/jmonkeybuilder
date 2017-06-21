@@ -68,6 +68,12 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private IntegerTextField endFrameField;
 
+    /**
+     * Instantiates a new Extract sub animation dialog.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public ExtractSubAnimationDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                      @NotNull final AnimationModelNode node) {
         this.nodeTree = nodeTree;
@@ -90,6 +96,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the node tree component.
      */
     @NotNull
@@ -98,6 +106,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node.
+     *
      * @return the animation node.
      */
     @NotNull

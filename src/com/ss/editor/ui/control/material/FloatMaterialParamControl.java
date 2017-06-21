@@ -27,6 +27,13 @@ public class FloatMaterialParamControl extends MaterialParamControl {
     @Nullable
     private FloatTextField floatField;
 
+    /**
+     * Instantiates a new Float material param control.
+     *
+     * @param changeHandler the change handler
+     * @param material      the material
+     * @param parameterName the parameter name
+     */
     public FloatMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
                                      @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);

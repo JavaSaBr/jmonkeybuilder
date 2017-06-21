@@ -29,6 +29,11 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
     @NotNull
     private static final EditableControlPropertyBuilder INSTANCE = new EditableControlPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static EditableControlPropertyBuilder getInstance() {
         return INSTANCE;
@@ -155,6 +160,14 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
         }
     }
 
+    /**
+     * Add control.
+     *
+     * @param <T>             the type parameter
+     * @param container       the container
+     * @param property        the property
+     * @param propertyControl the property control
+     */
     protected <T> void addControl(final @NotNull VBox container, @NotNull final EditableProperty<T, ?> property,
                                   @NotNull final AbstractPropertyControl<ModelChangeConsumer, EditableProperty<T, ?>, T> propertyControl) {
 

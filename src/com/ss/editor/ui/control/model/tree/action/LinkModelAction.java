@@ -36,7 +36,7 @@ import java.util.function.Predicate;
 /**
  * The implementation of the {@link AbstractNodeAction} for loading the {@link Spatial} to the editor.
  *
- * @author vp-byte
+ * @author vp -byte
  */
 public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
@@ -50,6 +50,12 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
+    /**
+     * Instantiates a new Link model action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public LinkModelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -74,6 +80,8 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
     /**
      * The process of opening file.
+     *
+     * @param file the file
      */
     protected void processOpen(@NotNull final Path file) {
 

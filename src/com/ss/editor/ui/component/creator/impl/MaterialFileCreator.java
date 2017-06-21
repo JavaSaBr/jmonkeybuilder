@@ -32,6 +32,9 @@ import java.nio.file.Path;
  */
 public class MaterialFileCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();

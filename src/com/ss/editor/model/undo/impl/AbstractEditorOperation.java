@@ -15,19 +15,32 @@ import com.ss.rlib.logging.LoggerManager;
 /**
  * The base implementation of the {@link EditorOperation} to support a generic type of an editor.
  *
+ * @param <E> the type parameter
  * @author JavaSabr
  */
 public abstract class AbstractEditorOperation<E> implements EditorOperation {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorOperation.class);
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The constant EDITOR.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
+    /**
+     * Instantiates a new Abstract editor operation.
+     */
     public AbstractEditorOperation() {
     }
 

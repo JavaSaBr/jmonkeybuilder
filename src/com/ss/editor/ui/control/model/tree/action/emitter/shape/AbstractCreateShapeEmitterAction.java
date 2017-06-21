@@ -25,6 +25,12 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create shape emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AbstractCreateShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -49,6 +55,11 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
         changeConsumer.execute(new ChangeEmitterShapeOperation(shape, element));
     }
 
+    /**
+     * Create mesh mesh.
+     *
+     * @return the mesh
+     */
     @NotNull
     protected abstract Mesh createMesh();
 }

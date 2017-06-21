@@ -141,11 +141,22 @@ public class ResourceTree extends TreeView<ResourceElement> {
      */
     private boolean onlyFolders;
 
+    /**
+     * Instantiates a new Resource tree.
+     *
+     * @param readOnly the read only
+     */
     public ResourceTree(final boolean readOnly) {
         this(DEFAULT_FUNCTION, readOnly);
         this.extensionFilter = ArrayFactory.newArray(String.class, 0);
     }
 
+    /**
+     * Instantiates a new Resource tree.
+     *
+     * @param openFunction the open function
+     * @param readOnly     the read only
+     */
     public ResourceTree(@Nullable final Consumer<ResourceElement> openFunction, final boolean readOnly) {
         this.openFunction = openFunction;
         this.readOnly = readOnly;
@@ -174,6 +185,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Sets expand handler.
+     *
      * @param expandHandler the handler for listening expand items.
      */
     public void setExpandHandler(@Nullable final IntObjectConsumer<ResourceTree> expandHandler) {
@@ -181,6 +194,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Sets action tester.
+     *
      * @param actionTester the action tester.
      */
     public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
@@ -196,6 +211,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Sets extension filter.
+     *
      * @param extensionFilter the list of filtered extensions.
      */
     public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
@@ -211,6 +228,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Sets on load handler.
+     *
      * @param onLoadHandler the post loading handler.
      */
     public void setOnLoadHandler(@Nullable final Consumer<Boolean> onLoadHandler) {
@@ -241,6 +260,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Gets context menu.
+     *
+     * @param element the element
      * @return the context menu for the element.
      */
     protected ContextMenu getContextMenu(@NotNull final ResourceElement element) {
@@ -558,6 +580,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     /**
      * Handle a removed file.
+     *
+     * @param file the file
      */
     public void notifyDeleted(@NotNull final Path file) {
 
@@ -691,6 +715,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Gets open function.
+     *
      * @return the open resource function.
      */
     @Nullable
@@ -721,6 +747,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     /**
      * Expand tree to the file.
+     *
+     * @param treeItem   the tree item
+     * @param needSelect the need select
      */
     public void expandTo(@NotNull final TreeItem<ResourceElement> treeItem, final boolean needSelect) {
 
@@ -738,6 +767,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     /**
      * Mark the element as expanded.
+     *
+     * @param file the file
      */
     public void markExpand(@NotNull final Path file) {
 
@@ -749,6 +780,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     /**
+     * Sets only folders.
+     *
      * @param onlyFolders true if need to show only folders.
      */
     public void setOnlyFolders(final boolean onlyFolders) {
@@ -764,6 +797,9 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
     /**
      * Expand tree to the file.
+     *
+     * @param file       the file
+     * @param needSelect the need select
      */
     public void expandTo(@NotNull final Path file, final boolean needSelect) {
 

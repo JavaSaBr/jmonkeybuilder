@@ -20,6 +20,12 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class CreateTorusShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
+    /**
+     * Instantiates a new Create torus shape emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateTorusShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

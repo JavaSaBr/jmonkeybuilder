@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class VehicleWheelModelNode extends ModelNode<VehicleWheel> {
 
+    /**
+     * Instantiates a new Vehicle wheel model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public VehicleWheelModelNode(@NotNull final VehicleWheel element, final long objectId) {
         super(element, objectId);
     }

@@ -14,10 +14,20 @@ public class LayersRoot {
     @NotNull
     private final SceneChangeConsumer changeConsumer;
 
+    /**
+     * Instantiates a new Layers root.
+     *
+     * @param changeConsumer the change consumer
+     */
     public LayersRoot(@NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
     }
 
+    /**
+     * Gets change consumer.
+     *
+     * @return the change consumer
+     */
     @NotNull
     public SceneChangeConsumer getChangeConsumer() {
         return changeConsumer;

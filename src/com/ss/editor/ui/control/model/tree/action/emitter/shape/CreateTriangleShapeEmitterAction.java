@@ -20,6 +20,12 @@ import tonegod.emitter.shapes.TriangleEmitterShape;
  */
 public class CreateTriangleShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
+    /**
+     * Instantiates a new Create triangle shape emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateTriangleShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

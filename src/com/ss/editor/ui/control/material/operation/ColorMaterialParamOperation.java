@@ -12,6 +12,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ColorMaterialParamOperation extends AbstractMaterialParamOperation<ColorRGBA> {
 
+    /**
+     * Instantiates a new Color material param operation.
+     *
+     * @param paramName the param name
+     * @param newValue  the new value
+     * @param oldValue  the old value
+     */
     public ColorMaterialParamOperation(@NotNull final String paramName, @Nullable final ColorRGBA newValue,
                                        @Nullable final ColorRGBA oldValue) {
         super(paramName, newValue, oldValue);

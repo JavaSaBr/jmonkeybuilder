@@ -17,6 +17,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AnimationBoneTrackModelNode extends AnimationTrackModelNode<BoneTrack> {
 
+    /**
+     * Instantiates a new Animation bone track model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationBoneTrackModelNode(@NotNull final BoneTrack element, final long objectId) {
         super(element, objectId);
     }

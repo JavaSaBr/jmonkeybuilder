@@ -93,6 +93,11 @@ public class TextureLayerSettings extends VBox {
      */
     private int maxLevels;
 
+    /**
+     * Instantiates a new Texture layer settings.
+     *
+     * @param editingComponent the editing component
+     */
     public TextureLayerSettings(@NotNull final TerrainEditingComponent editingComponent) {
         setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS);
         this.cells = ArrayFactory.newArray(TextureLayerCell.class);
@@ -181,6 +186,8 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Sets layer to alpha name.
+     *
      * @param layerToAlphaName the function to convert layer index to alpha texture param name.
      */
     @FXThread
@@ -198,6 +205,8 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Sets layer to diffuse name.
+     *
      * @param layerToDiffuseName the function to convert layer index to diffuse texture param name.
      */
     @FXThread
@@ -215,6 +224,8 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Sets layer to normal name.
+     *
      * @param layerToNormalName the function to convert layer index to normal texture param name.
      */
     @FXThread
@@ -232,6 +243,8 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Sets layer to scale name.
+     *
      * @param layerToScaleName the function to convert layer index to texture scale param name.
      */
     @FXThread
@@ -541,6 +554,8 @@ public class TextureLayerSettings extends VBox {
     }
 
     /**
+     * Sets max levels.
+     *
      * @param maxLevels the max count of texture levels.
      */
     @FXThread

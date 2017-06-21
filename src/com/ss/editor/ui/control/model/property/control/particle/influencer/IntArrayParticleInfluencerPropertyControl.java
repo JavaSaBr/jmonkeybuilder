@@ -12,13 +12,22 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
  * The implementation of the {@link AbstractIntArrayPropertyControl} to edit int array values in the {@link
- * ParticleInfluencer}.
+ * ParticleInfluencer}*.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class IntArrayParticleInfluencerPropertyControl<T extends ParticleInfluencer>
         extends AbstractIntArrayPropertyControl<ModelChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Int array particle influencer property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     * @param parent              the parent
+     */
     public IntArrayParticleInfluencerPropertyControl(@Nullable final int[] element, @NotNull final String paramName,
                                                      @NotNull final ModelChangeConsumer modelChangeConsumer,
                                                      @NotNull final Object parent) {

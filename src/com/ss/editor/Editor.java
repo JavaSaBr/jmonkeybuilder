@@ -75,11 +75,21 @@ public class Editor extends JmeToJFXApplication {
     @NotNull
     private static final Editor EDITOR = new Editor();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static Editor getInstance() {
         return EDITOR;
     }
 
+    /**
+     * Prepare to start editor.
+     *
+     * @return the editor
+     */
     @NotNull
     static Editor prepareToStart() {
         Configuration.MEMORY_ALLOCATOR.set("jemalloc");
@@ -208,6 +218,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Lock the render thread for other actions.
+     *
+     * @return the long
      */
     public final long asyncLock() {
         return lock.readLock();
@@ -215,6 +227,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Unlock the render thread.
+     *
+     * @param stamp the stamp
      */
     public final void asyncUnlock(final long stamp) {
         lock.unlockRead(stamp);
@@ -343,6 +357,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Try to lock render thread for doing actions with game scene.
+     *
+     * @return the long
      */
     public long trySyncLock() {
         return lock.tryWriteLock();
@@ -414,6 +430,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets post processor.
+     *
      * @return the processor of post effects.
      */
     @NotNull
@@ -454,6 +472,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Update the light probe.
+     *
+     * @param progressAdapter the progress adapter
      */
     public void updateProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
@@ -470,6 +490,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Update the light probe.
+     *
+     * @param progressAdapter the progress adapter
      */
     public void updatePreviewProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
@@ -493,6 +515,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets preview view port.
+     *
      * @return The preview view port.
      */
     @NotNull
@@ -517,6 +541,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets preview camera.
+     *
      * @return the camera for preview.
      */
     @NotNull
@@ -533,6 +559,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets preview node.
+     *
      * @return the node for preview.
      */
     @NotNull
@@ -541,6 +569,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets tone map filter.
+     *
      * @return the filter of color correction.
      */
     @NotNull
@@ -549,6 +579,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets fxaa filter.
+     *
      * @return The FXAA filter.
      */
     public FXAAFilter getFXAAFilter() {
@@ -556,6 +588,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets translucent bucket filter.
+     *
      * @return the translucent bucket filter.
      */
     @NotNull
@@ -564,6 +598,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Sets paused.
+     *
      * @param paused true if this app is paused.
      */
     void setPaused(final boolean paused) {
@@ -571,6 +607,8 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets gui font.
+     *
      * @return the gui font.
      */
     @Nullable

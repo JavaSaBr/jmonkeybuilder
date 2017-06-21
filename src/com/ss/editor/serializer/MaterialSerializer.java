@@ -22,6 +22,12 @@ import java.util.Collection;
  */
 public class MaterialSerializer {
 
+    /**
+     * Serialize to string string.
+     *
+     * @param material the material
+     * @return the string
+     */
     public static String serializeToString(@NotNull final Material material) {
 
         final MaterialDef materialDef = material.getMaterialDef();

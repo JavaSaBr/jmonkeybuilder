@@ -10,6 +10,12 @@ import java.io.IOException;
  */
 public class UpdateBSS {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
     public static void main(String[] args) throws IOException {
         Stylesheet.convertToBinary(new File("./resources/ui/css/base.css"), new File("./resources/ui/css/base.bss"));
         Stylesheet.convertToBinary(new File("./resources/ui/css/external.css"), new File("./resources/ui/css/external.bss"));

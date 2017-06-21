@@ -41,6 +41,8 @@ public interface ProcessingComponent extends HasName {
     }
 
     /**
+     * Gets processed object.
+     *
      * @return the processed object.
      */
     @NotNull
@@ -72,6 +74,9 @@ public interface ProcessingComponent extends HasName {
 
     /**
      * Notify about changed property.
+     *
+     * @param object       the object
+     * @param propertyName the property name
      */
     @FXThread
     void notifyChangeProperty(@NotNull Object object, @NotNull String propertyName);

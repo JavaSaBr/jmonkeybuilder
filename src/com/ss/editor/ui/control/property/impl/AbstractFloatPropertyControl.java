@@ -20,6 +20,8 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit float values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
@@ -30,6 +32,14 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
      */
     private FloatTextField valueField;
 
+    /**
+     * Instantiates a new Abstract float property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractFloatPropertyControl(@Nullable final Float propertyValue, @NotNull final String propertyName,
                                         @NotNull final C changeConsumer,
                                         @NotNull final SixObjectConsumer<C, T, String, Float, Float, BiConsumer<T, Float>> changeHandler) {
@@ -51,6 +61,8 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
     }
 
     /**
+     * Sets scroll power.
+     *
      * @param scrollPower the scroll power.
      */
     @FXThread
@@ -59,6 +71,8 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
     }
 
     /**
+     * Gets scroll power.
+     *
      * @return the scroll power.
      */
     @FXThread

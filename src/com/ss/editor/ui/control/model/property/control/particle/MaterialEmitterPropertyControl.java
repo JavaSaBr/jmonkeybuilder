@@ -24,12 +24,19 @@ import tonegod.emitter.material.ParticlesMaterial;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link Material} of the {@link
- * ParticleEmitterNode}.
+ * ParticleEmitterNode}*.
  *
  * @author JavaSaBr
  */
 public class MaterialEmitterPropertyControl extends MaterialModelPropertyControl<ParticleEmitterNode, ParticlesMaterial> {
 
+    /**
+     * Instantiates a new Material emitter property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public MaterialEmitterPropertyControl(@NotNull final ParticlesMaterial element, @NotNull final String paramName,
                                           @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);

@@ -33,6 +33,12 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
     @Nullable
     private FloatTextField heightField;
 
+    /**
+     * Instantiates a new Create capsule collision shape dialog.
+     *
+     * @param nodeTree        the node tree
+     * @param collisionObject the collision object
+     */
     public CreateCapsuleCollisionShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                              @NotNull final PhysicsCollisionObject collisionObject) {
         super(nodeTree, collisionObject);
@@ -67,6 +73,8 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
     }
 
     /**
+     * Gets height field.
+     *
      * @return the height size.
      */
     @NotNull

@@ -20,6 +20,12 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
  */
 public class CreateImpostorParticleMeshAction extends AbstractCreateParticleMeshAction {
 
+    /**
+     * Instantiates a new Create impostor particle mesh action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateImpostorParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

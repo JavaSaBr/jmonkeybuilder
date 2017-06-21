@@ -69,6 +69,9 @@ public class SceneFileEditor extends
     private static final int APP_STATES_TOOL = 4;
     private static final int FILTERS_TOOL = 5;
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 

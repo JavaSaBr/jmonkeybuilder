@@ -44,6 +44,11 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final PropertyBuilder INSTANCE = new AudioNodePropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

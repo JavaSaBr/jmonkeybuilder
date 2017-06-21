@@ -21,6 +21,9 @@ import java.nio.file.Path;
  */
 public class PostFilterViewFileCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
     static {

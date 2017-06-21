@@ -64,6 +64,11 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
      */
     private CheckBox applyLightingTransformCheckBox;
 
+    /**
+     * Instantiates a new Particles asset editor dialog.
+     *
+     * @param consumer the consumer
+     */
     public ParticlesAssetEditorDialog(@NotNull final Consumer<ParticlesMaterial> consumer) {
         super(consumer);
     }

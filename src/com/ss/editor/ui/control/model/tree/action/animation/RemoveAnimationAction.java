@@ -23,6 +23,12 @@ import java.util.Objects;
  */
 public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Remove animation action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public RemoveAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

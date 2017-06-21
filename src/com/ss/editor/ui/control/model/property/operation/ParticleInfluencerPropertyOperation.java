@@ -14,8 +14,10 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} for editing {@link ParticleInfluencer} in the {@link
- * ModelFileEditor}.
+ * ModelFileEditor}*.
  *
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T> extends AbstractEditorOperation<ModelChangeConsumer> {
@@ -56,6 +58,15 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
      */
     private BiConsumer<D, T> applyHandler;
 
+    /**
+     * Instantiates a new Particle influencer property operation.
+     *
+     * @param influencer   the influencer
+     * @param parent       the parent
+     * @param propertyName the property name
+     * @param newValue     the new value
+     * @param oldValue     the old value
+     */
     public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent,
                                                @NotNull final String propertyName, @Nullable final T newValue,
                                                @Nullable final T oldValue) {
@@ -67,6 +78,8 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
     }
 
     /**
+     * Sets apply handler.
+     *
      * @param applyHandler the handler for applying new value.
      */
     public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
@@ -83,6 +96,9 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
 
     /**
      * Apply new value of the property to the model.
+     *
+     * @param spatial the spatial
+     * @param value   the value
      */
     protected void apply(@NotNull final D spatial, @Nullable final T value) {
         applyHandler.accept(spatial, value);

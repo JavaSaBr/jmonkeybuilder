@@ -26,6 +26,12 @@ import javafx.scene.image.Image;
  */
 public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Play audio node action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public PlayAudioNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

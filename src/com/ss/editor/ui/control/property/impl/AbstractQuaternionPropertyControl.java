@@ -29,6 +29,8 @@ import com.ss.rlib.util.array.ArrayFactory;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit {@link Quaternion} values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer, T>
@@ -49,6 +51,14 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
      */
     private FloatTextField zField;
 
+    /**
+     * Instantiates a new Abstract quaternion property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractQuaternionPropertyControl(@Nullable final Quaternion propertyValue, @NotNull final String propertyName,
                                              @NotNull final C changeConsumer,
                                              @NotNull final SixObjectConsumer<C, T, String, Quaternion, Quaternion, BiConsumer<T, Quaternion>> changeHandler) {

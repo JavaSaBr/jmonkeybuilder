@@ -29,6 +29,12 @@ import tonegod.emitter.influencers.ParticleInfluencer;
  */
 public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Remove particle influencer action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public RemoveParticleInfluencerAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

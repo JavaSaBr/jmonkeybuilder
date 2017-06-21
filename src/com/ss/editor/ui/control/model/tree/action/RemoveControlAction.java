@@ -24,6 +24,12 @@ import javafx.scene.image.Image;
  */
 public class RemoveControlAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Remove control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public RemoveControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

@@ -17,6 +17,11 @@ import tonegod.emitter.node.ParticleNode;
  */
 public class ModelPropertyEditor extends AbstractPropertyEditor<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Model property editor.
+     *
+     * @param changeConsumer the change consumer
+     */
     public ModelPropertyEditor(@NotNull final ModelChangeConsumer changeConsumer) {
         super(changeConsumer);
     }

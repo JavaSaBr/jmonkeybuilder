@@ -32,6 +32,13 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final Node parent;
 
+    /**
+     * Instantiates a new Optimize geometry operation.
+     *
+     * @param newSpatial the new spatial
+     * @param oldSpatial the old spatial
+     * @param parent     the parent
+     */
     public OptimizeGeometryOperation(@NotNull final Spatial newSpatial, @NotNull final Spatial oldSpatial,
                                      @NotNull final Node parent) {
         this.newSpatial = newSpatial;

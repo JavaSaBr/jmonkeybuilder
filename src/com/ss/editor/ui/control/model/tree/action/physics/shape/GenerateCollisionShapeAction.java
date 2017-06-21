@@ -31,6 +31,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GenerateCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
 
+    /**
+     * Instantiates a new Generate collision shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public GenerateCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

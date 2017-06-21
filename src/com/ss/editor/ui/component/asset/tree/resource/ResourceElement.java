@@ -15,6 +15,9 @@ import java.nio.file.Path;
  */
 public abstract class ResourceElement implements Comparable<ResourceElement> {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(ResourceElement.class);
 
@@ -24,11 +27,18 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     @NotNull
     protected final Path file;
 
+    /**
+     * Instantiates a new Resource element.
+     *
+     * @param file the file
+     */
     public ResourceElement(@NotNull final Path file) {
         this.file = file;
     }
 
     /**
+     * Gets file.
+     *
      * @return the reference to the file.
      */
     @NotNull
@@ -37,6 +47,10 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     }
 
     /**
+     * Gets children.
+     *
+     * @param extensionFilter the extension filter
+     * @param onlyFolders     the only folders
      * @return list of children resource elements.
      */
     public Array<ResourceElement> getChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {
@@ -44,6 +58,10 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
     }
 
     /**
+     * Has children boolean.
+     *
+     * @param extensionFilter the extension filter
+     * @param onlyFolders     the only folders
      * @return true if this element has children.
      */
     public boolean hasChildren(@NotNull final Array<String> extensionFilter, final boolean onlyFolders) {

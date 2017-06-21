@@ -31,6 +31,7 @@ import tonegod.emitter.interpolation.Interpolation;
 /**
  * The control for editing interpolations in the {@link ParticleInfluencer}.
  *
+ * @param <I> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractInterpolationInfluencerControl<I extends InterpolatedParticleInfluencer> extends VBox implements UpdatableControl {
@@ -55,6 +56,13 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
      */
     private VBox elementContainer;
 
+    /**
+     * Instantiates a new Abstract interpolation influencer control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public AbstractInterpolationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final I influencer,
                                                   @NotNull final Object parent) {
         setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_CONTROL);
@@ -64,6 +72,9 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         createControls();
     }
 
+    /**
+     * Create controls.
+     */
     protected void createControls() {
 
         final Label propertyNameLabel = new Label(getControlTitle() + ":");
@@ -104,12 +115,19 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         return 2;
     }
 
+    /**
+     * Gets control title.
+     *
+     * @return the control title
+     */
     @NotNull
     protected String getControlTitle() {
         throw new UnsupportedOperationException();
     }
 
     /**
+     * Gets influencer.
+     *
      * @return the influencer.
      */
     @NotNull
@@ -118,6 +136,8 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
+     * Gets element container.
+     *
      * @return the element container.
      */
     @NotNull
@@ -126,6 +146,8 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     }
 
     /**
+     * Gets model change consumer.
+     *
      * @return the consumer of changes.
      */
     @NotNull
@@ -152,12 +174,22 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         }
     }
 
+    /**
+     * Is need rebuild boolean.
+     *
+     * @param influencer   the influencer
+     * @param currentCount the current count
+     * @return the boolean
+     */
     protected boolean isNeedRebuild(@NotNull final I influencer, final int currentCount) {
         return influencer.getStepCount() != currentCount;
     }
 
     /**
      * Fill this control.
+     *
+     * @param influencer the influencer
+     * @param root       the root
      */
     protected void fillControl(@NotNull final I influencer, @NotNull final VBox root) {
     }
@@ -191,10 +223,10 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
     /**
      * Execute change operation.
      *
+     * @param <T>          the type of value.
      * @param newValue     the new value.
      * @param oldValue     the old value.
      * @param applyHandler the apply handler.
-     * @param <T>          the type of value.
      */
     protected <T> void execute(@Nullable final T newValue, @Nullable final T oldValue, @NotNull final BiConsumer<I, T> applyHandler) {
 
@@ -205,6 +237,11 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         modelChangeConsumer.execute(operation);
     }
 
+    /**
+     * Gets property name.
+     *
+     * @return the property name
+     */
     @NotNull
     protected String getPropertyName() {
         return getControlTitle();

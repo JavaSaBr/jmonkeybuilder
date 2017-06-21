@@ -12,6 +12,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EditingComponentContainer extends ProcessingComponentContainer<Editing3DProvider, EditingComponent> {
 
+    /**
+     * Instantiates a new Editing component container.
+     *
+     * @param changeConsumer the change consumer
+     * @param provider       the provider
+     */
     public EditingComponentContainer(@NotNull final ModelChangeConsumer changeConsumer,
                                      @NotNull final Editing3DProvider provider) {
         super(changeConsumer, provider, EditingComponent.class);

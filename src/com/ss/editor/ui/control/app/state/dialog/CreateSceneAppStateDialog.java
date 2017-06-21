@@ -78,6 +78,11 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final SceneChangeConsumer changeConsumer;
 
+    /**
+     * Instantiates a new Create scene app state dialog.
+     *
+     * @param changeConsumer the change consumer
+     */
     public CreateSceneAppStateDialog(@NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
     }

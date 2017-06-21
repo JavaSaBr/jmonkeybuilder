@@ -104,6 +104,11 @@ public class GroovyEditorComponent extends VBox {
     @NotNull
     private final CodeArea codeArea;
 
+    /**
+     * Instantiates a new Groovy editor component.
+     *
+     * @param editable the editable
+     */
     public GroovyEditorComponent(final boolean editable) {
         setId(CSSIds.GROOVY_EDITOR_COMPONENT);
 
@@ -124,6 +129,8 @@ public class GroovyEditorComponent extends VBox {
     }
 
     /**
+     * Gets code.
+     *
      * @return the result code.
      */
     @NotNull

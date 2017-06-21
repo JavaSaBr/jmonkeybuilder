@@ -26,6 +26,12 @@ import tonegod.emitter.particle.ParticleDataMeshInfo;
  */
 public abstract class AbstractCreateParticleMeshAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create particle mesh action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     AbstractCreateParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -51,6 +57,11 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
         changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, geometry));
     }
 
+    /**
+     * Create mesh info particle data mesh info.
+     *
+     * @return the particle data mesh info
+     */
     @NotNull
     protected abstract ParticleDataMeshInfo createMeshInfo();
 }

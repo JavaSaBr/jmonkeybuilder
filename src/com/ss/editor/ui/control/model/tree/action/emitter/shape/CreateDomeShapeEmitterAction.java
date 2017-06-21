@@ -20,6 +20,12 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class CreateDomeShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
+    /**
+     * Instantiates a new Create dome shape emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateDomeShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

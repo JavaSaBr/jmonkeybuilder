@@ -15,6 +15,9 @@ public class OpenSettingsAction extends MenuItem {
 
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
+    /**
+     * Instantiates a new Open settings action.
+     */
     public OpenSettingsAction() {
         super(Messages.EDITOR_BAR_SETTINGS);
         setOnAction(event -> process());

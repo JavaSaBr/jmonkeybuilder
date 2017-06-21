@@ -53,6 +53,15 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
     @Nullable
     private final Texture.WrapMode oldWrapModel;
 
+    /**
+     * Instantiates a new Texture material param operation.
+     *
+     * @param paramName     the param name
+     * @param newTextureKey the new texture key
+     * @param newWrapMode   the new wrap mode
+     * @param oldTextureKey the old texture key
+     * @param oldWrapModel  the old wrap model
+     */
     public TextureMaterialParamOperation(@NotNull final String paramName, @Nullable final TextureKey newTextureKey,
                                          @Nullable final Texture.WrapMode newWrapMode,
                                          @Nullable final TextureKey oldTextureKey,
@@ -65,6 +74,8 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
     }
 
     /**
+     * Gets param name.
+     *
      * @return The parameter name.
      */
     @NotNull

@@ -29,6 +29,12 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class CreateToneg0dEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create toneg 0 d emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateToneg0dEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -69,6 +75,11 @@ public class CreateToneg0dEmitterAction extends AbstractNodeAction<ModelChangeCo
         changeConsumer.execute(new AddChildOperation(emitter, parent));
     }
 
+    /**
+     * Create emitter node particle emitter node.
+     *
+     * @return the particle emitter node
+     */
     @NotNull
     protected ParticleEmitterNode createEmitterNode() {
         return new ParticleEmitterNode(EDITOR.getAssetManager());

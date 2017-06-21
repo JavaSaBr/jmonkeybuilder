@@ -25,6 +25,12 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
      */
     private boolean needShow;
 
+    /**
+     * Instantiates a new Change visible scene layer operation.
+     *
+     * @param layer    the layer
+     * @param needShow the need show
+     */
     public ChangeVisibleSceneLayerOperation(@NotNull final SceneLayer layer, final boolean needShow) {
         this.layer = layer;
         this.needShow = needShow;

@@ -103,6 +103,11 @@ public class ParticlesPropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final PropertyBuilder INSTANCE = new ParticlesPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

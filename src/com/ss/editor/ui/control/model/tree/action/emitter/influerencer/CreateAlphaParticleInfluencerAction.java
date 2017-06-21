@@ -18,6 +18,12 @@ import tonegod.emitter.influencers.impl.AlphaInfluencer;
  */
 public class CreateAlphaParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
+    /**
+     * Instantiates a new Create alpha particle influencer action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateAlphaParticleInfluencerAction(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

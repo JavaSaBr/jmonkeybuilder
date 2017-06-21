@@ -58,6 +58,12 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);
     }
 
+    /**
+     * Gets style spans.
+     *
+     * @param text the text
+     * @return the style spans
+     */
     @NotNull
     protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         throw new RuntimeException("unsupported");

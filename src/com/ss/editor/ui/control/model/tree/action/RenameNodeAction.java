@@ -19,6 +19,12 @@ import javafx.scene.image.Image;
  */
 public class RenameNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Rename node action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public RenameNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull ModelNode<?> node) {
         super(nodeTree, node);
     }

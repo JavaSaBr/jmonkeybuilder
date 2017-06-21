@@ -51,6 +51,12 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
+    /**
+     * Instantiates a new Load model particles mesh action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public LoadModelParticlesMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -75,6 +81,8 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
 
     /**
      * The process of opening file.
+     *
+     * @param file the file
      */
     protected void processOpen(@NotNull final Path file) {
 

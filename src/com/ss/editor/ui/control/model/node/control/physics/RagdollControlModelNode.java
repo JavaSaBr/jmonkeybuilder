@@ -16,6 +16,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RagdollControlModelNode extends ControlModelNode<KinematicRagdollControl> {
 
+    /**
+     * Instantiates a new Ragdoll control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public RagdollControlModelNode(@NotNull final KinematicRagdollControl element, final long objectId) {
         super(element, objectId);
     }

@@ -54,6 +54,11 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private FloatTextField speedField;
 
+    /**
+     * Instantiates a new Play parameters dialog.
+     *
+     * @param node the node
+     */
     public PlayParametersDialog(@NotNull final AnimationControlModelNode node) {
         this.node = node;
 
@@ -66,6 +71,8 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node.
+     *
      * @return the animation control node.
      */
     @NotNull

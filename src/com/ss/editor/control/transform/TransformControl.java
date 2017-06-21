@@ -15,6 +15,8 @@ public interface TransformControl extends Control {
 
     /**
      * Set a collision result.
+     *
+     * @param colResult the col result
      */
     @EditorThread
     void setCollisionPlane(@NotNull final CollisionResult colResult);

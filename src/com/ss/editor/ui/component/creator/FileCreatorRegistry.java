@@ -30,6 +30,11 @@ public class FileCreatorRegistry {
     @NotNull
     private static final FileCreatorRegistry INSTANCE = new FileCreatorRegistry();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static FileCreatorRegistry getInstance() {
         return INSTANCE;
@@ -41,6 +46,9 @@ public class FileCreatorRegistry {
     @NotNull
     private final Array<FileCreatorDescription> descriptions;
 
+    /**
+     * Instantiates a new File creator registry.
+     */
     public FileCreatorRegistry() {
         this.descriptions = ArrayFactory.newArray(FileCreatorDescription.class);
         addDescription(MaterialFileCreator.DESCRIPTION);
@@ -62,6 +70,8 @@ public class FileCreatorRegistry {
     }
 
     /**
+     * Gets descriptions.
+     *
      * @return the list of file creator descriptions.
      */
     @NotNull

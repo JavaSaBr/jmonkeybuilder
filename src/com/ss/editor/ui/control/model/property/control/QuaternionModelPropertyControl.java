@@ -11,10 +11,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The implementation of the {@link AbstractQuaternionPropertyControl} to edit {@link Quaternion} values.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class QuaternionModelPropertyControl<T> extends AbstractQuaternionPropertyControl<ModelChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Quaternion model property control.
+     *
+     * @param element        the element
+     * @param paramName      the param name
+     * @param changeConsumer the change consumer
+     */
     public QuaternionModelPropertyControl(@NotNull final Quaternion element, @NotNull final String paramName,
                                           @NotNull final ModelChangeConsumer changeConsumer) {
         super(element, paramName, changeConsumer, newChangeHandler());

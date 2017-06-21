@@ -33,6 +33,9 @@ import com.ss.rlib.logging.LoggerManager;
  */
 public class RotationToolControl extends AbstractControl implements TransformControl {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
@@ -55,6 +58,11 @@ public class RotationToolControl extends AbstractControl implements TransformCon
     @NotNull
     private final Node collisionPlane;
 
+    /**
+     * Instantiates a new Rotation tool control.
+     *
+     * @param editorControl the editor control
+     */
     public RotationToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
         this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());

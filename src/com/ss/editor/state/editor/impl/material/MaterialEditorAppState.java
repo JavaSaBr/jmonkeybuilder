@@ -108,6 +108,11 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      */
     private int frame;
 
+    /**
+     * Instantiates a new Material editor app state.
+     *
+     * @param fileEditor the file editor
+     */
     public MaterialEditorAppState(@NotNull final MaterialFileEditor fileEditor) {
         super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
@@ -188,6 +193,8 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
 
     /**
      * Update the {@link Material}.
+     *
+     * @param material the material
      */
     public void updateMaterial(@NotNull final Material material) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterialImpl(material));
@@ -218,6 +225,8 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
 
     /**
      * Change the {@link ModelType}.
+     *
+     * @param modelType the model type
      */
     public void changeMode(@NotNull final ModelType modelType) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeModeImpl(modelType));
@@ -251,6 +260,8 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
 
     /**
      * Change the {@link Bucket}.
+     *
+     * @param bucket the bucket
      */
     public void changeBucketType(@NotNull final Bucket bucket) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeBucketTypeImpl(bucket));
@@ -344,6 +355,8 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
 
     /**
      * Update the light in the scene.
+     *
+     * @param enabled the enabled
      */
     public void updateLightEnabled(final boolean enabled) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightEnabledImpl(enabled));
@@ -410,13 +423,31 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
     }
 
+    /**
+     * The enum Model type.
+     */
     public enum ModelType {
+        /**
+         * Sphere model type.
+         */
         SPHERE,
+        /**
+         * Box model type.
+         */
         BOX,
+        /**
+         * Quad model type.
+         */
         QUAD;
 
         private static final ModelType[] VALUES = values();
 
+        /**
+         * Value of model type.
+         *
+         * @param index the index
+         * @return the model type
+         */
         public static ModelType valueOf(final int index) {
             return VALUES[index];
         }

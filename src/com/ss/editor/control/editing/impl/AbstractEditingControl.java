@@ -21,6 +21,9 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AbstractEditingControl extends AbstractControl implements EditingControl {
 
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -49,6 +52,12 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
         }
     }
 
+    /**
+     * Create wireframe material material.
+     *
+     * @param color the color
+     * @return the material
+     */
     @NotNull
     protected Material createWireframeMaterial(@NotNull final ColorRGBA color) {
 
@@ -58,6 +67,12 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
         return material;
     }
 
+    /**
+     * Create material material.
+     *
+     * @param color the color
+     * @return the material
+     */
     @NotNull
     protected Material createMaterial(@NotNull final ColorRGBA color) {
 
@@ -81,6 +96,8 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
     }
 
     /**
+     * Sets editing.
+     *
      * @param editing the flag of editing state.
      */
     protected void setEditing(final boolean editing) {
@@ -113,12 +130,16 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
 
     /**
      * Notify about that this control was attached.
+     *
+     * @param node the node
      */
     protected void onAttached(@NotNull final Node node) {
     }
 
     /**
      * Notify about that this control was detached.
+     *
+     * @param node the node
      */
     protected void onDetached(@NotNull final Node node) {
     }

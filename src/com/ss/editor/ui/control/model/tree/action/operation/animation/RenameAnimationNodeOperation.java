@@ -32,6 +32,13 @@ public class RenameAnimationNodeOperation extends AbstractEditorOperation<ModelC
     @NotNull
     private final AnimControl control;
 
+    /**
+     * Instantiates a new Rename animation node operation.
+     *
+     * @param oldName the old name
+     * @param newName the new name
+     * @param control the control
+     */
     public RenameAnimationNodeOperation(@NotNull final String oldName, @NotNull final String newName,
                                         @NotNull final AnimControl control) {
         this.oldName = oldName;

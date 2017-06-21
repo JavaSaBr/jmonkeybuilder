@@ -16,6 +16,9 @@ import java.nio.file.Path;
  */
 public class RequestedCreateFileEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
@@ -28,11 +31,16 @@ public class RequestedCreateFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String CREATOR = "creator";
 
+    /**
+     * Instantiates a new Requested create file event.
+     */
     public RequestedCreateFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
+     * Gets description.
+     *
      * @return the creator description.
      */
     @NotNull
@@ -41,6 +49,8 @@ public class RequestedCreateFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets description.
+     *
      * @param description the creator description.
      */
     public void setDescription(@NotNull final FileCreatorDescription description) {
@@ -48,6 +58,8 @@ public class RequestedCreateFileEvent extends SceneEvent {
     }
 
     /**
+     * Gets file.
+     *
      * @return the file.
      */
     @NotNull
@@ -56,6 +68,8 @@ public class RequestedCreateFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets file.
+     *
      * @param file the file.
      */
     public void setFile(@NotNull final Path file) {

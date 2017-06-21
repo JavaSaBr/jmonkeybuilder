@@ -92,6 +92,9 @@ public class JavaFXImageManager {
     }
 
     /**
+     * Is image boolean.
+     *
+     * @param file the file
      * @return true if the file is image.
      */
     public static boolean isImage(@Nullable final Path file) {
@@ -103,6 +106,11 @@ public class JavaFXImageManager {
     @Nullable
     private static JavaFXImageManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static JavaFXImageManager getInstance() {
         if (instance == null) instance = new JavaFXImageManager();
@@ -372,6 +380,12 @@ public class JavaFXImageManager {
         //TODO need to add remove from cache
     }
 
+    /**
+     * Gets metadata.
+     *
+     * @param file the file
+     * @return the metadata
+     */
     @Nullable
     public synchronized IIOMetadata getMetadata(@NotNull final Path file) {
 

@@ -32,6 +32,11 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      */
     private boolean audioShowed;
 
+    /**
+     * Instantiates a new Scene editor app state.
+     *
+     * @param fileEditor the file editor
+     */
     public SceneEditorAppState(@NotNull final SceneFileEditor fileEditor) {
         super(fileEditor);
 
@@ -197,6 +202,8 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
 
     /**
      * Change light showing.
+     *
+     * @param showed the showed
      */
     public void updateLightShowed(final boolean showed) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightShowedImpl(showed));
@@ -222,6 +229,8 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
 
     /**
      * Change audio showing.
+     *
+     * @param showed the showed
      */
     public void updateAudioShowed(final boolean showed) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateAudioShowedImpl(showed));

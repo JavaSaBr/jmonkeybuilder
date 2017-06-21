@@ -15,11 +15,16 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The base implementation of a processing component.
  *
+ * @param <T> the type parameter
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractProcessingComponent<T, C extends ProcessingComponentContainer> extends VBox implements
         ProcessingComponent {
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -40,6 +45,9 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
      */
     protected boolean showed;
 
+    /**
+     * Instantiates a new Abstract processing component.
+     */
     public AbstractProcessingComponent() {
         createComponents();
     }
@@ -51,6 +59,8 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     }
 
     /**
+     * Gets container.
+     *
      * @return the parent container.
      */
     @NotNull
@@ -59,6 +69,8 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     }
 
     /**
+     * Gets change consumer.
+     *
      * @return the change consumer.
      */
     @NotNull
@@ -78,6 +90,9 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
         this.processedObject = unsafeCast(object);
     }
 
+    /**
+     * Create components.
+     */
     protected void createComponents() {
     }
 
@@ -116,6 +131,8 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     }
 
     /**
+     * Is showed boolean.
+     *
      * @return true if this component is showed.
      */
     protected boolean isShowed() {
@@ -123,6 +140,8 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     }
 
     /**
+     * Sets showed.
+     *
      * @param showed true if this component is showed.
      */
     protected void setShowed(final boolean showed) {

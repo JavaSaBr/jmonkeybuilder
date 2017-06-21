@@ -11,6 +11,9 @@ import javafx.event.EventType;
  */
 public class RequestedRefreshAssetEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     public static final EventType<SceneEvent> EVENT_TYPE;
 
     static {
@@ -19,6 +22,9 @@ public class RequestedRefreshAssetEvent extends SceneEvent {
         }
     }
 
+    /**
+     * Instantiates a new Requested refresh asset event.
+     */
     public RequestedRefreshAssetEvent() {
         super(EVENT_TYPE);
     }

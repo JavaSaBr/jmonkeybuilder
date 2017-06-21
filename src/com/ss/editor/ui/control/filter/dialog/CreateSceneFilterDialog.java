@@ -87,6 +87,11 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final SceneChangeConsumer changeConsumer;
 
+    /**
+     * Instantiates a new Create scene filter dialog.
+     *
+     * @param changeConsumer the change consumer
+     */
     public CreateSceneFilterDialog(@NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
     }

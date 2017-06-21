@@ -39,6 +39,11 @@ public class ClasspathManager {
     @Nullable
     private static ClasspathManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static ClasspathManager getInstance() {
         if (instance == null) instance = new ClasspathManager();
@@ -89,6 +94,8 @@ public class ClasspathManager {
     }
 
     /**
+     * Gets additional cl.
+     *
      * @return the additional class loader.
      */
     @Nullable

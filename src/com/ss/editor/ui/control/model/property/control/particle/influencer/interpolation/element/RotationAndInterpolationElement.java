@@ -15,6 +15,12 @@ import tonegod.emitter.influencers.impl.RotationInfluencer;
  */
 public class RotationAndInterpolationElement extends Vector3fAndInterpolationElement<RotationInfluencer, RotationInfluencerControl> {
 
+    /**
+     * Instantiates a new Rotation and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public RotationAndInterpolationElement(@NotNull final RotationInfluencerControl control, final int index) {
         super(control, index);
     }

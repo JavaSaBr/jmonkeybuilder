@@ -28,6 +28,12 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class LayersRootModelNode extends ModelNode<LayersRoot> {
 
+    /**
+     * Instantiates a new Layers root model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public LayersRootModelNode(@NotNull final LayersRoot element, final long objectId) {
         super(element, objectId);
     }

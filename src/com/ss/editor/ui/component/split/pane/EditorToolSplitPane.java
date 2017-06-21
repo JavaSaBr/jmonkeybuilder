@@ -23,6 +23,12 @@ public class EditorToolSplitPane extends TabToolSplitPane<EditorToolConfig> {
     @NotNull
     private final Region root;
 
+    /**
+     * Instantiates a new Editor tool split pane.
+     *
+     * @param scene the scene
+     * @param root  the root
+     */
     public EditorToolSplitPane(@NotNull final Scene scene, @NotNull final Region root) {
         super(scene, null);
         this.root = root;

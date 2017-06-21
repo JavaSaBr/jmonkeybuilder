@@ -31,6 +31,12 @@ class ConvertFileByConverterAction extends MenuItem {
     @NotNull
     private final FileConverterDescription description;
 
+    /**
+     * Instantiates a new Convert file by converter action.
+     *
+     * @param element     the element
+     * @param description the description
+     */
     ConvertFileByConverterAction(@NotNull final ResourceElement element,
                                  @NotNull final FileConverterDescription description) {
         this.element = element;

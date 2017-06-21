@@ -32,6 +32,14 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
         private final int xIndex;
         private final int yIndex;
 
+        /**
+         * Instantiates a new Height point.
+         *
+         * @param x      the x
+         * @param y      the y
+         * @param xIndex the x index
+         * @param yIndex the y index
+         */
         public HeightPoint(final float x, final float y, final int xIndex, final int yIndex) {
             this.x = x;
             this.y = y;
@@ -68,6 +76,11 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
     @Nullable
     private Spatial copiedTerrain;
 
+    /**
+     * Instantiates a new Change height terrain tool control.
+     *
+     * @param component the component
+     */
     public ChangeHeightTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
         this.originalHeight = DictionaryFactory.newObjectDictionary();

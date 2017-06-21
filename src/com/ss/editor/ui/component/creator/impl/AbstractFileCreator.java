@@ -41,16 +41,40 @@ import java.nio.file.Path;
  */
 public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog implements FileCreator {
 
+    /**
+     * The constant LOGGER.
+     */
     protected static final Logger LOGGER = LoggerManager.getLogger(FileCreator.class);
 
+    /**
+     * The constant SETTINGS_CONTAINER_OFFSET.
+     */
     protected static final Insets SETTINGS_CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 10, 0);
+    /**
+     * The constant RESOURCE_TREE_OFFSET.
+     */
     protected static final Insets RESOURCE_TREE_OFFSET = new Insets(3, 0, 0, 0);
 
+    /**
+     * The constant DIALOG_SIZE.
+     */
     protected static final Point DIALOG_SIZE = new Point(900, 401);
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -140,6 +164,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     /**
+     * Gets file to create.
+     *
      * @return the file to creating.
      */
     @Nullable
@@ -159,6 +185,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     /**
+     * Gets file extension.
+     *
      * @return the file extension.
      */
     @NotNull
@@ -168,6 +196,9 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
     /**
      * Notify about the file created.
+     *
+     * @param createdFile the created file
+     * @param needSelect  the need select
      */
     protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
         if (!needSelect) return;
@@ -216,6 +247,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
     /**
      * Create settings of the creating file.
+     *
+     * @param root the root
      */
     protected void createSettings(@NotNull final GridPane root) {
 
@@ -237,6 +270,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     /**
+     * Gets file name label text.
+     *
      * @return the label text "file name".
      */
     @NotNull

@@ -21,6 +21,12 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class ResetToneg0dParticleEmittersAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Reset toneg 0 d particle emitters action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public ResetToneg0dParticleEmittersAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                               @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

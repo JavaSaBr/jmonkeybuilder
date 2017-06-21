@@ -16,6 +16,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CreateBoxCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
 
+    /**
+     * Instantiates a new Create box collision shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateBoxCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                          @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

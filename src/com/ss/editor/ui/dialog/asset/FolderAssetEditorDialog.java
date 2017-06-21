@@ -16,11 +16,22 @@ import java.util.function.Function;
  */
 public class FolderAssetEditorDialog extends FileAssetEditorDialog {
 
+    /**
+     * Instantiates a new Folder asset editor dialog.
+     *
+     * @param consumer the consumer
+     */
     public FolderAssetEditorDialog(@NotNull final Consumer<Path> consumer) {
         super(consumer);
         setOnlyFolders(true);
     }
 
+    /**
+     * Instantiates a new Folder asset editor dialog.
+     *
+     * @param consumer  the consumer
+     * @param validator the validator
+     */
     public FolderAssetEditorDialog(@NotNull final Consumer<Path> consumer,
                                    @Nullable final Function<Path, String> validator) {
         super(consumer, validator);

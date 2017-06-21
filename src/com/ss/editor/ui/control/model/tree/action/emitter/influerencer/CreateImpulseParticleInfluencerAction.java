@@ -18,6 +18,12 @@ import tonegod.emitter.influencers.impl.ImpulseInfluencer;
  */
 public class CreateImpulseParticleInfluencerAction extends AbstractCreateParticleInfluencerAction {
 
+    /**
+     * Instantiates a new Create impulse particle influencer action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateImpulseParticleInfluencerAction(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

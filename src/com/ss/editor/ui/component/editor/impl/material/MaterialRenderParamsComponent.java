@@ -102,6 +102,11 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     private boolean ignoreListeners;
 
+    /**
+     * Instantiates a new Material render params component.
+     *
+     * @param changeHandler the change handler
+     */
     MaterialRenderParamsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         setId(CSSIds.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
         this.changeHandler = changeHandler;
@@ -432,6 +437,8 @@ public class MaterialRenderParamsComponent extends VBox {
 
     /**
      * Update settings for a material.
+     *
+     * @param material the material
      */
     public void buildFor(@NotNull final Material material) {
         setCurrentMaterial(material);

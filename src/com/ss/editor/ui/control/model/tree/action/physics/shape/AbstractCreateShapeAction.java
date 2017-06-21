@@ -17,11 +17,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The action to create a new shape.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractCreateShapeAction<T extends PhysicsCollisionObject> extends
         AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     AbstractCreateShapeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -47,6 +54,13 @@ public abstract class AbstractCreateShapeAction<T extends PhysicsCollisionObject
         createShape(element, parentElement, nodeTree);
     }
 
+    /**
+     * Create shape.
+     *
+     * @param object        the object
+     * @param parentElement the parent element
+     * @param nodeTree      the node tree
+     */
     protected abstract void createShape(@NotNull final T object, @NotNull final Spatial parentElement,
                                         @NotNull final AbstractNodeTree<?> nodeTree);
 }

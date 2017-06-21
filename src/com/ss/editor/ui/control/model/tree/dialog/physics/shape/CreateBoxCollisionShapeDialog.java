@@ -45,6 +45,12 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
     @Nullable
     private FloatTextField zField;
 
+    /**
+     * Instantiates a new Create box collision shape dialog.
+     *
+     * @param nodeTree        the node tree
+     * @param collisionObject the collision object
+     */
     public CreateBoxCollisionShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                          @NotNull final PhysicsCollisionObject collisionObject) {
         super(nodeTree, collisionObject);
@@ -109,6 +115,8 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
     }
 
     /**
+     * Gets x field.
+     *
      * @return the x size.
      */
     @NotNull
@@ -117,6 +125,8 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
     }
 
     /**
+     * Gets y field.
+     *
      * @return the y size.
      */
     @NotNull
@@ -125,6 +135,8 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
     }
 
     /**
+     * Gets z field.
+     *
      * @return the z size.
      */
     @NotNull

@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateConeCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
 
+    /**
+     * Instantiates a new Create cone collision shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateConeCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                           @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

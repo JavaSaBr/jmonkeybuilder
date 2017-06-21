@@ -16,13 +16,23 @@ import com.ss.rlib.logging.LoggerManager;
 /**
  * The base implementation of the {@link EditorAppState} for using inside {@link FileEditor}.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractEditorAppState<T extends FileEditor> extends AbstractAppState implements EditorAppState {
 
+    /**
+     * The constant LOGGER.
+     */
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorAppState.class);
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -48,6 +58,8 @@ public abstract class AbstractEditorAppState<T extends FileEditor> extends Abstr
     }
 
     /**
+     * Gets state node.
+     *
      * @return the root node.
      */
     @NotNull
@@ -57,6 +69,8 @@ public abstract class AbstractEditorAppState<T extends FileEditor> extends Abstr
     }
 
     /**
+     * Gets file editor.
+     *
      * @return the owner editor.
      */
     @NotNull

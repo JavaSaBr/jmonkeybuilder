@@ -28,6 +28,12 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
     @NotNull
     private volatile Mesh prevShape;
 
+    /**
+     * Instantiates a new Change emitter shape operation.
+     *
+     * @param newShape    the new shape
+     * @param emitterNode the emitter node
+     */
     public ChangeEmitterShapeOperation(@NotNull final Mesh newShape, @NotNull final ParticleEmitterNode emitterNode) {
         this.prevShape = newShape;
         this.emitterNode = emitterNode;

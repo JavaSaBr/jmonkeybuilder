@@ -17,6 +17,8 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to change boolean values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractBooleanPropertyControl<C extends ChangeConsumer, T>
@@ -27,6 +29,14 @@ public abstract class AbstractBooleanPropertyControl<C extends ChangeConsumer, T
      */
     private CheckBox checkBox;
 
+    /**
+     * Instantiates a new Abstract boolean property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractBooleanPropertyControl(@Nullable final Boolean propertyValue, @NotNull final String propertyName,
                                           @NotNull final C changeConsumer,
                                           @NotNull final SixObjectConsumer<C, T, String, Boolean, Boolean, BiConsumer<T, Boolean>> changeHandler) {

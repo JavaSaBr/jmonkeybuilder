@@ -21,10 +21,17 @@ import com.ss.rlib.util.array.ArrayFactory;
 /**
  * The implementation of the {@link SpatialModelNode} to represent the {@link Geometry} in the editor.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
 
+    /**
+     * Instantiates a new Geometry model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public GeometryModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }

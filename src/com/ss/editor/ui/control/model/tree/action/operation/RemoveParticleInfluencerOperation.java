@@ -11,7 +11,7 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to remove a {@link ParticleInfluencer} from a {@link
- * ParticleEmitterNode}.
+ * ParticleEmitterNode}*.
  *
  * @author JavaSaBr.
  */
@@ -34,6 +34,13 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
      */
     private final int childIndex;
 
+    /**
+     * Instantiates a new Remove particle influencer operation.
+     *
+     * @param influencer  the influencer
+     * @param emitterNode the emitter node
+     * @param childIndex  the child index
+     */
     public RemoveParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
                                              @NotNull final ParticleEmitterNode emitterNode, final int childIndex) {
         this.influencer = influencer;

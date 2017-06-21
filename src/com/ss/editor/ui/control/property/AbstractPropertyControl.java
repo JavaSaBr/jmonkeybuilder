@@ -24,14 +24,26 @@ import java.util.function.Function;
 /**
  * The base implementation of the property control.
  *
+ * @param <C> the type parameter
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> extends VBox implements UpdatableControl {
 
+    /**
+     * The constant LOGGER.
+     */
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractPropertyControl.class);
 
+    /**
+     * The constant CONTROL_WIDTH_PERCENT.
+     */
     public static final double CONTROL_WIDTH_PERCENT = 0.4;
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -82,6 +94,14 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
      */
     private boolean ignoreListener;
 
+    /**
+     * Instantiates a new Abstract property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                    @NotNull final C changeConsumer,
                                    @NotNull final SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler) {
@@ -102,6 +122,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Sets edit object.
+     *
      * @param editObject the edit object.
      */
     @FXThread
@@ -110,6 +132,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Sets edit object.
+     *
      * @param editObject the edit object.
      * @param needReload the true if need to reload.
      */
@@ -126,6 +150,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Sets apply handler.
+     *
      * @param applyHandler the handler for handling new value.
      */
     @FXThread
@@ -134,6 +160,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Gets sync handler.
+     *
      * @return the handler for getting actual value.
      */
     @Nullable
@@ -142,6 +170,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Sets sync handler.
+     *
      * @param syncHandler the handler for getting actual value.
      */
     @FXThread
@@ -150,6 +180,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Gets edit object.
+     *
      * @return the edit object.
      */
     @NotNull
@@ -158,6 +190,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Has edit object boolean.
+     *
      * @return true if this control has an edit object.
      */
     protected boolean hasEditObject() {
@@ -215,6 +249,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Is single row boolean.
+     *
      * @return true if this control is single row.
      */
     protected boolean isSingleRow() {
@@ -223,11 +259,15 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
 
     /**
      * Create components of this control.
+     *
+     * @param container the container
      */
     protected void createComponents(@NotNull final HBox container) {
     }
 
     /**
+     * Gets property name.
+     *
      * @return the name of the property.
      */
     @NotNull
@@ -236,6 +276,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Gets change consumer.
+     *
      * @return the consumer of changes.
      */
     @NotNull
@@ -245,12 +287,17 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
 
     /**
      * Apply new value to the edit object.
+     *
+     * @param newValue the new value
+     * @param oldValue the old value
      */
     protected void changed(@Nullable final T newValue, @Nullable final T oldValue) {
         changeHandler.accept(getChangeConsumer(), getEditObject(), getPropertyName(), newValue, oldValue, getApplyHandler());
     }
 
     /**
+     * Gets property value.
+     *
      * @return the value of the property.
      */
     @Nullable
@@ -260,6 +307,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Gets apply handler.
+     *
      * @return the handler for handling new value.
      */
     @NotNull
@@ -268,6 +317,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Sets property value.
+     *
      * @param propertyValue the value of the property.
      */
     protected void setPropertyValue(@Nullable final T propertyValue) {
@@ -275,6 +326,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Sets ignore listener.
+     *
      * @param ignoreListener the flag for ignoring listeners.
      */
     protected void setIgnoreListener(final boolean ignoreListener) {
@@ -282,6 +335,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     }
 
     /**
+     * Is ignore listener boolean.
+     *
      * @return true if need to ignore listeners.
      */
     protected boolean isIgnoreListener() {

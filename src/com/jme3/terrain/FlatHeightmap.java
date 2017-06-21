@@ -45,6 +45,11 @@ public class FlatHeightmap extends AbstractHeightMap {
     private int size;
     private float[] heightmapData;
 
+    /**
+     * Instantiates a new Flat heightmap.
+     *
+     * @param size the size
+     */
     public FlatHeightmap(int size) {
         this.size = size;
     }

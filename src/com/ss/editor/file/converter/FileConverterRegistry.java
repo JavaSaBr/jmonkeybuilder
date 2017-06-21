@@ -32,6 +32,11 @@ public class FileConverterRegistry {
     @NotNull
     private static final FileConverterRegistry INSTANCE = new FileConverterRegistry();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static FileConverterRegistry getInstance() {
         return INSTANCE;
@@ -74,6 +79,7 @@ public class FileConverterRegistry {
     /**
      * Get the list of available converters for a file.
      *
+     * @param path the path
      * @return the list of available converters.
      */
     @FromAnyThread

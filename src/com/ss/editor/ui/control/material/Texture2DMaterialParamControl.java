@@ -93,6 +93,13 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     @Nullable
     private CheckBox flipButton;
 
+    /**
+     * Instantiates a new Texture 2 d material param control.
+     *
+     * @param changeHandler the change handler
+     * @param material      the material
+     * @param parameterName the parameter name
+     */
     public Texture2DMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
                                          @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);

@@ -21,6 +21,12 @@ import tonegod.emitter.influencers.impl.ColorInfluencer;
  */
 public class ColorAndInterpolationElement extends InterpolationElement<ColorInfluencer, ColorPicker, ColorInfluencerControl> {
 
+    /**
+     * Instantiates a new Color and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public ColorAndInterpolationElement(@NotNull final ColorInfluencerControl control, final int index) {
         super(control, index);
     }

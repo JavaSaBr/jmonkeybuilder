@@ -52,6 +52,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 

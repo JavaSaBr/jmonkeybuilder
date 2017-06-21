@@ -26,6 +26,11 @@ public class NodeUtils {
 
     /**
      * Find the parent of the model.
+     *
+     * @param <T>       the type parameter
+     * @param spatial   the spatial
+     * @param condition the condition
+     * @return the t
      */
     @Nullable
     public static <T> T findParent(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
@@ -37,6 +42,10 @@ public class NodeUtils {
 
     /**
      * Find the parent of the model.
+     *
+     * @param spatial the spatial
+     * @param count   the count
+     * @return the spatial
      */
     @Nullable
     public static Spatial findParent(@NotNull final Spatial spatial, int count) {
@@ -52,6 +61,9 @@ public class NodeUtils {
 
     /**
      * Find a first geometry in the {@link Spatial}.
+     *
+     * @param spatial the spatial
+     * @return the geometry
      */
     @Nullable
     public static Geometry findGeometry(@NotNull final Spatial spatial) {
@@ -70,6 +82,10 @@ public class NodeUtils {
 
     /**
      * Find a first geometry in the {@link Spatial}.
+     *
+     * @param spatial the spatial
+     * @param name    the name
+     * @return the geometry
      */
     @Nullable
     public static Geometry findGeometry(@NotNull final Spatial spatial, @NotNull final String name) {
@@ -90,6 +106,10 @@ public class NodeUtils {
 
     /**
      * Find a first spatial in the {@link Spatial}.
+     *
+     * @param spatial the spatial
+     * @param name    the name
+     * @return the spatial
      */
     @Nullable
     public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final String name) {
@@ -99,6 +119,10 @@ public class NodeUtils {
 
     /**
      * Find a first spatial in the {@link Spatial}.
+     *
+     * @param spatial   the spatial
+     * @param condition the condition
+     * @return the spatial
      */
     @Nullable
     public static Spatial findSpatial(@NotNull final Spatial spatial, @NotNull final Predicate<Spatial> condition) {
@@ -117,6 +141,10 @@ public class NodeUtils {
 
     /**
      * Collect all geometries from the asset path.
+     *
+     * @param spatial   the spatial
+     * @param container the container
+     * @param assetPath the asset path
      */
     public static void addGeometryWithMaterial(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container,
                                                @NotNull final String assetPath) {
@@ -147,6 +175,10 @@ public class NodeUtils {
 
     /**
      * Collect all geometries from the asset path.
+     *
+     * @param spatial   the spatial
+     * @param container the container
+     * @param assetPath the asset path
      */
     public static void addSpatialWithAssetPath(@NotNull final Spatial spatial, @NotNull final Array<Spatial> container,
                                                @NotNull final String assetPath) {
@@ -171,6 +203,9 @@ public class NodeUtils {
 
     /**
      * Visit all geometries.
+     *
+     * @param spatial  the spatial
+     * @param consumer the consumer
      */
     public static void visitGeometry(@NotNull final Spatial spatial, @NotNull final Consumer<Geometry> consumer) {
 
@@ -190,6 +225,11 @@ public class NodeUtils {
 
     /**
      * Visit spatials of the target type.
+     *
+     * @param <T>      the type parameter
+     * @param spatial  the spatial
+     * @param type     the type
+     * @param consumer the consumer
      */
     public static <T extends Spatial> void visitSpatial(@NotNull final Spatial spatial, @NotNull final Class<T> type,
                                                         @NotNull final Consumer<T> consumer) {
@@ -210,6 +250,9 @@ public class NodeUtils {
 
     /**
      * Collect all geometries.
+     *
+     * @param spatial   the spatial
+     * @param container the container
      */
     public static void addGeometry(@NotNull final Spatial spatial, @NotNull final Array<Geometry> container) {
 
@@ -229,6 +272,9 @@ public class NodeUtils {
 
     /**
      * Collect all lights.
+     *
+     * @param spatial   the spatial
+     * @param container the container
      */
     public static void addLight(@NotNull final Spatial spatial, @NotNull final Array<Light> container) {
 
@@ -246,6 +292,9 @@ public class NodeUtils {
 
     /**
      * Collect all audio nodes.
+     *
+     * @param spatial   the spatial
+     * @param container the container
      */
     public static void addAudioNodes(@NotNull final Spatial spatial, @NotNull final Array<AudioNode> container) {
         if (!(spatial instanceof Node)) return;

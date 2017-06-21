@@ -11,10 +11,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The implementation of the {@link AbstractVector3fPropertyControl} to edot vector3f values.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class Vector3fModelPropertyControl<T> extends AbstractVector3fPropertyControl<ModelChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Vector 3 f model property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public Vector3fModelPropertyControl(@NotNull final Vector3f element, @NotNull final String paramName,
                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer, newChangeHandler());

@@ -37,6 +37,9 @@ import java.util.function.BiConsumer;
  */
 public class PhysicsNodeListControl extends VBox implements UpdatableControl {
 
+    /**
+     * The constant JFX_APPLICATION.
+     */
     public static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
     /**
      * The consumer of changes.
@@ -58,6 +61,13 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      */
     private VBox elementContainer;
 
+    /**
+     * Instantiates a new Physics node list control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public PhysicsNodeListControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
                                   @NotNull final PhysicsInfluencer influencer,
                                   @NotNull final Object parent) {
@@ -68,6 +78,9 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         createControls();
     }
 
+    /**
+     * Create controls.
+     */
     protected void createControls() {
 
         final Label propertyNameLabel = new Label(getControlTitle() + ":");
@@ -109,12 +122,19 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         return 0;
     }
 
+    /**
+     * Gets control title.
+     *
+     * @return the control title
+     */
     @NotNull
     protected String getControlTitle() {
         return Messages.PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
     }
 
     /**
+     * Gets influencer.
+     *
      * @return the influencer.
      */
     @NotNull
@@ -123,6 +143,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
+     * Gets element container.
+     *
      * @return the element container.
      */
     @NotNull
@@ -131,6 +153,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     }
 
     /**
+     * Gets model change consumer.
+     *
      * @return the consumer of changes.
      */
     @NotNull
@@ -153,12 +177,22 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         }
     }
 
+    /**
+     * Is need rebuild boolean.
+     *
+     * @param influencer   the influencer
+     * @param currentCount the current count
+     * @return the boolean
+     */
     protected boolean isNeedRebuild(@NotNull final PhysicsInfluencer influencer, final int currentCount) {
         return influencer.getGeometries().size() != currentCount;
     }
 
     /**
      * Fill this control.
+     *
+     * @param influencer the influencer
+     * @param root       the root
      */
     protected void fillControl(@NotNull final PhysicsInfluencer influencer, @NotNull final VBox root) {
 
@@ -226,10 +260,10 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     /**
      * Execute change operation.
      *
+     * @param <T>          the type of value.
      * @param newValue     the new value.
      * @param oldValue     the old value.
      * @param applyHandler the apply handler.
-     * @param <T>          the type of value.
      */
     protected <T> void execute(@Nullable final T newValue, @Nullable final T oldValue,
                                @NotNull final BiConsumer<PhysicsInfluencer, T> applyHandler) {
@@ -242,6 +276,11 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         modelChangeConsumer.execute(operation);
     }
 
+    /**
+     * Gets property name.
+     *
+     * @return the property name
+     */
     @NotNull
     protected String getPropertyName() {
         return getControlTitle();

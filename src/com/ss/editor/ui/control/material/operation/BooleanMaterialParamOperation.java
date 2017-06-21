@@ -11,6 +11,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BooleanMaterialParamOperation extends AbstractMaterialParamOperation<Boolean> {
 
+    /**
+     * Instantiates a new Boolean material param operation.
+     *
+     * @param paramName the param name
+     * @param newValue  the new value
+     * @param oldValue  the old value
+     */
     public BooleanMaterialParamOperation(@NotNull final String paramName, @Nullable final Boolean newValue,
                                          @Nullable final Boolean oldValue) {
         super(paramName, newValue, oldValue);

@@ -893,7 +893,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * Is drag to rotate boolean.
      *
      * @return If drag to rotate feature is enabled.
-     * @see FlyByCamera#setDragToRotate(boolean) FlyByCamera#setDragToRotate(boolean)
+     * @see FlyByCamera#setDragToRotate(boolean) FlyByCamera#setDragToRotate(boolean)FlyByCamera#setDragToRotate(boolean)
      */
     public boolean isDragToRotate() {
         return dragToRotate;
@@ -902,10 +902,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Sets drag to rotate.
      *
-     * @param dragToRotate When true, the user must hold the mouse button and drag over the screen to rotate the camera,
-     *                     and the cursor is visible until dragged. Otherwise, the cursor is invisible at all times and
-     *                     holding the mouse button is not needed to rotate the camera. This feature is disabled by
-     *                     default.
+     * @param dragToRotate When true, the user must hold the mouse button and drag over the screen to rotate the camera,                     and the cursor is visible until dragged. Otherwise, the cursor is invisible at all times and                     holding the mouse button is not needed to rotate the camera. This feature is disabled by                     default.
      */
     public void setDragToRotate(boolean dragToRotate) {
         this.dragToRotate = dragToRotate;

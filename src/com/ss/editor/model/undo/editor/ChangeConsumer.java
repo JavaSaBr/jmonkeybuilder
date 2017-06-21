@@ -14,6 +14,8 @@ public interface ChangeConsumer {
 
     /**
      * Execute the operation.
+     *
+     * @param operation the operation
      */
     @FromAnyThread
     void execute(@NotNull EditorOperation operation);

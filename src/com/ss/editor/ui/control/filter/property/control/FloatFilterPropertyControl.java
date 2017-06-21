@@ -12,10 +12,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit float values.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class FloatFilterPropertyControl<T> extends AbstractFloatPropertyControl<SceneChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Float filter property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public FloatFilterPropertyControl(@Nullable final Float propertyValue, @NotNull final String propertyName,
                                       @NotNull final SceneChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());

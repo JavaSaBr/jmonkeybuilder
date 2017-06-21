@@ -32,6 +32,8 @@ public class FileCreatorDescription {
     private Image icon;
 
     /**
+     * Sets constructor.
+     *
      * @param constructor the constructor of a file creator.
      */
     public void setConstructor(@NotNull final Callable<FileCreator> constructor) {
@@ -39,6 +41,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Sets file description.
+     *
      * @param fileDescription the file description.
      */
     public void setFileDescription(@NotNull final String fileDescription) {
@@ -46,6 +50,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Gets constructor.
+     *
      * @return the constructor of a file creator.
      */
     @NotNull
@@ -54,6 +60,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Gets file description.
+     *
      * @return the file description.
      */
     @NotNull
@@ -62,6 +70,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Sets icon.
+     *
      * @param icon the icon.
      */
     public void setIcon(@Nullable final Image icon) {
@@ -69,6 +79,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Gets icon.
+     *
      * @return the icon.
      */
     @Nullable

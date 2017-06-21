@@ -57,25 +57,50 @@ import java.util.function.Predicate;
 /**
  * The implementation of the {@link EditorDialog} to choose the object from asset.
  *
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public class AssetEditorDialog<C> extends EditorDialog {
 
+    /**
+     * The constant OK_BUTTON_OFFSET.
+     */
     @NotNull
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
 
+    /**
+     * The constant CANCEL_BUTTON_OFFSET.
+     */
     @NotNull
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
+    /**
+     * The constant SECOND_PART_OFFSET_OFFSET.
+     */
     @NotNull
     protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
 
+    /**
+     * The constant DIALOG_SIZE.
+     */
     @NotNull
     protected static final Point DIALOG_SIZE = new Point(1204, 721);
 
+    /**
+     * The constant JAVA_FX_IMAGE_MANAGER.
+     */
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull
@@ -141,10 +166,21 @@ public class AssetEditorDialog<C> extends EditorDialog {
     @Nullable
     protected Button okButton;
 
+    /**
+     * Instantiates a new Asset editor dialog.
+     *
+     * @param consumer the consumer
+     */
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
         this(consumer, null);
     }
 
+    /**
+     * Instantiates a new Asset editor dialog.
+     *
+     * @param consumer  the consumer
+     * @param validator the validator
+     */
     public AssetEditorDialog(@NotNull final Consumer<C> consumer, @Nullable final Function<C, String> validator) {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
         this.consumer = consumer;
@@ -152,6 +188,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Sets extension filter.
+     *
      * @param extensionFilter the list of available extensions.
      */
     public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
@@ -159,6 +197,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Sets action tester.
+     *
      * @param actionTester the action tester.
      */
     public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
@@ -166,6 +206,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Sets only folders.
+     *
      * @param onlyFolders true if need to show only folders.
      */
     void setOnlyFolders(final boolean onlyFolders) {
@@ -192,6 +234,12 @@ public class AssetEditorDialog<C> extends EditorDialog {
         root.setOnKeyReleased(this::processKeyEvent);
     }
 
+    /**
+     * Build second part parent.
+     *
+     * @param container the container
+     * @return the parent
+     */
     @NotNull
     protected Parent buildSecondPart(@NotNull final HBox container) {
 
@@ -216,6 +264,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Gets ok button.
+     *
      * @return the ok button.
      */
     @NotNull
@@ -225,6 +275,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
     /**
      * The process of opening the element.
+     *
+     * @param element the element
      */
     protected void processOpen(@NotNull final ResourceElement element) {
         hide();
@@ -327,6 +379,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Gets validator.
+     *
      * @return the function for validating the choose.
      */
     @Nullable
@@ -431,7 +485,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Validate the resource element.
      *
-     * @param element the element.
+     * @param warningLabel the warning label
+     * @param element      the element.
      */
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
     }
@@ -469,6 +524,11 @@ public class AssetEditorDialog<C> extends EditorDialog {
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
+    /**
+     * Build disable condition boolean binding.
+     *
+     * @return the boolean binding
+     */
     protected BooleanBinding buildDisableCondition() {
 
         final ResourceTree resourceTree = getResourceTree();
@@ -480,6 +540,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Gets consumer.
+     *
      * @return the function for handling the choose.
      */
     @NotNull

@@ -29,16 +29,34 @@ import java.nio.file.Path;
  */
 public abstract class AbstractFileConverter implements FileConverter {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileConverter.class);
 
     @NotNull
     private static final Array<String> EMPTY_ARRAY = ArrayFactory.newArray(String.class);
 
+    /**
+     * The constant EDITOR_CONFIG.
+     */
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     @Override
@@ -98,6 +116,8 @@ public abstract class AbstractFileConverter implements FileConverter {
     }
 
     /**
+     * Gets available extensions.
+     *
      * @return the list of available extensions.
      */
     @NotNull

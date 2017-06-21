@@ -54,6 +54,11 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
     @NotNull
     private final ImageView visibleIcon;
 
+    /**
+     * Instantiates a new App state list cell.
+     *
+     * @param stateList the state list
+     */
     public AppStateListCell(final @NotNull AppStateList stateList) {
         this.stateList = stateList;
         this.content = new HBox();

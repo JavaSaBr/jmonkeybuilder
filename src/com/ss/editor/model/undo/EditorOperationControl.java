@@ -37,6 +37,11 @@ public class EditorOperationControl {
     @NotNull
     private final UndoableEditor editor;
 
+    /**
+     * Instantiates a new Editor operation control.
+     *
+     * @param editor the editor
+     */
     public EditorOperationControl(@NotNull final UndoableEditor editor) {
         this.editor = editor;
         this.operations = ArrayFactory.newArray(EditorOperation.class);

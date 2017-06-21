@@ -26,6 +26,12 @@ import javafx.scene.image.Image;
  */
 public class CreateAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create audio node action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateAudioNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

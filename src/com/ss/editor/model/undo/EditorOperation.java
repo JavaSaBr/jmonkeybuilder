@@ -13,6 +13,8 @@ public interface EditorOperation {
 
     /**
      * Redo this operation for the editor.
+     *
+     * @param editor the editor
      */
     @FXThread
     default void redo(@NotNull final UndoableEditor editor) {
@@ -20,6 +22,8 @@ public interface EditorOperation {
 
     /**
      * Undo this operation for the editor.
+     *
+     * @param editor the editor
      */
     @FXThread
     default void undo(@NotNull final UndoableEditor editor) {

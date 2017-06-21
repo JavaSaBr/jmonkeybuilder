@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PlaneCollisionShapeModelNode extends CollisionShapeModelNode<PlaneCollisionShape> {
 
+    /**
+     * Instantiates a new Plane collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public PlaneCollisionShapeModelNode(@NotNull final PlaneCollisionShape element, final long objectId) {
         super(element, objectId);
     }

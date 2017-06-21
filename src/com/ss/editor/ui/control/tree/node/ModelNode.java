@@ -16,13 +16,20 @@ import com.ss.rlib.util.array.ArrayFactory;
 /**
  * The base implementation of a node.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class ModelNode<T> implements UObject {
 
+    /**
+     * The constant EMPTY_ARRAY.
+     */
     @NotNull
     protected static final Array<ModelNode<?>> EMPTY_ARRAY = ArrayFactory.newArray(ModelNode.class);
 
+    /**
+     * The constant EDITOR.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
@@ -41,12 +48,20 @@ public abstract class ModelNode<T> implements UObject {
      */
     private ModelNode<?> parent;
 
+    /**
+     * Instantiates a new Model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ModelNode(@NotNull final T element, final long objectId) {
         this.element = element;
         this.objectId = objectId;
     }
 
     /**
+     * Gets element.
+     *
      * @return the element of the {@link com.jme3.scene.Spatial}.
      */
     @NotNull
@@ -55,6 +70,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Gets name.
+     *
      * @return the name of this node.
      */
     @NotNull
@@ -63,12 +80,16 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Sets name.
+     *
      * @param name the name.
      */
     public void setName(@NotNull final String name) {
     }
 
     /**
+     * Is need to save name boolean.
+     *
      * @return true if need to save name.
      */
     public boolean isNeedToSaveName() {
@@ -76,6 +97,9 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Has children boolean.
+     *
+     * @param nodeTree the node tree
      * @return true of this node has any children.
      */
     public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
@@ -83,6 +107,9 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Gets children.
+     *
+     * @param nodeTree the node tree
      * @return the array of children of this node.
      */
     @NotNull
@@ -91,6 +118,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Gets parent.
+     *
      * @return the parent of this node.
      */
     @Nullable
@@ -99,6 +128,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Sets parent.
+     *
      * @param parent the parent.
      */
     protected void setParent(final ModelNode<?> parent) {
@@ -106,6 +137,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Gets icon.
+     *
      * @return the icon of this node.
      */
     @Nullable
@@ -115,29 +148,42 @@ public abstract class ModelNode<T> implements UObject {
 
     /**
      * Fill the items actions for this node.
+     *
+     * @param nodeTree the node tree
+     * @param items    the items
      */
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
     }
 
     /**
      * Remove the child from this node.
+     *
+     * @param child the child
      */
     public void remove(@NotNull final ModelNode<?> child) {
     }
 
     /**
      * Add the new child to this node.
+     *
+     * @param child the child
      */
     public void add(@NotNull final ModelNode<?> child) {
     }
 
     /**
      * Handle changing the name of this node.
+     *
+     * @param nodeTree the node tree
+     * @param newName  the new name
      */
     public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
     }
 
     /**
+     * Can accept boolean.
+     *
+     * @param child the child
      * @return true of this node can accept the child.
      */
     public boolean canAccept(@NotNull final ModelNode<?> child) {
@@ -145,6 +191,9 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Can accept external boolean.
+     *
+     * @param dragboard the dragboard
      * @return true if this node can accept external resource.
      */
     public boolean canAcceptExternal(@NotNull final Dragboard dragboard) {
@@ -153,11 +202,16 @@ public abstract class ModelNode<T> implements UObject {
 
     /**
      * Accept external resources to this node.
+     *
+     * @param dragboard the dragboard
+     * @param consumer  the consumer
      */
     public void acceptExternal(@NotNull final Dragboard dragboard, @NotNull final ChangeConsumer consumer) {
     }
 
     /**
+     * Can move boolean.
+     *
      * @return true if this node supports moving.
      */
     public boolean canMove() {
@@ -165,6 +219,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Can copy boolean.
+     *
      * @return true if this node supports copying.
      */
     public boolean canCopy() {
@@ -172,6 +228,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Can edit name boolean.
+     *
      * @return true if this node supports name editing.
      */
     public boolean canEditName() {
@@ -179,6 +237,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Can remove boolean.
+     *
      * @return true if you can remove this node.
      */
     public boolean canRemove() {
@@ -186,6 +246,8 @@ public abstract class ModelNode<T> implements UObject {
     }
 
     /**
+     * Copy model node.
+     *
      * @return the new copy of this node.
      */
     @NotNull

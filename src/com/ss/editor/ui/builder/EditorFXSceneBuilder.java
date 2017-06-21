@@ -52,6 +52,12 @@ public class EditorFXSceneBuilder {
      */
     private static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
+    /**
+     * Build editor fx scene.
+     *
+     * @param stage the stage
+     * @return the editor fx scene
+     */
     @NotNull
     @FXThread
     public static EditorFXScene build(@NotNull final Stage stage) {

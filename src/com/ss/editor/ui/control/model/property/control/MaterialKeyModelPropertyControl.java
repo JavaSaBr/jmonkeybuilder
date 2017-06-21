@@ -23,6 +23,7 @@ import java.util.function.Predicate;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link MaterialKey}.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class MaterialKeyModelPropertyControl<T extends Spatial> extends MaterialModelPropertyControl<T, MaterialKey> {
@@ -31,6 +32,13 @@ public class MaterialKeyModelPropertyControl<T extends Spatial> extends Material
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
+    /**
+     * Instantiates a new Material key model property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public MaterialKeyModelPropertyControl(@Nullable final MaterialKey element, @NotNull final String paramName,
                                            @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);

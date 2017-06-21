@@ -13,10 +13,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit vector2f values.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class Vector2fFilterPropertyControl<T> extends AbstractVector2fPropertyControl<SceneChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Vector 2 f filter property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public Vector2fFilterPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
                                          @NotNull final SceneChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());

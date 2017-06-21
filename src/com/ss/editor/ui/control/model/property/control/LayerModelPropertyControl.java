@@ -41,6 +41,13 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
         }
     }
 
+    /**
+     * New change handler six object consumer.
+     *
+     * @param <D> the type parameter
+     * @param <T> the type parameter
+     * @return the six object consumer
+     */
     @NotNull
     public static <D, T> SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
@@ -57,6 +64,12 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
      */
     private ComboBox<SceneLayer> layerComboBox;
 
+    /**
+     * Instantiates a new Layer model property control.
+     *
+     * @param layer          the layer
+     * @param changeConsumer the change consumer
+     */
     public LayerModelPropertyControl(@Nullable final SceneLayer layer, @NotNull final SceneChangeConsumer changeConsumer) {
         super(layer == null ? SceneLayer.NO_LAYER : layer, Messages.MODEL_PROPERTY_LAYER, changeConsumer, newChangeHandler());
         setApplyHandler(this::setLayer);
@@ -100,6 +113,8 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
     }
 
     /**
+     * Gets layer combo box.
+     *
      * @return the layers combo box.
      */
     @NotNull

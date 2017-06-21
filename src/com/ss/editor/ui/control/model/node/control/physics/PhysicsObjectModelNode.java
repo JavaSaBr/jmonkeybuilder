@@ -23,11 +23,18 @@ import com.ss.rlib.util.array.ArrayFactory;
 /**
  * The implementation of the {@link ModelNode} to show a {@link PhysicsCollisionObject} in the tree.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 @SuppressWarnings("WeakerAccess")
 public class PhysicsObjectModelNode<T extends PhysicsCollisionObject & Control> extends ControlModelNode<T> {
 
+    /**
+     * Instantiates a new Physics object model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public PhysicsObjectModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }

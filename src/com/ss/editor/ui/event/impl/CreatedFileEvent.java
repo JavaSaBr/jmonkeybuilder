@@ -15,6 +15,9 @@ import java.nio.file.Path;
  */
 public class CreatedFileEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
@@ -28,11 +31,16 @@ public class CreatedFileEvent extends SceneEvent {
     private static final String NEED_SELECT = "need_select";
     private static final String IS_DIRECTORY = "isDirectory";
 
+    /**
+     * Instantiates a new Created file event.
+     */
     public CreatedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
+     * Sets need select.
+     *
      * @param needSelect true if need to select a file.
      */
     public void setNeedSelect(final boolean needSelect) {
@@ -40,6 +48,8 @@ public class CreatedFileEvent extends SceneEvent {
     }
 
     /**
+     * Is need select boolean.
+     *
      * @return true if need to select a file.
      */
     public boolean isNeedSelect() {
@@ -47,6 +57,8 @@ public class CreatedFileEvent extends SceneEvent {
     }
 
     /**
+     * Is directory boolean.
+     *
      * @return true if the file is directory.
      */
     public boolean isDirectory() {
@@ -54,6 +66,8 @@ public class CreatedFileEvent extends SceneEvent {
     }
 
     /**
+     * Gets file.
+     *
      * @return the new file.
      */
     @NotNull
@@ -62,6 +76,8 @@ public class CreatedFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets file.
+     *
      * @param file the new file.
      */
     public void setFile(@NotNull final Path file) {
@@ -69,6 +85,8 @@ public class CreatedFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets directory.
+     *
      * @param directory the directory.
      */
     public void setDirectory(final boolean directory) {

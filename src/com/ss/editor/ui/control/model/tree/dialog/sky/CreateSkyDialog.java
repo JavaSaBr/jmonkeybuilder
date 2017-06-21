@@ -64,15 +64,27 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The constant JFX_APPLICATION.
+     */
     @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
+    /**
+     * The constant EDITOR.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
 
     private enum SkyType {
+        /**
+         * Single texture sky type.
+         */
         SINGLE_TEXTURE(Messages.CREATE_SKY_DIALOG_SKY_TYPE_SINGLE),
+        /**
+         * Multiple texture sky type.
+         */
         MULTIPLE_TEXTURE(Messages.CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE);
 
         private static final SkyType[] VALUES = values();
@@ -201,6 +213,12 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private ChooseTextureControl bottomTextureControl;
 
+    /**
+     * Instantiates a new Create sky dialog.
+     *
+     * @param parentNode the parent node
+     * @param nodeTree   the node tree
+     */
     public CreateSkyDialog(@NotNull final ModelNode<?> parentNode,
                            @NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree) {
         this.parentNode = parentNode;

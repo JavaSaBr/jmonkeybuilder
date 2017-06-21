@@ -39,6 +39,12 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private Label questionLabel;
 
+    /**
+     * Instantiates a new Confirm dialog.
+     *
+     * @param handler  the handler
+     * @param question the question
+     */
     public ConfirmDialog(@NotNull final Consumer<Boolean> handler, @NotNull final String question) {
         this.handler = handler;
         final Label questionLabel = getQuestionLabel();

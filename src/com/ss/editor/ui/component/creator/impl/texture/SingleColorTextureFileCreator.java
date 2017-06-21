@@ -34,6 +34,9 @@ import java.nio.file.Path;
  */
 public class SingleColorTextureFileCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 

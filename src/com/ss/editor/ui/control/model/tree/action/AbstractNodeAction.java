@@ -22,14 +22,27 @@ import com.ss.rlib.logging.LoggerManager;
 /**
  * The base implementation of an action for an element in a node tree.
  *
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuItem {
 
+    /**
+     * The constant LOGGER.
+     */
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractNodeAction.class);
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -44,6 +57,12 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     @NotNull
     private final ModelNode<?> node;
 
+    /**
+     * Instantiates a new Abstract node action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AbstractNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
@@ -58,6 +77,8 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     }
 
     /**
+     * Gets name.
+     *
      * @return the name of this action.
      */
     @NotNull
@@ -80,6 +101,8 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the component of the model three.
      */
     @NotNull
@@ -88,6 +111,8 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
     }
 
     /**
+     * Gets node.
+     *
      * @return the node of the model.
      */
     @NotNull

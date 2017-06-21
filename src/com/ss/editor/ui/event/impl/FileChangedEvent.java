@@ -15,6 +15,9 @@ import java.nio.file.Path;
  */
 public class FileChangedEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
@@ -26,11 +29,16 @@ public class FileChangedEvent extends SceneEvent {
 
     private static final String FILE = "file";
 
+    /**
+     * Instantiates a new File changed event.
+     */
     public FileChangedEvent() {
         super(EVENT_TYPE);
     }
 
     /**
+     * Gets file.
+     *
      * @return the file.
      */
     @NotNull
@@ -39,6 +47,8 @@ public class FileChangedEvent extends SceneEvent {
     }
 
     /**
+     * Sets file.
+     *
      * @param file the file.
      */
     public void setFile(@NotNull final Path file) {

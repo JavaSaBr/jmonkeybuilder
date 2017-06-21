@@ -31,11 +31,19 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
     @NotNull
     private static final FilterPropertyBuilder INSTANCE = new FilterPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static FilterPropertyBuilder getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Instantiates a new Filter property builder.
+     */
     protected FilterPropertyBuilder() {
         super(SceneChangeConsumer.class);
     }
@@ -179,6 +187,14 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
         }
     }
 
+    /**
+     * Add control.
+     *
+     * @param <T>             the type parameter
+     * @param container       the container
+     * @param property        the property
+     * @param propertyControl the property control
+     */
     protected <T> void addControl(final @NotNull VBox container, @NotNull final EditableProperty<T, ?> property,
                                   @NotNull final AbstractPropertyControl<SceneChangeConsumer, EditableProperty<T, ?>, T> propertyControl) {
 

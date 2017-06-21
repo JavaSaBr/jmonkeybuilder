@@ -33,6 +33,11 @@ public class DeleteFileAction extends MenuItem {
     @NotNull
     private final ResourceElement element;
 
+    /**
+     * Instantiates a new Delete file action.
+     *
+     * @param element the element
+     */
     public DeleteFileAction(@NotNull final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_DELETE_FILE);

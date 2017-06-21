@@ -29,6 +29,12 @@ public interface SimpleFileVisitor extends FileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
 
+    /**
+     * Visit.
+     *
+     * @param file  the file
+     * @param attrs the attrs
+     */
     void visit(@NotNull final Path file, @NotNull final BasicFileAttributes attrs);
 
     @Override

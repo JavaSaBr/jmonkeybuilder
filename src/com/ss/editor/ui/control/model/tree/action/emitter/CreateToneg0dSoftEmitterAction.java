@@ -16,6 +16,12 @@ import tonegod.emitter.SoftParticleEmitterNode;
  */
 public class CreateToneg0dSoftEmitterAction extends CreateToneg0dEmitterAction {
 
+    /**
+     * Instantiates a new Create toneg 0 d soft emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateToneg0dSoftEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

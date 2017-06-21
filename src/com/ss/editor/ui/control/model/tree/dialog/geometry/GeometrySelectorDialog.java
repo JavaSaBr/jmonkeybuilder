@@ -16,6 +16,12 @@ import java.util.function.Consumer;
  */
 public class GeometrySelectorDialog extends NodeSelectorDialog<Geometry> {
 
+    /**
+     * Instantiates a new Geometry selector dialog.
+     *
+     * @param model   the model
+     * @param handler the handler
+     */
     public GeometrySelectorDialog(@NotNull final Spatial model, @NotNull final Consumer<Geometry> handler) {
         super(model, Geometry.class, handler);
     }

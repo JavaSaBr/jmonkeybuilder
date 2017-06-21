@@ -15,6 +15,9 @@ import java.nio.file.Path;
  */
 public class DeletedFileEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     @NotNull
     public static final EventType<SceneEvent> EVENT_TYPE;
 
@@ -27,11 +30,16 @@ public class DeletedFileEvent extends SceneEvent {
     private static final String FILE = "file";
     private static final String IS_DIRECTORY = "isDirectory";
 
+    /**
+     * Instantiates a new Deleted file event.
+     */
     public DeletedFileEvent() {
         super(EVENT_TYPE);
     }
 
     /**
+     * Gets file.
+     *
      * @return the file.
      */
     @NotNull
@@ -40,6 +48,8 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
+     * Is directory boolean.
+     *
      * @return true if the file is directory.
      */
     public boolean isDirectory() {
@@ -47,6 +57,8 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets file.
+     *
      * @param file the file.
      */
     public void setFile(@NotNull final Path file) {
@@ -54,6 +66,8 @@ public class DeletedFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets directory.
+     *
      * @param directory the directory.
      */
     public void setDirectory(final boolean directory) {

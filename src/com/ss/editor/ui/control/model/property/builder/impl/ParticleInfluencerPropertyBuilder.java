@@ -56,6 +56,11 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
     @NotNull
     private static final PropertyBuilder INSTANCE = new ParticleInfluencerPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
@@ -98,6 +103,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         }
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final InterpolatedParticleInfluencer influencer, @NotNull final Object parent) {
 
@@ -113,6 +126,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(fixedDurationControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
 
@@ -124,6 +145,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         addSplitLine(container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
 
@@ -146,6 +175,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(randomStartColorControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
 
@@ -180,6 +217,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(sizeVariationToleranceControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final SpriteInfluencer influencer, @NotNull final Object parent) {
 
@@ -226,6 +271,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(fixedDurationControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
 
@@ -249,6 +302,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(randomStartDestinationControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final ImpulseInfluencer influencer, @NotNull final Object parent) {
 
@@ -285,6 +346,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(magnitudeControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
 
@@ -322,6 +391,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(gravityControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final PhysicsInfluencer influencer, @NotNull final Object parent) {
 
@@ -352,6 +429,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(restitutionControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
 
@@ -420,6 +505,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         FXUtils.addToPane(tangetForceControl, container);
     }
 
+    /**
+     * Create controls.
+     *
+     * @param container      the container
+     * @param changeConsumer the change consumer
+     * @param influencer     the influencer
+     * @param parent         the parent
+     */
     protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
                                   @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
 

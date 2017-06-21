@@ -11,6 +11,11 @@ public class ResourceLoadingElement extends ResourceElement {
 
     private static final ResourceLoadingElement INSTANCE = new ResourceLoadingElement();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static ResourceLoadingElement getInstance() {
         return INSTANCE;
     }

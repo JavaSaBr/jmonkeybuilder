@@ -58,6 +58,12 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
      */
     private boolean ignoreListeners;
 
+    /**
+     * Instantiates a new Texture layer cell.
+     *
+     * @param prefWidth the pref width
+     * @param maxWidth  the max width
+     */
     public TextureLayerCell(@NotNull final ReadOnlyDoubleProperty prefWidth,
                             @NotNull final ReadOnlyDoubleProperty maxWidth) {
 

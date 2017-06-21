@@ -11,6 +11,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class FloatMaterialParamOperation extends AbstractMaterialParamOperation<Float> {
 
+    /**
+     * Instantiates a new Float material param operation.
+     *
+     * @param paramName the param name
+     * @param newValue  the new value
+     * @param oldValue  the old value
+     */
     public FloatMaterialParamOperation(@NotNull final String paramName, @Nullable final Float newValue,
                                        @Nullable final Float oldValue) {
         super(paramName, newValue, oldValue);

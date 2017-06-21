@@ -82,6 +82,12 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final Spatial spatial;
 
+    /**
+     * Instantiates a new Create custom control dialog.
+     *
+     * @param changeConsumer the change consumer
+     * @param spatial        the spatial
+     */
     public CreateCustomControlDialog(@NotNull final ModelChangeConsumer changeConsumer,
                                      @NotNull final Spatial spatial) {
         this.changeConsumer = changeConsumer;

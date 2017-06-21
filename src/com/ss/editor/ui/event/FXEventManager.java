@@ -23,6 +23,11 @@ public class FXEventManager {
     @NotNull
     private static final FXEventManager INSTANCE = new FXEventManager();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static FXEventManager getInstance() {
         return INSTANCE;
@@ -34,6 +39,9 @@ public class FXEventManager {
     @NotNull
     private final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers;
 
+    /**
+     * Instantiates a new Fx event manager.
+     */
     public FXEventManager() {
         this.eventHandlers = DictionaryFactory.newObjectDictionary();
     }

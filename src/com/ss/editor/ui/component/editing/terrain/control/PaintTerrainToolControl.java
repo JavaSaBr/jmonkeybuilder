@@ -38,6 +38,15 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         private float blue;
         private float alpha;
 
+        /**
+         * Instantiates a new Color point.
+         *
+         * @param index the index
+         * @param red   the red
+         * @param green the green
+         * @param blue  the blue
+         * @param alpha the alpha
+         */
         public ColorPoint(final int index, final float red, final float green, final float blue, final float alpha) {
             this.index = index;
             this.red = red;
@@ -123,6 +132,11 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      */
     private int layer;
 
+    /**
+     * Instantiates a new Paint terrain tool control.
+     *
+     * @param component the component
+     */
     public PaintTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
         this.colorPoints = ArrayFactory.newArray(ColorPoint.class);
@@ -220,6 +234,9 @@ public class PaintTerrainToolControl extends TerrainToolControl {
 
     /**
      * Notify about wanting to change color of a point.
+     *
+     * @param index the index
+     * @param color the color
      */
     protected void change(final int index, @NotNull final ColorRGBA color) {
 
@@ -352,6 +369,8 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     /**
+     * Sets alpha texture.
+     *
      * @param alphaTexture the alpha texture to paint.
      */
     public void setAlphaTexture(@Nullable final Texture alphaTexture) {
@@ -367,6 +386,8 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     }
 
     /**
+     * Sets layer.
+     *
      * @param layer the edited layer.
      */
     public void setLayer(final int layer) {

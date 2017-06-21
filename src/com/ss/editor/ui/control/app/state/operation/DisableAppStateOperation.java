@@ -19,6 +19,11 @@ public class DisableAppStateOperation extends AbstractEditorOperation<SceneChang
     @NotNull
     private final SceneAppState appState;
 
+    /**
+     * Instantiates a new Disable app state operation.
+     *
+     * @param appState the app state
+     */
     public DisableAppStateOperation(@NotNull final SceneAppState appState) {
         this.appState = appState;
     }

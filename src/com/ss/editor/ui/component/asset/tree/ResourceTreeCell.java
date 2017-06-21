@@ -36,6 +36,9 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      */
     private final Tooltip tooltip;
 
+    /**
+     * Instantiates a new Resource tree cell.
+     */
     protected ResourceTreeCell() {
         setId(ASSET_COMPONENT_RESOURCE_TREE_CELL);
         setMinHeight(FXConstants.CELL_SIZE);

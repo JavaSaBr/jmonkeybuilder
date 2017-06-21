@@ -38,6 +38,12 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
      */
     private float speed;
 
+    /**
+     * Instantiates a new Animation control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationControlModelNode(@NotNull final AnimControl element, final long objectId) {
         super(element, objectId);
         this.loopMode = LoopMode.Loop;
@@ -63,6 +69,8 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
     }
 
     /**
+     * Gets speed.
+     *
      * @return the animation speed.
      */
     public float getSpeed() {
@@ -70,6 +78,8 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
     }
 
     /**
+     * Gets loop mode.
+     *
      * @return the loop mode.
      */
     @NotNull

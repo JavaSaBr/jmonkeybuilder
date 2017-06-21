@@ -61,6 +61,12 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
      */
     private final boolean isFrontWheel;
 
+    /**
+     * Instantiates a new Remove vehicle wheel operation.
+     *
+     * @param control the control
+     * @param wheel   the wheel
+     */
     public RemoveVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final VehicleWheel wheel) {
         this.control = control;
         this.connectionPoint = wheel.getLocation();

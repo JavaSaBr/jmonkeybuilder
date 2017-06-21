@@ -19,6 +19,11 @@ public class EnableSceneFilterOperation extends AbstractEditorOperation<SceneCha
     @NotNull
     private final SceneFilter<?> sceneFilter;
 
+    /**
+     * Instantiates a new Enable scene filter operation.
+     *
+     * @param sceneFilter the scene filter
+     */
     public EnableSceneFilterOperation(@NotNull final SceneFilter<?> sceneFilter) {
         this.sceneFilter = sceneFilter;
     }

@@ -11,12 +11,19 @@ import tonegod.emitter.ParticleEmitterNode;
 
 /**
  * The implementation of the {@link Vector2fModelPropertyControl} to edit sprite count of the {@link
- * ParticleEmitterNode}.
+ * ParticleEmitterNode}*.
  *
  * @author JavaSaBr.
  */
 public class ParticlesSpriteCountModelPropertyControl extends Vector2fModelPropertyControl<ParticleEmitterNode> {
 
+    /**
+     * Instantiates a new Particles sprite count model property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public ParticlesSpriteCountModelPropertyControl(@NotNull final Vector2f element, @NotNull final String paramName,
                                                     @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);

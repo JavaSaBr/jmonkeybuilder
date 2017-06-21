@@ -46,6 +46,11 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      */
     private boolean changingTab;
 
+    /**
+     * Instantiates a new Tab tool component.
+     *
+     * @param pane the pane
+     */
     protected TabToolComponent(@NotNull final SplitPane pane) {
         this.collapsed = new SimpleBooleanProperty(this, "collapsed", false);
         this.pane = pane;
@@ -71,6 +76,8 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     }
 
     /**
+     * Sets expand position.
+     *
      * @param expandPosition the last expand position.
      */
     public void setExpandPosition(final double expandPosition) {
@@ -108,6 +115,9 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
 
     /**
      * Add a new component to this tool container.
+     *
+     * @param component the component
+     * @param name      the name
      */
     public void addComponent(@NotNull final Region component, @NotNull final String name) {
 
@@ -154,6 +164,8 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     }
 
     /**
+     * Is collapsed boolean.
+     *
      * @return true if this is collapsed.
      */
     public boolean isCollapsed() {
@@ -176,6 +188,8 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     }
 
     /**
+     * Gets collapse position.
+     *
      * @return the collapse position.
      */
     protected int getCollapsePosition() {

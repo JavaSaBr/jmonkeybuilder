@@ -17,6 +17,9 @@ import java.nio.file.Path;
  */
 public class FolderCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 

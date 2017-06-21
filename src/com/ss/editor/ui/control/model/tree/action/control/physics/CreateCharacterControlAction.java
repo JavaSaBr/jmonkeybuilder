@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateCharacterControlAction extends AbstractCreateControlAction {
 
+    /**
+     * Instantiates a new Create character control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateCharacterControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

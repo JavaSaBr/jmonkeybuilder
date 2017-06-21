@@ -27,16 +27,31 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit an elements from scene.
  *
+ * @param <C> the type parameter
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D, T> extends AbstractPropertyControl<C, D, T> {
 
+    /**
+     * The constant NO_ELEMENT.
+     */
     protected static final String NO_ELEMENT = Messages.ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
     
     private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -50,6 +65,15 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
      */
     private Label elementLabel;
 
+    /**
+     * Instantiates a new Abstract element property control.
+     *
+     * @param type           the type
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractElementPropertyControl(@NotNull final Class<T> type, @Nullable final T propertyValue,
                                           @NotNull final String propertyName, @NotNull final C changeConsumer,
                                           @NotNull final SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler) {
@@ -108,6 +132,8 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
     }
 
     /**
+     * Gets element label.
+     *
      * @return the label with name of the material.
      */
     @NotNull

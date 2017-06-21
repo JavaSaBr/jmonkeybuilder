@@ -77,6 +77,9 @@ public class UIUtils {
 
     /**
      * Fill a list of components.
+     *
+     * @param container the container
+     * @param node      the node
      */
     @FXThread
     public static void fillComponents(@NotNull final Array<ScreenComponent> container, @NotNull final Node node) {
@@ -103,6 +106,11 @@ public class UIUtils {
 
     /**
      * Find all components for a type.
+     *
+     * @param <T>  the type parameter
+     * @param node the node
+     * @param type the type
+     * @return the array
      */
     @NotNull
     @FXThread
@@ -114,6 +122,11 @@ public class UIUtils {
 
     /**
      * Find all components for a type.
+     *
+     * @param <T>       the type parameter
+     * @param container the container
+     * @param node      the node
+     * @param type      the type
      */
     @FXThread
     public static <T extends Node> void fillComponents(@NotNull final Array<T> container, @NotNull final Node node,
@@ -133,6 +146,9 @@ public class UIUtils {
 
     /**
      * Get all elements of a menu.
+     *
+     * @param menuBar the menu bar
+     * @return the all items
      */
     @NotNull
     @FXThread
@@ -164,6 +180,9 @@ public class UIUtils {
 
     /**
      * Collect all items.
+     *
+     * @param container  the container
+     * @param menuButton the menu button
      */
     @FXThread
     public static void getAllItems(@NotNull final Array<MenuItem> container, @NotNull final MenuButton menuButton) {
@@ -171,6 +190,12 @@ public class UIUtils {
         items.forEach(subMenuItem -> getAllItems(container, subMenuItem));
     }
 
+    /**
+     * Add to.
+     *
+     * @param item   the item
+     * @param parent the parent
+     */
     @FXThread
     public static void addTo(@NotNull final TreeItem<? super Object> item,
                              @NotNull final TreeItem<? super Object> parent) {
@@ -180,6 +205,10 @@ public class UIUtils {
 
     /**
      * Override tooltip timeout.
+     *
+     * @param openDelayInMillis       the open delay in millis
+     * @param visibleDurationInMillis the visible duration in millis
+     * @param closeDelayInMillis      the close delay in millis
      */
     public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis,
                                                int closeDelayInMillis) {
@@ -229,6 +258,7 @@ public class UIUtils {
     /**
      * Find a tree item by object id.
      *
+     * @param <T>      the type parameter
      * @param treeView the tree.
      * @param objectId the object id.
      * @return the tree item or null.
@@ -242,6 +272,7 @@ public class UIUtils {
     /**
      * Find a tree item by object id.
      *
+     * @param <T>      the type parameter
      * @param root     the root item.
      * @param objectId the object id.
      * @return the tree item or null.
@@ -271,6 +302,7 @@ public class UIUtils {
     /**
      * Find a tree item by its value.
      *
+     * @param <T>      the type parameter
      * @param treeView the tree view.
      * @param object   the value.
      * @return the tree item or null.
@@ -284,6 +316,7 @@ public class UIUtils {
     /**
      * Find a tree item by its value.
      *
+     * @param <T>    the type parameter
      * @param root   the root item.
      * @param object the value.
      * @return the tree item or null.
@@ -312,6 +345,7 @@ public class UIUtils {
     /**
      * Get all elements of a tree view.
      *
+     * @param <T>      the type parameter
      * @param treeView the tree view.
      * @return the list of all items.
      */
@@ -334,6 +368,7 @@ public class UIUtils {
     /**
      * Collect all elements of a tree item.
      *
+     * @param <T>       the type parameter
      * @param container the container.
      * @param root      the tree item.
      */
@@ -351,6 +386,9 @@ public class UIUtils {
 
     /**
      * Convert a color from {@link Color} to {@link ColorRGBA}.
+     *
+     * @param newValue the new value
+     * @return the color rgba
      */
     @NotNull
     @FXThread
@@ -472,7 +510,7 @@ public class UIUtils {
     /**
      * Check the dragboard.
      *
-     * @param dragboard  the dragboard.
+     * @param dragboard       the dragboard.
      * @param targetExtension the target extension.
      * @return true if there are required file.
      */
@@ -520,6 +558,7 @@ public class UIUtils {
     /**
      * Handle a first dropped file if it has required extensions.
      *
+     * @param <F>        the type parameter
      * @param dragEvent  the drag event.
      * @param extensions the extensions.
      * @param firstArg   the first argument.
@@ -549,6 +588,8 @@ public class UIUtils {
     /**
      * Handle a first dropped file if it has required extensions.
      *
+     * @param <F>             the type parameter
+     * @param <S>             the type parameter
      * @param dragEvent       the drag event.
      * @param targetExtension the extension.
      * @param firstArg        the first argument.
@@ -566,6 +607,8 @@ public class UIUtils {
     /**
      * Handle a first dropped file if it has required extensions.
      *
+     * @param <F>             the type parameter
+     * @param <S>             the type parameter
      * @param dragboard       the dragboard.
      * @param targetExtension the extension.
      * @param firstArg        the first argument.
@@ -596,6 +639,8 @@ public class UIUtils {
     /**
      * Handle a first dropped file if it has required extensions.
      *
+     * @param <F>        the type parameter
+     * @param <S>        the type parameter
      * @param dragEvent  the drag event.
      * @param extensions the extensions.
      * @param firstArg   the first argument.

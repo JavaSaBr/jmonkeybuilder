@@ -19,6 +19,12 @@ import javafx.scene.image.Image;
  */
 public class CreateSpotLightAction extends AbstractCreateLightAction {
 
+    /**
+     * Instantiates a new Create spot light action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateSpotLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

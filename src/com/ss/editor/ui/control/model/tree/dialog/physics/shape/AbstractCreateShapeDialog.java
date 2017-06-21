@@ -28,6 +28,12 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
     @NotNull
     private final PhysicsCollisionObject collisionObject;
 
+    /**
+     * Instantiates a new Abstract create shape dialog.
+     *
+     * @param nodeTree        the node tree
+     * @param collisionObject the collision object
+     */
     AbstractCreateShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                               @NotNull final PhysicsCollisionObject collisionObject) {
         this.nodeTree = nodeTree;
@@ -35,6 +41,8 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the node tree component.
      */
     @NotNull

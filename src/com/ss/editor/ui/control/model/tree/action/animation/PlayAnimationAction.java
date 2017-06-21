@@ -22,6 +22,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer> implements AnimEventListener {
 
+    /**
+     * Instantiates a new Play animation action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public PlayAnimationAction(final AbstractNodeTree<?> nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
     }

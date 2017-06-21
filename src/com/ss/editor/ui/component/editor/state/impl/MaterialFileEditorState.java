@@ -13,6 +13,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MaterialFileEditorState extends AbstractEditorState {
 
+    /**
+     * The constant serialVersionUID.
+     */
     public static final long serialVersionUID = 3;
 
     private static transient final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();
@@ -37,6 +40,9 @@ public class MaterialFileEditorState extends AbstractEditorState {
      */
     private volatile boolean lightEnable;
 
+    /**
+     * Instantiates a new Material file editor state.
+     */
     public MaterialFileEditorState() {
         modelType = MaterialEditorAppState.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
@@ -45,6 +51,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Gets bucket type.
+     *
      * @return the bucket type.
      */
     public RenderQueue.Bucket getBucketType() {
@@ -52,6 +60,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets bucket type.
+     *
      * @param bucketType the bucket type.
      */
     public void setBucketType(@NotNull final RenderQueue.Bucket bucketType) {
@@ -64,6 +74,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Gets bucket type id.
+     *
      * @return the bucket type ordinal.
      */
     public int getBucketTypeId() {
@@ -71,6 +83,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Gets opened tool.
+     *
      * @return the opened tool.
      */
     public int getOpenedTool() {
@@ -78,6 +92,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets opened tool.
+     *
      * @param openedTool the opened tool.
      */
     public void setOpenedTool(final int openedTool) {
@@ -90,6 +106,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Gets model type.
+     *
      * @return the model type.
      */
     public int getModelType() {
@@ -97,6 +115,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets model type.
+     *
      * @param modelType the model type.
      */
     public void setModelType(@NotNull final MaterialEditorAppState.ModelType modelType) {
@@ -109,6 +129,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Is light enable boolean.
+     *
      * @return true if the light is enabled.
      */
     public boolean isLightEnable() {
@@ -116,6 +138,8 @@ public class MaterialFileEditorState extends AbstractEditorState {
     }
 
     /**
+     * Sets light enable.
+     *
      * @param lightEnable true if the light is enabled.
      */
     public void setLightEnable(final boolean lightEnable) {

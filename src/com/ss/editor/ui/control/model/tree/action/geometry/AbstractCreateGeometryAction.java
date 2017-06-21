@@ -22,6 +22,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create geometry action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AbstractCreateGeometryAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -43,6 +49,11 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
         consumer.execute(new AddChildOperation(geometry, parent));
     }
 
+    /**
+     * Create geometry geometry.
+     *
+     * @return the geometry
+     */
     @NotNull
     protected abstract Geometry createGeometry();
 }

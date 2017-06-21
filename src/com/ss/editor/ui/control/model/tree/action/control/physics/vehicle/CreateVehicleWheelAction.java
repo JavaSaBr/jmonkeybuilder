@@ -22,6 +22,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create vehicle wheel action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateVehicleWheelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

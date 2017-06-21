@@ -21,6 +21,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateMotionControlAction extends AbstractCreateControlAction {
 
+    /**
+     * Instantiates a new Create motion control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateMotionControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

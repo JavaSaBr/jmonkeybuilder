@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateCylinderCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
 
+    /**
+     * Instantiates a new Create cylinder collision shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateCylinderCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                               @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

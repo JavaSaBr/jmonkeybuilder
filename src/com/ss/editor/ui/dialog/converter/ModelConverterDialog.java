@@ -66,6 +66,13 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox overwriteMaterialsCheckBox;
 
+    /**
+     * Instantiates a new Model converter dialog.
+     *
+     * @param source      the source
+     * @param destination the destination
+     * @param callback    the callback
+     */
     public ModelConverterDialog(@NotNull final Path source, @NotNull final Path destination,
                                 @NotNull final Consumer<ModelConverterDialog> callback) {
         this.callback = callback;
@@ -186,6 +193,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Is export materials boolean.
+     *
      * @return true if need to export materials.
      */
     public boolean isExportMaterials() {
@@ -201,6 +210,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Is overwrite materials boolean.
+     *
      * @return true if we can overwrite materials.
      */
     public boolean isOverwriteMaterials() {
@@ -216,6 +227,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets destination folder.
+     *
      * @return the destination folder.
      */
     @NotNull
@@ -232,6 +245,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets materials folder.
+     *
      * @return the materials destination folder.
      */
     @NotNull
@@ -248,6 +263,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets filename.
+     *
      * @return the filename.
      */
     @NotNull

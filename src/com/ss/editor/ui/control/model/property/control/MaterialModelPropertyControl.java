@@ -39,17 +39,37 @@ import com.ss.rlib.util.array.ArrayFactory;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link Material}.
  *
+ * @param <T> the type parameter
+ * @param <V> the type parameter
  * @author JavaSaBr
  */
 public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPropertyControl<T, V> {
 
+    /**
+     * The constant NO_MATERIAL.
+     */
     public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    /**
+     * The constant BUTTON_OFFSET.
+     */
     public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
+    /**
+     * The constant MATERIAL_EXTENSIONS.
+     */
     protected static final Array<String> MATERIAL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -61,6 +81,13 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
      */
     private Label materialLabel;
 
+    /**
+     * Instantiates a new Material model property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public MaterialModelPropertyControl(@Nullable final V element, @NotNull final String paramName,
                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
@@ -122,6 +149,8 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
 
     /**
      * Add the mew material.
+     *
+     * @param file the file
      */
     protected void addMaterial(@NotNull final Path file) {
 
@@ -178,6 +207,8 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
     }
 
     /**
+     * Gets material label.
+     *
      * @return the label with name of the material.
      */
     @NotNull

@@ -8,6 +8,8 @@ package com.ss.editor.ui.component;
 public interface ScreenComponent {
 
     /**
+     * Gets component id.
+     *
      * @return индентификатор компонента.
      */
     public default String getComponentId() {

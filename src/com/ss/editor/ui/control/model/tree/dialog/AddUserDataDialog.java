@@ -35,12 +35,33 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
     private static final Point DIALOG_SIZE = new Point(400, 157);
 
     private enum DataType {
+        /**
+         * Float data type.
+         */
         FLOAT,
+        /**
+         * Integer data type.
+         */
         INTEGER,
+        /**
+         * Vector 3 f data type.
+         */
         VECTOR3F,
+        /**
+         * Vector 2 f data type.
+         */
         VECTOR2F,
+        /**
+         * Color data type.
+         */
         COLOR,
+        /**
+         * Boolean data type.
+         */
         BOOLEAN,
+        /**
+         * String data type.
+         */
         STRING,
     }
 
@@ -71,6 +92,12 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private ComboBox<DataType> dataTypeComboBox;
 
+    /**
+     * Instantiates a new Add user data dialog.
+     *
+     * @param changeConsumer the change consumer
+     * @param spatial        the spatial
+     */
     public AddUserDataDialog(final @NotNull ModelChangeConsumer changeConsumer, final @NotNull Spatial spatial) {
         super();
         this.changeConsumer = changeConsumer;

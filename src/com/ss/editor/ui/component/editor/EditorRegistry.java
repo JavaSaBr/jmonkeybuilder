@@ -35,10 +35,18 @@ public class EditorRegistry {
 
     private static final Logger LOGGER = LoggerManager.getLogger(EditorRegistry.class);
 
+    /**
+     * The constant ALL_FORMATS.
+     */
     public static final String ALL_FORMATS = "*";
 
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static EditorRegistry getInstance() {
         return INSTANCE;
@@ -54,6 +62,9 @@ public class EditorRegistry {
      */
     private final ObjectDictionary<String, EditorDescription> editorIdToDescription;
 
+    /**
+     * Instantiates a new Editor registry.
+     */
     public EditorRegistry() {
         this.editorDescriptions = DictionaryFactory.newObjectDictionary();
         this.editorIdToDescription = DictionaryFactory.newObjectDictionary();
@@ -112,6 +123,9 @@ public class EditorRegistry {
     }
 
     /**
+     * Gets description.
+     *
+     * @param editorId the editor id
      * @return the description for the editor id or null.
      */
     @Nullable
@@ -177,6 +191,9 @@ public class EditorRegistry {
     }
 
     /**
+     * Gets available editors for.
+     *
+     * @param file the file
      * @return the list of available editors for the file.
      */
     @NotNull

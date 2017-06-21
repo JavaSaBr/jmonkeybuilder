@@ -15,6 +15,12 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement<SizeInfluencer, SizeInfluencerControl> {
 
+    /**
+     * Instantiates a new Size and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public SizeAndInterpolationElement(@NotNull final SizeInfluencerControl control, final int index) {
         super(control, index);
     }

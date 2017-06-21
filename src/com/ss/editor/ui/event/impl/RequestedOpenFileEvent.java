@@ -17,6 +17,9 @@ import java.nio.file.Path;
  */
 public class RequestedOpenFileEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     public static final EventType<SceneEvent> EVENT_TYPE;
 
     static {
@@ -25,17 +28,25 @@ public class RequestedOpenFileEvent extends SceneEvent {
         }
     }
 
+    /**
+     * The constant EDITOR.
+     */
     public static final String EDITOR = "editor";
 
     private static final String FILE = "file";
     private static final String NEED_SHOW = "need_show";
 
+    /**
+     * Instantiates a new Requested open file event.
+     */
     public RequestedOpenFileEvent() {
         super(EVENT_TYPE);
         setNeedShow(true);
     }
 
     /**
+     * Gets description.
+     *
      * @return the editor descriptor.
      */
     @Nullable
@@ -44,6 +55,8 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets description.
+     *
      * @param description the editor descriptor.
      */
     public void setDescription(final EditorDescription description) {
@@ -51,6 +64,8 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
+     * Gets file.
+     *
      * @return the file to open.
      */
     @NotNull
@@ -59,6 +74,8 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets file.
+     *
      * @param file the file to open.
      */
     public void setFile(final Path file) {
@@ -66,6 +83,8 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
+     * Is need show boolean.
+     *
      * @return true if need to show the editor.
      */
     public boolean isNeedShow() {
@@ -73,6 +92,8 @@ public class RequestedOpenFileEvent extends SceneEvent {
     }
 
     /**
+     * Sets need show.
+     *
      * @param needShow true if need to show the editor.
      */
     public void setNeedShow(final boolean needShow) {

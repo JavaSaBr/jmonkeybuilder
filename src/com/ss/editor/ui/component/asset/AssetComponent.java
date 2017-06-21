@@ -64,6 +64,9 @@ public class AssetComponent extends VBox implements ScreenComponent {
      */
     private boolean ignoreExpanded;
 
+    /**
+     * Instantiates a new Asset component.
+     */
     public AssetComponent() {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
         setId(CSSIds.ASSET_COMPONENT);
@@ -76,6 +79,8 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
+     * Gets waited files to select.
+     *
      * @return the list of waited files to select.
      */
     @NotNull
@@ -197,6 +202,8 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
+     * Is ignore expanded boolean.
+     *
      * @return true if the expand listener is ignored.
      */
     public boolean isIgnoreExpanded() {
@@ -204,6 +211,8 @@ public class AssetComponent extends VBox implements ScreenComponent {
     }
 
     /**
+     * Sets ignore expanded.
+     *
      * @param ignoreExpanded the flag for ignoring expand changes.
      */
     public void setIgnoreExpanded(final boolean ignoreExpanded) {

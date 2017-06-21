@@ -85,6 +85,11 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Nullable
     private static ResourceManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static ResourceManager getInstance() {
         if (instance == null) instance = new ResourceManager();
@@ -139,6 +144,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @NotNull
     private final ClassPathScanner classPathScanner;
 
+    /**
+     * Instantiates a new Resource manager.
+     */
     public ResourceManager() {
         InitializeManager.valid(getClass());
 
@@ -359,6 +367,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
+     * Gets class loaders.
+     *
      * @return the list of an additional classpath.
      */
     @NotNull
@@ -367,6 +377,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
+     * Gets available material definitions.
+     *
      * @return the list of all available material definitions.
      */
     @NotNull

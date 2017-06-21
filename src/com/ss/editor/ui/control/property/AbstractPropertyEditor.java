@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The component to contains property controls in the editor.
  *
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends ScrollPane {
@@ -39,6 +40,11 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
     @Nullable
     private Object currentObject;
 
+    /**
+     * Instantiates a new Abstract property editor.
+     *
+     * @param changeConsumer the change consumer
+     */
     public AbstractPropertyEditor(@NotNull final C changeConsumer) {
         this.changeConsumer = changeConsumer;
         createComponents();
@@ -64,6 +70,8 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
 
     /**
      * Sync all properties with controls.
+     *
+     * @param object the object
      */
     public void syncFor(@Nullable final Object object) {
         if (!isNeedUpdate(object)) return;
@@ -79,6 +87,9 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
 
     /**
      * Build property controls for the object.
+     *
+     * @param object the object
+     * @param parent the parent
      */
     public void buildFor(@Nullable final Object object, @Nullable final Object parent) {
         if (getCurrentObject() == object) return;
@@ -97,6 +108,8 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
     }
 
     /**
+     * Can edit boolean.
+     *
      * @param object the object to edit.
      * @return true if we can edit properties of the object.
      */
@@ -106,6 +119,9 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
 
     /**
      * Re-build property controls for the object.
+     *
+     * @param object the object
+     * @param parent the parent
      */
     public void rebuildFor(@Nullable final Object object, @Nullable final Object parent) {
         if (getCurrentObject() != object) return;
@@ -119,6 +135,12 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
         }
     }
 
+    /**
+     * Is need update boolean.
+     *
+     * @param object the object
+     * @return the boolean
+     */
     protected boolean isNeedUpdate(@Nullable final Object object) {
         final Object currentObject = getCurrentObject();
         return currentObject == object;
@@ -132,6 +154,8 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
     }
 
     /**
+     * Gets current object.
+     *
      * @return the current editable object.
      */
     @Nullable

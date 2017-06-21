@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The base implementation of an editor operation to change material parameter.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOperation<MaterialChangeConsumer> {
@@ -33,6 +34,13 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
     @Nullable
     private final T oldValue;
 
+    /**
+     * Instantiates a new Abstract material param operation.
+     *
+     * @param paramName the param name
+     * @param newValue  the new value
+     * @param oldValue  the old value
+     */
     public AbstractMaterialParamOperation(@NotNull final String paramName, @Nullable final T newValue,
                                           @Nullable final T oldValue) {
         this.paramName = paramName;
@@ -41,6 +49,8 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
     }
 
     /**
+     * Gets param name.
+     *
      * @return The parameter name..
      */
     @NotNull
@@ -49,6 +59,8 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
     }
 
     /**
+     * Gets var type.
+     *
      * @return the parameter type.
      */
     @NotNull

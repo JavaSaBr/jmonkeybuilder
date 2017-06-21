@@ -53,6 +53,12 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         return Icons.OPEN_FILE_16;
     }
 
+    /**
+     * Instantiates a new Load model shape emitter action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public LoadModelShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -71,6 +77,8 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
 
     /**
      * The process of opening file.
+     *
+     * @param file the file
      */
     protected void processOpen(@NotNull final Path file) {
 

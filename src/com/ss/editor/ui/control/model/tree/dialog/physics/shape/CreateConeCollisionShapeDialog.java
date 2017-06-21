@@ -40,6 +40,12 @@ public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeD
     @Nullable
     private ComboBox<String> axisBox;
 
+    /**
+     * Instantiates a new Create cone collision shape dialog.
+     *
+     * @param nodeTree        the node tree
+     * @param collisionObject the collision object
+     */
     public CreateConeCollisionShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                           @NotNull final PhysicsCollisionObject collisionObject) {
         super(nodeTree, collisionObject);

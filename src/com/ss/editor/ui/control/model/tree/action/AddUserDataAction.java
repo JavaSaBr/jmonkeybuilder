@@ -24,6 +24,12 @@ import javafx.scene.image.Image;
  */
 public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Add user data action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AddUserDataAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

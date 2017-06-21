@@ -22,6 +22,12 @@ import java.nio.Buffer;
  */
 public class VertexBufferModelNode extends ModelNode<VertexBuffer> {
 
+    /**
+     * Instantiates a new Vertex buffer model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public VertexBufferModelNode(@NotNull final VertexBuffer element, final long objectId) {
         super(element, objectId);
     }

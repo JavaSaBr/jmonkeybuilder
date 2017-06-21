@@ -24,6 +24,9 @@ import java.nio.file.Path;
  */
 public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 

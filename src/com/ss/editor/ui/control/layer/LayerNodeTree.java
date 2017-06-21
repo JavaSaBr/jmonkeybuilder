@@ -21,6 +21,12 @@ import java.util.function.Consumer;
  */
 public class LayerNodeTree extends AbstractNodeTree<SceneChangeConsumer> {
 
+    /**
+     * Instantiates a new Layer node tree.
+     *
+     * @param selectionHandler the selection handler
+     * @param consumer         the consumer
+     */
     public LayerNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final SceneChangeConsumer consumer) {
         super(selectionHandler, consumer);
     }

@@ -25,6 +25,8 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit {@link Vector2f} values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr.
  */
 public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, T>
@@ -40,6 +42,14 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
      */
     private FloatTextField yField;
 
+    /**
+     * Instantiates a new Abstract vector 2 f property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractVector2fPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
                                            @NotNull final C changeConsumer,
                                            @NotNull final SixObjectConsumer<C, T, String, Vector2f, Vector2f, BiConsumer<T, Vector2f>> changeHandler) {
@@ -81,25 +91,51 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_13);
     }
 
+    /**
+     * Gets y label text.
+     *
+     * @return the y label text
+     */
     @NotNull
     protected String getYLabelText() {
         return "y:";
     }
 
+    /**
+     * Gets x label text.
+     *
+     * @return the x label text
+     */
     @NotNull
     protected String getXLabelText() {
         return "x:";
     }
 
+    /**
+     * Check result x value float.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the float
+     */
     protected float checkResultXValue(final float x, final float y) {
         return x;
     }
 
+    /**
+     * Check result y value float.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the float
+     */
     protected float checkResultYValue(final float x, final float y) {
         return y;
     }
 
     /**
+     * Gets x field.
+     *
      * @return the field X.
      */
     protected FloatTextField getXField() {
@@ -107,6 +143,8 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
     }
 
     /**
+     * Gets y field.
+     *
      * @return the field Y.
      */
     protected FloatTextField getYField() {
@@ -129,6 +167,8 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
 
     /**
      * Update the vector.
+     *
+     * @param event the event
      */
     protected void updateVector(@Nullable final KeyEvent event) {
         UIUtils.consumeIfIsNotHotKey(event);

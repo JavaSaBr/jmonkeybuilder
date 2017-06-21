@@ -57,6 +57,11 @@ public class LodValueCell extends TextFieldListCell<Number> {
     @NotNull
     private final GenerateLodLevelsDialog dialog;
 
+    /**
+     * Instantiates a new Lod value cell.
+     *
+     * @param dialog the dialog
+     */
     LodValueCell(final @NotNull GenerateLodLevelsDialog dialog) {
         setId(CSSIds.GENERATE_LOD_DIALOG_LIST_VIEW_CELL);
         setConverter(converter);

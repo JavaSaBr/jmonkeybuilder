@@ -33,6 +33,11 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
     @NotNull
     private static final PropertyBuilder INSTANCE = new LightPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

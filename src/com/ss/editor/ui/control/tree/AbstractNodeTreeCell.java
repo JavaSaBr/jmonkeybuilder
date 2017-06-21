@@ -32,6 +32,8 @@ import java.util.Set;
 /**
  * The implementation of {@link TreeCell} to show tree nodes.
  *
+ * @param <C> the type parameter
+ * @param <M> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends AbstractNodeTree<C>> extends TextFieldTreeCell<ModelNode<?>> {
@@ -96,6 +98,11 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
      */
     private boolean ignoreUpdate;
 
+    /**
+     * Instantiates a new Abstract node tree cell.
+     *
+     * @param nodeTree the node tree
+     */
     public AbstractNodeTreeCell(@NotNull final M nodeTree) {
         this.nodeTree = nodeTree;
         this.icon = new ImageView();
@@ -251,6 +258,8 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the tree.
      */
     @NotNull
@@ -353,6 +362,17 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
         dragEvent.consume();
     }
 
+    /**
+     * Process drag dropped boolean.
+     *
+     * @param dragTreeItem  the drag tree item
+     * @param dragItem      the drag item
+     * @param item          the item
+     * @param isCopy        the is copy
+     * @param newParentItem the new parent item
+     * @param element       the element
+     * @return the boolean
+     */
     protected boolean processDragDropped(@NotNull final TreeItem<ModelNode<?>> dragTreeItem, @NotNull final ModelNode<?> dragItem,
                                          @NotNull final ModelNode<?> item, final boolean isCopy,
                                          @NotNull final TreeItem<ModelNode<?>> newParentItem, @NotNull final Object element) {

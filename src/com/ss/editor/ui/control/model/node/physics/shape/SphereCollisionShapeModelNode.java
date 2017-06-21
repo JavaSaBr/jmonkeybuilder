@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SphereCollisionShapeModelNode extends CollisionShapeModelNode<SphereCollisionShape> {
 
+    /**
+     * Instantiates a new Sphere collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public SphereCollisionShapeModelNode(@NotNull final SphereCollisionShape element, final long objectId) {
         super(element, objectId);
     }

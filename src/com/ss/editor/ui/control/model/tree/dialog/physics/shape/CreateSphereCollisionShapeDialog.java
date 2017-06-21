@@ -32,6 +32,12 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
     @Nullable
     private FloatTextField radiusField;
 
+    /**
+     * Instantiates a new Create sphere collision shape dialog.
+     *
+     * @param nodeTree        the node tree
+     * @param collisionObject the collision object
+     */
     public CreateSphereCollisionShapeDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                             @NotNull final PhysicsCollisionObject collisionObject) {
         super(nodeTree, collisionObject);
@@ -66,6 +72,8 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
     }
 
     /**
+     * Gets radius field.
+     *
      * @return the radius size.
      */
     @NotNull

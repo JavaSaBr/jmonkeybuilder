@@ -83,6 +83,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Sets init name.
+     *
      * @param initName the initial name.
      */
     public void setInitName(final String initName) {
@@ -107,6 +109,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Sets validator.
+     *
      * @param validator the function for validation name.
      */
     public void setValidator(@Nullable final Function<String, Boolean> validator) {
@@ -122,6 +126,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Sets handler.
+     *
      * @param handler the function for handling a new name.
      */
     public void setHandler(@Nullable final Consumer<String> handler) {

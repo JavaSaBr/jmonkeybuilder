@@ -25,6 +25,9 @@ public class MeshXmlToJ3oFileConverter extends AbstractModelFileConverter {
         EXTENSIONS.asUnsafe().trimToSize();
     }
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileConverterDescription DESCRIPTION = new FileConverterDescription();
 

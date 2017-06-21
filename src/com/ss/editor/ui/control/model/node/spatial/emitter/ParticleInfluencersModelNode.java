@@ -51,6 +51,12 @@ public class ParticleInfluencersModelNode extends ModelNode<ParticleInfluencers>
         CONSTRUCTORS.put(SpriteInfluencer.class, getConstructor(CreateSpriteParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
     }
 
+    /**
+     * Instantiates a new Particle influencers model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ParticleInfluencersModelNode(@NotNull final ParticleInfluencers element, final long objectId) {
         super(element, objectId);
     }

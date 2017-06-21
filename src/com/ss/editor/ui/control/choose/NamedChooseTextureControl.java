@@ -23,6 +23,11 @@ public class NamedChooseTextureControl extends ChooseTextureControl {
     @Nullable
     private final String name;
 
+    /**
+     * Instantiates a new Named choose texture control.
+     *
+     * @param name the name
+     */
     public NamedChooseTextureControl(@NotNull final String name) {
         this.name = name + ":";
     }

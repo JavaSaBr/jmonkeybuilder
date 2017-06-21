@@ -23,6 +23,12 @@ import javafx.scene.image.Image;
  */
 public class SceneNodeModelNode extends NodeModelNode<SceneNode> {
 
+    /**
+     * Instantiates a new Scene node model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public SceneNodeModelNode(@NotNull final SceneNode element, final long objectId) {
         super(element, objectId);
     }

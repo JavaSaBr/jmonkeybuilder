@@ -21,6 +21,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateLightAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create light action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AbstractCreateLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -39,6 +45,11 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
         changeConsumer.execute(new AddLightOperation(light, element));
     }
 
+    /**
+     * Create light light.
+     *
+     * @return the light
+     */
     @NotNull
     protected abstract Light createLight();
 }

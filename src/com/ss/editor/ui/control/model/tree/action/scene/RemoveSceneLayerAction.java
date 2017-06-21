@@ -27,6 +27,12 @@ import javafx.scene.image.Image;
  */
 public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsumer> {
 
+    /**
+     * Instantiates a new Remove scene layer action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public RemoveSceneLayerAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

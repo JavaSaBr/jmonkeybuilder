@@ -32,6 +32,12 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class SceneLayerModelNode extends ModelNode<SceneLayer> implements HideableNode<SceneChangeConsumer> {
 
+    /**
+     * Instantiates a new Scene layer model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public SceneLayerModelNode(@NotNull final SceneLayer element, final long objectId) {
         super(element, objectId);
     }

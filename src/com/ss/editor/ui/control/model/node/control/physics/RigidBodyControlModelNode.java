@@ -18,6 +18,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class RigidBodyControlModelNode extends PhysicsObjectModelNode<RigidBodyControl> {
 
+    /**
+     * Instantiates a new Rigid body control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public RigidBodyControlModelNode(@NotNull final RigidBodyControl element, final long objectId) {
         super(element, objectId);
     }

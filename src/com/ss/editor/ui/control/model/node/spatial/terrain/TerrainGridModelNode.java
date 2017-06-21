@@ -17,6 +17,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TerrainGridModelNode extends NodeModelNode<TerrainGrid> {
 
+    /**
+     * Instantiates a new Terrain grid model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public TerrainGridModelNode(@NotNull final TerrainGrid element, final long objectId) {
         super(element, objectId);
     }

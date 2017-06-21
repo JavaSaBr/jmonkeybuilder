@@ -38,10 +38,22 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final Point DIALOG_SIZE = new Point(530, 157);
 
+    /**
+     * The enum Algorithm type.
+     */
     public enum AlgorithmType {
+        /**
+         * Standard algorithm type.
+         */
         STANDARD,
+        /**
+         * Mikktspace algorithm type.
+         */
         MIKKTSPACE;
 
+        /**
+         * The constant VALUES.
+         */
         public static final AlgorithmType[] VALUES = values();
     }
 
@@ -69,12 +81,20 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox splitMirroredCheckBox;
 
+    /**
+     * Instantiates a new Generate tangents dialog.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public GenerateTangentsDialog(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the node tree component.
      */
     @NotNull
@@ -83,6 +103,8 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node.
+     *
      * @return the generated node.
      */
     @NotNull

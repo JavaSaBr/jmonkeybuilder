@@ -11,7 +11,7 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to add a {@link ParticleInfluencer} to a {@link
- * ParticleEmitterNode}.
+ * ParticleEmitterNode}*.
  *
  * @author JavaSaBr.
  */
@@ -27,6 +27,12 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
      */
     private final ParticleEmitterNode parent;
 
+    /**
+     * Instantiates a new Add particle influencer operation.
+     *
+     * @param influencer the influencer
+     * @param parent     the parent
+     */
     public AddParticleInfluencerOperation(@NotNull final ParticleInfluencer influencer,
                                           @NotNull final ParticleEmitterNode parent) {
         this.influencer = influencer;

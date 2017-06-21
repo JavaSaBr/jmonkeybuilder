@@ -25,6 +25,12 @@ import jme3tools.optimize.GeometryBatchFactory;
  */
 public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Optimize geometry action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public OptimizeGeometryAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

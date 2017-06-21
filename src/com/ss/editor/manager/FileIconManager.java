@@ -31,6 +31,9 @@ public class FileIconManager {
     @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileIconManager.class);
 
+    /**
+     * The constant DEFAULT_FILE_ICON_SIZE.
+     */
     public static final int DEFAULT_FILE_ICON_SIZE = 16;
 
     @NotNull
@@ -86,6 +89,11 @@ public class FileIconManager {
     @Nullable
     private static FileIconManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static FileIconManager getInstance() {
         if (instance == null) instance = new FileIconManager();
@@ -187,8 +195,8 @@ public class FileIconManager {
     /**
      * Get an image by an URL.
      *
-     * @param url  the url.
-     * @param size the size.
+     * @param url      the url.
+     * @param size     the size.
      * @param useCache true if need to use cache.
      * @return the image.
      */

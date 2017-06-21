@@ -78,15 +78,30 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The constant JFX_APPLICATION.
+     */
     @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
+    /**
+     * The constant EDITOR.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     private enum HeightMapType {
+        /**
+         * Flat height map type.
+         */
         FLAT(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT),
+        /**
+         * Image based height map type.
+         */
         IMAGE_BASED(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED),
+        /**
+         * Hill height map type.
+         */
         HILL(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL);
 
         private static final HeightMapType[] VALUES = values();
@@ -249,6 +264,12 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private FloatTextField hillMaxRadiusField;
 
+    /**
+     * Instantiates a new Create terrain dialog.
+     *
+     * @param parentNode the parent node
+     * @param nodeTree   the node tree
+     */
     public CreateTerrainDialog(@NotNull final ModelNode<?> parentNode, @NotNull final AbstractNodeTree<?> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;

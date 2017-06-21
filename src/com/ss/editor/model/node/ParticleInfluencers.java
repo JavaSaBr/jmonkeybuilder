@@ -7,6 +7,8 @@ import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
 
 /**
+ * The type Particle influencers.
+ *
  * @author JavaSaBr
  */
 public class ParticleInfluencers {
@@ -17,11 +19,18 @@ public class ParticleInfluencers {
     @NotNull
     private final ParticleEmitterNode emitterNode;
 
+    /**
+     * Instantiates a new Particle influencers.
+     *
+     * @param emitterNode the emitter node
+     */
     public ParticleInfluencers(@NotNull final ParticleEmitterNode emitterNode) {
         this.emitterNode = emitterNode;
     }
 
     /**
+     * Gets emitter node.
+     *
      * @return the emitter node.
      */
     @NotNull
@@ -30,6 +39,8 @@ public class ParticleInfluencers {
     }
 
     /**
+     * Gets influencers.
+     *
      * @return the array of influencers.
      */
     @NotNull

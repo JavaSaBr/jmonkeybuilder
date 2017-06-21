@@ -11,6 +11,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class IntegerMaterialParamOperation extends AbstractMaterialParamOperation<Integer> {
 
+    /**
+     * Instantiates a new Integer material param operation.
+     *
+     * @param paramName the param name
+     * @param newValue  the new value
+     * @param oldValue  the old value
+     */
     public IntegerMaterialParamOperation(@NotNull final String paramName, @Nullable final Integer newValue,
                                          @Nullable final Integer oldValue) {
         super(paramName, newValue, oldValue);

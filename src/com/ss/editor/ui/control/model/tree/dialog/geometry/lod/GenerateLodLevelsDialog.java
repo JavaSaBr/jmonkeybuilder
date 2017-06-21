@@ -50,10 +50,22 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The enum Reduction method.
+     */
     public enum ReductionMethod {
+        /**
+         * Proportional reduction method.
+         */
         PROPORTIONAL,
+        /**
+         * Constant reduction method.
+         */
         CONSTANT;
 
+        /**
+         * The constant VALUES.
+         */
         public static final ReductionMethod[] VALUES = values();
     }
 
@@ -87,6 +99,12 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private ListView<Number> levelsList;
 
+    /**
+     * Instantiates a new Generate lod levels dialog.
+     *
+     * @param nodeTree the node tree
+     * @param geometry the geometry
+     */
     public GenerateLodLevelsDialog(@NotNull final AbstractNodeTree<?> nodeTree, final @NotNull Geometry geometry) {
         this.nodeTree = nodeTree;
         this.geometry = geometry;
@@ -103,6 +121,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets mesh.
+     *
      * @return the mesh.
      */
     @NotNull
@@ -119,6 +139,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets method.
+     *
      * @return the reduction method.
      */
     @NotNull

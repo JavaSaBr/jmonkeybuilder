@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateCapsuleCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
 
+    /**
+     * Instantiates a new Create capsule collision shape action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateCapsuleCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                              @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
