@@ -1,22 +1,16 @@
 package com.ss.editor.ui.component.creator;
 
-import com.ss.editor.ui.component.creator.impl.EmptyFileCreator;
-import com.ss.editor.ui.component.creator.impl.EmptyModelCreator;
-import com.ss.editor.ui.component.creator.impl.EmptySceneCreator;
-import com.ss.editor.ui.component.creator.impl.FolderCreator;
-import com.ss.editor.ui.component.creator.impl.MaterialFileCreator;
-import com.ss.editor.ui.component.creator.impl.PostFilterViewFileCreator;
+import com.ss.editor.ui.component.creator.impl.*;
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.concurrent.Callable;
-
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
+import java.util.concurrent.Callable;
 
 /**
  * The registry with file creators.
@@ -49,15 +43,15 @@ public class FileCreatorRegistry {
     /**
      * Instantiates a new File creator registry.
      */
-    public FileCreatorRegistry() {
+    private FileCreatorRegistry() {
         this.descriptions = ArrayFactory.newArray(FileCreatorDescription.class);
         addDescription(MaterialFileCreator.DESCRIPTION);
-        addDescription(PostFilterViewFileCreator.DESCRIPTION);
         addDescription(EmptyFileCreator.DESCRIPTION);
         addDescription(FolderCreator.DESCRIPTION);
         addDescription(EmptyModelCreator.DESCRIPTION);
         addDescription(SingleColorTextureFileCreator.DESCRIPTION);
         addDescription(EmptySceneCreator.DESCRIPTION);
+        addDescription(DefaultSceneCreator.DESCRIPTION);
     }
 
     /**
@@ -86,12 +80,13 @@ public class FileCreatorRegistry {
      * @param file        the file.
      * @return the file creator.
      */
+    @Nullable
     public FileCreator newCreator(@NotNull final FileCreatorDescription description, @NotNull final Path file) {
 
         final Callable<FileCreator> constructor = description.getConstructor();
         try {
             return constructor.call();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.warning(e);
         }
 

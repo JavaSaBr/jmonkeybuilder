@@ -9,11 +9,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-/**
- * The class with all messages of this application.
- *
- * @author JavaSaBr
- */
 public class Messages {
 
     /**
@@ -1712,9 +1707,17 @@ public class Messages {
      */
     public static final String EMPTY_SCENE_CREATOR_DESCRIPTION;
     /**
+     * The constant DEFAULT_SCENE_CREATOR_DESCRIPTION.
+     */
+    public static final String DEFAULT_SCENE_CREATOR_DESCRIPTION;
+    /**
      * The constant EMPTY_SCENE_CREATOR_TITLE.
      */
     public static final String EMPTY_SCENE_CREATOR_TITLE;
+    /**
+     * The constant DEFAULT_SCENE_CREATOR_TITLE.
+     */
+    public static final String DEFAULT_SCENE_CREATOR_TITLE;
 
     /**
      * The constant GLSL_FILE_EDITOR_NAME.
@@ -2550,7 +2553,9 @@ public class Messages {
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
 
         EMPTY_SCENE_CREATOR_DESCRIPTION = bundle.getString("EmptySceneCreatorDescription");
+        DEFAULT_SCENE_CREATOR_DESCRIPTION = bundle.getString("DefaultSceneCreatorDescription");
         EMPTY_SCENE_CREATOR_TITLE = bundle.getString("EmptySceneCreatorTitle");
+        DEFAULT_SCENE_CREATOR_TITLE = bundle.getString("DefaultSceneCreatorTitle");
 
         GLSL_FILE_EDITOR_NAME = bundle.getString("GLSLFileEditorName");
         MATERIAL_DEFINITION_FILE_EDITOR_NAME = bundle.getString("MaterialDefinitionFileEditorName");

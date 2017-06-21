@@ -50,6 +50,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * The constant SETTINGS_CONTAINER_OFFSET.
      */
     protected static final Insets SETTINGS_CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 10, 0);
+
     /**
      * The constant RESOURCE_TREE_OFFSET.
      */
@@ -64,14 +65,17 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * The constant EXECUTOR_MANAGER.
      */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
      * The constant FX_EVENT_MANAGER.
      */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
     /**
      * The constant JFX_APPLICATION.
      */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
      * The constant EDITOR.
      */

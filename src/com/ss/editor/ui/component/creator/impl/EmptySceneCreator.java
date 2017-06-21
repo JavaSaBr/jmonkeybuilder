@@ -51,12 +51,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
         final Path fileToCreate = getFileToCreate();
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
-        final SceneNode newNode = new SceneNode();
-        newNode.addLayer(new SceneLayer("Default", true));
-        newNode.addLayer(new SceneLayer("TransparentFX", true));
-        newNode.addLayer(new SceneLayer("Ignore Raycast", true));
-        newNode.addLayer(new SceneLayer("Water", true));
-        newNode.getLayers().forEach(SceneLayer::show);
+        final SceneNode newNode = createScene();
 
         try (final OutputStream out = Files.newOutputStream(fileToCreate)) {
             exporter.save(newNode, out);
@@ -65,5 +60,21 @@ public class EmptySceneCreator extends AbstractFileCreator {
         }
 
         notifyFileCreated(fileToCreate, true);
+    }
+
+    /**
+     * Create scene scene node.
+     *
+     * @return the scene node
+     */
+    @NotNull
+    protected SceneNode createScene() {
+        final SceneNode newNode = new SceneNode();
+        newNode.addLayer(new SceneLayer("Default", true));
+        newNode.addLayer(new SceneLayer("TransparentFX", true));
+        newNode.addLayer(new SceneLayer("Ignore Raycast", true));
+        newNode.addLayer(new SceneLayer("Water", true));
+        newNode.getLayers().forEach(SceneLayer::show);
+        return newNode;
     }
 }
