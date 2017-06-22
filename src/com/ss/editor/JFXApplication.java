@@ -198,7 +198,7 @@ public class JFXApplication extends Application {
     @FXThread
     public void onExit() {
 
-        GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
+        GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
 
         final EditorConfig config = EditorConfig.getInstance();
@@ -228,7 +228,7 @@ public class JFXApplication extends Application {
 
         JMEFilePreviewManager.getInstance();
 
-        GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
+        GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();

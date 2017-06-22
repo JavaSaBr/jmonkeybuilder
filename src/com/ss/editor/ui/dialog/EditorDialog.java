@@ -147,7 +147,7 @@ public class EditorDialog extends AbstractPopupDialog {
             FX_EVENT_MANAGER.addEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
         }
 
-        GAnalytics.sendPageView(null, null, "/dialog/" + getDialogId());
+        GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
     }
 

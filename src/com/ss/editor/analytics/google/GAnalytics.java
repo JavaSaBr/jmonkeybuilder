@@ -61,9 +61,10 @@ public class GAnalytics extends EditorThread {
     private static final String PARAM_CUSTOM_DIMENSION = "cd";
 
     private static final String FIELD_OS = PARAM_CUSTOM_DIMENSION + "1";
-    private static final String FIELD_APP_VERSION = PARAM_CUSTOM_DIMENSION + "2";
+    private static final String FIELD_APP_VERSION = PARAM_CUSTOM_DIMENSION + "6";
     private static final String FIELD_LOCALE = PARAM_CUSTOM_DIMENSION + "3";
-    private static final String FIELD_USER_ID = PARAM_CUSTOM_DIMENSION + "4";
+    private static final String FIELD_USER_ID = PARAM_CUSTOM_DIMENSION + "5";
+    private static final String FIELD_JAVA_VERSION = PARAM_CUSTOM_DIMENSION + "7";
 
     private static final String PROP_ANALYTICS_HOST = "http://www.google-analytics.com/collect";
     private static final String PROP_TRACKING_ID = "UA-89459340-1";
@@ -118,8 +119,29 @@ public class GAnalytics extends EditorThread {
      * @param label    the label.
      */
     @FromAnyThread
-    public static void sendEvent(@NotNull final String category, @NotNull final String action, @Nullable final String label) {
+    public static void sendEvent(@NotNull final String category, @NotNull final String action,
+                                 @Nullable final String label) {
         if (!EDITOR_CONFIG.isAnalytics()) return;
+
+        final Map<String, Object> parameters = new HashMap<>();
+        parameters.put(PARAM_EVENT_CATEGORY, category);
+        parameters.put(PARAM_EVENT_ACTION, action);
+
+        if (!isEmpty(label)) parameters.put(PARAM_EVENT_LABEL, label);
+
+        send(HitType.EVENT, parameters);
+    }
+
+    /**
+     * Send an event ignoring disabling GA.
+     *
+     * @param category the category.
+     * @param action   the action.
+     * @param label    the label.
+     */
+    @FromAnyThread
+    public static void forceSendEvent(@NotNull final String category, @NotNull final String action,
+                                      @Nullable final String label) {
 
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put(PARAM_EVENT_CATEGORY, category);
@@ -163,9 +185,8 @@ public class GAnalytics extends EditorThread {
      * @param page     the page.
      */
     @FromAnyThread
-    public static void sendPageView(@Nullable final String title, @Nullable final String location,
+    public static void sendPageView(@NotNull final String title, @Nullable final String location,
                                     @Nullable final String page) {
-
         if (!EDITOR_CONFIG.isAnalytics()) return;
 
         final Map<String, Object> parameters = new HashMap<>();
@@ -187,7 +208,6 @@ public class GAnalytics extends EditorThread {
     @FromAnyThread
     public static void sendTiming(@NotNull final String timingCategory, @NotNull final String timingVar,
                                   final int timingValue, @Nullable final String timingLabel) {
-
         if (!EDITOR_CONFIG.isAnalytics()) return;
 
         final Map<String, Object> parameters = new HashMap<>();
@@ -217,7 +237,6 @@ public class GAnalytics extends EditorThread {
      * @param parameters the parameters.
      */
     private static void send(@NotNull final Map<String, Object> parameters) {
-        if (!EDITOR_CONFIG.isAnalytics()) return;
         getInstance().addTask(() -> doSend(parameters));
     }
 
@@ -235,6 +254,8 @@ public class GAnalytics extends EditorThread {
         final String appVersion = Config.VERSION;
         final String language = Locale.getDefault().toString();
         final String userId = Utils.getUserName();
+        final String javaVersion = System.getProperty("java.vm.name", "unknown") + " " +
+                System.getProperty("java.version", "unknown");
 
         final GAnalytics instance = getInstance();
         final AtomicInteger progressCount = instance.progressCount;
@@ -245,10 +266,14 @@ public class GAnalytics extends EditorThread {
             parameters.put(PARAM_TRACKING_ID, PROP_TRACKING_ID);
             parameters.put(PARAM_CLIENT_ID, PROP_CLIENT_ID);
 
+            if (EDITOR_CONFIG.isAnalytics()) {
+                if (!StringUtils.isEmpty(userId)) parameters.put(FIELD_USER_ID, userId);
+            }
+
             if (!StringUtils.isEmpty(os)) parameters.put(FIELD_OS, os);
             if (!StringUtils.isEmpty(appVersion)) parameters.put(FIELD_APP_VERSION, appVersion);
             if (!StringUtils.isEmpty(language)) parameters.put(FIELD_LOCALE, language);
-            if (!StringUtils.isEmpty(userId)) parameters.put(FIELD_USER_ID, userId);
+            if (!StringUtils.isEmpty(javaVersion)) parameters.put(FIELD_JAVA_VERSION, javaVersion);
 
             final String stringParameters = buildParameters(parameters);
             final byte[] byteParameters = stringParameters.getBytes("UTF-8");

@@ -50,7 +50,7 @@ public class OpenAssetAction extends MenuItem {
             chooser.setInitialDirectory(currentFolder);
         }
 
-        GAnalytics.sendPageView(null, null, "/dialog/AssetChooseDialog");
+        GAnalytics.sendPageView("AssetChooseDialog", null, "/dialog/AssetChooseDialog");
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "AssetChooseDialog");
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();

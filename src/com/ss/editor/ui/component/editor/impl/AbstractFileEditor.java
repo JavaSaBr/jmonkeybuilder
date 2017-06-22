@@ -364,7 +364,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_OPENED,
                 description.getEditorId() + "/" + getFileName());
 
-        GAnalytics.sendPageView(null, null, "/editing/" + description.getEditorId());
+        GAnalytics.sendPageView(description.getEditorId(), null, "/editing/" + description.getEditorId());
     }
 
     @NotNull
@@ -445,7 +445,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.showedTime = LocalTime.now();
 
         final EditorDescription description = getDescription();
-        GAnalytics.sendPageView(null, null, "/editing/" + description.getEditorId());
+        GAnalytics.sendPageView(description.getEditorId(), null, "/editing/" + description.getEditorId());
     }
 
     @Override
