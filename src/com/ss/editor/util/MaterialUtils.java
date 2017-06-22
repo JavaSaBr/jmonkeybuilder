@@ -14,11 +14,11 @@ import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
 import jme3tools.converters.ImageToAwt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -51,19 +51,25 @@ public class MaterialUtils {
     @Nullable
     public static Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
 
-        boolean needToReload = false;
+        final AssetManager assetManager = EDITOR.getAssetManager();
 
+        boolean needToReload = false;
         String textureKey = null;
 
         if (MaterialUtils.isShaderFile(file)) {
             if (!MaterialUtils.containsShader(material, file)) return null;
             needToReload = true;
+
+            // if the shader was changed we need to reload material definition
+            final MaterialDef materialDef = material.getMaterialDef();
+            final String assetName = materialDef.getAssetName();
+            assetManager.deleteFromCache(new AssetKey<>(assetName));
+
         } else if (MaterialUtils.isTextureFile(file)) {
             textureKey = MaterialUtils.containsTexture(material, file);
             if (textureKey == null) return null;
         }
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
         final String assetName = material.getAssetName();
 
         // try to refresh texture directly
@@ -75,6 +81,9 @@ public class MaterialUtils {
         }
 
         final MaterialKey materialKey = new MaterialKey(assetName);
+
+        assetManager.deleteFromCache(materialKey);
+
         final Material newMaterial = assetManager.loadAsset(materialKey);
 
         MaterialUtils.updateTo(newMaterial, material);

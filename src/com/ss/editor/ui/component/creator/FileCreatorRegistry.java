@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.creator;
 
 import com.ss.editor.ui.component.creator.impl.*;
+import com.ss.editor.ui.component.creator.impl.material.MaterialFileCreator;
+import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefinitionFileCreator;
 import com.ss.editor.ui.component.creator.impl.texture.SingleColorTextureFileCreator;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -46,6 +48,7 @@ public class FileCreatorRegistry {
     private FileCreatorRegistry() {
         this.descriptions = ArrayFactory.newArray(FileCreatorDescription.class);
         addDescription(MaterialFileCreator.DESCRIPTION);
+        addDescription(MaterialDefinitionFileCreator.DESCRIPTION);
         addDescription(EmptyFileCreator.DESCRIPTION);
         addDescription(FolderCreator.DESCRIPTION);
         addDescription(EmptyModelCreator.DESCRIPTION);

@@ -33,6 +33,7 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -49,8 +50,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -546,9 +545,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
             final ComboBox<String> materialDefinitionBox = getMaterialDefinitionBox();
             final ObservableList<String> items = materialDefinitionBox.getItems();
             items.clear();
-
-            final Array<String> availableMaterialDefinitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
-            availableMaterialDefinitions.forEach(items::add);
+            items.addAll(RESOURCE_MANAGER.getAvailableMaterialDefinitions());
 
             final MaterialDef materialDef = material.getMaterialDef();
             materialDefinitionBox.getSelectionModel().select(materialDef.getAssetName());
@@ -600,7 +597,9 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         materialDefinitionBox = new ComboBox<>();
         materialDefinitionBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
-        materialDefinitionBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeType(newValue));
+        materialDefinitionBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> changeType(newValue));
 
         final Label bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
         bucketLabel.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_LABEL);
@@ -608,7 +607,9 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         bucketComboBox = new ComboBox<>(FXCollections.observableArrayList(BUCKETS));
         bucketComboBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX);
         bucketComboBox.getSelectionModel().select(RenderQueue.Bucket.Inherit);
-        bucketComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
+        bucketComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
 
         FXUtils.addToPane(createSaveAction(), container);
         FXUtils.addToPane(cubeButton, container);
@@ -656,7 +657,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the type.
      */
-    private void changeType(@NotNull final String newType) {
+    private void changeType(@Nullable final String newType) {
         if (isIgnoreListeners()) return;
         processChangeTypeImpl(newType);
     }
@@ -664,7 +665,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the type.
      */
-    private void processChangeTypeImpl(@NotNull final String newType) {
+    private void processChangeTypeImpl(@Nullable final String newType) {
+        if (newType == null) return;
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Material newMaterial = new Material(assetManager, newType);

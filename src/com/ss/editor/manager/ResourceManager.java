@@ -384,8 +384,19 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @NotNull
     @FromAnyThread
     public synchronized Array<String> getAvailableMaterialDefinitions() {
-
         final Array<String> result = ArrayFactory.newArray(String.class);
+        addAvailableMaterialDefinitionsTo(result);
+        return result;
+    }
+
+    /**
+     * Add available material definitions to the result array.
+     *
+     * @param result the result
+     */
+    @FromAnyThread
+    public synchronized void addAvailableMaterialDefinitionsTo(@NotNull final Array<String> result) {
+
         final Array<String> materialDefinitions = getMaterialDefinitions();
 
         move(materialDefinitions, result, false);
@@ -396,7 +407,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         });
 
         result.sort(STRING_ARRAY_COMPARATOR);
-        return result;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.ss.editor.ui.component.creator.impl;
+package com.ss.editor.ui.component.creator.impl.material;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static java.util.Objects.requireNonNull;
@@ -8,17 +8,18 @@ import com.ss.editor.Messages;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -50,7 +51,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
     /**
      * The list of available definitions.
      */
-    @Nullable
+    @NotNull
     private Array<String> definitions;
 
     /**
@@ -60,7 +61,6 @@ public class MaterialFileCreator extends AbstractFileCreator {
     private ComboBox<String> materialTypeComboBox;
 
     private MaterialFileCreator() {
-        super();
     }
 
     @NotNull
@@ -100,10 +100,11 @@ public class MaterialFileCreator extends AbstractFileCreator {
 
         AutoCompleteComboBoxListener.install(materialTypeComboBox);
 
-        final ObservableList<String> items = materialTypeComboBox.getItems();
-
         definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
-        definitions.forEach(items::add);
+
+        final ObservableList<String> items = materialTypeComboBox.getItems();
+        items.clear();
+        items.addAll(definitions);
 
         final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
 

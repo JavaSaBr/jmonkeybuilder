@@ -245,7 +245,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the filed with new file name.
      */
     @NotNull
-    private TextField getFileNameField() {
+    protected TextField getFileNameField() {
         return requireNonNull(fileNameField);
     }
 

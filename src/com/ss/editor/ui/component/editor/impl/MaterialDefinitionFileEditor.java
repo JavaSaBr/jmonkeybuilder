@@ -33,7 +33,7 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
     }
 
     private static final String[] KEYWORDS = {
-            "MaterialDef", "MaterialParameters", "Technique", "WorldParameters", "Defines"
+            "MaterialDef", "MaterialParameters", "Technique", "WorldParameters", "Defines", "ForcedRenderState"
     };
 
     private static final String[] VALUE_TYPES = {
@@ -41,7 +41,7 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
             "VertexShader", "TessellationEvaluationShader ", "TessellationControlShader", "FragmentShader", "LightMode",
             "WorldViewProjectionMatrix", "Time", "NormalMatrix", "WorldViewMatrix",
             "ViewMatrix", "CameraPosition", "WorldMatrix", "FaceCull", "DepthTest", "DepthWrite", "PolyOffset",
-            "ColorWrite", "Blend", "Resolution", "FragmentShader", "ForcedRenderState", "ViewProjectionMatrix",
+            "ColorWrite", "Blend", "Resolution", "FragmentShader", "ViewProjectionMatrix",
             "IntArray", "FloatArray", "Vector2Array", "Vector3Array", "Vector4Array", "Matrix3",
             "Matrix3Array", "Matrix4Array", "TextureBuffer", "Texture3D", "TextureArray", "GeometryShader"
     };
