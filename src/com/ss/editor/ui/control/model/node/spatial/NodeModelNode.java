@@ -16,9 +16,10 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.*;
 import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateToneg0dEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateToneg0dSoftEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.ResetToneg0dParticleEmittersAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateToneg0dParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateToneg0dSoftParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetToneg0dParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateSphereAction;
@@ -95,7 +96,8 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new LoadModelAction(nodeTree, this),
                 new LinkModelAction(nodeTree, this), new CreateSkyAction(nodeTree, this),
-                new CreateToneg0dEmitterAction(nodeTree, this), new CreateToneg0dSoftEmitterAction(nodeTree, this),
+                new CreateToneg0dParticleEmitterAction(nodeTree, this), new CreateToneg0dSoftParticleEmitterAction(nodeTree, this),
+                new CreateParticleEmitterAction(nodeTree, this),
                 new CreateAudioNodeAction(nodeTree, this), new CreateTerrainAction(nodeTree, this),
                 createPrimitiveMenu, addLightMenu);
 

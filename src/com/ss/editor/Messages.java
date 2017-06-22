@@ -723,17 +723,21 @@ public class Messages {
      */
     public static final String MODEL_NODE_TREE_ACTION_AUDIO_STOP;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_TEMITTER.
+     * The constant MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER.
      */
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_TEMITTER;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_RESET_TEMITTERS.
+     * The constant MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER.
      */
-    public static final String MODEL_NODE_TREE_ACTION_RESET_TEMITTERS;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER.
+     * The constant MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER.
      */
-    public static final String MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER;
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
     /**
      * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE.
      */
@@ -1265,6 +1269,50 @@ public class Messages {
      * The constant PARTICLE_EMITTER_TEST_MODE.
      */
     public static final String PARTICLE_EMITTER_TEST_MODE;
+    /**
+     * The constant PARTICLE_EMITTER_FACING_VELOCITY.
+     */
+    public static final String PARTICLE_EMITTER_FACING_VELOCITY;
+    /**
+     * The constant PARTICLE_EMITTER_IN_WORLD_SPACE.
+     */
+    public static final String PARTICLE_EMITTER_IN_WORLD_SPACE;
+    /**
+     * The constant PARTICLE_EMITTER_RANDOM_ANGLE.
+     */
+    public static final String PARTICLE_EMITTER_RANDOM_ANGLE;
+    /**
+     * The constant PARTICLE_EMITTER_SELECT_RANDOM_IMAGE.
+     */
+    public static final String PARTICLE_EMITTER_SELECT_RANDOM_IMAGE;
+    /**
+     * The constant PARTICLE_EMITTER_SIZE.
+     */
+    public static final String PARTICLE_EMITTER_SIZE;
+    /**
+     * The constant PARTICLE_EMITTER_ROTATE_SPEED.
+     */
+    public static final String PARTICLE_EMITTER_ROTATE_SPEED;
+    /**
+     * The constant PARTICLE_EMITTER_START_COLOR.
+     */
+    public static final String PARTICLE_EMITTER_START_COLOR;
+    /**
+     * The constant PARTICLE_EMITTER_END_COLOR.
+     */
+    public static final String PARTICLE_EMITTER_END_COLOR;
+    /**
+     * The constant PARTICLE_EMITTER_MESH_TYPE.
+     */
+    public static final String PARTICLE_EMITTER_MESH_TYPE;
+    /**
+     * The constant PARTICLE_EMITTER_GRAVITY.
+     */
+    public static final String PARTICLE_EMITTER_GRAVITY;
+    /**
+     * The constant PARTICLE_EMITTER_FACE_NORMAL.
+     */
+    public static final String PARTICLE_EMITTER_FACE_NORMAL;
     /**
      * The constant PARTICLE_EMITTER_ENABLED.
      */
@@ -2307,9 +2355,10 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_AUDIO_NODE = bundle.getString("ModelNodeTreeActionCreateAudioNode");
         MODEL_NODE_TREE_ACTION_AUDIO_PLAY = bundle.getString("ModelNodeTreeActionAudioPlay");
         MODEL_NODE_TREE_ACTION_AUDIO_STOP = bundle.getString("ModelNodeTreeActionAudioStop");
-        MODEL_NODE_TREE_ACTION_CREATE_TEMITTER = bundle.getString("ModelNodeTreeActionCreateTEmitter");
-        MODEL_NODE_TREE_ACTION_RESET_TEMITTERS = bundle.getString("ModelNodeTreeActionResetTEmitters");
-        MODEL_NODE_TREE_ACTION_CREATE_SOFT_TEMITTER = bundle.getString("ModelNodeTreeActionCreateSoftTEmitter");
+        MODEL_NODE_TREE_ACTION_CREATE_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateToneg0dParticleEmitter");
+        MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
+        MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");
+        MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS = bundle.getString("ModelNodeTreeActionResetParticleEmitters");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
@@ -2466,6 +2515,18 @@ public class Messages {
         PARTICLE_EMITTER_COLUMNS = bundle.getString("ParticleEmitterColumns");
         PARTICLE_EMITTER_ROWS = bundle.getString("ParticleEmitterRows");
         PARTICLE_EMITTER_SPRITE_COUNT = bundle.getString("ParticleEmitterSpriteCount");
+        PARTICLE_EMITTER_FACING_VELOCITY = bundle.getString("ParticleEmitterFacingVelocity");
+        PARTICLE_EMITTER_IN_WORLD_SPACE = bundle.getString("ParticleEmitterInWorldSpace");
+        PARTICLE_EMITTER_RANDOM_ANGLE = bundle.getString("ParticleEmitterRandomAngle");
+        PARTICLE_EMITTER_SELECT_RANDOM_IMAGE = bundle.getString("ParticleEmitterSelectRandomImage");
+        PARTICLE_EMITTER_SIZE = bundle.getString("ParticleEmitterSize");
+        PARTICLE_EMITTER_ROTATE_SPEED = bundle.getString("ParticleEmitterRotateSpeed");
+        PARTICLE_EMITTER_START_COLOR = bundle.getString("ParticleEmitterStartColor");
+        PARTICLE_EMITTER_END_COLOR = bundle.getString("ParticleEmitterEndColor");
+        PARTICLE_EMITTER_MESH_TYPE = bundle.getString("ParticleEmitterMeshType");
+        PARTICLE_EMITTER_GRAVITY = bundle.getString("ParticleEmitterGravity");
+        PARTICLE_EMITTER_FACE_NORMAL = bundle.getString("ParticleEmitterFaceNormal");
+
         PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION = bundle.getString("ParticleEmitterInfluencerFixedDuration");
         PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR = bundle.getString("ParticleEmitterInfluencerRandomStartColor");
         PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE = bundle.getString("ParticleEmitterInfluencerRandomStartSize");

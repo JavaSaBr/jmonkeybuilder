@@ -23,6 +23,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -472,6 +473,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     protected void loadState() {
 
         scriptingComponent.addVariable("root", getCurrentModel());
+        scriptingComponent.addVariable("assetManager", EDITOR.getAssetManager());
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -480,6 +482,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent.addImport(DirectionalLight.class);
         scriptingComponent.addImport(PointLight.class);
         scriptingComponent.addImport(SpotLight.class);
+        scriptingComponent.addImport(Material.class);
+        scriptingComponent.addImport(Texture.class);
         scriptingComponent.setExampleCode("root.attachChild(new Node(\"created from Groovy\"));");
         scriptingComponent.buildHeader();
 

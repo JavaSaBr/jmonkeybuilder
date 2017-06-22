@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.emitter;
 
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.action.emitter.influerencer.RemoveParticleInfluencerAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.influerencer.RemoveParticleInfluencerAction;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 

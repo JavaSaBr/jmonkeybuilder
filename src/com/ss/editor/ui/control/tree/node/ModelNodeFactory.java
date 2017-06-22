@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.tree.node;
 
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.animation.*;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.collision.shapes.*;
@@ -11,12 +12,15 @@ import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionEvent;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.light.*;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.*;
 import com.jme3.scene.control.Control;
 import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainQuad;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.node.ParticleInfluencers;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.layer.node.LayersRootModelNode;
@@ -37,14 +41,14 @@ import com.ss.editor.ui.control.model.node.control.physics.vehicle.VehicleWheelM
 import com.ss.editor.ui.control.model.node.light.*;
 import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
-import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleEmitterNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleEmitterModelNode;
 import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencerModelNode;
 import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencersModelNode;
+import com.ss.editor.ui.control.model.node.spatial.emitter.Toneg0dParticleEmitterNodeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainGridModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainQuadModelNode;
-import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
@@ -52,24 +56,26 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 import java.nio.Buffer;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
-
 /**
- * The factory to create the {@link ModelNode} of the element of {@link com.jme3.scene.Spatial}.
+ * The factory to create the {@link ModelNode} of an element.
  *
  * @author JavaSabr
  */
 public class ModelNodeFactory {
 
+    /**
+     * The node id generator.
+     */
+    @NotNull
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
 
     /**
-     * Create for v.
+     * Create a model node for an element.
      *
      * @param <T>     the type parameter
      * @param <V>     the type parameter
      * @param element the element
-     * @return the v
+     * @return the model node.
      */
     @Nullable
     public static <T, V extends ModelNode<T>> V createFor(@Nullable final T element) {
@@ -158,7 +164,9 @@ public class ModelNodeFactory {
             return unsafeCast(new PointLightModelNode((PointLight) element, objectId));
         }
 
-        if (element instanceof TerrainGrid) {
+        if (element instanceof ParticleEmitter) {
+            return unsafeCast(new ParticleEmitterModelNode((ParticleEmitter) element, objectId));
+        } else if (element instanceof TerrainGrid) {
             return unsafeCast(new TerrainGridModelNode((TerrainGrid) element, objectId));
         } else if (element instanceof TerrainQuad) {
             return unsafeCast(new TerrainQuadModelNode((TerrainQuad) element, objectId));
@@ -167,7 +175,7 @@ public class ModelNodeFactory {
         } else if (element instanceof SceneLayer) {
             return unsafeCast(new SceneLayerModelNode((SceneLayer) element, objectId));
         } else if (element instanceof ParticleEmitterNode) {
-            return unsafeCast(new ParticleEmitterNodeModelNode((ParticleEmitterNode) element, objectId));
+            return unsafeCast(new Toneg0dParticleEmitterNodeModelNode((ParticleEmitterNode) element, objectId));
         } else if (element instanceof ParticleInfluencers) {
             return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, objectId));
         } else if (element instanceof ParticleInfluencer) {
