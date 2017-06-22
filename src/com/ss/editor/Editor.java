@@ -1,9 +1,9 @@
 package com.ss.editor;
 
 import static com.jme3.environment.LightProbeFactory.makeProbe;
+import static com.ss.rlib.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
 import static java.util.Objects.requireNonNull;
-import static com.ss.rlib.util.Utils.run;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -14,6 +14,7 @@ import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.font.BitmapFont;
 import com.jme3.light.LightProbe;
+import com.jme3.material.Material;
 import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -21,8 +22,10 @@ import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.CompileShaderException;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.NativeLibraryLoader;
@@ -32,20 +35,21 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.manager.*;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.editor.extension.loader.SceneLoader;
-import jme3_ext_xbuf.XbufLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.Configuration;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.logging.impl.FolderFileListener;
 import com.ss.rlib.manager.InitializeManager;
+import jme3_ext_xbuf.XbufLoader;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.Configuration;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.nio.file.Files;
@@ -211,6 +215,12 @@ public class Editor extends JmeToJFXApplication {
     @Nullable
     private TonegodTranslucentBucketFilter translucentBucketFilter;
 
+    /**
+     * The default material.
+     */
+    @Nullable
+    private Material defaultMaterial;
+
     private Editor() {
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
@@ -282,6 +292,8 @@ public class Editor extends JmeToJFXApplication {
 
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 10000);
+
+        defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
         // create preview view port
         previewCamera = cam.clone();
@@ -407,26 +419,38 @@ public class Editor extends JmeToJFXApplication {
 
             super.update();
 
-        } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
+        } catch (final RendererException e) {
             LOGGER.warning(e);
-            GAnalytics.sendException(e, true);
-            GAnalytics.waitForSend();
-            final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-            workspaceManager.clear();
-            System.exit(1);
-        } catch (final RendererException | IllegalStateException | UnsupportedOperationException e) {
+
+            final Object attachment = e.getAttachment();
+            if (e.getCause() instanceof CompileShaderException && attachment instanceof Geometry) {
+                ((Geometry) attachment).setMaterial(defaultMaterial);
+                EditorUtil.handleException(LOGGER, attachment, e);
+                return;
+            }
+
+            finishWorkOnError(e);
+        } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException |
+                NullPointerException | StackOverflowError | IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
-            GAnalytics.sendException(e, true);
-            GAnalytics.waitForSend();
-            final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-            workspaceManager.clear();
-            System.exit(2);
+            finishWorkOnError(e);
         } finally {
             syncUnlock(stamp);
         }
 
         listener.setLocation(cam.getLocation());
         listener.setRotation(cam.getRotation());
+    }
+
+    private void finishWorkOnError(@NotNull final Throwable e) {
+
+        GAnalytics.sendException(e, true);
+        GAnalytics.waitForSend();
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        workspaceManager.clear();
+
+        System.exit(2);
     }
 
     /**
