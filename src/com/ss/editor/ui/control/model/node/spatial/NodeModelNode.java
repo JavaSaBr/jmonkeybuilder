@@ -17,9 +17,9 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.*;
 import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateParticleEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateToneg0dParticleEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateToneg0dSoftParticleEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetToneg0dParticleEmittersAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.CreateToneg0dParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.CreateToneg0dSoftParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateSphereAction;
@@ -113,7 +113,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         final Spatial emitter = NodeUtils.findSpatial(element, spatial -> spatial instanceof ParticleEmitterNode);
 
         if (emitter != null) {
-            items.add(new ResetToneg0dParticleEmittersAction(nodeTree, this));
+            items.add(new ResetParticleEmittersAction(nodeTree, this));
         }
 
         super.fillContextMenu(nodeTree, items);

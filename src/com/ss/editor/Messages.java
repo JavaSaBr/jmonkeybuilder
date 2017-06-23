@@ -747,10 +747,6 @@ public class Messages {
      */
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE.
-     */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE;
-    /**
      * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE.
      */
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE;
@@ -774,6 +770,15 @@ public class Messages {
      * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE.
      */
     public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE;
+
     /**
      * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH.
      */
@@ -1264,6 +1269,22 @@ public class Messages {
      * The constant CONTROL_PROPERTY_CURRENT_TIME.
      */
     public static final String CONTROL_PROPERTY_CURRENT_TIME;
+    /**
+     * The constant CONTROL_PROPERTY_POINT.
+     */
+    public static final String CONTROL_PROPERTY_POINT;
+    /**
+     * The constant CONTROL_PROPERTY_MAX.
+     */
+    public static final String CONTROL_PROPERTY_MAX;
+    /**
+     * The constant CONTROL_PROPERTY_MIN.
+     */
+    public static final String CONTROL_PROPERTY_MIN;
+    /**
+     * The constant CONTROL_PROPERTY_CENTER.
+     */
+    public static final String CONTROL_PROPERTY_CENTER;
 
     /**
      * The constant PARTICLE_EMITTER_TEST_MODE.
@@ -2027,6 +2048,19 @@ public class Messages {
     public static final String CREATE_TERRAIN_DIALOG_MAX_RADIUS;
 
     /**
+     * The constant CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE;
+    /**
+     * The constant CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
+    /**
+     * The constant CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
+
+    /**
      * The constant EDITING_COMPONENT_BRUSH_SIZE.
      */
     public static final String EDITING_COMPONENT_BRUSH_SIZE;
@@ -2362,6 +2396,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
+        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePointShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeCylinderShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeDomeShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeQuadShape");
@@ -2492,6 +2527,10 @@ public class Messages {
         CONTROL_PROPERTY_WHEEL_SPATIAL = bundle.getString("ControlPropertyWheelSpatial");
         CONTROL_PROPERTY_LENGTH = bundle.getString("ControlPropertyLength");
         CONTROL_PROPERTY_CURRENT_TIME = bundle.getString("ControlPropertyCurrentTime");
+        CONTROL_PROPERTY_POINT = bundle.getString("ControlPropertyPoint");
+        CONTROL_PROPERTY_MAX = bundle.getString("ControlPropertyMax");
+        CONTROL_PROPERTY_MIN = bundle.getString("ControlPropertyMin");
+        CONTROL_PROPERTY_CENTER = bundle.getString("ControlPropertyCenter");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
@@ -2704,6 +2743,10 @@ public class Messages {
         CREATE_TERRAIN_DIALOG_FLATTENING = bundle.getString("CreateTerrainDialogFlattening");
         CREATE_TERRAIN_DIALOG_MIN_RADIUS = bundle.getString("CreateTerrainDialogMinRadius");
         CREATE_TERRAIN_DIALOG_MAX_RADIUS = bundle.getString("CreateTerrainDialogMaxRadius");
+
+        CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE = bundle.getString("CreateEmitterPointShapeDialogTitle");
+        CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE = bundle.getString("CreateEmitterBoxShapeDialogTitle");
+        CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE = bundle.getString("CreateEmitterSphereShapeDialogTitle");
 
         EDITING_COMPONENT_BRUSH_SIZE = bundle.getString("EditingComponentBrushSize");
         EDITING_COMPONENT_BRUSH_POWER = bundle.getString("EditingComponentBrushPower");

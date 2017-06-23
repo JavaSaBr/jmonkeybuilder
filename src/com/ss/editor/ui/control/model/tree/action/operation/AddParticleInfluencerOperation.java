@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import com.ss.editor.model.node.ParticleInfluencers;
+import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 
@@ -47,7 +47,7 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
             parent.addInfluencer(influencer);
             parent.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(new ParticleInfluencers(parent), influencer, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(new Toneg0dParticleInfluencers(parent), influencer, -1));
         });
     }
 
@@ -59,7 +59,7 @@ public class AddParticleInfluencerOperation extends AbstractEditorOperation<Mode
             parent.removeInfluencer(influencer);
             parent.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(new ParticleInfluencers(parent), influencer));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(new Toneg0dParticleInfluencers(parent), influencer));
         });
     }
 }

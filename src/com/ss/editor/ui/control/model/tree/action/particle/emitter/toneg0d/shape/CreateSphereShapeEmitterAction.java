@@ -1,18 +1,20 @@
-package com.ss.editor.ui.control.model.tree.action.particle.emitter.shape;
+package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.shape;
 
-import com.jme3.effect.ParticleEmitter;
+import com.jme3.scene.Mesh;
+import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.tree.dialog.particle.emitter.shape.CreateSphereShapeDialog;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.scene.EditorFXScene;
+
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
+
 import org.jetbrains.annotations.Nullable;
+import tonegod.emitter.ParticleEmitterNode;
 
 /**
- * The action to create a sphere shape to the {@link ParticleEmitter}.
+ * The action to switch an emitter shape of the {@link ParticleEmitterNode} to a {@link Sphere}.
  *
  * @author JavaSaBr
  */
@@ -28,15 +30,6 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
         super(nodeTree, node);
     }
 
-    @Override
-    protected void process(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ParticleEmitter emitter) {
-        super.process(nodeTree, emitter);
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final CreateSphereShapeDialog dialog = new CreateSphereShapeDialog(nodeTree, emitter);
-        dialog.show(scene.getWindow());
-    }
-
     @Nullable
     @Override
     protected Image getIcon() {
@@ -47,5 +40,11 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE;
+    }
+
+    @NotNull
+    @Override
+    protected Mesh createMesh() {
+        return new Sphere(10, 10, 1);
     }
 }

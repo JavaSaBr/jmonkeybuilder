@@ -19,7 +19,7 @@ import com.ss.rlib.ui.util.FXUtils;
 import java.awt.*;
 
 /**
- * The dialog to create box collision shape.
+ * The dialog to create a box collision shape.
  *
  * @author JavaSaBr
  */

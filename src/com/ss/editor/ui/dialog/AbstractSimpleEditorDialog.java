@@ -48,6 +48,10 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      * The constant DEFAULT_FIELD_W_PERCENT3.
      */
     protected static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT4.
+     */
+    protected static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
 
     /**
      * The constant OK_BUTTON_OFFSET.

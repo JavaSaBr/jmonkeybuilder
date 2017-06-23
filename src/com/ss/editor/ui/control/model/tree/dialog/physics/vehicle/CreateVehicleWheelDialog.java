@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog.physics.vehicle;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.math.Vector3f;
@@ -10,13 +11,13 @@ import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 
@@ -130,22 +131,25 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Label locationLabel = new Label(Messages.CONTROL_PROPERTY_LOCATION + ":");
         locationLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        locationLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.7));
+        locationLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
         locationXField = new FloatTextField();
         locationXField.setId(CSSIds.EDITOR_DIALOG_FIELD);
-        locationXField.prefWidthProperty().bind(root.widthProperty().multiply(0.3).multiply(0.33));
         locationXField.setValue(1);
+        locationXField.prefWidthProperty().bind(root.widthProperty()
+                .multiply(DEFAULT_FIELD_W_PERCENT4).multiply(0.33));
 
         locationYField = new FloatTextField();
         locationYField.setId(CSSIds.EDITOR_DIALOG_FIELD);
-        locationYField.prefWidthProperty().bind(root.widthProperty().multiply(0.3).multiply(0.33));
         locationYField.setValue(1);
+        locationYField.prefWidthProperty().bind(root.widthProperty()
+                .multiply(DEFAULT_FIELD_W_PERCENT4).multiply(0.33));
 
         locationZField = new FloatTextField();
         locationZField.setId(CSSIds.EDITOR_DIALOG_FIELD);
-        locationZField.prefWidthProperty().bind(root.widthProperty().multiply(0.3).multiply(0.33));
         locationZField.setValue(1);
+        locationZField.prefWidthProperty().bind(root.widthProperty()
+                .multiply(DEFAULT_FIELD_W_PERCENT4).multiply(0.33));
 
         root.add(locationLabel, 0, 0);
         root.add(locationXField, 1, 0);
@@ -154,7 +158,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Label directionLabel = new Label(Messages.CONTROL_PROPERTY_DIRECTION + ":");
         directionLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        directionLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        directionLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
         directionXField = new FloatTextField();
         directionXField.setId(CSSIds.EDITOR_DIALOG_FIELD);
@@ -175,7 +179,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Label axleLabel = new Label(Messages.CONTROL_PROPERTY_AXLE + ":");
         axleLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        axleLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        axleLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
         axleXField = new FloatTextField();
         axleXField.setId(CSSIds.EDITOR_DIALOG_FIELD);
@@ -196,7 +200,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Label suspensionRestLengthLabel = new Label(Messages.CONTROL_PROPERTY_REST_LENGTH + ":");
         suspensionRestLengthLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        suspensionRestLengthLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        suspensionRestLengthLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
         restLengthField = new FloatTextField();
         restLengthField.setId(CSSIds.EDITOR_DIALOG_FIELD);
@@ -207,7 +211,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Label wheelRadiusLabel = new Label(Messages.CONTROL_PROPERTY_RADIUS + ":");
         wheelRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        wheelRadiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        wheelRadiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
         wheelRadiusField = new FloatTextField();
         wheelRadiusField.setId(CSSIds.EDITOR_DIALOG_FIELD);
@@ -218,7 +222,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
 
         final Label frontLabel = new Label(Messages.CONTROL_PROPERTY_FRONT + ":");
         frontLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        frontLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.6));
+        frontLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
         frontBox = new CheckBox();
 
@@ -273,7 +277,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getLocationXField() {
-        return requireNonNull(locationXField);
+        return notNull(locationXField);
     }
 
     /**
@@ -281,7 +285,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getLocationYField() {
-        return requireNonNull(locationYField);
+        return notNull(locationYField);
     }
 
     /**
@@ -289,7 +293,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getLocationZField() {
-        return requireNonNull(locationZField);
+        return notNull(locationZField);
     }
 
     /**
@@ -297,7 +301,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getDirectionXField() {
-        return requireNonNull(directionXField);
+        return notNull(directionXField);
     }
 
     /**
@@ -305,7 +309,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getDirectionYField() {
-        return requireNonNull(directionYField);
+        return notNull(directionYField);
     }
 
     /**
@@ -313,7 +317,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getDirectionZField() {
-        return requireNonNull(directionZField);
+        return notNull(directionZField);
     }
 
     /**
@@ -321,7 +325,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getAxleXField() {
-        return requireNonNull(axleXField);
+        return notNull(axleXField);
     }
 
     /**
@@ -329,7 +333,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getAxleYField() {
-        return requireNonNull(axleYField);
+        return notNull(axleYField);
     }
 
     /**
@@ -337,7 +341,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getAxleZField() {
-        return requireNonNull(axleZField);
+        return notNull(axleZField);
     }
 
     /**
@@ -345,7 +349,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getRestLengthField() {
-        return requireNonNull(restLengthField);
+        return notNull(restLengthField);
     }
 
     /**
@@ -353,7 +357,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getWheelRadiusField() {
-        return requireNonNull(wheelRadiusField);
+        return notNull(wheelRadiusField);
     }
 
     /**
@@ -361,7 +365,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getFrontBox() {
-        return requireNonNull(frontBox);
+        return notNull(frontBox);
     }
 
     @Override
@@ -399,6 +403,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
                 restLengthField.getValue(), wheelRadiusField.getValue(), frontBox.isSelected()));
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -78,6 +78,6 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
 
     @NotNull
     protected ParticleEmitter createParticleEmitter() {
-        return new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
+        return new ParticleEmitter("Default Emitter", ParticleMesh.Type.Triangle, 30);
     }
 }

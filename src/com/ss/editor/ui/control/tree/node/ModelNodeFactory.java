@@ -13,6 +13,7 @@ import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.light.*;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.*;
@@ -21,7 +22,7 @@ import com.jme3.terrain.geomipmap.TerrainGrid;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
-import com.ss.editor.model.node.ParticleInfluencers;
+import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.layer.node.LayersRootModelNode;
 import com.ss.editor.ui.control.layer.node.SceneLayerModelNode;
@@ -41,10 +42,12 @@ import com.ss.editor.ui.control.model.node.control.physics.vehicle.VehicleWheelM
 import com.ss.editor.ui.control.model.node.light.*;
 import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
-import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleEmitterModelNode;
-import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencerModelNode;
-import com.ss.editor.ui.control.model.node.spatial.emitter.ParticleInfluencersModelNode;
-import com.ss.editor.ui.control.model.node.spatial.emitter.Toneg0dParticleEmitterNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.ParticleEmitterModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.Toneg0dParticleEmitterNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.ParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencersModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.shape.EmitterShapeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainGridModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainQuadModelNode;
@@ -166,6 +169,10 @@ public class ModelNodeFactory {
 
         if (element instanceof ParticleEmitter) {
             return unsafeCast(new ParticleEmitterModelNode((ParticleEmitter) element, objectId));
+        } else if (element instanceof EmitterShape) {
+            return unsafeCast(new EmitterShapeModelNode((EmitterShape) element, objectId));
+        } else if (element instanceof com.jme3.effect.influencers.ParticleInfluencer) {
+            return unsafeCast(new ParticleInfluencerModelNode((com.jme3.effect.influencers.ParticleInfluencer) element, objectId));
         } else if (element instanceof TerrainGrid) {
             return unsafeCast(new TerrainGridModelNode((TerrainGrid) element, objectId));
         } else if (element instanceof TerrainQuad) {
@@ -176,10 +183,10 @@ public class ModelNodeFactory {
             return unsafeCast(new SceneLayerModelNode((SceneLayer) element, objectId));
         } else if (element instanceof ParticleEmitterNode) {
             return unsafeCast(new Toneg0dParticleEmitterNodeModelNode((ParticleEmitterNode) element, objectId));
-        } else if (element instanceof ParticleInfluencers) {
-            return unsafeCast(new ParticleInfluencersModelNode((ParticleInfluencers) element, objectId));
+        } else if (element instanceof Toneg0dParticleInfluencers) {
+            return unsafeCast(new Toneg0dParticleInfluencersModelNode((Toneg0dParticleInfluencers) element, objectId));
         } else if (element instanceof ParticleInfluencer) {
-            return unsafeCast(new ParticleInfluencerModelNode((ParticleInfluencer) element, objectId));
+            return unsafeCast(new Toneg0dParticleInfluencerModelNode((ParticleInfluencer) element, objectId));
         } else if (element instanceof Mesh) {
             return unsafeCast(new MeshModelNode((Mesh) element, objectId));
         } else if (element instanceof Geometry) {
