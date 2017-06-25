@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer;
 import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,6 @@ public class CreateRadialParticleInfluencerAction extends AbstractCreateParticle
     @NotNull
     @Override
     protected String getName() {
-        return "Radial";
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL;
     }
 }

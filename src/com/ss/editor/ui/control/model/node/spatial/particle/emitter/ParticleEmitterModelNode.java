@@ -67,7 +67,9 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.EDIT_16));
+        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE,
+                new ImageView(Icons.EDIT_16));
+
         changeShapeMenu.getItems().addAll(new CreateBoxShapeEmitterAction(nodeTree, this),
                 new CreateSphereShapeEmitterAction(nodeTree, this),
                 new CreatePointShapeEmitterAction(nodeTree, this),
@@ -75,7 +77,9 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
                 new CreateMeshFaceShapeEmitterAction(nodeTree, this),
                 new CreateMeshConvexHullShapeEmitterAction(nodeTree, this));
 
-        final Menu changeInfluencerMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.EDIT_16));
+        final Menu changeInfluencerMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER,
+                new ImageView(Icons.EDIT_16));
+
         changeInfluencerMenu.getItems().addAll(new CreateEmptyParticleInfluencerAction(nodeTree, this),
                 new CreateDefaultParticleInfluencerAction(nodeTree, this),
                 new CreateRadialParticleInfluencerAction(nodeTree, this));

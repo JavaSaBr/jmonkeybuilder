@@ -4,6 +4,7 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterMeshConvexHullShape;
 import com.jme3.effect.shapes.EmitterMeshVertexShape;
 import com.jme3.scene.Mesh;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,6 @@ public class CreateMeshConvexHullShapeEmitterAction extends CreateMeshVertexShap
     @NotNull
     @Override
     protected String getName() {
-        return "Mesh convex hull";
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_CONVEX_HULL_SHAPE;
     }
 }

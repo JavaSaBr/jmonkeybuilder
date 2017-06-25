@@ -66,7 +66,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE;
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE;
     }
 
     @FXThread

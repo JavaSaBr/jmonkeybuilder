@@ -83,7 +83,7 @@ public class Toneg0dParticleEmitterNodeModelNode extends NodeModelNode<ParticleE
         primitivesItems.add(new CreateSphereShapeEmitterAction(nodeTree, this));
         primitivesItems.add(new CreateTorusShapeEmitterAction(nodeTree, this));
 
-        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.GEOMETRY_16));
+        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE, new ImageView(Icons.GEOMETRY_16));
         changeShapeMenu.getItems().addAll(new CreateTriangleShapeEmitterAction(nodeTree, this),
                 jmePrimitivesMenu,
                 new LoadModelShapeEmitterAction(nodeTree, this));

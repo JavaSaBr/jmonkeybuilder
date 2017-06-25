@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer;
 
 import com.jme3.effect.influencers.EmptyParticleInfluencer;
+import com.ss.editor.Messages;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,6 +24,6 @@ public class EmptyParticleInfluencerModelNode extends ParticleInfluencerModelNod
     @NotNull
     @Override
     public String getName() {
-        return "Empty influencer";
+        return Messages.MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY;
     }
 }

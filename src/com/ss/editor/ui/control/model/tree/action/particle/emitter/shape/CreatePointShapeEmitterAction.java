@@ -46,6 +46,6 @@ public class CreatePointShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE;
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_POINT_SHAPE;
     }
 }

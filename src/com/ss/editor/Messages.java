@@ -489,9 +489,46 @@ public class Messages {
      */
     public static final String MODEL_FILE_EDITOR_NODE_ANIM_CONTROL;
     /**
-     * The constant MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS.
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS.
      */
-    public static final String MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_RADIAL.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_RADIAL;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_BOX.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_BOX;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_SPHERE.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_SPHERE;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_POINT.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_POINT;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_VERTEX.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_VERTEX;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_FACE.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_FACE;
+    /**
+     * The constant MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL.
+     */
+    public static final String MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL;
+
     /**
      * The constant MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL.
      */
@@ -739,45 +776,73 @@ public class Messages {
      */
     public static final String MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_DEFAULT.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_DEFAULT;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_EMPTY.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_EMPTY;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_POINT_SHAPE.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_POINT_SHAPE;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_BOX_SHAPE.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_BOX_SHAPE;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_VERTEX_SHAPE.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_VERTEX_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_FACE_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_FACE_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_CONVEX_HULL_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_CONVEX_HULL_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CYLINDER_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CYLINDER_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_DOME_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_DOME_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_QUAD_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_QUAD_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TORUS_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TORUS_SHAPE;
+    /**
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE;
 
     /**
      * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH.
@@ -1285,6 +1350,27 @@ public class Messages {
      * The constant CONTROL_PROPERTY_CENTER.
      */
     public static final String CONTROL_PROPERTY_CENTER;
+    /**
+     * The constant CONTROL_PROPERTY_VELOCITY_VARIATION.
+     */
+    public static final String CONTROL_PROPERTY_VELOCITY_VARIATION;
+    /**
+     * The constant CONTROL_PROPERTY_INITIAL_VELOCITY.
+     */
+    public static final String CONTROL_PROPERTY_INITIAL_VELOCITY;
+    /**
+     * The constant CONTROL_PROPERTY_ORIGIN.
+     */
+    public static final String CONTROL_PROPERTY_ORIGIN;
+    /**
+     * The constant CONTROL_PROPERTY_RADIAL_VELOCITY.
+     */
+    public static final String CONTROL_PROPERTY_RADIAL_VELOCITY;
+    /**
+     * The constant CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL.
+     */
+    public static final String CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL;
+
 
     /**
      * The constant PARTICLE_EMITTER_TEST_MODE.
@@ -2329,7 +2415,17 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_SPOT_LIGHT = bundle.getString("ModelFileEditorNodeSpotLight");
         MODEL_FILE_EDITOR_NODE_LIGHT_PROBE = bundle.getString("ModelFileEditorNodeLightProbe");
         MODEL_FILE_EDITOR_NODE_ANIM_CONTROL = bundle.getString("ModelFileEditorNodeAnimControl");
-        MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeEmitterInfluencers");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencers");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_EMPTY = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencerEmpty");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_DEFAULT = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencerDefault");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCER_RADIAL = bundle.getString("ModelFileEditorNodeParticleEmitterInfluencerRadial");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_BOX = bundle.getString("ModelFileEditorNodeParticleEmitterShapeBox");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_SPHERE = bundle.getString("ModelFileEditorNodeParticleEmitterShapeSphere");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_POINT = bundle.getString("ModelFileEditorNodeParticleEmitterShapePoint");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_VERTEX = bundle.getString("ModelFileEditorNodeParticleEmitterShapeMeshVertex");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_FACE = bundle.getString("ModelFileEditorNodeParticleEmitterShapeMeshFace");
+        MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL = bundle.getString("ModelFileEditorNodeParticleEmitterShapeMeshConvexHull");
+
         MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeStaticRigidBodyControl");
         MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeRigidBodyControl");
         MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL = bundle.getString("ModelFileEditorNodeCharacterControl");
@@ -2393,16 +2489,23 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE_SOFT_TONEG0D_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateSoftToneg0dParticleEmitter");
         MODEL_NODE_TREE_ACTION_CREATE_DEFAULT_PARTICLE_EMITTER = bundle.getString("ModelNodeTreeActionCreateDefaultParticleEmitter");
         MODEL_NODE_TREE_ACTION_RESET_PARTICLE_EMITTERS = bundle.getString("ModelNodeTreeActionResetParticleEmitters");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTriangleShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_BOX_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeBoxShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_POINT_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangePointShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeCylinderShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeDomeShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_QUAD_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeQuadShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeSphereShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_TORUS_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeTorusShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_MODEL_SHAPE = bundle.getString("ModelNodeTreeActionEmitterChangeModelShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterChangeShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TRIANGLE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterTriangleShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_BOX_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterBoxShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_POINT_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterPointShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CYLINDER_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterCylinderShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_DOME_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterDomeShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_QUAD_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterQuadShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterSphereShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_VERTEX_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterMeshVertexShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_FACE_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterMeshFaceShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MESH_CONVEX_HULL_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterMeshConvexHullShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_INFLUENCER = bundle.getString("ModelNodeTreeActionParticleEmitterChangeInfluencer");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_DEFAULT = bundle.getString("ModelNodeTreeActionParticleEmitterInfluencerDefault");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_EMPTY = bundle.getString("ModelNodeTreeActionParticleEmitterInfluencerEmpty");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL = bundle.getString("ModelNodeTreeActionParticleEmitterInfluencerRadial");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TORUS_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterTorusShape");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterModelShape");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMesh");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshQuad");
         MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshPoint");
@@ -2531,6 +2634,11 @@ public class Messages {
         CONTROL_PROPERTY_MAX = bundle.getString("ControlPropertyMax");
         CONTROL_PROPERTY_MIN = bundle.getString("ControlPropertyMin");
         CONTROL_PROPERTY_CENTER = bundle.getString("ControlPropertyCenter");
+        CONTROL_PROPERTY_VELOCITY_VARIATION = bundle.getString("ControlPropertyVelocityVariation");
+        CONTROL_PROPERTY_INITIAL_VELOCITY = bundle.getString("ControlPropertyInitialVelocity");
+        CONTROL_PROPERTY_ORIGIN = bundle.getString("ControlPropertyOrigin");
+        CONTROL_PROPERTY_RADIAL_VELOCITY = bundle.getString("ControlPropertyRadialVelocity");
+        CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL = bundle.getString("ControlPropertyIsHorizontal");
 
         PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
         PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");

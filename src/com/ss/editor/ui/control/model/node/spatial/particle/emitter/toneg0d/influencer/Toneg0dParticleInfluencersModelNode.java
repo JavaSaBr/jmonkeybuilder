@@ -64,7 +64,7 @@ public class Toneg0dParticleInfluencersModelNode extends ModelNode<Toneg0dPartic
     @NotNull
     @Override
     public String getName() {
-        return Messages.MODEL_FILE_EDITOR_NODE_EMITTER_INFLUENCERS;
+        return Messages.MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_INFLUENCERS;
     }
 
     @Nullable

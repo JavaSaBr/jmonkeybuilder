@@ -39,7 +39,7 @@ public class CreateDomeShapeEmitterAction extends AbstractCreateShapeEmitterActi
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_DOME_SHAPE;
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_DOME_SHAPE;
     }
 
     @NotNull

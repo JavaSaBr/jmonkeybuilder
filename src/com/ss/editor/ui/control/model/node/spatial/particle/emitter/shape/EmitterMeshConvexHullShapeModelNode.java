@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.shape;
 
 import com.jme3.effect.shapes.EmitterMeshConvexHullShape;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,6 @@ public class EmitterMeshConvexHullShapeModelNode extends EmitterShapeModelNode {
     @NotNull
     @Override
     public String getName() {
-        return "Mesh convex hull shape";
+        return Messages.MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL;
     }
 }

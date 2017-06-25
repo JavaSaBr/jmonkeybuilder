@@ -39,7 +39,7 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SPHERE_SHAPE;
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_SPHERE_SHAPE;
     }
 
     @NotNull

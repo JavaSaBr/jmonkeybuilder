@@ -39,7 +39,7 @@ public class CreateCylinderShapeEmitterAction extends AbstractCreateShapeEmitter
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_CYLINDER_SHAPE;
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CYLINDER_SHAPE;
     }
 
     @NotNull
