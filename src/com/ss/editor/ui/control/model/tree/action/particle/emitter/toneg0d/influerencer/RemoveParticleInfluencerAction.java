@@ -11,8 +11,8 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.RemoveParticleInfluencerOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencerModelNode;
-import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencersModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0dParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0dParticleInfluencersModelNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

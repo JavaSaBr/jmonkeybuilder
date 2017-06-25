@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer;
+package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.rlib.util.ClassUtils.getConstructor;

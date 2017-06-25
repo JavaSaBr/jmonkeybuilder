@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.node.spatial.particle.emitter;
+package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import com.jme3.scene.Mesh;

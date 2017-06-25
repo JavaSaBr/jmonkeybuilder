@@ -1,7 +1,9 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.shape;
 
 import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.shapes.EmitterPointShape;
 import com.ss.editor.Messages;
+import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.particle.emitter.shape.CreatePointShapeDialog;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -11,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The action to create a point shape to the {@link ParticleEmitter}.
+ * The action to create a {@link EmitterPointShape} to the {@link ParticleEmitter}.
  *
  * @author JavaSaBr
  */
@@ -23,14 +25,13 @@ public class CreatePointShapeEmitterAction extends AbstractCreateShapeEmitterAct
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreatePointShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreatePointShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+                                         @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
     @Override
     protected void process(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ParticleEmitter emitter) {
-        super.process(nodeTree, emitter);
-
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final CreatePointShapeDialog dialog = new CreatePointShapeDialog(nodeTree, emitter);
         dialog.show(scene.getWindow());
@@ -39,8 +40,7 @@ public class CreatePointShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @Nullable
     @Override
     protected Image getIcon() {
-        //FIXME need to find an icon for this.
-        return null;
+        return Icons.DOR_IN_CIRCLE_16;
     }
 
     @NotNull

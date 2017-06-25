@@ -25,3 +25,5 @@ ui/icons/actions/svg/bar-chart.svg icon made by http://www.flaticon.com/authors/
 ui/icons/actions/svg/play-button.svg icon made by http://www.flaticon.com/authors/appzgear from www.flaticon.com
 ui/icons/actions/svg/stop.svg icon made by http://www.flaticon.com/authors/icomoon from www.flaticon.com
 ui/icons/actions/svg/pause.svg icon made by http://www.flaticon.com/authors/icomoon from www.flaticon.com
+ui/icons/actions/svg/pencil-edit-button.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/actions/svg/dot-and-circle.svg icon made by http://www.flaticon.com/authors/dave-gandy from www.flaticon.com

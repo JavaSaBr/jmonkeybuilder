@@ -8,9 +8,10 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.shape.CreateBoxShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.shape.CreatePointShapeEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.shape.CreateSphereShapeEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateDefaultParticleInfluencerAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateEmptyParticleInfluencerAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateRadialParticleInfluencerAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.shape.*;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.rlib.util.array.Array;
@@ -66,13 +67,21 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
     public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
-        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.ADD_12));
+        final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.EDIT_16));
         changeShapeMenu.getItems().addAll(new CreateBoxShapeEmitterAction(nodeTree, this),
                 new CreateSphereShapeEmitterAction(nodeTree, this),
-                new CreatePointShapeEmitterAction(nodeTree, this)
-                );
+                new CreatePointShapeEmitterAction(nodeTree, this),
+                new CreateMeshVertexShapeEmitterAction(nodeTree, this),
+                new CreateMeshFaceShapeEmitterAction(nodeTree, this),
+                new CreateMeshConvexHullShapeEmitterAction(nodeTree, this));
+
+        final Menu changeInfluencerMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_SHAPE, new ImageView(Icons.EDIT_16));
+        changeInfluencerMenu.getItems().addAll(new CreateEmptyParticleInfluencerAction(nodeTree, this),
+                new CreateDefaultParticleInfluencerAction(nodeTree, this),
+                new CreateRadialParticleInfluencerAction(nodeTree, this));
 
         items.add(changeShapeMenu);
+        items.add(changeInfluencerMenu);
 
         super.fillContextMenu(nodeTree, items);
     }

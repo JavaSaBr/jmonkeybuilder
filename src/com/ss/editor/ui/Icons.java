@@ -85,7 +85,7 @@ public interface Icons {
     /**
      * The constant EDIT_16.
      */
-    Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/edit.png");
+    Image EDIT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/pencil-edit-button.svg");
     /**
      * The constant AMBIENT_16.
      */
@@ -326,6 +326,10 @@ public interface Icons {
      * The constant STATISTICS_16.
      */
     Image STATISTICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/bar-chart.svg");
+    /**
+     * The constant STATISTICS_16.
+     */
+    Image DOR_IN_CIRCLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/dot-and-circle.svg");
 
     /**
      * The constant REFRESH_18.
@@ -384,10 +388,6 @@ public interface Icons {
      * The constant WARNING_24.
      */
     Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/warning.png", 24);
-    /**
-     * The constant EDIT_24.
-     */
-    Image EDIT_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/edit.png", 24);
     /**
      * The constant FROM_FULLSCREEN_24.
      */

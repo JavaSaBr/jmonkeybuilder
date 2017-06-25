@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The action to create a sphere shape to the {@link ParticleEmitter}.
+ * The action to create a {@link}to the {@link ParticleEmitter}.
  *
  * @author JavaSaBr
  */
@@ -30,8 +30,6 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
 
     @Override
     protected void process(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ParticleEmitter emitter) {
-        super.process(nodeTree, emitter);
-
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final CreateSphereShapeDialog dialog = new CreateSphereShapeDialog(nodeTree, emitter);
         dialog.show(scene.getWindow());

@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer;
+package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer;
 
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer.RemoveParticleInfluencerAction;

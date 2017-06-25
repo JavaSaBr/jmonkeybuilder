@@ -1,19 +1,18 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.AddParticleInfluencerOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeParticleInfluencerOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * The action to create a {@link ParticleInfluencer} for a {@link ParticleEmitter}.
@@ -28,7 +27,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateParticleInfluencerAction(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree,
+    public AbstractCreateParticleInfluencerAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                                   @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -44,12 +43,13 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     protected void process() {
 
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
         final ModelNode<?> modelNode = getNode();
+        final ParticleEmitter emitter = (ParticleEmitter) modelNode.getElement();
         final ParticleInfluencer influencer = createInfluencer();
 
-        changeConsumer.execute(new AddParticleInfluencerOperation(influencer, emitterNode));
+        changeConsumer.execute(new ChangeParticleInfluencerOperation(influencer, emitter));
     }
 
     /**

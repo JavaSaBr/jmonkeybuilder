@@ -13,7 +13,10 @@ import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.effect.ParticleEmitter;
-import com.jme3.effect.shapes.EmitterShape;
+import com.jme3.effect.influencers.DefaultParticleInfluencer;
+import com.jme3.effect.influencers.EmptyParticleInfluencer;
+import com.jme3.effect.influencers.RadialParticleInfluencer;
+import com.jme3.effect.shapes.*;
 import com.jme3.light.*;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.*;
@@ -43,11 +46,14 @@ import com.ss.editor.ui.control.model.node.light.*;
 import com.ss.editor.ui.control.model.node.physics.shape.*;
 import com.ss.editor.ui.control.model.node.spatial.*;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.ParticleEmitterModelNode;
-import com.ss.editor.ui.control.model.node.spatial.particle.emitter.Toneg0dParticleEmitterNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.DefaultParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.EmptyParticleInfluencerModelNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.ParticleInfluencerModelNode;
-import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencerModelNode;
-import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencersModelNode;
-import com.ss.editor.ui.control.model.node.spatial.particle.emitter.shape.EmitterShapeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.RadialParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.shape.*;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.Toneg0dParticleEmitterNodeModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0dParticleInfluencerModelNode;
+import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0dParticleInfluencersModelNode;
 import com.ss.editor.ui.control.model.node.spatial.scene.SceneNodeModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainGridModelNode;
 import com.ss.editor.ui.control.model.node.spatial.terrain.TerrainQuadModelNode;
@@ -97,30 +103,10 @@ public class ModelNodeFactory {
             return unsafeCast(new MotionPathModelNode((MotionPath) element, objectId));
         }
 
-        if (element instanceof BoxCollisionShape) {
-            return unsafeCast(new BoxCollisionShapeModelNode((BoxCollisionShape) element, objectId));
-        } else if (element instanceof CapsuleCollisionShape) {
-            return unsafeCast(new CapsuleCollisionShapeModelNode((CapsuleCollisionShape) element, objectId));
-        } else if (element instanceof CompoundCollisionShape) {
-            return unsafeCast(new ComputedCollisionShapeModelNode((CompoundCollisionShape) element, objectId));
-        } else if (element instanceof ConeCollisionShape) {
-            return unsafeCast(new ConeCollisionShapeModelNode((ConeCollisionShape) element, objectId));
-        } else if (element instanceof CylinderCollisionShape) {
-            return unsafeCast(new CylinderCollisionShapeModelNode((CylinderCollisionShape) element, objectId));
-        } else if (element instanceof GImpactCollisionShape) {
-            return unsafeCast(new GImpactCollisionShapeModelNode((GImpactCollisionShape) element, objectId));
-        } else if (element instanceof HullCollisionShape) {
-            return unsafeCast(new HullCollisionShapeModelNode((HullCollisionShape) element, objectId));
-        } else if (element instanceof MeshCollisionShape) {
-            return unsafeCast(new MeshCollisionShapeModelNode((MeshCollisionShape) element, objectId));
-        } else if (element instanceof PlaneCollisionShape) {
-            return unsafeCast(new PlaneCollisionShapeModelNode((PlaneCollisionShape) element, objectId));
-        } else if (element instanceof SphereCollisionShape) {
-            return unsafeCast(new SphereCollisionShapeModelNode((SphereCollisionShape) element, objectId));
-        } else if (element instanceof ChildCollisionShape) {
+        if (element instanceof ChildCollisionShape) {
             return unsafeCast(new ChildCollisionShapeModelNode((ChildCollisionShape) element, objectId));
         } else if (element instanceof CollisionShape) {
-            return unsafeCast(new CollisionShapeModelNode<>((CollisionShape) element, objectId));
+            return getCollisionShapeModelNode((CollisionShape) element, objectId);
         }
 
         if (element instanceof LayersRoot) {
@@ -155,24 +141,16 @@ public class ModelNodeFactory {
             return unsafeCast(new ControlModelNode<>((Control) element, objectId));
         }
 
-        if (element instanceof LightProbe) {
-            return unsafeCast(new LightProbeModelNode((LightProbe) element, objectId));
-        } else if (element instanceof AmbientLight) {
-            return unsafeCast(new AmbientLightModelNode((AmbientLight) element, objectId));
-        } else if (element instanceof DirectionalLight) {
-            return unsafeCast(new DirectionalLightModelNode((DirectionalLight) element, objectId));
-        } else if (element instanceof SpotLight) {
-            return unsafeCast(new SpotLightModelNode((SpotLight) element, objectId));
-        } else if (element instanceof PointLight) {
-            return unsafeCast(new PointLightModelNode((PointLight) element, objectId));
+        if(element instanceof Light) {
+            return getLightModelNode((Light) element, objectId);
         }
 
         if (element instanceof ParticleEmitter) {
             return unsafeCast(new ParticleEmitterModelNode((ParticleEmitter) element, objectId));
         } else if (element instanceof EmitterShape) {
-            return unsafeCast(new EmitterShapeModelNode((EmitterShape) element, objectId));
+            return getEmitterShapeModelNode((EmitterShape) element, objectId);
         } else if (element instanceof com.jme3.effect.influencers.ParticleInfluencer) {
-            return unsafeCast(new ParticleInfluencerModelNode((com.jme3.effect.influencers.ParticleInfluencer) element, objectId));
+            return getParticleInfluencerModelNode((com.jme3.effect.influencers.ParticleInfluencer) element, objectId);
         } else if (element instanceof TerrainGrid) {
             return unsafeCast(new TerrainGridModelNode((TerrainGrid) element, objectId));
         } else if (element instanceof TerrainQuad) {
@@ -200,5 +178,87 @@ public class ModelNodeFactory {
         }
 
         return null;
+    }
+
+    @NotNull
+    private static <T, V extends ModelNode<T>> V getParticleInfluencerModelNode(
+            @NotNull final com.jme3.effect.influencers.ParticleInfluencer element, final long objectId) {
+
+        if (element instanceof EmptyParticleInfluencer) {
+            return unsafeCast(new EmptyParticleInfluencerModelNode((EmptyParticleInfluencer) element, objectId));
+        } else if (element instanceof RadialParticleInfluencer) {
+            return unsafeCast(new RadialParticleInfluencerModelNode((RadialParticleInfluencer) element, objectId));
+        } else if (element instanceof DefaultParticleInfluencer) {
+            return unsafeCast(new DefaultParticleInfluencerModelNode((DefaultParticleInfluencer) element, objectId));
+        }
+
+        return unsafeCast(new ParticleInfluencerModelNode(element, objectId));
+    }
+
+    @NotNull
+    private static <T, V extends ModelNode<T>> V getCollisionShapeModelNode(@NotNull final CollisionShape element,
+                                                                            final long objectId) {
+
+        if (element instanceof BoxCollisionShape) {
+            return unsafeCast(new BoxCollisionShapeModelNode((BoxCollisionShape) element, objectId));
+        } else if (element instanceof CapsuleCollisionShape) {
+            return unsafeCast(new CapsuleCollisionShapeModelNode((CapsuleCollisionShape) element, objectId));
+        } else if (element instanceof CompoundCollisionShape) {
+            return unsafeCast(new ComputedCollisionShapeModelNode((CompoundCollisionShape) element, objectId));
+        } else if (element instanceof ConeCollisionShape) {
+            return unsafeCast(new ConeCollisionShapeModelNode((ConeCollisionShape) element, objectId));
+        } else if (element instanceof CylinderCollisionShape) {
+            return unsafeCast(new CylinderCollisionShapeModelNode((CylinderCollisionShape) element, objectId));
+        } else if (element instanceof GImpactCollisionShape) {
+            return unsafeCast(new GImpactCollisionShapeModelNode((GImpactCollisionShape) element, objectId));
+        } else if (element instanceof HullCollisionShape) {
+            return unsafeCast(new HullCollisionShapeModelNode((HullCollisionShape) element, objectId));
+        } else if (element instanceof MeshCollisionShape) {
+            return unsafeCast(new MeshCollisionShapeModelNode((MeshCollisionShape) element, objectId));
+        } else if (element instanceof PlaneCollisionShape) {
+            return unsafeCast(new PlaneCollisionShapeModelNode((PlaneCollisionShape) element, objectId));
+        } else if (element instanceof SphereCollisionShape) {
+            return unsafeCast(new SphereCollisionShapeModelNode((SphereCollisionShape) element, objectId));
+        }
+
+        return unsafeCast(new CollisionShapeModelNode<>(element, objectId));
+    }
+
+    @NotNull
+    private static <T, V extends ModelNode<T>> V getLightModelNode(@NotNull final Light element, final long objectId) {
+
+        if (element instanceof LightProbe) {
+            return unsafeCast(new LightProbeModelNode((LightProbe) element, objectId));
+        } else if (element instanceof AmbientLight) {
+            return unsafeCast(new AmbientLightModelNode((AmbientLight) element, objectId));
+        } else if (element instanceof DirectionalLight) {
+            return unsafeCast(new DirectionalLightModelNode((DirectionalLight) element, objectId));
+        } else if (element instanceof SpotLight) {
+            return unsafeCast(new SpotLightModelNode((SpotLight) element, objectId));
+        } else if (element instanceof PointLight) {
+            return unsafeCast(new PointLightModelNode((PointLight) element, objectId));
+        }
+
+        throw new IllegalArgumentException("Unsupported light " + element);
+    }
+
+    @NotNull
+    private static <T, V extends ModelNode<T>> V getEmitterShapeModelNode(@NotNull final EmitterShape element,
+                                                                          final long objectId) {
+        if (element instanceof EmitterBoxShape) {
+            return unsafeCast(new EmitterBoxShapeModelNode((EmitterBoxShape) element, objectId));
+        } else if (element instanceof EmitterSphereShape) {
+            return unsafeCast(new EmitterSphereShapeModelNode((EmitterSphereShape) element, objectId));
+        } else if (element instanceof EmitterPointShape) {
+            return unsafeCast(new EmitterPointShapeModelNode((EmitterPointShape) element, objectId));
+        } else if (element instanceof EmitterMeshConvexHullShape) {
+            return unsafeCast(new EmitterMeshConvexHullShapeModelNode((EmitterMeshConvexHullShape) element, objectId));
+        } else if (element instanceof EmitterMeshFaceShape) {
+            return unsafeCast(new EmitterMeshFaceShapeModelNode((EmitterMeshFaceShape) element, objectId));
+        } else if (element instanceof EmitterMeshVertexShape) {
+            return unsafeCast(new EmitterMeshVertexShapeModelNode((EmitterMeshVertexShape) element, objectId));
+        }
+
+        return unsafeCast(new EmitterShapeModelNode(element, objectId));
     }
 }

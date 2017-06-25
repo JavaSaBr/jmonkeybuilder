@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.shape;
 
 import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.shapes.EmitterShape;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The action to switch an emitter shape of the {@link ParticleEmitter}.
+ * The action to switch an {@link EmitterShape} of the {@link ParticleEmitter}.
  *
  * @author JavaSaBr
  */
@@ -24,7 +25,8 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+                                            @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -45,6 +47,5 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     }
 
     @FXThread
-    protected void process(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ParticleEmitter emitter) {
-    }
+    protected abstract void process(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ParticleEmitter emitter);
 }
