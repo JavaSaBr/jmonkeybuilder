@@ -8,7 +8,7 @@ import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.action.operation.RemoveParticleInfluencerOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.RemoveParticleInfluencerOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.influencer.Toneg0dParticleInfluencerModelNode;

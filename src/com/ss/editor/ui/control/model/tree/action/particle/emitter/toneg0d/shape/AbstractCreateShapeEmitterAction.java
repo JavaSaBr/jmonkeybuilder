@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.action.operation.ChangeToneg0dParticleEmitterShapeOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeEmitterMeshOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
@@ -52,7 +52,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
         final Mesh shape = createMesh();
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new ChangeToneg0dParticleEmitterShapeOperation(shape, element));
+        changeConsumer.execute(new ChangeEmitterMeshOperation(shape, element));
     }
 
     /**

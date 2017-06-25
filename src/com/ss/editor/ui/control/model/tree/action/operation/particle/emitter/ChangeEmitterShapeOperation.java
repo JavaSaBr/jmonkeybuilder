@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.action.operation;
+package com.ss.editor.ui.control.model.tree.action.operation.particle.emitter;
 
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterShape;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr.
  */
-public class ChangeParticleEmitterShapeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
      * The emitter.
@@ -25,7 +25,7 @@ public class ChangeParticleEmitterShapeOperation extends AbstractEditorOperation
     @NotNull
     private volatile EmitterShape prevShape;
 
-    public ChangeParticleEmitterShapeOperation(@NotNull final EmitterShape newShape, @NotNull final ParticleEmitter emitter) {
+    public ChangeEmitterShapeOperation(@NotNull final EmitterShape newShape, @NotNull final ParticleEmitter emitter) {
         this.prevShape = newShape;
         this.emitter = emitter;
     }

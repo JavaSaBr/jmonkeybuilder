@@ -1,4 +1,4 @@
-package com.ss.editor.ui.control.model.tree.action.operation;
+package com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d;
 
 import com.jme3.scene.Mesh;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -14,7 +14,7 @@ import tonegod.emitter.ParticleEmitterNode;
  *
  * @author JavaSaBr.
  */
-public class ChangeToneg0dParticleEmitterShapeOperation extends AbstractEditorOperation<ModelChangeConsumer> {
+public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
     /**
      * The emitter node.
@@ -34,7 +34,7 @@ public class ChangeToneg0dParticleEmitterShapeOperation extends AbstractEditorOp
      * @param newShape    the new shape
      * @param emitterNode the emitter node
      */
-    public ChangeToneg0dParticleEmitterShapeOperation(@NotNull final Mesh newShape, @NotNull final ParticleEmitterNode emitterNode) {
+    public ChangeEmitterMeshOperation(@NotNull final Mesh newShape, @NotNull final ParticleEmitterNode emitterNode) {
         this.prevShape = newShape;
         this.emitterNode = emitterNode;
     }

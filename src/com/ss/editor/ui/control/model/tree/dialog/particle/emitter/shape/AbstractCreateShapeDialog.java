@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterShape;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.model.tree.action.operation.ChangeParticleEmitterShapeOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeEmitterShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import org.jetbrains.annotations.NotNull;
@@ -73,7 +73,7 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
         final ParticleEmitter element = getEmitter();
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
-        changeConsumer.execute(new ChangeParticleEmitterShapeOperation(emitterShape, element));
+        changeConsumer.execute(new ChangeEmitterShapeOperation(emitterShape, element));
     }
 
     /**

@@ -15,7 +15,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileActio
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.action.operation.ChangeToneg0dParticleEmitterShapeOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeEmitterMeshOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
@@ -100,6 +100,6 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
         final ModelNode<?> modelNode = getNode();
         final ParticleEmitterNode element = (ParticleEmitterNode) modelNode.getElement();
 
-        changeConsumer.execute(new ChangeToneg0dParticleEmitterShapeOperation(geometry.getMesh(), element));
+        changeConsumer.execute(new ChangeEmitterMeshOperation(geometry.getMesh(), element));
     }
 }

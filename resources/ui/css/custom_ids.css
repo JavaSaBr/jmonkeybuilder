@@ -8,12 +8,10 @@
     -fx-min-height: 30px;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -fx-background-app-bar;
-    -fx-effect: -fx-material-shadow-panel;
-}
-
-#EditorBarComponentOffset {
-    -fx-min-height: 28px;
+    -fx-background-color: -fx-background-background;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-color: black;
+    -fx-effect: null;
 }
 
 #EditorLoadingLayer {

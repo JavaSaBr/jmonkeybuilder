@@ -1,13 +1,9 @@
-package com.ss.editor.ui.control.model.tree.action.operation;
+package com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d;
 
 import static com.ss.editor.util.NodeUtils.findParent;
-
-import com.jme3.scene.Node;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
-
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
 import tonegod.emitter.particle.ParticleDataMeshInfo;

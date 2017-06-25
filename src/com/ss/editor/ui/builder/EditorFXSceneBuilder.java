@@ -19,7 +19,6 @@ import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -113,15 +112,8 @@ public class EditorFXSceneBuilder {
         leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
         bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
 
-        final Pane editorBarOffset = new Pane();
-        editorBarOffset.setId(CSSIds.EDITOR_BAR_COMPONENT_OFFSET);
+        FXUtils.addToPane(new VBox(barComponent, leftSplitContainer), container);
 
-        FXUtils.addToPane(new VBox(editorBarOffset, leftSplitContainer), container);
-        FXUtils.addToPane(barComponent, container);
-
-        barComponent.toFront();
-
-        FXUtils.bindFixedWidth(editorBarOffset, container.widthProperty());
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
     }

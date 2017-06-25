@@ -20,10 +20,6 @@ public interface CSSIds {
      * The constant EDITOR_BAR_COMPONENT.
      */
     String EDITOR_BAR_COMPONENT = "EditorBarComponent";
-    /**
-     * The constant EDITOR_BAR_COMPONENT_OFFSET.
-     */
-    String EDITOR_BAR_COMPONENT_OFFSET = "EditorBarComponentOffset";
 
     /**
      * The constant EDITOR_LOADING_LAYER.
