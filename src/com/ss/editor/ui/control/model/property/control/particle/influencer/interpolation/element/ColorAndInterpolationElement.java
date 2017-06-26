@@ -34,7 +34,7 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_COLOR;
+        return Messages.MODEL_PROPERTY_COLOR;
     }
 
     @Override

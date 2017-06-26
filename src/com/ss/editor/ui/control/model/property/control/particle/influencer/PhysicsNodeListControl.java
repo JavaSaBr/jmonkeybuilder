@@ -129,7 +129,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      */
     @NotNull
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
+        return Messages.MODEL_PROPERTY_GEOMETRY_LIST;
     }
 
     /**
@@ -201,7 +201,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         for (int i = 0, length = geometries.size(); i < length; i++) {
 
             final Geometry geometry = geometries.get(i);
-            final Label label = new Label(Messages.PARTICLE_EMITTER_INFLUENCER_GEOMETRY + ": " + geometry.getName());
+            final Label label = new Label(Messages.MODEL_PROPERTY_GEOMETRY + ": " + geometry.getName());
             label.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(label, root);

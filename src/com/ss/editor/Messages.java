@@ -150,11 +150,6 @@ public class Messages {
     public static final String MATERIAL_FILE_EDITOR_ACTION_LIGHT;
 
     /**
-     * The constant POST_FILTER_EDITOR_MATERIAL_LABEL.
-     */
-    public static final String POST_FILTER_EDITOR_MATERIAL_LABEL;
-
-    /**
      * The constant ASSET_EDITOR_DIALOG_TITLE.
      */
     public static final String ASSET_EDITOR_DIALOG_TITLE;
@@ -266,10 +261,6 @@ public class Messages {
      */
     public static final String TEXT_FILE_EDITOR_NAME;
     /**
-     * The constant POST_FILTER_EDITOR_NAME.
-     */
-    public static final String POST_FILTER_EDITOR_NAME;
-    /**
      * The constant MATERIAL_EDITOR_NAME.
      */
     public static final String MATERIAL_EDITOR_NAME;
@@ -328,15 +319,6 @@ public class Messages {
      * The constant SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION.
      */
     public static final String SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION;
-
-    /**
-     * The constant POST_FILTER_VIEW_FILE_CREATOR_TITLE.
-     */
-    public static final String POST_FILTER_VIEW_FILE_CREATOR_TITLE;
-    /**
-     * The constant POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION.
-     */
-    public static final String POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION;
 
     /**
      * The constant SETTINGS_DIALOG_TITLE.
@@ -845,25 +827,25 @@ public class Messages {
     public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE;
 
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_QUAD.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_QUAD;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_POINT.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_POINT;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_IMPOSTOR.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_IMPOSTOR;
     /**
-     * The constant MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL.
+     * The constant MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_MODEL.
      */
-    public static final String MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL;
+    public static final String MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_MODEL;
     /**
      * The constant MODEL_NODE_TREE_ACTION_CREATE_LAYER.
      */
@@ -1002,21 +984,21 @@ public class Messages {
      */
     public static final String MODEL_PROPERTY_MAX;
     /**
-     * The constant MODEL_PROPERTY_LOOPING.
+     * The constant MODEL_PROPERTY_IS_LOOPING.
      */
-    public static final String MODEL_PROPERTY_LOOPING;
+    public static final String MODEL_PROPERTY_IS_LOOPING;
     /**
-     * The constant MODEL_PROPERTY_REVERB.
+     * The constant MODEL_PROPERTY_IS_REVERB.
      */
-    public static final String MODEL_PROPERTY_REVERB;
+    public static final String MODEL_PROPERTY_IS_REVERB;
     /**
-     * The constant MODEL_PROPERTY_DIRECTIONAL.
+     * The constant MODEL_PROPERTY_IS_DIRECTIONAL.
      */
-    public static final String MODEL_PROPERTY_DIRECTIONAL;
+    public static final String MODEL_PROPERTY_IS_DIRECTIONAL;
     /**
-     * The constant MODEL_PROPERTY_POSITIONAL.
+     * The constant MODEL_PROPERTY_IS_POSITIONAL.
      */
-    public static final String MODEL_PROPERTY_POSITIONAL;
+    public static final String MODEL_PROPERTY_IS_POSITIONAL;
     /**
      * The constant MODEL_PROPERTY_AUDIO_PITCH.
      */
@@ -1131,519 +1113,455 @@ public class Messages {
     public static final String MODEL_PROPERTY_CAPACITY;
 
     /**
-     * The constant CONTROL_PROPERTY_ENABLED.
+     * The constant MODEL_PROPERTY_IS_ENABLED.
      */
-    public static final String CONTROL_PROPERTY_ENABLED;
+    public static final String MODEL_PROPERTY_IS_ENABLED;
     /**
-     * The constant CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED.
+     * The constant MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED.
      */
-    public static final String CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED;
+    public static final String MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED;
     /**
-     * The constant CONTROL_PROPERTY_VIEW_DIRECTION.
+     * The constant MODEL_PROPERTY_VIEW_DIRECTION.
      */
-    public static final String CONTROL_PROPERTY_VIEW_DIRECTION;
+    public static final String MODEL_PROPERTY_VIEW_DIRECTION;
     /**
-     * The constant CONTROL_PROPERTY_WALK_DIRECTION.
+     * The constant MODEL_PROPERTY_WALK_DIRECTION.
      */
-    public static final String CONTROL_PROPERTY_WALK_DIRECTION;
+    public static final String MODEL_PROPERTY_WALK_DIRECTION;
     /**
-     * The constant CONTROL_PROPERTY_FALL_SPEED.
+     * The constant MODEL_PROPERTY_FALL_SPEED.
      */
-    public static final String CONTROL_PROPERTY_FALL_SPEED;
+    public static final String MODEL_PROPERTY_FALL_SPEED;
     /**
-     * The constant CONTROL_PROPERTY_GRAVITY.
+     * The constant MODEL_PROPERTY_GRAVITY.
      */
-    public static final String CONTROL_PROPERTY_GRAVITY;
+    public static final String MODEL_PROPERTY_GRAVITY;
     /**
-     * The constant CONTROL_PROPERTY_JUMP_SPEED.
+     * The constant MODEL_PROPERTY_JUMP_SPEED.
      */
-    public static final String CONTROL_PROPERTY_JUMP_SPEED;
+    public static final String MODEL_PROPERTY_JUMP_SPEED;
     /**
-     * The constant CONTROL_PROPERTY_MAX_SLOPE.
+     * The constant MODEL_PROPERTY_MAX_SLOPE.
      */
-    public static final String CONTROL_PROPERTY_MAX_SLOPE;
+    public static final String MODEL_PROPERTY_MAX_SLOPE;
     /**
-     * The constant CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL.
+     * The constant MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL.
      */
-    public static final String CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL;
+    public static final String MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL;
     /**
-     * The constant CONTROL_PROPERTY_USE_VIEW_DIRECTION.
+     * The constant MODEL_PROPERTY_IS_USE_VIEW_DIRECTION.
      */
-    public static final String CONTROL_PROPERTY_USE_VIEW_DIRECTION;
+    public static final String MODEL_PROPERTY_IS_USE_VIEW_DIRECTION;
     /**
-     * The constant CONTROL_PROPERTY_KINEMATIC_SPATIAL.
+     * The constant MODEL_PROPERTY_IS_KINEMATIC_SPATIAL.
      */
-    public static final String CONTROL_PROPERTY_KINEMATIC_SPATIAL;
+    public static final String MODEL_PROPERTY_IS_KINEMATIC_SPATIAL;
     /**
-     * The constant CONTROL_PROPERTY_KINEMATIC.
+     * The constant MODEL_PROPERTY_IS_KINEMATIC.
      */
-    public static final String CONTROL_PROPERTY_KINEMATIC;
+    public static final String MODEL_PROPERTY_IS_KINEMATIC;
     /**
-     * The constant CONTROL_PROPERTY_ANGULAR_VELOCITY.
+     * The constant MODEL_PROPERTY_ANGULAR_VELOCITY.
      */
-    public static final String CONTROL_PROPERTY_ANGULAR_VELOCITY;
+    public static final String MODEL_PROPERTY_ANGULAR_VELOCITY;
     /**
-     * The constant CONTROL_PROPERTY_LINEAR_FACTOR.
+     * The constant MODEL_PROPERTY_LINEAR_FACTOR.
      */
-    public static final String CONTROL_PROPERTY_LINEAR_FACTOR;
+    public static final String MODEL_PROPERTY_LINEAR_FACTOR;
     /**
-     * The constant CONTROL_PROPERTY_ANGULAR_DAMPING.
+     * The constant MODEL_PROPERTY_ANGULAR_DAMPING.
      */
-    public static final String CONTROL_PROPERTY_ANGULAR_DAMPING;
+    public static final String MODEL_PROPERTY_ANGULAR_DAMPING;
     /**
-     * The constant CONTROL_PROPERTY_ANGULAR_FACTOR.
+     * The constant MODEL_PROPERTY_ANGULAR_FACTOR.
      */
-    public static final String CONTROL_PROPERTY_ANGULAR_FACTOR;
+    public static final String MODEL_PROPERTY_ANGULAR_FACTOR;
     /**
-     * The constant CONTROL_PROPERTY_FRICTION.
+     * The constant MODEL_PROPERTY_FRICTION.
      */
-    public static final String CONTROL_PROPERTY_FRICTION;
+    public static final String MODEL_PROPERTY_FRICTION;
     /**
-     * The constant CONTROL_PROPERTY_LINEAR_DAMPING.
+     * The constant MODEL_PROPERTY_LINEAR_DAMPING.
      */
-    public static final String CONTROL_PROPERTY_LINEAR_DAMPING;
+    public static final String MODEL_PROPERTY_LINEAR_DAMPING;
     /**
-     * The constant CONTROL_PROPERTY_MASS.
+     * The constant MODEL_PROPERTY_MASS.
      */
-    public static final String CONTROL_PROPERTY_MASS;
+    public static final String MODEL_PROPERTY_MASS;
     /**
-     * The constant CONTROL_PROPERTY_RESTITUTION.
+     * The constant MODEL_PROPERTY_RESTITUTION.
      */
-    public static final String CONTROL_PROPERTY_RESTITUTION;
+    public static final String MODEL_PROPERTY_RESTITUTION;
     /**
-     * The constant CONTROL_PROPERTY_CURRENT_VALUE.
+     * The constant MODEL_PROPERTY_CURRENT_VALUE.
      */
-    public static final String CONTROL_PROPERTY_CURRENT_VALUE;
+    public static final String MODEL_PROPERTY_CURRENT_VALUE;
     /**
-     * The constant CONTROL_PROPERTY_CURRENT_WAY_POINT.
+     * The constant MODEL_PROPERTY_CURRENT_WAY_POINT.
      */
-    public static final String CONTROL_PROPERTY_CURRENT_WAY_POINT;
+    public static final String MODEL_PROPERTY_CURRENT_WAY_POINT;
     /**
-     * The constant CONTROL_PROPERTY_DIRECTION_TYPE.
+     * The constant MODEL_PROPERTY_DIRECTION_TYPE.
      */
-    public static final String CONTROL_PROPERTY_DIRECTION_TYPE;
+    public static final String MODEL_PROPERTY_DIRECTION_TYPE;
     /**
-     * The constant CONTROL_PROPERTY_DIRECTION.
+     * The constant MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD.
      */
-    public static final String CONTROL_PROPERTY_DIRECTION;
+    public static final String MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD;
     /**
-     * The constant CONTROL_PROPERTY_ROTATION.
+     * The constant MODEL_PROPERTY_LOOP_MODE.
      */
-    public static final String CONTROL_PROPERTY_ROTATION;
+    public static final String MODEL_PROPERTY_LOOP_MODE;
     /**
-     * The constant CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD.
+     * The constant MODEL_PROPERTY_INITIAL_DURATION.
      */
-    public static final String CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD;
+    public static final String MODEL_PROPERTY_INITIAL_DURATION;
     /**
-     * The constant CONTROL_PROPERTY_LOOP_MODE.
+     * The constant MODEL_PROPERTY_SPEED.
      */
-    public static final String CONTROL_PROPERTY_LOOP_MODE;
+    public static final String MODEL_PROPERTY_SPEED;
     /**
-     * The constant CONTROL_PROPERTY_INITIAL_DURATION.
+     * The constant MODEL_PROPERTY_TIME.
      */
-    public static final String CONTROL_PROPERTY_INITIAL_DURATION;
+    public static final String MODEL_PROPERTY_TIME;
     /**
-     * The constant CONTROL_PROPERTY_SPEED.
+     * The constant MODEL_PROPERTY_MARGIN.
      */
-    public static final String CONTROL_PROPERTY_SPEED;
+    public static final String MODEL_PROPERTY_MARGIN;
     /**
-     * The constant CONTROL_PROPERTY_TIME.
+     * The constant MODEL_PROPERTY_HALF_EXTENTS.
      */
-    public static final String CONTROL_PROPERTY_TIME;
+    public static final String MODEL_PROPERTY_HALF_EXTENTS;
     /**
-     * The constant CONTROL_PROPERTY_MARGIN.
+     * The constant MODEL_PROPERTY_HEIGHT.
      */
-    public static final String CONTROL_PROPERTY_MARGIN;
+    public static final String MODEL_PROPERTY_HEIGHT;
     /**
-     * The constant CONTROL_PROPERTY_LOCATION.
+     * The constant MODEL_PROPERTY_AXIS.
      */
-    public static final String CONTROL_PROPERTY_LOCATION;
+    public static final String MODEL_PROPERTY_AXIS;
     /**
-     * The constant CONTROL_PROPERTY_HALF_EXTENTS.
+     * The constant MODEL_PROPERTY_OBJECT_ID.
      */
-    public static final String CONTROL_PROPERTY_HALF_EXTENTS;
+    public static final String MODEL_PROPERTY_OBJECT_ID;
     /**
-     * The constant CONTROL_PROPERTY_RADIUS.
+     * The constant MODEL_PROPERTY_AXLE.
      */
-    public static final String CONTROL_PROPERTY_RADIUS;
+    public static final String MODEL_PROPERTY_AXLE;
     /**
-     * The constant CONTROL_PROPERTY_HEIGHT.
+     * The constant MODEL_PROPERTY_REST_LENGTH.
      */
-    public static final String CONTROL_PROPERTY_HEIGHT;
+    public static final String MODEL_PROPERTY_REST_LENGTH;
     /**
-     * The constant CONTROL_PROPERTY_AXIS.
+     * The constant MODEL_PROPERTY_IS_FRONT.
      */
-    public static final String CONTROL_PROPERTY_AXIS;
+    public static final String MODEL_PROPERTY_IS_FRONT;
     /**
-     * The constant CONTROL_PROPERTY_SCALE.
+     * The constant MODEL_PROPERTY_DAMPING_COMPRESSION.
      */
-    public static final String CONTROL_PROPERTY_SCALE;
+    public static final String MODEL_PROPERTY_DAMPING_COMPRESSION;
     /**
-     * The constant CONTROL_PROPERTY_OBJECT_ID.
+     * The constant MODEL_PROPERTY_FRICTION_SLIP.
      */
-    public static final String CONTROL_PROPERTY_OBJECT_ID;
+    public static final String MODEL_PROPERTY_FRICTION_SLIP;
     /**
-     * The constant CONTROL_PROPERTY_AXLE.
+     * The constant MODEL_PROPERTY_MAX_SUSPENSION_FORCE.
      */
-    public static final String CONTROL_PROPERTY_AXLE;
+    public static final String MODEL_PROPERTY_MAX_SUSPENSION_FORCE;
     /**
-     * The constant CONTROL_PROPERTY_REST_LENGTH.
+     * The constant MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM.
      */
-    public static final String CONTROL_PROPERTY_REST_LENGTH;
+    public static final String MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM;
     /**
-     * The constant CONTROL_PROPERTY_FRONT.
+     * The constant MODEL_PROPERTY_DAMPING_RELAXATION.
      */
-    public static final String CONTROL_PROPERTY_FRONT;
+    public static final String MODEL_PROPERTY_DAMPING_RELAXATION;
     /**
-     * The constant CONTROL_PROPERTY_DAMPING_COMPRESSION.
+     * The constant MODEL_PROPERTY_SUSPENSION_STIFFNESS.
      */
-    public static final String CONTROL_PROPERTY_DAMPING_COMPRESSION;
+    public static final String MODEL_PROPERTY_SUSPENSION_STIFFNESS;
     /**
-     * The constant CONTROL_PROPERTY_FRICTION_SLIP.
+     * The constant MODEL_PROPERTY_ROLL_INFLUENCE.
      */
-    public static final String CONTROL_PROPERTY_FRICTION_SLIP;
+    public static final String MODEL_PROPERTY_ROLL_INFLUENCE;
     /**
-     * The constant CONTROL_PROPERTY_MAX_SUSPENSION_FORCE.
+     * The constant MODEL_PROPERTY_WHEEL_SPATIAL.
      */
-    public static final String CONTROL_PROPERTY_MAX_SUSPENSION_FORCE;
+    public static final String MODEL_PROPERTY_WHEEL_SPATIAL;
     /**
-     * The constant CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM.
+     * The constant MODEL_PROPERTY_LENGTH.
      */
-    public static final String CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM;
+    public static final String MODEL_PROPERTY_LENGTH;
     /**
-     * The constant CONTROL_PROPERTY_DAMPING_RELAXATION.
+     * The constant MODEL_PROPERTY_CURRENT_TIME.
      */
-    public static final String CONTROL_PROPERTY_DAMPING_RELAXATION;
+    public static final String MODEL_PROPERTY_CURRENT_TIME;
     /**
-     * The constant CONTROL_PROPERTY_SUSPENSION_STIFFNESS.
+     * The constant MODEL_PROPERTY_POINT.
      */
-    public static final String CONTROL_PROPERTY_SUSPENSION_STIFFNESS;
+    public static final String MODEL_PROPERTY_POINT;
     /**
-     * The constant CONTROL_PROPERTY_ROLL_INFLUENCE.
+     * The constant MODEL_PROPERTY_CENTER.
      */
-    public static final String CONTROL_PROPERTY_ROLL_INFLUENCE;
+    public static final String MODEL_PROPERTY_CENTER;
     /**
-     * The constant CONTROL_PROPERTY_WHEEL_SPATIAL.
+     * The constant MODEL_PROPERTY_VELOCITY_VARIATION.
      */
-    public static final String CONTROL_PROPERTY_WHEEL_SPATIAL;
+    public static final String MODEL_PROPERTY_VELOCITY_VARIATION;
     /**
-     * The constant CONTROL_PROPERTY_LENGTH.
+     * The constant MODEL_PROPERTY_INITIAL_VELOCITY.
      */
-    public static final String CONTROL_PROPERTY_LENGTH;
+    public static final String MODEL_PROPERTY_INITIAL_VELOCITY;
     /**
-     * The constant CONTROL_PROPERTY_CURRENT_TIME.
+     * The constant MODEL_PROPERTY_ORIGIN.
      */
-    public static final String CONTROL_PROPERTY_CURRENT_TIME;
+    public static final String MODEL_PROPERTY_ORIGIN;
     /**
-     * The constant CONTROL_PROPERTY_POINT.
+     * The constant MODEL_PROPERTY_RADIAL_VELOCITY.
      */
-    public static final String CONTROL_PROPERTY_POINT;
+    public static final String MODEL_PROPERTY_RADIAL_VELOCITY;
     /**
-     * The constant CONTROL_PROPERTY_MAX.
+     * The constant MODEL_PROPERTY_IS_HORIZONTAL.
      */
-    public static final String CONTROL_PROPERTY_MAX;
-    /**
-     * The constant CONTROL_PROPERTY_MIN.
-     */
-    public static final String CONTROL_PROPERTY_MIN;
-    /**
-     * The constant CONTROL_PROPERTY_CENTER.
-     */
-    public static final String CONTROL_PROPERTY_CENTER;
-    /**
-     * The constant CONTROL_PROPERTY_VELOCITY_VARIATION.
-     */
-    public static final String CONTROL_PROPERTY_VELOCITY_VARIATION;
-    /**
-     * The constant CONTROL_PROPERTY_INITIAL_VELOCITY.
-     */
-    public static final String CONTROL_PROPERTY_INITIAL_VELOCITY;
-    /**
-     * The constant CONTROL_PROPERTY_ORIGIN.
-     */
-    public static final String CONTROL_PROPERTY_ORIGIN;
-    /**
-     * The constant CONTROL_PROPERTY_RADIAL_VELOCITY.
-     */
-    public static final String CONTROL_PROPERTY_RADIAL_VELOCITY;
-    /**
-     * The constant CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL.
-     */
-    public static final String CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL;
+    public static final String MODEL_PROPERTY_IS_HORIZONTAL;
 
 
     /**
-     * The constant PARTICLE_EMITTER_TEST_MODE.
+     * The constant MODEL_PROPERTY_IS_TEST_MODE.
      */
-    public static final String PARTICLE_EMITTER_TEST_MODE;
+    public static final String MODEL_PROPERTY_IS_TEST_MODE;
     /**
-     * The constant PARTICLE_EMITTER_FACING_VELOCITY.
+     * The constant MODEL_PROPERTY_IS_FACING_VELOCITY.
      */
-    public static final String PARTICLE_EMITTER_FACING_VELOCITY;
+    public static final String MODEL_PROPERTY_IS_FACING_VELOCITY;
     /**
-     * The constant PARTICLE_EMITTER_IN_WORLD_SPACE.
+     * The constant MODEL_PROPERTY_IS_IN_WORLD_SPACE.
      */
-    public static final String PARTICLE_EMITTER_IN_WORLD_SPACE;
+    public static final String MODEL_PROPERTY_IS_IN_WORLD_SPACE;
     /**
-     * The constant PARTICLE_EMITTER_RANDOM_ANGLE.
+     * The constant MODEL_PROPERTY_IS_RANDOM_ANGLE.
      */
-    public static final String PARTICLE_EMITTER_RANDOM_ANGLE;
+    public static final String MODEL_PROPERTY_IS_RANDOM_ANGLE;
     /**
-     * The constant PARTICLE_EMITTER_SELECT_RANDOM_IMAGE.
+     * The constant MODEL_PROPERTY_IS_SELECT_RANDOM_IMAGE.
      */
-    public static final String PARTICLE_EMITTER_SELECT_RANDOM_IMAGE;
+    public static final String MODEL_PROPERTY_IS_SELECT_RANDOM_IMAGE;
     /**
-     * The constant PARTICLE_EMITTER_SIZE.
+     * The constant MODEL_PROPERTY_SIZE.
      */
-    public static final String PARTICLE_EMITTER_SIZE;
+    public static final String MODEL_PROPERTY_SIZE;
     /**
-     * The constant PARTICLE_EMITTER_ROTATE_SPEED.
+     * The constant MODEL_PROPERTY_ROTATE_SPEED.
      */
-    public static final String PARTICLE_EMITTER_ROTATE_SPEED;
+    public static final String MODEL_PROPERTY_ROTATE_SPEED;
     /**
-     * The constant PARTICLE_EMITTER_START_COLOR.
+     * The constant MODEL_PROPERTY_START_COLOR.
      */
-    public static final String PARTICLE_EMITTER_START_COLOR;
+    public static final String MODEL_PROPERTY_START_COLOR;
     /**
-     * The constant PARTICLE_EMITTER_END_COLOR.
+     * The constant MODEL_PROPERTY_END_COLOR.
      */
-    public static final String PARTICLE_EMITTER_END_COLOR;
+    public static final String MODEL_PROPERTY_END_COLOR;
     /**
-     * The constant PARTICLE_EMITTER_MESH_TYPE.
+     * The constant MODEL_PROPERTY_MESH_TYPE.
      */
-    public static final String PARTICLE_EMITTER_MESH_TYPE;
+    public static final String MODEL_PROPERTY_MESH_TYPE;
     /**
-     * The constant PARTICLE_EMITTER_GRAVITY.
+     * The constant MODEL_PROPERTY_FACE_NORMAL.
      */
-    public static final String PARTICLE_EMITTER_GRAVITY;
+    public static final String MODEL_PROPERTY_FACE_NORMAL;
     /**
-     * The constant PARTICLE_EMITTER_FACE_NORMAL.
+     * The constant MODEL_PROPERTY_IS_RANDOM_POINT.
      */
-    public static final String PARTICLE_EMITTER_FACE_NORMAL;
+    public static final String MODEL_PROPERTY_IS_RANDOM_POINT;
     /**
-     * The constant PARTICLE_EMITTER_ENABLED.
+     * The constant MODEL_PROPERTY_IS_SEQUENTIAL_FACE.
      */
-    public static final String PARTICLE_EMITTER_ENABLED;
+    public static final String MODEL_PROPERTY_IS_SEQUENTIAL_FACE;
     /**
-     * The constant PARTICLE_EMITTER_RANDOM_POINT.
+     * The constant MODEL_PROPERTY_IS_SKIP_PATTERN.
      */
-    public static final String PARTICLE_EMITTER_RANDOM_POINT;
+    public static final String MODEL_PROPERTY_IS_SKIP_PATTERN;
     /**
-     * The constant PARTICLE_EMITTER_SEQUENTIAL_FACE.
+     * The constant MODEL_PROPERTY_EMISSION_POINT.
      */
-    public static final String PARTICLE_EMITTER_SEQUENTIAL_FACE;
+    public static final String MODEL_PROPERTY_EMISSION_POINT;
     /**
-     * The constant PARTICLE_EMITTER_SKIP_PATTERN.
+     * The constant MODEL_PROPERTY_MAX_PARTICLES.
      */
-    public static final String PARTICLE_EMITTER_SKIP_PATTERN;
+    public static final String MODEL_PROPERTY_MAX_PARTICLES;
     /**
-     * The constant PARTICLE_EMITTER_DIRECTION_TYPE.
+     * The constant MODEL_PROPERTY_EMISSION_PER_SECOND.
      */
-    public static final String PARTICLE_EMITTER_DIRECTION_TYPE;
+    public static final String MODEL_PROPERTY_EMISSION_PER_SECOND;
     /**
-     * The constant PARTICLE_EMITTER_EMISSION_POINT.
+     * The constant MODEL_PROPERTY_PARTICLES_PER_SECOND.
      */
-    public static final String PARTICLE_EMITTER_EMISSION_POINT;
+    public static final String MODEL_PROPERTY_PARTICLES_PER_SECOND;
     /**
-     * The constant PARTICLE_EMITTER_MAX_PARTICLES.
+     * The constant MODEL_PROPERTY_EMITTER_LIFE.
      */
-    public static final String PARTICLE_EMITTER_MAX_PARTICLES;
+    public static final String MODEL_PROPERTY_EMITTER_LIFE;
     /**
-     * The constant PARTICLE_EMITTER_EMISSION_PER_SECOND.
+     * The constant MODEL_PROPERTY_EMITTER_DELAY.
      */
-    public static final String PARTICLE_EMITTER_EMISSION_PER_SECOND;
+    public static final String MODEL_PROPERTY_EMITTER_DELAY;
     /**
-     * The constant PARTICLE_EMITTER_PARTICLES_PER_SECOND.
+     * The constant MODEL_PROPERTY_IS_TEST_PARTICLES.
      */
-    public static final String PARTICLE_EMITTER_PARTICLES_PER_SECOND;
+    public static final String MODEL_PROPERTY_IS_TEST_PARTICLES;
     /**
-     * The constant PARTICLE_EMITTER_EMITTER_LIFE.
+     * The constant MODEL_PROPERTY_IS_FOLLOW_EMITTER.
      */
-    public static final String PARTICLE_EMITTER_EMITTER_LIFE;
+    public static final String MODEL_PROPERTY_IS_FOLLOW_EMITTER;
     /**
-     * The constant PARTICLE_EMITTER_EMITTER_DELAY.
+     * The constant MODEL_PROPERTY_STRETCHING.
      */
-    public static final String PARTICLE_EMITTER_EMITTER_DELAY;
+    public static final String MODEL_PROPERTY_STRETCHING;
     /**
-     * The constant PARTICLE_EMITTER_TEST_PARTICLES.
+     * The constant MODEL_PROPERTY_MAGNITUDE.
      */
-    public static final String PARTICLE_EMITTER_TEST_PARTICLES;
+    public static final String MODEL_PROPERTY_MAGNITUDE;
     /**
-     * The constant PARTICLE_EMITTER_FOLLOW_EMITTER.
+     * The constant MODEL_PROPERTY_BILLBOARD.
      */
-    public static final String PARTICLE_EMITTER_FOLLOW_EMITTER;
+    public static final String MODEL_PROPERTY_BILLBOARD;
     /**
-     * The constant PARTICLE_EMITTER_STRETCHING.
+     * The constant MODEL_PROPERTY_INITIAL_FORCE.
      */
-    public static final String PARTICLE_EMITTER_STRETCHING;
+    public static final String MODEL_PROPERTY_INITIAL_FORCE;
     /**
-     * The constant PARTICLE_EMITTER_MAGNITUDE.
+     * The constant MODEL_PROPERTY_LIFE.
      */
-    public static final String PARTICLE_EMITTER_MAGNITUDE;
+    public static final String MODEL_PROPERTY_LIFE;
     /**
-     * The constant PARTICLE_EMITTER_BILLBOARD.
+     * The constant MODEL_PROPERTY_COLUMNS.
      */
-    public static final String PARTICLE_EMITTER_BILLBOARD;
+    public static final String MODEL_PROPERTY_COLUMNS;
     /**
-     * The constant PARTICLE_EMITTER_INITIAL_FORCE.
+     * The constant MODEL_PROPERTY_ROWS.
      */
-    public static final String PARTICLE_EMITTER_INITIAL_FORCE;
+    public static final String MODEL_PROPERTY_ROWS;
     /**
-     * The constant PARTICLE_EMITTER_LIFE.
+     * The constant MODEL_PROPERTY_SPRITE_COUNT.
      */
-    public static final String PARTICLE_EMITTER_LIFE;
+    public static final String MODEL_PROPERTY_SPRITE_COUNT;
     /**
-     * The constant PARTICLE_EMITTER_COLUMNS.
+     * The constant MODEL_PROPERTY_FIXED_DURATION.
      */
-    public static final String PARTICLE_EMITTER_COLUMNS;
+    public static final String MODEL_PROPERTY_FIXED_DURATION;
     /**
-     * The constant PARTICLE_EMITTER_ROWS.
+     * The constant MODEL_PROPERTY_IS_RANDOM_START_COLOR.
      */
-    public static final String PARTICLE_EMITTER_ROWS;
+    public static final String MODEL_PROPERTY_IS_RANDOM_START_COLOR;
     /**
-     * The constant PARTICLE_EMITTER_SPRITE_COUNT.
+     * The constant MODEL_PROPERTY_IS_RANDOM_START_SIZE.
      */
-    public static final String PARTICLE_EMITTER_SPRITE_COUNT;
+    public static final String MODEL_PROPERTY_IS_RANDOM_START_SIZE;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION.
+     * The constant MODEL_PROPERTY_SIZE_VARIATION_FACTOR.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION;
+    public static final String MODEL_PROPERTY_SIZE_VARIATION_FACTOR;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR.
+     * The constant MODEL_PROPERTY_IS_RANDOM_START_DESTINATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR;
+    public static final String MODEL_PROPERTY_IS_RANDOM_START_DESTINATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE.
+     * The constant MODEL_PROPERTY_CHANCE.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE;
+    public static final String MODEL_PROPERTY_CHANCE;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_SIZE_VARIATION_FACTOR.
+     * The constant MODEL_PROPERTY_STRENGTH.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_SIZE_VARIATION_FACTOR;
+    public static final String MODEL_PROPERTY_STRENGTH;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION.
+     * The constant MODEL_PROPERTY_ALIGNMENT.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION;
+    public static final String MODEL_PROPERTY_ALIGNMENT;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_CHANCE.
+     * The constant MODEL_PROPERTY_IS_RANDOM_DIRECTION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_CHANCE;
+    public static final String MODEL_PROPERTY_IS_RANDOM_DIRECTION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_STRENGTH.
+     * The constant MODEL_PROPERTY_PULL_CENTER.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_STRENGTH;
+    public static final String MODEL_PROPERTY_PULL_CENTER;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_MAGNITUDE.
+     * The constant MODEL_PROPERTY_PULL_ALIGNMENT.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_MAGNITUDE;
+    public static final String MODEL_PROPERTY_PULL_ALIGNMENT;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_GRAVITY.
+     * The constant MODEL_PROPERTY_UP_ALIGNMENT.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_GRAVITY;
+    public static final String MODEL_PROPERTY_UP_ALIGNMENT;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_ALIGNMENT.
+     * The constant MODEL_PROPERTY_RADIAL_PULL.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_ALIGNMENT;
+    public static final String MODEL_PROPERTY_RADIAL_PULL;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RANDOM_DIRECTION.
+     * The constant MODEL_PROPERTY_TANGENT_FORCE.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_DIRECTION;
+    public static final String MODEL_PROPERTY_TANGENT_FORCE;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_PULL_CENTER.
+     * The constant MODEL_PROPERTY_ALPHA_INTERPOLATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_PULL_CENTER;
+    public static final String MODEL_PROPERTY_ALPHA_INTERPOLATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_PULL_ALIGNMENT.
+     * The constant MODEL_PROPERTY_COLOR_INTERPOLATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_PULL_ALIGNMENT;
+    public static final String MODEL_PROPERTY_COLOR_INTERPOLATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT.
+     * The constant MODEL_PROPERTY_DESTINATION_INTERPOLATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT;
+    public static final String MODEL_PROPERTY_DESTINATION_INTERPOLATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL.
+     * The constant MODEL_PROPERTY_ROTATION_INTERPOLATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL;
+    public static final String MODEL_PROPERTY_ROTATION_INTERPOLATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE.
+     * The constant MODEL_PROPERTY_SIZE_INTERPOLATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE;
+    public static final String MODEL_PROPERTY_SIZE_INTERPOLATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION.
+     * The constant MODEL_PROPERTY_ALPHA.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION;
+    public static final String MODEL_PROPERTY_ALPHA;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION.
+     * The constant MODEL_PROPERTY_FRAME_SEQUENCE.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION;
+    public static final String MODEL_PROPERTY_FRAME_SEQUENCE;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION.
+     * The constant MODEL_PROPERTY_IS_RANDOM_START_IMAGE.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION;
+    public static final String MODEL_PROPERTY_IS_RANDOM_START_IMAGE;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION.
+     * The constant MODEL_PROPERTY_IS_ANIMATE.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION;
+    public static final String MODEL_PROPERTY_IS_ANIMATE;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION.
+     * The constant MODEL_PROPERTY_REACTION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION;
+    public static final String MODEL_PROPERTY_REACTION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_ALPHA.
+     * The constant MODEL_PROPERTY_IS_RANDOM_SPEED.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_ALPHA;
+    public static final String MODEL_PROPERTY_IS_RANDOM_SPEED;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_COLOR.
+     * The constant MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_COLOR;
+    public static final String MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_SPEED.
+     * The constant MODEL_PROPERTY_INTERPOLATION.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_SPEED;
+    public static final String MODEL_PROPERTY_INTERPOLATION;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_SIZE.
+     * The constant MODEL_PROPERTY_GEOMETRY_LIST.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_SIZE;
+    public static final String MODEL_PROPERTY_GEOMETRY_LIST;
     /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE.
+     * The constant MODEL_PROPERTY_GEOMETRY.
      */
-    public static final String PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_ANIMATE.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_ANIMATE;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_REACTION.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_REACTION;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RESTITUTION.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RESTITUTION;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_INTERPOLATION.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_INTERPOLATION;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST;
-    /**
-     * The constant PARTICLE_EMITTER_INFLUENCER_GEOMETRY.
-     */
-    public static final String PARTICLE_EMITTER_INFLUENCER_GEOMETRY;
+    public static final String MODEL_PROPERTY_GEOMETRY;
 
     /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
@@ -2134,17 +2052,17 @@ public class Messages {
     public static final String CREATE_TERRAIN_DIALOG_MAX_RADIUS;
 
     /**
-     * The constant CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE.
+     * The constant CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE.
      */
-    public static final String CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE;
     /**
-     * The constant CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE.
+     * The constant CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE.
      */
-    public static final String CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
     /**
-     * The constant CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE.
+     * The constant CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE.
      */
-    public static final String CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
+    public static final String CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
 
     /**
      * The constant EDITING_COMPONENT_BRUSH_SIZE.
@@ -2320,7 +2238,6 @@ public class Messages {
         MATERIAL_FILE_EDITOR_ACTION_PLANE = bundle.getString("MaterialFileEditorActionPlane");
         MATERIAL_FILE_EDITOR_ACTION_LIGHT = bundle.getString("MaterialFileEditorActionLight");
 
-        POST_FILTER_EDITOR_MATERIAL_LABEL = bundle.getString("PostFilterEditorMaterialListLabel");
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
         ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
         ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
@@ -2354,7 +2271,6 @@ public class Messages {
         MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL = bundle.getString("MaterialFileEditorBucketTypeLabel");
 
         TEXT_FILE_EDITOR_NAME = bundle.getString("TextFileEditorName");
-        POST_FILTER_EDITOR_NAME = bundle.getString("PostFilterEditorName");
         MATERIAL_EDITOR_NAME = bundle.getString("MaterialFileEditorName");
 
         FILE_CREATOR_BUTTON_OK = bundle.getString("FileCreatorButtonOk");
@@ -2363,6 +2279,7 @@ public class Messages {
         MATERIAL_FILE_CREATOR_TITLE = bundle.getString("MaterialFileCreatorTitle");
         MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL = bundle.getString("MaterialFileCreatorMaterialTypeLabel");
         MATERIAL_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("MaterialFileCreatorFileDescription");
+
         MATERIAL_DEFINITION_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("MaterialDefinitionFileCreatorFileDescription");
         MATERIAL_DEFINITION_FILE_CREATOR_TITLE = bundle.getString("MaterialDefinitionFileCreatorTitle");
         MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL = bundle.getString("MaterialDefinitionFileCreatorGlslLabel");
@@ -2372,9 +2289,6 @@ public class Messages {
         SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT = bundle.getString("SingleColorTextureFileCreatorHeight");
         SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR = bundle.getString("SingleColorTextureFileCreatorColor");
         SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION = bundle.getString("SingleColorTextureFileCreatorDescription");
-
-        POST_FILTER_VIEW_FILE_CREATOR_TITLE = bundle.getString("PostFilterViewFileCreatorTitle");
-        POST_FILTER_VIEW_FILE_CREATOR_FILE_DESCRIPTION = bundle.getString("PostFilterViewFileCreatorFileDescription");
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
@@ -2425,7 +2339,6 @@ public class Messages {
         MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_VERTEX = bundle.getString("ModelFileEditorNodeParticleEmitterShapeMeshVertex");
         MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_FACE = bundle.getString("ModelFileEditorNodeParticleEmitterShapeMeshFace");
         MODEL_FILE_EDITOR_NODE_PARTICLE_EMITTER_SHAPE_MESH_CONVEX_HULL = bundle.getString("ModelFileEditorNodeParticleEmitterShapeMeshConvexHull");
-
         MODEL_FILE_EDITOR_NODE_STATIC_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeStaticRigidBodyControl");
         MODEL_FILE_EDITOR_NODE_RIGID_BODY_CONTROL = bundle.getString("ModelFileEditorNodeRigidBodyControl");
         MODEL_FILE_EDITOR_NODE_CHARACTER_CONTROL = bundle.getString("ModelFileEditorNodeCharacterControl");
@@ -2506,11 +2419,11 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_INFLUENCER_RADIAL = bundle.getString("ModelNodeTreeActionParticleEmitterInfluencerRadial");
         MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_TORUS_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterTorusShape");
         MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_MODEL_SHAPE = bundle.getString("ModelNodeTreeActionParticleEmitterModelShape");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMesh");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshQuad");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_POINT = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshPoint");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_IMPOSTOR = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshImpostor");
-        MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_MODEL = bundle.getString("ModelNodeTreeActionEmitterChangeParticlesMeshModel");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH = bundle.getString("ModelNodeTreeActionParticleEmitterChangeParticlesMesh");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_QUAD = bundle.getString("ModelNodeTreeActionParticleEmitterParticlesMeshQuad");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_POINT = bundle.getString("ModelNodeTreeActionParticleEmitterParticlesMeshPoint");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_IMPOSTOR = bundle.getString("ModelNodeTreeActionParticleEmitterParticlesMeshImpostor");
+        MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_MODEL = bundle.getString("ModelNodeTreeActionParticleEmitterParticlesMeshModel");
         MODEL_NODE_TREE_ACTION_CREATE_LAYER = bundle.getString("ModelNodeTreeActionCreateLayer");
         MODEL_NODE_TREE_ACTION_ADD_USER_DATA = bundle.getString("ModelNodeTreeActionAddUserData");
         MODEL_NODE_TREE_ACTION_ADD_CONTROL = bundle.getString("ModelNodeTreeActionAddControl");
@@ -2546,10 +2459,10 @@ public class Messages {
         MODEL_PROPERTY_OUTER_ANGLE = bundle.getString("ModelPropertyOuterAngle");
         MODEL_PROPERTY_MIN = bundle.getString("ModelPropertyMin");
         MODEL_PROPERTY_MAX = bundle.getString("ModelPropertyMax");
-        MODEL_PROPERTY_LOOPING = bundle.getString("ModelPropertyLooping");
-        MODEL_PROPERTY_REVERB = bundle.getString("ModelPropertyReverb");
-        MODEL_PROPERTY_DIRECTIONAL = bundle.getString("ModelPropertyDirectional");
-        MODEL_PROPERTY_POSITIONAL = bundle.getString("ModelPropertyPositional");
+        MODEL_PROPERTY_IS_LOOPING = bundle.getString("ModelPropertyIsLooping");
+        MODEL_PROPERTY_IS_REVERB = bundle.getString("ModelPropertyIsReverb");
+        MODEL_PROPERTY_IS_DIRECTIONAL = bundle.getString("ModelPropertyIsDirectional");
+        MODEL_PROPERTY_IS_POSITIONAL = bundle.getString("ModelPropertyIsPositional");
         MODEL_PROPERTY_AUDIO_PITCH = bundle.getString("ModelPropertyAudioPitch");
         MODEL_PROPERTY_AUDIO_VOLUME = bundle.getString("ModelPropertyAudioVolume");
         MODEL_PROPERTY_TIME_OFFSET = bundle.getString("ModelPropertyTimeOffset");
@@ -2578,137 +2491,118 @@ public class Messages {
         MODEL_PROPERTY_OFFSET = bundle.getString("ModelPropertyOffset");
         MODEL_PROPERTY_STRIDE = bundle.getString("ModelPropertyStride");
         MODEL_PROPERTY_CAPACITY = bundle.getString("ModelPropertyCapacity");
-
-        CONTROL_PROPERTY_ENABLED = bundle.getString("ControlPropertyEnabled");
-        CONTROL_PROPERTY_HARDWARE_SKINNING_PREFERRED = bundle.getString("ControlPropertyHardwareSkinningPreferred");
-        CONTROL_PROPERTY_VIEW_DIRECTION = bundle.getString("ControlPropertyViewDirection");
-        CONTROL_PROPERTY_WALK_DIRECTION = bundle.getString("ControlPropertyWalkDirection");
-        CONTROL_PROPERTY_FALL_SPEED = bundle.getString("ControlPropertyFallSpeed");
-        CONTROL_PROPERTY_GRAVITY = bundle.getString("ControlPropertyGravity");
-        CONTROL_PROPERTY_JUMP_SPEED = bundle.getString("ControlPropertyJumpSpeed");
-        CONTROL_PROPERTY_MAX_SLOPE = bundle.getString("ControlPropertyMaxSlope");
-        CONTROL_PROPERTY_APPLY_PHYSICS_LOCAL = bundle.getString("ControlPropertyApplyPhysicsLocal");
-        CONTROL_PROPERTY_USE_VIEW_DIRECTION = bundle.getString("ControlPropertyUseViewDirection");
-        CONTROL_PROPERTY_KINEMATIC_SPATIAL = bundle.getString("ControlPropertyKinematicSpatial");
-        CONTROL_PROPERTY_KINEMATIC = bundle.getString("ControlPropertyKinematic");
-        CONTROL_PROPERTY_ANGULAR_VELOCITY = bundle.getString("ControlPropertyAngularVelocity");
-        CONTROL_PROPERTY_LINEAR_FACTOR = bundle.getString("ControlPropertyLinearFactor");
-        CONTROL_PROPERTY_ANGULAR_DAMPING = bundle.getString("ControlPropertyAngularDamping");
-        CONTROL_PROPERTY_ANGULAR_FACTOR = bundle.getString("ControlPropertyAngularFactor");
-        CONTROL_PROPERTY_FRICTION = bundle.getString("ControlPropertyFriction");
-        CONTROL_PROPERTY_LINEAR_DAMPING = bundle.getString("ControlPropertyLinearDamping");
-        CONTROL_PROPERTY_MASS = bundle.getString("ControlPropertyMass");
-        CONTROL_PROPERTY_RESTITUTION = bundle.getString("ControlPropertyRestitution");
-        CONTROL_PROPERTY_CURRENT_VALUE = bundle.getString("ControlPropertyCurrentValue");
-        CONTROL_PROPERTY_CURRENT_WAY_POINT = bundle.getString("ControlPropertyCurrentWayPoint");
-        CONTROL_PROPERTY_DIRECTION_TYPE = bundle.getString("ControlPropertyDirectionType");
-        CONTROL_PROPERTY_DIRECTION = bundle.getString("ControlPropertyDirection");
-        CONTROL_PROPERTY_ROTATION = bundle.getString("ControlPropertyRotation");
-        CONTROL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD = bundle.getString("ControlPropertyAngularSleepingThreshold");
-        CONTROL_PROPERTY_LOOP_MODE = bundle.getString("ControlPropertyLoopMode");
-        CONTROL_PROPERTY_INITIAL_DURATION = bundle.getString("ControlPropertyInitialDuration");
-        CONTROL_PROPERTY_SPEED = bundle.getString("ControlPropertySpeed");
-        CONTROL_PROPERTY_TIME = bundle.getString("ControlPropertyTime");
-        CONTROL_PROPERTY_MARGIN = bundle.getString("ControlPropertyMargin");
-        CONTROL_PROPERTY_LOCATION = bundle.getString("ControlPropertyLocation");
-        CONTROL_PROPERTY_HALF_EXTENTS = bundle.getString("ControlPropertyHalfExtents");
-        CONTROL_PROPERTY_RADIUS = bundle.getString("ControlPropertyRadius");
-        CONTROL_PROPERTY_HEIGHT = bundle.getString("ControlPropertyHeight");
-        CONTROL_PROPERTY_AXIS = bundle.getString("ControlPropertyAxis");
-        CONTROL_PROPERTY_SCALE = bundle.getString("ControlPropertyScale");
-        CONTROL_PROPERTY_OBJECT_ID = bundle.getString("ControlPropertyObjectId");
-        CONTROL_PROPERTY_AXLE = bundle.getString("ControlPropertyObjectId");
-        CONTROL_PROPERTY_REST_LENGTH = bundle.getString("ControlPropertyObjectId");
-        CONTROL_PROPERTY_FRONT = bundle.getString("ControlPropertyFront");
-        CONTROL_PROPERTY_DAMPING_COMPRESSION = bundle.getString("ControlPropertyDampingCompression");
-        CONTROL_PROPERTY_FRICTION_SLIP = bundle.getString("ControlPropertyFrictionSlip");
-        CONTROL_PROPERTY_MAX_SUSPENSION_FORCE = bundle.getString("ControlPropertyMaxSuspensionForce");
-        CONTROL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM = bundle.getString("ControlPropertyMaxSuspensionTravelCm");
-        CONTROL_PROPERTY_DAMPING_RELAXATION = bundle.getString("ControlPropertyDampingRelaxation");
-        CONTROL_PROPERTY_SUSPENSION_STIFFNESS = bundle.getString("ControlPropertySuspensionStiffness");
-        CONTROL_PROPERTY_ROLL_INFLUENCE = bundle.getString("ControlPropertyRollInfluence");
-        CONTROL_PROPERTY_WHEEL_SPATIAL = bundle.getString("ControlPropertyWheelSpatial");
-        CONTROL_PROPERTY_LENGTH = bundle.getString("ControlPropertyLength");
-        CONTROL_PROPERTY_CURRENT_TIME = bundle.getString("ControlPropertyCurrentTime");
-        CONTROL_PROPERTY_POINT = bundle.getString("ControlPropertyPoint");
-        CONTROL_PROPERTY_MAX = bundle.getString("ControlPropertyMax");
-        CONTROL_PROPERTY_MIN = bundle.getString("ControlPropertyMin");
-        CONTROL_PROPERTY_CENTER = bundle.getString("ControlPropertyCenter");
-        CONTROL_PROPERTY_VELOCITY_VARIATION = bundle.getString("ControlPropertyVelocityVariation");
-        CONTROL_PROPERTY_INITIAL_VELOCITY = bundle.getString("ControlPropertyInitialVelocity");
-        CONTROL_PROPERTY_ORIGIN = bundle.getString("ControlPropertyOrigin");
-        CONTROL_PROPERTY_RADIAL_VELOCITY = bundle.getString("ControlPropertyRadialVelocity");
-        CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL = bundle.getString("ControlPropertyIsHorizontal");
-
-        PARTICLE_EMITTER_TEST_MODE = bundle.getString("ParticleEmitterTestMode");
-        PARTICLE_EMITTER_ENABLED = bundle.getString("ParticleEmitterEnabled");
-        PARTICLE_EMITTER_RANDOM_POINT = bundle.getString("ParticleEmitterRandomPoint");
-        PARTICLE_EMITTER_SEQUENTIAL_FACE = bundle.getString("ParticleEmitterSequentialFace");
-        PARTICLE_EMITTER_SKIP_PATTERN = bundle.getString("ParticleEmitterSkipPattern");
-        PARTICLE_EMITTER_DIRECTION_TYPE = bundle.getString("ParticleEmitterDirectionType");
-        PARTICLE_EMITTER_EMISSION_POINT = bundle.getString("ParticleEmitterEmissionPoint");
-        PARTICLE_EMITTER_MAX_PARTICLES = bundle.getString("ParticleEmitterMaxParticles");
-        PARTICLE_EMITTER_EMISSION_PER_SECOND = bundle.getString("ParticleEmitterEmissionPerSecond");
-        PARTICLE_EMITTER_PARTICLES_PER_SECOND = bundle.getString("ParticleEmitterParticlesPerSecond");
-        PARTICLE_EMITTER_EMITTER_LIFE = bundle.getString("ParticleEmitterEmitterLife");
-        PARTICLE_EMITTER_EMITTER_DELAY = bundle.getString("ParticleEmitterEmitterDelay");
-        PARTICLE_EMITTER_TEST_PARTICLES = bundle.getString("ParticleEmitterTestParticles");
-        PARTICLE_EMITTER_FOLLOW_EMITTER = bundle.getString("ParticleEmitterFollowEmitter");
-        PARTICLE_EMITTER_STRETCHING = bundle.getString("ParticleEmitterStretching");
-        PARTICLE_EMITTER_MAGNITUDE = bundle.getString("ParticleEmitterMagnitude");
-        PARTICLE_EMITTER_BILLBOARD = bundle.getString("ParticleEmitterBillboard");
-        PARTICLE_EMITTER_INITIAL_FORCE = bundle.getString("ParticleEmitterInitialForce");
-        PARTICLE_EMITTER_LIFE = bundle.getString("ParticleEmitterLife");
-        PARTICLE_EMITTER_COLUMNS = bundle.getString("ParticleEmitterColumns");
-        PARTICLE_EMITTER_ROWS = bundle.getString("ParticleEmitterRows");
-        PARTICLE_EMITTER_SPRITE_COUNT = bundle.getString("ParticleEmitterSpriteCount");
-        PARTICLE_EMITTER_FACING_VELOCITY = bundle.getString("ParticleEmitterFacingVelocity");
-        PARTICLE_EMITTER_IN_WORLD_SPACE = bundle.getString("ParticleEmitterInWorldSpace");
-        PARTICLE_EMITTER_RANDOM_ANGLE = bundle.getString("ParticleEmitterRandomAngle");
-        PARTICLE_EMITTER_SELECT_RANDOM_IMAGE = bundle.getString("ParticleEmitterSelectRandomImage");
-        PARTICLE_EMITTER_SIZE = bundle.getString("ParticleEmitterSize");
-        PARTICLE_EMITTER_ROTATE_SPEED = bundle.getString("ParticleEmitterRotateSpeed");
-        PARTICLE_EMITTER_START_COLOR = bundle.getString("ParticleEmitterStartColor");
-        PARTICLE_EMITTER_END_COLOR = bundle.getString("ParticleEmitterEndColor");
-        PARTICLE_EMITTER_MESH_TYPE = bundle.getString("ParticleEmitterMeshType");
-        PARTICLE_EMITTER_GRAVITY = bundle.getString("ParticleEmitterGravity");
-        PARTICLE_EMITTER_FACE_NORMAL = bundle.getString("ParticleEmitterFaceNormal");
-
-        PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION = bundle.getString("ParticleEmitterInfluencerFixedDuration");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR = bundle.getString("ParticleEmitterInfluencerRandomStartColor");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE = bundle.getString("ParticleEmitterInfluencerRandomStartSize");
-        PARTICLE_EMITTER_INFLUENCER_SIZE_VARIATION_FACTOR = bundle.getString("ParticleEmitterInfluencerSizeVariationFactor");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION = bundle.getString("ParticleEmitterInfluencerRandomStartDestination");
-        PARTICLE_EMITTER_INFLUENCER_CHANCE = bundle.getString("ParticleEmitterInfluencerChance");
-        PARTICLE_EMITTER_INFLUENCER_STRENGTH = bundle.getString("ParticleEmitterInfluencerStrength");
-        PARTICLE_EMITTER_INFLUENCER_MAGNITUDE = bundle.getString("ParticleEmitterInfluencerMagnitude");
-        PARTICLE_EMITTER_INFLUENCER_GRAVITY = bundle.getString("ParticleEmitterInfluencerGravity");
-        PARTICLE_EMITTER_INFLUENCER_ALIGNMENT = bundle.getString("ParticleEmitterInfluencerAlignment");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_DIRECTION = bundle.getString("ParticleEmitterInfluencerRandomDirection");
-        PARTICLE_EMITTER_INFLUENCER_PULL_CENTER = bundle.getString("ParticleEmitterInfluencerPullCenter");
-        PARTICLE_EMITTER_INFLUENCER_PULL_ALIGNMENT = bundle.getString("ParticleEmitterInfluencerPullAlignment");
-        PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT = bundle.getString("ParticleEmitterInfluencerUpAlignment");
-        PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL = bundle.getString("ParticleEmitterInfluencerRadialPull");
-        PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE = bundle.getString("ParticleEmitterInfluencerTangetForce");
-        PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerAlphaInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerColorInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerDestinationInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerRotationInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerSizeInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_ALPHA = bundle.getString("ParticleEmitterInfluencerAlpha");
-        PARTICLE_EMITTER_INFLUENCER_COLOR = bundle.getString("ParticleEmitterInfluencerColor");
-        PARTICLE_EMITTER_INFLUENCER_SPEED = bundle.getString("ParticleEmitterInfluencerSpeed");
-        PARTICLE_EMITTER_INFLUENCER_SIZE = bundle.getString("ParticleEmitterInfluencerSize");
-        PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE = bundle.getString("ParticleEmitterInfluencerFrameSequence");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE = bundle.getString("ParticleEmitterInfluencerRandomStartImage");
-        PARTICLE_EMITTER_INFLUENCER_ANIMATE = bundle.getString("ParticleEmitterInfluencerAnimate");
-        PARTICLE_EMITTER_INFLUENCER_REACTION = bundle.getString("ParticleEmitterInfluencerReaction");
-        PARTICLE_EMITTER_INFLUENCER_RESTITUTION = bundle.getString("ParticleEmitterInfluencerRestitution");
-        PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED = bundle.getString("ParticleEmitterInfluencerRandomSpeed");
-        PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X = bundle.getString("ParticleEmitterInfluencerStartRandomRotationX");
-        PARTICLE_EMITTER_INFLUENCER_INTERPOLATION = bundle.getString("ParticleEmitterInfluencerInterpolation");
-        PARTICLE_EMITTER_INFLUENCER_GEOMETRY_LIST = bundle.getString("ParticleEmitterInfluencerGeometryList");
-        PARTICLE_EMITTER_INFLUENCER_GEOMETRY = bundle.getString("ParticleEmitterInfluencerGeometry");
+        MODEL_PROPERTY_IS_ENABLED = bundle.getString("ModelPropertyIsEnabled");
+        MODEL_PROPERTY_IS_HARDWARE_SKINNING_PREFERRED = bundle.getString("ModelPropertyIsHardwareSkinningPreferred");
+        MODEL_PROPERTY_VIEW_DIRECTION = bundle.getString("ModelPropertyViewDirection");
+        MODEL_PROPERTY_WALK_DIRECTION = bundle.getString("ModelPropertyWalkDirection");
+        MODEL_PROPERTY_FALL_SPEED = bundle.getString("ModelPropertyFallSpeed");
+        MODEL_PROPERTY_GRAVITY = bundle.getString("ModelPropertyGravity");
+        MODEL_PROPERTY_JUMP_SPEED = bundle.getString("ModelPropertyJumpSpeed");
+        MODEL_PROPERTY_MAX_SLOPE = bundle.getString("ModelPropertyMaxSlope");
+        MODEL_PROPERTY_IS_APPLY_PHYSICS_LOCAL = bundle.getString("ModelPropertyIsApplyPhysicsLocal");
+        MODEL_PROPERTY_IS_USE_VIEW_DIRECTION = bundle.getString("ModelPropertyIsUseViewDirection");
+        MODEL_PROPERTY_IS_KINEMATIC_SPATIAL = bundle.getString("ModelPropertyIsKinematicSpatial");
+        MODEL_PROPERTY_IS_KINEMATIC = bundle.getString("ModelPropertyIsKinematic");
+        MODEL_PROPERTY_ANGULAR_VELOCITY = bundle.getString("ModelPropertyAngularVelocity");
+        MODEL_PROPERTY_LINEAR_FACTOR = bundle.getString("ModelPropertyLinearFactor");
+        MODEL_PROPERTY_ANGULAR_DAMPING = bundle.getString("ModelPropertyAngularDamping");
+        MODEL_PROPERTY_ANGULAR_FACTOR = bundle.getString("ModelPropertyAngularFactor");
+        MODEL_PROPERTY_FRICTION = bundle.getString("ModelPropertyFriction");
+        MODEL_PROPERTY_LINEAR_DAMPING = bundle.getString("ModelPropertyLinearDamping");
+        MODEL_PROPERTY_MASS = bundle.getString("ModelPropertyMass");
+        MODEL_PROPERTY_RESTITUTION = bundle.getString("ModelPropertyRestitution");
+        MODEL_PROPERTY_CURRENT_VALUE = bundle.getString("ModelPropertyCurrentValue");
+        MODEL_PROPERTY_CURRENT_WAY_POINT = bundle.getString("ModelPropertyCurrentWayPoint");
+        MODEL_PROPERTY_DIRECTION_TYPE = bundle.getString("ModelPropertyDirectionType");
+        MODEL_PROPERTY_ANGULAR_SLEEPING_THRESHOLD = bundle.getString("ModelPropertyAngularSleepingThreshold");
+        MODEL_PROPERTY_LOOP_MODE = bundle.getString("ModelPropertyLoopMode");
+        MODEL_PROPERTY_INITIAL_DURATION = bundle.getString("ModelPropertyInitialDuration");
+        MODEL_PROPERTY_SPEED = bundle.getString("ModelPropertySpeed");
+        MODEL_PROPERTY_TIME = bundle.getString("ModelPropertyTime");
+        MODEL_PROPERTY_MARGIN = bundle.getString("ModelPropertyMargin");
+        MODEL_PROPERTY_HALF_EXTENTS = bundle.getString("ModelPropertyHalfExtents");
+        MODEL_PROPERTY_HEIGHT = bundle.getString("ModelPropertyHeight");
+        MODEL_PROPERTY_AXIS = bundle.getString("ModelPropertyAxis");
+        MODEL_PROPERTY_OBJECT_ID = bundle.getString("ModelPropertyObjectId");
+        MODEL_PROPERTY_AXLE = bundle.getString("ModelPropertyObjectId");
+        MODEL_PROPERTY_REST_LENGTH = bundle.getString("ModelPropertyObjectId");
+        MODEL_PROPERTY_IS_FRONT = bundle.getString("ModelPropertyIsFront");
+        MODEL_PROPERTY_DAMPING_COMPRESSION = bundle.getString("ModelPropertyDampingCompression");
+        MODEL_PROPERTY_FRICTION_SLIP = bundle.getString("ModelPropertyFrictionSlip");
+        MODEL_PROPERTY_MAX_SUSPENSION_FORCE = bundle.getString("ModelPropertyMaxSuspensionForce");
+        MODEL_PROPERTY_MAX_SUSPENSION_TRAVEL_CM = bundle.getString("ModelPropertyMaxSuspensionTravelCm");
+        MODEL_PROPERTY_DAMPING_RELAXATION = bundle.getString("ModelPropertyDampingRelaxation");
+        MODEL_PROPERTY_SUSPENSION_STIFFNESS = bundle.getString("ModelPropertySuspensionStiffness");
+        MODEL_PROPERTY_ROLL_INFLUENCE = bundle.getString("ModelPropertyRollInfluence");
+        MODEL_PROPERTY_WHEEL_SPATIAL = bundle.getString("ModelPropertyWheelSpatial");
+        MODEL_PROPERTY_LENGTH = bundle.getString("ModelPropertyLength");
+        MODEL_PROPERTY_CURRENT_TIME = bundle.getString("ModelPropertyCurrentTime");
+        MODEL_PROPERTY_POINT = bundle.getString("ModelPropertyPoint");
+        MODEL_PROPERTY_CENTER = bundle.getString("ModelPropertyCenter");
+        MODEL_PROPERTY_VELOCITY_VARIATION = bundle.getString("ModelPropertyVelocityVariation");
+        MODEL_PROPERTY_INITIAL_VELOCITY = bundle.getString("ModelPropertyInitialVelocity");
+        MODEL_PROPERTY_ORIGIN = bundle.getString("ModelPropertyOrigin");
+        MODEL_PROPERTY_RADIAL_VELOCITY = bundle.getString("ModelPropertyRadialVelocity");
+        MODEL_PROPERTY_IS_HORIZONTAL = bundle.getString("ModelPropertyIsHorizontal");
+        MODEL_PROPERTY_IS_TEST_MODE = bundle.getString("ModelPropertyIsTestMode");
+        MODEL_PROPERTY_IS_RANDOM_POINT = bundle.getString("ModelPropertyIsRandomPoint");
+        MODEL_PROPERTY_IS_SEQUENTIAL_FACE = bundle.getString("ModelPropertyIsSequentialFace");
+        MODEL_PROPERTY_IS_SKIP_PATTERN = bundle.getString("ModelPropertyIsSkipPattern");
+        MODEL_PROPERTY_EMISSION_POINT = bundle.getString("ModelPropertyEmissionPoint");
+        MODEL_PROPERTY_MAX_PARTICLES = bundle.getString("ModelPropertyMaxParticles");
+        MODEL_PROPERTY_EMISSION_PER_SECOND = bundle.getString("ModelPropertyEmissionPerSecond");
+        MODEL_PROPERTY_PARTICLES_PER_SECOND = bundle.getString("ModelPropertyParticlesPerSecond");
+        MODEL_PROPERTY_EMITTER_LIFE = bundle.getString("ModelPropertyEmitterLife");
+        MODEL_PROPERTY_EMITTER_DELAY = bundle.getString("ModelPropertyEmitterDelay");
+        MODEL_PROPERTY_IS_TEST_PARTICLES = bundle.getString("ModelPropertyIsTestParticles");
+        MODEL_PROPERTY_IS_FOLLOW_EMITTER = bundle.getString("ModelPropertyIsFollowEmitter");
+        MODEL_PROPERTY_STRETCHING = bundle.getString("ModelPropertyStretching");
+        MODEL_PROPERTY_MAGNITUDE = bundle.getString("ModelPropertyMagnitude");
+        MODEL_PROPERTY_BILLBOARD = bundle.getString("ModelPropertyBillboard");
+        MODEL_PROPERTY_INITIAL_FORCE = bundle.getString("ModelPropertyInitialForce");
+        MODEL_PROPERTY_LIFE = bundle.getString("ModelPropertyLife");
+        MODEL_PROPERTY_COLUMNS = bundle.getString("ModelPropertyColumns");
+        MODEL_PROPERTY_ROWS = bundle.getString("ModelPropertyRows");
+        MODEL_PROPERTY_SPRITE_COUNT = bundle.getString("ModelPropertySpriteCount");
+        MODEL_PROPERTY_IS_FACING_VELOCITY = bundle.getString("ModelPropertyIsFacingVelocity");
+        MODEL_PROPERTY_IS_IN_WORLD_SPACE = bundle.getString("ModelPropertyIsInWorldSpace");
+        MODEL_PROPERTY_IS_RANDOM_ANGLE = bundle.getString("ModelPropertyIsRandomAngle");
+        MODEL_PROPERTY_IS_SELECT_RANDOM_IMAGE = bundle.getString("ModelPropertyIsSelectRandomImage");
+        MODEL_PROPERTY_SIZE = bundle.getString("ModelPropertySize");
+        MODEL_PROPERTY_ROTATE_SPEED = bundle.getString("ModelPropertyRotateSpeed");
+        MODEL_PROPERTY_START_COLOR = bundle.getString("ModelPropertyStartColor");
+        MODEL_PROPERTY_END_COLOR = bundle.getString("ModelPropertyEndColor");
+        MODEL_PROPERTY_MESH_TYPE = bundle.getString("ModelPropertyMeshType");
+        MODEL_PROPERTY_FACE_NORMAL = bundle.getString("ModelPropertyFaceNormal");
+        MODEL_PROPERTY_FIXED_DURATION = bundle.getString("ModelPropertyFixedDuration");
+        MODEL_PROPERTY_IS_RANDOM_START_COLOR = bundle.getString("ModelPropertyIsRandomStartColor");
+        MODEL_PROPERTY_IS_RANDOM_START_SIZE = bundle.getString("ModelPropertyIsRandomStartSize");
+        MODEL_PROPERTY_SIZE_VARIATION_FACTOR = bundle.getString("ModelPropertySizeVariationFactor");
+        MODEL_PROPERTY_IS_RANDOM_START_DESTINATION = bundle.getString("ModelPropertyIsRandomStartDestination");
+        MODEL_PROPERTY_CHANCE = bundle.getString("ModelPropertyChance");
+        MODEL_PROPERTY_STRENGTH = bundle.getString("ModelPropertyStrength");
+        MODEL_PROPERTY_ALIGNMENT = bundle.getString("ModelPropertyAlignment");
+        MODEL_PROPERTY_IS_RANDOM_DIRECTION = bundle.getString("ModelPropertyIsRandomDirection");
+        MODEL_PROPERTY_PULL_CENTER = bundle.getString("ModelPropertyPullCenter");
+        MODEL_PROPERTY_PULL_ALIGNMENT = bundle.getString("ModelPropertyPullAlignment");
+        MODEL_PROPERTY_UP_ALIGNMENT = bundle.getString("ModelPropertyUpAlignment");
+        MODEL_PROPERTY_RADIAL_PULL = bundle.getString("ModelPropertyRadialPull");
+        MODEL_PROPERTY_TANGENT_FORCE = bundle.getString("ModelPropertyTangetForce");
+        MODEL_PROPERTY_ALPHA_INTERPOLATION = bundle.getString("ModelPropertyAlphaInterpolation");
+        MODEL_PROPERTY_COLOR_INTERPOLATION = bundle.getString("ModelPropertyColorInterpolation");
+        MODEL_PROPERTY_DESTINATION_INTERPOLATION = bundle.getString("ModelPropertyDestinationInterpolation");
+        MODEL_PROPERTY_ROTATION_INTERPOLATION = bundle.getString("ModelPropertyRotationInterpolation");
+        MODEL_PROPERTY_SIZE_INTERPOLATION = bundle.getString("ModelPropertySizeInterpolation");
+        MODEL_PROPERTY_ALPHA = bundle.getString("ModelPropertyInfluencerAlpha");
+        MODEL_PROPERTY_FRAME_SEQUENCE = bundle.getString("ModelPropertyFrameSequence");
+        MODEL_PROPERTY_IS_RANDOM_START_IMAGE = bundle.getString("ModelPropertyIsRandomStartImage");
+        MODEL_PROPERTY_IS_ANIMATE = bundle.getString("ModelPropertyIsAnimate");
+        MODEL_PROPERTY_REACTION = bundle.getString("ModelPropertyReaction");
+        MODEL_PROPERTY_IS_RANDOM_SPEED = bundle.getString("ModelPropertyIsRandomSpeed");
+        MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X = bundle.getString("ModelPropertyIsStartRandomRotationX");
+        MODEL_PROPERTY_INTERPOLATION = bundle.getString("ModelPropertyInterpolation");
+        MODEL_PROPERTY_GEOMETRY_LIST = bundle.getString("ModelPropertyGeometryList");
+        MODEL_PROPERTY_GEOMETRY = bundle.getString("ModelPropertyGeometry");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
@@ -2832,6 +2726,7 @@ public class Messages {
         CREATE_CYLINDER_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCylinderCollisionShapeDialogTitle");
         CREATE_CONE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateConeCollisionShapeDialogTitle");
         CREATE_CAPSULE_COLLISION_SHAPE_DIALOG_TITLE = bundle.getString("CreateCapsuleCollisionShapeDialogTitle");
+
         ADD_VEHICLE_WHEEL_DIALOG_TITLE = bundle.getString("AddVehicleWheelDialogTitle");
 
         CREATE_TERRAIN_DIALOG_TITLE = bundle.getString("CreateTerrainDialogTitle");
@@ -2852,9 +2747,9 @@ public class Messages {
         CREATE_TERRAIN_DIALOG_MIN_RADIUS = bundle.getString("CreateTerrainDialogMinRadius");
         CREATE_TERRAIN_DIALOG_MAX_RADIUS = bundle.getString("CreateTerrainDialogMaxRadius");
 
-        CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE = bundle.getString("CreateEmitterPointShapeDialogTitle");
-        CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE = bundle.getString("CreateEmitterBoxShapeDialogTitle");
-        CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE = bundle.getString("CreateEmitterSphereShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterPointShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterBoxShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterSphereShapeDialogTitle");
 
         EDITING_COMPONENT_BRUSH_SIZE = bundle.getString("EditingComponentBrushSize");
         EDITING_COMPONENT_BRUSH_POWER = bundle.getString("EditingComponentBrushPower");

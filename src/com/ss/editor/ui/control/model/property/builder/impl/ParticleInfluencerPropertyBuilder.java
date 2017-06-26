@@ -51,7 +51,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         final float velocityVariation = influencer.getVelocityVariation();
 
         final FloatModelPropertyControl<ParticleInfluencer> velocityVariationControl =
-                new FloatModelPropertyControl<>(velocityVariation, Messages.CONTROL_PROPERTY_VELOCITY_VARIATION, changeConsumer);
+                new FloatModelPropertyControl<>(velocityVariation, Messages.MODEL_PROPERTY_VELOCITY_VARIATION, changeConsumer);
 
         velocityVariationControl.setSyncHandler(ParticleInfluencer::getVelocityVariation);
         velocityVariationControl.setApplyHandler(ParticleInfluencer::setVelocityVariation);
@@ -64,7 +64,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         }
 
         final Vector3fModelPropertyControl<ParticleInfluencer> initialVelocityControl =
-                new Vector3fModelPropertyControl<>(initialVelocity, Messages.CONTROL_PROPERTY_INITIAL_VELOCITY, changeConsumer);
+                new Vector3fModelPropertyControl<>(initialVelocity, Messages.MODEL_PROPERTY_INITIAL_VELOCITY, changeConsumer);
 
         initialVelocityControl.setSyncHandler(ParticleInfluencer::getInitialVelocity);
         initialVelocityControl.setApplyHandler(ParticleInfluencer::setInitialVelocity);
@@ -88,14 +88,14 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         final boolean horizontal = influencer.isHorizontal();
 
         final FloatModelPropertyControl<RadialParticleInfluencer> radialVelocityControl =
-                new FloatModelPropertyControl<>(radialVelocity, Messages.CONTROL_PROPERTY_RADIAL_VELOCITY, changeConsumer);
+                new FloatModelPropertyControl<>(radialVelocity, Messages.MODEL_PROPERTY_RADIAL_VELOCITY, changeConsumer);
 
         radialVelocityControl.setSyncHandler(RadialParticleInfluencer::getRadialVelocity);
         radialVelocityControl.setApplyHandler(RadialParticleInfluencer::setRadialVelocity);
         radialVelocityControl.setEditObject(influencer);
 
         final BooleanModelPropertyControl<RadialParticleInfluencer> horizontalControl =
-                new BooleanModelPropertyControl<>(horizontal, Messages.CONTROL_PROPERTY_RADIAL_IS_HORIZONTAL, changeConsumer);
+                new BooleanModelPropertyControl<>(horizontal, Messages.MODEL_PROPERTY_IS_HORIZONTAL, changeConsumer);
 
         horizontalControl.setSyncHandler(RadialParticleInfluencer::isHorizontal);
         horizontalControl.setApplyHandler(RadialParticleInfluencer::setHorizontal);
@@ -103,7 +103,7 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
 
 
         final Vector3fModelPropertyControl<RadialParticleInfluencer> originControl =
-                new Vector3fModelPropertyControl<>(origin, Messages.CONTROL_PROPERTY_ORIGIN, changeConsumer);
+                new Vector3fModelPropertyControl<>(origin, Messages.MODEL_PROPERTY_ORIGIN, changeConsumer);
 
         originControl.setSyncHandler(RadialParticleInfluencer::getOrigin);
         originControl.setApplyHandler(RadialParticleInfluencer::setOrigin);

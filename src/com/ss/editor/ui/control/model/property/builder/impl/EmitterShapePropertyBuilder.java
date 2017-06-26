@@ -67,7 +67,7 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         final Vector3f point = shape.getPoint();
 
         final Vector3fModelPropertyControl<EmitterPointShape> pointControl =
-                new Vector3fModelPropertyControl<>(point, Messages.CONTROL_PROPERTY_POINT, changeConsumer);
+                new Vector3fModelPropertyControl<>(point, Messages.MODEL_PROPERTY_POINT, changeConsumer);
 
         pointControl.setSyncHandler(EmitterPointShape::getPoint);
         pointControl.setApplyHandler(EmitterPointShape::setPoint);
@@ -90,14 +90,14 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         final Vector3f min = shape.getMin();
 
         final Vector3fModelPropertyControl<EmitterBoxShape> lengthControl =
-                new Vector3fModelPropertyControl<>(length, Messages.CONTROL_PROPERTY_LENGTH, changeConsumer);
+                new Vector3fModelPropertyControl<>(length, Messages.MODEL_PROPERTY_LENGTH, changeConsumer);
 
         lengthControl.setSyncHandler(EmitterBoxShape::getLen);
         lengthControl.setApplyHandler(EmitterBoxShape::setLen);
         lengthControl.setEditObject(shape);
 
         final Vector3fModelPropertyControl<EmitterBoxShape> minControl =
-                new Vector3fModelPropertyControl<>(min, Messages.CONTROL_PROPERTY_MIN, changeConsumer);
+                new Vector3fModelPropertyControl<>(min, Messages.MODEL_PROPERTY_MIN, changeConsumer);
 
         minControl.setSyncHandler(EmitterBoxShape::getMin);
         minControl.setApplyHandler(EmitterBoxShape::setMin);
@@ -121,14 +121,14 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         final float radius = shape.getRadius();
 
         final FloatModelPropertyControl<EmitterSphereShape> radiusControl =
-                new FloatModelPropertyControl<>(radius, Messages.CONTROL_PROPERTY_RADIUS, changeConsumer);
+                new FloatModelPropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
 
         radiusControl.setSyncHandler(EmitterSphereShape::getRadius);
         radiusControl.setApplyHandler(EmitterSphereShape::setRadius);
         radiusControl.setEditObject(shape);
 
         final Vector3fModelPropertyControl<EmitterSphereShape> centerControl =
-                new Vector3fModelPropertyControl<>(center, Messages.CONTROL_PROPERTY_CENTER, changeConsumer);
+                new Vector3fModelPropertyControl<>(center, Messages.MODEL_PROPERTY_CENTER, changeConsumer);
 
         centerControl.setSyncHandler(EmitterSphereShape::getCenter);
         centerControl.setApplyHandler(EmitterSphereShape::setCenter);

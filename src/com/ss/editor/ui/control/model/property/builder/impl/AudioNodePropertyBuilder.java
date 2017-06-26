@@ -84,28 +84,28 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         final boolean positional = audioNode.isPositional();
 
         final BooleanModelPropertyControl<AudioNode> loopControl = new BooleanModelPropertyControl<>(looping,
-                Messages.MODEL_PROPERTY_LOOPING, changeConsumer);
+                Messages.MODEL_PROPERTY_IS_LOOPING, changeConsumer);
 
         loopControl.setApplyHandler(AudioNode::setLooping);
         loopControl.setSyncHandler(AudioNode::isLooping);
         loopControl.setEditObject(audioNode);
 
         final BooleanModelPropertyControl<AudioNode> reverbControl = new BooleanModelPropertyControl<>(reverbEnabled,
-                Messages.MODEL_PROPERTY_REVERB, changeConsumer);
+                Messages.MODEL_PROPERTY_IS_REVERB, changeConsumer);
 
         reverbControl.setApplyHandler(AudioNode::setReverbEnabled);
         reverbControl.setSyncHandler(AudioNode::isReverbEnabled);
         reverbControl.setEditObject(audioNode);
 
         final BooleanModelPropertyControl<AudioNode> directionalControl = new BooleanModelPropertyControl<>(directional,
-                Messages.MODEL_PROPERTY_DIRECTIONAL, changeConsumer);
+                Messages.MODEL_PROPERTY_IS_DIRECTIONAL, changeConsumer);
 
         directionalControl.setApplyHandler(AudioNode::setDirectional);
         directionalControl.setSyncHandler(AudioNode::isDirectional);
         directionalControl.setEditObject(audioNode);
 
         final BooleanModelPropertyControl<AudioNode> positionalControl = new BooleanModelPropertyControl<>(positional,
-                Messages.MODEL_PROPERTY_POSITIONAL, changeConsumer);
+                Messages.MODEL_PROPERTY_IS_POSITIONAL, changeConsumer);
 
         positionalControl.setApplyHandler(AudioNode::setPositional);
         positionalControl.setSyncHandler(AudioNode::isPositional);

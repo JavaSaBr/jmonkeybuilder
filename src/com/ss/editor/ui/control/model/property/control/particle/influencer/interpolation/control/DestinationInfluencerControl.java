@@ -34,7 +34,7 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_DESTINATION_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_DESTINATION_INTERPOLATION;
     }
 
     @Override

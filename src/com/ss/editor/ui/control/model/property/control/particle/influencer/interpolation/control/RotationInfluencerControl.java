@@ -34,7 +34,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_ROTATION_INTERPOLATION;
     }
 
     @Override

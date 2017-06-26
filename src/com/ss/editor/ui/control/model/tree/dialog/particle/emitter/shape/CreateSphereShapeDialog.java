@@ -47,7 +47,7 @@ public class CreateSphereShapeDialog extends CreatePointShapeDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label radiusLabel = new Label(Messages.CONTROL_PROPERTY_RADIUS + ":");
+        final Label radiusLabel = new Label(Messages.MODEL_PROPERTY_RADIUS + ":");
         radiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         radiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -68,7 +68,7 @@ public class CreateSphereShapeDialog extends CreatePointShapeDialog {
     @NotNull
     @Override
     protected String getPointLabel() {
-        return Messages.CONTROL_PROPERTY_CENTER;
+        return Messages.MODEL_PROPERTY_CENTER;
     }
 
     @NotNull
@@ -88,7 +88,7 @@ public class CreateSphereShapeDialog extends CreatePointShapeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return Messages.CREATE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
+        return Messages.CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
     }
 
     /**

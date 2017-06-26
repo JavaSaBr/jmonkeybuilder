@@ -47,7 +47,7 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label radiusLabel = new Label(Messages.CONTROL_PROPERTY_RADIUS + ":");
+        final Label radiusLabel = new Label(Messages.MODEL_PROPERTY_RADIUS + ":");
         radiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         radiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 

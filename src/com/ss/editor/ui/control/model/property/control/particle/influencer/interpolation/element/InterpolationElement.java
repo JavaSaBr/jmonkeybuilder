@@ -108,7 +108,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
 
         editableControl = createEditableControl();
 
-        final Label interpolationLabel = new Label(Messages.PARTICLE_EMITTER_INFLUENCER_INTERPOLATION + ":");
+        final Label interpolationLabel = new Label(Messages.MODEL_PROPERTY_INTERPOLATION + ":");
         interpolationLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 

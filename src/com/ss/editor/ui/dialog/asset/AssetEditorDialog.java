@@ -3,6 +3,7 @@ package com.ss.editor.ui.dialog.asset;
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
@@ -21,6 +22,10 @@ import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -42,10 +47,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.awt.*;
 import java.nio.file.Files;
@@ -55,7 +56,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * The implementation of the {@link EditorDialog} to choose the object from asset.
+ * The implementation of the {@link EditorDialog} to choose the object from an asset folder.
  *
  * @param <C> the type parameter
  * @author JavaSaBr
@@ -89,18 +90,25 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * The constant JAVA_FX_IMAGE_MANAGER.
      */
+    @NotNull
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+
     /**
      * The constant EXECUTOR_MANAGER.
      */
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
      * The constant FX_EVENT_MANAGER.
      */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull
@@ -270,7 +278,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     public Button getOkButton() {
-        return requireNonNull(okButton);
+        return notNull(okButton);
     }
 
     /**
@@ -367,7 +375,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private ImageView getImageView() {
-        return requireNonNull(imageView);
+        return notNull(imageView);
     }
 
     /**
@@ -375,7 +383,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private TextArea getTextView() {
-        return requireNonNull(textView);
+        return notNull(textView);
     }
 
     /**
@@ -393,7 +401,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private Label getWarningLabel() {
-        return requireNonNull(warningLabel);
+        return notNull(warningLabel);
     }
 
     /**
@@ -554,7 +562,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private ResourceTree getResourceTree() {
-        return requireNonNull(resourceTree);
+        return notNull(resourceTree);
     }
 
     /**
@@ -580,6 +588,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
         return ASSET_EDITOR_DIALOG_TITLE;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

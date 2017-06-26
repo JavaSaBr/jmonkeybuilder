@@ -59,7 +59,7 @@ public class CreateBoxShapeDialog extends CreatePointShapeDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label maxLabel = new Label(Messages.CONTROL_PROPERTY_MAX + ":");
+        final Label maxLabel = new Label(Messages.MODEL_PROPERTY_MAX + ":");
         maxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         maxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -95,7 +95,7 @@ public class CreateBoxShapeDialog extends CreatePointShapeDialog {
     @NotNull
     @Override
     protected String getPointLabel() {
-        return Messages.CONTROL_PROPERTY_MIN;
+        return Messages.MODEL_PROPERTY_MIN;
     }
 
     @NotNull
@@ -119,7 +119,7 @@ public class CreateBoxShapeDialog extends CreatePointShapeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return Messages.CREATE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
+        return Messages.CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE;
     }
 
     /**

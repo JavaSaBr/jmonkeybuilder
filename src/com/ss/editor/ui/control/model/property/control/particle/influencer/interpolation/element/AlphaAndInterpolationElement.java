@@ -37,7 +37,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_ALPHA;
+        return Messages.MODEL_PROPERTY_ALPHA;
     }
 
     @Override

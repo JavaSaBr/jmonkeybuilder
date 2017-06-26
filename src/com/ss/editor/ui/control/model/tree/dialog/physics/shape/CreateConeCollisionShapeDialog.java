@@ -55,7 +55,7 @@ public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeD
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label axisLabel = new Label(Messages.CONTROL_PROPERTY_AXIS + ":");
+        final Label axisLabel = new Label(Messages.MODEL_PROPERTY_AXIS + ":");
         axisLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         axisLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 

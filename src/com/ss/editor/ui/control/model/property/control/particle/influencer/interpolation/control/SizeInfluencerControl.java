@@ -34,7 +34,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_SIZE_INTERPOLATION;
     }
 
     /**

@@ -34,7 +34,7 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_COLOR_INTERPOLATION;
     }
 
     @Override

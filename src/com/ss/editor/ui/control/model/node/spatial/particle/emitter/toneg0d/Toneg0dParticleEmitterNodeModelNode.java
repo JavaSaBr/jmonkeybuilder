@@ -67,7 +67,7 @@ public class Toneg0dParticleEmitterNodeModelNode extends NodeModelNode<ParticleE
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
-        final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH, new ImageView(Icons.MESH_16));
+        final Menu changeMeshMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_PARTICLES_MESH, new ImageView(Icons.MESH_16));
         final ObservableList<MenuItem> subItems = changeMeshMenu.getItems();
         subItems.add(new CreateQuadParticleMeshAction(nodeTree, this));
         subItems.add(new CreatePointParticleMeshAction(nodeTree, this));

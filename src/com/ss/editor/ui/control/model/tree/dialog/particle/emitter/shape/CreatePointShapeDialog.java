@@ -105,7 +105,7 @@ public class CreatePointShapeDialog extends AbstractCreateShapeDialog {
      */
     @NotNull
     protected String getPointLabel() {
-        return Messages.CONTROL_PROPERTY_POINT;
+        return Messages.MODEL_PROPERTY_POINT;
     }
 
     @NotNull
@@ -124,7 +124,7 @@ public class CreatePointShapeDialog extends AbstractCreateShapeDialog {
     @NotNull
     @Override
     protected String getTitleText() {
-        return Messages.CREATE_EMITTER_POINT_SHAPE_DIALOG_TITLE;
+        return Messages.CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE;
     }
 
     /**

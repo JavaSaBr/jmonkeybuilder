@@ -28,7 +28,7 @@ public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_SIZE;
+        return Messages.MODEL_PROPERTY_SIZE;
     }
 
     @Override

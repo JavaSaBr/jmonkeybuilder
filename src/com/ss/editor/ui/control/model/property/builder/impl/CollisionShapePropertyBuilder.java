@@ -72,21 +72,21 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final int axis = shape.getAxis();
 
         final DefaultModelSinglePropertyControl<CylinderCollisionShape, Vector3f> halfExtentsControl =
-                new DefaultModelSinglePropertyControl<>(halfExtents, Messages.CONTROL_PROPERTY_HALF_EXTENTS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(halfExtents, Messages.MODEL_PROPERTY_HALF_EXTENTS, changeConsumer);
 
         halfExtentsControl.setSyncHandler(CylinderCollisionShape::getHalfExtents);
         halfExtentsControl.setToStringFunction(Vector3f::toString);
         halfExtentsControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<CylinderCollisionShape, Float> marginControl =
-                new DefaultModelSinglePropertyControl<>(margin, Messages.CONTROL_PROPERTY_MARGIN, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(margin, Messages.MODEL_PROPERTY_MARGIN, changeConsumer);
 
         marginControl.setSyncHandler(CylinderCollisionShape::getMargin);
         marginControl.setToStringFunction(value -> Float.toString(value));
         marginControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<CylinderCollisionShape, Integer> axisControl =
-                new DefaultModelSinglePropertyControl<>(axis, Messages.CONTROL_PROPERTY_AXIS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(axis, Messages.MODEL_PROPERTY_AXIS, changeConsumer);
 
         axisControl.setSyncHandler(CylinderCollisionShape::getAxis);
         axisControl.setToStringFunction(value -> Integer.toString(value));
@@ -104,14 +104,14 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final float height = shape.getHeight();
 
         final DefaultModelSinglePropertyControl<ConeCollisionShape, Float> radiusControl =
-                new DefaultModelSinglePropertyControl<>(radius, Messages.CONTROL_PROPERTY_RADIUS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
 
         radiusControl.setSyncHandler(ConeCollisionShape::getRadius);
         radiusControl.setToStringFunction(value -> Float.toString(value));
         radiusControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<ConeCollisionShape, Float> heightControl =
-                new DefaultModelSinglePropertyControl<>(height, Messages.CONTROL_PROPERTY_HEIGHT, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(height, Messages.MODEL_PROPERTY_HEIGHT, changeConsumer);
 
         heightControl.setSyncHandler(ConeCollisionShape::getHeight);
         heightControl.setToStringFunction(value -> Float.toString(value));
@@ -121,7 +121,7 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(heightControl, container);
     }
 
-    private void build(final @NotNull CapsuleCollisionShape shape, final @NotNull VBox container,
+    private void build(final @NotNull CapsuleCollisionShape shape, @NotNull final VBox container,
                        final @NotNull ModelChangeConsumer changeConsumer) {
 
         final float radius = shape.getRadius();
@@ -130,21 +130,21 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final int axis = shape.getAxis();
 
         final DefaultModelSinglePropertyControl<CapsuleCollisionShape, Float> radiusControl =
-                new DefaultModelSinglePropertyControl<>(radius, Messages.CONTROL_PROPERTY_RADIUS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
 
         radiusControl.setSyncHandler(CapsuleCollisionShape::getRadius);
         radiusControl.setToStringFunction(value -> Float.toString(value));
         radiusControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<CapsuleCollisionShape, Float> heightControl =
-                new DefaultModelSinglePropertyControl<>(height, Messages.CONTROL_PROPERTY_HEIGHT, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(height, Messages.MODEL_PROPERTY_HEIGHT, changeConsumer);
 
         heightControl.setSyncHandler(CapsuleCollisionShape::getHeight);
         heightControl.setToStringFunction(value -> Float.toString(value));
         heightControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<CapsuleCollisionShape, Integer> axisControl =
-                new DefaultModelSinglePropertyControl<>(axis, Messages.CONTROL_PROPERTY_AXIS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(axis, Messages.MODEL_PROPERTY_AXIS, changeConsumer);
 
         axisControl.setSyncHandler(CapsuleCollisionShape::getAxis);
         axisControl.setToStringFunction(value -> Integer.toString(value));
@@ -161,7 +161,7 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final float radius = shape.getRadius();
 
         final DefaultModelSinglePropertyControl<SphereCollisionShape, Float> radiusControl =
-                new DefaultModelSinglePropertyControl<>(radius, Messages.CONTROL_PROPERTY_RADIUS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(radius, Messages.MODEL_PROPERTY_RADIUS, changeConsumer);
 
         radiusControl.setSyncHandler(SphereCollisionShape::getRadius);
         radiusControl.setToStringFunction(value -> Float.toString(value));
@@ -176,7 +176,7 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final Vector3f halfExtents = shape.getHalfExtents();
 
         final DefaultModelSinglePropertyControl<BoxCollisionShape, Vector3f> halfExtentsControl =
-                new DefaultModelSinglePropertyControl<>(halfExtents, Messages.CONTROL_PROPERTY_HALF_EXTENTS, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(halfExtents, Messages.MODEL_PROPERTY_HALF_EXTENTS, changeConsumer);
 
         halfExtentsControl.setSyncHandler(BoxCollisionShape::getHalfExtents);
         halfExtentsControl.setToStringFunction(Vector3f::toString);
@@ -193,21 +193,21 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final float margin = shape.getMargin();
 
         final DefaultModelSinglePropertyControl<CollisionShape, Vector3f> scaleControl =
-                new DefaultModelSinglePropertyControl<>(scale, Messages.CONTROL_PROPERTY_SCALE, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(scale, Messages.MODEL_PROPERTY_SCALE, changeConsumer);
 
         scaleControl.setSyncHandler(CollisionShape::getScale);
         scaleControl.setToStringFunction(Vector3f::toString);
         scaleControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<CollisionShape, Long> objectIdControl =
-                new DefaultModelSinglePropertyControl<>(objectId, Messages.CONTROL_PROPERTY_OBJECT_ID, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(objectId, Messages.MODEL_PROPERTY_OBJECT_ID, changeConsumer);
 
         objectIdControl.setSyncHandler(CollisionShape::getObjectId);
         objectIdControl.setToStringFunction(String::valueOf);
         objectIdControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<CollisionShape, Float> marginControl =
-                new DefaultModelSinglePropertyControl<>(margin, Messages.CONTROL_PROPERTY_MARGIN, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(margin, Messages.MODEL_PROPERTY_MARGIN, changeConsumer);
 
         marginControl.setSyncHandler(CollisionShape::getMargin);
         marginControl.setToStringFunction(String::valueOf);
@@ -225,14 +225,14 @@ public class CollisionShapePropertyBuilder extends AbstractPropertyBuilder<Model
         final Matrix3f rotation = shape.rotation;
 
         final DefaultModelSinglePropertyControl<ChildCollisionShape, Vector3f> locationControl =
-                new DefaultModelSinglePropertyControl<>(location, Messages.CONTROL_PROPERTY_LOCATION, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
 
         locationControl.setSyncHandler(collisionShape -> collisionShape.location);
         locationControl.setToStringFunction(Vector3f::toString);
         locationControl.setEditObject(shape);
 
         final DefaultModelSinglePropertyControl<ChildCollisionShape, Matrix3f> rotationControl =
-                new DefaultModelSinglePropertyControl<>(rotation, Messages.CONTROL_PROPERTY_ROTATION, changeConsumer);
+                new DefaultModelSinglePropertyControl<>(rotation, Messages.MODEL_PROPERTY_ROTATION, changeConsumer);
 
         rotationControl.setSyncHandler(collisionShape -> collisionShape.rotation);
         rotationControl.setToStringFunction(matrix3f -> new Quaternion().fromRotationMatrix(matrix3f).toString());

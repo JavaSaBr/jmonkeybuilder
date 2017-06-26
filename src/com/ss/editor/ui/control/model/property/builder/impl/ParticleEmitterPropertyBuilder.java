@@ -207,103 +207,103 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         final Vector2f spriteCount = emitterNode.getSpriteCount();
 
         final BooleanModelPropertyControl<ParticleEmitterNode> testEmitterControl =
-                new BooleanModelPropertyControl<>(testEmitter, Messages.PARTICLE_EMITTER_TEST_MODE, changeConsumer);
+                new BooleanModelPropertyControl<>(testEmitter, Messages.MODEL_PROPERTY_IS_TEST_MODE, changeConsumer);
         testEmitterControl.setApplyHandler(ParticleEmitterNode::setEnabledTestEmitter);
         testEmitterControl.setSyncHandler(ParticleEmitterNode::isEnabledTestEmitter);
         testEmitterControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> testParticlesControl =
-                new BooleanModelPropertyControl<>(testParticles, Messages.PARTICLE_EMITTER_TEST_PARTICLES, changeConsumer);
+                new BooleanModelPropertyControl<>(testParticles, Messages.MODEL_PROPERTY_IS_TEST_PARTICLES, changeConsumer);
         testParticlesControl.setApplyHandler(ParticleEmitterNode::setEnabledTestParticles);
         testParticlesControl.setSyncHandler(ParticleEmitterNode::isEnabledTestParticles);
         testParticlesControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> enableControl =
-                new BooleanModelPropertyControl<>(enabled, Messages.PARTICLE_EMITTER_ENABLED, changeConsumer);
+                new BooleanModelPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
         enableControl.setApplyHandler(ParticleEmitterNode::setEnabled);
         enableControl.setSyncHandler(ParticleEmitterNode::isEnabled);
         enableControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> particlesFollowEmitControl =
-                new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.PARTICLE_EMITTER_FOLLOW_EMITTER, changeConsumer);
+                new BooleanModelPropertyControl<>(particlesFollowEmitter, Messages.MODEL_PROPERTY_IS_FOLLOW_EMITTER, changeConsumer);
         particlesFollowEmitControl.setApplyHandler(FOLLOW_EMITTER_HANDLER);
         particlesFollowEmitControl.setSyncHandler(ParticleEmitterNode::isParticlesFollowEmitter);
         particlesFollowEmitControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> particlesStretchingControl =
-                new BooleanModelPropertyControl<>(velocityStretching, Messages.PARTICLE_EMITTER_STRETCHING, changeConsumer);
+                new BooleanModelPropertyControl<>(velocityStretching, Messages.MODEL_PROPERTY_STRETCHING, changeConsumer);
         particlesStretchingControl.setApplyHandler(VELOCITY_STRETCHING_HANDLER);
         particlesStretchingControl.setSyncHandler(ParticleEmitterNode::isVelocityStretching);
         particlesStretchingControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> randomPointControl =
-                new BooleanModelPropertyControl<>(randomEmissionPoint, Messages.PARTICLE_EMITTER_RANDOM_POINT, changeConsumer);
+                new BooleanModelPropertyControl<>(randomEmissionPoint, Messages.MODEL_PROPERTY_IS_RANDOM_POINT, changeConsumer);
         randomPointControl.setApplyHandler(RANDOM_EMISSION_POINT_HANDLER);
         randomPointControl.setSyncHandler(ParticleEmitterNode::isRandomEmissionPoint);
         randomPointControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> sequentialFaceControl =
-                new BooleanModelPropertyControl<>(sequentialEmissionFace, Messages.PARTICLE_EMITTER_SEQUENTIAL_FACE, changeConsumer);
+                new BooleanModelPropertyControl<>(sequentialEmissionFace, Messages.MODEL_PROPERTY_IS_SEQUENTIAL_FACE, changeConsumer);
         sequentialFaceControl.setApplyHandler(SEQUENTIAL_EMISSION_FACE_HANDLER);
         sequentialFaceControl.setSyncHandler(ParticleEmitterNode::isSequentialEmissionFace);
         sequentialFaceControl.setEditObject(emitterNode);
 
         final BooleanModelPropertyControl<ParticleEmitterNode> skipPatternControl =
-                new BooleanModelPropertyControl<>(skipPattern, Messages.PARTICLE_EMITTER_SKIP_PATTERN, changeConsumer);
+                new BooleanModelPropertyControl<>(skipPattern, Messages.MODEL_PROPERTY_IS_SKIP_PATTERN, changeConsumer);
         skipPatternControl.setApplyHandler(SEQUENTIAL_SKIP_PATTERN_HANDLER);
         skipPatternControl.setSyncHandler(ParticleEmitterNode::isSequentialSkipPattern);
         skipPatternControl.setEditObject(emitterNode);
 
         final EnumModelPropertyControl<ParticleEmitterNode, DirectionType> directionTypeControl =
-                new EnumModelPropertyControl<>(directionType, Messages.PARTICLE_EMITTER_DIRECTION_TYPE, changeConsumer, DIRECTION_TYPES);
+                new EnumModelPropertyControl<>(directionType, Messages.MODEL_PROPERTY_DIRECTION_TYPE, changeConsumer, DIRECTION_TYPES);
         directionTypeControl.setApplyHandler(DIRECTION_TYPE_HANDLER);
         directionTypeControl.setSyncHandler(ParticleEmitterNode::getDirectionType);
         directionTypeControl.setEditObject(emitterNode);
 
         final EnumModelPropertyControl<ParticleEmitterNode, EmissionPoint> emissionPointControl =
-                new EnumModelPropertyControl<>(emissionPoint, Messages.PARTICLE_EMITTER_EMISSION_POINT, changeConsumer, PARTICLE_EMISSION_POINTS);
+                new EnumModelPropertyControl<>(emissionPoint, Messages.MODEL_PROPERTY_EMISSION_POINT, changeConsumer, PARTICLE_EMISSION_POINTS);
         emissionPointControl.setApplyHandler(EMISSION_POINT_HANDLER);
         emissionPointControl.setSyncHandler(ParticleEmitterNode::getEmissionPoint);
         emissionPointControl.setEditObject(emitterNode);
 
         final EnumModelPropertyControl<ParticleEmitterNode, BillboardMode> billboardModeControl =
-                new EnumModelPropertyControl<>(billboardMode, Messages.PARTICLE_EMITTER_BILLBOARD, changeConsumer, BillboardMode.values());
+                new EnumModelPropertyControl<>(billboardMode, Messages.MODEL_PROPERTY_BILLBOARD, changeConsumer, BillboardMode.values());
         billboardModeControl.setApplyHandler(ParticleEmitterNode::setBillboardMode);
         billboardModeControl.setSyncHandler(ParticleEmitterNode::getBillboardMode);
         billboardModeControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> maxParticlesControl =
-                new IntegerModelPropertyControl<>(maxParticles, Messages.PARTICLE_EMITTER_MAX_PARTICLES, changeConsumer);
+                new IntegerModelPropertyControl<>(maxParticles, Messages.MODEL_PROPERTY_MAX_PARTICLES, changeConsumer);
         maxParticlesControl.setApplyHandler(ParticleEmitterNode::setMaxParticles);
         maxParticlesControl.setSyncHandler(ParticleEmitterNode::getMaxParticles);
         maxParticlesControl.setEditObject(emitterNode);
 
         final FloatModelPropertyControl<ParticleEmitterNode> emissionPerSecControl =
-                new FloatModelPropertyControl<>(emissionsPerSecond, Messages.PARTICLE_EMITTER_EMISSION_PER_SECOND, changeConsumer);
+                new FloatModelPropertyControl<>(emissionsPerSecond, Messages.MODEL_PROPERTY_EMISSION_PER_SECOND, changeConsumer);
         emissionPerSecControl.setApplyHandler(EMISSIONS_PER_SECOND_HANDLER);
         emissionPerSecControl.setSyncHandler(ParticleEmitterNode::getEmissionsPerSecond);
         emissionPerSecControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> particlesPerEmissionControl =
-                new IntegerModelPropertyControl<>(particlesPerEmission, Messages.PARTICLE_EMITTER_PARTICLES_PER_SECOND, changeConsumer);
+                new IntegerModelPropertyControl<>(particlesPerEmission, Messages.MODEL_PROPERTY_PARTICLES_PER_SECOND, changeConsumer);
         particlesPerEmissionControl.setApplyHandler(PARTICLES_PER_EMISSION_HANDLER);
         particlesPerEmissionControl.setSyncHandler(ParticleEmitterNode::getParticlesPerEmission);
         particlesPerEmissionControl.setEditObject(emitterNode);
 
         final FloatModelPropertyControl<ParticleEmitterNode> emitterLifeControl =
-                new FloatModelPropertyControl<>(emitterLife, Messages.PARTICLE_EMITTER_EMITTER_LIFE, changeConsumer);
+                new FloatModelPropertyControl<>(emitterLife, Messages.MODEL_PROPERTY_EMITTER_LIFE, changeConsumer);
         emitterLifeControl.setApplyHandler(ParticleEmitterNode::setEmitterLife);
         emitterLifeControl.setSyncHandler(ParticleEmitterNode::getEmitterLife);
         emitterLifeControl.setEditObject(emitterNode);
 
         final FloatModelPropertyControl<ParticleEmitterNode> emitterDelayControl =
-                new FloatModelPropertyControl<>(emitterDelay, Messages.PARTICLE_EMITTER_EMITTER_DELAY, changeConsumer);
+                new FloatModelPropertyControl<>(emitterDelay, Messages.MODEL_PROPERTY_EMITTER_DELAY, changeConsumer);
         emitterDelayControl.setApplyHandler(ParticleEmitterNode::setEmitterDelay);
         emitterDelayControl.setSyncHandler(ParticleEmitterNode::getEmitterDelay);
         emitterDelayControl.setEditObject(emitterNode);
 
         final FloatModelPropertyControl<ParticleEmitterNode> magnitudeControl =
-                new FloatModelPropertyControl<>(stretchFactor, Messages.PARTICLE_EMITTER_MAGNITUDE, changeConsumer);
+                new FloatModelPropertyControl<>(stretchFactor, Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer);
         magnitudeControl.setApplyHandler(ParticleEmitterNode::setVelocityStretchFactor);
         magnitudeControl.setSyncHandler(ParticleEmitterNode::getVelocityStretchFactor);
         magnitudeControl.setEditObject(emitterNode);
@@ -316,19 +316,19 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
 
 
         final MinMaxModelPropertyControl<ParticleEmitterNode> forceMinMaxControl =
-                new MinMaxModelPropertyControl<>(forceMinMax, Messages.PARTICLE_EMITTER_INITIAL_FORCE, changeConsumer);
+                new MinMaxModelPropertyControl<>(forceMinMax, Messages.MODEL_PROPERTY_INITIAL_FORCE, changeConsumer);
         forceMinMaxControl.setApplyHandler(FORCE_MIN_MAX_HANDLER);
         forceMinMaxControl.setSyncHandler(ParticleEmitterNode::getForceMinMax);
         forceMinMaxControl.setEditObject(emitterNode);
 
         final MinMaxModelPropertyControl<ParticleEmitterNode> lifeMinMaxControl =
-                new MinMaxModelPropertyControl<>(lifeMinMax, Messages.PARTICLE_EMITTER_LIFE, changeConsumer);
+                new MinMaxModelPropertyControl<>(lifeMinMax, Messages.MODEL_PROPERTY_LIFE, changeConsumer);
         lifeMinMaxControl.setApplyHandler(LIFE_MIN_MAX_HANDLER);
         lifeMinMaxControl.setSyncHandler(ParticleEmitterNode::getLifeMinMax);
         lifeMinMaxControl.setEditObject(emitterNode);
 
         final Toneg0dParticleEmitterSpriteCountModelPropertyControl spriteCountControl =
-                new Toneg0dParticleEmitterSpriteCountModelPropertyControl(spriteCount, Messages.PARTICLE_EMITTER_SPRITE_COUNT, changeConsumer);
+                new Toneg0dParticleEmitterSpriteCountModelPropertyControl(spriteCount, Messages.MODEL_PROPERTY_SPRITE_COUNT, changeConsumer);
         spriteCountControl.setApplyHandler(ParticleEmitterNode::setSpriteCount);
         spriteCountControl.setSyncHandler(ParticleEmitterNode::getSpriteCount);
         spriteCountControl.setEditObject(emitterNode);
@@ -388,91 +388,91 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         final Vector3f faceNormal = emitter.getFaceNormal() == null? new Vector3f() : emitter.getFaceNormal();
 
         final BooleanModelPropertyControl<ParticleEmitter> enabledControl =
-                new BooleanModelPropertyControl<>(enabled, Messages.PARTICLE_EMITTER_ENABLED, changeConsumer);
+                new BooleanModelPropertyControl<>(enabled, Messages.MODEL_PROPERTY_IS_ENABLED, changeConsumer);
         enabledControl.setApplyHandler(ParticleEmitter::setEnabled);
         enabledControl.setSyncHandler(ParticleEmitter::isEnabled);
         enabledControl.setEditObject(emitter);
 
         final BooleanModelPropertyControl<ParticleEmitter> facingVelocityControl =
-                new BooleanModelPropertyControl<>(facingVelocity, Messages.PARTICLE_EMITTER_FACING_VELOCITY, changeConsumer);
+                new BooleanModelPropertyControl<>(facingVelocity, Messages.MODEL_PROPERTY_IS_FACING_VELOCITY, changeConsumer);
         facingVelocityControl.setApplyHandler(ParticleEmitter::setFacingVelocity);
         facingVelocityControl.setSyncHandler(ParticleEmitter::isFacingVelocity);
         facingVelocityControl.setEditObject(emitter);
 
         final BooleanModelPropertyControl<ParticleEmitter> inWorldSpaceControl =
-                new BooleanModelPropertyControl<>(inWorldSpace, Messages.PARTICLE_EMITTER_IN_WORLD_SPACE, changeConsumer);
+                new BooleanModelPropertyControl<>(inWorldSpace, Messages.MODEL_PROPERTY_IS_IN_WORLD_SPACE, changeConsumer);
         inWorldSpaceControl.setApplyHandler(ParticleEmitter::setInWorldSpace);
         inWorldSpaceControl.setSyncHandler(ParticleEmitter::isInWorldSpace);
         inWorldSpaceControl.setEditObject(emitter);
 
         final BooleanModelPropertyControl<ParticleEmitter> randomAngleControl =
-                new BooleanModelPropertyControl<>(randomAngle, Messages.PARTICLE_EMITTER_RANDOM_ANGLE, changeConsumer);
+                new BooleanModelPropertyControl<>(randomAngle, Messages.MODEL_PROPERTY_IS_RANDOM_ANGLE, changeConsumer);
         randomAngleControl.setApplyHandler(ParticleEmitter::setRandomAngle);
         randomAngleControl.setSyncHandler(ParticleEmitter::isRandomAngle);
         randomAngleControl.setEditObject(emitter);
 
         final BooleanModelPropertyControl<ParticleEmitter> selectRandomImageControl =
-                new BooleanModelPropertyControl<>(selectRandomImage, Messages.PARTICLE_EMITTER_SELECT_RANDOM_IMAGE, changeConsumer);
+                new BooleanModelPropertyControl<>(selectRandomImage, Messages.MODEL_PROPERTY_IS_SELECT_RANDOM_IMAGE, changeConsumer);
         selectRandomImageControl.setApplyHandler(ParticleEmitter::setSelectRandomImage);
         selectRandomImageControl.setSyncHandler(ParticleEmitter::isSelectRandomImage);
         selectRandomImageControl.setEditObject(emitter);
 
         final IntegerModelPropertyControl<ParticleEmitter> maxNumParticlesControl =
-                new IntegerModelPropertyControl<>(maxNumParticles, Messages.PARTICLE_EMITTER_MAX_PARTICLES, changeConsumer);
+                new IntegerModelPropertyControl<>(maxNumParticles, Messages.MODEL_PROPERTY_MAX_PARTICLES, changeConsumer);
         maxNumParticlesControl.setApplyHandler(ParticleEmitter::setNumParticles);
         maxNumParticlesControl.setSyncHandler(ParticleEmitter::getMaxNumParticles);
         maxNumParticlesControl.setEditObject(emitter);
 
         final FloatModelPropertyControl<ParticleEmitter> rotateSpeedControl =
-                new FloatModelPropertyControl<>(rotateSpeed, Messages.PARTICLE_EMITTER_ROTATE_SPEED, changeConsumer);
+                new FloatModelPropertyControl<>(rotateSpeed, Messages.MODEL_PROPERTY_ROTATE_SPEED, changeConsumer);
         rotateSpeedControl.setApplyHandler(ParticleEmitter::setRotateSpeed);
         rotateSpeedControl.setSyncHandler(ParticleEmitter::getRotateSpeed);
         rotateSpeedControl.setEditObject(emitter);
 
         final EnumModelPropertyControl<ParticleEmitter, ParticleMesh.Type> meshTypeControl =
-                new EnumModelPropertyControl<>(meshType, Messages.PARTICLE_EMITTER_MESH_TYPE, changeConsumer, MESH_TYPES);
+                new EnumModelPropertyControl<>(meshType, Messages.MODEL_PROPERTY_MESH_TYPE, changeConsumer, MESH_TYPES);
         meshTypeControl.setApplyHandler(ParticleEmitter::setMeshType);
         meshTypeControl.setSyncHandler(ParticleEmitter::getMeshType);
         meshTypeControl.setEditObject(emitter);
 
         final ColorModelPropertyControl<ParticleEmitter> startColorControl =
-                new ColorModelPropertyControl<>(startColor, Messages.PARTICLE_EMITTER_START_COLOR, changeConsumer);
+                new ColorModelPropertyControl<>(startColor, Messages.MODEL_PROPERTY_START_COLOR, changeConsumer);
         startColorControl.setApplyHandler(ParticleEmitter::setStartColor);
         startColorControl.setSyncHandler(ParticleEmitter::getStartColor);
         startColorControl.setEditObject(emitter);
 
         final ColorModelPropertyControl<ParticleEmitter> endColorControl =
-                new ColorModelPropertyControl<>(endColor, Messages.PARTICLE_EMITTER_END_COLOR, changeConsumer);
+                new ColorModelPropertyControl<>(endColor, Messages.MODEL_PROPERTY_END_COLOR, changeConsumer);
         endColorControl.setApplyHandler(ParticleEmitter::setEndColor);
         endColorControl.setSyncHandler(ParticleEmitter::getEndColor);
         endColorControl.setEditObject(emitter);
 
         final MinMaxModelPropertyControl<ParticleEmitter> sizeControl =
-                new MinMaxModelPropertyControl<>(new Vector2f(startSize, endSize), Messages.PARTICLE_EMITTER_SIZE, changeConsumer);
+                new MinMaxModelPropertyControl<>(new Vector2f(startSize, endSize), Messages.MODEL_PROPERTY_SIZE, changeConsumer);
         sizeControl.setApplyHandler(APPLY_SIZE_HANDLER);
         sizeControl.setSyncHandler(SYNC_SIZE_HANDLER);
         sizeControl.setEditObject(emitter);
 
         final MinMaxModelPropertyControl<ParticleEmitter> lifeControl =
-                new MinMaxModelPropertyControl<>(new Vector2f(lowLife, highLife), Messages.PARTICLE_EMITTER_LIFE, changeConsumer);
+                new MinMaxModelPropertyControl<>(new Vector2f(lowLife, highLife), Messages.MODEL_PROPERTY_LIFE, changeConsumer);
         lifeControl.setApplyHandler(APPLY_LIFE_HANDLER);
         lifeControl.setSyncHandler(SYNC_LIFE_HANDLER);
         lifeControl.setEditObject(emitter);
 
         final ParticleEmitterImagesModelPropertyControl imagesControl =
-                new ParticleEmitterImagesModelPropertyControl(new Vector2f(imagesX, imagesY), Messages.PARTICLE_EMITTER_SPRITE_COUNT, changeConsumer);
+                new ParticleEmitterImagesModelPropertyControl(new Vector2f(imagesX, imagesY), Messages.MODEL_PROPERTY_SPRITE_COUNT, changeConsumer);
         imagesControl.setApplyHandler(APPLY_IMAGES_HANDLER);
         imagesControl.setSyncHandler(SYNC_IMAGES_HANDLER);
         imagesControl.setEditObject(emitter);
 
         final Vector3fModelPropertyControl<ParticleEmitter> gravityControl =
-                new Vector3fModelPropertyControl<>(gravity, Messages.PARTICLE_EMITTER_GRAVITY, changeConsumer);
+                new Vector3fModelPropertyControl<>(gravity, Messages.MODEL_PROPERTY_GRAVITY, changeConsumer);
         gravityControl.setApplyHandler(ParticleEmitter::setGravity);
         gravityControl.setSyncHandler(ParticleEmitter::getGravity);
         gravityControl.setEditObject(emitter);
 
         final Vector3fModelPropertyControl<ParticleEmitter> faceNormalControl =
-                new Vector3fModelPropertyControl<>(faceNormal, Messages.PARTICLE_EMITTER_FACE_NORMAL, changeConsumer);
+                new Vector3fModelPropertyControl<>(faceNormal, Messages.MODEL_PROPERTY_FACE_NORMAL, changeConsumer);
         faceNormalControl.setApplyHandler(ParticleEmitter::setFaceNormal);
         faceNormalControl.setSyncHandler(SYNC_FACE_NORMAL_HANDLER);
         faceNormalControl.setEditObject(emitter);

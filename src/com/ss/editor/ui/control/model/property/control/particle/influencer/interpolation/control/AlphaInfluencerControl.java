@@ -34,7 +34,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_ALPHA_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_ALPHA_INTERPOLATION;
     }
 
     /**

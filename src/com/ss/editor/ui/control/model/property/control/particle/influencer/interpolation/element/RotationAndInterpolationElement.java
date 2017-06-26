@@ -28,7 +28,7 @@ public class RotationAndInterpolationElement extends Vector3fAndInterpolationEle
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_SPEED;
+        return Messages.MODEL_PROPERTY_SPEED;
     }
 
     @Override

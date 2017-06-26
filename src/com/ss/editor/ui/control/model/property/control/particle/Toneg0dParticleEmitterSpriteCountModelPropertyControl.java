@@ -34,12 +34,12 @@ public class Toneg0dParticleEmitterSpriteCountModelPropertyControl extends
     @NotNull
     @Override
     protected String getXLabelText() {
-        return Messages.PARTICLE_EMITTER_COLUMNS + ":";
+        return Messages.MODEL_PROPERTY_COLUMNS + ":";
     }
 
     @NotNull
     @Override
     protected String getYLabelText() {
-        return Messages.PARTICLE_EMITTER_ROWS + ":";
+        return Messages.MODEL_PROPERTY_ROWS + ":";
     }
 }

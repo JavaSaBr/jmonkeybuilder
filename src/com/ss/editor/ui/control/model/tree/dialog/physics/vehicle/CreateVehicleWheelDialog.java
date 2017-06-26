@@ -129,7 +129,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
 
-        final Label locationLabel = new Label(Messages.CONTROL_PROPERTY_LOCATION + ":");
+        final Label locationLabel = new Label(Messages.MODEL_PROPERTY_LOCATION + ":");
         locationLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         locationLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -156,7 +156,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         root.add(locationYField, 2, 0);
         root.add(locationZField, 3, 0);
 
-        final Label directionLabel = new Label(Messages.CONTROL_PROPERTY_DIRECTION + ":");
+        final Label directionLabel = new Label(Messages.MODEL_PROPERTY_DIRECTION + ":");
         directionLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         directionLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -177,7 +177,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         root.add(directionYField, 2, 1);
         root.add(directionZField, 3, 1);
 
-        final Label axleLabel = new Label(Messages.CONTROL_PROPERTY_AXLE + ":");
+        final Label axleLabel = new Label(Messages.MODEL_PROPERTY_AXLE + ":");
         axleLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         axleLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -198,7 +198,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         root.add(axleYField, 2, 2);
         root.add(axleZField, 3, 2);
 
-        final Label suspensionRestLengthLabel = new Label(Messages.CONTROL_PROPERTY_REST_LENGTH + ":");
+        final Label suspensionRestLengthLabel = new Label(Messages.MODEL_PROPERTY_REST_LENGTH + ":");
         suspensionRestLengthLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         suspensionRestLengthLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -209,7 +209,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         root.add(suspensionRestLengthLabel, 0, 3);
         root.add(restLengthField, 1, 3, 3, 1);
 
-        final Label wheelRadiusLabel = new Label(Messages.CONTROL_PROPERTY_RADIUS + ":");
+        final Label wheelRadiusLabel = new Label(Messages.MODEL_PROPERTY_RADIUS + ":");
         wheelRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         wheelRadiusLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 
@@ -220,7 +220,7 @@ public class CreateVehicleWheelDialog extends AbstractSimpleEditorDialog {
         root.add(wheelRadiusLabel, 0, 4);
         root.add(wheelRadiusField, 1, 4, 3, 1);
 
-        final Label frontLabel = new Label(Messages.CONTROL_PROPERTY_FRONT + ":");
+        final Label frontLabel = new Label(Messages.MODEL_PROPERTY_IS_FRONT + ":");
         frontLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         frontLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT3));
 

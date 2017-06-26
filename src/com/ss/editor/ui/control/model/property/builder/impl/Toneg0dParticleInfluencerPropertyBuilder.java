@@ -117,7 +117,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         final float fixedDuration = influencer.getFixedDuration();
 
         final FloatParticleInfluencerPropertyControl<InterpolatedParticleInfluencer> fixedDurationControl =
-                new FloatParticleInfluencerPropertyControl<>(fixedDuration, Messages.PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION, changeConsumer, parent);
+                new FloatParticleInfluencerPropertyControl<>(fixedDuration, Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
 
         fixedDurationControl.setSyncHandler(InterpolatedParticleInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(InterpolatedParticleInfluencer::setFixedDuration);
@@ -162,7 +162,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         colorControl.reload();
 
         final BooleanParticleInfluencerPropertyControl<ColorInfluencer> randomStartColorControl =
-                new BooleanParticleInfluencerPropertyControl<>(randomStartColor, Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_COLOR, changeConsumer, parent);
+                new BooleanParticleInfluencerPropertyControl<>(randomStartColor, Messages.MODEL_PROPERTY_IS_RANDOM_START_COLOR, changeConsumer, parent);
 
         randomStartColorControl.setSyncHandler(ColorInfluencer::isRandomStartColor);
         randomStartColorControl.setApplyHandler(ColorInfluencer::setRandomStartColor);
@@ -195,7 +195,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<SizeInfluencer> randomStartSizeControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomSize,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_SIZE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_RANDOM_START_SIZE, changeConsumer, parent);
 
         randomStartSizeControl.setSyncHandler(SizeInfluencer::isRandomSize);
         randomStartSizeControl.setApplyHandler(SizeInfluencer::setRandomSize);
@@ -203,7 +203,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<SizeInfluencer> sizeVariationToleranceControl =
                 new FloatParticleInfluencerPropertyControl<>(randomSizeTolerance,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_SIZE_VARIATION_FACTOR, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_SIZE_VARIATION_FACTOR, changeConsumer, parent);
 
         sizeVariationToleranceControl.setSyncHandler(SizeInfluencer::getRandomSizeTolerance);
         sizeVariationToleranceControl.setApplyHandler(SizeInfluencer::setRandomSizeTolerance);
@@ -235,7 +235,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final IntArrayParticleInfluencerPropertyControl<SpriteInfluencer> frameSequenceControl =
                 new IntArrayParticleInfluencerPropertyControl<>(frameSequence,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_FRAME_SEQUENCE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_FRAME_SEQUENCE, changeConsumer, parent);
 
         frameSequenceControl.setSyncHandler(SpriteInfluencer::getFrameSequence);
         frameSequenceControl.setApplyHandler(SpriteInfluencer::setFrameSequence);
@@ -243,7 +243,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<SpriteInfluencer> randomStartImageControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomStartImage,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_IMAGE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_RANDOM_START_IMAGE, changeConsumer, parent);
 
         randomStartImageControl.setSyncHandler(SpriteInfluencer::isRandomStartImage);
         randomStartImageControl.setApplyHandler(SpriteInfluencer::setRandomStartImage);
@@ -251,7 +251,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<SpriteInfluencer> animateControl =
                 new BooleanParticleInfluencerPropertyControl<>(animate,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_ANIMATE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_ANIMATE, changeConsumer, parent);
 
         animateControl.setSyncHandler(SpriteInfluencer::isAnimate);
         animateControl.setApplyHandler(SpriteInfluencer::setAnimate);
@@ -259,7 +259,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<SpriteInfluencer> fixedDurationControl =
                 new FloatParticleInfluencerPropertyControl<>(fixedDuration,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_FIXED_DURATION, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_FIXED_DURATION, changeConsumer, parent);
 
         fixedDurationControl.setSyncHandler(SpriteInfluencer::getFixedDuration);
         fixedDurationControl.setApplyHandler(SpriteInfluencer::setFixedDuration);
@@ -289,7 +289,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<DestinationInfluencer> randomStartDestinationControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomStartDestination,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_START_DESTINATION, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_RANDOM_START_DESTINATION, changeConsumer, parent);
 
         randomStartDestinationControl.setSyncHandler(DestinationInfluencer::isRandomStartDestination);
         randomStartDestinationControl.setApplyHandler(DestinationInfluencer::setRandomStartDestination);
@@ -319,7 +319,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<ImpulseInfluencer> chanceControl =
                 new FloatParticleInfluencerPropertyControl<>(chance,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_CHANCE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_CHANCE, changeConsumer, parent);
 
         chanceControl.setSyncHandler(ImpulseInfluencer::getChance);
         chanceControl.setApplyHandler(ImpulseInfluencer::setChance);
@@ -327,7 +327,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<ImpulseInfluencer> strengthControl =
                 new FloatParticleInfluencerPropertyControl<>(strength,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_STRENGTH, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_STRENGTH, changeConsumer, parent);
 
         strengthControl.setSyncHandler(ImpulseInfluencer::getStrength);
         strengthControl.setApplyHandler(ImpulseInfluencer::setStrength);
@@ -335,7 +335,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<ImpulseInfluencer> magnitudeControl =
                 new FloatParticleInfluencerPropertyControl<>(magnitude,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_MAGNITUDE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer, parent);
 
         magnitudeControl.setSyncHandler(ImpulseInfluencer::getMagnitude);
         magnitudeControl.setApplyHandler(ImpulseInfluencer::setMagnitude);
@@ -364,7 +364,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final Vector3fParticleInfluencerPropertyControl<GravityInfluencer> gravityControl =
                 new Vector3fParticleInfluencerPropertyControl<>(gravity,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_GRAVITY, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_GRAVITY, changeConsumer, parent);
 
         gravityControl.setSyncHandler(GravityInfluencer::getGravity);
         gravityControl.setApplyHandler(GravityInfluencer::setGravity);
@@ -372,7 +372,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final EnumParticleInfluencerEmitterPropertyControl<GravityInfluencer, GravityAlignment> gravityAlignmentControl =
                 new EnumParticleInfluencerEmitterPropertyControl<>(alignment,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_ALIGNMENT, changeConsumer, GRAVITY_ALIGNMENTS, parent);
+                        Messages.MODEL_PROPERTY_ALIGNMENT, changeConsumer, GRAVITY_ALIGNMENTS, parent);
 
         gravityAlignmentControl.setSyncHandler(GravityInfluencer::getAlignment);
         gravityAlignmentControl.setApplyHandler(GravityInfluencer::setAlignment);
@@ -380,7 +380,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<GravityInfluencer> magnitudeControl =
                 new FloatParticleInfluencerPropertyControl<>(magnitude,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_MAGNITUDE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_MAGNITUDE, changeConsumer, parent);
 
         magnitudeControl.setSyncHandler(GravityInfluencer::getMagnitude);
         magnitudeControl.setApplyHandler(GravityInfluencer::setMagnitude);
@@ -410,7 +410,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final EnumParticleInfluencerEmitterPropertyControl<PhysicsInfluencer, CollisionReaction> reactionControl =
                 new EnumParticleInfluencerEmitterPropertyControl<>(collisionReaction,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_REACTION, changeConsumer, COLLISION_REACTIONS, parent);
+                        Messages.MODEL_PROPERTY_REACTION, changeConsumer, COLLISION_REACTIONS, parent);
 
         reactionControl.setSyncHandler(PhysicsInfluencer::getCollisionReaction);
         reactionControl.setApplyHandler(PhysicsInfluencer::setCollisionReaction);
@@ -418,7 +418,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<PhysicsInfluencer> restitutionControl =
                 new FloatParticleInfluencerPropertyControl<>(restitution,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RESTITUTION, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_RESTITUTION, changeConsumer, parent);
 
         restitutionControl.setSyncHandler(PhysicsInfluencer::getRestitution);
         restitutionControl.setApplyHandler(PhysicsInfluencer::setRestitution);
@@ -451,7 +451,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<RadialVelocityInfluencer> randomDirectionControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomDirection,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_DIRECTION, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_RANDOM_DIRECTION, changeConsumer, parent);
 
         randomDirectionControl.setSyncHandler(RadialVelocityInfluencer::isRandomDirection);
         randomDirectionControl.setApplyHandler(RadialVelocityInfluencer::setRandomDirection);
@@ -459,7 +459,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullCenter> pullCenterControl =
                 new EnumParticleInfluencerEmitterPropertyControl<>(pullCenter,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_PULL_CENTER, changeConsumer, RADIAL_PULL_CENTERS, parent);
+                        Messages.MODEL_PROPERTY_PULL_CENTER, changeConsumer, RADIAL_PULL_CENTERS, parent);
 
         pullCenterControl.setSyncHandler(RadialVelocityInfluencer::getRadialPullCenter);
         pullCenterControl.setApplyHandler(RadialVelocityInfluencer::setRadialPullCenter);
@@ -467,7 +467,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialPullAlignment> pullAlignmentControl =
                 new EnumParticleInfluencerEmitterPropertyControl<>(pullAlignment,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_PULL_ALIGNMENT, changeConsumer, RADIAL_PULL_ALIGNMENTS, parent);
+                        Messages.MODEL_PROPERTY_PULL_ALIGNMENT, changeConsumer, RADIAL_PULL_ALIGNMENTS, parent);
 
         pullAlignmentControl.setSyncHandler(RadialVelocityInfluencer::getRadialPullAlignment);
         pullAlignmentControl.setApplyHandler(RadialVelocityInfluencer::setRadialPullAlignment);
@@ -475,7 +475,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final EnumParticleInfluencerEmitterPropertyControl<RadialVelocityInfluencer, RadialUpAlignment> upAlignmentControl =
                 new EnumParticleInfluencerEmitterPropertyControl<>(upAlignment,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_UP_ALIGNMENT, changeConsumer, RADIAL_UP_ALIGNMENTS, parent);
+                        Messages.MODEL_PROPERTY_UP_ALIGNMENT, changeConsumer, RADIAL_UP_ALIGNMENTS, parent);
 
         upAlignmentControl.setSyncHandler(RadialVelocityInfluencer::getRadialUpAlignment);
         upAlignmentControl.setApplyHandler(RadialVelocityInfluencer::setRadialUpAlignment);
@@ -483,7 +483,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<RadialVelocityInfluencer> radialPullControl =
                 new FloatParticleInfluencerPropertyControl<>(radialPull,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RADIAL_PULL, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_RADIAL_PULL, changeConsumer, parent);
 
         radialPullControl.setSyncHandler(RadialVelocityInfluencer::getRadialPull);
         radialPullControl.setApplyHandler(RadialVelocityInfluencer::setRadialPull);
@@ -491,7 +491,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final FloatParticleInfluencerPropertyControl<RadialVelocityInfluencer> tangetForceControl =
                 new FloatParticleInfluencerPropertyControl<>(tangentForce,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_TANGENT_FORCE, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_TANGENT_FORCE, changeConsumer, parent);
 
         tangetForceControl.setSyncHandler(RadialVelocityInfluencer::getTangentForce);
         tangetForceControl.setApplyHandler(RadialVelocityInfluencer::setTangentForce);
@@ -527,7 +527,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomDirectionControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomDirection,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_DIRECTION, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_RANDOM_DIRECTION, changeConsumer, parent);
 
         randomDirectionControl.setSyncHandler(RotationInfluencer::isRandomDirection);
         randomDirectionControl.setApplyHandler(RotationInfluencer::setRandomDirection);
@@ -535,7 +535,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomSpeedControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomSpeed,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_RANDOM_SPEED, changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_RANDOM_SPEED, changeConsumer, parent);
 
         randomSpeedControl.setSyncHandler(RotationInfluencer::isRandomSpeed);
         randomSpeedControl.setApplyHandler(RotationInfluencer::setRandomSpeed);
@@ -543,7 +543,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationXControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomStartRotationX,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X + " X", changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " X", changeConsumer, parent);
 
         randomStartRotationXControl.setSyncHandler(RotationInfluencer::isRandomStartRotationX);
         randomStartRotationXControl.setApplyHandler(RotationInfluencer::setRandomStartRotationX);
@@ -551,7 +551,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationYControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomStartRotationY,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X + " Y", changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " Y", changeConsumer, parent);
 
         randomStartRotationYControl.setSyncHandler(RotationInfluencer::isRandomStartRotationY);
         randomStartRotationYControl.setApplyHandler(RotationInfluencer::setRandomStartRotationY);
@@ -559,7 +559,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
 
         final BooleanParticleInfluencerPropertyControl<RotationInfluencer> randomStartRotationZControl =
                 new BooleanParticleInfluencerPropertyControl<>(randomStartRotationZ,
-                        Messages.PARTICLE_EMITTER_INFLUENCER_START_RANDOM_ROTATION_X + " Z", changeConsumer, parent);
+                        Messages.MODEL_PROPERTY_IS_START_RANDOM_ROTATION_X + " Z", changeConsumer, parent);
 
         randomStartRotationZControl.setSyncHandler(RotationInfluencer::isRandomStartRotationZ);
         randomStartRotationZControl.setApplyHandler(RotationInfluencer::setRandomStartRotationZ);

@@ -39,7 +39,7 @@ public class CreateQuadParticleMeshAction extends AbstractCreateParticleMeshActi
     @NotNull
     @Override
     protected String getName() {
-        return Messages.MODEL_NODE_TREE_ACTION_EMITTER_CHANGE_PARTICLES_MESH_QUAD;
+        return Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_PARTICLES_MESH_QUAD;
     }
 
     @NotNull
