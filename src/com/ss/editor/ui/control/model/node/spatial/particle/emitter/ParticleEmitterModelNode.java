@@ -8,6 +8,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.GeometryModelNode;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateDefaultParticleInfluencerAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateEmptyParticleInfluencerAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateRadialParticleInfluencerAction;
@@ -84,6 +85,7 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
                 new CreateDefaultParticleInfluencerAction(nodeTree, this),
                 new CreateRadialParticleInfluencerAction(nodeTree, this));
 
+        items.add(new ResetParticleEmittersAction(nodeTree, this));
         items.add(changeShapeMenu);
         items.add(changeInfluencerMenu);
 

@@ -6,7 +6,6 @@ import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh.CreateImpostorParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh.CreatePointParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh.CreateQuadParticleMeshAction;
@@ -87,7 +86,6 @@ public class Toneg0dParticleEmitterNodeModelNode extends NodeModelNode<ParticleE
                 jmePrimitivesMenu,
                 new LoadModelShapeEmitterAction(nodeTree, this));
 
-        items.add(new ResetParticleEmittersAction(nodeTree, this));
         items.add(changeShapeMenu);
         items.add(changeMeshMenu);
 

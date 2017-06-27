@@ -110,7 +110,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final T element = getElement();
-        final Spatial emitter = NodeUtils.findSpatial(element, spatial -> spatial instanceof ParticleEmitterNode);
+        final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitterNode.class::isInstance);
 
         if (emitter != null) {
             items.add(new ResetParticleEmittersAction(nodeTree, this));

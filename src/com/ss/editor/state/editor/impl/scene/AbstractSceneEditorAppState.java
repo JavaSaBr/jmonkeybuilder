@@ -1,6 +1,7 @@
 package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
@@ -47,10 +48,6 @@ import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.EditingUtils;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.geom.util.AngleUtils;
 import com.ss.rlib.util.array.Array;
@@ -58,6 +55,10 @@ import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ArrayIterator;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The base implementation of the {@link AppState} for the editor.
@@ -349,7 +350,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getCameraNode() {
-        return requireNonNull(cameraNode);
+        return notNull(cameraNode);
     }
 
     @Override
@@ -588,7 +589,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @NotNull
     @Override
     public PickedAxis getPickedAxis() {
-        return requireNonNull(pickedAxis);
+        return notNull(pickedAxis);
     }
 
     @Nullable
@@ -630,7 +631,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getGrid() {
-        return requireNonNull(grid);
+        return notNull(grid);
     }
 
     /**
@@ -638,7 +639,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getMoveTool() {
-        return requireNonNull(moveTool);
+        return notNull(moveTool);
     }
 
     /**
@@ -646,7 +647,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getRotateTool() {
-        return requireNonNull(rotateTool);
+        return notNull(rotateTool);
     }
 
     /**
@@ -654,7 +655,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getScaleTool() {
-        return requireNonNull(scaleTool);
+        return notNull(scaleTool);
     }
 
     /**
