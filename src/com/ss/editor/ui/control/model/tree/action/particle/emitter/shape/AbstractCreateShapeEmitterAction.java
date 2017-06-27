@@ -98,7 +98,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     }
 
     /**
-     * Gets a list of property definitions to create a mesh.
+     * Gets a list of property definitions to create a shape.
      *
      * @return the list of definitions.
      */
@@ -106,10 +106,10 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     protected abstract Array<PropertyDefinition> getPropertyDefinitions();
 
     /**
-     * Create emitter shape emitter shape.
+     * Create emitter shape.
      *
      * @param vars the table with variables.
-     * @return the emitter shape
+     * @return the emitter shape.
      */
     @NotNull
     protected abstract EmitterShape createEmitterShape(@NotNull final VarTable vars);

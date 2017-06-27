@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
 import static com.jme3.bullet.util.CollisionShapeFactory.createDynamicMeshShape;
 import static com.jme3.bullet.util.CollisionShapeFactory.createMeshShape;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -15,11 +15,16 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +34,10 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class GenerateCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
+public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
+
+    @NotNull
+    private static final Array<PropertyDefinition> EMPTY_DEFINITIONS = ArrayFactory.asArray();
 
     /**
      * Instantiates a new Generate collision shape action.
@@ -47,9 +55,16 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction<Phys
         return Icons.INFLUENCER_16;
     }
 
+    @FXThread
     @Override
-    protected void createShape(@NotNull final PhysicsCollisionObject object, @NotNull final Spatial parentElement,
-                               @NotNull final AbstractNodeTree<?> nodeTree) {
+    protected void process() {
+        super.process();
+
+        final ModelNode<?> modelNode = getNode();
+        final ModelNode<?> parentNode = notNull(modelNode.getParent());
+
+        final PhysicsCollisionObject object = (PhysicsCollisionObject) modelNode.getElement();
+        final Spatial parentElement = (Spatial) notNull(parentNode.getElement());
 
         CollisionShape shape = null;
 
@@ -77,8 +92,27 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction<Phys
             }
         }
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeCollisionShapeOperation(shape, object.getCollisionShape(), object));
+    }
+
+    @NotNull
+    @Override
+    protected String getDialogTitle() {
+        throw new RuntimeException();
+    }
+
+    @NotNull
+    @Override
+    protected Array<PropertyDefinition> getPropertyDefinitions() {
+        return EMPTY_DEFINITIONS;
+    }
+
+    @NotNull
+    @Override
+    protected CollisionShape createShape(@NotNull final VarTable vars) {
+        throw new RuntimeException();
     }
 
     @NotNull

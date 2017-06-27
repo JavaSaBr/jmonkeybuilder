@@ -1,12 +1,16 @@
 package com.ss.editor.ui.control.model.tree.action.physics.shape;
 
-import com.jme3.bullet.collision.PhysicsCollisionObject;
-import com.jme3.scene.Spatial;
+import static com.ss.editor.extension.property.EditablePropertyType.VECTOR_3F;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.model.tree.dialog.physics.shape.CreateBoxCollisionShapeDialog;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +18,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class CreateBoxCollisionShapeAction extends AbstractCreateShapeAction<PhysicsCollisionObject> {
+public class CreateBoxCollisionShapeAction extends AbstractCreateShapeAction {
+
+    @NotNull
+    private static final String PROPERTY_HALF_EXTENTS = "halfExtents";
 
     /**
      * Instantiates a new Create box collision shape action.
@@ -27,18 +34,30 @@ public class CreateBoxCollisionShapeAction extends AbstractCreateShapeAction<Phy
         super(nodeTree, node);
     }
 
-    @Override
-    protected void createShape(@NotNull final PhysicsCollisionObject object, @NotNull final Spatial parentElement,
-                               @NotNull final AbstractNodeTree<?> nodeTree) {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final CreateBoxCollisionShapeDialog dialog = new CreateBoxCollisionShapeDialog(nodeTree, object);
-        dialog.show(scene.getWindow());
-    }
-
     @NotNull
     @Override
     protected String getName() {
         return Messages.MODEL_NODE_TREE_ACTION_BOX_COLLISION_SHAPE;
+    }
+
+    @NotNull
+    @Override
+    protected String getDialogTitle() {
+        return Messages.CREATE_BOX_COLLISION_SHAPE_DIALOG_TITLE;
+    }
+
+    @NotNull
+    @Override
+    protected Array<PropertyDefinition> getPropertyDefinitions() {
+        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        definitions.add(new PropertyDefinition(VECTOR_3F, Messages.MODEL_PROPERTY_HALF_EXTENTS, PROPERTY_HALF_EXTENTS, new Vector3f(1, 1, 1)));
+        return definitions;
+    }
+
+    @NotNull
+    @Override
+    protected CollisionShape createShape(@NotNull final VarTable vars) {
+        final Vector3f halfExtents = vars.get(PROPERTY_HALF_EXTENTS);
+        return new BoxCollisionShape(halfExtents);
     }
 }

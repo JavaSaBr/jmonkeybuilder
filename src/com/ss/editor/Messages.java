@@ -1603,7 +1603,6 @@ public class Messages {
      * The constant MODEL_PROPERTY_DATA_TYPE.
      */
     public static final String MODEL_PROPERTY_DATA_TYPE;
-
     /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
      */

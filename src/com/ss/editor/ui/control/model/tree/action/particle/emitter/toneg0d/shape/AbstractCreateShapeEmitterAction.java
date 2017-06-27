@@ -86,7 +86,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     protected abstract Array<PropertyDefinition> getPropertyDefinitions();
 
     /**
-     * Create mesh mesh.
+     * Create a mesh.
      *
      * @param vars the table with variables.
      * @return the mesh
