@@ -23,6 +23,7 @@ public class PropertyEditorControlFactory {
             case VECTOR_3F: return new Vector3fPropertyEditorControl(vars, definition, validation);
             case ENUM: return new EnumPropertyEditorControl<>(vars, definition, validation);
             case STRING: return new StringPropertyEditorControl(vars, definition, validation);
+            case GEOMETRY_FROM_ASSET_FOLDER: return new GeometryAssetResourcePropertyControl(vars, definition, validation);
             default:
                 throw new IllegalArgumentException("Unknown the type " + definition.getPropertyType());
         }

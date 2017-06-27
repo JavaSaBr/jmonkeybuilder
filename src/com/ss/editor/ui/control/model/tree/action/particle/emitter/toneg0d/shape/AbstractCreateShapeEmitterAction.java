@@ -47,7 +47,6 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     @FXThread
     @Override
     protected void process() {
-
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final ObjectFactoryDialog dialog = new ObjectFactoryDialog(getPropertyDefinitions(), this::handleResult);
         dialog.setTitle(getDialogTitle());

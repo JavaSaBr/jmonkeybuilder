@@ -46,13 +46,13 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
      * The constant NO_MATERIAL.
      */
     @NotNull
-    public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
+    protected static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
     /**
      * The constant BUTTON_OFFSET.
      */
     @NotNull
-    public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
+    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     /**
      * The constant FX_EVENT_MANAGER.

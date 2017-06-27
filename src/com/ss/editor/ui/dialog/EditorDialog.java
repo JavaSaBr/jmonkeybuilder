@@ -145,8 +145,10 @@ public class EditorDialog extends AbstractPopupDialog {
 
     @Override
     protected void configureSize(@NotNull final VBox container) {
+        configureSize(container, getSize());
+    }
 
-        final Point size = getSize();
+    private void configureSize(@NotNull final VBox container, @NotNull final Point size) {
 
         final double width = size.getX();
         final double height = size.getY();
@@ -158,6 +160,15 @@ public class EditorDialog extends AbstractPopupDialog {
         if (height >= 1D) {
             FXUtils.setFixedHeight(container, height);
         }
+    }
+
+    /**
+     * Updates a size of this dialog.
+     *
+     * @param size the size of the dialog.
+     */
+    public void updateSize(@NotNull final Point size) {
+        configureSize(getContainer(), size);
     }
 
     @NotNull

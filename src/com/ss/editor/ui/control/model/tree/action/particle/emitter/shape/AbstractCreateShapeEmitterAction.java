@@ -1,16 +1,26 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.shape;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.shapes.EmitterShape;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
+import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeEmitterShapeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
+import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
 
 /**
  * The action to switch an {@link EmitterShape} of the {@link ParticleEmitter}.
@@ -40,12 +50,67 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     @Override
     protected void process() {
 
-        final ModelNode<?> node = getNode();
-        final ParticleEmitter particleEmitter = (ParticleEmitter) node.getElement();
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final Point dialogSize = getDialogSize();
 
-        process(getNodeTree(), particleEmitter);
+        final ObjectFactoryDialog dialog = new ObjectFactoryDialog(getPropertyDefinitions(), this::handleResult);
+        dialog.setTitle(getDialogTitle());
+
+        if (dialogSize != null) {
+            dialog.updateSize(dialogSize);
+        }
+
+        dialog.show(scene.getWindow());
     }
 
-    @FXThread
-    protected abstract void process(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ParticleEmitter emitter);
+    /**
+     * Gets another dialog size.
+     *
+     * @return the dialog size or null.
+     */
+    @Nullable
+    protected Point getDialogSize() {
+        return null;
+    }
+
+    /**
+     * Gets a dialog title.
+     *
+     * @return the dialog title.
+     */
+    @NotNull
+    protected abstract String getDialogTitle();
+
+    /**
+     * Handle the result from the dialog.
+     *
+     * @param vars the table with variables.
+     */
+    private void handleResult(@NotNull final VarTable vars) {
+
+        final ModelNode<?> modelNode = getNode();
+        final ParticleEmitter element = (ParticleEmitter) modelNode.getElement();
+        final EmitterShape emitterShape = createEmitterShape(vars);
+
+        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
+        changeConsumer.execute(new ChangeEmitterShapeOperation(emitterShape, element));
+    }
+
+    /**
+     * Gets a list of property definitions to create a mesh.
+     *
+     * @return the list of definitions.
+     */
+    @NotNull
+    protected abstract Array<PropertyDefinition> getPropertyDefinitions();
+
+    /**
+     * Create emitter shape emitter shape.
+     *
+     * @param vars the table with variables.
+     * @return the emitter shape
+     */
+    @NotNull
+    protected abstract EmitterShape createEmitterShape(@NotNull final VarTable vars);
 }

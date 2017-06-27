@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog.factory.control;
 
+import com.ss.editor.Editor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
@@ -17,6 +18,9 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class PropertyEditorControl<T> extends HBox {
+
+    @NotNull
+    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The validation callback to call re-validating.

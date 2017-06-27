@@ -2225,6 +2225,11 @@ public class Messages {
      */
     public static final String EDITOR_SCRIPTING_COMPONENT_RUN;
 
+    /**
+     * The constant RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED.
+     */
+    public static final String RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -2839,5 +2844,7 @@ public class Messages {
         EDITOR_SCRIPTING_COMPONENT_HEADERS = bundle.getString("EditorScriptingComponentHeaders");
         EDITOR_SCRIPTING_COMPONENT_BODY = bundle.getString("EditorScriptingComponentBody");
         EDITOR_SCRIPTING_COMPONENT_RUN = bundle.getString("EditorScriptingComponentRun");
+
+        RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED = bundle.getString("ResourcePropertyEditControlNothingIsSelected");
     }
 }
