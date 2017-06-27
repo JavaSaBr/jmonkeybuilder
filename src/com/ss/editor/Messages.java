@@ -2572,8 +2572,8 @@ public class Messages {
         MODEL_PROPERTY_HEIGHT = bundle.getString("ModelPropertyHeight");
         MODEL_PROPERTY_AXIS = bundle.getString("ModelPropertyAxis");
         MODEL_PROPERTY_OBJECT_ID = bundle.getString("ModelPropertyObjectId");
-        MODEL_PROPERTY_AXLE = bundle.getString("ModelPropertyObjectId");
-        MODEL_PROPERTY_REST_LENGTH = bundle.getString("ModelPropertyObjectId");
+        MODEL_PROPERTY_AXLE = bundle.getString("ModelPropertyAxle");
+        MODEL_PROPERTY_REST_LENGTH = bundle.getString("ModelPropertyRestLength");
         MODEL_PROPERTY_IS_FRONT = bundle.getString("ModelPropertyIsFront");
         MODEL_PROPERTY_DAMPING_COMPRESSION = bundle.getString("ModelPropertyDampingCompression");
         MODEL_PROPERTY_FRICTION_SLIP = bundle.getString("ModelPropertyFrictionSlip");

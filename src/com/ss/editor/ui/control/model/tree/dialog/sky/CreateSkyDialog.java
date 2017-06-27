@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.dialog.sky;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
@@ -27,6 +27,8 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -36,8 +38,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -49,11 +49,17 @@ import java.nio.file.Path;
  */
 public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(6, 15, 20, 0);
+    @NotNull
+    private static final Insets CONTAINER_OFFSET = new Insets(6, 0, 20, 0);
+
+    @NotNull
     private static final Insets SINGLE_TEXTURE_SITTINGS_OFFSET = new Insets(4, 0, 81, 0);
+
+    @NotNull
     private static final Insets MULTIPLY_TEXTURE_SETTINGS_OFFSET = new Insets(4, 0, 0, 0);
 
-    private static final Point DIALOG_SIZE = new Point(580, 317);
+    @NotNull
+    private static final Point DIALOG_SIZE = new Point(614, 0);
 
     @NotNull
     private static final ObservableList<SkyType> SKY_TYPES_LIST = observableArrayList(SkyType.VALUES);
@@ -236,7 +242,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<SkyType> getSkyTypeComboBox() {
-        return requireNonNull(skyTypeComboBox);
+        return notNull(skyTypeComboBox);
     }
 
     @NotNull
@@ -424,7 +430,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private VBox getSettingsRoot() {
-        return requireNonNull(settingsRoot);
+        return notNull(settingsRoot);
     }
 
     /**
@@ -432,7 +438,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private GridPane getSingleTextureSettings() {
-        return requireNonNull(singleTextureSettings);
+        return notNull(singleTextureSettings);
     }
 
     /**
@@ -440,7 +446,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private GridPane getMultipleTextureSettings() {
-        return requireNonNull(multipleTextureSettings);
+        return notNull(multipleTextureSettings);
     }
 
     /**
@@ -473,7 +479,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getSingleTextureControl() {
-        return requireNonNull(singleTextureControl);
+        return notNull(singleTextureControl);
     }
 
     /**
@@ -481,7 +487,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<EnvMapType> getEnvMapTypeComboBox() {
-        return requireNonNull(envMapTypeComboBox);
+        return notNull(envMapTypeComboBox);
     }
 
     /**
@@ -489,7 +495,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getTopTextureControl() {
-        return requireNonNull(topTextureControl);
+        return notNull(topTextureControl);
     }
 
     /**
@@ -497,7 +503,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getBottomTextureControl() {
-        return requireNonNull(bottomTextureControl);
+        return notNull(bottomTextureControl);
     }
 
     /**
@@ -505,7 +511,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getNorthTextureControl() {
-        return requireNonNull(northTextureControl);
+        return notNull(northTextureControl);
     }
 
     /**
@@ -513,7 +519,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getSouthTextureControl() {
-        return requireNonNull(southTextureControl);
+        return notNull(southTextureControl);
     }
 
     /**
@@ -521,7 +527,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getEastTextureControl() {
-        return requireNonNull(eastTextureControl);
+        return notNull(eastTextureControl);
     }
 
     /**
@@ -529,7 +535,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseTextureControl getWestTextureControl() {
-        return requireNonNull(westTextureControl);
+        return notNull(westTextureControl);
     }
 
     /**
@@ -592,7 +598,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getFlipYCheckBox() {
-        return requireNonNull(flipYCheckBox);
+        return notNull(flipYCheckBox);
     }
 
     /**
@@ -600,7 +606,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getNormalScaleXField() {
-        return requireNonNull(normalScaleXField);
+        return notNull(normalScaleXField);
     }
 
     /**
@@ -608,7 +614,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getNormalScaleYField() {
-        return requireNonNull(normalScaleYField);
+        return notNull(normalScaleYField);
     }
 
     /**
@@ -616,7 +622,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private FloatTextField getNormalScaleZField() {
-        return requireNonNull(normalScaleZField);
+        return notNull(normalScaleZField);
     }
 
     /**
@@ -650,7 +656,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
         final FloatTextField normalScaleXSpinner = getNormalScaleXField();
         final FloatTextField normalScaleYSpinner = getNormalScaleYField();
@@ -681,29 +687,29 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
                                        @NotNull final ChangeConsumer changeConsumer, @NotNull final Vector3f scale) {
 
         final ChooseTextureControl northTextureControl = getNorthTextureControl();
-        final Path northTextureFile = requireNonNull(northTextureControl.getTextureFile());
+        final Path northTextureFile = notNull(northTextureControl.getTextureFile());
 
         final ChooseTextureControl southTextureControl = getSouthTextureControl();
-        final Path southTextureFile = requireNonNull(southTextureControl.getTextureFile());
+        final Path southTextureFile = notNull(southTextureControl.getTextureFile());
 
         final ChooseTextureControl eastTextureControl = getEastTextureControl();
-        final Path eastTextureFile = requireNonNull(eastTextureControl.getTextureFile());
+        final Path eastTextureFile = notNull(eastTextureControl.getTextureFile());
 
         final ChooseTextureControl westTextureControl = getWestTextureControl();
-        final Path westTextureFile = requireNonNull(westTextureControl.getTextureFile());
+        final Path westTextureFile = notNull(westTextureControl.getTextureFile());
 
         final ChooseTextureControl topTextureControl = getTopTextureControl();
-        final Path topTextureFile = requireNonNull(topTextureControl.getTextureFile());
+        final Path topTextureFile = notNull(topTextureControl.getTextureFile());
 
         final ChooseTextureControl bottomTextureControl = getBottomTextureControl();
-        final Path bottomTextureFile = requireNonNull(bottomTextureControl.getTextureFile());
+        final Path bottomTextureFile = notNull(bottomTextureControl.getTextureFile());
 
-        final Path northTextureAssetFile = requireNonNull(getAssetFile(northTextureFile));
-        final Path southTextureAssetFile = requireNonNull(getAssetFile(southTextureFile));
-        final Path eastTextureAssetFile = requireNonNull(getAssetFile(eastTextureFile));
-        final Path westTextureAssetFile = requireNonNull(getAssetFile(westTextureFile));
-        final Path topTextureAssetFile = requireNonNull(getAssetFile(topTextureFile));
-        final Path bottomTextureAssetFile = requireNonNull(getAssetFile(bottomTextureFile));
+        final Path northTextureAssetFile = notNull(getAssetFile(northTextureFile));
+        final Path southTextureAssetFile = notNull(getAssetFile(southTextureFile));
+        final Path eastTextureAssetFile = notNull(getAssetFile(eastTextureFile));
+        final Path westTextureAssetFile = notNull(getAssetFile(westTextureFile));
+        final Path topTextureAssetFile = notNull(getAssetFile(topTextureFile));
+        final Path bottomTextureAssetFile = notNull(getAssetFile(bottomTextureFile));
 
         final Texture northTexture = assetManager.loadTexture(toAssetPath(northTextureAssetFile));
         final Texture southTexture = assetManager.loadTexture(toAssetPath(southTextureAssetFile));
@@ -714,7 +720,9 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
         EXECUTOR_MANAGER.addEditorThreadTask(() -> {
 
-            final Spatial skyModel = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture, topTexture, bottomTexture, scale);
+            final Spatial skyModel = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture,
+                    southTexture, topTexture, bottomTexture, scale);
+
             skyModel.setUserData(SceneEditorControl.SKY_NODE_KEY, Boolean.TRUE);
 
             final ModelNode<?> parentNode = getParentNode();
@@ -737,8 +745,8 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final EnvMapType envMapType = envMapTypeComboBox.getSelectionModel().getSelectedItem();
 
         final ChooseTextureControl singleTextureControl = getSingleTextureControl();
-        final Path textureFile = requireNonNull(singleTextureControl.getTextureFile());
-        final Path assetFile = requireNonNull(getAssetFile(textureFile));
+        final Path textureFile = notNull(singleTextureControl.getTextureFile());
+        final Path assetFile = notNull(getAssetFile(textureFile));
         final String assetPath = toAssetPath(assetFile);
 
         final TextureKey textureKey = new TextureKey(assetPath, flipY);
