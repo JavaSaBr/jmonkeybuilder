@@ -118,7 +118,6 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
         root.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        VBox.setMargin(root, CONTAINER_OFFSET);
     }
 
     /**

@@ -1,11 +1,13 @@
 package com.ss.editor.ui.dialog.converter;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -13,8 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -129,7 +129,6 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         overwriteMaterialsCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         overwriteMaterialsCheckBox.disableProperty().bind(exportMaterialsCheckBox.selectedProperty().not());
 
-        root.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
         root.add(filenameLabel, 0, 0);
         root.add(filenameField, 1, 0);
         root.add(destinationLabel, 0, 1);
@@ -141,12 +140,8 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         root.add(overwiteMaterials, 0, 4);
         root.add(overwriteMaterialsCheckBox, 1, 4);
 
-        FXUtils.addClassTo(filenameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(filenameField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(destinationLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(exportMaterialsLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(materialsFolderLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(overwiteMaterials, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(filenameLabel, filenameField, destinationLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(exportMaterialsLabel, materialsFolderLabel, overwiteMaterials, CSSClasses.SPECIAL_FONT_14);
     }
 
     @Override
@@ -189,7 +184,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getExportMaterialsCheckBox() {
-        return requireNonNull(exportMaterialsCheckBox);
+        return notNull(exportMaterialsCheckBox);
     }
 
     /**
@@ -206,7 +201,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getOverwriteMaterialsCheckBox() {
-        return requireNonNull(overwriteMaterialsCheckBox);
+        return notNull(overwriteMaterialsCheckBox);
     }
 
     /**
@@ -223,7 +218,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseFolderControl getDestinationControl() {
-        return requireNonNull(destinationControl);
+        return notNull(destinationControl);
     }
 
     /**
@@ -233,7 +228,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     public Path getDestinationFolder() {
-        return requireNonNull(getDestinationControl().getFolder());
+        return notNull(getDestinationControl().getFolder());
     }
 
     /**
@@ -241,7 +236,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ChooseFolderControl getMaterialsFolderControl() {
-        return requireNonNull(materialsFolderControl);
+        return notNull(materialsFolderControl);
     }
 
     /**
@@ -251,7 +246,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     public Path getMaterialsFolder() {
-        return requireNonNull(getMaterialsFolderControl().getFolder());
+        return notNull(getMaterialsFolderControl().getFolder());
     }
 
     /**
@@ -259,7 +254,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private TextField getFilenameField() {
-        return requireNonNull(filenameField);
+        return notNull(filenameField);
     }
 
     /**
