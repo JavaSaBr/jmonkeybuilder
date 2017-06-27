@@ -94,6 +94,7 @@
 
 .dialog-content-root {
     -fx-padding: 10px 15px 0px 15px;
+    -fx-alignment: center;
 }
 
 /* Transparent TreeView */

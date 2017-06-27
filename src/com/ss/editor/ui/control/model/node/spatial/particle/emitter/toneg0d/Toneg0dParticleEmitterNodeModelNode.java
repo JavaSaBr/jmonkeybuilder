@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
-import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
@@ -101,11 +100,10 @@ public class Toneg0dParticleEmitterNodeModelNode extends NodeModelNode<ParticleE
 
         final ParticleEmitterNode element = getElement();
         final EmitterMesh emitterShape = element.getEmitterShape();
-        final Mesh mesh = emitterShape.getMesh();
 
         final Array<ModelNode<?>> children = ArrayFactory.newArray(ModelNode.class);
         children.add(createFor(new Toneg0dParticleInfluencers(element)));
-        children.add(createFor(mesh));
+        children.add(createFor(emitterShape.getMesh()));
 
         return children;
     }

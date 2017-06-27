@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -48,7 +49,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
         final SceneNode newNode = createScene();

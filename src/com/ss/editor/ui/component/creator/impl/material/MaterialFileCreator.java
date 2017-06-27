@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.creator.impl.material;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
@@ -51,7 +51,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
     /**
      * The list of available definitions.
      */
-    @NotNull
+    @Nullable
     private Array<String> definitions;
 
     /**
@@ -80,7 +80,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
      */
     @NotNull
     private ComboBox<String> getMaterialTypeComboBox() {
-        return requireNonNull(materialTypeComboBox);
+        return notNull(materialTypeComboBox);
     }
 
     @Override
@@ -122,9 +122,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
         root.add(materialTypeLabel, 0, 1);
         root.add(materialTypeComboBox, 1, 1);
 
+        FXUtils.addClassTo(materialTypeLabel, materialTypeComboBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(materialTypeComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
-        FXUtils.addClassTo(materialTypeLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(materialTypeComboBox, CSSClasses.SPECIAL_FONT_14);
     }
 
     @Override
@@ -144,7 +143,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
             return;
         }
 
-        okButton.setDisable(!definitions.contains(selectedItem));
+        okButton.setDisable(!notNull(definitions).contains(selectedItem));
     }
 
     @Override
@@ -160,7 +159,7 @@ public class MaterialFileCreator extends AbstractFileCreator {
         material.getAdditionalRenderState();
 
         final String materialContent = MaterialSerializer.serializeToString(material);
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
 
         try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fileToCreate))) {
             out.print(materialContent);

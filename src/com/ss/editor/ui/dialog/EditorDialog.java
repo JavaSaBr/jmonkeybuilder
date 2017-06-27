@@ -57,6 +57,12 @@ public class EditorDialog extends AbstractPopupDialog {
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
+     * The default dialog size.
+     */
+    @NotNull
+    protected static final Point DEFAULT_SIZE = new Point(0, 0);
+
+    /**
      * The handler for handling changing a focus of the window.
      */
     @NotNull
@@ -157,7 +163,7 @@ public class EditorDialog extends AbstractPopupDialog {
     @NotNull
     @Override
     protected Point getSize() {
-        return new Point(0, 0);
+        return DEFAULT_SIZE;
     }
 
     /**

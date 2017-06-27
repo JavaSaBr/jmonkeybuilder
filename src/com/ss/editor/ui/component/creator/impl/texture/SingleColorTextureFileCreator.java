@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.creator.impl.texture;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -8,6 +8,8 @@ import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.control.input.IntegerTextField;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -17,8 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.control.input.IntegerTextField;
-import com.ss.rlib.ui.util.FXUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -114,12 +114,8 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
         root.add(colorLabel, 0, 3);
         root.add(colorPicker, 1, 3);
 
-        FXUtils.addClassTo(widthLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(widthField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(colorLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(widthLabel, widthField, heightLabel, heightField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(colorLabel, colorPicker, CSSClasses.SPECIAL_FONT_14);
     }
 
     /**
@@ -127,7 +123,7 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
      */
     @NotNull
     private IntegerTextField getWidthField() {
-        return requireNonNull(widthField);
+        return notNull(widthField);
     }
 
     /**
@@ -135,7 +131,7 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
      */
     @NotNull
     private IntegerTextField getHeightField() {
-        return requireNonNull(heightField);
+        return notNull(heightField);
     }
 
     /**
@@ -143,14 +139,14 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
      */
     @NotNull
     private ColorPicker getColorPicker() {
-        return requireNonNull(colorPicker);
+        return notNull(colorPicker);
     }
 
     @Override
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
         try {
             Files.createFile(fileToCreate);
         } catch (final IOException e) {

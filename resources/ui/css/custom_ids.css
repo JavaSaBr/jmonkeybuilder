@@ -376,6 +376,7 @@
 
 #SettingsDialogMessageLabel {
     -fx-alignment: center;
+    -fx-text-alignment: center;
     -fx-min-height: 35;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;

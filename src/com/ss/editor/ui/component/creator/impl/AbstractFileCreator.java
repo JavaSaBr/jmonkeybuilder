@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
@@ -15,7 +15,10 @@ import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
-import javafx.geometry.Insets;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
@@ -25,10 +28,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
 
 import java.awt.*;
 import java.nio.file.Files;
@@ -44,41 +43,37 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * The constant LOGGER.
      */
+    @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileCreator.class);
-
-    /**
-     * The constant SETTINGS_CONTAINER_OFFSET.
-     */
-    protected static final Insets SETTINGS_CONTAINER_OFFSET = new Insets(10, 15, 10, 0);
-
-    /**
-     * The constant RESOURCE_TREE_OFFSET.
-     */
-    protected static final Insets RESOURCE_TREE_OFFSET = new Insets(3, 0, 0, 0);
 
     /**
      * The constant DIALOG_SIZE.
      */
+    @NotNull
     protected static final Point DIALOG_SIZE = new Point(900, 401);
 
     /**
      * The constant EXECUTOR_MANAGER.
      */
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The constant FX_EVENT_MANAGER.
      */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
      * The constant JFX_APPLICATION.
      */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -104,7 +99,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         this.initFile = file;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = requireNonNull(editorConfig.getCurrentAsset());
+        final Path currentAsset = notNull(editorConfig.getCurrentAsset());
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         show(scene.getWindow());
@@ -128,7 +123,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      */
     @NotNull
     private ResourceTree getResourceTree() {
-        return requireNonNull(resourceTree);
+        return notNull(resourceTree);
     }
 
     /**
@@ -143,7 +138,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      */
     @NotNull
     private Path getInitFile() {
-        return requireNonNull(initFile);
+        return notNull(initFile);
     }
 
     @NotNull
@@ -219,14 +214,15 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
         final HBox container = new HBox();
         container.setId(CSSIds.FILE_CREATOR_DIALOG_CONTAINER);
+        container.prefWidthProperty().bind(widthProperty());
 
         final GridPane settingsContainer = new GridPane();
         settingsContainer.setId(CSSIds.FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER);
         settingsContainer.prefHeightProperty().bind(container.heightProperty());
-        settingsContainer.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        settingsContainer.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
 
         resourceTree = new ResourceTree(null, true);
-        resourceTree.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
+        resourceTree.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
 
         final MultipleSelectionModel<TreeItem<ResourceElement>> selectionModel = resourceTree.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> validateFileName());
@@ -236,9 +232,6 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         FXUtils.addToPane(resourceTree, container);
         FXUtils.addToPane(settingsContainer, container);
         FXUtils.addToPane(container, root);
-
-        HBox.setMargin(resourceTree, RESOURCE_TREE_OFFSET);
-        HBox.setMargin(settingsContainer, SETTINGS_CONTAINER_OFFSET);
     }
 
     /**
@@ -246,7 +239,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      */
     @NotNull
     protected TextField getFileNameField() {
-        return requireNonNull(fileNameField);
+        return notNull(fileNameField);
     }
 
     /**

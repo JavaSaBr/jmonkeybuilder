@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.creator.impl.material.definition;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL_DEFINITION;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
 import static java.nio.file.Files.readAllBytes;
 import static java.util.Objects.requireNonNull;
@@ -134,26 +135,20 @@ public class MaterialDefinitionFileCreator extends AbstractFileCreator {
         root.add(glslLabel, 0, 1);
         root.add(glslComboBox, 1, 1);
 
-        FXUtils.addClassTo(glslComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
         FXUtils.addClassTo(glslLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(glslComboBox, CSSClasses.SPECIAL_FONT_14);
     }
 
     @NotNull
     private ComboBox<String> getGlslComboBox() {
-        return requireNonNull(glslComboBox);
-    }
-
-    @Override
-    protected void validateFileName() {
-        super.validateFileName();
+        return notNull(glslComboBox);
     }
 
     @Override
     protected void processOk() {
         super.processOk();
 
-        final Path matDefFile = requireNonNull(getFileToCreate());
+        final Path matDefFile = notNull(getFileToCreate());
         final String filename = FileUtils.getNameWithoutExtension(matDefFile);
 
         final Path parent = matDefFile.getParent();

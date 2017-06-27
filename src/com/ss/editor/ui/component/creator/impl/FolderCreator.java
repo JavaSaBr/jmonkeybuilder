@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
@@ -53,7 +54,7 @@ public class FolderCreator extends AbstractFileCreator {
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
         try {
             Files.createDirectory(fileToCreate);
         } catch (final IOException e) {
