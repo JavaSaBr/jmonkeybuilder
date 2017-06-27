@@ -1595,6 +1595,14 @@ public class Messages {
      * The constant MODEL_PROPERTY_OUTER_RADIUS.
      */
     public static final String MODEL_PROPERTY_OUTER_RADIUS;
+    /**
+     * The constant MODEL_PROPERTY_NAME.
+     */
+    public static final String MODEL_PROPERTY_NAME;
+    /**
+     * The constant MODEL_PROPERTY_DATA_TYPE.
+     */
+    public static final String MODEL_PROPERTY_DATA_TYPE;
 
     /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
@@ -1642,14 +1650,6 @@ public class Messages {
      * The constant PLAY_ANIMATION_SETTINGS_DIALOG_TITLE.
      */
     public static final String PLAY_ANIMATION_SETTINGS_DIALOG_TITLE;
-    /**
-     * The constant PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE.
-     */
-    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE;
-    /**
-     * The constant PLAY_ANIMATION_SETTINGS_DIALOG_SPEED.
-     */
-    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_SPEED;
     /**
      * The constant PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK.
      */
@@ -1954,14 +1954,6 @@ public class Messages {
      * The constant ADD_USER_DATA_DIALOG_TITLE.
      */
     public static final String ADD_USER_DATA_DIALOG_TITLE;
-    /**
-     * The constant ADD_USER_DATA_DIALOG_NAME.
-     */
-    public static final String ADD_USER_DATA_DIALOG_NAME;
-    /**
-     * The constant ADD_USER_DATA_DIALOG_DATA_TYPE.
-     */
-    public static final String ADD_USER_DATA_DIALOG_DATA_TYPE;
     /**
      * The constant ADD_USER_DATA_DIALOG_BUTTON_OK.
      */
@@ -2664,6 +2656,8 @@ public class Messages {
         MODEL_PROPERTY_CIRCLE_SAMPLES = bundle.getString("ModelPropertyCircleSamples");
         MODEL_PROPERTY_INNER_RADIUS = bundle.getString("ModelPropertyInnerRadius");
         MODEL_PROPERTY_OUTER_RADIUS = bundle.getString("ModelPropertyOuterRadius");
+        MODEL_PROPERTY_NAME = bundle.getString("ModelPropertyName");
+        MODEL_PROPERTY_DATA_TYPE = bundle.getString("ModelPropertyDataType");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
@@ -2678,8 +2672,6 @@ public class Messages {
         RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
 
         PLAY_ANIMATION_SETTINGS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
-        PLAY_ANIMATION_SETTINGS_DIALOG_LOOP_MODE = bundle.getString("PlayAnimationSettingsDialogLoopMode");
-        PLAY_ANIMATION_SETTINGS_DIALOG_SPEED = bundle.getString("PlayAnimationSettingsDialogSpeed");
         PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
 
         MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE = bundle.getString("ManualExtractAnimationDialogTitle");
@@ -2771,8 +2763,6 @@ public class Messages {
         CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneFilterDialogCustomField");
 
         ADD_USER_DATA_DIALOG_TITLE = bundle.getString("AddUserDataDialogTitle");
-        ADD_USER_DATA_DIALOG_NAME = bundle.getString("AddUserDataDialogName");
-        ADD_USER_DATA_DIALOG_DATA_TYPE = bundle.getString("AddUserDataDialogDataType");
         ADD_USER_DATA_DIALOG_BUTTON_OK = bundle.getString("AddUserDataDialogButtonOk");
 
         CREATE_CUSTOM_CONTROL_DIALOG_TITLE = bundle.getString("CreateCustomControlDialogTitle");

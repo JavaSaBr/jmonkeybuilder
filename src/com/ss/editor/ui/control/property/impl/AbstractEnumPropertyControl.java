@@ -1,36 +1,36 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.SingleSelectionModel;
+import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
-
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit {@link Enum} values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
- * @param <E> the type parameter
+ * @param <C> the type of a {@link ChangeConsumer}
+ * @param <T> the type of an editing object.
+ * @param <E> the type of editing enum.
  * @author JavaSaBr
  */
-public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>>
-        extends AbstractPropertyControl<C, T, E> {
+public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E extends Enum<?>> extends
+        AbstractPropertyControl<C, T, E> {
 
     /**
      * The list of available options of the {@link Enum} value.
      */
+    @Nullable
     private ComboBox<E> enumComboBox;
 
     /**
@@ -46,7 +46,7 @@ public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E
                                        @NotNull final C changeConsumer, @NotNull final E[] availableValues,
                                        @NotNull final SixObjectConsumer<C, T, String, E, E, BiConsumer<T, E>> changeHandler) {
         super(propertyValue, propertyName, changeConsumer, changeHandler);
-        final ObservableList<E> items = enumComboBox.getItems();
+        final ObservableList<E> items = getEnumComboBox().getItems();
         items.addAll(availableValues);
     }
 
@@ -66,8 +66,9 @@ public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E
     /**
      * @return the list of available options of the {@link Enum} value.
      */
+    @NotNull
     private ComboBox<E> getEnumComboBox() {
-        return enumComboBox;
+        return notNull(enumComboBox);
     }
 
     /**

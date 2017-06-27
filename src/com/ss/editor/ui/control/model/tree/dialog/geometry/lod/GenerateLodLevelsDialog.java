@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog.geometry.lod;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
@@ -43,8 +44,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
     private static final ObservableList<ReductionMethod> METHOD_TYPES = observableArrayList(ReductionMethod.VALUES);
 
-    private static final Point DIALOG_SIZE = new Point(360, 296);
-    private static final Insets FIELD_OFFSET = new Insets(6, 15, 6, 0);
+    private static final Point DIALOG_SIZE = new Point(360, 0);
+    private static final Insets FIELD_OFFSET = new Insets(6, 0, 6, 0);
 
     private static final double LIST_WIDTH_PERCENT = 0.94;
 
@@ -155,7 +156,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ListView<Number> getLevelsList() {
-        return requireNonNull(levelsList);
+        return notNull(levelsList);
     }
 
     @NotNull
@@ -280,7 +281,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<ReductionMethod> getReductionMethodComboBox() {
-        return requireNonNull(reductionMethodComboBox);
+        return notNull(reductionMethodComboBox);
     }
 
     @Override
@@ -326,7 +327,9 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
             final AbstractNodeTree<?> nodeTree = getNodeTree();
             final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
 
-            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
+            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation =
+                    new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
+
             operation.setApplyHandler((geom, buffers) -> geom.getMesh().setLodLevels(buffers));
 
             consumer.execute(operation);

@@ -21,6 +21,8 @@ public class PropertyEditorControlFactory {
             case BOOLEAN: return new BooleanPropertyEditorControl(vars, definition, validation);
             case INTEGER: return new IntegerPropertyEditorControl(vars, definition, validation);
             case VECTOR_3F: return new Vector3fPropertyEditorControl(vars, definition, validation);
+            case ENUM: return new EnumPropertyEditorControl<>(vars, definition, validation);
+            case STRING: return new StringPropertyEditorControl(vars, definition, validation);
             default:
                 throw new IllegalArgumentException("Unknown the type " + definition.getPropertyType());
         }

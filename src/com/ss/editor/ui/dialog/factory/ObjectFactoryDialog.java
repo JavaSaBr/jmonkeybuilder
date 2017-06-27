@@ -88,6 +88,15 @@ public class ObjectFactoryDialog extends AbstractSimpleEditorDialog {
         getTitleLabel().setText(title);
     }
 
+    /**
+     * Sets the label to the OK button.
+     *
+     * @param label the new label.
+     */
+    public void setButtonOkLabel(@NotNull final String label) {
+        getOkButton().setText(label);
+    }
+
     @Override
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
@@ -83,7 +83,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      */
     @NotNull
     protected ModelNodeTree getNodeTree() {
-        return requireNonNull(nodeTree);
+        return notNull(nodeTree);
     }
 
     @NotNull
