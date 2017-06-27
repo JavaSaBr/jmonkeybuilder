@@ -1,50 +1,50 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
-import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit {@link Vector3f} values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the type of a {@link ChangeConsumer}
+ * @param <T> the type of an editing object.
  * @author JavaSaBr
  */
-public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, T>
-        extends AbstractPropertyControl<C, T, Vector3f> {
+public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, T> extends
+        AbstractPropertyControl<C, T, Vector3f> {
 
     /**
      * The field X.
      */
+    @Nullable
     private FloatTextField xField;
 
     /**
      * The field Y.
      */
+    @Nullable
     private FloatTextField yField;
 
     /**
      * The field Z.
      */
+    @Nullable
     private FloatTextField zField;
 
     /**
@@ -124,8 +124,9 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
      *
      * @return the field X.
      */
+    @NotNull
     protected FloatTextField getXField() {
-        return xField;
+        return notNull(xField);
     }
 
     /**
@@ -133,8 +134,9 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
      *
      * @return the field Y.
      */
+    @NotNull
     protected FloatTextField getYFiled() {
-        return yField;
+        return notNull(yField);
     }
 
     /**
@@ -142,14 +144,15 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
      *
      * @return the field Z.
      */
+    @NotNull
     protected FloatTextField getZField() {
-        return zField;
+        return notNull(zField);
     }
 
     @Override
     protected void reload() {
 
-        final Vector3f element = requireNonNull(getPropertyValue(), "The property value can't be null.");
+        final Vector3f element = notNull(getPropertyValue(), "The property value can't be null.");
 
         final FloatTextField xField = getXField();
         xField.setValue(element.getX());
@@ -183,7 +186,7 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
         final FloatTextField zField = getZField();
         final float z = zField.getValue();
 
-        final Vector3f oldValue = requireNonNull(getPropertyValue(), "The property value can't be null.");
+        final Vector3f oldValue = notNull(getPropertyValue(), "The property value can't be null.");
         final Vector3f newValue = new Vector3f();
         newValue.set(x, y, z);
 

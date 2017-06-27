@@ -199,7 +199,7 @@
 
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 0 0 0 0;
 }
 
 #AssetEditorDialogResourcesContainer {
@@ -706,6 +706,11 @@
 #AbstractParamControlSplitLine {
     -fx-stroke: -fx-color-600;
     -fx-stroke-width: 2;
+}
+
+#AbstractParamControlMultiValuesContainer {
+    -fx-alignment: center;
+    -fx-hgap: 2px;
 }
 
 #ImageViewEditorContainer {

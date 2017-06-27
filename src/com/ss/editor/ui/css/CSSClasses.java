@@ -75,6 +75,21 @@ public interface CSSClasses {
     String MONO_FONT_13 = "mono-font-13";
 
     /**
+     * The constant DIALOG_ROOT.
+     */
+    String DIALOG_ROOT = "dialog-root";
+
+    /**
+     * The constant DIALOG_ACTIONS_ROOT.
+     */
+    String DIALOG_ACTIONS_ROOT = "dialog-actions-root";
+
+    /**
+     * The constant DIALOG_CONTENT_ROOT.
+     */
+    String DIALOG_CONTENT_ROOT = "dialog-content-root";
+
+    /**
      * The constant EDITOR_BAR_BUTTON.
      */
     String EDITOR_BAR_BUTTON = "editor-bar-button";

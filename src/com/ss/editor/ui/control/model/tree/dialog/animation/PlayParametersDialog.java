@@ -161,6 +161,7 @@ public class PlayParametersDialog extends AbstractSimpleEditorDialog {
         return Messages.PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

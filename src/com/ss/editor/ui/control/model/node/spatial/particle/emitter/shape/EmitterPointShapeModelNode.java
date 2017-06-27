@@ -27,7 +27,7 @@ public class EmitterPointShapeModelNode extends EmitterShapeModelNode {
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.DOR_IN_CIRCLE_16;
+        return Icons.POINTS_16;
     }
 
     @NotNull

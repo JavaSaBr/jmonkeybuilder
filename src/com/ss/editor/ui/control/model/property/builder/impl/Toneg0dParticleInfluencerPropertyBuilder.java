@@ -111,8 +111,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
-                                  @NotNull final InterpolatedParticleInfluencer influencer, @NotNull final Object parent) {
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                  @NotNull InterpolatedParticleInfluencer influencer, @NotNull final Object parent) {
 
         final float fixedDuration = influencer.getFixedDuration();
 
@@ -134,7 +134,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
 
         final AlphaInfluencerControl influencerControl = new AlphaInfluencerControl(changeConsumer, influencer, parent);
@@ -153,7 +153,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomStartColor = influencer.isRandomStartColor();
@@ -183,7 +183,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomSize = influencer.isRandomSize();
@@ -225,11 +225,12 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final SpriteInfluencer influencer, @NotNull final Object parent) {
 
         final int[] frameSequence = influencer.getFrameSequence();
         final float fixedDuration = influencer.getFixedDuration();
+
         final boolean animate = influencer.isAnimate();
         final boolean randomStartImage = influencer.isRandomStartImage();
 
@@ -279,7 +280,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomStartDestination = influencer.isRandomStartDestination();
@@ -310,7 +311,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final ImpulseInfluencer influencer, @NotNull final Object parent) {
 
         final float chance = influencer.getChance();
@@ -354,7 +355,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
 
         final Vector3f gravity = influencer.getGravity().clone();
@@ -399,7 +400,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final PhysicsInfluencer influencer, @NotNull final Object parent) {
 
         final CollisionReaction collisionReaction = influencer.getCollisionReaction();
@@ -437,7 +438,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
 
         final RadialPullCenter pullCenter = influencer.getRadialPullCenter();
@@ -513,7 +514,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
                                   @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomDirection = influencer.isRandomDirection();

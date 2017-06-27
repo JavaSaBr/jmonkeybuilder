@@ -88,6 +88,7 @@ public class CreateSphereCollisionShapeDialog extends AbstractCreateShapeDialog 
         return new SphereCollisionShape(radiusField.getValue());
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

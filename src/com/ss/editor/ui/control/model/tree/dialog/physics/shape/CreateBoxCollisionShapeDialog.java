@@ -155,6 +155,7 @@ public class CreateBoxCollisionShapeDialog extends AbstractCreateShapeDialog {
         return new BoxCollisionShape(new Vector3f(xField.getValue(), yField.getValue(), zField.getValue()));
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

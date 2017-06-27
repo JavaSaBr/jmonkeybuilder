@@ -206,6 +206,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         return Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -298,6 +298,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         return Messages.MODEL_CONVERTER_DIALOG_BUTTON_OK;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

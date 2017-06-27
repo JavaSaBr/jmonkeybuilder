@@ -99,6 +99,7 @@ public class CreateConeCollisionShapeDialog extends CreateCapsuleCollisionShapeD
         return new ConeCollisionShape(radiusField.getValue(), heightField.getValue(), selectedIndex);
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -391,6 +391,10 @@ public interface CSSIds {
      * The constant ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON.
      */
     String ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON = "AbstractParamControlElementButton";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER.
+     */
+    String ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER = "AbstractParamControlMultiValuesContainer";
 
     /**
      * The constant IMAGE_VIEW_EDITOR_CONTAINER.

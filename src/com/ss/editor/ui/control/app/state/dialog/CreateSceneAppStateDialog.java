@@ -229,6 +229,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         }
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

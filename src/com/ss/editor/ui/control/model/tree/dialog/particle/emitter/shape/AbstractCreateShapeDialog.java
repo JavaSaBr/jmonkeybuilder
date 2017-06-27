@@ -23,7 +23,7 @@ public abstract class AbstractCreateShapeDialog extends AbstractSimpleEditorDial
     private final AbstractNodeTree<?> nodeTree;
 
     /**
-     * The collision object.
+     * The emitter.
      */
     @NotNull
     private final ParticleEmitter emitter;

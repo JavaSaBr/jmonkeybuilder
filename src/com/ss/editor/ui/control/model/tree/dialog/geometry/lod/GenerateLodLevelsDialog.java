@@ -44,7 +44,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     private static final ObservableList<ReductionMethod> METHOD_TYPES = observableArrayList(ReductionMethod.VALUES);
 
     private static final Point DIALOG_SIZE = new Point(360, 296);
-    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 6, 0);
+    private static final Insets FIELD_OFFSET = new Insets(6, 15, 6, 0);
 
     private static final double LIST_WIDTH_PERCENT = 0.94;
 
@@ -341,6 +341,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         return Messages.GENERATE_LOD_DIALOG_BUTTON_GENERATE;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

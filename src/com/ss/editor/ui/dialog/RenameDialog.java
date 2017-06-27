@@ -169,6 +169,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
         handler.accept(nameField.getText());
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

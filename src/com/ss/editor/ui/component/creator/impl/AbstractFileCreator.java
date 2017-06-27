@@ -49,7 +49,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * The constant SETTINGS_CONTAINER_OFFSET.
      */
-    protected static final Insets SETTINGS_CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 10, 0);
+    protected static final Insets SETTINGS_CONTAINER_OFFSET = new Insets(10, 15, 10, 0);
 
     /**
      * The constant RESOURCE_TREE_OFFSET.
@@ -299,6 +299,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         okButton.setDisable(false);
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

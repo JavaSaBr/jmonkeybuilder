@@ -49,7 +49,7 @@ import java.nio.file.Path;
  */
 public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Insets CONTAINER_OFFSET = new Insets(6, 15, 20, 0);
     private static final Insets SINGLE_TEXTURE_SITTINGS_OFFSET = new Insets(4, 0, 81, 0);
     private static final Insets MULTIPLY_TEXTURE_SETTINGS_OFFSET = new Insets(4, 0, 0, 0);
 
@@ -762,6 +762,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         });
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

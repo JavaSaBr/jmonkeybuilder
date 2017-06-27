@@ -218,6 +218,7 @@ public class AddUserDataDialog extends AbstractSimpleEditorDialog {
         changeConsumer.execute(operation);
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -209,6 +209,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         super.processOk();
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

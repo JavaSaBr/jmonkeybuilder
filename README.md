@@ -7,7 +7,7 @@
 
 ## ver. 0.9.8 ##
 * -Added an action to reset particle emitters.
-* -Updated toneg0d.emitter to 2.2.2, updated the integration with this lib.
+* -Updated toneg0d.emitterNode to 2.2.2, updated the integration with this lib.
 * -Updated UI.
 * -Added an action 'Pause' to animation nodes, added information about animation length.
 * -Started to use new extension library to integrate custom classes with the editor: https://github.com/JavaSaBr/jme3-spaceshift-extension
@@ -47,7 +47,7 @@
 * -Added an action to switch off|on showing audio/light models in the scene editor.
 * -Added an action to create terrain.
 * -Implemented terrain editing.
-* -Updated the toneg0d.emitter library with some optimizations.
+* -Updated the toneg0d.emitterNode library with some optimizations.
 * -Updated working with particle nodes.
 * -Fixed some bugs.
 
@@ -96,13 +96,13 @@
 
 ## ver. 0.9.0 ##
 * [Video](https://www.youtube.com/watch?v=LNrDesrg7zc&feature=youtu.be)
-* -Implemented soft particles emitter.
+* -Implemented soft particles emitterNode.
 * -Fixed gamma correction and updated fast envs in the ModelEditor.
 * -Fixed some problems with standard shaders.
 * -Fixed the some bugs with editing influencers.
 * -Implemented auto-refreshing files which was edited from external editors.
 * -Implemented memory optimizations of the toneg0d emitters.
-* -Added lifetime of an emitter node.
+* -Added lifetime of an emitterNode node.
 * -Added control to edit geometry list of a physics influencer.
 
 ## ver. 0.8.9 ##
@@ -128,7 +128,7 @@
 * -Bugfixes.
 
 ## ver. 0.8.7 ##
-* -Implemented saving/loading particle emitter nodes.
+* -Implemented saving/loading particle emitterNode nodes.
 * -Added a LogView panel.
 
 ## ver. 0.8.6 ##

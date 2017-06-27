@@ -112,6 +112,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         handler.accept(Boolean.FALSE);
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -1111,7 +1111,6 @@ public class Messages {
      * The constant MODEL_PROPERTY_CAPACITY.
      */
     public static final String MODEL_PROPERTY_CAPACITY;
-
     /**
      * The constant MODEL_PROPERTY_IS_ENABLED.
      */
@@ -1324,8 +1323,6 @@ public class Messages {
      * The constant MODEL_PROPERTY_IS_HORIZONTAL.
      */
     public static final String MODEL_PROPERTY_IS_HORIZONTAL;
-
-
     /**
      * The constant MODEL_PROPERTY_IS_TEST_MODE.
      */
@@ -1562,6 +1559,42 @@ public class Messages {
      * The constant MODEL_PROPERTY_GEOMETRY.
      */
     public static final String MODEL_PROPERTY_GEOMETRY;
+    /**
+     * The constant MODEL_PROPERTY_AXIS_SAMPLES.
+     */
+    public static final String MODEL_PROPERTY_AXIS_SAMPLES;
+    /**
+     * The constant MODEL_PROPERTY_RADIAL_SAMPLES.
+     */
+    public static final String MODEL_PROPERTY_RADIAL_SAMPLES;
+    /**
+     * The constant MODEL_PROPERTY_PLANES.
+     */
+    public static final String MODEL_PROPERTY_PLANES;
+    /**
+     * The constant MODEL_PROPERTY_WIDTH.
+     */
+    public static final String MODEL_PROPERTY_WIDTH;
+    /**
+     * The constant MODEL_PROPERTY_FLIP_COORDS.
+     */
+    public static final String MODEL_PROPERTY_FLIP_COORDS;
+    /**
+     * The constant MODEL_PROPERTY_Z_SAMPLES.
+     */
+    public static final String MODEL_PROPERTY_Z_SAMPLES;
+    /**
+     * The constant MODEL_PROPERTY_CIRCLE_SAMPLES.
+     */
+    public static final String MODEL_PROPERTY_CIRCLE_SAMPLES;
+    /**
+     * The constant MODEL_PROPERTY_INNER_RADIUS.
+     */
+    public static final String MODEL_PROPERTY_INNER_RADIUS;
+    /**
+     * The constant MODEL_PROPERTY_OUTER_RADIUS.
+     */
+    public static final String MODEL_PROPERTY_OUTER_RADIUS;
 
     /**
      * The constant MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE.
@@ -2063,7 +2096,26 @@ public class Messages {
      * The constant CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE.
      */
     public static final String CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
-
+    /**
+     * The constant CREATE_PARTICLE_EMITTER_CYLINDER_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_PARTICLE_EMITTER_CYLINDER_SHAPE_DIALOG_TITLE;
+    /**
+     * The constant CREATE_PARTICLE_EMITTER_DOME_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_PARTICLE_EMITTER_DOME_SHAPE_DIALOG_TITLE;
+    /**
+     * The constant CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE;
+    /**
+     * The constant CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE;
+    /**
+     * The constant CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE.
+     */
+    public static final String CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE;
     /**
      * The constant EDITING_COMPONENT_BRUSH_SIZE.
      */
@@ -2603,6 +2655,15 @@ public class Messages {
         MODEL_PROPERTY_INTERPOLATION = bundle.getString("ModelPropertyInterpolation");
         MODEL_PROPERTY_GEOMETRY_LIST = bundle.getString("ModelPropertyGeometryList");
         MODEL_PROPERTY_GEOMETRY = bundle.getString("ModelPropertyGeometry");
+        MODEL_PROPERTY_AXIS_SAMPLES = bundle.getString("ModelPropertyAxisSamples");
+        MODEL_PROPERTY_RADIAL_SAMPLES = bundle.getString("ModelPropertyRadialSamples");
+        MODEL_PROPERTY_PLANES = bundle.getString("ModelPropertyPlanes");
+        MODEL_PROPERTY_WIDTH = bundle.getString("ModelPropertyWidth");
+        MODEL_PROPERTY_FLIP_COORDS = bundle.getString("ModelPropertyFlipCoords");
+        MODEL_PROPERTY_Z_SAMPLES = bundle.getString("ModelPropertyZSamples");
+        MODEL_PROPERTY_CIRCLE_SAMPLES = bundle.getString("ModelPropertyCircleSamples");
+        MODEL_PROPERTY_INNER_RADIUS = bundle.getString("ModelPropertyInnerRadius");
+        MODEL_PROPERTY_OUTER_RADIUS = bundle.getString("ModelPropertyOuterRadius");
 
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE = bundle.getString("MaterialModelPropertyControlNoTexture");
         MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL = bundle.getString("MaterialModelPropertyControlNoMaterial");
@@ -2750,6 +2811,11 @@ public class Messages {
         CREATE_PARTICLE_EMITTER_POINT_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterPointShapeDialogTitle");
         CREATE_PARTICLE_EMITTER_BOX_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterBoxShapeDialogTitle");
         CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterSphereShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_CYLINDER_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterSphereShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_DOME_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterDomeShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_QUAD_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterQuadShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_TORUS_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTorusShapeDialogTitle");
+        CREATE_PARTICLE_EMITTER_TRIANGLE_SHAPE_DIALOG_TITLE = bundle.getString("CreateParticleEmitterTriangleShapeDialogTitle");
 
         EDITING_COMPONENT_BRUSH_SIZE = bundle.getString("EditingComponentBrushSize");
         EDITING_COMPONENT_BRUSH_POWER = bundle.getString("EditingComponentBrushPower");

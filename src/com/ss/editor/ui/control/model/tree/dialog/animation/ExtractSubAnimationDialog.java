@@ -235,6 +235,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -103,6 +103,7 @@ public class CreateCylinderCollisionShapeDialog extends CreateBoxCollisionShapeD
         return new CylinderCollisionShape(halfExtents, selectedIndex);
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

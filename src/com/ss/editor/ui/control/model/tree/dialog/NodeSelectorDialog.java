@@ -7,7 +7,6 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +25,6 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(600, 451);
-
-    @NotNull
-    private static final Insets TREE_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
      * The type of selectable objects.
@@ -156,6 +152,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
         return Messages.NODE_SELECTOR_DIALOG_BUTTON;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

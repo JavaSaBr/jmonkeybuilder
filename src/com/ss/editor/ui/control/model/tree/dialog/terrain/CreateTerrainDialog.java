@@ -62,7 +62,7 @@ import java.nio.file.Paths;
  */
 public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    private static final Insets CONTAINER_OFFSET = new Insets(6, 15, 20, 0);
     private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 106, 0);
     private static final Insets HEIGHTMAP_CONTAINER_OFFSET = new Insets(0, 0, 27, 0);
 
@@ -874,6 +874,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         return parentNode;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

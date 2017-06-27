@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.geometry.Pos.BOTTOM_LEFT;
 import static javafx.scene.text.TextAlignment.LEFT;
 import com.ss.editor.Editor;
@@ -10,6 +11,11 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.ui.hanlder.WindowDragHandler;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.window.popup.dialog.AbstractPopupDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -26,12 +32,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.hanlder.WindowDragHandler;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.ui.window.popup.dialog.AbstractPopupDialog;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -92,6 +94,12 @@ public class EditorDialog extends AbstractPopupDialog {
     private Node focusOwner;
 
     /**
+     * The title label.
+     */
+    @Nullable
+    private Label titleLabel;
+
+    /**
      * Instantiates a new Editor dialog.
      */
     public EditorDialog() {
@@ -106,17 +114,50 @@ public class EditorDialog extends AbstractPopupDialog {
 
         createHeader(root);
 
+        final VBox actionsContainer = new VBox();
+
         if (isGridStructure()) {
-            final GridPane gridPane = new GridPane();
-            createContent(gridPane);
-            FXUtils.addToPane(gridPane, root);
+            final GridPane container = new GridPane();
+            createContent(container);
+            FXUtils.addToPane(container, root);
+            FXUtils.addClassTo(container, CSSClasses.DIALOG_CONTENT_ROOT);
         } else {
-            createContent(root);
+            final VBox container = new VBox();
+            createContent(container);
+            FXUtils.addToPane(container, root);
+            FXUtils.addClassTo(container, CSSClasses.DIALOG_CONTENT_ROOT);
         }
 
-        createActions(root);
+        createActions(actionsContainer);
+
+        FXUtils.addToPane(actionsContainer, root);
+        FXUtils.addClassTo(actionsContainer, CSSClasses.DIALOG_ACTIONS_ROOT);
+        FXUtils.addClassTo(root, CSSClasses.DIALOG_ROOT);
 
         addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
+    }
+
+    @Override
+    protected void configureSize(@NotNull final VBox container) {
+
+        final Point size = getSize();
+
+        final double width = size.getX();
+        final double height = size.getY();
+
+        if (width >= 1D) {
+            FXUtils.setFixedWidth(container, width);
+        }
+
+        if (height >= 1D) {
+            FXUtils.setFixedHeight(container, height);
+        }
+    }
+
+    @NotNull
+    @Override
+    protected Point getSize() {
+        return new Point(0, 0);
     }
 
     /**
@@ -210,7 +251,7 @@ public class EditorDialog extends AbstractPopupDialog {
         titleContainer.setAlignment(Pos.CENTER_LEFT);
         titleContainer.setPickOnBounds(false);
 
-        final Label titleLabel = new Label(getTitleText());
+        titleLabel = new Label(getTitleText());
         titleLabel.setTextAlignment(LEFT);
         titleLabel.setAlignment(BOTTOM_LEFT);
 
@@ -271,5 +312,15 @@ public class EditorDialog extends AbstractPopupDialog {
     @NotNull
     protected String getTitleText() {
         return "Title";
+    }
+
+    /**
+     * Gets a title label.
+     *
+     * @return the title label.
+     */
+    @NotNull
+    protected Label getTitleLabel() {
+        return notNull(titleLabel);
     }
 }

@@ -92,6 +92,7 @@ public class CreateCapsuleCollisionShapeDialog extends CreateSphereCollisionShap
         return new CapsuleCollisionShape(radiusField.getValue(), heightField.getValue());
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

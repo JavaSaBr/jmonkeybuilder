@@ -1,15 +1,19 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.shape;
 
+import static com.ss.editor.extension.property.EditablePropertyType.FLOAT;
+import static com.ss.editor.extension.property.EditablePropertyType.INTEGER;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
+import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
-
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 
@@ -20,13 +24,23 @@ import tonegod.emitter.ParticleEmitterNode;
  */
 public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAction {
 
+    @NotNull
+    private static final String PROPERTY_Z_SAMPLES = "zSamples";
+
+    @NotNull
+    private static final String PROPERTY_RADIAL_SAMPLES = "radialSamples";
+
+    @NotNull
+    private static final String PROPERTY_RADIUS = "radius";
+
     /**
      * Instantiates a new Create sphere shape emitter action.
      *
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateSphereShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateSphereShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+                                          @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -44,7 +58,28 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
 
     @NotNull
     @Override
-    protected Mesh createMesh() {
-        return new Sphere(10, 10, 1);
+    protected Array<PropertyDefinition> getPropertyDefinitions() {
+
+        final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
+        definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_Z_SAMPLES, PROPERTY_Z_SAMPLES, 10));
+        definitions.add(new PropertyDefinition(INTEGER, Messages.MODEL_PROPERTY_RADIAL_SAMPLES, PROPERTY_RADIAL_SAMPLES, 10));
+        definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_RADIUS, PROPERTY_RADIUS, 1F));
+
+        return definitions;
+    }
+
+    @NotNull
+    @Override
+    protected String getDialogTitle() {
+        return Messages.CREATE_PARTICLE_EMITTER_SPHERE_SHAPE_DIALOG_TITLE;
+    }
+
+    @NotNull
+    @Override
+    protected Mesh createMesh(@NotNull final VarTable vars) {
+        final int zSamples = vars.getInteger(PROPERTY_Z_SAMPLES);
+        final int radialSamples = vars.getInteger(PROPERTY_RADIAL_SAMPLES);
+        final float radius = vars.getFloat(PROPERTY_RADIUS);
+        return new Sphere(zSamples, radialSamples, radius);
     }
 }

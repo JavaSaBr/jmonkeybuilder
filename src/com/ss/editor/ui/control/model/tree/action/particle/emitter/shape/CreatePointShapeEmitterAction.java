@@ -40,7 +40,7 @@ public class CreatePointShapeEmitterAction extends AbstractCreateShapeEmitterAct
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.DOR_IN_CIRCLE_16;
+        return Icons.POINTS_16;
     }
 
     @NotNull
