@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.dialog.animation;
 
 import static com.ss.editor.util.AnimationUtils.extractAnimation;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
@@ -33,7 +33,7 @@ import java.awt.*;
 public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(390, 184);
+    private static final Point DIALOG_SIZE = new Point(390, 0);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -68,13 +68,19 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private IntegerTextField endFrameField;
 
+    /**
+     * Instantiates a new Extract sub animation dialog.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public ExtractSubAnimationDialog(@NotNull final AbstractNodeTree<?> nodeTree,
                                      @NotNull final AnimationModelNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
         final Animation animation = node.getElement();
-        final AnimControl control = requireNonNull(node.getControl());
+        final AnimControl control = notNull(node.getControl());
         final int frameCount = AnimationUtils.getFrameCount(animation);
 
         final TextField nameField = getNameField();
@@ -90,6 +96,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the node tree component.
      */
     @NotNull
@@ -98,6 +106,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node.
+     *
      * @return the animation node.
      */
     @NotNull
@@ -146,12 +156,9 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         root.add(endFrameLabel, 0, 2);
         root.add(endFrameField, 1, 2);
 
-        FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(startFrameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(startFrameField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(endFrameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(endFrameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(nameLabel, nameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(startFrameLabel, startFrameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(endFrameLabel, endFrameField, CSSClasses.SPECIAL_FONT_14);
     }
 
     @Override
@@ -164,7 +171,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private TextField getNameField() {
-        return requireNonNull(nameField);
+        return notNull(nameField);
     }
 
     /**
@@ -172,7 +179,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private IntegerTextField getStartFrameField() {
-        return requireNonNull(startFrameField);
+        return notNull(startFrameField);
     }
 
     /**
@@ -180,7 +187,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private IntegerTextField getEndFrameField() {
-        return requireNonNull(endFrameField);
+        return notNull(endFrameField);
     }
 
     @Override
@@ -196,7 +203,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
     private void processExtract() {
 
         final AnimationModelNode node = getNode();
-        final AnimControl control = requireNonNull(node.getControl());
+        final AnimControl control = notNull(node.getControl());
         final Animation animation = node.getElement();
 
         final TextField nameField = getNameField();
@@ -213,7 +220,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         final Animation subAnimation = extractAnimation(animation, nameField.getText(), startFrame, endFrame);
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
 
         EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
@@ -225,6 +232,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

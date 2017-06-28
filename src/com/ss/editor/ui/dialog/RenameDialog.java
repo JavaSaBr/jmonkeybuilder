@@ -1,9 +1,10 @@
 package com.ss.editor.ui.dialog;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,7 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 public class RenameDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(400, 140);
+    private static final Point DIALOG_SIZE = new Point(400, 0);
 
     /**
      * The function for validation name.
@@ -51,18 +51,17 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
 
         final Label nameLabel = new Label(Messages.RENAME_DIALOG_NEW_NAME_LABEL + ":");
         nameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
-        nameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        nameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         nameField = new TextField();
         nameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> validateName(newValue));
-        nameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        nameField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(nameLabel, 0, 0);
         root.add(nameField, 1, 0);
 
-        FXUtils.addClassTo(nameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(nameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(nameLabel, nameField, CSSClasses.SPECIAL_FONT_14);
     }
 
     @Override
@@ -83,6 +82,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Sets init name.
+     *
      * @param initName the initial name.
      */
     public void setInitName(final String initName) {
@@ -95,7 +96,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private TextField getNameField() {
-        return requireNonNull(nameField);
+        return notNull(nameField);
     }
 
     /**
@@ -107,6 +108,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Sets validator.
+     *
      * @param validator the function for validation name.
      */
     public void setValidator(@Nullable final Function<String, Boolean> validator) {
@@ -122,6 +125,8 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Sets handler.
+     *
      * @param handler the function for handling a new name.
      */
     public void setHandler(@Nullable final Consumer<String> handler) {
@@ -163,6 +168,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
         handler.accept(nameField.getText());
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

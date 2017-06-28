@@ -25,6 +25,8 @@ import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 /**
  * The implementation of the element for editing vector values and interpolation.
  *
+ * @param <P> the type parameter
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInfluencer, C extends AbstractInterpolationInfluencerControl<P>> extends InterpolationElement<P, Parent, C> {
@@ -44,6 +46,12 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
      */
     private TextField zField;
 
+    /**
+     * Instantiates a new Vector 3 f and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public Vector3fAndInterpolationElement(@NotNull final C control, final int index) {
         super(control, index);
     }
@@ -125,6 +133,8 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
     }
 
     /**
+     * Gets min value.
+     *
      * @return the min available value.
      */
     protected float getMinValue() {
@@ -132,6 +142,8 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
     }
 
     /**
+     * Gets max value.
+     *
      * @return the max available value.
      */
     protected float getMaxValue() {
@@ -170,6 +182,10 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
 
     /**
      * Request to change the vector value.
+     *
+     * @param x the x
+     * @param y the y
+     * @param z the z
      */
     protected void requestToChange(final float x, final float y, final float z) {
     }
@@ -198,6 +214,9 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
 
     /**
      * Get vector value from the influencer.
+     *
+     * @param influencer the influencer
+     * @return the value
      */
     protected Vector3f getValue(final P influencer) {
         throw new UnsupportedOperationException();

@@ -19,6 +19,11 @@ public class EnableAppStateOperation extends AbstractEditorOperation<SceneChange
     @NotNull
     private final SceneAppState appState;
 
+    /**
+     * Instantiates a new Enable app state operation.
+     *
+     * @param appState the app state
+     */
     public EnableAppStateOperation(@NotNull final SceneAppState appState) {
         this.appState = appState;
     }

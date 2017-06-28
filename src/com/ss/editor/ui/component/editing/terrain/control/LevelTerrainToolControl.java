@@ -46,6 +46,11 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private boolean precision;
 
+    /**
+     * Instantiates a new Level terrain tool control.
+     *
+     * @param component the component
+     */
     public LevelTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
 
@@ -232,6 +237,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Sets level.
+     *
      * @param level the target level.
      */
     public void setLevel(final float level) {
@@ -239,6 +246,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Gets level.
+     *
      * @return the target level.
      */
     public float getLevel() {
@@ -246,6 +255,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Is precision boolean.
+     *
      * @return true if using precision changing.
      */
     public boolean isPrecision() {
@@ -253,6 +264,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Sets precision.
+     *
      * @param precision the flag of using precision changing.
      */
     public void setPrecision(final boolean precision) {
@@ -260,6 +273,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Sets use marker.
+     *
      * @param useMarker the flag of using marker.
      */
     public void setUseMarker(final boolean useMarker) {
@@ -267,6 +282,8 @@ public class LevelTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Is use marker boolean.
+     *
      * @return the flag of using marker.
      */
     public boolean isUseMarker() {

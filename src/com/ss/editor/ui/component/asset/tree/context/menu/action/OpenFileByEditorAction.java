@@ -33,6 +33,12 @@ class OpenFileByEditorAction extends MenuItem {
     @NotNull
     private final EditorDescription description;
 
+    /**
+     * Instantiates a new Open file by editor action.
+     *
+     * @param element     the element
+     * @param description the description
+     */
     OpenFileByEditorAction(@NotNull final ResourceElement element, @NotNull final EditorDescription description) {
         this.element = element;
         this.description = description;

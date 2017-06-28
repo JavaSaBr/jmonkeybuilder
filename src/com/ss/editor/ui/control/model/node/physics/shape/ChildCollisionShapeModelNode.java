@@ -20,6 +20,12 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape> {
 
+    /**
+     * Instantiates a new Child collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ChildCollisionShapeModelNode(@NotNull final ChildCollisionShape element, final long objectId) {
         super(element, objectId);
     }

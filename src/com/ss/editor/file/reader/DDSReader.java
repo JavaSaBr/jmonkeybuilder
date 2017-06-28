@@ -14,15 +14,36 @@
 
 package com.ss.editor.file.reader;
 
+/**
+ * The type Dds reader.
+ */
 public final class DDSReader {
 
+    /**
+     * The constant ARGB.
+     */
     public static final Order ARGB = new Order(16, 8, 0, 24);
+    /**
+     * The constant ABGR.
+     */
     public static final Order ABGR = new Order(0, 8, 16, 24);
 
+    /**
+     * Gets height.
+     *
+     * @param buffer the buffer
+     * @return the height
+     */
     public static int getHeight(byte[] buffer) {
         return (buffer[12] & 0xFF) | (buffer[13] & 0xFF) << 8 | (buffer[14] & 0xFF) << 16 | (buffer[15] & 0xFF) << 24;
     }
 
+    /**
+     * Gets width.
+     *
+     * @param buffer the buffer
+     * @return the width
+     */
     public static int getWidth(byte[] buffer) {
         return (buffer[16] & 0xFF) | (buffer[17] & 0xFF) << 8 | (buffer[18] & 0xFF) << 16 | (buffer[19] & 0xFF) << 24;
     }
@@ -61,6 +82,14 @@ public final class DDSReader {
                 (buffer[107] & 0xFF) << 24;
     }
 
+    /**
+     * Read int [ ].
+     *
+     * @param buffer      the buffer
+     * @param order       the order
+     * @param mipmapLevel the mipmap level
+     * @return the int [ ]
+     */
     public static int[] read(byte[] buffer, Order order, int mipmapLevel) {
 
         // header
@@ -642,6 +671,14 @@ public final class DDSReader {
     }
 
     private static final class Order {
+        /**
+         * Instantiates a new Order.
+         *
+         * @param redShift   the red shift
+         * @param greenShift the green shift
+         * @param blueShift  the blue shift
+         * @param alphaShift the alpha shift
+         */
         Order(int redShift, int greenShift, int blueShift, int alphaShift) {
             this.redShift = redShift;
             this.greenShift = greenShift;
@@ -649,9 +686,21 @@ public final class DDSReader {
             this.alphaShift = alphaShift;
         }
 
+        /**
+         * The Red shift.
+         */
         public int redShift;
+        /**
+         * The Green shift.
+         */
         public int greenShift;
+        /**
+         * The Blue shift.
+         */
         public int blueShift;
+        /**
+         * The Alpha shift.
+         */
         public int alphaShift;
     }
 

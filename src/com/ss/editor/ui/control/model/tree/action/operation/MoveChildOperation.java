@@ -35,6 +35,14 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
      */
     private Node newParent;
 
+    /**
+     * Instantiates a new Move child operation.
+     *
+     * @param moved      the moved
+     * @param oldParent  the old parent
+     * @param newParent  the new parent
+     * @param childIndex the child index
+     */
     public MoveChildOperation(@NotNull final Spatial moved, @NotNull final Node oldParent,
                               @NotNull final Node newParent, final int childIndex) {
         this.moved = moved;

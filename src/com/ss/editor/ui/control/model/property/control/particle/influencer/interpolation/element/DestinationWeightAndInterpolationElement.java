@@ -47,6 +47,12 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
      */
     private TextField weightField;
 
+    /**
+     * Instantiates a new Destination weight and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public DestinationWeightAndInterpolationElement(@NotNull final DestinationInfluencerControl control, final int index) {
         super(control, index);
     }

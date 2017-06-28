@@ -61,6 +61,17 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
      */
     private final boolean isFrontWheel;
 
+    /**
+     * Instantiates a new Add vehicle wheel operation.
+     *
+     * @param control         the control
+     * @param connectionPoint the connection point
+     * @param direction       the direction
+     * @param axle            the axle
+     * @param restLength      the rest length
+     * @param wheelRadius     the wheel radius
+     * @param isFrontWheel    the is front wheel
+     */
     public AddVehicleWheelOperation(@NotNull final VehicleControl control, @NotNull final Vector3f connectionPoint,
                                     @NotNull final Vector3f direction, @NotNull final Vector3f axle,
                                     final float restLength, final float wheelRadius, final boolean isFrontWheel) {

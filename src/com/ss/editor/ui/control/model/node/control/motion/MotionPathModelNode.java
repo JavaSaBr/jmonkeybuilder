@@ -22,6 +22,12 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class MotionPathModelNode extends ModelNode<MotionPath> {
 
+    /**
+     * Instantiates a new Motion path model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public MotionPathModelNode(@NotNull final MotionPath element, final long objectId) {
         super(element, objectId);
     }

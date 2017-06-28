@@ -8,12 +8,10 @@
     -fx-min-height: 30px;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -fx-background-app-bar;
-    -fx-effect: -fx-material-shadow-panel;
-}
-
-#EditorBarComponentOffset {
-    -fx-min-height: 28px;
+    -fx-background-color: -fx-background-background;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-color: black;
+    -fx-effect: null;
 }
 
 #EditorLoadingLayer {
@@ -201,7 +199,7 @@
 
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
-    -fx-padding: 0 0 10 0;
+    -fx-padding: 0 0 0 0;
 }
 
 #AssetEditorDialogResourcesContainer {
@@ -378,6 +376,7 @@
 
 #SettingsDialogMessageLabel {
     -fx-alignment: center;
+    -fx-text-alignment: center;
     -fx-min-height: 35;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
@@ -710,6 +709,11 @@
     -fx-stroke-width: 2;
 }
 
+#AbstractParamControlMultiValuesContainer {
+    -fx-alignment: center;
+    -fx-hgap: 2px;
+}
+
 #ImageViewEditorContainer {
     -fx-alignment: center;
     -fx-background-color: -fx-background-background;
@@ -731,10 +735,10 @@
 
 #AbstractNodeTreeTransparentContainer {
     -fx-background-color: transparent;
-    -fx-padding: 4 2 0 0;
+    -fx-padding: 4 0 0 0;
 }
 
-#EditingContainer {
+#ProcessingComponentContainer {
     -fx-background-color: -fx-background-background;
 }
 

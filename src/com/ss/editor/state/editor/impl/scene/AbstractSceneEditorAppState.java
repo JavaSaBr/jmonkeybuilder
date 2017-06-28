@@ -1,6 +1,7 @@
 package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
@@ -22,6 +23,8 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.*;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -45,12 +48,9 @@ import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.EditingUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.geom.util.AngleUtils;
 import com.ss.rlib.util.array.Array;
@@ -58,10 +58,16 @@ import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ArrayIterator;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The base implementation of the {@link AppState} for the editor.
  *
+ * @param <T> the type parameter
+ * @param <M> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
@@ -277,6 +283,11 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     private boolean editingMode;
 
+    /**
+     * Instantiates a new Abstract scene editor app state.
+     *
+     * @param fileEditor the file editor
+     */
     public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
@@ -342,7 +353,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getCameraNode() {
-        return requireNonNull(cameraNode);
+        return notNull(cameraNode);
     }
 
     @Override
@@ -351,6 +362,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets light node.
+     *
      * @return the node for the placement of lights.
      */
     @NotNull
@@ -359,6 +372,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets audio node.
+     *
      * @return the node for the placement of audio nodes.
      */
     @NotNull
@@ -460,6 +475,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets grid size.
+     *
      * @return the grid size.
      */
     protected int getGridSize() {
@@ -533,6 +550,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Sets transform type.
+     *
      * @param transformType the current type of the transform.
      */
     @FromAnyThread
@@ -549,6 +568,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets transform type.
+     *
      * @return the current type of transformation.
      */
     @Nullable
@@ -571,7 +592,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     @NotNull
     @Override
     public PickedAxis getPickedAxis() {
-        return requireNonNull(pickedAxis);
+        return notNull(pickedAxis);
     }
 
     @Nullable
@@ -599,6 +620,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets tool node.
+     *
      * @return the node for the placement of controls.
      */
     @NotNull
@@ -611,7 +634,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getGrid() {
-        return requireNonNull(grid);
+        return notNull(grid);
     }
 
     /**
@@ -619,7 +642,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getMoveTool() {
-        return requireNonNull(moveTool);
+        return notNull(moveTool);
     }
 
     /**
@@ -627,7 +650,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getRotateTool() {
-        return requireNonNull(rotateTool);
+        return notNull(rotateTool);
     }
 
     /**
@@ -635,7 +658,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @NotNull
     private Node getScaleTool() {
-        return requireNonNull(scaleTool);
+        return notNull(scaleTool);
     }
 
     /**
@@ -844,6 +867,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Update selected models.
+     *
+     * @param spatials the spatials
      */
     @FromAnyThread
     public void updateSelection(@NotNull final Array<Spatial> spatials) {
@@ -1043,6 +1068,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Update the showing selection.
+     *
+     * @param showSelection the show selection
      */
     @FromAnyThread
     public void updateShowSelection(final boolean showSelection) {
@@ -1070,6 +1097,12 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         }
     }
 
+    /**
+     * Gets editing input.
+     *
+     * @param mouseButton the mouse button
+     * @return the editing input
+     */
     @NotNull
     protected EditingInput getEditingInput(final MouseButton mouseButton) {
         switch (mouseButton) {
@@ -1197,6 +1230,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets model node.
+     *
      * @return the node for the placement of models.
      */
     @NotNull
@@ -1206,6 +1241,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Update the showing grid.
+     *
+     * @param showGrid the show grid
      */
     @FromAnyThread
     public void updateShowGrid(final boolean showGrid) {
@@ -1370,6 +1407,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
 
     /**
      * Show the model in the scene.
+     *
+     * @param model the model
      */
     @FromAnyThread
     public void openModel(@NotNull final M model) {
@@ -1386,6 +1425,21 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         final M currentModel = getCurrentModel();
         if (currentModel != null) modelNode.detachChild(currentModel);
 
+        NodeUtils.visitGeometry(model, geometry -> {
+
+            final RenderManager renderManager = EDITOR.getRenderManager();
+            try {
+                renderManager.preloadScene(geometry);
+            } catch (final RendererException | UnsupportedOperationException e) {
+
+                EditorUtil.handleException(LOGGER, this,
+                        new RuntimeException("Found invalid material in the geometry: [" + geometry.getName() + "]. " +
+                                "The material will be removed from the geometry.", e));
+
+                geometry.setMaterial(EDITOR.getDefaultMaterial());
+            }
+        });
+
         modelNode.attachChild(model);
 
         setCurrentModel(model);
@@ -1399,6 +1453,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets current model.
+     *
      * @return current display model.
      */
     @Nullable
@@ -1702,6 +1758,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets cursor node.
+     *
      * @return the cursor node.
      */
     @NotNull
@@ -1711,6 +1769,8 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     /**
+     * Gets markers node.
+     *
      * @return the markers node.
      */
     @NotNull

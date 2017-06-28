@@ -10,11 +10,21 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link Enum} values.
  *
+ * @param <T> the type parameter
+ * @param <E> the type parameter
  * @author JavaSaBr
  */
 public class EnumModelPropertyControl<T, E extends Enum<?>>
         extends AbstractEnumPropertyControl<ModelChangeConsumer, T, E> {
 
+    /**
+     * Instantiates a new Enum model property control.
+     *
+     * @param element         the element
+     * @param paramName       the param name
+     * @param changeConsumer  the change consumer
+     * @param availableValues the available values
+     */
     public EnumModelPropertyControl(@NotNull final E element, @NotNull final String paramName,
                                     @NotNull final ModelChangeConsumer changeConsumer,
                                     @NotNull final E[] availableValues) {

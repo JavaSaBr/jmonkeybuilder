@@ -13,10 +13,19 @@ import java.util.function.BiConsumer;
 /**
  * The base implementation of the property control for the {@link EditableSceneAppState}.
  *
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class AppStatePropertyControl<D, T> extends AbstractPropertyControl<SceneChangeConsumer, D, T> {
 
+    /**
+     * New change handler six object consumer.
+     *
+     * @param <D> the type parameter
+     * @param <T> the type parameter
+     * @return the six object consumer
+     */
     @NotNull
     public static <D, T> SixObjectConsumer<SceneChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
@@ -28,6 +37,13 @@ public class AppStatePropertyControl<D, T> extends AbstractPropertyControl<Scene
         };
     }
 
+    /**
+     * Instantiates a new App state property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public AppStatePropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                    @NotNull final SceneChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());

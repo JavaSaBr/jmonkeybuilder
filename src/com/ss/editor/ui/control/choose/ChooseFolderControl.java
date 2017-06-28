@@ -60,6 +60,9 @@ public class ChooseFolderControl extends HBox {
     @Nullable
     private Runnable changeHandler;
 
+    /**
+     * Instantiates a new Choose folder control.
+     */
     public ChooseFolderControl() {
         setAlignment(Pos.CENTER_LEFT);
         createComponents();
@@ -67,6 +70,8 @@ public class ChooseFolderControl extends HBox {
     }
 
     /**
+     * Sets change handler.
+     *
      * @param changeHandler the handler.
      */
     public void setChangeHandler(@Nullable final Runnable changeHandler) {
@@ -81,6 +86,9 @@ public class ChooseFolderControl extends HBox {
         return changeHandler;
     }
 
+    /**
+     * Create components.
+     */
     protected void createComponents() {
 
         folderLabel = new Label(StringUtils.EMPTY);
@@ -132,6 +140,8 @@ public class ChooseFolderControl extends HBox {
     }
 
     /**
+     * Gets folder.
+     *
      * @return the selected folder.
      */
     @Nullable
@@ -140,6 +150,8 @@ public class ChooseFolderControl extends HBox {
     }
 
     /**
+     * Sets folder.
+     *
      * @param folder the selected folder.
      */
     public void setFolder(@Nullable final Path folder) {

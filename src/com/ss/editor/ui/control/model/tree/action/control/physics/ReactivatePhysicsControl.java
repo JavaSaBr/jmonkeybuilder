@@ -19,6 +19,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Reactivate physics control.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public ReactivatePhysicsControl(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

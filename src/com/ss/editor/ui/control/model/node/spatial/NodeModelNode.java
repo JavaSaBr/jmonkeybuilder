@@ -16,9 +16,10 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.*;
 import com.ss.editor.ui.control.model.tree.action.audio.CreateAudioNodeAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateToneg0dEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.CreateToneg0dSoftEmitterAction;
-import com.ss.editor.ui.control.model.tree.action.emitter.ResetToneg0dParticleEmittersAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.CreateParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.CreateToneg0dParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.CreateToneg0dSoftParticleEmitterAction;
+import com.ss.editor.ui.control.model.tree.action.particle.emitter.ResetParticleEmittersAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateBoxAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateQuadAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.CreateSphereAction;
@@ -52,10 +53,17 @@ import java.util.List;
 /**
  * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the editor.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
+    /**
+     * Instantiates a new Node model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public NodeModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }
@@ -88,7 +96,8 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
         menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new LoadModelAction(nodeTree, this),
                 new LinkModelAction(nodeTree, this), new CreateSkyAction(nodeTree, this),
-                new CreateToneg0dEmitterAction(nodeTree, this), new CreateToneg0dSoftEmitterAction(nodeTree, this),
+                new CreateToneg0dParticleEmitterAction(nodeTree, this), new CreateToneg0dSoftParticleEmitterAction(nodeTree, this),
+                new CreateParticleEmitterAction(nodeTree, this),
                 new CreateAudioNodeAction(nodeTree, this), new CreateTerrainAction(nodeTree, this),
                 createPrimitiveMenu, addLightMenu);
 
@@ -101,10 +110,10 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final T element = getElement();
-        final Spatial emitter = NodeUtils.findSpatial(element, spatial -> spatial instanceof ParticleEmitterNode);
+        final Spatial emitter = NodeUtils.findSpatial(element, ParticleEmitterNode.class::isInstance);
 
         if (emitter != null) {
-            items.add(new ResetToneg0dParticleEmittersAction(nodeTree, this));
+            items.add(new ResetParticleEmittersAction(nodeTree, this));
         }
 
         super.fillContextMenu(nodeTree, items);
@@ -127,6 +136,11 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
         return result;
     }
 
+    /**
+     * Gets spatials.
+     *
+     * @return the spatials
+     */
     @NotNull
     protected List<Spatial> getSpatials() {
         final Node element = getElement();

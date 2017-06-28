@@ -62,7 +62,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     private static final Logger LOGGER = LoggerManager.getLogger(EditorAreaComponent.class);
 
+    /**
+     * The constant COMPONENT_ID.
+     */
     public static final String COMPONENT_ID = "EditorAreaComponent";
+    /**
+     * The constant KEY_EDITOR.
+     */
     public static final String KEY_EDITOR = "editor";
 
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
@@ -86,6 +92,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      */
     private boolean ignoreOpenedFiles;
 
+    /**
+     * Instantiates a new Editor area component.
+     */
     public EditorAreaComponent() {
         setId(CSSIds.EDITOR_AREA_COMPONENT);
         setPickOnBounds(true);
@@ -392,6 +401,9 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     /**
      * Add and open new editor.
+     *
+     * @param editor   the editor
+     * @param needShow the need show
      */
     public void addEditor(@NotNull final FileEditor editor, final boolean needShow) {
 

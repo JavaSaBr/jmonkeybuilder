@@ -26,6 +26,11 @@ public class EditorThreadExecutor {
     @NotNull
     private static final EditorThreadExecutor INSTANCE = new EditorThreadExecutor();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     public static EditorThreadExecutor getInstance() {
         return INSTANCE;
     }

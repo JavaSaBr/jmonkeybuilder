@@ -23,6 +23,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -33,14 +34,14 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.undo.editor.ModelEditingProvider;
+import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.StatsAppState;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editing.EditingContainer;
+import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
@@ -94,6 +95,10 @@ import java.util.function.Supplier;
 /**
  * The base implementation of a model file editor.
  *
+ * @param <IM> the type parameter
+ * @param <M>  the type parameter
+ * @param <MA> the type parameter
+ * @param <ES> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
@@ -162,7 +167,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The container of editing components.
      */
     @Nullable
-    private EditingContainer editingContainer;
+    private EditingComponentContainer editingComponentContainer;
 
     /**
      * The scripting component.
@@ -264,6 +269,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     private boolean ignoreCameraMove;
 
+    /**
+     * Instantiates a new Abstract scene file editor.
+     */
     public AbstractSceneFileEditor() {
         this.editorAppState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
@@ -275,6 +283,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         processChangeTool(-1, OBJECTS_TOOL);
     }
 
+    /**
+     * Create editor app state ma.
+     *
+     * @return the ma
+     */
     @NotNull
     protected abstract MA createEditorAppState();
 
@@ -285,6 +298,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Gets editor app state.
+     *
      * @return the 3D part of this editor.
      */
     @NotNull
@@ -293,6 +308,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Gets editor state.
+     *
      * @return the state of this editor.
      */
     @Nullable
@@ -301,6 +318,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Gets model node tree.
+     *
      * @return the model tree.
      */
     @NotNull
@@ -309,6 +328,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Gets model property editor.
+     *
      * @return the model property editor.
      */
     @NotNull
@@ -320,8 +341,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the container of editing components.
      */
     @NotNull
-    private EditingContainer getEditingContainer() {
-        return requireNonNull(editingContainer);
+    private EditingComponentContainer getEditingComponentContainer() {
+        return requireNonNull(editingComponentContainer);
     }
 
     /**
@@ -412,6 +433,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     /**
      * Handle a added model.
+     *
+     * @param model the model
      */
     protected void handleAddedObject(@NotNull final Spatial model) {
 
@@ -428,6 +451,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     /**
      * Handle a removed model.
+     *
+     * @param model the model
      */
     protected void handleRemovedObject(@NotNull final Spatial model) {
 
@@ -448,6 +473,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     protected void loadState() {
 
         scriptingComponent.addVariable("root", getCurrentModel());
+        scriptingComponent.addVariable("assetManager", EDITOR.getAssetManager());
         scriptingComponent.addImport(Spatial.class);
         scriptingComponent.addImport(Geometry.class);
         scriptingComponent.addImport(Control.class);
@@ -456,6 +482,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent.addImport(DirectionalLight.class);
         scriptingComponent.addImport(PointLight.class);
         scriptingComponent.addImport(SpotLight.class);
+        scriptingComponent.addImport(Material.class);
+        scriptingComponent.addImport(Texture.class);
         scriptingComponent.setExampleCode("root.attachChild(new Node(\"created from Groovy\"));");
         scriptingComponent.buildHeader();
 
@@ -592,6 +620,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Is ignore listeners boolean.
+     *
      * @return true if needs to ignore events.
      */
     protected boolean isIgnoreListeners() {
@@ -599,6 +629,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Sets ignore listeners.
+     *
      * @param ignoreListeners true if needs to ignore events.
      */
     protected void setIgnoreListeners(final boolean ignoreListeners) {
@@ -620,6 +652,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Sets current model.
+     *
      * @param currentModel the opened model.
      */
     protected void setCurrentModel(@NotNull final M currentModel) {
@@ -642,8 +676,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyChanged(parent, object);
 
-        final EditingContainer editingContainer = getEditingContainer();
-        editingContainer.notifyChangeProperty(object, propertyName);
+        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        editingComponentContainer.notifyChangeProperty(object, propertyName);
     }
 
     @Override
@@ -727,6 +761,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     /**
      * Handle the selected object.
+     *
+     * @param object the object
      */
     @FXThread
     public void notifySelected(@Nullable Object object) {
@@ -748,11 +784,18 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
     }
 
+    /**
+     * Gets state constructor.
+     *
+     * @return the state constructor
+     */
     @NotNull
     protected abstract Supplier<EditorState> getStateConstructor();
 
     /**
      * Handle the selected object from the Tree.
+     *
+     * @param object the object
      */
     @FXThread
     public void selectNodeFromTree(@Nullable final Object object) {
@@ -800,8 +843,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.buildFor(element, parent);
 
-        final EditingContainer editingContainer = getEditingContainer();
-        editingContainer.showComponentFor(element);
+        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
+        editingComponentContainer.showComponentFor(element);
     }
 
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
@@ -1039,8 +1082,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelNodeTreeEditingContainer = new VBox();
         modelNodeTreeObjectsContainer = new VBox();
 
-        editingContainer = new EditingContainer(this, this);
-        editingContainer.addComponent(new TerrainEditingComponent());
+        editingComponentContainer = new EditingComponentContainer(this, this);
+        editingComponentContainer.addComponent(new TerrainEditingComponent());
 
         scriptingComponent = new EditorScriptingComponent(this::refreshTree);
 
@@ -1049,7 +1092,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         objectsSplitContainer.prefHeightProperty().bind(root.heightProperty());
         objectsSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane editingSplitContainer = new SplitPane(modelNodeTreeEditingContainer, editingContainer);
+        final SplitPane editingSplitContainer = new SplitPane(modelNodeTreeEditingContainer, editingComponentContainer);
         editingSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         editingSplitContainer.prefHeightProperty().bind(root.heightProperty());
         editingSplitContainer.prefWidthProperty().bind(root.widthProperty());
@@ -1085,6 +1128,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
+     * Gets editor tool component.
+     *
      * @return the editor tool component.
      */
     @NotNull
@@ -1092,11 +1137,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         return requireNonNull(editorToolComponent);
     }
 
+    /**
+     * Process change tool.
+     *
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
     protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        final EditingContainer editingContainer = getEditingContainer();
+        final EditingComponentContainer editingComponentContainer = getEditingComponentContainer();
 
         final VBox propertyEditorParent = (VBox) modelPropertyEditor.getParent();
         final VBox modelNodeTreeParent = (VBox) modelNodeTree.getParent();
@@ -1117,11 +1168,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
         } else if (newIndex == EDITING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
-            editingContainer.notifyShowed();
+            editingComponentContainer.notifyShowed();
         }
 
         if (oldIndex == EDITING_TOOL) {
-            editingContainer.notifyHided();
+            editingComponentContainer.notifyHided();
         }
 
         final MA editorAppState = getEditorAppState();
@@ -1221,6 +1272,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         });
     }
 
+    /**
+     * Calc v split size.
+     *
+     * @param splitContainer the split container
+     */
     static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
         splitContainer.setDividerPosition(0, 0.3);
     }
@@ -1266,6 +1322,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     /**
      * Notify about transformed the object.
+     *
+     * @param spatial the spatial
      */
     @FromAnyThread
     public void notifyTransformed(@NotNull final Spatial spatial) {

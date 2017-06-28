@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/jme3-spaceshift-editor.iml" filepath="$PROJECT_DIR$/.idea/jme3-spaceshift-editor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jme3-spaceshift-extension/jme3-spaceshift-extension.iml" filepath="$PROJECT_DIR$/jme3-spaceshift-extension/jme3-spaceshift-extension.iml" />
     </modules>
   </component>
 </project>

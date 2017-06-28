@@ -39,6 +39,9 @@ import java.util.function.Supplier;
  */
 public class Workspace implements Serializable {
 
+    /**
+     * The constant serialVersionUID.
+     */
     public static final long serialVersionUID = 63;
 
     @NotNull
@@ -80,6 +83,9 @@ public class Workspace implements Serializable {
     @Nullable
     private volatile String currentEditedFile;
 
+    /**
+     * Instantiates a new Workspace.
+     */
     public Workspace() {
         this.changes = new AtomicInteger();
     }
@@ -105,6 +111,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Gets current edited file.
+     *
      * @return the current edited file.
      */
     @Nullable
@@ -145,6 +153,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Gets expanded absolute folders.
+     *
      * @return the list of expanded absolute folders.
      */
     @NotNull
@@ -161,6 +171,8 @@ public class Workspace implements Serializable {
 
     /**
      * Update a list of expanded folders.
+     *
+     * @param folders the folders
      */
     public synchronized void updateExpandedFolders(@NotNull final Array<Path> folders) {
 
@@ -176,6 +188,7 @@ public class Workspace implements Serializable {
     /**
      * Get an editor state for a file.
      *
+     * @param <T>          the type parameter
      * @param file         the edited file.
      * @param stateFactory the state factory.
      * @return the state of the editor.
@@ -202,8 +215,8 @@ public class Workspace implements Serializable {
     /**
      * Update an editor state of a file.
      *
-     * @param editorState the editor state.
      * @param file        the file.
+     * @param editorState the editor state.
      */
     public synchronized void updateEditorState(@NotNull final Path file, @NotNull final EditorState editorState) {
 
@@ -255,6 +268,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Sets asset folder.
+     *
      * @param assetFolder the asset folder of this workspace.
      */
     public void setAssetFolder(@NotNull final Path assetFolder) {
@@ -262,6 +277,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Gets opened files.
+     *
      * @return the table of opened files.
      */
     @NotNull
@@ -306,6 +323,8 @@ public class Workspace implements Serializable {
     }
 
     /**
+     * Gets asset folder.
+     *
      * @return the asset folder of this workspace.
      */
     @NotNull
@@ -329,6 +348,8 @@ public class Workspace implements Serializable {
 
     /**
      * Save this workspace.
+     *
+     * @param force the force
      */
     public void save(final boolean force) {
         if (!force && changes.get() == 0) return;

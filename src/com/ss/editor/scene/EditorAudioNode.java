@@ -41,6 +41,9 @@ public class EditorAudioNode extends Node {
     @Nullable
     private Node model;
 
+    /**
+     * Instantiates a new Editor audio node.
+     */
     public EditorAudioNode() {
         this.editedNode = new Node("EditedNode");
         attachChild(editedNode);
@@ -85,6 +88,8 @@ public class EditorAudioNode extends Node {
     }
 
     /**
+     * Gets edited node.
+     *
      * @return the edited node.
      */
     @NotNull

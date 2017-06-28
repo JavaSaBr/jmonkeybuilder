@@ -9,6 +9,9 @@ import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
  */
 public class ModelFileEditorState extends AbstractModelFileEditorState {
 
+    /**
+     * The constant serialVersionUID.
+     */
     public static final long serialVersionUID = 3;
 
     /**
@@ -21,12 +24,17 @@ public class ModelFileEditorState extends AbstractModelFileEditorState {
      */
     private volatile boolean enableLight;
 
+    /**
+     * Instantiates a new Model file editor state.
+     */
     public ModelFileEditorState() {
         this.skyType = 0;
         this.enableLight = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
     }
 
     /**
+     * Gets sky type.
+     *
      * @return the sky type.
      */
     public int getSkyType() {
@@ -34,6 +42,8 @@ public class ModelFileEditorState extends AbstractModelFileEditorState {
     }
 
     /**
+     * Sets sky type.
+     *
      * @param skyType the sky type.
      */
     public void setSkyType(final int skyType) {
@@ -46,6 +56,8 @@ public class ModelFileEditorState extends AbstractModelFileEditorState {
     }
 
     /**
+     * Sets enable light.
+     *
      * @param enableLight true if the light is enabled.
      */
     public void setEnableLight(final boolean enableLight) {
@@ -58,6 +70,8 @@ public class ModelFileEditorState extends AbstractModelFileEditorState {
     }
 
     /**
+     * Is enable light boolean.
+     *
      * @return true if the light is enabled.
      */
     public boolean isEnableLight() {

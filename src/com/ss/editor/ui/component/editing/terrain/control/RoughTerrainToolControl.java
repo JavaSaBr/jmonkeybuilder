@@ -41,6 +41,11 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
     private float octaves;
     private float scale;
 
+    /**
+     * Instantiates a new Rough terrain tool control.
+     *
+     * @param component the component
+     */
     public RoughTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
     }
@@ -202,42 +207,92 @@ public class RoughTerrainToolControl extends ChangeHeightTerrainToolControl {
         return ground;
     }
 
+    /**
+     * Sets octaves.
+     *
+     * @param octaves the octaves
+     */
     public void setOctaves(final float octaves) {
         this.octaves = octaves;
     }
 
+    /**
+     * Gets octaves.
+     *
+     * @return the octaves
+     */
     public float getOctaves() {
         return octaves;
     }
 
+    /**
+     * Sets frequency.
+     *
+     * @param frequency the frequency
+     */
     public void setFrequency(final float frequency) {
         this.frequency = frequency;
     }
 
+    /**
+     * Gets frequency.
+     *
+     * @return the frequency
+     */
     public float getFrequency() {
         return frequency;
     }
 
+    /**
+     * Sets lacunarity.
+     *
+     * @param lacunarity the lacunarity
+     */
     public void setLacunarity(final float lacunarity) {
         this.lacunarity = lacunarity;
     }
 
+    /**
+     * Gets lacunarity.
+     *
+     * @return the lacunarity
+     */
     public float getLacunarity() {
         return lacunarity;
     }
 
+    /**
+     * Sets roughness.
+     *
+     * @param roughness the roughness
+     */
     public void setRoughness(final float roughness) {
         this.roughness = roughness;
     }
 
+    /**
+     * Gets roughness.
+     *
+     * @return the roughness
+     */
     public float getRoughness() {
         return roughness;
     }
 
+    /**
+     * Sets scale.
+     *
+     * @param scale the scale
+     */
     public void setScale(final float scale) {
         this.scale = scale;
     }
 
+    /**
+     * Gets scale.
+     *
+     * @return the scale
+     */
     public float getScale() {
         return scale;
     }

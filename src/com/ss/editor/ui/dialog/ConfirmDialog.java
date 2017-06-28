@@ -1,9 +1,9 @@
 package com.ss.editor.ui.dialog;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
-import javafx.geometry.Insets;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -24,8 +23,8 @@ import java.util.function.Consumer;
  */
 public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets QUESTION_PADDING = new Insets(10, 0, 10, 0);
-    private static final Point DIALOG_SIZE = new Point(600, 131);
+    @NotNull
+    private static final Point DIALOG_SIZE = new Point(600, 0);
 
     /**
      * The handler of an answer.
@@ -39,6 +38,12 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private Label questionLabel;
 
+    /**
+     * Instantiates a new Confirm dialog.
+     *
+     * @param handler  the handler
+     * @param question the question
+     */
     public ConfirmDialog(@NotNull final Consumer<Boolean> handler, @NotNull final String question) {
         this.handler = handler;
         final Label questionLabel = getQuestionLabel();
@@ -50,7 +55,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private Label getQuestionLabel() {
-        return requireNonNull(questionLabel);
+        return notNull(questionLabel);
     }
 
     @NotNull
@@ -66,10 +71,8 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         questionLabel = new Label();
         questionLabel.setWrapText(true);
         questionLabel.setAlignment(Pos.CENTER);
-        questionLabel.setPadding(QUESTION_PADDING);
         questionLabel.setTextAlignment(TextAlignment.CENTER);
-        questionLabel.prefWidthProperty().bind(root.widthProperty().multiply(0.9));
-        questionLabel.prefHeightProperty().bind(root.heightProperty());
+        questionLabel.minWidthProperty().bind(widthProperty().multiply(0.9));
 
         FXUtils.addToPane(questionLabel, root);
         FXUtils.addClassTo(questionLabel, CSSClasses.SPECIAL_FONT_15);
@@ -106,6 +109,7 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         handler.accept(Boolean.FALSE);
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

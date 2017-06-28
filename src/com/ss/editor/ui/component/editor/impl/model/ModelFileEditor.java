@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor.impl.model;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
@@ -13,6 +13,7 @@ import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
@@ -26,6 +27,9 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -33,9 +37,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 import java.util.function.Supplier;
@@ -52,6 +53,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -103,7 +107,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
      */
     @NotNull
     private ComboBox<String> getFastSkyComboBox() {
-        return requireNonNull(fastSkyComboBox);
+        return notNull(fastSkyComboBox);
     }
 
     /**
@@ -111,14 +115,15 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
      */
     @NotNull
     private ToggleButton getLightButton() {
-        return requireNonNull(lightButton);
+        return notNull(lightButton);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
+        final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -151,7 +156,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     protected void loadState() {
         super.loadState();
 
-        final ModelFileEditorState editorState = requireNonNull(getEditorState());
+        final ModelFileEditorState editorState = notNull(getEditorState());
 
         final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
         fastSkyComboBox.getSelectionModel().select(editorState.getSkyType());

@@ -85,6 +85,11 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Nullable
     private static ResourceManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static ResourceManager getInstance() {
         if (instance == null) instance = new ResourceManager();
@@ -139,6 +144,9 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @NotNull
     private final ClassPathScanner classPathScanner;
 
+    /**
+     * Instantiates a new Resource manager.
+     */
     public ResourceManager() {
         InitializeManager.valid(getClass());
 
@@ -359,6 +367,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
+     * Gets class loaders.
+     *
      * @return the list of an additional classpath.
      */
     @NotNull
@@ -367,13 +377,26 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     }
 
     /**
+     * Gets available material definitions.
+     *
      * @return the list of all available material definitions.
      */
     @NotNull
     @FromAnyThread
     public synchronized Array<String> getAvailableMaterialDefinitions() {
-
         final Array<String> result = ArrayFactory.newArray(String.class);
+        addAvailableMaterialDefinitionsTo(result);
+        return result;
+    }
+
+    /**
+     * Add available material definitions to the result array.
+     *
+     * @param result the result
+     */
+    @FromAnyThread
+    public synchronized void addAvailableMaterialDefinitionsTo(@NotNull final Array<String> result) {
+
         final Array<String> materialDefinitions = getMaterialDefinitions();
 
         move(materialDefinitions, result, false);
@@ -384,7 +407,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         });
 
         result.sort(STRING_ARRAY_COMPARATOR);
-        return result;
     }
 
     /**

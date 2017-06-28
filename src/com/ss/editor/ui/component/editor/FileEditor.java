@@ -20,6 +20,9 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public interface FileEditor {
 
+    /**
+     * The Empty states.
+     */
     Array<EditorAppState> EMPTY_STATES = ArrayFactory.newArray(EditorAppState.class);
 
     /**
@@ -32,6 +35,8 @@ public interface FileEditor {
     Parent getPage();
 
     /**
+     * Gets file name.
+     *
      * @return the file name of the current opened file.
      */
     @NotNull
@@ -39,6 +44,8 @@ public interface FileEditor {
     String getFileName();
 
     /**
+     * Gets edit file.
+     *
      * @return the editing file.
      */
     @NotNull
@@ -54,6 +61,8 @@ public interface FileEditor {
     void openFile(@NotNull final Path file);
 
     /**
+     * Dirty property boolean property.
+     *
      * @return the dirty property of this editor.
      */
     @NotNull
@@ -61,6 +70,8 @@ public interface FileEditor {
     BooleanProperty dirtyProperty();
 
     /**
+     * Is dirty boolean.
+     *
      * @return true if the current file was changed.
      */
     boolean isDirty();
@@ -72,6 +83,8 @@ public interface FileEditor {
     }
 
     /**
+     * Gets states.
+     *
      * @return the 3D part of this editor.
      */
     @NotNull
@@ -89,6 +102,9 @@ public interface FileEditor {
 
     /**
      * Notify about renamed files.
+     *
+     * @param prevFile the prev file
+     * @param newFile  the new file
      */
     @FXThread
     default void notifyRenamed(@NotNull final Path prevFile, @NotNull final Path newFile) {
@@ -96,12 +112,17 @@ public interface FileEditor {
 
     /**
      * Notify about moved file.
+     *
+     * @param prevFile the prev file
+     * @param newFile  the new file
      */
     @FXThread
     default void notifyMoved(@NotNull final Path prevFile, @NotNull final Path newFile) {
     }
 
     /**
+     * Gets description.
+     *
      * @return the description of this editor.
      */
     @NotNull
@@ -123,6 +144,10 @@ public interface FileEditor {
     }
 
     /**
+     * Is inside boolean.
+     *
+     * @param sceneX the scene x
+     * @param sceneY the scene y
      * @return true if the point is inside in this editor.
      */
     @FXThread

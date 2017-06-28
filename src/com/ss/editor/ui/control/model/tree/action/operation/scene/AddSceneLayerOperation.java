@@ -33,6 +33,13 @@ public class AddSceneLayerOperation extends AbstractEditorOperation<ModelChangeC
     @NotNull
     private final SceneNode sceneNode;
 
+    /**
+     * Instantiates a new Add scene layer operation.
+     *
+     * @param layersRoot the layers root
+     * @param layer      the layer
+     * @param sceneNode  the scene node
+     */
     public AddSceneLayerOperation(final @NotNull LayersRoot layersRoot, @NotNull final SceneLayer layer,
                                   @NotNull final SceneNode sceneNode) {
         this.layersRoot = layersRoot;

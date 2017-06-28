@@ -6,5 +6,8 @@ package com.ss.editor.ui.component.editing.terrain;
  * @author JavaSaBr
  */
 public enum TerrainBrushType {
+    /**
+     * Sphere terrain brush type.
+     */
     SPHERE,
 }

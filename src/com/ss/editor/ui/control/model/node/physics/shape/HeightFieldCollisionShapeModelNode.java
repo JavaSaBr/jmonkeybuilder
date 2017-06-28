@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class HeightFieldCollisionShapeModelNode extends CollisionShapeModelNode<HeightfieldCollisionShape> {
 
+    /**
+     * Instantiates a new Height field collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public HeightFieldCollisionShapeModelNode(@NotNull final HeightfieldCollisionShape element, final long objectId) {
         super(element, objectId);
     }

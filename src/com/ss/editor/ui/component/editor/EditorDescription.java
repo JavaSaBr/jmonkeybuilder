@@ -43,11 +43,16 @@ public class EditorDescription {
     @Nullable
     private Image icon;
 
+    /**
+     * Instantiates a new Editor description.
+     */
     public EditorDescription() {
         this.extensions = ArrayFactory.newArray(String.class);
     }
 
     /**
+     * Gets editor id.
+     *
      * @return the editor id.
      */
     @NotNull
@@ -56,6 +61,8 @@ public class EditorDescription {
     }
 
     /**
+     * Sets editor id.
+     *
      * @param editorId the editor id.
      */
     public void setEditorId(@NotNull final String editorId) {
@@ -63,6 +70,8 @@ public class EditorDescription {
     }
 
     /**
+     * Add extension.
+     *
      * @param extension the supported extension.
      */
     public void addExtension(@NotNull final String extension) {
@@ -70,6 +79,8 @@ public class EditorDescription {
     }
 
     /**
+     * Gets extensions.
+     *
      * @return the list of supported extensions.
      */
     @NotNull
@@ -78,6 +89,8 @@ public class EditorDescription {
     }
 
     /**
+     * Gets constructor.
+     *
      * @return the editor constructor.
      */
     @NotNull
@@ -86,6 +99,8 @@ public class EditorDescription {
     }
 
     /**
+     * Sets constructor.
+     *
      * @param constructor the editor constructor.
      */
     public void setConstructor(@NotNull final Callable<FileEditor> constructor) {
@@ -93,6 +108,8 @@ public class EditorDescription {
     }
 
     /**
+     * Gets editor name.
+     *
      * @return the editor name.
      */
     @NotNull
@@ -101,6 +118,8 @@ public class EditorDescription {
     }
 
     /**
+     * Sets editor name.
+     *
      * @param editorName the editor name.
      */
     public void setEditorName(@NotNull final String editorName) {
@@ -108,6 +127,8 @@ public class EditorDescription {
     }
 
     /**
+     * Gets icon.
+     *
      * @return the icon.
      */
     @Nullable
@@ -116,6 +137,8 @@ public class EditorDescription {
     }
 
     /**
+     * Sets icon.
+     *
      * @param icon the icon.
      */
     public void setIcon(@Nullable final Image icon) {

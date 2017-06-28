@@ -20,6 +20,13 @@ import tonegod.emitter.interpolation.Interpolation;
  */
 public class SizeInfluencerControl extends AbstractInterpolationInfluencerControl<SizeInfluencer> {
 
+    /**
+     * Instantiates a new Size influencer control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public SizeInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
@@ -27,9 +34,15 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_SIZE_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_SIZE_INTERPOLATION;
     }
 
+    /**
+     * Request to change.
+     *
+     * @param newValue the new value
+     * @param index    the index
+     */
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
 
         final SizeInfluencer influencer = getInfluencer();

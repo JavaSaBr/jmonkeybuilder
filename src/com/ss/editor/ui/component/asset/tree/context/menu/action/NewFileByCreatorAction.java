@@ -34,6 +34,12 @@ class NewFileByCreatorAction extends MenuItem {
     @NotNull
     private final FileCreatorDescription description;
 
+    /**
+     * Instantiates a new New file by creator action.
+     *
+     * @param element     the element
+     * @param description the description
+     */
     NewFileByCreatorAction(@NotNull final ResourceElement element, @NotNull final FileCreatorDescription description) {
         this.element = element;
         this.description = description;

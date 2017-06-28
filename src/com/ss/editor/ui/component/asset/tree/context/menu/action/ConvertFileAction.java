@@ -18,6 +18,12 @@ import com.ss.rlib.util.array.Array;
  */
 public class ConvertFileAction extends Menu {
 
+    /**
+     * Instantiates a new Convert file action.
+     *
+     * @param element      the element
+     * @param descriptions the descriptions
+     */
     public ConvertFileAction(@NotNull final ResourceElement element,
                              @NotNull final Array<FileConverterDescription> descriptions) {
 

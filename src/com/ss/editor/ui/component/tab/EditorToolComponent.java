@@ -14,6 +14,12 @@ import javafx.scene.control.SplitPane;
  */
 public class EditorToolComponent extends TabToolComponent {
 
+    /**
+     * Instantiates a new Editor tool component.
+     *
+     * @param pane  the pane
+     * @param index the index
+     */
     public EditorToolComponent(@NotNull final SplitPane pane, final int index) {
         super(pane);
         setId(CSSIds.FILE_EDITOR_TOOL_COMPONENT);

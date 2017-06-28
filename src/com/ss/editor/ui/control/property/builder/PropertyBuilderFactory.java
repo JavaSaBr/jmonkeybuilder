@@ -24,8 +24,7 @@ public class PropertyBuilderFactory {
 
     static {
         BUILDERS.add(AudioNodePropertyBuilder.getInstance());
-        BUILDERS.add(ParticleInfluencerPropertyBuilder.getInstance());
-        BUILDERS.add(ParticlesPropertyBuilder.getInstance());
+        BUILDERS.add(ParticleEmitterPropertyBuilder.getInstance());
         BUILDERS.add(GeometryPropertyBuilder.getInstance());
         BUILDERS.add(LightPropertyBuilder.getInstance());
         BUILDERS.add(SpatialPropertyBuilder.getInstance());
@@ -36,6 +35,9 @@ public class PropertyBuilderFactory {
         BUILDERS.add(CollisionShapePropertyBuilder.getInstance());
         BUILDERS.add(PrimitivePropertyBuilder.getInstance());
         BUILDERS.add(MeshPropertyBuilder.getInstance());
+        BUILDERS.add(ParticleInfluencerPropertyBuilder.getInstance());
+        BUILDERS.add(EmitterShapePropertyBuilder.getInstance());
+        BUILDERS.add(Toneg0dParticleInfluencerPropertyBuilder.getInstance());
     }
 
     /**

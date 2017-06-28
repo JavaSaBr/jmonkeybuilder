@@ -26,6 +26,12 @@ import javafx.scene.image.Image;
  */
 public class CreateSceneLayerAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create scene layer action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateSceneLayerAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -45,6 +51,7 @@ public class CreateSceneLayerAction extends AbstractNodeAction<ModelChangeConsum
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final SceneLayer layer = new SceneLayer("New Layer", false);
         final LayersRootModelNode modelNode = (LayersRootModelNode) getNode();

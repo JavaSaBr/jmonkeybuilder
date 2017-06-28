@@ -25,6 +25,12 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final Animation animation;
 
+    /**
+     * Instantiates a new Add animation node operation.
+     *
+     * @param animation the animation
+     * @param control   the control
+     */
     public AddAnimationNodeOperation(@NotNull final Animation animation, @NotNull final AnimControl control) {
         this.animation = animation;
         this.control = control;

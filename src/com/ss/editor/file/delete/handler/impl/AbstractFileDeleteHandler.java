@@ -14,9 +14,15 @@ import java.nio.file.Path;
  */
 public abstract class AbstractFileDeleteHandler implements FileDeleteHandler {
 
+    /**
+     * The constant JFX_APPLICATION.
+     */
     @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
+    /**
+     * The constant EDITOR.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 

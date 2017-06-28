@@ -13,6 +13,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GlobalLeftToolComponent extends TabToolComponent {
 
+    /**
+     * Instantiates a new Global left tool component.
+     *
+     * @param pane the pane
+     */
     public GlobalLeftToolComponent(@NotNull final SplitPane pane) {
         super(pane);
         setId(CSSIds.GLOBAL_LEFT_TOOL_COMPONENT);

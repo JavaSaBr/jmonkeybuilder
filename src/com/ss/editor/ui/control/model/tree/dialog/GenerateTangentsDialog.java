@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -13,6 +13,7 @@ import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -21,7 +22,6 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 
@@ -36,12 +36,24 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(530, 157);
+    private static final Point DIALOG_SIZE = new Point(530, 0);
 
+    /**
+     * The enum Algorithm type.
+     */
     public enum AlgorithmType {
+        /**
+         * Standard algorithm type.
+         */
         STANDARD,
+        /**
+         * Mikktspace algorithm type.
+         */
         MIKKTSPACE;
 
+        /**
+         * The constant VALUES.
+         */
         public static final AlgorithmType[] VALUES = values();
     }
 
@@ -69,12 +81,20 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private CheckBox splitMirroredCheckBox;
 
+    /**
+     * Instantiates a new Generate tangents dialog.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public GenerateTangentsDialog(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the node tree component.
      */
     @NotNull
@@ -83,6 +103,8 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node.
+     *
      * @return the generated node.
      */
     @NotNull
@@ -141,7 +163,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getSplitMirroredCheckBox() {
-        return requireNonNull(splitMirroredCheckBox);
+        return notNull(splitMirroredCheckBox);
     }
 
     /**
@@ -149,7 +171,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<AlgorithmType> getAlgorithmTypeComboBox() {
-        return requireNonNull(algorithmTypeComboBox);
+        return notNull(algorithmTypeComboBox);
     }
 
     @Override
@@ -172,7 +194,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
             TangentGenerator.useMikktspaceGenerator(geometry);
         }
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeMeshOperation(newMesh, oldMesh, geometry));
 
         super.processOk();
@@ -184,6 +206,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         return Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

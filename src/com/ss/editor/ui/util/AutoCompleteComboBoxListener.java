@@ -14,6 +14,7 @@ import com.ss.rlib.util.StringUtils;
 /**
  * The implementation of autocomplete for combobox.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
@@ -21,6 +22,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
     /**
      * Install autocomplete to a combobox.
      *
+     * @param <T>      the type parameter
      * @param comboBox the combobox.
      */
     public static <T> void install(@NotNull final ComboBox<T> comboBox) {

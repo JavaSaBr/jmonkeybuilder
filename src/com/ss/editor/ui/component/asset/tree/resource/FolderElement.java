@@ -18,6 +18,11 @@ import java.nio.file.Path;
  */
 public class FolderElement extends ResourceElement {
 
+    /**
+     * Instantiates a new Folder element.
+     *
+     * @param file the file
+     */
     FolderElement(@NotNull final Path file) {
         super(file);
     }

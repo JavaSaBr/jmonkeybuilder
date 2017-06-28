@@ -54,6 +54,11 @@ public class FilterListCell extends TextFieldListCell<EditableSceneFilter<?>> {
     @NotNull
     private final ImageView visibleIcon;
 
+    /**
+     * Instantiates a new Filter list cell.
+     *
+     * @param stateList the state list
+     */
     public FilterListCell(final @NotNull FilterList stateList) {
         this.stateList = stateList;
         this.content = new HBox();

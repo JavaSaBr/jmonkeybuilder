@@ -13,6 +13,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AnimationSpatialTrackModelNode extends AnimationTrackModelNode<SpatialTrack> {
 
+    /**
+     * Instantiates a new Animation spatial track model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationSpatialTrackModelNode(@NotNull final SpatialTrack element, final long objectId) {
         super(element, objectId);
     }

@@ -24,6 +24,9 @@ public class OpenAssetAction extends MenuItem {
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
+    /**
+     * Instantiates a new Open asset action.
+     */
     public OpenAssetAction() {
         super(Messages.EDITOR_BAR_ASSET_OPEN_ASSET);
         setOnAction(event -> process());
@@ -47,7 +50,7 @@ public class OpenAssetAction extends MenuItem {
             chooser.setInitialDirectory(currentFolder);
         }
 
-        GAnalytics.sendPageView(null, null, "/dialog/AssetChooseDialog");
+        GAnalytics.sendPageView("AssetChooseDialog", null, "/dialog/AssetChooseDialog");
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, "AssetChooseDialog");
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();

@@ -13,6 +13,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AnimationEffectTrackModelNode extends AnimationTrackModelNode<EffectTrack> {
 
+    /**
+     * Instantiates a new Animation effect track model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationEffectTrackModelNode(@NotNull final EffectTrack element, final long objectId) {
         super(element, objectId);
     }

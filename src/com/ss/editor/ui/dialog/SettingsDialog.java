@@ -1,5 +1,6 @@
 package com.ss.editor.ui.dialog;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
@@ -48,13 +49,11 @@ import java.nio.file.Path;
 public class SettingsDialog extends EditorDialog {
 
     private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-    private static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-    private static final Insets TAB_OFFSET = new Insets(5, 0, 5, 0);
-    private static final Insets MESSAGE_OFFSET = new Insets(5, 20, 10, 0);
+    private static final Insets MESSAGE_OFFSET = new Insets(5, 0, 10, 0);
     private static final Insets FIELD_OFFSET = new Insets(5, 20, 0, 0);
     private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
 
-    private static final Point DIALOG_SIZE = new Point(600, 380);
+    private static final Point DIALOG_SIZE = new Point(600, 400);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
 
@@ -73,91 +72,109 @@ public class SettingsDialog extends EditorDialog {
     /**
      * The message label.
      */
+    @Nullable
     private Label messageLabel;
 
     /**
      * The list with anisotropy levels.
      */
+    @Nullable
     private ComboBox<Integer> anisotropyComboBox;
 
     /**
      * The white point X.
      */
+    @Nullable
     private Spinner<Double> toneMapFilterWhitePointX;
 
     /**
      * The white point Y.
      */
+    @Nullable
     private Spinner<Double> toneMapFilterWhitePointY;
 
     /**
      * The white point Z.
      */
+    @Nullable
     private Spinner<Double> toneMapFilterWhitePointZ;
 
     /**
      * The gamma correction checkbox.
      */
+    @Nullable
     private CheckBox gammaCorrectionCheckBox;
 
     /**
      * The tone map filter checkbox.
      */
+    @Nullable
     private CheckBox toneMapFilterCheckBox;
 
     /**
      * The FXAA checkbox.
      */
+    @Nullable
     private CheckBox fxaaFilterCheckBox;
 
     /**
      * The checkbox for enabling google analytics.
      */
+    @Nullable
     private CheckBox googleAnalyticsCheckBox;
 
     /**
      * The checkbox for enabling auto tangent generating.
      */
+    @Nullable
     private CheckBox autoTangentGeneratingCheckBox;
 
     /**
      * The checkbox for enabling use flip texture by default.
      */
+    @Nullable
     private CheckBox defaultUseFlippedTextureCheckBox;
 
     /**
      * The checkbox for enabling camera lamp by default.
      */
+    @Nullable
     private CheckBox defaultCameraLampEnabledCheckBox;
 
     /**
      * The additional classpath field.
      */
+    @Nullable
     private TextField additionalClasspathField;
 
     /**
      * The additional envs field.
      */
+    @Nullable
     private TextField additionalEnvsField;
 
     /**
      * The frame rate field.
      */
+    @Nullable
     private IntegerTextField frameRateField;
 
     /**
      * The camera angle field.
      */
+    @Nullable
     private IntegerTextField cameraAngleField;
 
     /**
      * The additional classpath folder.
      */
+    @Nullable
     private Path additionalClasspathFolder;
 
     /**
      * The additional envs folder.
      */
+    @Nullable
     private Path additionalEnvsFolder;
 
     /**
@@ -198,10 +215,10 @@ public class SettingsDialog extends EditorDialog {
         messageLabel.setId(CSSIds.SETTINGS_DIALOG_MESSAGE_LABEL);
 
         final VBox graphicsRoot = new VBox();
-        graphicsRoot.prefHeightProperty().bind(root.heightProperty());
+        graphicsRoot.prefHeightProperty().bind(heightProperty());
 
         final VBox otherRoot = new VBox();
-        otherRoot.prefHeightProperty().bind(root.heightProperty());
+        otherRoot.prefHeightProperty().bind(heightProperty());
 
         final Tab graphicsSettings = new Tab(Messages.SETTINGS_DIALOG_TAB_GRAPHICS);
         graphicsSettings.setClosable(false);
@@ -215,7 +232,7 @@ public class SettingsDialog extends EditorDialog {
         tabPane.setId(CSSIds.SETTINGS_DIALOG_TAB_PANE);
         tabPane.getTabs().addAll(graphicsSettings, otherSettings);
         tabPane.prefWidthProperty().bind(widthProperty());
-        tabPane.prefHeightProperty().bind(root.heightProperty());
+        tabPane.prefHeightProperty().bind(heightProperty());
 
         createAnisotropyControl(graphicsRoot);
         createGammaCorrectionControl(graphicsRoot);
@@ -232,7 +249,7 @@ public class SettingsDialog extends EditorDialog {
         createUseFlippedTextureDefaultControl(otherRoot);
         createDefaultCameraLampEnabledControl(otherRoot);
 
-        FXUtils.bindFixedWidth(messageLabel, root.widthProperty().multiply(0.8));
+        FXUtils.bindFixedWidth(messageLabel, widthProperty().multiply(0.8));
 
         FXUtils.addClassTo(messageLabel, CSSClasses.SPECIAL_FONT_15);
         FXUtils.addClassTo(graphicsSettings, CSSClasses.SPECIAL_FONT_15);
@@ -241,7 +258,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(tabPane, root);
         FXUtils.addToPane(messageLabel, root);
 
-        VBox.setMargin(tabPane, TAB_OFFSET);
         VBox.setMargin(messageLabel, MESSAGE_OFFSET);
     }
 
@@ -269,16 +285,12 @@ public class SettingsDialog extends EditorDialog {
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemoveCF());
 
-        FXUtils.addToPane(label, container);
-        FXUtils.addToPane(additionalClasspathField, container);
-        FXUtils.addToPane(addButton, container);
-        FXUtils.addToPane(removeButton, container);
+        FXUtils.addToPane(label, additionalClasspathField, addButton, removeButton, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(additionalClasspathField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(label, additionalClasspathField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
         HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
@@ -317,8 +329,8 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(additionalEnvsField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
         HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
@@ -348,15 +360,17 @@ public class SettingsDialog extends EditorDialog {
     /**
      * @return the additional classpath field.
      */
+    @NotNull
     private TextField getAdditionalClasspathField() {
-        return additionalClasspathField;
+        return notNull(additionalClasspathField);
     }
 
     /**
      * @return the additional envs field.
      */
+    @NotNull
     private TextField getAdditionalEnvsField() {
-        return additionalEnvsField;
+        return notNull(additionalEnvsField);
     }
 
     /**
@@ -752,7 +766,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getGammaCorrectionCheckBox() {
-        return gammaCorrectionCheckBox;
+        return notNull(gammaCorrectionCheckBox);
     }
 
     /**
@@ -760,7 +774,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getToneMapFilterCheckBox() {
-        return toneMapFilterCheckBox;
+        return notNull(toneMapFilterCheckBox);
     }
 
     /**
@@ -768,7 +782,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private Spinner<Double> getToneMapFilterWhitePointX() {
-        return toneMapFilterWhitePointX;
+        return notNull(toneMapFilterWhitePointX);
     }
 
     /**
@@ -776,7 +790,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private Spinner<Double> getToneMapFilterWhitePointY() {
-        return toneMapFilterWhitePointY;
+        return notNull(toneMapFilterWhitePointY);
     }
 
     /**
@@ -784,7 +798,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private Spinner<Double> getToneMapFilterWhitePointZ() {
-        return toneMapFilterWhitePointZ;
+        return notNull(toneMapFilterWhitePointZ);
     }
 
     /**
@@ -792,7 +806,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getFXAAFilterCheckBox() {
-        return fxaaFilterCheckBox;
+        return notNull(fxaaFilterCheckBox);
     }
 
     /**
@@ -800,21 +814,21 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private ComboBox<Integer> getAnisotropyComboBox() {
-        return anisotropyComboBox;
+        return notNull(anisotropyComboBox);
     }
 
     /**
      * @return The frame rate field.
      */
     private IntegerTextField getFrameRateField() {
-        return frameRateField;
+        return notNull(frameRateField);
     }
 
     /**
      * @return the camera angle field.
      */
     private IntegerTextField getCameraAngleField() {
-        return cameraAngleField;
+        return notNull(cameraAngleField);
     }
 
     /**
@@ -822,7 +836,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getAutoTangentGeneratingCheckBox() {
-        return autoTangentGeneratingCheckBox;
+        return notNull(autoTangentGeneratingCheckBox);
     }
 
     /**
@@ -830,7 +844,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getDefaultCameraLampEnabledCheckBox() {
-        return defaultCameraLampEnabledCheckBox;
+        return notNull(defaultCameraLampEnabledCheckBox);
     }
 
     /**
@@ -838,7 +852,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getDefaultUseFlippedTextureCheckBox() {
-        return defaultUseFlippedTextureCheckBox;
+        return notNull(defaultUseFlippedTextureCheckBox);
     }
 
     /**
@@ -846,7 +860,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private CheckBox getGoogleAnalyticsCheckBox() {
-        return googleAnalyticsCheckBox;
+        return notNull(googleAnalyticsCheckBox);
     }
 
     /**
@@ -854,7 +868,7 @@ public class SettingsDialog extends EditorDialog {
      */
     @NotNull
     private Label getMessageLabel() {
-        return messageLabel;
+        return notNull(messageLabel);
     }
 
     /**
@@ -1010,7 +1024,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(container, root);
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
     /**

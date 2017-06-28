@@ -27,6 +27,12 @@ public class RemoveLightOperation extends AbstractEditorOperation<ModelChangeCon
     @NotNull
     private final Node parent;
 
+    /**
+     * Instantiates a new Remove light operation.
+     *
+     * @param light  the light
+     * @param parent the parent
+     */
     public RemoveLightOperation(@NotNull final Light light, @NotNull final Node parent) {
         this.light = light;
         this.parent = parent;

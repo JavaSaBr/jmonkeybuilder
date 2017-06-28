@@ -26,6 +26,11 @@ public class LogView extends CodeArea {
     @NotNull
     private static final LogView INSTANCE = new LogView();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static LogView getInstance() {
         return INSTANCE;
@@ -104,6 +109,9 @@ public class LogView extends CodeArea {
         return spansBuilder.create();
     }
 
+    /**
+     * Instantiates a new Log view.
+     */
     public LogView() {
         setId(CSSIds.LOG_VIEW);
         setWrapText(true);

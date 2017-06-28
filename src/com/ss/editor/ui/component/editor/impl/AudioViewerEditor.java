@@ -37,6 +37,9 @@ import java.nio.file.Path;
  */
 public class AudioViewerEditor extends AbstractFileEditor<VBox> {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -209,6 +212,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         }
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);

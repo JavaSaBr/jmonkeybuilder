@@ -19,7 +19,6 @@ import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -35,23 +34,33 @@ public class EditorFXSceneBuilder {
     /**
      * The path to the base CSS styles.
      */
-    private static final String CSS_FILE_BASE = "/ui/css/base.bss";
+    @NotNull
+    public static final String CSS_FILE_BASE = "/ui/css/base.bss";
 
     /**
      * The path to the external CSS styles.
      */
-    private static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
+    @NotNull
+    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
 
     /**
      * The path to the custom ids CSS styles.
      */
-    private static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
+    @NotNull
+    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
 
     /**
      * The path to the custom classes CSS styles.
      */
-    private static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
+    @NotNull
+    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
+    /**
+     * Build editor fx scene.
+     *
+     * @param stage the stage
+     * @return the editor fx scene
+     */
     @NotNull
     @FXThread
     public static EditorFXScene build(@NotNull final Stage stage) {
@@ -107,15 +116,8 @@ public class EditorFXSceneBuilder {
         leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
         bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
 
-        final Pane editorBarOffset = new Pane();
-        editorBarOffset.setId(CSSIds.EDITOR_BAR_COMPONENT_OFFSET);
+        FXUtils.addToPane(new VBox(barComponent, leftSplitContainer), container);
 
-        FXUtils.addToPane(new VBox(editorBarOffset, leftSplitContainer), container);
-        FXUtils.addToPane(barComponent, container);
-
-        barComponent.toFront();
-
-        FXUtils.bindFixedWidth(editorBarOffset, container.widthProperty());
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
     }

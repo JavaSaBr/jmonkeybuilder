@@ -1,9 +1,9 @@
 package com.ss.editor;
 
 import static com.jme3.environment.LightProbeFactory.makeProbe;
-import static java.nio.file.Files.createDirectories;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.run;
+import static java.nio.file.Files.createDirectories;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -14,6 +14,7 @@ import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.font.BitmapFont;
 import com.jme3.light.LightProbe;
+import com.jme3.material.Material;
 import com.jme3.material.TechniqueDef;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -32,20 +33,20 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.manager.*;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.editor.extension.loader.SceneLoader;
-import jme3_ext_xbuf.XbufLoader;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.Configuration;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.logging.impl.FolderFileListener;
 import com.ss.rlib.manager.InitializeManager;
+import jme3_ext_xbuf.XbufLoader;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.Configuration;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.nio.file.Files;
@@ -75,11 +76,21 @@ public class Editor extends JmeToJFXApplication {
     @NotNull
     private static final Editor EDITOR = new Editor();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static Editor getInstance() {
         return EDITOR;
     }
 
+    /**
+     * Prepare to start editor.
+     *
+     * @return the editor
+     */
     @NotNull
     static Editor prepareToStart() {
         Configuration.MEMORY_ALLOCATOR.set("jemalloc");
@@ -201,6 +212,12 @@ public class Editor extends JmeToJFXApplication {
     @Nullable
     private TonegodTranslucentBucketFilter translucentBucketFilter;
 
+    /**
+     * The default material.
+     */
+    @Nullable
+    private Material defaultMaterial;
+
     private Editor() {
         this.lock = new StampedLock();
         this.previewNode = new Node("Preview Node");
@@ -208,6 +225,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Lock the render thread for other actions.
+     *
+     * @return the long
      */
     public final long asyncLock() {
         return lock.readLock();
@@ -215,6 +234,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Unlock the render thread.
+     *
+     * @param stamp the stamp
      */
     public final void asyncUnlock(final long stamp) {
         lock.unlockRead(stamp);
@@ -268,6 +289,8 @@ public class Editor extends JmeToJFXApplication {
 
         viewPort.setBackgroundColor(new ColorRGBA(50 / 255F, 50 / 255F, 50 / 255F, 1F));
         cam.setFrustumPerspective(55, (float) cam.getWidth() / cam.getHeight(), 1f, 10000);
+
+        defaultMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
 
         // create preview view port
         previewCamera = cam.clone();
@@ -343,6 +366,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Try to lock render thread for doing actions with game scene.
+     *
+     * @return the long
      */
     public long trySyncLock() {
         return lock.tryWriteLock();
@@ -391,20 +416,10 @@ public class Editor extends JmeToJFXApplication {
 
             super.update();
 
-        } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException | NullPointerException | StackOverflowError e) {
+        } catch (final AssetNotFoundException | RendererException | AssertionError | ArrayIndexOutOfBoundsException |
+                NullPointerException | StackOverflowError | IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
-            GAnalytics.sendException(e, true);
-            GAnalytics.waitForSend();
-            final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-            workspaceManager.clear();
-            System.exit(1);
-        } catch (final RendererException | IllegalStateException | UnsupportedOperationException e) {
-            LOGGER.warning(e);
-            GAnalytics.sendException(e, true);
-            GAnalytics.waitForSend();
-            final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-            workspaceManager.clear();
-            System.exit(2);
+            finishWorkOnError(e);
         } finally {
             syncUnlock(stamp);
         }
@@ -413,12 +428,25 @@ public class Editor extends JmeToJFXApplication {
         listener.setRotation(cam.getRotation());
     }
 
+    private void finishWorkOnError(@NotNull final Throwable e) {
+
+        GAnalytics.sendException(e, true);
+        GAnalytics.waitForSend();
+
+        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
+        workspaceManager.clear();
+
+        System.exit(2);
+    }
+
     /**
+     * Gets post processor.
+     *
      * @return the processor of post effects.
      */
     @NotNull
     public FilterPostProcessor getPostProcessor() {
-        return requireNonNull(postProcessor);
+        return notNull(postProcessor);
     }
 
     /**
@@ -454,6 +482,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Update the light probe.
+     *
+     * @param progressAdapter the progress adapter
      */
     public void updateProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
@@ -470,6 +500,8 @@ public class Editor extends JmeToJFXApplication {
 
     /**
      * Update the light probe.
+     *
+     * @param progressAdapter the progress adapter
      */
     public void updatePreviewProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
@@ -493,11 +525,13 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets preview view port.
+     *
      * @return The preview view port.
      */
     @NotNull
     public ViewPort getPreviewViewPort() {
-        return requireNonNull(previewViewPort);
+        return notNull(previewViewPort);
     }
 
     /**
@@ -517,11 +551,13 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets preview camera.
+     *
      * @return the camera for preview.
      */
     @NotNull
     public Camera getPreviewCamera() {
-        return requireNonNull(previewCamera);
+        return notNull(previewCamera);
     }
 
     /**
@@ -533,22 +569,28 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets preview node.
+     *
      * @return the node for preview.
      */
     @NotNull
     public Node getPreviewNode() {
-        return requireNonNull(previewNode);
+        return notNull(previewNode);
     }
 
     /**
+     * Gets tone map filter.
+     *
      * @return the filter of color correction.
      */
     @NotNull
     public ToneMapFilter getToneMapFilter() {
-        return requireNonNull(toneMapFilter);
+        return notNull(toneMapFilter);
     }
 
     /**
+     * Gets fxaa filter.
+     *
      * @return The FXAA filter.
      */
     public FXAAFilter getFXAAFilter() {
@@ -556,14 +598,18 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets translucent bucket filter.
+     *
      * @return the translucent bucket filter.
      */
     @NotNull
     public TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
-        return requireNonNull(translucentBucketFilter);
+        return notNull(translucentBucketFilter);
     }
 
     /**
+     * Sets paused.
+     *
      * @param paused true if this app is paused.
      */
     void setPaused(final boolean paused) {
@@ -571,10 +617,22 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Gets gui font.
+     *
      * @return the gui font.
      */
     @Nullable
     public BitmapFont getGuiFont() {
-        return requireNonNull(guiFont);
+        return notNull(guiFont);
+    }
+
+    /**
+     * Gets a default material.
+     *
+     * @return the default material.
+     */
+    @NotNull
+    public Material getDefaultMaterial() {
+        return notNull(defaultMaterial);
     }
 }

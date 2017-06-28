@@ -10,10 +10,16 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link SpatialModelNode} for representing the {@link Node} in the editor.
  *
- * @author vp-byte
+ * @author vp -byte
  */
 public class AssetLinkNodeModelNode extends NodeModelNode<AssetLinkNode> {
 
+    /**
+     * Instantiates a new Asset link node model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AssetLinkNodeModelNode(@NotNull final AssetLinkNode element, final long objectId) {
         super(element, objectId);
     }

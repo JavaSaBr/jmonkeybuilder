@@ -1,29 +1,29 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
+import com.ss.editor.extension.scene.control.EditableControl;
+import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.extension.scene.control.EditableControl;
-import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.awt.*;
 
@@ -35,7 +35,7 @@ import java.awt.*;
 public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(415, 184);
+    private static final Point DIALOG_SIZE = new Point(415, 0);
 
     @NotNull
     private static final ObjectDictionary<String, EditableControl> BUILT_IN = newObjectDictionary();
@@ -82,6 +82,12 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final Spatial spatial;
 
+    /**
+     * Instantiates a new Create custom control dialog.
+     *
+     * @param changeConsumer the change consumer
+     * @param spatial        the spatial
+     */
     public CreateCustomControlDialog(@NotNull final ModelChangeConsumer changeConsumer,
                                      @NotNull final Spatial spatial) {
         this.changeConsumer = changeConsumer;
@@ -99,7 +105,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getCustomCheckBox() {
-        return requireNonNull(customCheckBox);
+        return notNull(customCheckBox);
     }
 
     /**
@@ -107,7 +113,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<String> getBuiltInBox() {
-        return requireNonNull(builtInBox);
+        return notNull(builtInBox);
     }
 
     /**
@@ -115,7 +121,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private TextField getControlNameField() {
-        return requireNonNull(controlNameField);
+        return notNull(controlNameField);
     }
 
     @Override
@@ -194,7 +200,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
             final SingleSelectionModel<String> selectionModel = builtInBox.getSelectionModel();
             final String name = selectionModel.getSelectedItem();
 
-            final EditableControl example = requireNonNull(BUILT_IN.get(name));
+            final EditableControl example = notNull(BUILT_IN.get(name));
             final EditableControl newExample = ClassUtils.newInstance(example.getClass());
 
             changeConsumer.execute(new AddControlOperation(newExample, spatial));
@@ -203,6 +209,7 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         super.processOk();
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

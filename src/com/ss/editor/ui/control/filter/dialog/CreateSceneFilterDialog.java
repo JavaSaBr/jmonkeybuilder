@@ -1,6 +1,7 @@
 package com.ss.editor.ui.control.filter.dialog;
 
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.ss.editor.Messages;
@@ -36,7 +37,7 @@ import java.awt.*;
 public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(415, 184);
+    private static final Point DIALOG_SIZE = new Point(415, 0);
 
     private static final ObjectDictionary<String, SceneFilter<?>> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
@@ -87,6 +88,11 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private final SceneChangeConsumer changeConsumer;
 
+    /**
+     * Instantiates a new Create scene filter dialog.
+     *
+     * @param changeConsumer the change consumer
+     */
     public CreateSceneFilterDialog(@NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
     }
@@ -153,7 +159,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getCustomCheckBox() {
-        return requireNonNull(customCheckBox);
+        return notNull(customCheckBox);
     }
 
     /**
@@ -161,7 +167,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private TextField getFilterNameField() {
-        return requireNonNull(filterNameField);
+        return notNull(filterNameField);
     }
 
     /**
@@ -169,7 +175,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<String> getBuiltInBox() {
-        return requireNonNull(builtInBox);
+        return notNull(builtInBox);
     }
 
     @Override
@@ -231,6 +237,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         }
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

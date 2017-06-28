@@ -20,6 +20,9 @@ public class AssetBarComponent extends HBox {
 
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
+    /**
+     * Instantiates a new Asset bar component.
+     */
     public AssetBarComponent() {
         setId(CSSIds.ASSET_COMPONENT_BAR);
 

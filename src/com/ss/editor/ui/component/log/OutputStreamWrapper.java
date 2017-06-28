@@ -7,6 +7,8 @@ import java.io.PrintStream;
 import java.util.function.Consumer;
 
 /**
+ * The type Output stream wrapper.
+ *
  * @author JavaSaBr
  */
 public class OutputStreamWrapper extends PrintStream {
@@ -14,6 +16,12 @@ public class OutputStreamWrapper extends PrintStream {
     @NotNull
     private final Consumer<String> consumer;
 
+    /**
+     * Instantiates a new Output stream wrapper.
+     *
+     * @param out      the out
+     * @param consumer the consumer
+     */
     public OutputStreamWrapper(@NotNull final OutputStream out, @NotNull final Consumer<String> consumer) {
         super(out);
         this.consumer = consumer;

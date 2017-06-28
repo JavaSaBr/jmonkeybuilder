@@ -18,10 +18,17 @@ import com.ss.rlib.util.StringUtils;
 /**
  * The base implementation of {@link ModelNode} to present lights.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class LightModelNode<T extends Light> extends ModelNode<T> {
 
+    /**
+     * Instantiates a new Light model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public LightModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }

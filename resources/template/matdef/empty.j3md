@@ -1,0 +1,21 @@
+MaterialDef ${matdef-name} {
+    MaterialParameters {
+    }
+
+    Technique {
+        LightMode ${light-mode}
+
+        VertexShader   ${GLSL-version} : ${vertex-path}
+        FragmentShader ${GLSL-version} : ${fragment-path}
+
+        WorldParameters {
+            WorldViewProjectionMatrix
+        }
+
+        Defines {
+        }
+
+        ForcedRenderState {
+        }
+    }
+}

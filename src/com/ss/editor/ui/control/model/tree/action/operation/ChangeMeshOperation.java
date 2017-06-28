@@ -32,6 +32,13 @@ public class ChangeMeshOperation extends AbstractEditorOperation<ModelChangeCons
     @NotNull
     private final Geometry geometry;
 
+    /**
+     * Instantiates a new Change mesh operation.
+     *
+     * @param newMesh  the new mesh
+     * @param oldMesh  the old mesh
+     * @param geometry the geometry
+     */
     public ChangeMeshOperation(@NotNull final Mesh newMesh, @NotNull final Mesh oldMesh, @NotNull final Geometry geometry) {
         this.newMesh = newMesh;
         this.oldMesh = oldMesh;

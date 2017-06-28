@@ -24,6 +24,12 @@ import tonegod.emitter.influencers.impl.AlphaInfluencer;
  */
 public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfluencer, TextField, AlphaInfluencerControl> {
 
+    /**
+     * Instantiates a new Alpha and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public AlphaAndInterpolationElement(@NotNull final AlphaInfluencerControl control, final int index) {
         super(control, index);
     }
@@ -31,7 +37,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_ALPHA;
+        return Messages.MODEL_PROPERTY_ALPHA;
     }
 
     @Override

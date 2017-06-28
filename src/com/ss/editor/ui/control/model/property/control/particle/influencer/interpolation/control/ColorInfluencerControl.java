@@ -20,6 +20,13 @@ import tonegod.emitter.interpolation.Interpolation;
  */
 public class ColorInfluencerControl extends AbstractInterpolationInfluencerControl<ColorInfluencer> {
 
+    /**
+     * Instantiates a new Color influencer control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public ColorInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
@@ -27,7 +34,7 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_COLOR_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_COLOR_INTERPOLATION;
     }
 
     @Override
@@ -44,6 +51,12 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
         }
     }
 
+    /**
+     * Request to change.
+     *
+     * @param newValue the new value
+     * @param index    the index
+     */
     public void requestToChange(@NotNull final ColorRGBA newValue, final int index) {
 
         final ColorInfluencer influencer = getInfluencer();

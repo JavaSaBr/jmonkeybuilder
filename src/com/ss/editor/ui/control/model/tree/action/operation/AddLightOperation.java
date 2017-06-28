@@ -26,6 +26,12 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
     @NotNull
     private final Node parent;
 
+    /**
+     * Instantiates a new Add light operation.
+     *
+     * @param light  the light
+     * @param parent the parent
+     */
     public AddLightOperation(@NotNull final Light light, @NotNull Node parent) {
         this.light = light;
         this.parent = parent;

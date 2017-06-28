@@ -56,6 +56,11 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
      */
     private boolean lock;
 
+    /**
+     * Instantiates a new Slope terrain tool control.
+     *
+     * @param component the component
+     */
     public SlopeTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
 
@@ -350,6 +355,8 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Is precision boolean.
+     *
      * @return true if using precision changing.
      */
     public boolean isPrecision() {
@@ -357,6 +364,8 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Sets precision.
+     *
      * @param precision the flag of using precision changing.
      */
     public void setPrecision(final boolean precision) {
@@ -371,6 +380,8 @@ public class SlopeTerrainToolControl extends ChangeHeightTerrainToolControl {
     }
 
     /**
+     * Sets lock.
+     *
      * @param lock the flag of locking.
      */
     public void setLock(final boolean lock) {

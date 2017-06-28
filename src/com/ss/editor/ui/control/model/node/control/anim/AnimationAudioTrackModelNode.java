@@ -13,6 +13,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class AnimationAudioTrackModelNode extends AnimationTrackModelNode<AudioTrack> {
 
+    /**
+     * Instantiates a new Animation audio track model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AnimationAudioTrackModelNode(@NotNull final AudioTrack element, final long objectId) {
         super(element, objectId);
     }

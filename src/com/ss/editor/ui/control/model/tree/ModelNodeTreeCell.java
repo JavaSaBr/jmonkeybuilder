@@ -21,6 +21,11 @@ import javafx.scene.control.TreeItem;
  */
 public class ModelNodeTreeCell extends AbstractNodeTreeCell<ModelChangeConsumer, ModelNodeTree> {
 
+    /**
+     * Instantiates a new Model node tree cell.
+     *
+     * @param nodeTree the node tree
+     */
     ModelNodeTreeCell(@NotNull final ModelNodeTree nodeTree) {
         super(nodeTree);
     }

@@ -18,12 +18,22 @@ import com.ss.rlib.function.SixObjectConsumer;
 /**
  * The implementation of the {@link AbstractVector2fPropertyControl} to edit min-max value range.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractMinMaxPropertyControl<C extends ChangeConsumer, T extends Spatial>
         extends AbstractVector2fPropertyControl<C, T> {
 
 
+    /**
+     * Instantiates a new Abstract min max property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractMinMaxPropertyControl(@Nullable final Vector2f propertyValue, @NotNull final String propertyName,
                                          @NotNull final C changeConsumer, @NotNull
                                          final SixObjectConsumer<C, T, String, Vector2f, Vector2f, BiConsumer<T, Vector2f>> changeHandler) {

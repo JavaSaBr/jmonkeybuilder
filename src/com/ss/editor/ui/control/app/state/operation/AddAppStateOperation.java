@@ -26,6 +26,12 @@ public class AddAppStateOperation extends AbstractEditorOperation<SceneChangeCon
     @NotNull
     private final SceneNode sceneNode;
 
+    /**
+     * Instantiates a new Add app state operation.
+     *
+     * @param newState  the new state
+     * @param sceneNode the scene node
+     */
     public AddAppStateOperation(@NotNull final SceneAppState newState, @NotNull final SceneNode sceneNode) {
         this.newState = newState;
         this.sceneNode = sceneNode;

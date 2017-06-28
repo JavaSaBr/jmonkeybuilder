@@ -1,25 +1,26 @@
 package com.ss.editor.ui.control.model.property.operation;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tonegod.emitter.influencers.ParticleInfluencer;
 
 import java.util.function.BiConsumer;
 
-import tonegod.emitter.influencers.ParticleInfluencer;
-
 /**
- * The implementation of the {@link AbstractEditorOperation} for editing {@link ParticleInfluencer} in the {@link
- * ModelFileEditor}.
+ * The implementation of the {@link AbstractEditorOperation} to edit {@link ParticleInfluencer}.
  *
+ * @param <D> the type of a {@link ParticleInfluencer}
+ * @param <T> the type of an edited value.
  * @author JavaSaBr
  */
-public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T> extends AbstractEditorOperation<ModelChangeConsumer> {
+public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T> extends
+        AbstractEditorOperation<ModelChangeConsumer> {
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -54,8 +55,18 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
     /**
      * The handler for applying new value.
      */
+    @Nullable
     private BiConsumer<D, T> applyHandler;
 
+    /**
+     * Instantiates a new Particle influencer property operation.
+     *
+     * @param influencer   the influencer
+     * @param parent       the parent
+     * @param propertyName the property name
+     * @param newValue     the new value
+     * @param oldValue     the old value
+     */
     public ParticleInfluencerPropertyOperation(@NotNull final D influencer, @NotNull final Object parent,
                                                @NotNull final String propertyName, @Nullable final T newValue,
                                                @Nullable final T oldValue) {
@@ -67,6 +78,8 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
     }
 
     /**
+     * Sets apply handler.
+     *
      * @param applyHandler the handler for applying new value.
      */
     public void setApplyHandler(@NotNull final BiConsumer<D, T> applyHandler) {
@@ -83,9 +96,12 @@ public class ParticleInfluencerPropertyOperation<D extends ParticleInfluencer, T
 
     /**
      * Apply new value of the property to the model.
+     *
+     * @param spatial the spatial
+     * @param value   the value
      */
     protected void apply(@NotNull final D spatial, @Nullable final T value) {
-        applyHandler.accept(spatial, value);
+        notNull(applyHandler).accept(spatial, value);
     }
 
     @Override

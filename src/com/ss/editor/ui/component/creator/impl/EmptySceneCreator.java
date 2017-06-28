@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -21,6 +22,9 @@ import java.nio.file.Path;
  */
 public class EmptySceneCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
@@ -45,15 +49,10 @@ public class EmptySceneCreator extends AbstractFileCreator {
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
-        final SceneNode newNode = new SceneNode();
-        newNode.addLayer(new SceneLayer("Default", true));
-        newNode.addLayer(new SceneLayer("TransparentFX", true));
-        newNode.addLayer(new SceneLayer("Ignore Raycast", true));
-        newNode.addLayer(new SceneLayer("Water", true));
-        newNode.getLayers().forEach(SceneLayer::show);
+        final SceneNode newNode = createScene();
 
         try (final OutputStream out = Files.newOutputStream(fileToCreate)) {
             exporter.save(newNode, out);
@@ -62,5 +61,21 @@ public class EmptySceneCreator extends AbstractFileCreator {
         }
 
         notifyFileCreated(fileToCreate, true);
+    }
+
+    /**
+     * Create scene scene node.
+     *
+     * @return the scene node
+     */
+    @NotNull
+    protected SceneNode createScene() {
+        final SceneNode newNode = new SceneNode();
+        newNode.addLayer(new SceneLayer("Default", true));
+        newNode.addLayer(new SceneLayer("TransparentFX", true));
+        newNode.addLayer(new SceneLayer("Ignore Raycast", true));
+        newNode.addLayer(new SceneLayer("Water", true));
+        newNode.getLayers().forEach(SceneLayer::show);
+        return newNode;
     }
 }

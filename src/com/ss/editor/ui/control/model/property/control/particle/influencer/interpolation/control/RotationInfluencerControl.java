@@ -20,6 +20,13 @@ import tonegod.emitter.interpolation.Interpolation;
  */
 public class RotationInfluencerControl extends AbstractInterpolationInfluencerControl<RotationInfluencer> {
 
+    /**
+     * Instantiates a new Rotation influencer control.
+     *
+     * @param modelChangeConsumer the model change consumer
+     * @param influencer          the influencer
+     * @param parent              the parent
+     */
     public RotationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
@@ -27,7 +34,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @NotNull
     @Override
     protected String getControlTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_ROTATION_INTERPOLATION;
+        return Messages.MODEL_PROPERTY_ROTATION_INTERPOLATION;
     }
 
     @Override
@@ -35,6 +42,12 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
         return 1;
     }
 
+    /**
+     * Request to change.
+     *
+     * @param newValue the new value
+     * @param index    the index
+     */
     public void requestToChange(@NotNull final Vector3f newValue, final int index) {
 
         final RotationInfluencer influencer = getInfluencer();

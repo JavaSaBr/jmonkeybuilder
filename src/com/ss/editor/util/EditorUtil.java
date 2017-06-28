@@ -55,6 +55,9 @@ public abstract class EditorUtil {
     @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorUtil.class);
 
+    /**
+     * The constant JAVA_PARAM.
+     */
     @NotNull
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
@@ -62,6 +65,8 @@ public abstract class EditorUtil {
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
 
     /**
+     * Check exists boolean.
+     *
      * @param path the path to resource.
      * @return true if the resource is exists.
      */
@@ -101,6 +106,8 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Gets input stream.
+     *
      * @param path the path to resource.
      * @return the input stream of the resource or null.
      */
@@ -221,6 +228,8 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Has file in clipboard boolean.
+     *
      * @return true if you have a file in your system clipboard.
      */
     public static boolean hasFileInClipboard() {
@@ -231,6 +240,9 @@ public abstract class EditorUtil {
     }
 
     /**
+     * To asset path string.
+     *
+     * @param path the path
      * @return the valid asset path for the file.
      */
     @NotNull
@@ -241,6 +253,10 @@ public abstract class EditorUtil {
 
     /**
      * Handle exception.
+     *
+     * @param logger the logger
+     * @param owner  the owner
+     * @param e      the e
      */
     public static void handleException(@Nullable final Logger logger, @Nullable final Object owner,
                                        @NotNull final Exception e) {
@@ -249,6 +265,11 @@ public abstract class EditorUtil {
 
     /**
      * Handle exception.
+     *
+     * @param logger   the logger
+     * @param owner    the owner
+     * @param e        the e
+     * @param callback the callback
      */
     public static void handleException(@Nullable Logger logger, @Nullable final Object owner,
                                        @NotNull final Exception e, @Nullable final Runnable callback) {
@@ -329,6 +350,8 @@ public abstract class EditorUtil {
 
     /**
      * Open the file in an external editor.
+     *
+     * @param path the path
      */
     public static void openFileInExternalEditor(@NotNull final Path path) {
 
@@ -368,6 +391,9 @@ public abstract class EditorUtil {
 
     /**
      * Convert the object to byte array.
+     *
+     * @param object the object
+     * @return the byte [ ]
      */
     @NotNull
     public static byte[] serialize(@NotNull final Serializable object) {
@@ -385,6 +411,10 @@ public abstract class EditorUtil {
 
     /**
      * Convert the byte array to object.
+     *
+     * @param <T>   the type parameter
+     * @param bytes the bytes
+     * @return the t
      */
     @NotNull
     public static <T> T deserialize(@NotNull final byte[] bytes) {
@@ -401,6 +431,10 @@ public abstract class EditorUtil {
 
     /**
      * Format the float number.
+     *
+     * @param value the value
+     * @param mod   the mod
+     * @return the float
      */
     public static float clipNumber(float value, float mod) {
         return (int) (value * mod) / mod;
@@ -429,6 +463,7 @@ public abstract class EditorUtil {
     /**
      * Get an array of available enum values by an enum value.
      *
+     * @param <E>   the type parameter
      * @param value the enum value.
      * @return the array of enum values.
      */
@@ -443,6 +478,7 @@ public abstract class EditorUtil {
     /**
      * Try to create an user object using asset classpath and additional classpath.
      *
+     * @param <T>        the type parameter
      * @param owner      the requester.
      * @param className  the classname.
      * @param resultType the result type.

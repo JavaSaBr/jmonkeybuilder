@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
@@ -17,6 +18,9 @@ import java.nio.file.Path;
  */
 public class FolderCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
@@ -50,7 +54,7 @@ public class FolderCreator extends AbstractFileCreator {
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
         try {
             Files.createDirectory(fileToCreate);
         } catch (final IOException e) {

@@ -85,6 +85,11 @@ public class JMEFilePreviewManager extends AbstractControl {
     @Nullable
     private static volatile JMEFilePreviewManager instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static JMEFilePreviewManager getInstance() {
         if (instance == null) {
@@ -98,6 +103,9 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
+     * Is jme file boolean.
+     *
+     * @param file the file
      * @return true is the file is a JME file.
      */
     public static boolean isJmeFile(@Nullable final Path file) {
@@ -107,6 +115,9 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
+     * Is audio file boolean.
+     *
+     * @param file the file
      * @return true is the file is a JME file.
      */
     public static boolean isAudioFile(@Nullable final Path file) {
@@ -284,6 +295,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     /**
+     * Gets image view.
+     *
      * @return the image view with a preview.
      */
     @NotNull

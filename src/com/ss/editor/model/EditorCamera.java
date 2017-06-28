@@ -1,19 +1,14 @@
 package com.ss.editor.model;
 
+import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
+import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.sqrt;
-import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
-import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
-
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
-import com.jme3.input.CameraInput;
-import com.jme3.input.ChaseCamera;
-import com.jme3.input.FlyByCamera;
-import com.jme3.input.InputManager;
-import com.jme3.input.MouseInput;
+import com.jme3.input.*;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.MouseAxisTrigger;
@@ -25,7 +20,6 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
-import com.ss.editor.Editor;
 
 import java.io.IOException;
 
@@ -54,15 +48,49 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             CHASECAM_ZOOMOUT
     };
 
+    /**
+     * The enum Perspective.
+     */
     public enum Perspective {
-        BACK, RIGHT, TOP, BOTTOM
+        /**
+         * Back perspective.
+         */
+        BACK,
+        /**
+         * Right perspective.
+         */
+        RIGHT,
+        /**
+         * Top perspective.
+         */
+        TOP,
+        /**
+         * Bottom perspective.
+         */
+        BOTTOM
     }
 
+    /**
+     * The enum Direction.
+     */
     public enum Direction {
-        LEFT, RIGHT, TOP, BOTTOM
+        /**
+         * Left direction.
+         */
+        LEFT,
+        /**
+         * Right direction.
+         */
+        RIGHT,
+        /**
+         * Top direction.
+         */
+        TOP,
+        /**
+         * Bottom direction.
+         */
+        BOTTOM
     }
-
-    private static final Editor EDITOR = Editor.getInstance();
 
     private InputManager inputManager;
 
@@ -164,6 +192,9 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Разворот камеры.
+     *
+     * @param direction the direction
+     * @param value     the value
      */
     public void rotateTo(final Direction direction, final float value) {
 
@@ -186,6 +217,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Разворот камеры.
+     *
+     * @param perspective the perspective
      */
     public void rotateTo(final Perspective perspective) {
 
@@ -214,6 +247,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
+     * Sets target rotation.
+     *
      * @param targetRotation целевой разворот камеры.
      */
     public void setTargetRotation(final float targetRotation) {
@@ -228,6 +263,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
+     * Sets target v rotation.
+     *
      * @param targetVRotation целевой разворот камеры по вертикали.
      */
     public void setTargetVRotation(final float targetVRotation) {
@@ -252,6 +289,11 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         }
     }
 
+    /**
+     * Sets lock rotation.
+     *
+     * @param lockRotation the lock rotation
+     */
     public void setLockRotation(boolean lockRotation) {
         this.lockRotation = lockRotation;
     }
@@ -281,6 +323,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Registers inputs with the input manager
+     *
+     * @param inputManager the input manager
      */
     public final void registerInput(final InputManager inputManager) {
         this.inputManager = inputManager;
@@ -316,10 +360,18 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         inputManager.addListener(this, ALL_INPUTS);
     }
 
+    /**
+     * Unregister input.
+     *
+     * @param inputManager the input manager
+     */
     public void unregisterInput(final InputManager inputManager) {
         inputManager.removeListener(this);
     }
 
+    /**
+     * Compute position.
+     */
     protected void computePosition() {
 
         float highDistance = (distance) * FastMath.sin((FastMath.PI / 2) - verticalRotation);
@@ -328,6 +380,11 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         position.addLocal(target.getWorldTranslation());
     }
 
+    /**
+     * Rotate camera.
+     *
+     * @param value the value
+     */
     //rotate the camera around the target on the horizontal plane
     protected void rotateCamera(float value) {
         if (!canRotate || !enabled) return;
@@ -335,14 +392,29 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         targetRotation += value * rotationSpeed;
     }
 
+    /**
+     * Gets target distance.
+     *
+     * @return the target distance
+     */
     public float getTargetDistance() {
         return targetDistance;
     }
 
+    /**
+     * Sets target distance.
+     *
+     * @param targetDistance the target distance
+     */
     public void setTargetDistance(final float targetDistance) {
         this.targetDistance = max(min(targetDistance, maxDistance), minDistance);
     }
 
+    /**
+     * Zoom camera.
+     *
+     * @param value the value
+     */
     //move the camera toward or away the target
     protected void zoomCamera(float value) {
         if (!enabled) return;
@@ -352,6 +424,11 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
         targetDistance = max(min(targetDistance, maxDistance), minDistance);
     }
 
+    /**
+     * Vertical rotate camera.
+     *
+     * @param value the value
+     */
     //rotate the camera around the target on the vertical plane
     protected void verticalRotateCamera(final float value) {
         if (!canRotate || !enabled) return;
@@ -362,6 +439,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Updates the camera, should only be called internally
+     *
+     * @param tpf the tpf
      */
     protected void updateCamera(float tpf) {
         if (!enabled) return;
@@ -526,7 +605,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Returns the max zoom distance of the camera (default is 40)
      *
-     * @return maxDistance
+     * @return maxDistance max distance
      */
     public float getMaxDistance() {
         return maxDistance;
@@ -534,6 +613,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Sets the max zoom distance of the camera (default is 40)
+     *
+     * @param maxDistance the max distance
      */
     public void setMaxDistance(float maxDistance) {
         this.maxDistance = maxDistance;
@@ -545,7 +626,7 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Returns the min zoom distance of the camera (default is 1)
      *
-     * @return minDistance
+     * @return minDistance min distance
      */
     public float getMinDistance() {
         return minDistance;
@@ -553,6 +634,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Sets the min zoom distance of the camera (default is 1)
+     *
+     * @param minDistance the min distance
      */
     public void setMinDistance(float minDistance) {
         this.minDistance = minDistance;
@@ -625,6 +708,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
+     * Is smooth motion boolean.
+     *
      * @return True is smooth motion is enabled for this chase camera
      */
     public boolean isSmoothMotion() {
@@ -633,6 +718,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Enables smooth motion for this chase camera
+     *
+     * @param smoothMotion the smooth motion
      */
     public void setSmoothMotion(boolean smoothMotion) {
         this.smoothMotion = smoothMotion;
@@ -640,6 +727,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the chasing sensitivity
+     *
+     * @return the chasing sensitivity
      */
     public float getChasingSensitivity() {
         return chasingSensitivity;
@@ -648,6 +737,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Sets the chasing sensitivity, the lower the value the slower the camera will follow the target when it moves
      * default is 5 Only has an effect if smoothMotion is set to true and trailing is enabled
+     *
+     * @param chasingSensitivity the chasing sensitivity
      */
     public void setChasingSensitivity(float chasingSensitivity) {
         this.chasingSensitivity = chasingSensitivity;
@@ -655,6 +746,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Returns the rotation sensitivity
+     *
+     * @return the rotation sensitivity
      */
     public float getRotationSensitivity() {
         return rotationSensitivity;
@@ -664,6 +757,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * Sets the rotation sensitivity, the lower the value the slower the camera will rotates around the target when
      * draging with the mouse default is 5, values over 5 should have no effect. If you want a significant slow down try
      * values below 1. Only has an effect if smoothMotion is set to true
+     *
+     * @param rotationSensitivity the rotation sensitivity
      */
     public void setRotationSensitivity(float rotationSensitivity) {
         this.rotationSensitivity = rotationSensitivity;
@@ -671,6 +766,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns true if the trailing is enabled
+     *
+     * @return the boolean
      */
     public boolean isTrailingEnabled() {
         return trailingEnabled;
@@ -679,6 +776,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Enable the camera trailing : The camera smoothly go in the targets trail when it moves. Only has an effect if
      * smoothMotion is set to true
+     *
+     * @param trailingEnabled the trailing enabled
      */
     public void setTrailingEnabled(boolean trailingEnabled) {
         this.trailingEnabled = trailingEnabled;
@@ -686,6 +785,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the trailing rotation inertia
+     *
+     * @return the trailing rotation inertia
      */
     public float getTrailingRotationInertia() {
         return trailingRotationInertia;
@@ -695,6 +796,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
      * Sets the trailing rotation inertia : default is 0.1. This prevent the camera to roughtly stop when the target
      * stops moving before the camera reached the trail position. Only has an effect if smoothMotion is set to true and
      * trailing is enabled
+     *
+     * @param trailingRotationInertia the trailing rotation inertia
      */
     public void setTrailingRotationInertia(float trailingRotationInertia) {
         this.trailingRotationInertia = trailingRotationInertia;
@@ -702,6 +805,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the trailing sensitivity
+     *
+     * @return the trailing sensitivity
      */
     public float getTrailingSensitivity() {
         return trailingSensitivity;
@@ -710,6 +815,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     /**
      * Only has an effect if smoothMotion is set to true and trailing is enabled Sets the trailing sensitivity, the
      * lower the value, the slower the camera will go in the target trail when it moves. default is 0.5;
+     *
+     * @param trailingSensitivity the trailing sensitivity
      */
     public void setTrailingSensitivity(float trailingSensitivity) {
         this.trailingSensitivity = trailingSensitivity;
@@ -717,6 +824,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the zoom sensitivity
+     *
+     * @return the zoom sensitivity
      */
     public float getZoomSensitivity() {
         return zoomSensitivity;
@@ -724,6 +833,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Sets the zoom sensitivity, the lower the value, the slower the camera will zoom in and out. default is 2.
+     *
+     * @param zoomSensitivity the zoom sensitivity
      */
     public void setZoomSensitivity(float zoomSensitivity) {
         this.zoomSensitivity = zoomSensitivity;
@@ -739,8 +850,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
-     * Sets the rotate amount when user moves his mouse, the lower the value, the slower the camera will rotate. default
-     * is 1.
+     * Sets the rotate amount when user moves his mouse, the lower the value, the slower the camera will rotate.
+     * default is 1.
      *
      * @param rotationSpeed Rotation speed on mouse movement, default is 1.
      */
@@ -750,6 +861,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Sets the default distance at start of applicaiton
+     *
+     * @param defaultDistance the default distance
      */
     public void setDefaultDistance(float defaultDistance) {
         distance = defaultDistance;
@@ -758,6 +871,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * sets the default horizontal rotation in radian of the camera at start of the application
+     *
+     * @param angleInRad the angle in rad
      */
     public void setDefaultHorizontalRotation(float angleInRad) {
         rotation = angleInRad;
@@ -766,6 +881,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * sets the default vertical rotation in radian of the camera at start of the application
+     *
+     * @param angleInRad the angle in rad
      */
     public void setDefaultVerticalRotation(float angleInRad) {
         verticalRotation = angleInRad;
@@ -773,18 +890,19 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
     }
 
     /**
+     * Is drag to rotate boolean.
+     *
      * @return If drag to rotate feature is enabled.
-     * @see FlyByCamera#setDragToRotate(boolean)
+     * @see FlyByCamera#setDragToRotate(boolean) FlyByCamera#setDragToRotate(boolean)FlyByCamera#setDragToRotate(boolean)
      */
     public boolean isDragToRotate() {
         return dragToRotate;
     }
 
     /**
-     * @param dragToRotate When true, the user must hold the mouse button and drag over the screen to rotate the camera,
-     *                     and the cursor is visible until dragged. Otherwise, the cursor is invisible at all times and
-     *                     holding the mouse button is not needed to rotate the camera. This feature is disabled by
-     *                     default.
+     * Sets drag to rotate.
+     *
+     * @param dragToRotate When true, the user must hold the mouse button and drag over the screen to rotate the camera,                     and the cursor is visible until dragged. Otherwise, the cursor is invisible at all times and                     holding the mouse button is not needed to rotate the camera. This feature is disabled by                     default.
      */
     public void setDragToRotate(boolean dragToRotate) {
         this.dragToRotate = dragToRotate;
@@ -797,6 +915,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * return the current distance from the camera to the target
+     *
+     * @return the distance to target
      */
     public float getDistanceToTarget() {
         return distance;
@@ -804,6 +924,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the current horizontal rotation around the target in radians
+     *
+     * @return the horizontal rotation
      */
     public float getHorizontalRotation() {
         return rotation;
@@ -811,6 +933,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the current vertical rotation around the target in radians.
+     *
+     * @return the vertical rotation
      */
     public float getVerticalRotation() {
         return verticalRotation;
@@ -818,6 +942,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * returns the offset from the target's position where the camera looks at
+     *
+     * @return the look at offset
      */
     public Vector3f getLookAtOffset() {
         return lookAtOffset;
@@ -825,6 +951,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Sets the offset from the target's position where the camera looks at
+     *
+     * @param lookAtOffset the look at offset
      */
     public void setLookAtOffset(Vector3f lookAtOffset) {
         this.lookAtOffset = lookAtOffset;
@@ -832,6 +960,8 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Sets the up vector of the camera used for the lookAt on the target
+     *
+     * @param up the up
      */
     public void setUpVector(Vector3f up) {
         initialUpVec = up;
@@ -839,15 +969,27 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
 
     /**
      * Returns the up vector of the camera used for the lookAt on the target
+     *
+     * @return the up vector
      */
     public Vector3f getUpVector() {
         return initialUpVec;
     }
 
+    /**
+     * Is hide cursor on rotate boolean.
+     *
+     * @return the boolean
+     */
     public boolean isHideCursorOnRotate() {
         return hideCursorOnRotate;
     }
 
+    /**
+     * Sets hide cursor on rotate.
+     *
+     * @param hideCursorOnRotate the hide cursor on rotate
+     */
     public void setHideCursorOnRotate(boolean hideCursorOnRotate) {
         this.hideCursorOnRotate = hideCursorOnRotate;
     }

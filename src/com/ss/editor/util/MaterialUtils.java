@@ -14,11 +14,11 @@ import com.jme3.texture.Image;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
 import jme3tools.converters.ImageToAwt;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -51,19 +51,25 @@ public class MaterialUtils {
     @Nullable
     public static Material updateMaterialIdNeed(@NotNull final Path file, @NotNull final Material material) {
 
-        boolean needToReload = false;
+        final AssetManager assetManager = EDITOR.getAssetManager();
 
+        boolean needToReload = false;
         String textureKey = null;
 
         if (MaterialUtils.isShaderFile(file)) {
             if (!MaterialUtils.containsShader(material, file)) return null;
             needToReload = true;
+
+            // if the shader was changed we need to reload material definition
+            final MaterialDef materialDef = material.getMaterialDef();
+            final String assetName = materialDef.getAssetName();
+            assetManager.deleteFromCache(new AssetKey<>(assetName));
+
         } else if (MaterialUtils.isTextureFile(file)) {
             textureKey = MaterialUtils.containsTexture(material, file);
             if (textureKey == null) return null;
         }
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
         final String assetName = material.getAssetName();
 
         // try to refresh texture directly
@@ -75,9 +81,12 @@ public class MaterialUtils {
         }
 
         final MaterialKey materialKey = new MaterialKey(assetName);
-        final Material newMaterial = assetManager.loadAsset(materialKey);
 
-        MaterialUtils.updateTo(newMaterial, material);
+        assetManager.deleteFromCache(materialKey);
+
+        final Material newMaterial = new Material(assetManager, material.getMaterialDef().getAssetName());
+
+        migrateTo(newMaterial, material);
 
         return newMaterial;
     }
@@ -157,6 +166,8 @@ public class MaterialUtils {
     }
 
     /**
+     * Is shader file boolean.
+     *
      * @param path the file path.
      * @return true if the file is shader.
      */
@@ -167,6 +178,8 @@ public class MaterialUtils {
     }
 
     /**
+     * Is texture file boolean.
+     *
      * @param path the file path.
      * @return true if the file is texture.
      */
@@ -242,13 +255,13 @@ public class MaterialUtils {
     /**
      * Migrate the material to second material.
      *
-     * @param toMigrate the material for migrating.
-     * @param material  the target material.
+     * @param target the target migrating.
+     * @param source the source material.
      */
-    public static void migrateTo(@NotNull final Material toMigrate, @NotNull final Material material) {
+    public static void migrateTo(@NotNull final Material target, @NotNull final Material source) {
 
-        final MaterialDef materialDef = toMigrate.getMaterialDef();
-        final Collection<MatParam> actualParams = material.getParams();
+        final MaterialDef materialDef = target.getMaterialDef();
+        final Collection<MatParam> actualParams = source.getParams();
 
         actualParams.forEach(matParam -> {
 
@@ -258,11 +271,13 @@ public class MaterialUtils {
                 return;
             }
 
-            toMigrate.setParam(matParam.getName(), matParam.getVarType(), matParam.getValue());
+            target.setParam(matParam.getName(), matParam.getVarType(), matParam.getValue());
         });
 
-        final RenderState additionalRenderState = toMigrate.getAdditionalRenderState();
-        additionalRenderState.set(material.getAdditionalRenderState());
+        final RenderState additionalRenderState = target.getAdditionalRenderState();
+        additionalRenderState.set(source.getAdditionalRenderState());
+
+        target.setKey(source.getKey());
     }
 
     /**

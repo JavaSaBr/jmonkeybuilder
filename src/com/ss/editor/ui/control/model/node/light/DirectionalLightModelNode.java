@@ -17,6 +17,12 @@ import com.ss.rlib.util.StringUtils;
  */
 public class DirectionalLightModelNode extends LightModelNode<DirectionalLight> {
 
+    /**
+     * Instantiates a new Directional light model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public DirectionalLightModelNode(@NotNull final DirectionalLight element, final long objectId) {
         super(element, objectId);
     }

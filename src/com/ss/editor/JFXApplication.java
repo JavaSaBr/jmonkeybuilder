@@ -45,6 +45,11 @@ public class JFXApplication extends Application {
     @Nullable
     private static JFXApplication instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     @FromAnyThread
     public static JFXApplication getInstance() {
@@ -63,6 +68,12 @@ public class JFXApplication extends Application {
         return instance == null ? null : instance.stage;
     }
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     * @throws IOException the io exception
+     */
     public static void main(final String[] args) throws IOException {
 
         // fix of the fonts render
@@ -97,6 +108,9 @@ public class JFXApplication extends Application {
         new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
     }
 
+    /**
+     * Start.
+     */
     @FromAnyThread
     public static void start() {
         launch();
@@ -178,11 +192,14 @@ public class JFXApplication extends Application {
         buildScene();
     }
 
+    /**
+     * On exit.
+     */
     @FXThread
     public void onExit() {
 
-        GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
-                GAEvent.Action.CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
+        GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
+                GAEvent.Action.APPLICATION_CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
 
         final EditorConfig config = EditorConfig.getInstance();
         config.save();
@@ -211,8 +228,8 @@ public class JFXApplication extends Application {
 
         JMEFilePreviewManager.getInstance();
 
-        GAnalytics.sendEvent(GAEvent.Category.APPLICATION,
-                GAEvent.Action.LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
+        GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
+                GAEvent.Action.APPLICATION_LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
         executorManager.addBackgroundTask(new CheckNewVersionTask());

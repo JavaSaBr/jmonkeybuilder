@@ -3,6 +3,7 @@ package com.ss.editor.ui.dialog.asset;
 import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
@@ -21,6 +22,10 @@ import com.ss.editor.ui.event.impl.CreatedFileEvent;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -42,10 +47,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.awt.*;
 import java.nio.file.Files;
@@ -55,27 +56,59 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * The implementation of the {@link EditorDialog} to choose the object from asset.
+ * The implementation of the {@link EditorDialog} to choose the object from an asset folder.
  *
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public class AssetEditorDialog<C> extends EditorDialog {
 
+    /**
+     * The constant OK_BUTTON_OFFSET.
+     */
     @NotNull
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
 
+    /**
+     * The constant CANCEL_BUTTON_OFFSET.
+     */
     @NotNull
     protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
 
+    /**
+     * The constant SECOND_PART_OFFSET_OFFSET.
+     */
     @NotNull
     protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
 
+    /**
+     * The constant DIALOG_SIZE.
+     */
     @NotNull
     protected static final Point DIALOG_SIZE = new Point(1204, 721);
 
+    /**
+     * The constant JAVA_FX_IMAGE_MANAGER.
+     */
+    @NotNull
     protected static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
+
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    /**
+     * The constant EDITOR.
+     */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @NotNull
@@ -141,10 +174,21 @@ public class AssetEditorDialog<C> extends EditorDialog {
     @Nullable
     protected Button okButton;
 
+    /**
+     * Instantiates a new Asset editor dialog.
+     *
+     * @param consumer the consumer
+     */
     public AssetEditorDialog(@NotNull final Consumer<C> consumer) {
         this(consumer, null);
     }
 
+    /**
+     * Instantiates a new Asset editor dialog.
+     *
+     * @param consumer  the consumer
+     * @param validator the validator
+     */
     public AssetEditorDialog(@NotNull final Consumer<C> consumer, @Nullable final Function<C, String> validator) {
         this.waitedFilesToSelect = ArrayFactory.newArray(Path.class);
         this.consumer = consumer;
@@ -152,6 +196,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Sets extension filter.
+     *
      * @param extensionFilter the list of available extensions.
      */
     public void setExtensionFilter(@NotNull final Array<String> extensionFilter) {
@@ -159,6 +205,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Sets action tester.
+     *
      * @param actionTester the action tester.
      */
     public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
@@ -166,6 +214,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Sets only folders.
+     *
      * @param onlyFolders true if need to show only folders.
      */
     void setOnlyFolders(final boolean onlyFolders) {
@@ -192,6 +242,12 @@ public class AssetEditorDialog<C> extends EditorDialog {
         root.setOnKeyReleased(this::processKeyEvent);
     }
 
+    /**
+     * Build second part parent.
+     *
+     * @param container the container
+     * @return the parent
+     */
     @NotNull
     protected Parent buildSecondPart(@NotNull final HBox container) {
 
@@ -216,15 +272,19 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Gets ok button.
+     *
      * @return the ok button.
      */
     @NotNull
     public Button getOkButton() {
-        return requireNonNull(okButton);
+        return notNull(okButton);
     }
 
     /**
      * The process of opening the element.
+     *
+     * @param element the element
      */
     protected void processOpen(@NotNull final ResourceElement element) {
         hide();
@@ -315,7 +375,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private ImageView getImageView() {
-        return requireNonNull(imageView);
+        return notNull(imageView);
     }
 
     /**
@@ -323,10 +383,12 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private TextArea getTextView() {
-        return requireNonNull(textView);
+        return notNull(textView);
     }
 
     /**
+     * Gets validator.
+     *
      * @return the function for validating the choose.
      */
     @Nullable
@@ -339,7 +401,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private Label getWarningLabel() {
-        return requireNonNull(warningLabel);
+        return notNull(warningLabel);
     }
 
     /**
@@ -431,7 +493,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     /**
      * Validate the resource element.
      *
-     * @param element the element.
+     * @param warningLabel the warning label
+     * @param element      the element.
      */
     protected void validate(@NotNull final Label warningLabel, @Nullable final ResourceElement element) {
     }
@@ -469,6 +532,11 @@ public class AssetEditorDialog<C> extends EditorDialog {
         HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
+    /**
+     * Build disable condition boolean binding.
+     *
+     * @return the boolean binding
+     */
     protected BooleanBinding buildDisableCondition() {
 
         final ResourceTree resourceTree = getResourceTree();
@@ -480,6 +548,8 @@ public class AssetEditorDialog<C> extends EditorDialog {
     }
 
     /**
+     * Gets consumer.
+     *
      * @return the function for handling the choose.
      */
     @NotNull
@@ -492,7 +562,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      */
     @NotNull
     private ResourceTree getResourceTree() {
-        return requireNonNull(resourceTree);
+        return notNull(resourceTree);
     }
 
     /**
@@ -518,6 +588,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
         return ASSET_EDITOR_DIALOG_TITLE;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

@@ -17,10 +17,17 @@ import javafx.scene.image.Image;
 /**
  * The implementation of the {@link ModelNode} to show a {@link Control} in the tree.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class ControlModelNode<T extends Control> extends ModelNode<T> {
 
+    /**
+     * Instantiates a new Control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ControlModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }

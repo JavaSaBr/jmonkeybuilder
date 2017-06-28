@@ -18,10 +18,21 @@ import javafx.scene.control.Label;
  */
 public class FileAssetEditorDialog extends AssetEditorDialog<Path> {
 
+    /**
+     * Instantiates a new File asset editor dialog.
+     *
+     * @param consumer the consumer
+     */
     public FileAssetEditorDialog(@NotNull final Consumer<Path> consumer) {
         super(consumer);
     }
 
+    /**
+     * Instantiates a new File asset editor dialog.
+     *
+     * @param consumer  the consumer
+     * @param validator the validator
+     */
     public FileAssetEditorDialog(@NotNull final Consumer<Path> consumer, @Nullable final Function<Path, String> validator) {
         super(consumer, validator);
     }

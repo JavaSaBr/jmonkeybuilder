@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MeshCollisionShapeModelNode extends CollisionShapeModelNode<MeshCollisionShape> {
 
+    /**
+     * Instantiates a new Mesh collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public MeshCollisionShapeModelNode(@NotNull final MeshCollisionShape element, final long objectId) {
         super(element, objectId);
     }

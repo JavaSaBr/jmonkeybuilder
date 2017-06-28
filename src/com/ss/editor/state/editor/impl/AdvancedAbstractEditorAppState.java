@@ -28,47 +28,144 @@ import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 /**
  * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> extends AbstractEditorAppState<T> {
 
+    /**
+     * The constant TRIGGERS.
+     */
     protected static final ObjectDictionary<String, Trigger> TRIGGERS = DictionaryFactory.newObjectDictionary();
+    /**
+     * The constant MULTI_TRIGGERS.
+     */
     protected static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS = DictionaryFactory.newObjectDictionary();
 
+    /**
+     * The constant MOUSE_RIGHT_CLICK.
+     */
     protected static final String MOUSE_RIGHT_CLICK = "SSEditor.editorState.mouseRightClick";
+    /**
+     * The constant MOUSE_LEFT_CLICK.
+     */
     protected static final String MOUSE_LEFT_CLICK = "SSEditor.editorState.mouseLeftClick";
+    /**
+     * The constant MOUSE_MIDDLE_CLICK.
+     */
     protected static final String MOUSE_MIDDLE_CLICK = "SSEditor.editorState.mouseMiddleClick";
 
+    /**
+     * The constant MOUSE_X_AXIS.
+     */
     protected static final String MOUSE_X_AXIS = "SSEditor.editorState.mouseXAxis";
+    /**
+     * The constant MOUSE_X_AXIS_NEGATIVE.
+     */
     protected static final String MOUSE_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseXAxisNegative";
+    /**
+     * The constant MOUSE_Y_AXIS.
+     */
     protected static final String MOUSE_Y_AXIS = "SSEditor.editorState.mouseYAxis";
+    /**
+     * The constant MOUSE_Y_AXIS_NEGATIVE.
+     */
     protected static final String MOUSE_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseYAxisNegative";
 
+    /**
+     * The constant MOUSE_MOVE_CAMERA_X_AXIS.
+     */
     protected static final String MOUSE_MOVE_CAMERA_X_AXIS = "SSEditor.editorState.mouseMoveCameraXAxis";
+    /**
+     * The constant MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE.
+     */
     protected static final String MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraXAxisNegative";
+    /**
+     * The constant MOUSE_MOVE_CAMERA_Y_AXIS.
+     */
     protected static final String MOUSE_MOVE_CAMERA_Y_AXIS = "SSEditor.editorState.mouseMoveCameraYAxis";
+    /**
+     * The constant MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE.
+     */
     protected static final String MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraYAxisNegative";
 
+    /**
+     * The constant KEY_CTRL.
+     */
     protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
+    /**
+     * The constant KEY_ALT.
+     */
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
+    /**
+     * The constant KEY_SHIFT.
+     */
     protected static final String KEY_SHIFT = "SSEditor.editorState.keyShift";
+    /**
+     * The constant KEY_CTRL_S.
+     */
     protected static final String KEY_CTRL_S = "SSEditor.editorState.Ctrl.S";
+    /**
+     * The constant KEY_CTRL_Z.
+     */
     protected static final String KEY_CTRL_Z = "SSEditor.editorState.Ctrl.Z";
+    /**
+     * The constant KEY_CTRL_Y.
+     */
     protected static final String KEY_CTRL_Y = "SSEditor.editorState.Ctrl.Y";
 
+    /**
+     * The constant KEY_FLY_CAMERA_W.
+     */
     protected static final String KEY_FLY_CAMERA_W = "SSEditor.editorState.keyFlyCameraW";
+    /**
+     * The constant KEY_FLY_CAMERA_S.
+     */
     protected static final String KEY_FLY_CAMERA_S = "SSEditor.editorState.keyFlyCameraS";
+    /**
+     * The constant KEY_FLY_CAMERA_A.
+     */
     protected static final String KEY_FLY_CAMERA_A = "SSEditor.editorState.keyFlyCameraA";
+    /**
+     * The constant KEY_FLY_CAMERA_D.
+     */
     protected static final String KEY_FLY_CAMERA_D = "SSEditor.editorState.keyFlyCameraD";
 
+    /**
+     * The constant KEY_NUM_1.
+     */
     protected static final String KEY_NUM_1 = "SSEditor.editorState.num1";
+    /**
+     * The constant KEY_NUM_2.
+     */
     protected static final String KEY_NUM_2 = "SSEditor.editorState.num2";
+    /**
+     * The constant KEY_NUM_3.
+     */
     protected static final String KEY_NUM_3 = "SSEditor.editorState.num3";
+    /**
+     * The constant KEY_NUM_4.
+     */
     protected static final String KEY_NUM_4 = "SSEditor.editorState.num4";
+    /**
+     * The constant KEY_NUM_5.
+     */
     protected static final String KEY_NUM_5 = "SSEditor.editorState.num5";
+    /**
+     * The constant KEY_NUM_6.
+     */
     protected static final String KEY_NUM_6 = "SSEditor.editorState.num6";
+    /**
+     * The constant KEY_NUM_7.
+     */
     protected static final String KEY_NUM_7 = "SSEditor.editorState.num7";
+    /**
+     * The constant KEY_NUM_8.
+     */
     protected static final String KEY_NUM_8 = "SSEditor.editorState.num8";
+    /**
+     * The constant KEY_NUM_9.
+     */
     protected static final String KEY_NUM_9 = "SSEditor.editorState.num9";
 
     static {
@@ -217,6 +314,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      */
     private boolean buttonMiddleDown;
 
+    /**
+     * Instantiates a new Advanced abstract editor app state.
+     *
+     * @param fileEditor the file editor
+     */
     public AdvancedAbstractEditorAppState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
@@ -241,6 +343,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Register action handlers.
+     *
+     * @param actionHandlers the action handlers
      */
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
@@ -306,6 +410,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Register analog handlers.
+     *
+     * @param analogHandlers the analog handlers
      */
     protected void registerAnalogHandlers(@NotNull final ObjectDictionary<String, FloatFloatConsumer> analogHandlers) {
         analogHandlers.put(MOUSE_X_AXIS, (value, tpf) -> moveXMouse(value));
@@ -451,6 +557,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Need movable camera boolean.
+     *
      * @return true if camera can move.
      */
     protected boolean needMovableCamera() {
@@ -459,6 +567,10 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Handle action events.
+     *
+     * @param name      the name
+     * @param isPressed the is pressed
+     * @param tpf       the tpf
      */
     protected void onActionImpl(final String name, final boolean isPressed, final float tpf) {
 
@@ -472,11 +584,23 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
         }
     }
 
+    /**
+     * Rotate to.
+     *
+     * @param perspective the perspective
+     * @param isPressed   the is pressed
+     */
     protected void rotateTo(final EditorCamera.Perspective perspective, final boolean isPressed) {
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null && isPressed) editorCamera.rotateTo(perspective);
     }
 
+    /**
+     * Rotate to.
+     *
+     * @param direction the direction
+     * @param isPressed the is pressed
+     */
     protected void rotateTo(final EditorCamera.Direction direction, final boolean isPressed) {
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null && isPressed) editorCamera.rotateTo(direction, 10F);
@@ -495,6 +619,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Is alt down boolean.
+     *
      * @return true if alt is pressed.
      */
     protected boolean isAltDown() {
@@ -502,6 +628,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets alt down.
+     *
      * @param altDown the alt is pressed.
      */
     protected void setAltDown(final boolean altDown) {
@@ -509,6 +637,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Is control down boolean.
+     *
      * @return true if control is pressed.
      */
     protected boolean isControlDown() {
@@ -516,6 +646,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets control down.
+     *
      * @param controlDown the control is pressed.
      */
     protected void setControlDown(final boolean controlDown) {
@@ -523,6 +655,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Is shift down boolean.
+     *
      * @return true if shift is pressed.
      */
     protected boolean isShiftDown() {
@@ -530,6 +664,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets shift down.
+     *
      * @param shiftDown the shift is pressed.
      */
     protected void setShiftDown(final boolean shiftDown) {
@@ -537,6 +673,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets button left down.
+     *
      * @param buttonLeftDown the left button is pressed.
      */
     protected void setButtonLeftDown(final boolean buttonLeftDown) {
@@ -544,6 +682,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets button middle down.
+     *
      * @param buttonMiddleDown the middle button is pressed.
      */
     protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
@@ -551,6 +691,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets button right down.
+     *
      * @param buttonRightDown the right button is pressed.
      */
     protected void setButtonRightDown(final boolean buttonRightDown) {
@@ -558,6 +700,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Is button left down boolean.
+     *
      * @return true if left button is pressed.
      */
     protected boolean isButtonLeftDown() {
@@ -565,6 +709,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Is button middle down boolean.
+     *
      * @return true if middle button is pressed.
      */
     protected boolean isButtonMiddleDown() {
@@ -572,6 +718,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Is button right down boolean.
+     *
      * @return true if right button is pressed.
      */
     protected boolean isButtonRightDown() {
@@ -579,6 +727,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Gets editor camera.
+     *
      * @return the editor camera.
      */
     @Nullable
@@ -613,6 +763,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Check and update all triggers.
+     *
+     * @param inputManager the input manager
      */
     protected void checkAndAddMappings(final InputManager inputManager) {
         TRIGGERS.forEach(inputManager, AdvancedAbstractEditorAppState::addMapping);
@@ -631,6 +783,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Register the analog listener.
+     *
+     * @param inputManager the input manager
      */
     protected void registerAnalogListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(analogListener, MOUSE_X_AXIS, MOUSE_X_AXIS_NEGATIVE, MOUSE_Y_AXIS,
@@ -640,6 +794,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Register the action listener.
+     *
+     * @param inputManager the input manager
      */
     protected void registerActionListener(@NotNull final InputManager inputManager) {
         inputManager.addListener(actionListener, MOUSE_RIGHT_CLICK, MOUSE_LEFT_CLICK, MOUSE_MIDDLE_CLICK);
@@ -671,6 +827,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Need editor camera boolean.
+     *
      * @return true if need an editor camera.
      */
     protected boolean needEditorCamera() {
@@ -678,6 +836,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Need light for camera boolean.
+     *
      * @return true if need a camera light.
      */
     protected boolean needLightForCamera() {
@@ -705,6 +865,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Create light for camera directional light.
+     *
      * @return the light for the camera.
      */
     @NotNull
@@ -715,6 +877,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Gets node for camera.
+     *
      * @return the node for the camera.
      */
     @NotNull
@@ -723,6 +887,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Gets light for camera.
+     *
      * @return the light for the camera.
      */
     @Nullable
@@ -731,6 +897,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Gets prev h rotation.
+     *
      * @return the previous horizontal camera rotation.
      */
     protected float getPrevHRotation() {
@@ -738,6 +906,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets prev h rotation.
+     *
      * @param prevHRotation the previous horizontal camera rotation.
      */
     protected void setPrevHRotation(final float prevHRotation) {
@@ -745,6 +915,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Gets prev target distance.
+     *
      * @return the previous camera zoom.
      */
     protected float getPrevTargetDistance() {
@@ -752,6 +924,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets prev target distance.
+     *
      * @param prevTargetDistance the previous camera zoom.
      */
     protected void setPrevTargetDistance(final float prevTargetDistance) {
@@ -759,6 +933,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Gets prev v rotation.
+     *
      * @return the previous vertical camera rotation.
      */
     protected float getPrevVRotation() {
@@ -766,12 +942,19 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Sets prev v rotation.
+     *
      * @param prevVRotation the previous vertical camera rotation.
      */
     protected void setPrevVRotation(final float prevVRotation) {
         this.prevVRotation = prevVRotation;
     }
 
+    /**
+     * Gets prev camera location.
+     *
+     * @return the prev camera location
+     */
     @NotNull
     public Vector3f getPrevCameraLocation() {
         return prevCameraLocation;
@@ -815,6 +998,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Check camera changes.
+     *
+     * @param editorCamera the editor camera
      */
     protected void checkCameraChanges(@NotNull final EditorCamera editorCamera) {
 
@@ -858,6 +1043,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Notify about changed camera.
+     *
+     * @param cameraLocation the camera location
+     * @param hRotation      the h rotation
+     * @param vRotation      the v rotation
+     * @param targetDistance the target distance
      */
     protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                                        final float vRotation, final float targetDistance) {
@@ -865,6 +1055,11 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
 
     /**
      * Update the editor camera.
+     *
+     * @param cameraLocation the camera location
+     * @param hRotation      the h rotation
+     * @param vRotation      the v rotation
+     * @param targetDistance the target distance
      */
     @EditorThread
     public void updateCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
@@ -888,6 +1083,8 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     /**
+     * Need update camera light boolean.
+     *
      * @return true if need to update the camera light.
      */
     protected boolean needUpdateCameraLight() {

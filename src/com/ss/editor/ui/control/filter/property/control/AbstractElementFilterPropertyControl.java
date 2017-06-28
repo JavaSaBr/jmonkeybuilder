@@ -13,10 +13,20 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link AbstractElementPropertyControl} to edit an elements from scene.
  *
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractElementFilterPropertyControl<D, T> extends AbstractElementPropertyControl<SceneChangeConsumer, D, T> {
 
+    /**
+     * Instantiates a new Abstract element filter property control.
+     *
+     * @param type           the type
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public AbstractElementFilterPropertyControl(@NotNull final Class<T> type, @Nullable final T propertyValue,
                                                 @NotNull final String propertyName,
                                                 @NotNull final SceneChangeConsumer changeConsumer) {
@@ -31,12 +41,22 @@ public abstract class AbstractElementFilterPropertyControl<D, T> extends Abstrac
         dialog.show(scene.getWindow());
     }
 
+    /**
+     * Create node selector dialog node selector dialog.
+     *
+     * @return the node selector dialog
+     */
     @NotNull
     protected NodeSelectorDialog<T> createNodeSelectorDialog() {
         final SceneChangeConsumer changeConsumer = getChangeConsumer();
         return new NodeSelectorDialog<>(changeConsumer.getCurrentModel(), type, this::processAdd);
     }
 
+    /**
+     * Process add.
+     *
+     * @param newElement the new element
+     */
     protected void processAdd(@NotNull final T newElement) {
         changed(newElement, getPropertyValue());
     }

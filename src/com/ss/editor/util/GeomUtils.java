@@ -28,6 +28,10 @@ public class GeomUtils {
 
     /**
      * Get the UP vector from the rotation.
+     *
+     * @param rotation the rotation
+     * @param store    the store
+     * @return the up
      */
     @NotNull
     public static Vector3f getUp(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
@@ -36,6 +40,10 @@ public class GeomUtils {
 
     /**
      * Get the Left vector from the rotation.
+     *
+     * @param rotation the rotation
+     * @param store    the store
+     * @return the left
      */
     @NotNull
     public static Vector3f getLeft(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
@@ -44,6 +52,10 @@ public class GeomUtils {
 
     /**
      * Get the Direction vector from the rotation.
+     *
+     * @param rotation the rotation
+     * @param store    the store
+     * @return the direction
      */
     @NotNull
     public static Vector3f getDirection(@NotNull final Quaternion rotation, @NotNull final Vector3f store) {
@@ -52,6 +64,10 @@ public class GeomUtils {
 
     /**
      * Get the index of the object in the model.
+     *
+     * @param model  the model
+     * @param object the object
+     * @return the index
      */
     public static int getIndex(@NotNull final Spatial model, @NotNull final Object object) {
 
@@ -109,6 +125,10 @@ public class GeomUtils {
 
     /**
      * Find the object by the index in the model.
+     *
+     * @param model the model
+     * @param index the index
+     * @return the object by index
      */
     @Nullable
     public static Object getObjectByIndex(@NotNull final Spatial model, final int index) {
@@ -166,6 +186,10 @@ public class GeomUtils {
     }
 
     /**
+     * Can attach boolean.
+     *
+     * @param node    the node
+     * @param spatial the spatial
      * @return true if the spatial can be attached to the node.
      */
     public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial) {

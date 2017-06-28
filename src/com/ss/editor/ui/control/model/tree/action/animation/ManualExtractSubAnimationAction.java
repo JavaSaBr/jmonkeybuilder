@@ -23,6 +23,12 @@ import javafx.scene.image.Image;
  */
 public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Manual extract sub animation action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public ManualExtractSubAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -42,7 +48,8 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
     @FXThread
     @Override
     protected void process() {
-
+        super.process();
+        
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
 

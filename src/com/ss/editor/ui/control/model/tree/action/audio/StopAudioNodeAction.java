@@ -22,6 +22,12 @@ import javafx.scene.image.Image;
  */
 public class StopAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Stop audio node action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public StopAudioNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -41,6 +47,7 @@ public class StopAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AudioModelNode audioModelNode = (AudioModelNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();

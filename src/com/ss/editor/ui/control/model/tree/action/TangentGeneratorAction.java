@@ -21,6 +21,12 @@ import javafx.scene.image.Image;
  */
 public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Tangent generator action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public TangentGeneratorAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -40,6 +46,8 @@ public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsum
     @FXThread
     @Override
     protected void process() {
+        super.process();
+
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());
         dialog.show(scene.getWindow());

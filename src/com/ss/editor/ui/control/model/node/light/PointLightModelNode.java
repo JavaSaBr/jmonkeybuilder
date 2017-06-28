@@ -17,6 +17,12 @@ import com.ss.rlib.util.StringUtils;
  */
 public class PointLightModelNode extends LightModelNode<PointLight> {
 
+    /**
+     * Instantiates a new Point light model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public PointLightModelNode(@NotNull final PointLight element, final long objectId) {
         super(element, objectId);
     }

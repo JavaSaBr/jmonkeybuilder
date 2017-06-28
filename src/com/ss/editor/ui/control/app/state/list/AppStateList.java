@@ -51,6 +51,12 @@ public class AppStateList extends VBox {
      */
     private ListView<EditableSceneAppState> listView;
 
+    /**
+     * Instantiates a new App state list.
+     *
+     * @param selectHandler  the select handler
+     * @param changeConsumer the change consumer
+     */
     public AppStateList(@NotNull final Consumer<EditableSceneAppState> selectHandler,
                         @NotNull final SceneChangeConsumer changeConsumer) {
         setId(CSSIds.SCENE_APP_STATE_CONTAINER);
@@ -94,6 +100,8 @@ public class AppStateList extends VBox {
 
     /**
      * Fill a list of app states.
+     *
+     * @param sceneNode the scene node
      */
     public void fill(@NotNull final SceneNode sceneNode) {
 
@@ -143,6 +151,8 @@ public class AppStateList extends VBox {
     }
 
     /**
+     * Gets change consumer.
+     *
      * @return the changes consumer.
      */
     @NotNull

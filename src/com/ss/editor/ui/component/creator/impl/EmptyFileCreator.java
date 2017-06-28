@@ -1,11 +1,11 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +18,9 @@ import java.nio.file.Path;
  */
 public class EmptyFileCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
@@ -42,7 +45,7 @@ public class EmptyFileCreator extends AbstractFileCreator {
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = requireNonNull(getFileToCreate());
+        final Path fileToCreate = notNull(getFileToCreate());
         try {
             Files.createFile(fileToCreate);
         } catch (final IOException e) {

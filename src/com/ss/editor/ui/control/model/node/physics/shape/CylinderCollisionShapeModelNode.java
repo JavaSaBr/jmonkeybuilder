@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CylinderCollisionShapeModelNode extends CollisionShapeModelNode<CylinderCollisionShape> {
 
+    /**
+     * Instantiates a new Cylinder collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public CylinderCollisionShapeModelNode(@NotNull final CylinderCollisionShape element, final long objectId) {
         super(element, objectId);
     }

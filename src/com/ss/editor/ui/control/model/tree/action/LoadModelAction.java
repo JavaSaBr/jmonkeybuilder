@@ -49,6 +49,12 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
         MODEL_EXTENSIONS.add(FileExtensions.JME_OBJECT);
     }
 
+    /**
+     * Instantiates a new Load model action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public LoadModelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -68,11 +74,14 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
         UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 
     /**
      * The process of opening file.
+     *
+     * @param file the file
      */
     protected void processOpen(@NotNull final Path file) {
 

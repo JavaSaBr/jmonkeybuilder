@@ -12,10 +12,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit boolean values.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class BooleanFilterPropertyControl<T> extends AbstractBooleanPropertyControl<SceneChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Boolean filter property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public BooleanFilterPropertyControl(@Nullable final Boolean propertyValue, @NotNull final String propertyName,
                                         @NotNull final SceneChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());

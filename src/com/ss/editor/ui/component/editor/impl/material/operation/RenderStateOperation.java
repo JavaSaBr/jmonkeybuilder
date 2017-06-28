@@ -13,6 +13,7 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of an editor operation to edit material render params.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 @SuppressWarnings("Duplicates")
@@ -38,6 +39,13 @@ public class RenderStateOperation<T> extends AbstractEditorOperation<MaterialCha
     @Nullable
     private final T oldValue;
 
+    /**
+     * Instantiates a new Render state operation.
+     *
+     * @param newValue     the new value
+     * @param oldValue     the old value
+     * @param applyHandler the apply handler
+     */
     public RenderStateOperation(@Nullable final T newValue, @Nullable final T oldValue,
                                    @NotNull final BiConsumer<RenderState, T> applyHandler) {
         this.newValue = newValue;

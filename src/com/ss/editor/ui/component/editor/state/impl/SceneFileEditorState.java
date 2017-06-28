@@ -9,6 +9,9 @@ import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
  */
 public class SceneFileEditorState extends AbstractModelFileEditorState {
 
+    /**
+     * The constant serialVersionUID.
+     */
     public static final long serialVersionUID = 2;
 
     /**
@@ -21,12 +24,17 @@ public class SceneFileEditorState extends AbstractModelFileEditorState {
      */
     private volatile boolean showedAudio;
 
+    /**
+     * Instantiates a new Scene file editor state.
+     */
     public SceneFileEditorState() {
         this.showedAudio = true;
         this.showedLight = true;
     }
 
     /**
+     * Sets showed light.
+     *
      * @param showedLight true if the light is showed.
      */
     public void setShowedLight(final boolean showedLight) {
@@ -39,6 +47,8 @@ public class SceneFileEditorState extends AbstractModelFileEditorState {
     }
 
     /**
+     * Is showed light boolean.
+     *
      * @return true if the light is showed.
      */
     public boolean isShowedLight() {
@@ -46,6 +56,8 @@ public class SceneFileEditorState extends AbstractModelFileEditorState {
     }
 
     /**
+     * Sets showed audio.
+     *
      * @param showedAudio true if the audio is showed.
      */
     public void setShowedAudio(final boolean showedAudio) {
@@ -58,6 +70,8 @@ public class SceneFileEditorState extends AbstractModelFileEditorState {
     }
 
     /**
+     * Is showed audio boolean.
+     *
      * @return true if the audio is showed.
      */
     public boolean isShowedAudio() {

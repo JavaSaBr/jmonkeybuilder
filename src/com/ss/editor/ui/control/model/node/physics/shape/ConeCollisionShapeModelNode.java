@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ConeCollisionShapeModelNode extends CollisionShapeModelNode<ConeCollisionShape> {
 
+    /**
+     * Instantiates a new Cone collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ConeCollisionShapeModelNode(@NotNull final ConeCollisionShape element, final long objectId) {
         super(element, objectId);
     }

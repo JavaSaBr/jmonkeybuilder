@@ -1,6 +1,11 @@
 package com.ss.editor.ui.component.editor.impl;
 
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Collections.singleton;
+import static java.util.Objects.requireNonNull;
+import com.jme3.asset.AssetKey;
+import com.jme3.asset.AssetManager;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -8,6 +13,7 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +25,9 @@ import java.util.regex.Pattern;
  */
 public class GLSLFileEditor extends CodeAreaFileEditor {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
@@ -124,6 +133,19 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
     @Override
     protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         return computeHighlighting(text);
+    }
+
+    @Override
+    public void doSave() {
+
+        final Path editFile = getEditFile();
+        final Path assetFile = requireNonNull(getAssetFile(editFile));
+        final String assetPath = toAssetPath(assetFile);
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        assetManager.deleteFromCache(new AssetKey<>(assetPath));
+
+        super.doSave();
     }
 
     @NotNull

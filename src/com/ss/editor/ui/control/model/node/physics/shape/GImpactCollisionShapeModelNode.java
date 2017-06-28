@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GImpactCollisionShapeModelNode extends CollisionShapeModelNode<GImpactCollisionShape> {
 
+    /**
+     * Instantiates a new G impact collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public GImpactCollisionShapeModelNode(@NotNull final GImpactCollisionShape element, final long objectId) {
         super(element, objectId);
     }

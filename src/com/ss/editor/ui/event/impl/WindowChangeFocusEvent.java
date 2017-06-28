@@ -10,6 +10,9 @@ import javafx.event.EventType;
  */
 public class WindowChangeFocusEvent extends SceneEvent {
 
+    /**
+     * The constant EVENT_TYPE.
+     */
     public static final EventType<SceneEvent> EVENT_TYPE;
 
     static {
@@ -20,11 +23,16 @@ public class WindowChangeFocusEvent extends SceneEvent {
 
     private static final String FOCUS = "focus";
 
+    /**
+     * Instantiates a new Window change focus event.
+     */
     public WindowChangeFocusEvent() {
         super(EVENT_TYPE);
     }
 
     /**
+     * Is focused boolean.
+     *
      * @return true if a window has focus.
      */
     public boolean isFocused() {
@@ -32,6 +40,8 @@ public class WindowChangeFocusEvent extends SceneEvent {
     }
 
     /**
+     * Sets focused.
+     *
      * @param focused true if a window has focus.
      */
     public void setFocused(final boolean focused) {

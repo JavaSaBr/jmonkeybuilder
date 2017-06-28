@@ -2,7 +2,7 @@ package com.ss.editor.ui.dialog.asset;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.MatParam;
@@ -13,32 +13,26 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
-
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.beans.binding.BooleanBinding;
+import javafx.collections.ObservableList;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tonegod.emitter.material.ParticlesMaterial;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-import javafx.beans.binding.BooleanBinding;
-import javafx.collections.ObservableList;
-import javafx.scene.Parent;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import com.ss.rlib.ui.util.FXUtils;
-import tonegod.emitter.material.ParticlesMaterial;
-
 /**
- * The implementation of the {@link AssetEditorDialog} for choosing the {@link ParticlesMaterial} from asset.
+ * The implementation of the {@link AssetEditorDialog} to chose the {@link ParticlesMaterial} from asset.
  *
  * @author JavaSaBr
  */
@@ -47,23 +41,32 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     /**
      * The label 'Texture parameter name'.
      */
+    @Nullable
     private Label textureParamNameLabel;
 
     /**
      * The label 'Apply lighting transform'.
      */
+    @Nullable
     private Label applyLightingTransformLabel;
 
     /**
      * The combo box with texture parameter name.
      */
+    @Nullable
     private ComboBox<String> textureParamNameComboBox;
 
     /**
      * The check box for applying the lighting transform.
      */
+    @Nullable
     private CheckBox applyLightingTransformCheckBox;
 
+    /**
+     * Instantiates a new Particles asset editor dialog.
+     *
+     * @param consumer the consumer
+     */
     public ParticlesAssetEditorDialog(@NotNull final Consumer<ParticlesMaterial> consumer) {
         super(consumer);
     }
@@ -121,15 +124,17 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     /**
      * @return the combo box with texture parameter name.
      */
+    @NotNull
     private ComboBox<String> getTextureParamNameComboBox() {
-        return textureParamNameComboBox;
+        return notNull(textureParamNameComboBox);
     }
 
     /**
      * @return the check box for applying the lighting transform.
      */
+    @NotNull
     private CheckBox getApplyLightingTransformCheckBox() {
-        return applyLightingTransformCheckBox;
+        return notNull(applyLightingTransformCheckBox);
     }
 
     @Override
@@ -157,6 +162,7 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         consumer.accept(new ParticlesMaterial(material, textureParamName, transformBox.isSelected()));
     }
 
+    @NotNull
     @Override
     protected BooleanBinding buildDisableCondition() {
         final ComboBox<String> comboBox = getTextureParamNameComboBox();

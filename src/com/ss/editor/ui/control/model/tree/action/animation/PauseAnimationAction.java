@@ -20,6 +20,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PauseAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Pause animation action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public PauseAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -39,6 +45,7 @@ public class PauseAnimationAction extends AbstractNodeAction<ModelChangeConsumer
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
         if (modelNode.getChannel() < 0) return;

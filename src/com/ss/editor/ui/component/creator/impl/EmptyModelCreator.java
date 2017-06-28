@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.export.binary.BinaryExporter;
 import com.jme3.scene.Node;
 import com.ss.editor.FileExtensions;
@@ -20,6 +21,9 @@ import java.nio.file.Path;
  */
 public class EmptyModelCreator extends AbstractFileCreator {
 
+    /**
+     * The constant DESCRIPTION.
+     */
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
@@ -44,7 +48,7 @@ public class EmptyModelCreator extends AbstractFileCreator {
     protected void processOk() {
         super.processOk();
 
-        final Path fileToCreate = getFileToCreate();
+        final Path fileToCreate = notNull(getFileToCreate());
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
         final Node newNode = new Node("New node");

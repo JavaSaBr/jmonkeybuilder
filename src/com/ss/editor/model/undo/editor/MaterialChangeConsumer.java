@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public interface MaterialChangeConsumer {
 
     /**
+     * Gets current material.
+     *
      * @return the current material.
      */
     @NotNull
@@ -21,6 +23,8 @@ public interface MaterialChangeConsumer {
 
     /**
      * Notify about a changed parameter.
+     *
+     * @param paramName the param name
      */
     @FXThread
     void notifyChangeParam(@NotNull final String paramName);

@@ -56,8 +56,8 @@ public class EditingUtils {
      * Check that a point is contains in a geometry.
      *
      * @param geometry the geometry.
-     * @param x    the X coord.
-     * @param y    the Y coord.
+     * @param x        the X coord.
+     * @param y        the Y coord.
      * @return true of the mesh contains the point.
      */
     public static boolean isContains(@NotNull final Geometry geometry, final float x, final float y) {
@@ -80,10 +80,11 @@ public class EditingUtils {
      * the radius it is).
      * The farther from the center, the less the height will be.
      * This produces a linear height falloff.
-     * @param radius of the tool
+     *
+     * @param radius       of the tool
      * @param heightFactor potential height value to be adjusted
-     * @param x location
-     * @param z location
+     * @param x            location
+     * @param z            location
      * @return the adjusted height value
      */
     public static float calculateHeight(float radius, float heightFactor, float x, float z) {
@@ -91,6 +92,14 @@ public class EditingUtils {
         return heightFactor * val;
     }
 
+    /**
+     * Calculate radius percent float.
+     *
+     * @param radius the radius
+     * @param x      the x
+     * @param z      the z
+     * @return the float
+     */
     public static float calculateRadiusPercent(float radius, float x, float z) {
         // find percentage for each 'unit' in radius
         Vector2f point = new Vector2f(x,z);
@@ -99,14 +108,38 @@ public class EditingUtils {
         return val;
     }
 
+    /**
+     * Float equals boolean.
+     *
+     * @param a       the a
+     * @param b       the b
+     * @param epsilon the epsilon
+     * @return the boolean
+     */
     public static boolean floatEquals(float a, float b, float epsilon) {
         return a == b || Math.abs(a - b) < epsilon;
     }
 
+    /**
+     * Float less than boolean.
+     *
+     * @param a       the a
+     * @param b       the b
+     * @param epsilon the epsilon
+     * @return the boolean
+     */
     public static boolean floatLessThan(float a, float b, float epsilon) {
         return b - a > epsilon;
     }
 
+    /**
+     * Float greater than boolean.
+     *
+     * @param a       the a
+     * @param b       the b
+     * @param epsilon the epsilon
+     * @return the boolean
+     */
     public static boolean floatGreaterThan(float a, float b, float epsilon) {
         return a - b > epsilon;
     }

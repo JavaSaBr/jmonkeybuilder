@@ -91,6 +91,9 @@ public class ChooseTextureControl extends HBox {
     @Nullable
     private Runnable changeHandler;
 
+    /**
+     * Instantiates a new Choose texture control.
+     */
     public ChooseTextureControl() {
         setAlignment(Pos.CENTER_LEFT);
         createComponents();
@@ -114,6 +117,8 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
+     * Sets change handler.
+     *
      * @param changeHandler the handler.
      */
     public void setChangeHandler(@Nullable final Runnable changeHandler) {
@@ -128,6 +133,9 @@ public class ChooseTextureControl extends HBox {
         return changeHandler;
     }
 
+    /**
+     * Create components.
+     */
     protected void createComponents() {
 
         textureLabel = new Label();
@@ -172,6 +180,8 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
+     * Gets texture label.
+     *
      * @return the label for the path to a texture.
      */
     @NotNull
@@ -195,6 +205,8 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
+     * Gets texture file.
+     *
      * @return the selected file.
      */
     @Nullable
@@ -203,6 +215,8 @@ public class ChooseTextureControl extends HBox {
     }
 
     /**
+     * Sets texture file.
+     *
      * @param textureFile the selected file.
      */
     public void setTextureFile(@Nullable final Path textureFile) {
@@ -229,6 +243,9 @@ public class ChooseTextureControl extends HBox {
         return requireNonNull(texturePreview);
     }
 
+    /**
+     * Reload.
+     */
     protected void reload() {
 
         final ImageChannelPreview textureTooltip = getTextureTooltip();

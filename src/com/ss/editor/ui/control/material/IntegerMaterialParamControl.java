@@ -27,6 +27,13 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
     @Nullable
     private IntegerTextField integerField;
 
+    /**
+     * Instantiates a new Integer material param control.
+     *
+     * @param changeHandler the change handler
+     * @param material      the material
+     * @param parameterName the parameter name
+     */
     public IntegerMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
         super(changeHandler, material, parameterName);
     }

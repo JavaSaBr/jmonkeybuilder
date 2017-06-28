@@ -238,6 +238,8 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
     }
 
     /**
+     * Gets prev status.
+     *
      * @return the previous status.
      */
     @Nullable

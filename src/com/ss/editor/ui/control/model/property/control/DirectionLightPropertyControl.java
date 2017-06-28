@@ -12,10 +12,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit direction's vector of the {@link Light}.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class DirectionLightPropertyControl<T extends Light> extends AbstractVector3fPropertyControl<ModelChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Direction light property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public DirectionLightPropertyControl(@NotNull final Vector3f element, @NotNull final String paramName,
                                          @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer, newChangeHandler());

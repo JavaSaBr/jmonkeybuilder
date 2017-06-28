@@ -19,6 +19,12 @@ import javafx.scene.image.Image;
  */
 public class CreateSphereAction extends AbstractCreateGeometryAction {
 
+    /**
+     * Instantiates a new Create sphere action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateSphereAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

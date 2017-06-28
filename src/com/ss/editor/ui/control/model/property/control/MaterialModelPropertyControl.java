@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.property.control;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Editor;
@@ -13,16 +13,9 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,24 +25,57 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link Material}.
  *
+ * @param <T> the type of a {@link Spatial}
+ * @param <V> the type of material property
  * @author JavaSaBr
  */
 public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPropertyControl<T, V> {
 
-    public static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
-    public static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
+    /**
+     * The constant NO_MATERIAL.
+     */
+    @NotNull
+    protected static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
 
+    /**
+     * The constant BUTTON_OFFSET.
+     */
+    @NotNull
+    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
+
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    /**
+     * The constant JFX_APPLICATION.
+     */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
+    /**
+     * The constant EDITOR.
+     */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
+    /**
+     * The constant MATERIAL_EXTENSIONS.
+     */
+    @NotNull
     protected static final Array<String> MATERIAL_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -59,8 +85,16 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
     /**
      * The label with name of the material.
      */
+    @Nullable
     private Label materialLabel;
 
+    /**
+     * Instantiates a new Material model property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public MaterialModelPropertyControl(@Nullable final V element, @NotNull final String paramName,
                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
@@ -122,6 +156,8 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
 
     /**
      * Add the mew material.
+     *
+     * @param file the file
      */
     protected void addMaterial(@NotNull final Path file) {
 
@@ -159,10 +195,8 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
         HBox.setMargin(editButton, BUTTON_OFFSET);
 
         FXUtils.addClassTo(materialLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, editButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 
     /**
@@ -178,10 +212,12 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
     }
 
     /**
+     * Gets material label.
+     *
      * @return the label with name of the material.
      */
     @NotNull
     protected Label getMaterialLabel() {
-        return Objects.requireNonNull(materialLabel);
+        return notNull(materialLabel);
     }
 }

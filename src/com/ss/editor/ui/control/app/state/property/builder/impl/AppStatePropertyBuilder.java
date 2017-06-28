@@ -29,11 +29,19 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
     @NotNull
     private static final AppStatePropertyBuilder INSTANCE = new AppStatePropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static AppStatePropertyBuilder getInstance() {
         return INSTANCE;
     }
 
+    /**
+     * Instantiates a new App state property builder.
+     */
     protected AppStatePropertyBuilder() {
         super(SceneChangeConsumer.class);
     }
@@ -155,6 +163,14 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
         }
     }
 
+    /**
+     * Add control.
+     *
+     * @param <T>             the type parameter
+     * @param container       the container
+     * @param property        the property
+     * @param propertyControl the property control
+     */
     protected <T> void addControl(final @NotNull VBox container, @NotNull final EditableProperty<T, ?> property,
                                   @NotNull final AbstractPropertyControl<SceneChangeConsumer, EditableProperty<T, ?>, T> propertyControl) {
 

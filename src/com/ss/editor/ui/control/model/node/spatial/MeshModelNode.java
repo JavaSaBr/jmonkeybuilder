@@ -21,6 +21,12 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class MeshModelNode extends ModelNode<Mesh> {
 
+    /**
+     * Instantiates a new Mesh model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public MeshModelNode(@NotNull final Mesh element, final long objectId) {
         super(element, objectId);
     }

@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CapsuleCollisionShapeModelNode extends CollisionShapeModelNode<CapsuleCollisionShape> {
 
+    /**
+     * Instantiates a new Capsule collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public CapsuleCollisionShapeModelNode(@NotNull final CapsuleCollisionShape element, final long objectId) {
         super(element, objectId);
     }

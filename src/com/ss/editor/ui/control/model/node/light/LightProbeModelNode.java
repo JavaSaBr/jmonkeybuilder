@@ -13,6 +13,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LightProbeModelNode extends ModelNode<LightProbe> {
 
+    /**
+     * Instantiates a new Light probe model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public LightProbeModelNode(final LightProbe element, final long objectId) {
         super(element, objectId);
     }

@@ -34,6 +34,11 @@ public class RenameFileAction extends MenuItem {
      */
     private final ResourceElement element;
 
+    /**
+     * Instantiates a new Rename file action.
+     *
+     * @param element the element
+     */
     public RenameFileAction(final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_RENAME_FILE);

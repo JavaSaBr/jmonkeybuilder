@@ -16,6 +16,12 @@ import java.util.function.Consumer;
  */
 public class ModelNodeTree extends AbstractNodeTree<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Model node tree.
+     *
+     * @param selectionHandler the selection handler
+     * @param consumer         the consumer
+     */
     public ModelNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final ModelChangeConsumer consumer) {
         super(selectionHandler, consumer);
     }

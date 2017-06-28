@@ -1,37 +1,35 @@
 package com.ss.editor.ui.dialog;
 
-import static javafx.geometry.Pos.BOTTOM_LEFT;
-import static javafx.scene.text.TextAlignment.LEFT;
+import static com.ss.editor.ui.builder.EditorFXSceneBuilder.*;
+import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.Editor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
-import javafx.beans.value.ChangeListener;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.ui.window.popup.dialog.AbstractPopupDialog;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.hanlder.WindowDragHandler;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.ui.window.popup.dialog.AbstractPopupDialog;
 
+import java.awt.*;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -40,38 +38,31 @@ import java.time.LocalTime;
  *
  * @author JavaSaBr
  */
-public class EditorDialog extends AbstractPopupDialog {
+public class EditorDialog {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorDialog.class);
 
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
-     * The handler for handling changing a focus of the window.
+     * The default dialog size.
      */
     @NotNull
-    private final EventHandler<? super Event> hideEventHandler = event -> {
-        final WindowChangeFocusEvent focusEvent = (WindowChangeFocusEvent) event;
-        if (!focusEvent.isFocused()) {
-            super.hide();
-        } else {
-            show();
-        }
-    };
+    protected static final Point DEFAULT_SIZE = new Point(0, 0);
 
     /**
-     * The handler for handling changing a focus of the window from JavaFX.
+     * The stage of this dialog.
      */
     @NotNull
-    private final ChangeListener<Boolean> hideListener = (observable, oldValue, newValue) -> {
-        if (newValue == Boolean.FALSE) {
-            super.hide();
-        } else {
-            show();
-        }
-    };
+    private final Stage dialog;
 
     /**
      * The time when this DIALOG was showed.
@@ -80,36 +71,171 @@ public class EditorDialog extends AbstractPopupDialog {
     private volatile LocalTime showedTime;
 
     /**
+     * The content container.
+     */
+    @NotNull
+    private final VBox container;
+
+    /**
      * The last focus owner.
      */
     @Nullable
     private Node focusOwner;
 
+    /**
+     * Instantiates a new Editor dialog.
+     */
     public EditorDialog() {
         this.showedTime = LocalTime.now();
+
+        dialog = new Stage();
+        dialog.setTitle(getTitleText());
+        dialog.initStyle(StageStyle.UTILITY);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.setResizable(isResizable());
+
+        container = new VBox();
+        container.setAlignment(CENTER);
+
+        createControls(container);
+        configureSize(container);
+
+        final Scene scene = new Scene(container);
+        final ObservableList<String> stylesheets = scene.getStylesheets();
+        stylesheets.add(CSS_FILE_BASE);
+        stylesheets.add(CSS_FILE_EXTERNAL);
+        stylesheets.add(CSS_FILE_CUSTOM_IDS);
+        stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
+
+        dialog.setScene(scene);
     }
 
-    @Override
+    /**
+     * @return true if this dialog should be resizable.
+     */
+    protected boolean isResizable() {
+        return false;
+    }
+
+    /**
+     * Create controls of this dialog.
+     *
+     * @param root the root container.
+     */
     protected void createControls(@NotNull final VBox root) {
         root.setId(CSSIds.EDITOR_DIALOG_BACKGROUND);
 
-        super.createControls(root);
-
-        createHeader(root);
+        final VBox actionsContainer = new VBox();
 
         if (isGridStructure()) {
-            final GridPane gridPane = new GridPane();
-            createContent(gridPane);
-            FXUtils.addToPane(gridPane, root);
+            final GridPane container = new GridPane();
+            createContent(container);
+            FXUtils.addToPane(container, root);
+            FXUtils.addClassTo(container, CSSClasses.DIALOG_CONTENT_ROOT);
         } else {
-            createContent(root);
+            final VBox container = new VBox();
+            createContent(container);
+            FXUtils.addToPane(container, root);
+            FXUtils.addClassTo(container, CSSClasses.DIALOG_CONTENT_ROOT);
         }
 
-        createActions(root);
+        createActions(actionsContainer);
 
-        addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
+        FXUtils.addToPane(actionsContainer, root);
+        FXUtils.addClassTo(actionsContainer, CSSClasses.DIALOG_ACTIONS_ROOT);
+        FXUtils.addClassTo(root, CSSClasses.DIALOG_ROOT);
+
+        root.addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);
     }
 
+    /**
+     * @return the stage of this dialog.
+     */
+    @NotNull
+    protected Stage getDialog() {
+        return dialog;
+    }
+
+    /**
+     * @return the width property of this dialog.
+     */
+    @NotNull
+    protected ReadOnlyDoubleProperty widthProperty() {
+        return getContainer().widthProperty();
+    }
+
+    /**
+     * @return the height property of this dialog.
+     */
+    @NotNull
+    protected ReadOnlyDoubleProperty heightProperty() {
+        return getContainer().heightProperty();
+    }
+
+    /**
+     * Configure size of the root container.
+     *
+     * @param container the root container.
+     */
+    protected void configureSize(@NotNull final VBox container) {
+        configureSize(container, getSize());
+    }
+
+    /**
+     * Configure size of the root container.
+     *
+     * @param container the root container.
+     * @param size      the size.
+     */
+    private void configureSize(@NotNull final VBox container, @NotNull final Point size) {
+
+        final Stage dialog = getDialog();
+
+        final double width = size.getX();
+        final double height = size.getY();
+
+        if (width >= 1D) {
+            FXUtils.setFixedWidth(container, width);
+            dialog.setMinWidth(width);
+            dialog.setMaxWidth(width);
+        }
+
+        if (height >= 1D) {
+            FXUtils.setFixedHeight(container, height);
+            dialog.setMinHeight(height);
+            dialog.setMaxHeight(height);
+        }
+    }
+
+    /**
+     * Gets container.
+     *
+     * @return The content container.
+     */
+    @NotNull
+    protected VBox getContainer() {
+        return container;
+    }
+
+    /**
+     * Updates a size of this dialog.
+     *
+     * @param size the size of the dialog.
+     */
+    public void updateSize(@NotNull final Point size) {
+        configureSize(getContainer(), size);
+    }
+
+    @NotNull
+    protected Point getSize() {
+        return DEFAULT_SIZE;
+    }
+
+    /**
+     * Process key.
+     *
+     * @param event the event
+     */
     protected void processKey(@NotNull final KeyEvent event) {
         event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
@@ -117,7 +243,6 @@ public class EditorDialog extends AbstractPopupDialog {
         }
     }
 
-    @Override
     public void show(@NotNull final Window owner) {
 
         final EditorFXScene scene = (EditorFXScene) owner.getScene();
@@ -126,29 +251,30 @@ public class EditorDialog extends AbstractPopupDialog {
 
         focusOwner = scene.getFocusOwner();
 
-        super.show(owner);
+        dialog.initOwner(owner);
+        dialog.show();
+        dialog.requestFocus();
 
-        if (isHideOnLostFocus()) {
-            owner.focusedProperty().addListener(hideListener);
-            FX_EVENT_MANAGER.addEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
-        }
-
-        GAnalytics.sendPageView(null, null, "/dialog/" + getDialogId());
+        GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
     }
 
+    /**
+     * Gets dialog id.
+     *
+     * @return the dialog id
+     */
     @NotNull
     protected String getDialogId() {
         return getClass().getSimpleName();
     }
 
-    @Override
     public void hide() {
 
         final Duration duration = Duration.between(showedTime, LocalTime.now());
         final int seconds = (int) duration.getSeconds();
 
-        final Window window = getOwnerWindow();
+        final Window window = dialog.getOwner();
         final EditorFXScene scene = (EditorFXScene) window.getScene();
         final StackPane container = scene.getContainer();
         container.setFocusTraversable(true);
@@ -157,69 +283,31 @@ public class EditorDialog extends AbstractPopupDialog {
             focusOwner.requestFocus();
         }
 
-        super.hide();
-
-        if (isHideOnLostFocus()) {
-            window.focusedProperty().removeListener(hideListener);
-            FX_EVENT_MANAGER.removeEventHandler(WindowChangeFocusEvent.EVENT_TYPE, hideEventHandler);
-        }
+        dialog.hide();
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, getDialogId());
         GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG, seconds, getDialogId());
     }
 
     /**
-     * @return true if dialog will hide after losing a focus.
-     */
-    protected boolean isHideOnLostFocus() {
-        return true;
-    }
-
-    /**
-     * Create the header of this dialog.
-     */
-    protected void createHeader(@NotNull final VBox root) {
-
-        final StackPane header = new StackPane();
-        header.setId(CSSIds.EDITOR_DIALOG_HEADER);
-
-        final HBox titleContainer = new HBox();
-        titleContainer.setAlignment(Pos.CENTER_LEFT);
-        titleContainer.setPickOnBounds(false);
-
-        final Label titleLabel = new Label(getTitleText());
-        titleLabel.setTextAlignment(LEFT);
-        titleLabel.setAlignment(BOTTOM_LEFT);
-
-        final Button closeButton = new Button();
-        closeButton.setId(CSSIds.EDITOR_DIALOG_HEADER_BUTTON_CLOSE);
-        closeButton.setOnAction(event -> hide());
-
-        FXUtils.addClassTo(titleLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(closeButton, CSSClasses.EDITOR_BAR_BUTTON);
-
-        FXUtils.addToPane(titleLabel, titleContainer);
-        FXUtils.addToPane(closeButton, header);
-        FXUtils.addToPane(titleContainer, header);
-
-        WindowDragHandler.install(header);
-
-        FXUtils.addToPane(header, root);
-    }
-
-    /**
      * Create the content of this dialog.
+     *
+     * @param root the root
      */
     protected void createContent(@NotNull final VBox root) {
     }
 
     /**
      * Create the content of this dialog.
+     *
+     * @param root the root
      */
     protected void createContent(@NotNull final GridPane root) {
     }
 
     /**
+     * Is grid structure boolean.
+     *
      * @return true if this dialog has grid structure.
      */
     protected boolean isGridStructure() {
@@ -228,11 +316,15 @@ public class EditorDialog extends AbstractPopupDialog {
 
     /**
      * Create the actions of this dialog.
+     *
+     * @param root the root
      */
     protected void createActions(@NotNull final VBox root) {
     }
 
     /**
+     * Gets title text.
+     *
      * @return the title of this dialog.
      */
     @NotNull

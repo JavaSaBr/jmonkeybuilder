@@ -18,6 +18,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class AbstractCreateControlAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Abstract create control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public AbstractCreateControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -25,6 +31,7 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final ModelNode<?> modelNode = getNode();
         final Spatial parent = (Spatial) modelNode.getElement();
@@ -36,6 +43,12 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
         consumer.execute(new AddControlOperation(control, parent));
     }
 
+    /**
+     * Create control control.
+     *
+     * @param parent the parent
+     * @return the control
+     */
     @NotNull
     protected abstract Control createControl(@NotNull final Spatial parent);
 }

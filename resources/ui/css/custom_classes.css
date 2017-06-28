@@ -84,6 +84,19 @@
     -fx-font-size: 13px;
 }
 
+.dialog-root {
+    -fx-padding: 0px;
+}
+
+.dialog-actions-root {
+    -fx-padding: 15px 15px 15px 15px;
+}
+
+.dialog-content-root {
+    -fx-padding: 10px 15px 0px 15px;
+    -fx-alignment: center;
+}
+
 /* Transparent TreeView */
 .transparent-tree-view {
     -fx-background-color: transparent;

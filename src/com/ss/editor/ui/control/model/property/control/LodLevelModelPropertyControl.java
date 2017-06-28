@@ -59,6 +59,13 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
      */
     private ComboBox<Integer> levelComboBox;
 
+    /**
+     * Instantiates a new Lod level model property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     */
     public LodLevelModelPropertyControl(@Nullable final Integer element, @NotNull final String paramName,
                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer);
@@ -99,6 +106,8 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
     }
 
     /**
+     * Gets level combo box.
+     *
      * @return The lod level combobox.
      */
     @NotNull

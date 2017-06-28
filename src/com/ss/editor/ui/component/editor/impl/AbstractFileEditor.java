@@ -47,16 +47,32 @@ import java.time.LocalTime;
 /**
  * The base implementation of an editor.
  *
+ * @param <R> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
+    /**
+     * The constant LOGGER.
+     */
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(FileEditor.class);
 
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -110,6 +126,9 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     private boolean buttonMiddleDown;
 
+    /**
+     * Instantiates a new Abstract file editor.
+     */
     protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
         this.editorStates = ArrayFactory.newArray(EditorAppState.class);
@@ -120,12 +139,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Add the new 3D part of this editor.
+     *
+     * @param editorAppState the editor app state
      */
     protected void addEditorState(@NotNull final EditorAppState editorAppState) {
         this.editorStates.add(editorAppState);
     }
 
     /**
+     * Sets edit file.
+     *
      * @param file the edit file.
      */
     protected void setEditFile(@NotNull final Path file) {
@@ -193,6 +216,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Handle the key released event.
+     *
+     * @param event the event
      */
     protected void processKeyReleased(@NotNull final KeyEvent event) {
 
@@ -234,6 +259,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Handle the key pressed event.
+     *
+     * @param event the event
      */
     @FXThread
     protected void processKeyPressed(@NotNull final KeyEvent event) {
@@ -241,12 +268,16 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Create toolbar.
+     *
+     * @param container the container
      */
     protected void createToolbar(@NotNull final HBox container) {
     }
 
     /**
      * Create the save action.
+     *
+     * @return the button
      */
     @NotNull
     protected Button createSaveAction() {
@@ -277,6 +308,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Need toolbar boolean.
+     *
      * @return true if this editor needs a toolbar.
      */
     protected boolean needToolbar() {
@@ -284,6 +317,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Create root r.
+     *
      * @return the new root.
      */
     @NotNull
@@ -291,6 +326,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Create content.
+     *
+     * @param root the root
      */
     protected abstract void createContent(@NotNull final R root);
 
@@ -315,6 +352,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return fileName.toString();
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
@@ -327,7 +365,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EDITOR_OPENED,
                 description.getEditorId() + "/" + getFileName());
 
-        GAnalytics.sendPageView(null, null, "/editing/" + description.getEditorId());
+        GAnalytics.sendPageView(description.getEditorId(), null, "/editing/" + description.getEditorId());
     }
 
     @NotNull
@@ -343,6 +381,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Set the flag of dirty of this editor.
+     *
+     * @param dirty the dirty
      */
     protected void setDirty(final boolean dirty) {
         this.dirtyProperty.setValue(dirty);
@@ -390,6 +430,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Notify about changing editor camera.
+     *
+     * @param cameraLocation the camera location
+     * @param hRotation      the h rotation
+     * @param vRotation      the v rotation
+     * @param targetDistance the target distance
      */
     @FXThread
     public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
@@ -401,7 +446,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         this.showedTime = LocalTime.now();
 
         final EditorDescription description = getDescription();
-        GAnalytics.sendPageView(null, null, "/editing/" + description.getEditorId());
+        GAnalytics.sendPageView(description.getEditorId(), null, "/editing/" + description.getEditorId());
     }
 
     @Override
@@ -434,6 +479,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     /**
      * Handle a changed file.
+     *
+     * @param event the event
      */
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
     }
@@ -455,6 +502,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Sets button left down.
+     *
      * @param buttonLeftDown the left button is pressed.
      */
     protected void setButtonLeftDown(final boolean buttonLeftDown) {
@@ -462,6 +511,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Sets button middle down.
+     *
      * @param buttonMiddleDown the middle button is pressed.
      */
     protected void setButtonMiddleDown(final boolean buttonMiddleDown) {
@@ -469,6 +520,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Sets button right down.
+     *
      * @param buttonRightDown the right button is pressed.
      */
     protected void setButtonRightDown(final boolean buttonRightDown) {
@@ -476,6 +529,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Is button left down boolean.
+     *
      * @return true if left button is pressed.
      */
     protected boolean isButtonLeftDown() {
@@ -483,6 +538,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Is button middle down boolean.
+     *
      * @return true if middle button is pressed.
      */
     protected boolean isButtonMiddleDown() {
@@ -490,6 +547,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
+     * Is button right down boolean.
+     *
      * @return true if right button is pressed.
      */
     protected boolean isButtonRightDown() {

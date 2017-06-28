@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static java.util.Objects.requireNonNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.layout.HBox;
@@ -58,6 +59,12 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);
     }
 
+    /**
+     * Gets style spans.
+     *
+     * @param text the text
+     * @return the style spans
+     */
     @NotNull
     protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         throw new RuntimeException("unsupported");
@@ -89,6 +96,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         return requireNonNull(codeArea);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);

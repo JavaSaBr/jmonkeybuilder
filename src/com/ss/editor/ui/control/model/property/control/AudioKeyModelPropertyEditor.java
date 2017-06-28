@@ -59,8 +59,17 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
     private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
     private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
+    /**
+     * The constant FX_EVENT_MANAGER.
+     */
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+    /**
+     * The constant JFX_APPLICATION.
+     */
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+    /**
+     * The constant EDITOR.
+     */
     protected static final Editor EDITOR = Editor.getInstance();
 
     private static final Array<String> AUDIO_EXTENSIONS = ArrayFactory.newArray(String.class);
@@ -76,6 +85,13 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
      */
     private Label audioKeyLabel;
 
+    /**
+     * Instantiates a new Audio key model property editor.
+     *
+     * @param element        the element
+     * @param paramName      the param name
+     * @param changeConsumer the change consumer
+     */
     public AudioKeyModelPropertyEditor(@Nullable final AudioKey element, @NotNull final String paramName,
                                        @NotNull final ModelChangeConsumer changeConsumer) {
         super(element, paramName, changeConsumer);
@@ -219,6 +235,8 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
     }
 
     /**
+     * Gets audio key label.
+     *
      * @return the label with name of the audio key.
      */
     protected Label getAudioKeyLabel() {

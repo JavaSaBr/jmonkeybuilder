@@ -12,10 +12,18 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit integer values.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class IntegerFilterPropertyControl<T> extends AbstractIntegerPropertyControl<SceneChangeConsumer, T> {
 
+    /**
+     * Instantiates a new Integer filter property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public IntegerFilterPropertyControl(@Nullable final Integer propertyValue, @NotNull final String propertyName,
                                         @NotNull final SceneChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer, newChangeHandler());

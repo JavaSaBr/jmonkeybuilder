@@ -17,6 +17,12 @@ import com.ss.rlib.util.StringUtils;
  */
 public class AmbientLightModelNode extends LightModelNode<AmbientLight> {
 
+    /**
+     * Instantiates a new Ambient light model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AmbientLightModelNode(@NotNull final AmbientLight element, final long objectId) {
         super(element, objectId);
     }

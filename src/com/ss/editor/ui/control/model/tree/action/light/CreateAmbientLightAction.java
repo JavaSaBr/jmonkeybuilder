@@ -19,6 +19,12 @@ import javafx.scene.image.Image;
  */
 public class CreateAmbientLightAction extends AbstractCreateLightAction {
 
+    /**
+     * Instantiates a new Create ambient light action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateAmbientLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

@@ -26,6 +26,12 @@ import javafx.scene.image.Image;
  */
 public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create custom control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateCustomControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -45,6 +51,7 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());

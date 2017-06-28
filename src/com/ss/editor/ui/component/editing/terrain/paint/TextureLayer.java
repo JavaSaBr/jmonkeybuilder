@@ -32,6 +32,12 @@ public class TextureLayer implements Comparable<TextureLayer> {
      */
     private final int layer;
 
+    /**
+     * Instantiates a new Texture layer.
+     *
+     * @param settings the settings
+     * @param layer    the layer
+     */
     public TextureLayer(@NotNull final TextureLayerSettings settings, final int layer) {
         this.settings = settings;
         this.layer = layer;
@@ -51,6 +57,8 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
+     * Gets layer.
+     *
      * @return the layer.
      */
     @FromAnyThread
@@ -59,6 +67,8 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
+     * Gets scale.
+     *
      * @return the texture scale.
      */
     @FromAnyThread
@@ -67,6 +77,8 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
+     * Sets scale.
+     *
      * @param scale the texture scale.
      */
     @FromAnyThread
@@ -75,6 +87,8 @@ public class TextureLayer implements Comparable<TextureLayer> {
     }
 
     /**
+     * Gets diffuse file.
+     *
      * @return the diffuse file.
      */
     @Nullable
@@ -100,6 +114,11 @@ public class TextureLayer implements Comparable<TextureLayer> {
         settings.setDiffuse(texture, getLayer());
     }
 
+    /**
+     * Gets normal file.
+     *
+     * @return the normal file
+     */
     @FromAnyThread
     public Path getNormalFile() {
         final Texture normal = settings.getNormal(getLayer());

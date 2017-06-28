@@ -18,6 +18,11 @@ public class OpenFileByExternalEditorAction extends MenuItem {
      */
     private final ResourceElement element;
 
+    /**
+     * Instantiates a new Open file by external editor action.
+     *
+     * @param element the element
+     */
     public OpenFileByExternalEditorAction(final ResourceElement element) {
         this.element = element;
         setText(Messages.ASSET_COMPONENT_RESOURCE_TREE_CONTEXT_MENU_OPEN_FILE_BY_EXTERNAL_EDITOR);

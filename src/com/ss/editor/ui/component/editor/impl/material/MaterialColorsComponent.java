@@ -17,6 +17,11 @@ import java.util.function.Consumer;
  */
 public class MaterialColorsComponent extends AbstractMaterialPropertiesComponent {
 
+    /**
+     * Instantiates a new Material colors component.
+     *
+     * @param changeHandler the change handler
+     */
     public MaterialColorsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         super(changeHandler);
     }

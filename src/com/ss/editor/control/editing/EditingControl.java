@@ -15,6 +15,8 @@ import org.jetbrains.annotations.Nullable;
 public interface EditingControl extends Control {
 
     /**
+     * Gets edited model.
+     *
      * @return the edited model.
      */
     @Nullable
@@ -62,6 +64,8 @@ public interface EditingControl extends Control {
     }
 
     /**
+     * Is started editing boolean.
+     *
      * @return true if this control started editing.
      */
     @EditorThread

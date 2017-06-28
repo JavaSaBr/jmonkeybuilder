@@ -13,6 +13,12 @@ import java.awt.image.BufferedImage;
  */
 public class TGAReader {
 
+    /**
+     * Gets image.
+     *
+     * @param buffer the buffer
+     * @return the image
+     */
     @Nullable
     public static Image getImage(@NotNull final byte[] buffer) {
         return decode(buffer);

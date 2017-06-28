@@ -13,10 +13,18 @@ import javafx.scene.control.Label;
 /**
  * The implementation of the {@link AbstractElementFilterPropertyControl} to edit direction light from a scene.
  *
+ * @param <D> the type parameter
  * @author JavaSaBr
  */
 public class DirectionLightElementFilterPropertyControl<D> extends AbstractElementFilterPropertyControl<D, DirectionalLight> {
 
+    /**
+     * Instantiates a new Direction light element filter property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public DirectionLightElementFilterPropertyControl(@Nullable final DirectionalLight propertyValue,
                                                       @NotNull final String propertyName,
                                                       @NotNull final SceneChangeConsumer changeConsumer) {

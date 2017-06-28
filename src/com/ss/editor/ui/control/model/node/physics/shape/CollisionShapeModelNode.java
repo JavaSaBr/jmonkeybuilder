@@ -10,10 +10,17 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link ModelNode} to show a {@link CollisionShape} in the tree.
  *
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class CollisionShapeModelNode<T extends CollisionShape> extends ModelNode<T> {
 
+    /**
+     * Instantiates a new Collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public CollisionShapeModelNode(@NotNull final T element, final long objectId) {
         super(element, objectId);
     }

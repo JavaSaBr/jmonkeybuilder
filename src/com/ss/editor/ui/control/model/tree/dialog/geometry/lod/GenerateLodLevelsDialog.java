@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog.geometry.lod;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
@@ -43,17 +44,29 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
     private static final ObservableList<ReductionMethod> METHOD_TYPES = observableArrayList(ReductionMethod.VALUES);
 
-    private static final Point DIALOG_SIZE = new Point(360, 296);
-    private static final Insets FIELD_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 6, 0);
+    private static final Point DIALOG_SIZE = new Point(360, 0);
+    private static final Insets FIELD_OFFSET = new Insets(6, 0, 6, 0);
 
     private static final double LIST_WIDTH_PERCENT = 0.94;
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The enum Reduction method.
+     */
     public enum ReductionMethod {
+        /**
+         * Proportional reduction method.
+         */
         PROPORTIONAL,
+        /**
+         * Constant reduction method.
+         */
         CONSTANT;
 
+        /**
+         * The constant VALUES.
+         */
         public static final ReductionMethod[] VALUES = values();
     }
 
@@ -87,6 +100,12 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private ListView<Number> levelsList;
 
+    /**
+     * Instantiates a new Generate lod levels dialog.
+     *
+     * @param nodeTree the node tree
+     * @param geometry the geometry
+     */
     public GenerateLodLevelsDialog(@NotNull final AbstractNodeTree<?> nodeTree, final @NotNull Geometry geometry) {
         this.nodeTree = nodeTree;
         this.geometry = geometry;
@@ -103,6 +122,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets mesh.
+     *
      * @return the mesh.
      */
     @NotNull
@@ -119,6 +140,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets method.
+     *
      * @return the reduction method.
      */
     @NotNull
@@ -133,7 +156,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ListView<Number> getLevelsList() {
-        return requireNonNull(levelsList);
+        return notNull(levelsList);
     }
 
     @NotNull
@@ -258,7 +281,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<ReductionMethod> getReductionMethodComboBox() {
-        return requireNonNull(reductionMethodComboBox);
+        return notNull(reductionMethodComboBox);
     }
 
     @Override
@@ -304,7 +327,9 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
             final AbstractNodeTree<?> nodeTree = getNodeTree();
             final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
 
-            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation = new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
+            final ModelPropertyOperation<Geometry, VertexBuffer[]> operation =
+                    new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
+
             operation.setApplyHandler((geom, buffers) -> geom.getMesh().setLodLevels(buffers));
 
             consumer.execute(operation);
@@ -319,6 +344,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         return Messages.GENERATE_LOD_DIALOG_BUTTON_GENERATE;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

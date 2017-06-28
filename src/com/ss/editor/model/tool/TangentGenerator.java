@@ -21,6 +21,9 @@ public class TangentGenerator {
 
     /**
      * Generate tangents using a standard algorithm.
+     *
+     * @param spatial       the spatial
+     * @param splitMirrored the split mirrored
      */
     public static void useStandardGenerator(@NotNull final Spatial spatial, final boolean splitMirrored) {
         try {
@@ -32,6 +35,8 @@ public class TangentGenerator {
 
     /**
      * Generate tangents using a Mikktspace algorithm.
+     *
+     * @param spatial the spatial
      */
     public static void useMikktspaceGenerator(@NotNull final Spatial spatial) {
         try {

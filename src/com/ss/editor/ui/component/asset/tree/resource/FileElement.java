@@ -11,6 +11,11 @@ import java.nio.file.Path;
  */
 public class FileElement extends ResourceElement {
 
+    /**
+     * Instantiates a new File element.
+     *
+     * @param file the file
+     */
     FileElement(@NotNull final Path file) {
         super(file);
     }

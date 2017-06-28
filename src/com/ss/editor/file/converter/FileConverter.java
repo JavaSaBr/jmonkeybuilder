@@ -32,6 +32,8 @@ public interface FileConverter {
 
 
     /**
+     * Gets target extension.
+     *
      * @return the result file format name.
      */
     @NotNull

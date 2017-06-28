@@ -22,6 +22,12 @@ import java.util.List;
  */
 public class ComputedCollisionShapeModelNode extends CollisionShapeModelNode<CompoundCollisionShape> {
 
+    /**
+     * Instantiates a new Computed collision shape model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public ComputedCollisionShapeModelNode(@NotNull final CompoundCollisionShape element, final long objectId) {
         super(element, objectId);
     }

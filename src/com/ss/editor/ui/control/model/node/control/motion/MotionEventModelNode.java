@@ -21,6 +21,12 @@ import com.ss.rlib.util.array.ArrayFactory;
  */
 public class MotionEventModelNode extends ControlModelNode<MotionEvent> {
 
+    /**
+     * Instantiates a new Motion event model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public MotionEventModelNode(@NotNull final MotionEvent element, final long objectId) {
         super(element, objectId);
     }

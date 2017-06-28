@@ -25,6 +25,11 @@ public class MeshPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCons
     @NotNull
     private static final PropertyBuilder INSTANCE = new MeshPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

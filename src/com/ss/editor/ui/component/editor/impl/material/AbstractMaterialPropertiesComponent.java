@@ -29,12 +29,19 @@ public abstract class AbstractMaterialPropertiesComponent extends VBox {
     @NotNull
     private final Consumer<EditorOperation> changeHandler;
 
+    /**
+     * Instantiates a new Abstract material properties component.
+     *
+     * @param changeHandler the change handler
+     */
     public AbstractMaterialPropertiesComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
         setId(CSSIds.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
         this.changeHandler = changeHandler;
     }
 
     /**
+     * Gets change handler.
+     *
      * @return the changes handler.
      */
     @NotNull
@@ -44,6 +51,8 @@ public abstract class AbstractMaterialPropertiesComponent extends VBox {
 
     /**
      * Build property controls for the material.
+     *
+     * @param material the material
      */
     public void buildFor(@NotNull final Material material) {
 
@@ -58,6 +67,9 @@ public abstract class AbstractMaterialPropertiesComponent extends VBox {
 
     /**
      * Build a control to edit the material parameter.
+     *
+     * @param matParam the mat param
+     * @param material the material
      */
     protected void buildFor(@NotNull final MatParam matParam, @NotNull final Material material) {
     }

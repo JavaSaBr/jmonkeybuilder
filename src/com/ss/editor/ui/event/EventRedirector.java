@@ -51,6 +51,13 @@ public class EventRedirector {
      */
     private double sceneY;
 
+    /**
+     * Instantiates a new Event redirector.
+     *
+     * @param editorAreaComponent the editor area component
+     * @param destination         the destination
+     * @param stage               the stage
+     */
     public EventRedirector(@NotNull final EditorAreaComponent editorAreaComponent, @NotNull final Node destination,
                            @NotNull final Stage stage) {
         this.editorAreaComponent = editorAreaComponent;

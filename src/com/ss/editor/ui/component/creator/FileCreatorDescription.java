@@ -1,12 +1,11 @@
 package com.ss.editor.ui.component.creator;
 
+import static java.util.Objects.requireNonNull;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.concurrent.Callable;
-
-import javafx.scene.image.Image;
 
 /**
  * The description of a file creator.
@@ -18,11 +17,13 @@ public class FileCreatorDescription {
     /**
      * The file description.
      */
+    @Nullable
     private String fileDescription;
 
     /**
      * The constructor of a file creator.
      */
+    @Nullable
     private Callable<FileCreator> constructor;
 
     /**
@@ -32,6 +33,8 @@ public class FileCreatorDescription {
     private Image icon;
 
     /**
+     * Sets constructor.
+     *
      * @param constructor the constructor of a file creator.
      */
     public void setConstructor(@NotNull final Callable<FileCreator> constructor) {
@@ -39,6 +42,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Sets file description.
+     *
      * @param fileDescription the file description.
      */
     public void setFileDescription(@NotNull final String fileDescription) {
@@ -46,22 +51,28 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Gets constructor.
+     *
      * @return the constructor of a file creator.
      */
     @NotNull
     public Callable<FileCreator> getConstructor() {
-        return Objects.requireNonNull(constructor);
+        return requireNonNull(constructor);
     }
 
     /**
+     * Gets file description.
+     *
      * @return the file description.
      */
     @NotNull
     public String getFileDescription() {
-        return Objects.requireNonNull(fileDescription);
+        return requireNonNull(fileDescription);
     }
 
     /**
+     * Sets icon.
+     *
      * @param icon the icon.
      */
     public void setIcon(@Nullable final Image icon) {
@@ -69,6 +80,8 @@ public class FileCreatorDescription {
     }
 
     /**
+     * Gets icon.
+     *
      * @return the icon.
      */
     @Nullable

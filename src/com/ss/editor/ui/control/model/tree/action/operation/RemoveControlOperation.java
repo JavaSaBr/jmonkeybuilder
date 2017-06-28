@@ -26,6 +26,12 @@ public class RemoveControlOperation extends AbstractEditorOperation<ModelChangeC
     @NotNull
     private final Spatial parent;
 
+    /**
+     * Instantiates a new Remove control operation.
+     *
+     * @param control the control
+     * @param parent  the parent
+     */
     public RemoveControlOperation(@NotNull final Control control, @NotNull final Spatial parent) {
         this.control = control;
         this.parent = parent;

@@ -14,6 +14,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CharacterControlModelNode extends PhysicsObjectModelNode<CharacterControl> {
 
+    /**
+     * Instantiates a new Character control model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public CharacterControlModelNode(@NotNull final CharacterControl element, final long objectId) {
         super(element, objectId);
     }

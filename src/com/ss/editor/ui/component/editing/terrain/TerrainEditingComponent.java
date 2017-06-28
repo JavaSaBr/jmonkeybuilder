@@ -12,7 +12,9 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.editing.impl.AbstractEditingComponent;
+import com.ss.editor.ui.component.container.impl.AbstractProcessingComponent;
+import com.ss.editor.ui.component.editing.EditingComponent;
+import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.control.*;
 import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
@@ -48,11 +50,21 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQuad> {
+public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer>
+        implements EditingComponent {
 
+    /**
+     * The constant LABEL_PERCENT.
+     */
     public static final double LABEL_PERCENT = 1D - AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
+    /**
+     * The constant FIELD_PERCENT.
+     */
     public static final double FIELD_PERCENT = AbstractPropertyControl.CONTROL_WIDTH_PERCENT;
 
+    /**
+     * The constant TERRAIN_PARAM.
+     */
     public static final String TERRAIN_PARAM = "terrainParam";
 
     @NotNull
@@ -319,6 +331,9 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
      */
     private boolean ignoreListeners;
 
+    /**
+     * Instantiates a new Terrain editing component.
+     */
     public TerrainEditingComponent() {
         this.buttonToControl = DictionaryFactory.newObjectDictionary();
         this.buttonToSettings = DictionaryFactory.newObjectDictionary();
@@ -807,6 +822,8 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     /**
+     * Gets paint tool control.
+     *
      * @return the control to paint textures.
      */
     @NotNull
@@ -821,13 +838,13 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     private void changePaintControlShininess(@NotNull final Float newValue) {
         if (isIgnoreListeners()) return;
 
-        final TerrainQuad editedObject = getEditedObject();
-        final Material mat = editedObject.getMaterial();
+        final TerrainQuad processedObject = getProcessedObject();
+        final Material mat = processedObject.getMaterial();
         final MatParam param = mat.getParam("Shininess");
         final float shininess = param == null ? 0F : (float) param.getValue();
 
         final ModelPropertyOperation<TerrainQuad, Float> operation =
-                new ModelPropertyOperation<>(editedObject, TERRAIN_PARAM, newValue, shininess);
+                new ModelPropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, shininess);
 
         operation.setApplyHandler((terrainQuad, value) -> {
             NodeUtils.visitGeometry(terrainQuad, geometry -> {
@@ -847,10 +864,10 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     private void changePaintControlTriPlanar(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final TerrainQuad editedObject = getEditedObject();
+        final TerrainQuad processedObject = getProcessedObject();
 
         final ModelPropertyOperation<TerrainQuad, Boolean> operation =
-                new ModelPropertyOperation<>(editedObject, TERRAIN_PARAM, newValue, !newValue);
+                new ModelPropertyOperation<>(processedObject, TERRAIN_PARAM, newValue, !newValue);
 
         operation.setApplyHandler((terrainQuad, value) -> {
             NodeUtils.visitGeometry(terrainQuad, geometry -> {
@@ -966,18 +983,22 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     /**
+     * Gets tri planar check box.
+     *
      * @return the box to use tri-planar.
      */
     @NotNull
-    public CheckBox getTriPlanarCheckBox() {
+    protected CheckBox getTriPlanarCheckBox() {
         return requireNonNull(triPlanarCheckBox);
     }
 
     /**
+     * Gets shininess field.
+     *
      * @return the shininess field.
      */
     @NotNull
-    public FloatTextField getShininessField() {
+    protected FloatTextField getShininessField() {
         return requireNonNull(shininessField);
     }
 
@@ -1110,13 +1131,8 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
     }
 
     @Override
-    public void stopEditing() {
-        super.stopEditing();
-    }
-
-    @Override
-    public void startEditing(@NotNull final Object object) {
-        super.startEditing(object);
+    public void startProcessing(@NotNull final Object object) {
+        super.startProcessing(object);
 
         final TextureLayerSettings settings = getTextureLayerSettings();
 
@@ -1144,7 +1160,7 @@ public class TerrainEditingComponent extends AbstractEditingComponent<TerrainQua
         setIgnoreListeners(true);
         try {
 
-            final Terrain terrain = getEditedObject();
+            final Terrain terrain = getProcessedObject();
             final Material material = terrain.getMaterial();
             final FloatTextField shininessField = getShininessField();
             final CheckBox triPlanarCheckBox = getTriPlanarCheckBox();

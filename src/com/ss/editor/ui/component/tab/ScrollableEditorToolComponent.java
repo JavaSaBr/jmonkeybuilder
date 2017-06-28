@@ -18,6 +18,12 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public class ScrollableEditorToolComponent extends EditorToolComponent {
 
+    /**
+     * Instantiates a new Scrollable editor tool component.
+     *
+     * @param pane  the pane
+     * @param index the index
+     */
     public ScrollableEditorToolComponent(@NotNull final SplitPane pane, final int index) {
         super(pane, index);
     }

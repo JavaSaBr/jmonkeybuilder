@@ -12,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class GlobalBottomToolComponent extends TabToolComponent {
 
+    /**
+     * Instantiates a new Global bottom tool component.
+     *
+     * @param pane the pane
+     */
     public GlobalBottomToolComponent(@NotNull final SplitPane pane) {
         super(pane);
         setId(CSSIds.GLOBAL_BOTTOM_TOOL_COMPONENT);

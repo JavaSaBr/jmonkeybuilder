@@ -21,8 +21,14 @@ public abstract class Config {
 
     private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
 
+    /**
+     * The constant TITLE.
+     */
     public static final String TITLE = "jME3 SpaceShift Editor";
-    public static final String VERSION = "v.0.9.8";
+    /**
+     * The constant VERSION.
+     */
+    public static final String VERSION = "v.0.9.9";
 
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 
@@ -76,6 +82,8 @@ public abstract class Config {
     }
 
     /**
+     * Gets folder for log.
+     *
      * @return the path to the folder for writing log files.
      */
     @NotNull
@@ -85,6 +93,8 @@ public abstract class Config {
 
     /**
      * The path to the folder for storing data in the user home.
+     *
+     * @return the app folder in user home
      */
     @NotNull
     public static Path getAppFolderInUserHome() {

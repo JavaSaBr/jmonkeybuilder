@@ -17,6 +17,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateStaticRigidBodyControlAction extends CreateRigidBodyControlAction {
 
+    /**
+     * Instantiates a new Create static rigid body control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateStaticRigidBodyControlAction(@NotNull final AbstractNodeTree<?> nodeTree,
                                               @NotNull final ModelNode<?> node) {
         super(nodeTree, node);

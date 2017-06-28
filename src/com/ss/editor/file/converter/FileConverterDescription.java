@@ -32,6 +32,8 @@ public class FileConverterDescription {
     private Array<String> extensions;
 
     /**
+     * Gets extensions.
+     *
      * @return the list of extensions.
      */
     @NotNull
@@ -41,6 +43,8 @@ public class FileConverterDescription {
     }
 
     /**
+     * Sets extensions.
+     *
      * @param extensions the list of extensions.
      */
     @FXThread
@@ -49,6 +53,8 @@ public class FileConverterDescription {
     }
 
     /**
+     * Gets constructor.
+     *
      * @return the constructor.
      */
     @NotNull
@@ -58,6 +64,8 @@ public class FileConverterDescription {
     }
 
     /**
+     * Sets constructor.
+     *
      * @param constructor the constructor.
      */
     @FXThread
@@ -66,6 +74,8 @@ public class FileConverterDescription {
     }
 
     /**
+     * Gets description.
+     *
      * @return the description.
      */
     @FXThread
@@ -74,6 +84,8 @@ public class FileConverterDescription {
     }
 
     /**
+     * Sets description.
+     *
      * @param description the description.
      */
     @FXThread

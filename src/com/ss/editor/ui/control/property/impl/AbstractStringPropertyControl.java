@@ -21,6 +21,8 @@ import com.ss.rlib.ui.util.FXUtils;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit string values.
  *
+ * @param <C> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractStringPropertyControl<C extends ChangeConsumer, T>
@@ -31,6 +33,14 @@ public abstract class AbstractStringPropertyControl<C extends ChangeConsumer, T>
      */
     private TextField valueField;
 
+    /**
+     * Instantiates a new Abstract string property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     * @param changeHandler  the change handler
+     */
     public AbstractStringPropertyControl(@Nullable final String propertyValue, @NotNull final String propertyName,
                                          @NotNull final C changeConsumer,
                                          @NotNull final SixObjectConsumer<C, T, String, String, String, BiConsumer<T, String>> changeHandler) {

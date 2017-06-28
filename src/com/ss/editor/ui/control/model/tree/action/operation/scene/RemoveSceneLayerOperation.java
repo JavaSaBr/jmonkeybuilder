@@ -43,6 +43,13 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
     @NotNull
     private final SceneNode sceneNode;
 
+    /**
+     * Instantiates a new Remove scene layer operation.
+     *
+     * @param layersRoot the layers root
+     * @param layer      the layer
+     * @param sceneNode  the scene node
+     */
     public RemoveSceneLayerOperation(final @NotNull LayersRoot layersRoot, @NotNull final SceneLayer layer,
                                      @NotNull final SceneNode sceneNode) {
         this.toRevert = ArrayFactory.newArray(Spatial.class);

@@ -70,6 +70,11 @@ public class EditorFXScene extends Scene {
     @Nullable
     private ProgressIndicator progressIndicator;
 
+    /**
+     * Instantiates a new Editor fx scene.
+     *
+     * @param root the root
+     */
     public EditorFXScene(@NotNull final Group root) {
         super(root);
 
@@ -106,6 +111,8 @@ public class EditorFXScene extends Scene {
     }
 
     /**
+     * Gets canvas.
+     *
      * @return the view for drawing JME.
      */
     @NotNull
@@ -117,7 +124,8 @@ public class EditorFXScene extends Scene {
     /**
      * Find the component with the ID.
      *
-     * @param id the component id.
+     * @param <T> the type parameter
+     * @param id  the component id.
      * @return the component or null.
      */
     @Nullable
@@ -128,6 +136,8 @@ public class EditorFXScene extends Scene {
     }
 
     /**
+     * Gets components.
+     *
      * @return the list of components.
      */
     @NotNull
@@ -137,6 +147,8 @@ public class EditorFXScene extends Scene {
     }
 
     /**
+     * Gets container.
+     *
      * @return the container of this scene.
      */
     @NotNull
@@ -155,6 +167,8 @@ public class EditorFXScene extends Scene {
     }
 
     /**
+     * Gets hide layer.
+     *
      * @return the hide layer.
      */
     @NotNull

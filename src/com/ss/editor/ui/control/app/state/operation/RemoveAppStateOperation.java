@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to remove a {@link SceneAppState} from a {@link
- * SceneNode}.
+ * SceneNode}*.
  *
  * @author JavaSaBr.
  */
@@ -27,6 +27,12 @@ public class RemoveAppStateOperation extends AbstractEditorOperation<SceneChange
     @NotNull
     private final SceneNode sceneNode;
 
+    /**
+     * Instantiates a new Remove app state operation.
+     *
+     * @param newState  the new state
+     * @param sceneNode the scene node
+     */
     public RemoveAppStateOperation(@NotNull final SceneAppState newState, @NotNull final SceneNode sceneNode) {
         this.newState = newState;
         this.sceneNode = sceneNode;

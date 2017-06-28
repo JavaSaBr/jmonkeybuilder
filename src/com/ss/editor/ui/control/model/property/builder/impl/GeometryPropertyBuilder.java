@@ -83,6 +83,11 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
     @NotNull
     private static final PropertyBuilder INSTANCE = new GeometryPropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
@@ -138,6 +143,12 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
         FXUtils.addToPane(lodLevelControl, container);
     }
 
+    /**
+     * Can edit material boolean.
+     *
+     * @param geometry the geometry
+     * @return the boolean
+     */
     protected boolean canEditMaterial(final Geometry geometry) {
         return !(geometry instanceof ParticleGeometry);
     }

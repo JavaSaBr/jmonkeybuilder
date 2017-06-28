@@ -77,6 +77,11 @@ public final class EditorConfig implements AssetEventListener {
     @Nullable
     private static volatile EditorConfig instance;
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static EditorConfig getInstance() {
 
@@ -211,11 +216,16 @@ public final class EditorConfig implements AssetEventListener {
      */
     private volatile boolean analyticsQuestion;
 
+    /**
+     * Instantiates a new Editor config.
+     */
     public EditorConfig() {
         this.lastOpenedAssets = new ArrayList<>();
     }
 
     /**
+     * Gets last opened assets.
+     *
      * @return The list of last opened asset folders.
      */
     @NotNull
@@ -226,6 +236,8 @@ public final class EditorConfig implements AssetEventListener {
 
     /**
      * Add the new last opened asset folder.
+     *
+     * @param currentAsset the current asset
      */
     @FromAnyThread
     public synchronized void addOpenedAsset(@NotNull final Path currentAsset) {
@@ -255,6 +267,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets anisotropy.
+     *
      * @param anisotropy the new level of the anisotropy.
      */
     @FromAnyThread
@@ -263,6 +277,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets anisotropy.
+     *
      * @return the current level of the anisotropy.
      */
     @FromAnyThread
@@ -271,6 +287,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets fxaa.
+     *
      * @param fxaa flag is for enabling the FXAA.
      */
     @FromAnyThread
@@ -279,6 +297,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is fxaa boolean.
+     *
      * @return flag is for enabling the FXAA.
      */
     @FromAnyThread
@@ -287,6 +307,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets current asset.
+     *
      * @return the current asset folder.
      */
     @Nullable
@@ -296,6 +318,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets current asset.
+     *
      * @param currentAsset the new current asset folder.
      */
     @FromAnyThread
@@ -304,6 +328,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets additional classpath.
+     *
      * @return путь к папке с дополнительным classpath.
      */
     @Nullable
@@ -313,6 +339,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets additional classpath.
+     *
      * @param additionalClasspath путь к папке с дополнительным classpath.
      */
     @FromAnyThread
@@ -321,6 +349,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets additional envs.
+     *
      * @return the path to the folder with additional envs.
      */
     @Nullable
@@ -330,6 +360,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets additional envs.
+     *
      * @param additionalEnvs the path to the folder with additional envs.
      */
     @FromAnyThread
@@ -338,6 +370,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is gamma correction boolean.
+     *
      * @return flag is for enabling the gamma correction.
      */
     @FromAnyThread
@@ -346,6 +380,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets gamma correction.
+     *
      * @param gammaCorrection flag is for enabling the gamma correction.
      */
     @FromAnyThread
@@ -354,6 +390,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is tone map filter boolean.
+     *
      * @return flag is for enabling the tone map filter.
      */
     @FromAnyThread
@@ -362,6 +400,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets tone map filter.
+     *
      * @param toneMapFilter flag is for enabling the tone map filter.
      */
     @FromAnyThread
@@ -370,6 +410,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets tone map filter white point.
+     *
      * @return the current white point for the tone map filter.
      */
     @NotNull
@@ -379,6 +421,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets tone map filter white point.
+     *
      * @param toneMapFilterWhitePoint the new white point for the tone map filter.
      */
     @FromAnyThread
@@ -387,6 +431,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets screen height.
+     *
      * @param screenHeight the height of this screen.
      */
     @FromAnyThread
@@ -395,6 +441,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets screen width.
+     *
      * @param screenWidth the width of this screen.
      */
     @FromAnyThread
@@ -403,6 +451,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets screen height.
+     *
      * @return the height of this screen.
      */
     @FromAnyThread
@@ -411,6 +461,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets screen width.
+     *
      * @return the width of this screen.
      */
     @FromAnyThread
@@ -419,6 +471,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is maximized boolean.
+     *
      * @return true is a window is maximized.
      */
     @FromAnyThread
@@ -427,6 +481,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets maximized.
+     *
      * @param maximized flag is for maximizing a window.
      */
     @FromAnyThread
@@ -435,6 +491,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets global left tool width.
+     *
      * @return the global left tool width.
      */
     @FromAnyThread
@@ -443,6 +501,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets global bottom tool height.
+     *
      * @return the global bottom tool height.
      */
     @FromAnyThread
@@ -451,6 +511,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets global left tool width.
+     *
      * @param globalLeftToolWidth the global left tool width.
      */
     @FromAnyThread
@@ -459,6 +521,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets global bottom tool height.
+     *
      * @param globalBottomToolHeight the global bottom tool height.
      */
     @FromAnyThread
@@ -467,6 +531,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets global left tool collapsed.
+     *
      * @param globalLeftToolCollapsed flag is for collapsing the global left tool.
      */
     @FromAnyThread
@@ -475,6 +541,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets global bottom tool collapsed.
+     *
      * @param globalBottomToolCollapsed flag is for collapsing the global bottom tool.
      */
     @FromAnyThread
@@ -483,6 +551,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is global left tool collapsed boolean.
+     *
      * @return true if the global left tool is collapsed.
      */
     @FromAnyThread
@@ -491,6 +561,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is global bottom tool collapsed boolean.
+     *
      * @return true if the global bottom tool is collapsed.
      */
     @FromAnyThread
@@ -499,6 +571,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets analytics.
+     *
      * @param analytics true if you want to enable analytics.
      */
     @FromAnyThread
@@ -507,6 +581,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is analytics boolean.
+     *
      * @return true if analytics is enabled.
      */
     @FromAnyThread
@@ -515,6 +591,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is auto tangent generating boolean.
+     *
      * @return true if enabled auto tangent generating.
      */
     @FromAnyThread
@@ -523,6 +601,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets auto tangent generating.
+     *
      * @param autoTangentGenerating flag is of enabling auto tangent generating.
      */
     @FromAnyThread
@@ -531,6 +611,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is default use flipped texture boolean.
+     *
      * @return true if use flip textures by default.
      */
     public boolean isDefaultUseFlippedTexture() {
@@ -538,6 +620,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets default use flipped texture.
+     *
      * @param defaultUseFlippedTexture flag is of enabling using flip textures by default.
      */
     public void setDefaultUseFlippedTexture(final boolean defaultUseFlippedTexture) {
@@ -545,6 +629,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is default editor camera enabled boolean.
+     *
      * @return true if enable camera lamp by default.
      */
     public boolean isDefaultEditorCameraEnabled() {
@@ -552,6 +638,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets default editor camera enabled.
+     *
      * @param defaultEditorCameraEnabled Flag is of enabling camera lamp in editors by default.
      */
     public void setDefaultEditorCameraEnabled(final boolean defaultEditorCameraEnabled) {
@@ -559,6 +647,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets frame rate.
+     *
      * @return the current frameRate.
      */
     @FromAnyThread
@@ -567,6 +657,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets frame rate.
+     *
      * @param frameRate the current frameRate.
      */
     @FromAnyThread
@@ -575,6 +667,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets camera angle.
+     *
      * @param cameraAngle the camera angle.
      */
     @FromAnyThread
@@ -583,6 +677,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets camera angle.
+     *
      * @return the camera angle.
      */
     @FromAnyThread
@@ -591,6 +687,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Is analytics question boolean.
+     *
      * @return true if the question was showed.
      */
     public boolean isAnalyticsQuestion() {
@@ -598,6 +696,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Sets analytics question.
+     *
      * @param analyticsQuestion true if the question was showed.
      */
     public void setAnalyticsQuestion(final boolean analyticsQuestion) {
@@ -605,6 +705,8 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets settings.
+     *
      * @return the settings for JME.
      */
     @FromAnyThread

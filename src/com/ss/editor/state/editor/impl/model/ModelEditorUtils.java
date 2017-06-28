@@ -26,6 +26,15 @@ import tonegod.emitter.geometry.ParticleGeometry;
  */
 public class ModelEditorUtils {
 
+    /**
+     * Find to select object.
+     *
+     * @param <T>    the type parameter
+     * @param <M>    the type parameter
+     * @param state  the state
+     * @param object the object
+     * @return the object
+     */
     @Nullable
     public static <T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial> Object findToSelect(
             @NotNull final AbstractSceneEditorAppState<T, M> state, @NotNull final Object object) {

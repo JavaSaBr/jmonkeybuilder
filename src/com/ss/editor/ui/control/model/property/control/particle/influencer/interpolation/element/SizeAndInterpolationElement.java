@@ -15,6 +15,12 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  */
 public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement<SizeInfluencer, SizeInfluencerControl> {
 
+    /**
+     * Instantiates a new Size and interpolation element.
+     *
+     * @param control the control
+     * @param index   the index
+     */
     public SizeAndInterpolationElement(@NotNull final SizeInfluencerControl control, final int index) {
         super(control, index);
     }
@@ -22,7 +28,7 @@ public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement
     @NotNull
     @Override
     protected String getEditableTitle() {
-        return Messages.PARTICLE_EMITTER_INFLUENCER_SIZE;
+        return Messages.MODEL_PROPERTY_SIZE;
     }
 
     @Override

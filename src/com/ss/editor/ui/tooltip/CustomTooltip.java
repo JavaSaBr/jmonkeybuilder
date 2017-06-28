@@ -9,6 +9,7 @@ import javafx.scene.layout.Region;
 /**
  * The base implementation of custom tooltip.
  *
+ * @param <R> the type parameter
  * @author JavaSaBr
  */
 public abstract class CustomTooltip<R extends Region> extends Tooltip {
@@ -19,6 +20,9 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     @NotNull
     private final R root;
 
+    /**
+     * Instantiates a new Custom tooltip.
+     */
     CustomTooltip() {
         this.root = createRoot();
 
@@ -29,6 +33,8 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
     }
 
     /**
+     * Gets root.
+     *
      * @return the root container.
      */
     @NotNull
@@ -36,11 +42,18 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
         return root;
     }
 
+    /**
+     * Create root r.
+     *
+     * @return the r
+     */
     @NotNull
     protected abstract R createRoot();
 
     /**
      * Create content of this tooltip.
+     *
+     * @param root the root
      */
     protected void createContent(@NotNull final R root) {
     }

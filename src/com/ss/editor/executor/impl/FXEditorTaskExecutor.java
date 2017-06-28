@@ -26,6 +26,9 @@ public class FXEditorTaskExecutor extends AbstractEditorTaskExecutor {
     @NotNull
     private final Runnable fxTask = () -> doExecute(execute, executed);
 
+    /**
+     * Instantiates a new Fx editor task executor.
+     */
     public FXEditorTaskExecutor() {
         setName(FXEditorTaskExecutor.class.getSimpleName());
         setPriority(NORM_PRIORITY);

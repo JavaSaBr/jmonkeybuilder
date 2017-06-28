@@ -25,6 +25,11 @@ public class PrimitivePropertyBuilder extends AbstractPropertyBuilder<ModelChang
     @NotNull
     private static final PropertyBuilder INSTANCE = new PrimitivePropertyBuilder();
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
     @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;

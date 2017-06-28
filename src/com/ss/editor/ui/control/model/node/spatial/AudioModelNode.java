@@ -23,6 +23,12 @@ import javafx.scene.image.Image;
  */
 public class AudioModelNode extends NodeModelNode<AudioNode> {
 
+    /**
+     * Instantiates a new Audio model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public AudioModelNode(@NotNull final AudioNode element, final long objectId) {
         super(element, objectId);
     }

@@ -19,6 +19,12 @@ import javafx.scene.image.Image;
  */
 public class CreateQuadAction extends AbstractCreateGeometryAction {
 
+    /**
+     * Instantiates a new Create quad action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateQuadAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

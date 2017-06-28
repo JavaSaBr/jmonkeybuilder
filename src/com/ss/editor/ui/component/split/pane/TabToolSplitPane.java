@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link SplitPane} for the {@link TabToolComponent}.
  *
+ * @param <C> the type parameter
  * @author JavaSaBr
  */
 public abstract class TabToolSplitPane<C> extends SplitPane {
@@ -45,6 +46,12 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      */
     private boolean collapsed;
 
+    /**
+     * Instantiates a new Tab tool split pane.
+     *
+     * @param scene  the scene
+     * @param config the config
+     */
     protected TabToolSplitPane(@NotNull final Scene scene, @Nullable C config) {
         this.scene = scene;
         this.config = config;
@@ -56,6 +63,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
 
     /**
      * Update this pane for the new config.
+     *
+     * @param config the config
      */
     public void updateFor(@NotNull final C config) {
         this.config = config;
@@ -65,6 +74,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
+     * Load collapsed boolean.
+     *
      * @return the stored flag of collapsed.
      */
     protected boolean loadCollapsed() {
@@ -72,6 +83,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
+     * Load size int.
+     *
      * @return the stored size of the tool component.
      */
     protected int loadSize() {
@@ -94,6 +107,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
+     * Gets config.
+     *
      * @return the config.
      */
     @NotNull
@@ -103,6 +118,9 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
 
     /**
      * Init this split pane for the tool component.
+     *
+     * @param toolComponent the tool component
+     * @param other         the other
      */
     public void initFor(@NotNull final TabToolComponent toolComponent, @NotNull final Node other) {
         this.toolComponent = toolComponent;
@@ -114,6 +132,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
 
     /**
      * Add with listener to handle size changes.
+     *
+     * @param toolComponent the tool component
      */
     protected void addListeners(@NotNull final TabToolComponent toolComponent) {
         toolComponent.widthProperty()
@@ -153,6 +173,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
 
     /**
      * Handle changing tool's size.
+     *
+     * @param newValue the new value
      */
     protected void handleToolChanged(@NotNull final Number newValue) {
         if (config == null) return;
@@ -171,6 +193,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
+     * Gets scene size.
+     *
      * @return the scene size.
      */
     protected double getSceneSize() {
@@ -179,18 +203,24 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
 
     /**
      * Save the flag of collapsed.
+     *
+     * @param collapsed the collapsed
      */
     protected void saveCollapsed(final boolean collapsed) {
     }
 
     /**
      * Save the size of the tool component.
+     *
+     * @param size the size
      */
     protected void saveSize(final int size) {
     }
 
     /**
      * Handle changing scene's size.
+     *
+     * @param newSize the new size
      */
     protected void handleSceneChanged(@NotNull final Number newSize) {
         if (config == null) return;
@@ -204,6 +234,8 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
     }
 
     /**
+     * Gets collapsed position.
+     *
      * @return the collapsed position.
      */
     protected double getCollapsedPosition() {
@@ -219,6 +251,10 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
 
     /**
      * Calculate an expand position.
+     *
+     * @param toolSize  the tool size
+     * @param sceneSize the scene size
+     * @return the expand position
      */
     protected double getExpandPosition(final double toolSize, final double sceneSize) {
         return min(1, max(0.1, toolSize / sceneSize));

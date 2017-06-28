@@ -21,6 +21,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateVehicleControlAction extends AbstractCreateControlAction {
 
+    /**
+     * Instantiates a new Create vehicle control action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateVehicleControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

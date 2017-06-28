@@ -13,11 +13,22 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link Enum} values.
  *
+ * @param <T> the type parameter
+ * @param <E> the type parameter
  * @author JavaSaBr
  */
 public class EnumParticleInfluencerEmitterPropertyControl<T extends ParticleInfluencer, E extends Enum<E>>
         extends AbstractEnumPropertyControl<ModelChangeConsumer, T, E> {
 
+    /**
+     * Instantiates a new Enum particle influencer emitter property control.
+     *
+     * @param element             the element
+     * @param paramName           the param name
+     * @param modelChangeConsumer the model change consumer
+     * @param availableValues     the available values
+     * @param parent              the parent
+     */
     public EnumParticleInfluencerEmitterPropertyControl(@NotNull final E element, @NotNull final String paramName,
                                                         @NotNull final ModelChangeConsumer modelChangeConsumer,
                                                         @NotNull final E[] availableValues, final @NotNull Object parent) {

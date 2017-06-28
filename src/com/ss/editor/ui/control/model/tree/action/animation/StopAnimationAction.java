@@ -24,6 +24,12 @@ import javafx.scene.image.Image;
  */
 public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Stop animation action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public StopAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -43,6 +49,7 @@ public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
         if (modelNode.getChannel() < 0) return;

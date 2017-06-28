@@ -18,6 +18,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class WheelElementModelPropertyControl extends SpatialElementModelPropertyControl<VehicleWheel> {
 
+    /**
+     * Instantiates a new Wheel element model property control.
+     *
+     * @param propertyValue  the property value
+     * @param propertyName   the property name
+     * @param changeConsumer the change consumer
+     */
     public WheelElementModelPropertyControl(@Nullable final Spatial propertyValue, @NotNull final String propertyName,
                                             @NotNull final ModelChangeConsumer changeConsumer) {
         super(propertyValue, propertyName, changeConsumer);

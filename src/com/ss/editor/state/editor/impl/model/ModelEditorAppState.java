@@ -61,6 +61,11 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      */
     private int frame;
 
+    /**
+     * Instantiates a new Model editor app state.
+     *
+     * @param fileEditor the file editor
+     */
     public ModelEditorAppState(final ModelFileEditor fileEditor) {
         super(fileEditor);
         this.customSkyNode = new Node("Custom Sky");
@@ -177,6 +182,8 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
     /**
      * Update light.
+     *
+     * @param enabled the enabled
      */
     public void updateLightEnabled(final boolean enabled) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightEnabledImpl(enabled));
@@ -202,6 +209,8 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
     /**
      * Change the fast sky.
+     *
+     * @param fastSky the fast sky
      */
     public void changeFastSky(final Spatial fastSky) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> changeFastSkyImpl(fastSky));
@@ -233,6 +242,8 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
     /**
      * Add the custom sky.
+     *
+     * @param sky the sky
      */
     public void addCustomSky(@NotNull final Spatial sky) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> addCustomSkyImpl(sky));
@@ -248,6 +259,8 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
     /**
      * Remove the custom sky.
+     *
+     * @param sky the sky
      */
     public void removeCustomSky(@NotNull final Spatial sky) {
         EXECUTOR_MANAGER.addEditorThreadTask(() -> removeCustomSkyImpl(sky));

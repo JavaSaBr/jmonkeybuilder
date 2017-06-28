@@ -59,6 +59,11 @@ public class EditorScriptingComponent extends GridPane {
     @NotNull
     private final Runnable applyHandler;
 
+    /**
+     * Instantiates a new Editor scripting component.
+     *
+     * @param applyHandler the apply handler
+     */
     public EditorScriptingComponent(@NotNull final Runnable applyHandler) {
         this.applyHandler = applyHandler;
         setId(CSSIds.EDITOR_SCRIPTING_COMPONENT);
@@ -96,7 +101,7 @@ public class EditorScriptingComponent extends GridPane {
     /**
      * Add a global variable to the script.
      *
-     * @param name the name of the variable.
+     * @param name  the name of the variable.
      * @param value the variable.
      */
     public void addVariable(@NotNull final String name, @NotNull final Object value) {

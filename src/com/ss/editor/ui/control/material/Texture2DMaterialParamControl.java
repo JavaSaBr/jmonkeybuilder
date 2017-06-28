@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.material;
 import static com.ss.editor.Messages.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
@@ -27,12 +28,14 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
+import javafx.geometry.Insets;
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,10 +54,15 @@ import java.util.function.Predicate;
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
 
+    @NotNull
+    private static final Insets BUTTON_OFFSET = new Insets(0, 4, 0, 4);
+
+    @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
+    @NotNull
     private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -66,7 +74,10 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_HDR);
     }
 
+    @NotNull
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -93,6 +104,13 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     @Nullable
     private CheckBox flipButton;
 
+    /**
+     * Instantiates a new Texture 2 d material param control.
+     *
+     * @param changeHandler the change handler
+     * @param material      the material
+     * @param parameterName the parameter name
+     */
     public Texture2DMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
                                          @NotNull final Material material, @NotNull final String parameterName) {
         super(changeHandler, material, parameterName);
@@ -146,8 +164,8 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         FXUtils.addToPane(flipButton, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON);
+        HBox.setMargin(addButton, BUTTON_OFFSET);
 
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());
         repeatButton.disableProperty().bind(texturePreview.imageProperty().isNull());
@@ -178,7 +196,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private ImageChannelPreview getTextureTooltip() {
-        return requireNonNull(textureTooltip);
+        return notNull(textureTooltip);
     }
 
     /**
@@ -305,7 +323,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private CheckBox getRepeatButton() {
-        return requireNonNull(repeatButton);
+        return notNull(repeatButton);
     }
 
     /**
@@ -313,7 +331,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private CheckBox getFlipButton() {
-        return requireNonNull(flipButton);
+        return notNull(flipButton);
     }
 
     /**
@@ -321,7 +339,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private ImageView getTexturePreview() {
-        return requireNonNull(texturePreview);
+        return notNull(texturePreview);
     }
 
     @Override

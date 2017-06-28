@@ -62,9 +62,8 @@ import java.nio.file.Paths;
  */
 public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
-    private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 106, 0);
-    private static final Insets HEIGHTMAP_CONTAINER_OFFSET = new Insets(0, 0, 27, 0);
+    private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 0, 0);
+    private static final Insets HEIGHTMAP_CONTAINER_OFFSET = new Insets(0, 0, 0, 0);
 
     private static final Integer DEFAULT_BLEND_TEXTURE_SIZE = 256;
     private static final Integer DEFAULT_TOTAL_SIZE = DEFAULT_BLEND_TEXTURE_SIZE;
@@ -73,20 +72,35 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     private static final int NUM_ALPHA_TEXTURES = 3;
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(580, 367);
+    private static final Point DIALOG_SIZE = new Point(580, 0);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    /**
+     * The constant JFX_APPLICATION.
+     */
     @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
+    /**
+     * The constant EDITOR.
+     */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     private enum HeightMapType {
+        /**
+         * Flat height map type.
+         */
         FLAT(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_FLAT),
+        /**
+         * Image based height map type.
+         */
         IMAGE_BASED(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_IMAGE_BASED),
+        /**
+         * Hill height map type.
+         */
         HILL(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE_HILL);
 
         private static final HeightMapType[] VALUES = values();
@@ -249,6 +263,12 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private FloatTextField hillMaxRadiusField;
 
+    /**
+     * Instantiates a new Create terrain dialog.
+     *
+     * @param parentNode the parent node
+     * @param nodeTree   the node tree
+     */
     public CreateTerrainDialog(@NotNull final ModelNode<?> parentNode, @NotNull final AbstractNodeTree<?> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
@@ -460,7 +480,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(baseSettings, settingsRoot);
         FXUtils.addToPane(settingsRoot, root);
 
-        VBox.setMargin(settingsRoot, CONTAINER_OFFSET);
         VBox.setMargin(flatSettings, FLAT_CONTAINER_OFFSET);
         VBox.setMargin(heightMapSettings, HEIGHTMAP_CONTAINER_OFFSET);
     }
@@ -853,6 +872,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         return parentNode;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

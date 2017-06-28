@@ -10,12 +10,22 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of the {@link AbstractEditorOperation} to edit properties of filters in the {@link
- * SceneFileEditor}.
+ * SceneFileEditor}*.
  *
+ * @param <D> the type parameter
+ * @param <T> the type parameter
  * @author JavaSaBr
  */
 public class FilterPropertyOperation<D, T> extends AbstractPropertyOperation<SceneChangeConsumer, D, T> {
 
+    /**
+     * Instantiates a new Filter property operation.
+     *
+     * @param target       the target
+     * @param propertyName the property name
+     * @param newValue     the new value
+     * @param oldValue     the old value
+     */
     public FilterPropertyOperation(@NotNull final D target, @NotNull final String propertyName, @Nullable final T newValue,
                                    @Nullable final T oldValue) {
         super(target, propertyName, newValue, oldValue);

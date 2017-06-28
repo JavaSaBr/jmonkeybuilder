@@ -15,6 +15,12 @@ import java.nio.Buffer;
  */
 public class BufferModelNode extends ModelNode<Buffer> {
 
+    /**
+     * Instantiates a new Buffer model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public BufferModelNode(@NotNull final Buffer element, final long objectId) {
         super(element, objectId);
     }

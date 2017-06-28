@@ -17,6 +17,12 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TerrainQuadModelNode extends NodeModelNode<TerrainQuad> {
 
+    /**
+     * Instantiates a new Terrain quad model node.
+     *
+     * @param element  the element
+     * @param objectId the object id
+     */
     public TerrainQuadModelNode(@NotNull final TerrainQuad element, final long objectId) {
         super(element, objectId);
     }

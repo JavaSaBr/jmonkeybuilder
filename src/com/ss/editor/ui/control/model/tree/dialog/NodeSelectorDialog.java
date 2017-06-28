@@ -1,13 +1,12 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +18,13 @@ import java.util.function.Consumer;
 /**
  * The implementation of a dialog to select an object from a model.
  *
+ * @param <T> the type of a node.
  * @author JavaSaBr
  */
 public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(600, 451);
-
-    @NotNull
-    private static final Insets TREE_OFFSET = new Insets(6, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
 
     /**
      * The type of selectable objects.
@@ -59,6 +56,13 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     @Nullable
     private T selected;
 
+    /**
+     * Instantiates a new Node selector dialog.
+     *
+     * @param model   the model
+     * @param type    the type
+     * @param handler the handler
+     */
     public NodeSelectorDialog(@NotNull final Spatial model, @NotNull final Class<T> type,
                               @NotNull final Consumer<T> handler) {
         this.model = model;
@@ -73,11 +77,13 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets node tree.
+     *
      * @return the model tree component.
      */
     @NotNull
     protected ModelNodeTree getNodeTree() {
-        return requireNonNull(nodeTree);
+        return notNull(nodeTree);
     }
 
     @NotNull
@@ -104,6 +110,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets model.
+     *
      * @return the loaded model.
      */
     @NotNull
@@ -112,6 +120,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * Gets type.
+     *
      * @return the type of selectable objects.
      */
     @NotNull
@@ -142,6 +152,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
         return Messages.NODE_SELECTOR_DIALOG_BUTTON;
     }
 
+    @NotNull
     @Override
     protected Point getSize() {
         return DIALOG_SIZE;

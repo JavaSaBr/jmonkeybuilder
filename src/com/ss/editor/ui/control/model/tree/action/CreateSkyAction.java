@@ -21,6 +21,12 @@ import javafx.scene.image.Image;
  */
 public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
 
+    /**
+     * Instantiates a new Create sky action.
+     *
+     * @param nodeTree the node tree
+     * @param node     the node
+     */
     public CreateSkyAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -40,6 +46,7 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
 

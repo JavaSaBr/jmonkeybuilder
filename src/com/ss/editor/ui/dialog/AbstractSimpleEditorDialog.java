@@ -1,11 +1,12 @@
 package com.ss.editor.ui.dialog;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -15,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The simple implementation of the dialog.
@@ -24,17 +24,57 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT.
+     */
     protected static final double DEFAULT_LABEL_W_PERCENT = 0.4;
+
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT.
+     */
     protected static final double DEFAULT_FIELD_W_PERCENT = 0.6;
+
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT2.
+     */
     protected static final double DEFAULT_LABEL_W_PERCENT2 = 0.5;
+
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT2.
+     */
     protected static final double DEFAULT_FIELD_W_PERCENT2 = 0.5;
+
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT3.
+     */
     protected static final double DEFAULT_LABEL_W_PERCENT3 = 0.6;
+
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT3.
+     */
     protected static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
 
-    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-    protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-    protected static final Insets CONTAINER_OFFSET = new Insets(10, CANCEL_BUTTON_OFFSET.getRight(), 20, 0);
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT4.
+     */
+    protected static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
 
+    /**
+     * The constant OK_BUTTON_OFFSET.
+     */
+    @NotNull
+    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
+
+    /**
+     * FIXME to remove
+     * The constant CONTAINER_OFFSET.
+     */
+    @NotNull
+    protected static final Insets CONTAINER_OFFSET = new Insets(10, 15, 20, 0);
+
+    /**
+     * The constant EXECUTOR_MANAGER.
+     */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
@@ -49,11 +89,16 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      */
     private boolean ready;
 
+    /**
+     * Instantiates a new Abstract simple editor dialog.
+     */
     public AbstractSimpleEditorDialog() {
         ready = true;
     }
 
     /**
+     * Is ready boolean.
+     *
      * @return true if this dialog is ready.
      */
     protected boolean isReady() {
@@ -73,15 +118,16 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
         root.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
-        VBox.setMargin(root, CONTAINER_OFFSET);
     }
 
     /**
+     * Gets ok button.
+     *
      * @return the ok button.
      */
     @NotNull
     protected Button getOkButton() {
-        return requireNonNull(okButton);
+        return notNull(okButton);
     }
 
     @Override
@@ -93,13 +139,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
 
         okButton = new Button(getButtonOkLabel());
         okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
-        okButton.setOnAction(event -> {
-            try {
-                processOk();
-            } catch (final Exception e) {
-                EditorUtil.handleException(LOGGER, this, e);
-            }
-        });
+        okButton.setOnAction(event -> safeProcessOk());
 
         final Button cancelButton = new Button(getButtonCancelLabel());
         cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
@@ -113,14 +153,31 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
+    private void safeProcessOk() {
+        try {
+            processOk();
+        } catch (final Exception e) {
+            EditorUtil.handleException(LOGGER, this, e);
+        }
+    }
+
+    /**
+     * Gets button cancel label.
+     *
+     * @return the button cancel label
+     */
     @NotNull
     protected String getButtonCancelLabel() {
         return Messages.SIMPLE_DIALOG_BUTTON_CANCEL;
     }
 
+    /**
+     * Gets button ok label.
+     *
+     * @return the button ok label
+     */
     @NotNull
     protected String getButtonOkLabel() {
         return Messages.SIMPLE_DIALOG_BUTTON_OK;
