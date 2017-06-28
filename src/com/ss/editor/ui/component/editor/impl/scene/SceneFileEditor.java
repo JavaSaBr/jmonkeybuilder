@@ -145,6 +145,7 @@ public class SceneFileEditor extends
         return new SceneEditorAppState(this);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);

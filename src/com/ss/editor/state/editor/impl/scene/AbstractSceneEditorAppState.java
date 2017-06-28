@@ -23,6 +23,8 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.*;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -46,6 +48,7 @@ import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.EditingUtils;
+import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.function.BooleanFloatConsumer;
@@ -1421,6 +1424,21 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         final Node modelNode = getModelNode();
         final M currentModel = getCurrentModel();
         if (currentModel != null) modelNode.detachChild(currentModel);
+
+        NodeUtils.visitGeometry(model, geometry -> {
+
+            final RenderManager renderManager = EDITOR.getRenderManager();
+            try {
+                renderManager.preloadScene(geometry);
+            } catch (final RendererException | UnsupportedOperationException e) {
+
+                EditorUtil.handleException(LOGGER, this,
+                        new RuntimeException("Found invalid material in the geometry: [" + geometry.getName() + "]. " +
+                                "The material will be removed from the geometry.", e));
+
+                geometry.setMaterial(EDITOR.getDefaultMaterial());
+            }
+        });
 
         modelNode.attachChild(model);
 

@@ -352,6 +352,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return fileName.toString();
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());

@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSIds;
@@ -91,6 +92,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         imageView.setImage(preview);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);

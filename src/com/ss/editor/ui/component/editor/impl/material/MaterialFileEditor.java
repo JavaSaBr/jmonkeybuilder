@@ -1,8 +1,10 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
+import static com.ss.editor.util.EditorUtil.getAssetFile;
+import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
@@ -11,6 +13,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.manager.WorkspaceManager;
@@ -31,7 +34,6 @@ import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.FXCollections;
@@ -392,7 +394,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private Pane getEditorAreaPane() {
-        return requireNonNull(editorAreaPane);
+        return notNull(editorAreaPane);
     }
 
     @Override
@@ -407,7 +409,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private MaterialTexturesComponent getMaterialTexturesComponent() {
-        return requireNonNull(materialTexturesComponent);
+        return notNull(materialTexturesComponent);
     }
 
     /**
@@ -415,7 +417,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private MaterialColorsComponent getMaterialColorsComponent() {
-        return requireNonNull(materialColorsComponent);
+        return notNull(materialColorsComponent);
     }
 
     /**
@@ -423,7 +425,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
-        return requireNonNull(materialOtherParamsComponent);
+        return notNull(materialOtherParamsComponent);
     }
 
     /**
@@ -431,18 +433,19 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private MaterialRenderParamsComponent getMaterialRenderParamsComponent() {
-        return requireNonNull(materialRenderParamsComponent);
+        return notNull(materialRenderParamsComponent);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = EditorUtil.getAssetFile(file);
+        final Path assetFile = getAssetFile(file);
 
-        requireNonNull(assetFile, "Asset file can't be null.");
+        notNull(assetFile, "Asset file can't be null.");
 
-        final MaterialKey materialKey = new MaterialKey(EditorUtil.toAssetPath(assetFile));
+        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
@@ -483,7 +486,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private void loadState() {
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = requireNonNull(workspaceManager.getCurrentWorkspace(),
+        final Workspace currentWorkspace = notNull(workspaceManager.getCurrentWorkspace(),
                 "Current workspace can't be null.");
 
         editorState = currentWorkspace.getEditorState(getEditFile(), MaterialFileEditorState::new);
@@ -560,7 +563,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private ComboBox<String> getMaterialDefinitionBox() {
-        return requireNonNull(materialDefinitionBox);
+        return notNull(materialDefinitionBox);
     }
 
     @Override
@@ -697,7 +700,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private ToggleButton getCubeButton() {
-        return requireNonNull(cubeButton);
+        return notNull(cubeButton);
     }
 
     /**
@@ -705,7 +708,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private ToggleButton getPlaneButton() {
-        return requireNonNull(planeButton);
+        return notNull(planeButton);
     }
 
     /**
@@ -713,7 +716,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private ToggleButton getSphereButton() {
-        return requireNonNull(sphereButton);
+        return notNull(sphereButton);
     }
 
     /**
@@ -721,7 +724,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     @NotNull
     private ToggleButton getLightButton() {
-        return requireNonNull(lightButton);
+        return notNull(lightButton);
     }
 
     /**
@@ -766,7 +769,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     @NotNull
     @Override
     public Material getCurrentMaterial() {
-        return requireNonNull(currentMaterial);
+        return notNull(currentMaterial);
     }
 
     @Override

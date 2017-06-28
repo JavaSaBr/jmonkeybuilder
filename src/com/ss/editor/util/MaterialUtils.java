@@ -84,9 +84,9 @@ public class MaterialUtils {
 
         assetManager.deleteFromCache(materialKey);
 
-        final Material newMaterial = assetManager.loadAsset(materialKey);
+        final Material newMaterial = new Material(assetManager, material.getMaterialDef().getAssetName());
 
-        MaterialUtils.updateTo(newMaterial, material);
+        migrateTo(newMaterial, material);
 
         return newMaterial;
     }
@@ -255,13 +255,13 @@ public class MaterialUtils {
     /**
      * Migrate the material to second material.
      *
-     * @param toMigrate the material for migrating.
-     * @param material  the target material.
+     * @param target the target migrating.
+     * @param source the source material.
      */
-    public static void migrateTo(@NotNull final Material toMigrate, @NotNull final Material material) {
+    public static void migrateTo(@NotNull final Material target, @NotNull final Material source) {
 
-        final MaterialDef materialDef = toMigrate.getMaterialDef();
-        final Collection<MatParam> actualParams = material.getParams();
+        final MaterialDef materialDef = target.getMaterialDef();
+        final Collection<MatParam> actualParams = source.getParams();
 
         actualParams.forEach(matParam -> {
 
@@ -271,11 +271,13 @@ public class MaterialUtils {
                 return;
             }
 
-            toMigrate.setParam(matParam.getName(), matParam.getVarType(), matParam.getValue());
+            target.setParam(matParam.getName(), matParam.getVarType(), matParam.getValue());
         });
 
-        final RenderState additionalRenderState = toMigrate.getAdditionalRenderState();
-        additionalRenderState.set(material.getAdditionalRenderState());
+        final RenderState additionalRenderState = target.getAdditionalRenderState();
+        additionalRenderState.set(source.getAdditionalRenderState());
+
+        target.setKey(source.getKey());
     }
 
     /**

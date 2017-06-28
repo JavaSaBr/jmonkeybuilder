@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderFactory;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    private static final int WIDTH_OFFSET = 4;
+    private static final int WIDTH_OFFSET = 6;
 
     /**
      * The consumer of changes.
@@ -55,7 +55,7 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
      */
     @NotNull
     private VBox getContainer() {
-        return requireNonNull(container);
+        return notNull(container);
     }
 
     /**

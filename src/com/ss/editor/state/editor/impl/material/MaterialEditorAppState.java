@@ -1,6 +1,6 @@
 package com.ss.editor.state.editor.impl.material;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -14,6 +14,8 @@ import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -27,12 +29,13 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
-import javafx.scene.input.KeyCode;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.geom.util.AngleUtils;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import javafx.scene.input.KeyCode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation the 3D part of the {@link MaterialFileEditor}.
@@ -133,10 +136,10 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         final Node stateNode = getStateNode();
         stateNode.attachChild(sky);
 
-        final DirectionalLight light = requireNonNull(getLightForCamera());
+        final DirectionalLight light = notNull(getLightForCamera());
         light.setDirection(LIGHT_DIRECTION);
 
-        final EditorCamera editorCamera = requireNonNull(getEditorCamera());
+        final EditorCamera editorCamera = notNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
     }
@@ -213,6 +216,16 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
 
         final Geometry testSphere = getTestSphere();
         testSphere.setMaterial(material);
+
+        final RenderManager renderManager = EDITOR.getRenderManager();
+        try {
+            renderManager.preloadScene(testBox);
+        } catch (final RendererException | UnsupportedOperationException e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            testBox.setMaterial(EDITOR.getDefaultMaterial());
+            testQuad.setMaterial(EDITOR.getDefaultMaterial());
+            testSphere.setMaterial(EDITOR.getDefaultMaterial());
+        }
     }
 
     /**
@@ -220,7 +233,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      */
     @NotNull
     private Node getModelNode() {
-        return requireNonNull(modelNode);
+        return notNull(modelNode);
     }
 
     /**
@@ -329,7 +342,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      */
     @NotNull
     private ModelType getCurrentModelType() {
-        return requireNonNull(currentModelType);
+        return notNull(currentModelType);
     }
 
     /**

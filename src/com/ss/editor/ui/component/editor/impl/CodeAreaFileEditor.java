@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static java.util.Objects.requireNonNull;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import javafx.scene.layout.HBox;
@@ -95,6 +96,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         return requireNonNull(codeArea);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);

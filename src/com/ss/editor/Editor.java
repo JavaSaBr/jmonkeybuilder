@@ -1,9 +1,9 @@
 package com.ss.editor;
 
 import static com.jme3.environment.LightProbeFactory.makeProbe;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
-import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -22,10 +22,8 @@ import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.CompileShaderException;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.NativeLibraryLoader;
@@ -40,7 +38,6 @@ import com.ss.editor.manager.*;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
@@ -419,18 +416,7 @@ public class Editor extends JmeToJFXApplication {
 
             super.update();
 
-        } catch (final RendererException e) {
-            LOGGER.warning(e);
-
-            final Object attachment = e.getAttachment();
-            if (e.getCause() instanceof CompileShaderException && attachment instanceof Geometry) {
-                ((Geometry) attachment).setMaterial(defaultMaterial);
-                EditorUtil.handleException(LOGGER, attachment, e);
-                return;
-            }
-
-            finishWorkOnError(e);
-        } catch (final AssetNotFoundException | AssertionError | ArrayIndexOutOfBoundsException |
+        } catch (final AssetNotFoundException | RendererException | AssertionError | ArrayIndexOutOfBoundsException |
                 NullPointerException | StackOverflowError | IllegalStateException | UnsupportedOperationException e) {
             LOGGER.warning(e);
             finishWorkOnError(e);
@@ -460,7 +446,7 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     public FilterPostProcessor getPostProcessor() {
-        return requireNonNull(postProcessor);
+        return notNull(postProcessor);
     }
 
     /**
@@ -545,7 +531,7 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     public ViewPort getPreviewViewPort() {
-        return requireNonNull(previewViewPort);
+        return notNull(previewViewPort);
     }
 
     /**
@@ -571,7 +557,7 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     public Camera getPreviewCamera() {
-        return requireNonNull(previewCamera);
+        return notNull(previewCamera);
     }
 
     /**
@@ -589,7 +575,7 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     public Node getPreviewNode() {
-        return requireNonNull(previewNode);
+        return notNull(previewNode);
     }
 
     /**
@@ -599,7 +585,7 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     public ToneMapFilter getToneMapFilter() {
-        return requireNonNull(toneMapFilter);
+        return notNull(toneMapFilter);
     }
 
     /**
@@ -618,7 +604,7 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     public TonegodTranslucentBucketFilter getTranslucentBucketFilter() {
-        return requireNonNull(translucentBucketFilter);
+        return notNull(translucentBucketFilter);
     }
 
     /**
@@ -637,6 +623,16 @@ public class Editor extends JmeToJFXApplication {
      */
     @Nullable
     public BitmapFont getGuiFont() {
-        return requireNonNull(guiFont);
+        return notNull(guiFont);
+    }
+
+    /**
+     * Gets a default material.
+     *
+     * @return the default material.
+     */
+    @NotNull
+    public Material getDefaultMaterial() {
+        return notNull(defaultMaterial);
     }
 }

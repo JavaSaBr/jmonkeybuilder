@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CSSClasses;
@@ -96,6 +97,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         return requireNonNull(textArea);
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);

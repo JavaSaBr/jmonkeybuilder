@@ -212,6 +212,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         }
     }
 
+    @FXThread
     @Override
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
