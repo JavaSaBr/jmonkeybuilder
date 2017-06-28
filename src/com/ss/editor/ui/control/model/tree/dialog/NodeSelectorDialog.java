@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 /**
  * The implementation of a dialog to select an object from a model.
  *
- * @param <T> the type parameter
+ * @param <T> the type of a node.
  * @author JavaSaBr
  */
 public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {

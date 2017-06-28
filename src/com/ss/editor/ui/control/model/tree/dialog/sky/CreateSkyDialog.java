@@ -50,10 +50,7 @@ import java.nio.file.Path;
 public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Insets CONTAINER_OFFSET = new Insets(6, 0, 20, 0);
-
-    @NotNull
-    private static final Insets SINGLE_TEXTURE_SITTINGS_OFFSET = new Insets(4, 0, 81, 0);
+    private static final Insets SINGLE_TEXTURE_SITTINGS_OFFSET = new Insets(4, 0, 0, 0);
 
     @NotNull
     private static final Insets MULTIPLY_TEXTURE_SETTINGS_OFFSET = new Insets(4, 0, 0, 0);
@@ -299,7 +296,6 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
         VBox.setMargin(multipleTextureSettings, MULTIPLY_TEXTURE_SETTINGS_OFFSET);
         VBox.setMargin(singleTextureSettings, SINGLE_TEXTURE_SITTINGS_OFFSET);
-        VBox.setMargin(settingsRoot, CONTAINER_OFFSET);
 
         FXUtils.addClassTo(skyTypeLabel, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(skyTypeComboBox, CSSClasses.SPECIAL_FONT_14);

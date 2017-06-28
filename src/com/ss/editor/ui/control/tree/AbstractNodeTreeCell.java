@@ -32,16 +32,19 @@ import java.util.Set;
 /**
  * The implementation of {@link TreeCell} to show tree nodes.
  *
- * @param <C> the type parameter
+ * @param <C> the type of a {@link ChangeConsumer}
  * @param <M> the type parameter
  * @author JavaSaBr
  */
 public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends AbstractNodeTree<C>> extends TextFieldTreeCell<ModelNode<?>> {
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    @NotNull
     private static final DataFormat DATA_FORMAT = new DataFormat(AbstractNodeTreeCell.class.getName());
 
+    @NotNull
     private static final Insets VISIBLE_ICON_OFFSET = new Insets(0, 0, 0, 2);
 
     private final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {

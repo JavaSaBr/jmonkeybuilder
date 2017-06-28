@@ -735,7 +735,7 @@
 
 #AbstractNodeTreeTransparentContainer {
     -fx-background-color: transparent;
-    -fx-padding: 4 2 0 0;
+    -fx-padding: 4 0 0 0;
 }
 
 #ProcessingComponentContainer {

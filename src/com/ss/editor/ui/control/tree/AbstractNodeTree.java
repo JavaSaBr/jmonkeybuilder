@@ -45,6 +45,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * The tree with structure of the model.
      */
+    @Nullable
     private TreeView<ModelNode<?>> treeView;
 
     /**

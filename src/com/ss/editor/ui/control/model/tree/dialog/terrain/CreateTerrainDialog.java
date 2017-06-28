@@ -62,9 +62,8 @@ import java.nio.file.Paths;
  */
 public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
-    private static final Insets CONTAINER_OFFSET = new Insets(6, 15, 20, 0);
-    private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 106, 0);
-    private static final Insets HEIGHTMAP_CONTAINER_OFFSET = new Insets(0, 0, 27, 0);
+    private static final Insets FLAT_CONTAINER_OFFSET = new Insets(0, 0, 0, 0);
+    private static final Insets HEIGHTMAP_CONTAINER_OFFSET = new Insets(0, 0, 0, 0);
 
     private static final Integer DEFAULT_BLEND_TEXTURE_SIZE = 256;
     private static final Integer DEFAULT_TOTAL_SIZE = DEFAULT_BLEND_TEXTURE_SIZE;
@@ -73,7 +72,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
     private static final int NUM_ALPHA_TEXTURES = 3;
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(580, 367);
+    private static final Point DIALOG_SIZE = new Point(580, 0);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -481,7 +480,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(baseSettings, settingsRoot);
         FXUtils.addToPane(settingsRoot, root);
 
-        VBox.setMargin(settingsRoot, CONTAINER_OFFSET);
         VBox.setMargin(flatSettings, FLAT_CONTAINER_OFFSET);
         VBox.setMargin(heightMapSettings, HEIGHTMAP_CONTAINER_OFFSET);
     }
