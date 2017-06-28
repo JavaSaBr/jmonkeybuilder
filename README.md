@@ -9,7 +9,7 @@
 
 ## ver. 0.9.9 ##
 * -Implemented integration with built-in of jME3 particle system.
-* -Added to send anonymous google analytics anly about start/close application events if a user disable analytics.
+* -Added to send anonymous google analytics only about start/close application events if a user disable analytics.
 * -Added an action to create a new material definition with a fragment and a vertex shader.
 * -Updated UI.
 * -Added handling shader errors to avoid application crashes, so now a user can edit shaders without worrying about an application crash.
