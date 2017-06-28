@@ -30,29 +30,33 @@ public interface GAEvent {
      */
     interface Action {
         /**
-         * The constant LAUNCHED.
+         * The constant APPLICATION_LAUNCHED.
          */
-        String LAUNCHED = "Launched";
+        String APPLICATION_LAUNCHED = "Application launched";
         /**
-         * The constant CLOSED.
+         * The constant APPLICATION_CLOSED.
          */
-        String CLOSED = "Closed";
+        String APPLICATION_CLOSED = "Application closed";
         /**
          * The constant EDITOR_OPENED.
          */
-        String EDITOR_OPENED = "Opened";
+        String EDITOR_OPENED = "Editor opened";
         /**
          * The constant EDITOR_CLOSED.
          */
-        String EDITOR_CLOSED = "Closed";
+        String EDITOR_CLOSED = "Editor closed";
         /**
          * The constant DIALOG_OPENED.
          */
-        String DIALOG_OPENED = "Opened";
+        String DIALOG_OPENED = "Dialog opened";
         /**
          * The constant DIALOG_CLOSED.
          */
-        String DIALOG_CLOSED = "Closed";
+        String DIALOG_CLOSED = "Dialog closed";
+        /**
+         * The constant EXECUTE_NODE_ACTION.
+         */
+        String EXECUTE_NODE_ACTION = "Execute node action";
     }
 
     /**

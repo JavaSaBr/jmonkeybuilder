@@ -51,6 +51,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AudioModelNode audioModelNode = (AudioModelNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();

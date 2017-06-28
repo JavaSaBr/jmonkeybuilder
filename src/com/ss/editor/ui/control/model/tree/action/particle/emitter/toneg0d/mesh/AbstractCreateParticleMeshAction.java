@@ -45,6 +45,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
 

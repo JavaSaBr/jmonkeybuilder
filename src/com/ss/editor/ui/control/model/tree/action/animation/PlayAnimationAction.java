@@ -47,6 +47,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
         final AnimationControlModelNode controlModelNode = modelNode.getControlModelNode();

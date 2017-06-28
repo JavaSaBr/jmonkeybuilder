@@ -54,6 +54,7 @@ public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<Model
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
 

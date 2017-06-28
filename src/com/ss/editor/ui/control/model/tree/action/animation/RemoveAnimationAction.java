@@ -48,6 +48,7 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final ModelNode<?> node = getNode();
         final Object element = node.getElement();

@@ -49,6 +49,7 @@ public class RemoveNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final ModelNode<?> node = getNode();
         final Object element = node.getElement();

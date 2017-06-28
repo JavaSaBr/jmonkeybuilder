@@ -51,6 +51,7 @@ public class CreateAudioNodeAction extends AbstractNodeAction<ModelChangeConsume
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
 

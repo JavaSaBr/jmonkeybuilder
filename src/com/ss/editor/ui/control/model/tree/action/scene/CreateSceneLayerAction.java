@@ -51,6 +51,7 @@ public class CreateSceneLayerAction extends AbstractNodeAction<ModelChangeConsum
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final SceneLayer layer = new SceneLayer("New Layer", false);
         final LayersRootModelNode modelNode = (LayersRootModelNode) getNode();

@@ -1,23 +1,22 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.analytics.google.GAEvent;
+import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The base implementation of an action for an element in a node tree.
@@ -88,7 +87,9 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * Execute this action.
      */
     @FXThread
-    protected abstract void process();
+    protected void process() {
+        GAnalytics.sendEvent(GAEvent.Category.EDITOR, GAEvent.Action.EXECUTE_NODE_ACTION, getClass().getSimpleName());
+    }
 
     /**
      * The icon of this action.

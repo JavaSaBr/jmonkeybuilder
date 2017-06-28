@@ -49,6 +49,7 @@ public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AnimationModelNode modelNode = (AnimationModelNode) getNode();
         if (modelNode.getChannel() < 0) return;

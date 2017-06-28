@@ -46,6 +46,7 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final Array<PropertyDefinition> definitions = getPropertyDefinitions();
         if (definitions.isEmpty()) return;

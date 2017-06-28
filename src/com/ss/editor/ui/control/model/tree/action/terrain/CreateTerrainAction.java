@@ -5,7 +5,6 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.model.tree.dialog.sky.CreateSkyDialog;
 import com.ss.editor.ui.control.model.tree.dialog.terrain.CreateTerrainDialog;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
@@ -46,6 +45,7 @@ public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer>
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
 

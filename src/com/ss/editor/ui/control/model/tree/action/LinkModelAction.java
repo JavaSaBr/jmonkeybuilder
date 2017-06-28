@@ -75,6 +75,7 @@ public class LinkModelAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
         UIUtils.openAssetDialog(this::processOpen, MODEL_EXTENSIONS, ACTION_TESTER);
     }
 

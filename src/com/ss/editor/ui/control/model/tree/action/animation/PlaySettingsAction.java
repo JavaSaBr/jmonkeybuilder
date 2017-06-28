@@ -57,6 +57,7 @@ public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> 
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AnimationControlModelNode node = (AnimationControlModelNode) getNode();
         final LoopMode loopMode = node.getLoopMode();

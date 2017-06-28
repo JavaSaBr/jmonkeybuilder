@@ -35,6 +35,7 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());

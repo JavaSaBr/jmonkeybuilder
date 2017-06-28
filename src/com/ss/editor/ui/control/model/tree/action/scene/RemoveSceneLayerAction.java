@@ -2,6 +2,8 @@ package com.ss.editor.ui.control.model.tree.action.scene;
 
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.layer.LayersRoot;
@@ -10,15 +12,11 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.RemoveSceneLayerOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to remove a scene layer.
@@ -52,6 +50,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsum
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<SceneChangeConsumer> nodeTree = getNodeTree();
         final SceneChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());

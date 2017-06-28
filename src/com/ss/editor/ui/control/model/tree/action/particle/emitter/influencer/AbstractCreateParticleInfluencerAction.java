@@ -41,6 +41,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());

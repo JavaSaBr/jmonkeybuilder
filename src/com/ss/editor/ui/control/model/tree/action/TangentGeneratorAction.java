@@ -46,6 +46,8 @@ public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsum
     @FXThread
     @Override
     protected void process() {
+        super.process();
+
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());
         dialog.show(scene.getWindow());

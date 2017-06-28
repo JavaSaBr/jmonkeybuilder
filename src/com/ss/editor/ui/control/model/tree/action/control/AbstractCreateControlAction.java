@@ -31,6 +31,7 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final ModelNode<?> modelNode = getNode();
         final Spatial parent = (Spatial) modelNode.getElement();

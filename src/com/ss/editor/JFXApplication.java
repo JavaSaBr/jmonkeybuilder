@@ -199,7 +199,7 @@ public class JFXApplication extends Application {
     public void onExit() {
 
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
-                GAEvent.Action.CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
+                GAEvent.Action.APPLICATION_CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
 
         final EditorConfig config = EditorConfig.getInstance();
         config.save();
@@ -229,7 +229,7 @@ public class JFXApplication extends Application {
         JMEFilePreviewManager.getInstance();
 
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
-                GAEvent.Action.LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
+                GAEvent.Action.APPLICATION_LAUNCHED, GAEvent.Label.THE_EDITOR_APP_WAS_LAUNCHED);
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
         executorManager.addBackgroundTask(new CheckNewVersionTask());

@@ -95,6 +95,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final Array<PropertyDefinition> definitions = ArrayFactory.newArray(PropertyDefinition.class);
         definitions.add(new PropertyDefinition(STRING, Messages.MODEL_PROPERTY_NAME, PROPERTY_NAME, ""));

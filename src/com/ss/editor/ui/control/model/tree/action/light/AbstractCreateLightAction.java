@@ -34,6 +34,7 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
 

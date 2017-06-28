@@ -47,6 +47,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
         final AssetManager assetManager = EDITOR.getAssetManager();

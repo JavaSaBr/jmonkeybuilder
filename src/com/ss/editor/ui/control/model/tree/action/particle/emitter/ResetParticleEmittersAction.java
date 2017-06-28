@@ -47,6 +47,7 @@ public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeC
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final ModelNode<?> modelNode = getNode();
         final Node node = (Node) modelNode.getElement();

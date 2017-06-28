@@ -48,7 +48,8 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
     @FXThread
     @Override
     protected void process() {
-
+        super.process();
+        
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
 

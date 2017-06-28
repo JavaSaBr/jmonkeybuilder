@@ -49,6 +49,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final Point dialogSize = getDialogSize();

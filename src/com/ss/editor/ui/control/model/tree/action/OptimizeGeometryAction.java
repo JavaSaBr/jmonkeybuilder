@@ -50,6 +50,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsum
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final AbstractNodeTree<?> nodeTree = getNodeTree();
         final ModelNode<?> node = getNode();

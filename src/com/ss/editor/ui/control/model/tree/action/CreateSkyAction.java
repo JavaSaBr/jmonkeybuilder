@@ -46,6 +46,7 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
 

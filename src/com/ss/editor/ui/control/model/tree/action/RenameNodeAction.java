@@ -44,6 +44,7 @@ public class RenameNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
+        super.process();
         final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.startEdit(getNode());
     }
