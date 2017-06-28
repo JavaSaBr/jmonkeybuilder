@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.8 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.9 #
 ## License: Apache Version 2.0 ##
 
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
@@ -6,6 +6,16 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.9 ##
+* -Implemented integration with built-in of jME3 particle system.
+* -Added to send anonymous google analytics anly about start/close application events if a user disable analytics.
+* -Added an action to create a new material definition with a fragment and a vertex shader.
+* -Updated UI.
+* -Added handling shader errors to avoid application crashes, so now a user can edit shaders without worrying about an application crash.
+* -Implemented autorefrsh opened material in the Material Editor when a user change a material defintion in the MD Editor or shaders in the GLSL editor.
+* -Updated all dialogs.
+* -Fixed some bugs.
 
 ## ver. 0.9.8 ##
 * -Added an action to reset particle emitters.
