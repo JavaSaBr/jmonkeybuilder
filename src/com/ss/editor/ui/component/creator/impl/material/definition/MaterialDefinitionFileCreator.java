@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.creator.impl.material.definition;
 import static com.ss.editor.FileExtensions.JME_MATERIAL_DEFINITION;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
-import static java.nio.file.Files.readAllBytes;
 import static java.util.Objects.requireNonNull;
 import com.jme3.material.TechniqueDef;
 import com.jme3.renderer.Caps;
@@ -18,7 +17,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.Utils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -31,11 +29,10 @@ import rlib.util.array.Array;
 import rlib.util.array.ArrayFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * The creator to create a new material definition.
@@ -78,12 +75,12 @@ public class MaterialDefinitionFileCreator extends AbstractFileCreator {
     private static final String VERT_TEMPLATE;
 
     static {
-        final URL mdResource = FileCreator.class.getResource("/template/matdef/empty.j3md");
-        final URL fragResourcesource = FileCreator.class.getResource("/template/frag/empty.frag");
-        final URL vertResource = FileCreator.class.getResource("/template/vert/empty.vert");
-        MD_TEMPLATE = requireNonNull(Utils.get(() -> new String(readAllBytes(Paths.get(mdResource.toURI())), "UTF-8")));
-        FRAG_TEMPLATE = requireNonNull(Utils.get(() -> new String(readAllBytes(Paths.get(fragResourcesource.toURI())), "UTF-8")));
-        VERT_TEMPLATE = requireNonNull(Utils.get(() -> new String(readAllBytes(Paths.get(vertResource.toURI())), "UTF-8")));
+        final InputStream mdResource = FileCreator.class.getResourceAsStream("/template/matdef/empty.j3md");
+        final InputStream fragResource = FileCreator.class.getResourceAsStream("/template/frag/empty.frag");
+        final InputStream vertResource = FileCreator.class.getResourceAsStream("/template/vert/empty.vert");
+        MD_TEMPLATE = FileUtils.read(mdResource);
+        FRAG_TEMPLATE = FileUtils.read(fragResource);
+        VERT_TEMPLATE = FileUtils.read(vertResource);
     }
 
     /**
