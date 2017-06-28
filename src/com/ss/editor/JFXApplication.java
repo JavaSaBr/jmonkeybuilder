@@ -3,7 +3,6 @@ package com.ss.editor;
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
-import static java.util.Objects.requireNonNull;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
@@ -77,11 +76,14 @@ public class JFXApplication extends Application {
      * @throws IOException the io exception
      */
     public static void main(final String[] args) throws IOException {
-        Configuration.GLFW_CHECK_THREAD0.get(false);
+
+        // need to disable to work on macos
+        Configuration.GLFW_CHECK_THREAD0.set(false);
 
         // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
+        System.setProperty("prism.allowhidpi", "true");
 
         // some settings for the render of JavaFX
         //System.setProperty("prism.cacheshapes", "true");
@@ -221,7 +223,7 @@ public class JFXApplication extends Application {
      */
     @FXThread
     private void buildScene() {
-        this.scene = EditorFXSceneBuilder.build(requireNonNull(stage));
+        this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
         final EditorFXScene scene = getScene();
 
@@ -245,7 +247,7 @@ public class JFXApplication extends Application {
 
         Platform.runLater(() -> {
 
-            final Stage stage = requireNonNull(getStage());
+            final Stage stage = notNull(getStage());
             final ConfirmDialog confirmDialog = new ConfirmDialog(result -> {
 
                 editorConfig.setAnalyticsQuestion(true);
