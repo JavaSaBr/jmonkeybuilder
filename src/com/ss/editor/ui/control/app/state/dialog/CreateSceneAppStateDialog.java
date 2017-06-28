@@ -1,14 +1,10 @@
 package com.ss.editor.ui.control.app.state.dialog;
 
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
@@ -16,17 +12,22 @@ import com.ss.editor.extension.scene.app.state.impl.EditableLightingSceneAppStat
 import com.ss.editor.extension.scene.app.state.impl.EditableSkySceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.awt.*;
 
@@ -38,7 +39,7 @@ import java.awt.*;
 public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(415, 184);
+    private static final Point DIALOG_SIZE = new Point(415, 0);
 
     private static final ObjectDictionary<String, EditableSceneAppState> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
@@ -152,7 +153,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private CheckBox getCustomCheckBox() {
-        return requireNonNull(customCheckBox);
+        return notNull(customCheckBox);
     }
 
     /**
@@ -160,7 +161,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private TextField getStateNameField() {
-        return requireNonNull(stateNameField);
+        return notNull(stateNameField);
     }
 
     /**
@@ -168,7 +169,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
      */
     @NotNull
     private ComboBox<String> getBuiltInBox() {
-        return requireNonNull(builtInBox);
+        return notNull(builtInBox);
     }
 
     @Override
@@ -185,7 +186,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
             final SceneAppState newExample = tryToCreateUserObject(this, stateNameField.getText(), SceneAppState.class);
 
             if (newExample == null) {
-                throw new RuntimeException("Can't create a state of the class " + this.stateNameField.getText());
+                throw new RuntimeException("Can't create a state of the class " + stateNameField.getText());
             }
 
             check(appStates, filters, newExample);
