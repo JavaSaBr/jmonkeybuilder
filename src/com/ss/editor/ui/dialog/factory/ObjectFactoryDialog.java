@@ -85,7 +85,7 @@ public class ObjectFactoryDialog extends AbstractSimpleEditorDialog {
      * @param title the new title.
      */
     public void setTitle(@NotNull final String title) {
-        getTitleLabel().setText(title);
+        getDialog().setTitle(title);
     }
 
     /**

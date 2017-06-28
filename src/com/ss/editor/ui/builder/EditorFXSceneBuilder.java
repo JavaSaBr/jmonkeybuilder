@@ -34,22 +34,26 @@ public class EditorFXSceneBuilder {
     /**
      * The path to the base CSS styles.
      */
-    private static final String CSS_FILE_BASE = "/ui/css/base.bss";
+    @NotNull
+    public static final String CSS_FILE_BASE = "/ui/css/base.bss";
 
     /**
      * The path to the external CSS styles.
      */
-    private static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
+    @NotNull
+    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
 
     /**
      * The path to the custom ids CSS styles.
      */
-    private static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
+    @NotNull
+    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
 
     /**
      * The path to the custom classes CSS styles.
      */
-    private static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
+    @NotNull
+    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
     /**
      * Build editor fx scene.
