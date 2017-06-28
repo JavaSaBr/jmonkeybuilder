@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
 import static java.util.Objects.requireNonNull;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
@@ -29,6 +30,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.Configuration;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -53,7 +55,7 @@ public class JFXApplication extends Application {
     @NotNull
     @FromAnyThread
     public static JFXApplication getInstance() {
-        return requireNonNull(instance);
+        return notNull(instance);
     }
 
     /**
@@ -75,6 +77,7 @@ public class JFXApplication extends Application {
      * @throws IOException the io exception
      */
     public static void main(final String[] args) throws IOException {
+        Configuration.GLFW_CHECK_THREAD0.get(false);
 
         // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");
@@ -196,7 +199,7 @@ public class JFXApplication extends Application {
      * On exit.
      */
     @FXThread
-    public void onExit() {
+    protected void onExit() {
 
         GAnalytics.forceSendEvent(GAEvent.Category.APPLICATION,
                 GAEvent.Action.APPLICATION_CLOSED, GAEvent.Label.THE_EDITOR_APP_WAS_CLOSED);
@@ -262,7 +265,7 @@ public class JFXApplication extends Application {
 
         this.sceneProcessor = sceneProcessor;
 
-        final Stage stage = requireNonNull(getStage());
+        final Stage stage = notNull(getStage());
         stage.focusedProperty().addListener((observable, oldValue, newValue) -> editor.setPaused(!newValue));
 
         Platform.runLater(scene::notifyFinishBuild);
@@ -276,7 +279,7 @@ public class JFXApplication extends Application {
     @NotNull
     @FromAnyThread
     public EditorFXScene getScene() {
-        return requireNonNull(scene, "Scene can't be null.");
+        return notNull(scene, "Scene can't be null.");
     }
 
     /**
@@ -287,6 +290,6 @@ public class JFXApplication extends Application {
     @NotNull
     @FromAnyThread
     public FrameTransferSceneProcessor getSceneProcessor() {
-        return requireNonNull(sceneProcessor, "Scene processor can't be null.");
+        return notNull(sceneProcessor, "Scene processor can't be null.");
     }
 }
