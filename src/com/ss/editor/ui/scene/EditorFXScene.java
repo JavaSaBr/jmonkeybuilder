@@ -132,7 +132,8 @@ public class EditorFXScene extends Scene {
     @FXThread
     public <T extends ScreenComponent> T findComponent(@NotNull final String id) {
         final Array<ScreenComponent> components = getComponents();
-        return unsafeCast(components.search(id, (component, toCheck) -> StringUtils.equals(toCheck, component.getComponentId())));
+        return unsafeCast(components.search(id, (component, toCheck) ->
+                StringUtils.equals(toCheck, component.getComponentId())));
     }
 
     /**

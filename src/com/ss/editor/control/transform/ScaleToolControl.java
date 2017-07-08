@@ -1,5 +1,6 @@
 package com.ss.editor.control.transform;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.collision.CollisionResult;
@@ -62,7 +63,7 @@ public class ScaleToolControl extends AbstractControl implements TransformContro
      */
     public ScaleToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
-        this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());
+        this.collisionPlane = notNull(editorControl.getCollisionPlane());
     }
 
     /**

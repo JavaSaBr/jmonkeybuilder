@@ -2,7 +2,7 @@ package com.ss.editor.file.delete.handler.impl;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
@@ -12,12 +12,12 @@ import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +37,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         super.preDelete(file);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Path assetFile = requireNonNull(getAssetFile(file));
+        final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 
         this.model = assetManager.loadModel(assetPath);
@@ -48,7 +48,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
      */
     @NotNull
     private Spatial getModel() {
-        return requireNonNull(model);
+        return notNull(model);
     }
 
     @Override

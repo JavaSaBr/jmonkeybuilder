@@ -1,6 +1,6 @@
 package com.ss.editor.config;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.get;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
@@ -11,10 +11,10 @@ import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.util.EditorUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -417,7 +417,7 @@ public final class EditorConfig implements AssetEventListener {
     @NotNull
     @FromAnyThread
     public Vector3f getToneMapFilterWhitePoint() {
-        return requireNonNull(toneMapFilterWhitePoint);
+        return notNull(toneMapFilterWhitePoint);
     }
 
     /**

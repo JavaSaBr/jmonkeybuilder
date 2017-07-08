@@ -25,10 +25,13 @@ public class WorkspaceManager {
     /**
      * The constant FOLDER_EDITOR.
      */
+    @NotNull
     public static final String FOLDER_EDITOR = ".jme3-spaceshift-editor";
+
     /**
      * The constant FILE_WORKSPACE.
      */
+    @NotNull
     public static final String FILE_WORKSPACE = "workspace";
 
     @Nullable

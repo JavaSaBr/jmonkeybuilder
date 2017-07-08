@@ -1,9 +1,8 @@
 package com.ss.editor.executor.impl;
 
-import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.array.Array;
-
 import static java.lang.Math.min;
+import com.ss.rlib.util.array.Array;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The implementation of the {@link EditorThreadExecutor} for executing task in the background.
@@ -44,7 +43,7 @@ public class BackgroundEditorTaskExecutor extends AbstractEditorTaskExecutor {
         final Runnable[] array = execute.array();
 
         for (int i = 0, length = min(execute.size(), PROP_MAXIMUM_UPDATE); i < length; ) {
-            for (int count = 0, limit = PROP_EXECUTE_LIMIT; count < limit && i < length; count++, i++) {
+            for (int count = 0; count < PROP_EXECUTE_LIMIT && i < length; count++, i++) {
 
                 final Runnable task = array[i];
                 task.run();

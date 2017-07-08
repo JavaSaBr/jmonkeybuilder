@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +41,7 @@ public class RequestSelectFileEvent extends SceneEvent {
      */
     @NotNull
     public Path getFile() {
-        return requireNonNull(get(FILE));
+        return notNull(get(FILE));
     }
 
     /**

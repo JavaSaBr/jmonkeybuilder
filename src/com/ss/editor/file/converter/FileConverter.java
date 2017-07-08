@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 
 /**
- * Interface for implementing a file converter.
+ * The interface to implement a file converter.
  *
  * @author JavaSaBr
  */

@@ -41,22 +41,31 @@ public abstract class AbstractFileConverter implements FileConverter {
     /**
      * The constant EDITOR_CONFIG.
      */
+    @NotNull
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
     /**
      * The constant EXECUTOR_MANAGER.
      */
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
      * The constant FX_EVENT_MANAGER.
      */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
     /**
      * The constant JFX_APPLICATION.
      */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     @Override

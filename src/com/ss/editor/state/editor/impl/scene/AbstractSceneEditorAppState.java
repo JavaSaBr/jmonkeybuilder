@@ -35,7 +35,7 @@ import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
-import com.ss.editor.annotation.EditorThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.editing.EditingControl;
 import com.ss.editor.control.editing.EditingInput;
@@ -789,7 +789,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Update the transformation node.
      */
-    @EditorThread
+    @JMEThread
     private void updateTransformNode(@Nullable final Transform transform) {
         if (transform == null) return;
 
@@ -802,7 +802,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     }
 
     @NotNull
-    @EditorThread
+    @JMEThread
     private Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
         final Camera camera = EDITOR.getCamera();
         final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.4f);
@@ -878,7 +878,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of updating selected models.
      */
-    @EditorThread
+    @JMEThread
     private void updateSelectionImpl(@NotNull final Array<Spatial> spatials) {
 
         final Array<Spatial> selected = getSelected();
@@ -926,7 +926,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Update the transformation's center.
      */
-    @EditorThread
+    @JMEThread
     private void updateTransformCenter() {
 
         final Spatial toTransform = getToTransform();
@@ -940,7 +940,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Add the spatial to selection.
      */
-    @EditorThread
+    @JMEThread
     private void addToSelection(@NotNull final Spatial spatial) {
 
         Spatial shape;
@@ -970,7 +970,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Remove the spatial from the selection.
      */
-    @EditorThread
+    @JMEThread
     private void removeFromSelection(@NotNull final Spatial spatial) {
         setTransformCenter(null);
         setToTransform(null);
@@ -983,7 +983,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Build the selection box for the spatial.
      */
-    @EditorThread
+    @JMEThread
     private Spatial buildBoxSelection(@NotNull final Spatial spatial) {
         spatial.updateModelBound();
 
@@ -1025,7 +1025,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Build selection grid for the geometry.
      */
-    @EditorThread
+    @JMEThread
     private Spatial buildGeometrySelection(@NotNull final Geometry geom) {
 
         final Mesh mesh = geom.getMesh();
@@ -1125,7 +1125,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Handling a click in the area of the editor.
      */
-    @EditorThread
+    @JMEThread
     private void processSelect() {
         if (isEditingMode()) return;
 
@@ -1147,7 +1147,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the position on a scene.
      */
     @NotNull
-    @EditorThread
+    @JMEThread
     public Vector3f getScenePosByScreenPos(final float worldX, final float worldY) {
 
         final Camera camera = EDITOR.getCamera();
@@ -1180,7 +1180,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the position on a scene.
      */
     @Nullable
-    @EditorThread
+    @JMEThread
     public Geometry getGeometryByScreenPos(final float worldX, final float worldY) {
 
         final Camera camera = EDITOR.getCamera();
@@ -1205,7 +1205,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
         return closestCollision.getGeometry();
     }
 
-    @EditorThread
+    @JMEThread
     private void notifySelected(@Nullable final Object object) {
         getFileEditor().notifySelected(object);
     }
@@ -1213,7 +1213,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of updating the showing selection.
      */
-    @EditorThread
+    @JMEThread
     private void updateShowSelectionImpl(final boolean showSelection) {
         if (isShowSelection() == showSelection) return;
 
@@ -1252,7 +1252,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of updating the showing grid.
      */
-    @EditorThread
+    @JMEThread
     private void updateShowGridImpl(final boolean showGrid) {
         if (isShowGrid() == showGrid) return;
 
@@ -1271,7 +1271,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Finish the transformation of the model.
      */
-    @EditorThread
+    @JMEThread
     private void endTransform() {
         if (!isActiveTransform()) return;
 
@@ -1305,7 +1305,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Start transformation.
      */
-    @EditorThread
+    @JMEThread
     private boolean startTransform() {
         updateTransformCenter();
 
@@ -1352,7 +1352,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Start editing.
      */
-    @EditorThread
+    @JMEThread
     private void startEditing(@NotNull final EditingInput editingInput) {
         final Node cursorNode = getCursorNode();
         final EditingControl control = EditingUtils.getEditingControl(cursorNode);
@@ -1364,7 +1364,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Finish editing.
      */
-    @EditorThread
+    @JMEThread
     private void finishEditing(@NotNull final EditingInput editingInput) {
 
         final Node cursorNode = getCursorNode();
@@ -1382,7 +1382,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * Update editing.
      */
-    @EditorThread
+    @JMEThread
     private void updateEditing() {
         final Node cursorNode = getCursorNode();
         final EditingControl control = EditingUtils.getEditingControl(cursorNode);
@@ -1418,7 +1418,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of showing the model in the scene.
      */
-    @EditorThread
+    @JMEThread
     private void openModelImpl(@NotNull final M model) {
 
         final Node modelNode = getModelNode();
@@ -1476,7 +1476,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of adding a light.
      */
-    @EditorThread
+    @JMEThread
     private void addLightImpl(@NotNull final Light light) {
 
         final Node node = LIGHT_MODEL_TABLE.get(light.getType());
@@ -1559,7 +1559,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of removing a light.
      */
-    @EditorThread
+    @JMEThread
     private void removeLightImpl(@NotNull final Light light) {
 
         final Node node = LIGHT_MODEL_TABLE.get(light.getType());
@@ -1591,7 +1591,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of adding an audio node.
      */
-    @EditorThread
+    @JMEThread
     private void addAudioNodeImpl(@NotNull final AudioNode audio) {
 
         final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
@@ -1637,7 +1637,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
     /**
      * The process of removing an audio node.
      */
-    @EditorThread
+    @JMEThread
     private void removeAudioNodeImpl(@NotNull final AudioNode audio) {
 
         final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
@@ -1737,7 +1737,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      *
      * @param editingMode true if editing mode is enabled.
      */
-    @EditorThread
+    @JMEThread
     private void changeEditingModeImpl(final boolean editingMode) {
         setEditingMode(editingMode);
 
@@ -1763,7 +1763,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the cursor node.
      */
     @NotNull
-    @EditorThread
+    @JMEThread
     public Node getCursorNode() {
         return cursorNode;
     }
@@ -1774,7 +1774,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      * @return the markers node.
      */
     @NotNull
-    @EditorThread
+    @JMEThread
     public Node getMarkersNode() {
         return markersNode;
     }

@@ -2,8 +2,8 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.awt.Image.SCALE_DEFAULT;
-import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
@@ -16,11 +16,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.DeletedFileEvent;
 import com.ss.editor.util.EditorUtil;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import jme3tools.converters.ImageToAwt;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
@@ -31,6 +26,11 @@ import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import jme3tools.converters.ImageToAwt;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -224,7 +224,7 @@ public class JavaFXImageManager {
 
         } else if (JME_FORMATS.contains(extension)) {
 
-            final Path assetFile = requireNonNull(getAssetFile(file));
+            final Path assetFile = notNull(getAssetFile(file));
             final String assetPath = toAssetPath(assetFile);
 
             final Editor editor = Editor.getInstance();
@@ -295,7 +295,7 @@ public class JavaFXImageManager {
 
         } else if (FileExtensions.IMAGE_DDS.equals(extension)) {
 
-            final byte[] content = requireNonNull(Utils.get(file, Files::readAllBytes));
+            final byte[] content = notNull(Utils.get(file, Files::readAllBytes));
             final int[] pixels = DDSReader.read(content, DDSReader.ARGB, 0);
             final int currentWidth = DDSReader.getWidth(content);
             final int currentHeight = DDSReader.getHeight(content);
@@ -324,7 +324,7 @@ public class JavaFXImageManager {
 
         } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
 
-            final byte[] content = requireNonNull(Utils.get(file, Files::readAllBytes));
+            final byte[] content = notNull(Utils.get(file, Files::readAllBytes));
 
             final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
             if (awtImage == null) return Icons.IMAGE_512;

@@ -2,16 +2,16 @@ package com.ss.editor.manager;
 
 import static com.ss.editor.FileExtensions.*;
 import static com.ss.editor.util.EditorUtil.*;
-import static java.lang.System.currentTimeMillis;
-import static java.nio.file.StandardWatchEventKinds.*;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.ArrayUtils.contains;
 import static com.ss.rlib.util.ArrayUtils.move;
 import static com.ss.rlib.util.FileUtils.getFiles;
 import static com.ss.rlib.util.FileUtils.toUrl;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.get;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import static com.ss.rlib.util.ref.ReferenceFactory.newRef;
+import static java.lang.System.currentTimeMillis;
+import static java.nio.file.StandardWatchEventKinds.*;
 import com.jme3.asset.AssetEventListener;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
@@ -24,8 +24,6 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.classpath.ClassPathScanner;
 import com.ss.rlib.classpath.ClassPathScannerFactory;
 import com.ss.rlib.concurrent.util.ThreadUtils;
@@ -42,6 +40,8 @@ import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import com.ss.rlib.util.ref.Reference;
 import com.ss.rlib.util.ref.ReferenceType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -212,7 +212,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         if (StringUtils.isEmpty(extension)) return;
 
         final ObjectDictionary<String, Reference> table = getAssetCacheTable();
-        final Reference reference = requireNonNull(table.get(key.getName(), () -> newRef(ReferenceType.LONG)));
+        final Reference reference = notNull(table.get(key.getName(), () -> newRef(ReferenceType.LONG)));
         reference.setLong(currentTimeMillis());
     }
 
@@ -297,7 +297,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
@@ -464,7 +464,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL_DEFINITION)) {
-            final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+            final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
             final Array<String> materialDefinitions = getMaterialDefinitions();
             materialDefinitions.add(toAssetPath(assetFile));
         } else if (extension.endsWith(FileExtensions.JAVA_LIBRARY)) {

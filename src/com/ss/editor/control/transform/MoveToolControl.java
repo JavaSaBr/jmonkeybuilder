@@ -1,18 +1,11 @@
 package com.ss.editor.control.transform;
 
-import static com.ss.editor.util.GeomUtils.getDirection;
-import static com.ss.editor.util.GeomUtils.getLeft;
-import static com.ss.editor.util.GeomUtils.getUp;
-import static java.util.Objects.requireNonNull;
+import static com.ss.editor.util.GeomUtils.*;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.input.InputManager;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
-import com.jme3.math.Transform;
-import com.jme3.math.Vector2f;
-import com.jme3.math.Vector3f;
+import com.jme3.math.*;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -23,11 +16,9 @@ import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
 import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
 import com.ss.editor.util.LocalObjects;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The implementation of the moving control.
@@ -42,8 +33,13 @@ public class MoveToolControl extends AbstractControl implements TransformControl
     @NotNull
     protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
 
+    @NotNull
     private static final String NODE_MOVE_X = "move_x";
+
+    @NotNull
     private static final String NODE_MOVE_Y = "move_y";
+
+    @NotNull
     private static final String NODE_MOVE_Z = "move_z";
 
     @NotNull
@@ -68,7 +64,7 @@ public class MoveToolControl extends AbstractControl implements TransformControl
      */
     public MoveToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
-        this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());
+        this.collisionPlane = notNull(editorControl.getCollisionPlane());
     }
 
     /**

@@ -3,7 +3,7 @@ package com.ss.editor.control.brush;
 import com.jme3.scene.control.Control;
 
 /**
- * The interface to implement brush.
+ * The interface to implement a brush.
  *
  * @author JavaSaBr
  */

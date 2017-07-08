@@ -92,7 +92,9 @@ public class EditorFXSceneBuilder {
         return scene;
     }
 
-    private static void build(@NotNull final EditorFXScene scene, @NotNull final StackPane container, @NotNull final Stage stage) {
+    private static void build(@NotNull final EditorFXScene scene,
+                              @NotNull final StackPane container,
+                              @NotNull final Stage stage) {
 
         final Canvas canvas = scene.getCanvas();
         final EditorBarComponent barComponent = new EditorBarComponent();

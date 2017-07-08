@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -44,7 +44,7 @@ public class DeletedFileEvent extends SceneEvent {
      */
     @NotNull
     public Path getFile() {
-        return requireNonNull(get(FILE), "Can't find a file");
+        return notNull(get(FILE), "Can't find a file");
     }
 
     /**

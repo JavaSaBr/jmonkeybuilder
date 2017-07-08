@@ -289,7 +289,6 @@ public class GAnalytics extends EditorThread {
             }
 
         } catch (final IOException e) {
-            LOGGER.warning(e);
         } finally {
             progressCount.decrementAndGet();
             ConcurrentUtils.notifyAll(progressCount);
@@ -302,7 +301,10 @@ public class GAnalytics extends EditorThread {
         return builder.toString();
     }
 
-    private static void appendParam(@NotNull final StringBuilder builder, @NotNull final String key, @Nullable final Object value) {
+    private static void appendParam(@NotNull final StringBuilder builder,
+                                    @NotNull final String key,
+                                    @Nullable final Object value) {
+
         if (value == null) return;
         else if (builder.length() > 1) {
             builder.append('&');

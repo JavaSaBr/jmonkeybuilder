@@ -2,6 +2,7 @@ package com.ss.editor.control.transform;
 
 import static com.ss.editor.control.transform.TransformConstraint.constraintValue;
 import static com.ss.editor.control.transform.TransformConstraint.getRotateConstraint;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 
 import com.jme3.collision.CollisionResult;
@@ -65,7 +66,7 @@ public class RotationToolControl extends AbstractControl implements TransformCon
      */
     public RotationToolControl(@NotNull final SceneEditorControl editorControl) {
         this.editorControl = editorControl;
-        this.collisionPlane = requireNonNull(editorControl.getCollisionPlane());
+        this.collisionPlane = notNull(editorControl.getCollisionPlane());
     }
 
     /**

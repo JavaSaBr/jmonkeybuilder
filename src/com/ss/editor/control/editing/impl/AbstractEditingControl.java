@@ -24,6 +24,7 @@ public class AbstractEditingControl extends AbstractControl implements EditingCo
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**

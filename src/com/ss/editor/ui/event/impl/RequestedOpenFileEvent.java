@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
@@ -70,7 +70,7 @@ public class RequestedOpenFileEvent extends SceneEvent {
      */
     @NotNull
     public Path getFile() {
-        return requireNonNull(get(FILE));
+        return notNull(get(FILE));
     }
 
     /**

@@ -393,7 +393,8 @@ public class UIUtils {
     @NotNull
     @FXThread
     public static ColorRGBA convertColor(@NotNull final Color newValue) {
-        return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(), (float) newValue.getBlue(), (float) newValue.getOpacity());
+        return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(),
+                (float) newValue.getBlue(), (float) newValue.getOpacity());
     }
 
     /**

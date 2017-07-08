@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * The interface From any thread.
+ * The annotation to mark a method that it can be executed in any thread.
  */
 @Inherited
 @Documented

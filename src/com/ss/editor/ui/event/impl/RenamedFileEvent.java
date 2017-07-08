@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -44,7 +44,7 @@ public class RenamedFileEvent extends SceneEvent {
      */
     @NotNull
     public Path getNewFile() {
-        return requireNonNull(get(NEW_FILE));
+        return notNull(get(NEW_FILE));
     }
 
     /**
@@ -63,7 +63,7 @@ public class RenamedFileEvent extends SceneEvent {
      */
     @NotNull
     public Path getPrevFile() {
-        return requireNonNull(get(PREV_FILE));
+        return notNull(get(PREV_FILE));
     }
 
     /**

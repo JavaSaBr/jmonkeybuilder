@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,10 +30,16 @@ import java.io.InputStream;
  */
 public class CheckNewVersionTask implements Runnable {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(CheckNewVersionTask.class);
 
-    private static final String APP_VERSION_URL = "https://api.bitbucket.org/1.0/repositories/javasabr/jme3-spaceshift-editor/raw/master/app.version";
-    private static final String DOWNLOAD_APP_PATH_URL = "https://api.bitbucket.org/1.0/repositories/javasabr/jme3-spaceshift-editor/raw/master/download.app.path";
+    @NotNull
+    private static final String APP_VERSION_URL = "https://api.bitbucket.org/1.0/repositories/javasabr/" +
+            "jme3-spaceshift-editor/raw/master/app.version";
+
+    @NotNull
+    private static final String DOWNLOAD_APP_PATH_URL = "https://api.bitbucket.org/1.0/repositories/javasabr/" +
+            "jme3-spaceshift-editor/raw/master/download.app.path";
 
     @Override
     public void run() {

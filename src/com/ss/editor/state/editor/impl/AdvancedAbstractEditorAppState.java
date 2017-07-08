@@ -13,7 +13,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.ss.editor.annotation.EditorThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.LocalObjects;
@@ -737,7 +737,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     @Override
-    @EditorThread
+    @JMEThread
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
         this.stateManager = stateManager;
@@ -805,7 +805,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     }
 
     @Override
-    @EditorThread
+    @JMEThread
     public void cleanup() {
         super.cleanup();
 
@@ -1061,7 +1061,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * @param vRotation      the v rotation
      * @param targetDistance the target distance
      */
-    @EditorThread
+    @JMEThread
     public void updateCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                              final float vRotation, final float targetDistance) {
 

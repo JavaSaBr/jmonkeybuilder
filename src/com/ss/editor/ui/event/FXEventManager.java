@@ -1,17 +1,17 @@
 package com.ss.editor.ui.event;
 
+import static com.ss.rlib.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 /**
  * The class to manage javaFX events.
@@ -55,8 +55,10 @@ public class FXEventManager {
     @FXThread
     public void addEventHandler(@NotNull final EventType<? extends Event> eventType,
                                 @NotNull final EventHandler<? super Event> eventHandler) {
-        final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
-        final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType, () -> ArrayFactory.newArray(EventHandler.class));
+
+        final Array<EventHandler<? super Event>> handlers = getEventHandlers().get(eventType,
+                () -> newArray(EventHandler.class));
+
         handlers.add(eventHandler);
     }
 
@@ -70,8 +72,7 @@ public class FXEventManager {
     public void removeEventHandler(@NotNull final EventType<? extends Event> eventType,
                                    @NotNull final EventHandler<? super Event> eventHandler) {
 
-        final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
-        final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
+        final Array<EventHandler<? super Event>> handlers = getEventHandlers().get(eventType);
         if (handlers == null) return;
 
         handlers.slowRemove(eventHandler);
@@ -110,7 +111,7 @@ public class FXEventManager {
         final ObjectDictionary<EventType<? extends Event>, Array<EventHandler<? super Event>>> eventHandlers = getEventHandlers();
 
         for (EventType<? extends Event> eventType = event.getEventType();
-             eventType != null; eventType = (EventType<? extends Event>) eventType.getSuperType()) {
+             eventType != null; eventType = eventType.getSuperType()) {
 
             final Array<EventHandler<? super Event>> handlers = eventHandlers.get(eventType);
             if (handlers == null || handlers.isEmpty()) continue;

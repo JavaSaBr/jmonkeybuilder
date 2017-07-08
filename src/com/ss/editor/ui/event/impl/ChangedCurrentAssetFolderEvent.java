@@ -1,6 +1,6 @@
 package com.ss.editor.ui.event.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.event.SceneEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
@@ -43,7 +43,7 @@ public class ChangedCurrentAssetFolderEvent extends SceneEvent {
      */
     @NotNull
     public Path getNewAssetFolder() {
-        return requireNonNull(get(ASSET));
+        return notNull(get(ASSET));
     }
 
     /**

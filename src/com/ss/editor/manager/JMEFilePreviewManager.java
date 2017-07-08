@@ -25,7 +25,7 @@ import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
-import com.ss.editor.annotation.EditorThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
@@ -190,7 +190,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         frame++;
     }
 
-    @EditorThread
+    @JMEThread
     private void notifyProbeComplete() {
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.attachChild(modelNode);
@@ -230,7 +230,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param path the path to object.
      */
-    @EditorThread
+    @JMEThread
     private void showObject(@NotNull final String path) {
         if (processor != null) processor.setEnabled(true);
 
@@ -255,7 +255,7 @@ public class JMEFilePreviewManager extends AbstractControl {
      *
      * @param path the path to material.
      */
-    @EditorThread
+    @JMEThread
     private void showMaterial(@NotNull final String path) {
         if (processor != null) processor.setEnabled(true);
 
@@ -285,7 +285,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         EDITOR_THREAD_EXECUTOR.addToExecute(this::clearImpl);
     }
 
-    @EditorThread
+    @JMEThread
     private void clearImpl() {
 
         final Node rootNode = EDITOR.getPreviewNode();

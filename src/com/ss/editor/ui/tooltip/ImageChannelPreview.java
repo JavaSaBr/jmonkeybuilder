@@ -1,6 +1,6 @@
 package com.ss.editor.ui.tooltip;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.css.CSSIds;
@@ -150,7 +150,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @NotNull
     @FXThread
     private ImageView getAlphaView() {
-        return requireNonNull(alphaView);
+        return notNull(alphaView);
     }
 
     /**
@@ -159,7 +159,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @NotNull
     @FXThread
     private ImageView getBlueView() {
-        return requireNonNull(blueView);
+        return notNull(blueView);
     }
 
     /**
@@ -168,7 +168,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @NotNull
     @FXThread
     private ImageView getGreenView() {
-        return requireNonNull(greenView);
+        return notNull(greenView);
     }
 
     /**
@@ -177,7 +177,7 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @NotNull
     @FXThread
     private ImageView getRedView() {
-        return requireNonNull(redView);
+        return notNull(redView);
     }
 
     /**

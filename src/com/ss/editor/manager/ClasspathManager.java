@@ -6,19 +6,18 @@ import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.array.Array;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 
 /**
- * The class to manage custom classpathes.
+ * The class to manage custom classpath.
  *
  * @author JavaSaBr
  */
@@ -78,7 +77,9 @@ public class ClasspathManager {
         if (path == null) return;
 
         final Array<Path> jars = FileUtils.getFiles(path, false, EXTENSIONS);
-        final URL[] urls = jars.stream().map(jar -> Utils.get(jar, FileUtils::toUrl)).toArray(URL[]::new);
+        final URL[] urls = jars.stream().map(FileUtils::toUrl)
+                .toArray(URL[]::new);
+
         final URLClassLoader newCL = new URLClassLoader(urls, getClass().getClassLoader());
 
         ASSET_MANAGER.addClassLoader(newCL);
@@ -89,7 +90,7 @@ public class ClasspathManager {
     /**
      * @param additionalCL the additional class loader.
      */
-    private synchronized void setAdditionalCL(@Nullable final URLClassLoader additionalCL) {
+    private void setAdditionalCL(@Nullable final URLClassLoader additionalCL) {
         this.additionalCL = additionalCL;
     }
 
@@ -100,7 +101,7 @@ public class ClasspathManager {
      */
     @Nullable
     @FromAnyThread
-    public synchronized URLClassLoader getAdditionalCL() {
+    public URLClassLoader getAdditionalCL() {
         return additionalCL;
     }
 }

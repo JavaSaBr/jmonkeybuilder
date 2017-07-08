@@ -2,8 +2,8 @@ package com.ss.editor.file.converter.impl;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
@@ -20,12 +20,12 @@ import com.ss.editor.ui.dialog.converter.ModelConverterDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -80,7 +80,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final Path destination = destinationFolder.resolve(filename);
         final boolean isOverwrite = Files.exists(destination);
 
-        final Path assetFile = requireNonNull(getAssetFile(source), "Not found asset file for " + source);
+        final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);
         final ModelKey modelKey = new ModelKey(assetFile.toString());
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -140,7 +140,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
             }
         }
 
-        final Path assetFile = requireNonNull(getAssetFile(resultFile));
+        final Path assetFile = notNull(getAssetFile(resultFile));
         final String assetPath = toAssetPath(assetFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
