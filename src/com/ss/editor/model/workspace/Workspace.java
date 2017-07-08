@@ -3,7 +3,7 @@ package com.ss.editor.model.workspace;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -102,7 +102,8 @@ public class Workspace implements Serializable {
         if (editorStateMap == null) {
             editorStateMap = new HashMap<>();
         } else {
-            editorStateMap.forEach((key, editorState) -> editorState.setChangeHandler(this::incrementChanges));
+            editorStateMap.forEach((key, editorState) ->
+                    editorState.setChangeHandler(this::incrementChanges));
         }
 
         if (expandedFolders == null) {
@@ -141,7 +142,7 @@ public class Workspace implements Serializable {
      */
     @NotNull
     private Map<String, EditorState> getEditorStateMap() {
-        return requireNonNull(editorStateMap);
+        return notNull(editorStateMap);
     }
 
     /**
@@ -149,7 +150,7 @@ public class Workspace implements Serializable {
      */
     @NotNull
     private List<String> getExpandedFolders() {
-        return requireNonNull(expandedFolders);
+        return notNull(expandedFolders);
     }
 
     /**
@@ -283,7 +284,7 @@ public class Workspace implements Serializable {
      */
     @NotNull
     public Map<String, String> getOpenedFiles() {
-        return requireNonNull(openedFiles);
+        return notNull(openedFiles);
     }
 
     /**
@@ -329,7 +330,7 @@ public class Workspace implements Serializable {
      */
     @NotNull
     public Path getAssetFolder() {
-        return requireNonNull(assetFolder);
+        return notNull(assetFolder);
     }
 
     /**
@@ -357,7 +358,8 @@ public class Workspace implements Serializable {
         final Path assetFolder = getAssetFolder();
         if (!Files.exists(assetFolder)) return;
 
-        final Path workspaceFile = assetFolder.resolve(WorkspaceManager.FOLDER_EDITOR).resolve(WorkspaceManager.FILE_WORKSPACE);
+        final Path workspaceFile = assetFolder.resolve(WorkspaceManager.FOLDER_EDITOR)
+                .resolve(WorkspaceManager.FILE_WORKSPACE);
 
         try {
 
@@ -378,6 +380,8 @@ public class Workspace implements Serializable {
                 Files.setAttribute(workspaceFile, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
             }
 
+        } catch (final UnsupportedOperationException | IllegalArgumentException e) {
+            // we can igone that
         } catch (final IOException e) {
             LOGGER.warning(e);
         }
