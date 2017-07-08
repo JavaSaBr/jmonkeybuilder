@@ -164,7 +164,7 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
 
         final Button changeButton = new Button();
         changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
-        changeButton.setGraphic(new ImageView(Icons.ADD_24));
+        changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processChange());
 
         final Button openButton = new Button();

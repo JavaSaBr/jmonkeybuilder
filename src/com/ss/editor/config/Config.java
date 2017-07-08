@@ -28,7 +28,7 @@ public abstract class Config {
     /**
      * The constant VERSION.
      */
-    public static final String VERSION = "v.0.9.9";
+    public static final String VERSION = "v.0.9.10";
 
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
 

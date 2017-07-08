@@ -55,7 +55,7 @@ public class LightModelNode<T extends Light> extends ModelNode<T> {
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.LIGHT_24;
+        return Icons.LIGHT_16;
     }
 
     @Override

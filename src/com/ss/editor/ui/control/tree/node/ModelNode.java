@@ -262,10 +262,7 @@ public abstract class ModelNode<T> implements UObject {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "objectId=" + objectId +
-                ", element=" + element +
-                '}';
+        return getName();
     }
 
     @Override

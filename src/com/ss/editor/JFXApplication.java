@@ -83,7 +83,6 @@ public class JFXApplication extends Application {
         // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
-        System.setProperty("prism.allowhidpi", "true");
 
         // some settings for the render of JavaFX
         //System.setProperty("prism.cacheshapes", "true");

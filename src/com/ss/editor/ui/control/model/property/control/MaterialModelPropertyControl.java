@@ -173,7 +173,7 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
 
         final Button changeButton = new Button();
         changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
-        changeButton.setGraphic(new ImageView(Icons.ADD_24));
+        changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processChange());
 
         final Button editButton = new Button();

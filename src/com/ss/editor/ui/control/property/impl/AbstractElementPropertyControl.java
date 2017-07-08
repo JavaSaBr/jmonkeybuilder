@@ -9,20 +9,18 @@ import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-import java.util.function.BiConsumer;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit an elements from scene.
@@ -90,7 +88,7 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
 
         final Button changeButton = new Button();
         changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
-        changeButton.setGraphic(new ImageView(Icons.ADD_24));
+        changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processAdd());
 
         final Button editButton = new Button();

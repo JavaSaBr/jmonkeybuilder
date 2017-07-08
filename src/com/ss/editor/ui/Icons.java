@@ -29,15 +29,15 @@ public interface Icons {
     /**
      * The constant SAVE_16.
      */
-    Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/save.png", 16);
+    Image SAVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/save-disk.svg", 16);
     /**
      * The constant SCALE_16.
      */
-    Image SCALE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scale.png", 16);
+    Image SCALE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/resize.svg", 16);
     /**
      * The constant ROTATION_16.
      */
-    Image ROTATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rotation.png", 16);
+    Image ROTATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/eliptical-arrows.svg", 16);
     /**
      * The constant CUBE_16.
      */
@@ -45,7 +45,7 @@ public interface Icons {
     /**
      * The constant MOVE_16.
      */
-    Image MOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/move.png", 16);
+    Image MOVE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/move-arrows.svg", 16);
     /**
      * The constant LIGHT_16.
      */
@@ -53,7 +53,7 @@ public interface Icons {
     /**
      * The constant INFLUENCER_16.
      */
-    Image INFLUENCER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/influencer.png");
+    Image INFLUENCER_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/enhance-effect.svg", 16);
     /**
      * The constant SPHERE_16.
      */
@@ -61,19 +61,15 @@ public interface Icons {
     /**
      * The constant PLANE_16.
      */
-    Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/plane.png");
+    Image PLANE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/table.svg", 16);
     /**
      * The constant NODE_16.
      */
-    Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/node.png");
+    Image NODE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/family-tree.svg");
     /**
      * The constant PARTICLES_16.
      */
-    Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particles.png");
-    /**
-     * The constant PARTICLE_GEOMETRY_16.
-     */
-    Image PARTICLE_GEOMETRY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/particle-geometry.png");
+    Image PARTICLES_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/molecule_2.svg", 16);
     /**
      * The constant GEOMETRY_16.
      */
@@ -97,11 +93,11 @@ public interface Icons {
     /**
      * The constant POINT_LIGHT_16.
      */
-    Image POINT_LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/point.png");
+    Image POINT_LIGHT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/light-bulb.svg");
     /**
      * The constant SUN_16.
      */
-    Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sun.png");
+    Image SUN_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/sunny-day.svg");
     /**
      * The constant PLAY_16.
      */
@@ -117,19 +113,15 @@ public interface Icons {
     /**
      * The constant ANIMATION_16.
      */
-    Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/animation.png");
-    /**
-     * The constant ANI_CHANNEL_16.
-     */
-    Image ANI_CHANNEL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/anim-channel.png");
+    Image ANIMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/movie-symbol-of-video-camera.svg", 16);
     /**
      * The constant GEAR_16.
      */
-    Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/gear.png");
+    Image GEAR_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/settings.svg", 16);
     /**
      * The constant BONE_16.
      */
-    Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/bone.png");
+    Image BONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/bone.svg", 16);
     /**
      * The constant AUDIO_16.
      */
@@ -137,115 +129,103 @@ public interface Icons {
     /**
      * The constant SETTINGS_16.
      */
-    Image SETTINGS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/settings.png");
+    Image SETTINGS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/settings.svg");
     /**
      * The constant PASTE_16.
      */
-    Image PASTE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/paste.png");
-    /**
-     * The constant VIEW_16.
-     */
-    Image VIEW_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/view.png");
+    Image PASTE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/clipboard-paste-option.svg");
     /**
      * The constant NEW_FILE_16.
      */
-    Image NEW_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/new_file.png");
+    Image NEW_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/add-new-file.svg", 16);
     /**
      * The constant CUT_16.
      */
-    Image CUT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cut.png");
+    Image CUT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/cut-content-button.svg", 16);
     /**
      * The constant COPY_16.
      */
-    Image COPY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/copy.png");
+    Image COPY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/copy-file.svg", 16);
     /**
      * The constant TRANSFORMATION_16.
      */
-    Image TRANSFORMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/transformation.png");
+    Image TRANSFORMATION_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/transformation-of-geometric-shapes-from-cube-to-cone-outlines.svg");
     /**
      * The constant EXTRACT_16.
      */
-    Image EXTRACT_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/extract.png");
-    /**
-     * The constant GENERATE_16.
-     */
-    Image GENERATE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/generate_16.png");
+    Image EXTRACT_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/extract-image.svg", 16);
     /**
      * The constant SCENE_16.
      */
-    Image SCENE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/scene.png");
+    Image SCENE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/line-segment.svg");
     /**
      * The constant LAYERS_16.
      */
-    Image LAYERS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/layers.png");
+    Image LAYERS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/layers.svg", 16);
     /**
      * The constant OPEN_FILE_16.
      */
     Image OPEN_FILE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/open-folder-with-document.svg");
     /**
-     * The constant BACKGROUND_16.
-     */
-    Image BACKGROUND_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/background.png");
-    /**
      * The constant EMITTER_16.
      */
-    Image EMITTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/emitter.png");
+    Image EMITTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/atom-symbol.svg", 16);
     /**
      * The constant SKY_16.
      */
-    Image SKY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/sky.png");
+    Image SKY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/cloudy-day-outlined-weather-interface-symbol.svg");
     /**
      * The constant INVISIBLE_16.
      */
-    Image INVISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/invisible.png");
+    Image INVISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/invisible.svg", 16);
     /**
      * The constant VISIBLE_16.
      */
-    Image VISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/visible.png");
+    Image VISIBLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/eye-view-interface-symbol.svg");
     /**
      * The constant STATIC_RIGID_BODY_16.
      */
-    Image STATIC_RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/static-rigid-body.png");
+    Image STATIC_RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/brickwall-.svg");
     /**
      * The constant RIGID_BODY_16.
      */
-    Image RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/rigid-body.png");
+    Image RIGID_BODY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/soccer-ball.svg");
     /**
      * The constant REPLAY_16.
      */
-    Image REPLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/reply.png");
+    Image REPLAY_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/replay.svg");
     /**
      * The constant CHARACTER_16.
      */
-    Image CHARACTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/character.png");
+    Image CHARACTER_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/user-silhouette.svg", 16);
     /**
      * The constant SKELETON_16.
      */
-    Image SKELETON_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/skeleton.png");
+    Image SKELETON_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/bones.svg");
     /**
      * The constant VEHICLE_16.
      */
-    Image VEHICLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/vehicle.png");
+    Image VEHICLE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/sports-car.svg");
     /**
      * The constant ATOM_16.
      */
-    Image ATOM_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/atom.png");
+    Image ATOM_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/molecule.svg", 16);
     /**
      * The constant PHYSICS_16.
      */
-    Image PHYSICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/physics.png");
+    Image PHYSICS_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/black-hole.svg", 16);
     /**
      * The constant DOLL_16.
      */
-    Image DOLL_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/doll.png");
+    Image DOLL_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/doll.svg", 16);
     /**
      * The constant CAPSULE_16.
      */
-    Image CAPSULE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/capsule.png");
+    Image CAPSULE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/capsule-black-and-white-variant.svg", 16);
     /**
      * The constant CONE_16.
      */
-    Image CONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/16/cone.png");
+    Image CONE_16 = ICON_MANAGER.getImage("/ui/icons/actions/svg/cone-geometrical-shape.svg", 16);
     /**
      * The constant CYLINDER_16.
      */
@@ -334,68 +314,11 @@ public interface Icons {
     /**
      * The constant REFRESH_18.
      */
-    Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/refresh.png", 18);
-    /**
-     * The constant CLOSE_18.
-     */
-    Image CLOSE_18 = ICON_MANAGER.getImage("/ui/icons/actions/18/close.png", 18);
-
-    /**
-     * The constant SAVE_24.
-     */
-    Image SAVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/save.png", 24);
-    /**
-     * The constant ADD_24.
-     */
-    Image ADD_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add.png", 24);
-    /**
-     * The constant LIGHT_24.
-     */
-    Image LIGHT_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/idea.svg", 24);
-    /**
-     * The constant ROTATION_24.
-     */
-    Image ROTATION_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/rotation.png", 24);
-    /**
-     * The constant MOVE_24.
-     */
-    Image MOVE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/move.png", 24);
-    /**
-     * The constant SCALE_24.
-     */
-    Image SCALE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/scale.png", 24);
-    /**
-     * The constant CUBE_24.
-     */
-    Image CUBE_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/hollow-cube.svg", 24);
-    /**
-     * The constant SPHERE_24.
-     */
-    Image SPHERE_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/planet-sphere.svg", 24);
-    /**
-     * The constant PLANE_24.
-     */
-    Image PLANE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/plane.png", 24);
-    /**
-     * The constant ADD_CIRCLE_24.
-     */
-    Image ADD_CIRCLE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/add_circle.png", 24);
-    /**
-     * The constant IMAGE_24.
-     */
-    Image IMAGE_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/image.png", 24);
+    Image REFRESH_18 = ICON_MANAGER.getImage("/ui/icons/actions/svg/refresh-button.svg", 18);
     /**
      * The constant WARNING_24.
      */
-    Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/warning.png", 24);
-    /**
-     * The constant FROM_FULLSCREEN_24.
-     */
-    Image FROM_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/from_fullscreen.png", 24);
-    /**
-     * The constant TO_FULLSCREEN_24.
-     */
-    Image TO_FULLSCREEN_24 = ICON_MANAGER.getImage("/ui/icons/actions/24/to_fullscreen.png", 24);
+    Image WARNING_24 = ICON_MANAGER.getImage("/ui/icons/actions/svg/warning.svg", 24);
 
     /**
      * The constant TERRAIN_LEVEL_32.
@@ -425,15 +348,15 @@ public interface Icons {
     /**
      * The constant PLAY_128.
      */
-    Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/play.png", 128);
+    Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/actions/svg/play-button.svg", 128);
     /**
      * The constant PAUSE_128.
      */
-    Image PAUSE_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/pause.png", 128);
+    Image PAUSE_128 = ICON_MANAGER.getImage("/ui/icons/actions/svg/pause.svg", 128);
     /**
      * The constant STOP_128.
      */
-    Image STOP_128 = ICON_MANAGER.getImage("/ui/icons/actions/128/stop.png", 128);
+    Image STOP_128 = ICON_MANAGER.getImage("/ui/icons/actions/svg/stop.svg", 128);
 
     /**
      * The constant IMAGE_512.

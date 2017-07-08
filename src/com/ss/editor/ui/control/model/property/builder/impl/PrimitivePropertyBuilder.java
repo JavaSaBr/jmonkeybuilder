@@ -8,10 +8,10 @@ import com.ss.editor.ui.control.model.property.control.DefaultModelSinglePropert
 import com.ss.editor.ui.control.model.property.control.Vector3fModelPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.nio.Buffer;
 
@@ -59,6 +59,9 @@ public class PrimitivePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         } else if (object instanceof VertexBuffer) {
 
             final VertexBuffer vertexBuffer = (VertexBuffer) object;
+            final Buffer data = vertexBuffer.getData();
+            if (data == null) return;
+
             final VertexBuffer.Type bufferType = vertexBuffer.getBufferType();
             final VertexBuffer.Format format = vertexBuffer.getFormat();
             final VertexBuffer.Usage usage = vertexBuffer.getUsage();

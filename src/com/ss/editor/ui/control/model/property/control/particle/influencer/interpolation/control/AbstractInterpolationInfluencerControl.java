@@ -8,12 +8,7 @@ import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPrope
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -23,10 +18,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
+
+import java.util.function.BiConsumer;
 
 /**
  * The control for editing interpolations in the {@link ParticleInfluencer}.
@@ -84,7 +82,7 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
 
         final Button addButton = new Button();
         addButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
-        addButton.setGraphic(new ImageView(Icons.ADD_24));
+        addButton.setGraphic(new ImageView(Icons.ADD_16));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();

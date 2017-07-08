@@ -119,25 +119,6 @@
     -fx-effect: -fx-material-shadow-panel;
 }
 
-#EditorDialogHeader {
-    -fx-alignment: center-right;
-    -fx-min-height: 32;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 0 0 10;
-    -fx-cursor: move;
-}
-
-#EditorDialogHeaderButtonClose {
-    -fx-min-height: 32;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 32;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-graphic: url("/ui/icons/actions/24/close.png");
-}
-
 #EditorDialogButtonOk {
     -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;

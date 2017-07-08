@@ -90,7 +90,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
 
         final Button addButton = new Button();
         addButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
-        addButton.setGraphic(new ImageView(Icons.ADD_24));
+        addButton.setGraphic(new ImageView(Icons.ADD_16));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();

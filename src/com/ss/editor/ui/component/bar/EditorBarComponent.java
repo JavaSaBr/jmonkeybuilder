@@ -31,7 +31,6 @@ public class EditorBarComponent extends MenuBar implements ScreenComponent {
         super();
         setId(CSSIds.EDITOR_BAR_COMPONENT);
         createComponents();
-        setUseSystemMenuBar(true);
     }
 
     private void createComponents() {

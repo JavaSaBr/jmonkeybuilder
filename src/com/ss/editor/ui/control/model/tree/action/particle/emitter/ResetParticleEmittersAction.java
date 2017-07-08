@@ -35,7 +35,7 @@ public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeC
     @Nullable
     @Override
     protected Image getIcon() {
-        return Icons.EMITTER_16;
+        return Icons.REPLAY_16;
     }
 
     @NotNull

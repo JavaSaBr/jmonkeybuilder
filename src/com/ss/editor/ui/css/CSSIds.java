@@ -102,14 +102,6 @@ public interface CSSIds {
      */
     String EDITOR_DIALOG_BACKGROUND = "EditorDialogBackground";
     /**
-     * The constant EDITOR_DIALOG_HEADER.
-     */
-    String EDITOR_DIALOG_HEADER = "EditorDialogHeader";
-    /**
-     * The constant EDITOR_DIALOG_HEADER_BUTTON_CLOSE.
-     */
-    String EDITOR_DIALOG_HEADER_BUTTON_CLOSE = "EditorDialogHeaderButtonClose";
-    /**
      * The constant EDITOR_DIALOG_BUTTON_OK.
      */
     String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
