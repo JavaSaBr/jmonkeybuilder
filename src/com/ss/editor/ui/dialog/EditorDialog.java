@@ -5,8 +5,10 @@ import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.Editor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.logging.Logger;
@@ -56,7 +58,7 @@ public class EditorDialog {
      * The default dialog size.
      */
     @NotNull
-    protected static final Point DEFAULT_SIZE = new Point(0, 0);
+    private static final Point DEFAULT_SIZE = new Point(0, 0);
 
     /**
      * The stage of this dialog.
@@ -100,12 +102,16 @@ public class EditorDialog {
         createControls(container);
         configureSize(container);
 
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final CssColorTheme theme = editorConfig.getTheme();
+
         final Scene scene = new Scene(container);
         final ObservableList<String> stylesheets = scene.getStylesheets();
         stylesheets.add(CSS_FILE_BASE);
         stylesheets.add(CSS_FILE_EXTERNAL);
         stylesheets.add(CSS_FILE_CUSTOM_IDS);
         stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
+        stylesheets.add(theme.getCssFile());
 
         dialog.setScene(scene);
     }

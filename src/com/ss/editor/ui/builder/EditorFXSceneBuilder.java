@@ -3,6 +3,7 @@ package com.ss.editor.ui.builder;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.AssetComponent;
 import com.ss.editor.ui.component.bar.EditorMenuComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
@@ -12,6 +13,7 @@ import com.ss.editor.ui.component.split.pane.GlobalLeftToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.ui.hanlder.WindowResizeHandler;
@@ -65,6 +67,9 @@ public class EditorFXSceneBuilder {
     @FXThread
     public static EditorFXScene build(@NotNull final Stage stage) {
 
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final CssColorTheme theme = editorConfig.getTheme();
+
         final Group root = new Group();
         //root.getTransforms().add(new Scale(1.5, 1.5));
 
@@ -77,6 +82,7 @@ public class EditorFXSceneBuilder {
         stylesheets.add(CSS_FILE_EXTERNAL);
         stylesheets.add(CSS_FILE_CUSTOM_IDS);
         stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
+        stylesheets.add(theme.getCssFile());
 
         final StackPane container = scene.getContainer();
 

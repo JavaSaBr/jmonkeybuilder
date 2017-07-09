@@ -15,6 +15,7 @@ import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -56,6 +57,7 @@ public class SettingsDialog extends EditorDialog {
     private static final Point DIALOG_SIZE = new Point(600, 400);
 
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
+    private static final Array<CssColorTheme> THEMES = ArrayFactory.newArray(CssColorTheme.class);
 
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
@@ -67,6 +69,8 @@ public class SettingsDialog extends EditorDialog {
         ANISOTROPYCS.add(4);
         ANISOTROPYCS.add(8);
         ANISOTROPYCS.add(16);
+        THEMES.add(CssColorTheme.LIGHT);
+        THEMES.add(CssColorTheme.DARK);
     }
 
     /**
@@ -80,6 +84,12 @@ public class SettingsDialog extends EditorDialog {
      */
     @Nullable
     private ComboBox<Integer> anisotropyComboBox;
+
+    /**
+     * The list with themes.
+     */
+    @Nullable
+    private ComboBox<CssColorTheme> themeComboBox;
 
     /**
      * The white point X.
@@ -244,6 +254,7 @@ public class SettingsDialog extends EditorDialog {
 
         createAdditionalClasspathControl(otherRoot);
         createAdditionalEnvsControl(otherRoot);
+        createThemeControl(otherRoot);
         createGoogleAnalyticsControl(otherRoot);
         createAutoTangentGeneratingControl(otherRoot);
         createUseFlippedTextureDefaultControl(otherRoot);
@@ -692,7 +703,9 @@ public class SettingsDialog extends EditorDialog {
         anisotropyComboBox = new ComboBox<>();
         anisotropyComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         anisotropyComboBox.prefWidthProperty().bind(root.widthProperty());
-        anisotropyComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> validate());
+        anisotropyComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> validate());
 
         FXUtils.addToPane(anisotropyLabel, anisotropyContainer);
         FXUtils.addToPane(anisotropyComboBox, anisotropyContainer);
@@ -705,6 +718,37 @@ public class SettingsDialog extends EditorDialog {
 
         final ObservableList<Integer> items = anisotropyComboBox.getItems();
         items.addAll(ANISOTROPYCS);
+    }
+
+    /**
+     * Create the theme control
+     */
+    private void createThemeControl(@NotNull final VBox root) {
+
+        final HBox anisotropyContainer = new HBox();
+        anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
+
+        final Label anisotropyLabel = new Label("Theme" + ":");
+        anisotropyLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+
+        themeComboBox = new ComboBox<>();
+        themeComboBox.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        themeComboBox.prefWidthProperty().bind(root.widthProperty());
+        themeComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(anisotropyLabel, anisotropyContainer);
+        FXUtils.addToPane(themeComboBox, anisotropyContainer);
+        FXUtils.addToPane(anisotropyContainer, root);
+
+        FXUtils.addClassTo(anisotropyLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(themeComboBox, CSSClasses.SPECIAL_FONT_14);
+
+        VBox.setMargin(anisotropyContainer, FIELD_OFFSET);
+
+        final ObservableList<CssColorTheme> items = themeComboBox.getItems();
+        items.addAll(THEMES);
     }
 
     /**
@@ -915,6 +959,10 @@ public class SettingsDialog extends EditorDialog {
         final SingleSelectionModel<Integer> selectedAnisotropy = anisotropyComboBox.getSelectionModel();
         selectedAnisotropy.select(Integer.valueOf(editorConfig.getAnisotropy()));
 
+        final ComboBox<CssColorTheme> themeComboBox = getThemeComboBox();
+        final SingleSelectionModel<CssColorTheme> selectedTheme = themeComboBox.getSelectionModel();
+        selectedTheme.select(editorConfig.getTheme());
+
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         fxaaFilterCheckBox.setSelected(editorConfig.isFXAA());
 
@@ -969,6 +1017,14 @@ public class SettingsDialog extends EditorDialog {
 
         setAdditionalClasspathFolder(additionalClasspath);
         setAdditionalEnvsFolder(additionalEnvs);
+    }
+
+    /**
+     * @return the list with themes.
+     */
+    @NotNull
+    private ComboBox<CssColorTheme> getThemeComboBox() {
+        return notNull(themeComboBox);
     }
 
     /**
@@ -1039,10 +1095,15 @@ public class SettingsDialog extends EditorDialog {
         final int currentFrameRate = editorConfig.getFrameRate();
         final int currentCameraAngle = editorConfig.getCameraAngle();
 
+        final CssColorTheme currentTheme = editorConfig.getTheme();
+
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
 
         final ComboBox<Integer> anisotropyComboBox = getAnisotropyComboBox();
         final Integer anisotropy = anisotropyComboBox.getSelectionModel().getSelectedItem();
+
+        final ComboBox<CssColorTheme> themeComboBox = getThemeComboBox();
+        final CssColorTheme theme = themeComboBox.getSelectionModel().getSelectedItem();
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
@@ -1083,6 +1144,8 @@ public class SettingsDialog extends EditorDialog {
             needRestart++;
         } else if (frameRate != currentFrameRate) {
             needRestart++;
+        } else if (theme != currentTheme) {
+            needRestart++;
         }
 
         editorConfig.setAnisotropy(anisotropy);
@@ -1098,6 +1161,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setAutoTangentGenerating(autoTangentGenerating);
         editorConfig.setDefaultUseFlippedTexture(useFlippedTextures);
         editorConfig.setDefaultEditorCameraEnabled(cameraLampEnabled);
+        editorConfig.setTheme(theme);
         editorConfig.save();
 
         if (cameraAngle != currentCameraAngle) {

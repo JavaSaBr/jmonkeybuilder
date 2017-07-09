@@ -10,6 +10,7 @@ import com.jme3.system.AppSettings;
 import com.jme3x.jfx.injfx.JmeToJFXIntegrator;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -49,7 +50,6 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
     private static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
     private static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
-    private static final String PREF_SCREEN_DECORATED = SCREEN_ALIAS + "." + "decorated";
 
     private static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     private static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
@@ -64,15 +64,17 @@ public final class EditorConfig implements AssetEventListener {
 
     private static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
     private static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
-    private static final String PREF_GLOBAL_LEFT_TOOL_WIDTH = ASSET_OTHER + "." + "globalLeftToolWidth";
-    private static final String PREF_GLOBAL_LEFT_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalLeftToolCollapsed";
-    private static final String PREF_GLOBAL_BOTTOM_TOOL_WIDTH = ASSET_OTHER + "." + "globalBottomToolHeight";
-    private static final String PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalBottomToolCollapsed";
+    private static final String PREF_THEME = ASSET_OTHER + "." + "theme";
     private static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
     private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
     private static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
     private static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
     private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion" + Config.VERSION;
+
+    private static final String PREF_GLOBAL_LEFT_TOOL_WIDTH = ASSET_OTHER + "." + "globalLeftToolWidth";
+    private static final String PREF_GLOBAL_LEFT_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalLeftToolCollapsed";
+    private static final String PREF_GLOBAL_BOTTOM_TOOL_WIDTH = ASSET_OTHER + "." + "globalBottomToolHeight";
+    private static final String PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalBottomToolCollapsed";
 
     @Nullable
     private static volatile EditorConfig instance;
@@ -160,6 +162,11 @@ public final class EditorConfig implements AssetEventListener {
      * The global bottom tool width.
      */
     private volatile int globalBottomToolHeight;
+
+    /**
+     * The current theme.
+     */
+    private volatile int theme;
 
     /**
      * Flag is for collapsing the global left tool.
@@ -705,6 +712,25 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * Gets the current theme.
+     *
+     * @return the current theme.
+     */
+    @NotNull
+    public CssColorTheme getTheme() {
+        return CssColorTheme.valueOf(theme);
+    }
+
+    /**
+     * Sets the current theme.
+     *
+     * @param theme the current theme.
+     */
+    public void setTheme(@NotNull final CssColorTheme theme) {
+        this.theme = theme.ordinal();
+    }
+
+    /**
      * Gets settings.
      *
      * @return the settings for JME.
@@ -767,6 +793,7 @@ public final class EditorConfig implements AssetEventListener {
         this.defaultUseFlippedTexture = prefs.getBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, true);
         this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_CAMERA_LAMP_ENABLED, true);
         this.analyticsQuestion = prefs.getBoolean(PREF_ANALYTICS_QUESTION, false);
+        this.theme = prefs.getInt(PREF_THEME, CssColorTheme.DARK.ordinal());
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -839,6 +866,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
         prefs.putBoolean(PREF_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
         prefs.putBoolean(PREF_ANALYTICS_QUESTION, isAnalyticsQuestion());
+        prefs.putInt(PREF_THEME, getTheme().ordinal());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 
