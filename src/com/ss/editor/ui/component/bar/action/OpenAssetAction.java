@@ -28,7 +28,7 @@ public class OpenAssetAction extends MenuItem {
      * Instantiates a new Open asset action.
      */
     public OpenAssetAction() {
-        super(Messages.EDITOR_BAR_ASSET_OPEN_ASSET);
+        super(Messages.EDITOR_MENU_FILE_OPEN_ASSET);
         setOnAction(event -> process());
     }
 
@@ -38,7 +38,7 @@ public class OpenAssetAction extends MenuItem {
     private void process() {
 
         final DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle(Messages.EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER);
+        chooser.setTitle(Messages.EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER);
 
         final EditorConfig config = EditorConfig.getInstance();
         final Path currentAsset = config.getCurrentAsset();

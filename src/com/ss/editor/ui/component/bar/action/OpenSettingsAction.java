@@ -19,7 +19,7 @@ public class OpenSettingsAction extends MenuItem {
      * Instantiates a new Open settings action.
      */
     public OpenSettingsAction() {
-        super(Messages.EDITOR_BAR_SETTINGS);
+        super(Messages.EDITOR_MENU_OTHER_SETTINGS);
         setOnAction(event -> process());
     }
 

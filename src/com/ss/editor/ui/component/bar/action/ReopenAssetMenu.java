@@ -25,7 +25,7 @@ public class ReopenAssetMenu extends Menu {
      * Instantiates a new Reopen asset menu.
      */
     public ReopenAssetMenu() {
-        super(Messages.EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER);
+        super(Messages.EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER);
         update();
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> update());
     }

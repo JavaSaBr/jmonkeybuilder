@@ -176,8 +176,7 @@ public class JFXApplication extends Application {
         stage.setWidth(config.getScreenWidth());
         stage.setHeight(config.getScreenHeight());
         stage.setMaximized(config.isMaximized());
-        stage.setTitle(Config.TITLE + " " + Config.VERSION);
-        stage.setOnCloseRequest(event -> onExit());
+        stage.setTitle(Config.TITLE);
         stage.show();
 
         if (!stage.isMaximized()) stage.centerOnScreen();
@@ -194,6 +193,12 @@ public class JFXApplication extends Application {
         stage.maximizedProperty().addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
 
         buildScene();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        onExit();
     }
 
     /**

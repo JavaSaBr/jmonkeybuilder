@@ -454,7 +454,7 @@
 
 .scroll-pane > .viewport,
 .scroll-pane {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: transparent;
 }
 
 /* SplitPane */
@@ -1317,4 +1317,9 @@
 .slider:vertical .track {
 }
 .slider .axis {
+}
+
+/* hyperlink */
+.hyperlink {
+    -fx-padding: 0px;
 }

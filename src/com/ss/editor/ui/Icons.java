@@ -346,6 +346,11 @@ public interface Icons {
     Image TERRAIN_UP_32 = ICON_MANAGER.getImage("/ui/icons/svg/raise_terrain.svg", 32);
 
     /**
+     * The constant APPLICATION_64.
+     */
+    Image APPLICATION_64 = ICON_MANAGER.getImage("/ui/icons/app/SSEd64.png", 64);
+
+    /**
      * The constant PLAY_128.
      */
     Image PLAY_128 = ICON_MANAGER.getImage("/ui/icons/svg/play-button.svg", 128);

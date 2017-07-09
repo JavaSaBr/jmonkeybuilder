@@ -66,13 +66,6 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
 
     /**
-     * FIXME to remove
-     * The constant CONTAINER_OFFSET.
-     */
-    @NotNull
-    protected static final Insets CONTAINER_OFFSET = new Insets(10, 15, 20, 0);
-
-    /**
      * The constant EXECUTOR_MANAGER.
      */
     @NotNull

@@ -4,7 +4,7 @@ import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.asset.AssetComponent;
-import com.ss.editor.ui.component.bar.EditorBarComponent;
+import com.ss.editor.ui.component.bar.EditorMenuComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.component.split.pane.GlobalBottomToolSplitPane;
@@ -97,7 +97,7 @@ public class EditorFXSceneBuilder {
                               @NotNull final Stage stage) {
 
         final Canvas canvas = scene.getCanvas();
-        final EditorBarComponent barComponent = new EditorBarComponent();
+        final EditorMenuComponent barComponent = new EditorMenuComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 
         new EventRedirector(editorAreaComponent, canvas, stage);

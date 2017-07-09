@@ -1,9 +1,7 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.dialog.SettingsDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
+import javafx.application.Platform;
 import javafx.scene.control.MenuItem;
 
 /**
@@ -11,15 +9,13 @@ import javafx.scene.control.MenuItem;
  *
  * @author JavaSaBr
  */
-public class OpenSettingsAction extends MenuItem {
-
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+public class ExitAction extends MenuItem {
 
     /**
      * Instantiates a new Open settings action.
      */
-    public OpenSettingsAction() {
-        super(Messages.EDITOR_BAR_SETTINGS);
+    public ExitAction() {
+        super(Messages.EDITOR_MENU_FILE_EXIT);
         setOnAction(event -> process());
     }
 
@@ -27,10 +23,6 @@ public class OpenSettingsAction extends MenuItem {
      * The process of opening.
      */
     private void process() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
-        final SettingsDialog dialog = new SettingsDialog();
-        dialog.show(scene.getWindow());
+        Platform.exit();
     }
 }

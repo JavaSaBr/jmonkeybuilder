@@ -17,9 +17,9 @@ public interface CSSIds {
     String ROOT_CONTAINER = "RootContainer";
 
     /**
-     * The constant EDITOR_BAR_COMPONENT.
+     * The constant EDITOR_MENU_BAR_COMPONENT.
      */
-    String EDITOR_BAR_COMPONENT = "EditorBarComponent";
+    String EDITOR_MENU_BAR_COMPONENT = "EditorMenuBarComponent";
 
     /**
      * The constant EDITOR_LOADING_LAYER.
@@ -463,4 +463,21 @@ public interface CSSIds {
      * The constant GROOVY_EDITOR_COMPONENT.
      */
     String GROOVY_EDITOR_COMPONENT = "GroovyEditorComponent";
+
+    /**
+     * The constant ABOUT_DIALOG_GRID_PANE.
+     */
+    String ABOUT_DIALOG_GRID_PANE = "AboutDialogGridPane";
+    /**
+     * The constant ABOUT_DIALOG_LABEL.
+     */
+    String ABOUT_DIALOG_LABEL = "AboutDialogLabel";
+    /**
+     * The constant ABOUT_DIALOG_LONG_LABEL.
+     */
+    String ABOUT_DIALOG_LONG_LABEL = "AboutDialogLongLabel";
+    /**
+     * The constant ABOUT_DIALOG_TITLE_LABEL.
+     */
+    String ABOUT_DIALOG_TITLE_LABEL = "AboutDialogTitleLabel";
 }

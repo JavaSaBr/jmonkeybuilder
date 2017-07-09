@@ -68,6 +68,10 @@ public interface CSSClasses {
      * The constant SPECIAL_FONT_16.
      */
     String SPECIAL_FONT_16 = "special-font-16";
+    /**
+     * The constant SPECIAL_FONT_22.
+     */
+    String SPECIAL_FONT_22 = "special-font-22";
 
     /**
      * The constant MONO_FONT_13.

@@ -79,6 +79,11 @@
     -fx-font-size: 16;
 }
 
+.special-font-22 {
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 22;
+}
+
 .mono-font-13 {
     -fx-font-family: "Ubuntu Mono";
     -fx-font-size: 13px;

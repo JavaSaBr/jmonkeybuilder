@@ -17,29 +17,42 @@ public class Messages {
     public static final String BUNDLE_NAME = "messages/messages";
 
     /**
-     * The constant EDITOR_BAR_ASSET.
+     * The constant EDITOR_MENU_FILE.
      */
-    public static final String EDITOR_BAR_ASSET;
+    public static final String EDITOR_MENU_FILE;
     /**
-     * The constant EDITOR_BAR_ASSET_OPEN_ASSET.
+     * The constant EDITOR_MENU_FILE_EXIT.
      */
-    public static final String EDITOR_BAR_ASSET_OPEN_ASSET;
+    public static final String EDITOR_MENU_FILE_EXIT;
     /**
-     * The constant EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER.
+     * The constant EDITOR_MENU_FILE_OPEN_ASSET.
      */
-    public static final String EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER;
+    public static final String EDITOR_MENU_FILE_OPEN_ASSET;
     /**
-     * The constant EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER.
+     * The constant EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER.
      */
-    public static final String EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER;
+    public static final String EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER;
     /**
-     * The constant EDITOR_BAR_SETTINGS.
+     * The constant EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER.
      */
-    public static final String EDITOR_BAR_SETTINGS;
+    public static final String EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER;
     /**
-     * The constant EDITOR_BAR_OTHER.
+     * The constant EDITOR_MENU_OTHER.
      */
-    public static final String EDITOR_BAR_OTHER;
+    public static final String EDITOR_MENU_OTHER;
+    /**
+     * The constant EDITOR_MENU_OTHER_SETTINGS.
+     */
+    public static final String EDITOR_MENU_OTHER_SETTINGS;
+    /**
+     * The constant EDITOR_MENU_HELP.
+     */
+    public static final String EDITOR_MENU_HELP;
+    /**
+     * The constant EDITOR_MENU_HELP_ABOUT.
+     */
+    public static final String EDITOR_MENU_HELP_ABOUT;
+
     /**
      * The constant EDITOR_TOOL_ASSET.
      */
@@ -2225,6 +2238,35 @@ public class Messages {
     public static final String EDITOR_SCRIPTING_COMPONENT_RUN;
 
     /**
+     * The constant ABOUT_DIALOG_TITLE.
+     */
+    public static final String ABOUT_DIALOG_TITLE;
+    /**
+     * The constant ABOUT_DIALOG_BUTTON_OK.
+     */
+    public static final String ABOUT_DIALOG_BUTTON_OK;
+    /**
+     * The constant ABOUT_DIALOG_VERSION.
+     */
+    public static final String ABOUT_DIALOG_VERSION;
+    /**
+     * The constant ABOUT_DIALOG_PROJECT_HOME.
+     */
+    public static final String ABOUT_DIALOG_PROJECT_HOME;
+    /**
+     * The constant ABOUT_DIALOG_FORUM_THREAD.
+     */
+    public static final String ABOUT_DIALOG_FORUM_THREAD;
+    /**
+     * The constant ABOUT_DIALOG_USED_LIBRARIES.
+     */
+    public static final String ABOUT_DIALOG_USED_LIBRARIES;
+    /**
+     * The constant ABOUT_DIALOG_USED_ICONS.
+     */
+    public static final String ABOUT_DIALOG_USED_ICONS;
+
+    /**
      * The constant RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED.
      */
     public static final String RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED;
@@ -2248,12 +2290,15 @@ public class Messages {
 
         final ResourceBundle bundle = getBundle(BUNDLE_NAME, PropertyLoader.getInstance());
 
-        EDITOR_BAR_ASSET = bundle.getString("EditorBarComponentAsset");
-        EDITOR_BAR_ASSET_OPEN_ASSET = bundle.getString("EditorBarComponentAssetOpenAsset");
-        EDITOR_BAR_ASSET_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorBarComponentAssetOpenAssetDirectoryChooser");
-        EDITOR_BAR_ASSET_REOPEN_ASSET_FOLDER = bundle.getString("EditorBarComponentAssetReopen");
-        EDITOR_BAR_OTHER = bundle.getString("EditorBarOther");
-        EDITOR_BAR_SETTINGS = bundle.getString("EditorBarComponentSettings");
+        EDITOR_MENU_FILE = bundle.getString("EditorMenuFile");
+        EDITOR_MENU_FILE_OPEN_ASSET = bundle.getString("EditorMenuFileOpenAsset");
+        EDITOR_MENU_FILE_OPEN_ASSET_DIRECTORY_CHOOSER = bundle.getString("EditorMenuFileOpenAssetDirectoryChooser");
+        EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER = bundle.getString("EditorMenuFileReopenAssetFolder");
+        EDITOR_MENU_FILE_EXIT = bundle.getString("EditorMenuFileExit");
+        EDITOR_MENU_OTHER = bundle.getString("EditorMenuOther");
+        EDITOR_MENU_OTHER_SETTINGS = bundle.getString("EditorMenuOtherSettings");
+        EDITOR_MENU_HELP = bundle.getString("EditorMenuHelp");
+        EDITOR_MENU_HELP_ABOUT = bundle.getString("EditorMenuHelpAbout");
 
         EDITOR_TOOL_ASSET = bundle.getString("EditorToolAsset");
 
@@ -2843,6 +2888,14 @@ public class Messages {
         EDITOR_SCRIPTING_COMPONENT_HEADERS = bundle.getString("EditorScriptingComponentHeaders");
         EDITOR_SCRIPTING_COMPONENT_BODY = bundle.getString("EditorScriptingComponentBody");
         EDITOR_SCRIPTING_COMPONENT_RUN = bundle.getString("EditorScriptingComponentRun");
+
+        ABOUT_DIALOG_TITLE = bundle.getString("AboutDialogTitle");
+        ABOUT_DIALOG_VERSION = bundle.getString("AboutDialogVersion");
+        ABOUT_DIALOG_PROJECT_HOME = bundle.getString("AboutDialogProjectHome");
+        ABOUT_DIALOG_FORUM_THREAD = bundle.getString("AboutDialogForumThread");
+        ABOUT_DIALOG_USED_LIBRARIES = bundle.getString("AboutDialogUsedLibraries");
+        ABOUT_DIALOG_USED_ICONS = bundle.getString("AboutDialogUsedIcons");
+        ABOUT_DIALOG_BUTTON_OK = bundle.getString("AboutDialogButtonOk");
 
         RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED = bundle.getString("ResourcePropertyEditControlNothingIsSelected");
     }
