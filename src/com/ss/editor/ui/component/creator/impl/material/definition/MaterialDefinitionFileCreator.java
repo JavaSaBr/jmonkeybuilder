@@ -6,6 +6,7 @@ import static java.lang.Character.toUpperCase;
 import static java.util.Objects.requireNonNull;
 import com.jme3.material.TechniqueDef;
 import com.jme3.renderer.Caps;
+import com.jme3.renderer.Renderer;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
@@ -17,6 +18,7 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -33,6 +35,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.EnumSet;
 
 /**
  * The creator to create a new material definition.
@@ -56,13 +59,14 @@ public class MaterialDefinitionFileCreator extends AbstractFileCreator {
 
     static {
         AVAILABLE_GLSL = ArrayFactory.newArray(String.class);
-        AVAILABLE_GLSL.add(Caps.GLSL100.name());
-        AVAILABLE_GLSL.add(Caps.GLSL110.name());
-        AVAILABLE_GLSL.add(Caps.GLSL120.name());
-        AVAILABLE_GLSL.add(Caps.GLSL130.name());
-        AVAILABLE_GLSL.add(Caps.GLSL150.name());
-        AVAILABLE_GLSL.add(Caps.GLSL330.name());
-        AVAILABLE_GLSL.add(Caps.GLSL400.name());
+
+        final Renderer renderer = EDITOR.getRenderer();
+
+        final EnumSet<Caps> caps = renderer.getCaps();
+        caps.stream().filter(cap -> cap.name().startsWith("GLSL"))
+                .map(Enum::name)
+                .sorted(StringUtils::compareIgnoreCase)
+                .forEach(AVAILABLE_GLSL::add);
     }
 
     @NotNull

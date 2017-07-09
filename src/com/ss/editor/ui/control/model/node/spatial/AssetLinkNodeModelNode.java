@@ -27,6 +27,6 @@ public class AssetLinkNodeModelNode extends NodeModelNode<AssetLinkNode> {
     @Nullable
     @Override
     public Image getIcon() {
-        return Icons.LINKNODE_16;
+        return Icons.LINKED_NODE_16;
     }
 }
