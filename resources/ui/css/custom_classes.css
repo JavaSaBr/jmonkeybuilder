@@ -154,7 +154,7 @@
 }
 
 .transparent-tree-cell > .tree-disclosure-node > .arrow {
-    -fx-background-color: -fx-font-color;
+    -fx-background-color: -var-arrow-color;
     -fx-padding: 0.333333em 0.229em 0.333333em 0.229em; /* 4 */
     -fx-shape: "M 0 -3.5 L 4 0 L 0 3.5 z";
 }
@@ -259,7 +259,7 @@
 
 .toolbar-button:armed,
 .editor-bar-button:armed {
-    -fx-body-color: -fx-button-background-arm;
+    -fx-body-color: -var-button-arm-color;
 }
 
 .toolbar-button:focused,
@@ -268,7 +268,7 @@
 
 .toolbar-button:selected,
 .editor-bar-button:selected {
-    -fx-body-color: -fx-button-background-arm;
+    -fx-body-color: -var-button-arm-color;
 }
 
 .file-editor-toolbar-button {
@@ -301,7 +301,7 @@
 }
 
 .drawer-button:armed {
-    -fx-body-color: -fx-button-background-arm;
+    -fx-body-color: -var-button-arm-color;
 }
 
 .drawer-button:focused {
@@ -326,7 +326,7 @@
 }
 
 .editor-bar-button:armed {
-    -fx-body-color: -fx-button-background-arm;
+    -fx-body-color: -var-button-arm-color;
 }
 
 .transparent-menu-item {

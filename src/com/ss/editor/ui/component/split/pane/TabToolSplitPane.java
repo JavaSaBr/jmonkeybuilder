@@ -1,8 +1,8 @@
 package com.ss.editor.ui.component.split.pane;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import static java.util.Objects.requireNonNull;
 import com.ss.editor.ui.component.tab.TabToolComponent;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -103,7 +103,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      */
     @NotNull
     private TabToolComponent getToolComponent() {
-        return requireNonNull(toolComponent);
+        return notNull(toolComponent);
     }
 
     /**
@@ -113,7 +113,7 @@ public abstract class TabToolSplitPane<C> extends SplitPane {
      */
     @NotNull
     public C getConfig() {
-        return requireNonNull(config);
+        return notNull(config);
     }
 
     /**

@@ -27,10 +27,13 @@
 
 .context-menu {
     -fx-padding: 0 0 0 0;
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-menu-background-color;
     -fx-background-insets: 0;
-    -fx-background-radius: 2px;
-    -fx-effect: -fx-material-shadow-control;
+    -fx-background-radius: 3px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-effect: -fx-shadow-menu;
 }
 
 .context-menu .separator:horizontal .line {
@@ -130,13 +133,13 @@
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: -fx-background-status-bar;
+    -fx-background-color: -var-split-line-color;
     -fx-background-insets: 0;
     -fx-effect: null;
 }
 
 .split-pane:vertical > .split-pane-divider {
-    -fx-background-color: -fx-background-status-bar;
+    -fx-background-color: -var-split-line-color;
     -fx-background-insets: 0;
     -fx-effect: null;
 }
@@ -205,7 +208,7 @@
 }
 
 .tab-pane > .tab-header-area > .tab-header-background {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
 }
 
 .tab-pane:top > .tab-header-area > .tab-header-background {
@@ -243,14 +246,14 @@
 
 /* TODO: scaling the shape seems to make it way too large */
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-close-button {
-    -fx-background-color: -fx-button-background-arm;
+    -fx-background-color: -var-button-arm-color;
     -fx-shape: "M 0,0 H1 L 4,3 7,0 H8 V1 L 5,4 8,7 V8 H7 L 4,5 1,8 H0 V7 L 3,4 0,1 Z";
     -fx-scale-shape: false;
     -fx-effect: null;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:hover > .tab-container > .tab-close-button {
-    -fx-background-color: -fx-button-background-arm;
+    -fx-background-color: -var-button-arm-color;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-close-button:hover {
@@ -417,7 +420,7 @@
 .scroll-bar > .decrement-button:pressed,
 .choice-box:showing,
 .tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:pressed {
-    -fx-body-color: -fx-button-background-arm;
+    -fx-body-color: -var-button-arm-color;
 }
 
 .button:focused,
@@ -465,7 +468,7 @@
 }
 
 .check-box:selected .mark {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-effect: null;
 }
 
@@ -474,10 +477,30 @@
 .menu-bar {
     -fx-padding: 0.0em 0.666667em 0.0em 0.666667em; /* 0 8 0 8 */
     -fx-spacing: 0.166667em; /* 2 */
-    -fx-background-color: -fx-background-app-bar;
+    -fx-background-color: -var-background-color;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-effect: null;
+}
+
+.menu-bar > .container > .menu-button {
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.menu-bar > .container > .menu-button:hover, .menu-bar > .container > .menu-button:focused, .menu-bar > .container > .menu-button:showing {
+    -fx-background-color: -var-menu-item-hover-color;
+}
+
+.menu-bar > .container > .menu-button:hover {
+    -fx-background: red;
+    -fx-background-color: -var-menu-item-hover-color;
+    -fx-text-fill: -fx-selection-bar-text;
+}
+
+.menu-bar:show-mnemonics > .mnemonic-underline {
+    -fx-stroke: -fx-text-fill;
 }
 
 /* MenuItem */
@@ -500,20 +523,20 @@
 .menu-item > .label {
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14px;
+    -fx-text-fill: -var-font-color;
     -fx-padding: 0em 0.5em 0em 0em;
-    -fx-text-fill: -fx-text-base-color;
 }
 
 .menu-item:focused {
-    -fx-body-color: -fx-button-background-hover;
+    -fx-body-color: -var-menu-item-hover-color;
 }
 
 .menu-item:focused > .label {
-    -fx-text-fill: white;
+    -fx-text-fill: -var-font-focused-color;
 }
 
 .menu-item:hover > .label {
-    -fx-text-fill: white;
+    -fx-text-fill: -var-font-hover-color;
 }
 
 .menu-item > .right-container {
@@ -524,6 +547,8 @@
     -fx-stroke: -fx-text-fill;
 }
 
+/* Menu */
+
 .menu {
     -fx-cursor: hand;
 }
@@ -533,10 +558,20 @@
     -fx-font-size: 14px;
 }
 
+.menu > .right-container > .arrow {
+    -fx-background-color: -var-menu-arrow-color;
+}
+
+.menu:focused > .right-container > .arrow {
+    -fx-background-color: -var-menu-arrow-color;
+}
+
+/* Tooltip */
+
 .tooltip {
     -fx-background-color: -fx-color-panel-900;
     -fx-background-radius: 0;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-effect: -fx-shadow-panel;
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14;
 }
@@ -582,10 +617,10 @@
 }
 
 .color-palette {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-background-insets: 0;
     -fx-background-radius: 2px;
-    -fx-effect: -fx-material-shadow-control;
+    -fx-effect: -fx-shadow-control;
 }
 
 .hover-square {
@@ -599,7 +634,7 @@
 /* CustomColorDialog */
 
 .custom-color-dialog {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-padding: 1.25em;
     -fx-spacing: 1.25em;
 }
@@ -634,7 +669,7 @@
     -fx-translate-y: -0.4166667em;
     -fx-pref-width: 0.833333em;
     -fx-pref-height: 0.833333em;
-    -fx-effect: -fx-material-shadow-control;
+    -fx-effect: -fx-shadow-control;
 }
 
 .custom-color-dialog > .color-rect-pane > .color-bar > #color-bar-indicator {
@@ -644,7 +679,7 @@
     -fx-pref-height: 0.833333em;
     -fx-translate-x: -0.1666667em;
     -fx-translate-y: -0.4166667em;
-    -fx-effect: -fx-material-shadow-control;
+    -fx-effect: -fx-shadow-control;
 }
 
 .custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
@@ -671,7 +706,7 @@
 }
 
 .custom-color-dialog .controls-pane #settings-pane {
-    -fx-background-color: -fx-background-dialogs;
+    -fx-background-color: -var-background-color;
     -fx-hgap: 0.4166667em;
     -fx-vgap: 0.3333333em;
     -fx-padding: 0 0 4px 0;
@@ -928,7 +963,7 @@
     -fx-background-color: -fx-color-panel-900;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-effect: -fx-shadow-panel;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell {

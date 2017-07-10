@@ -252,9 +252,9 @@ public class SettingsDialog extends EditorDialog {
         createToneMapFilterControl(graphicsRoot);
         createToneMapFilterWhitePointControl(graphicsRoot);
 
+        createThemeControl(otherRoot);
         createAdditionalClasspathControl(otherRoot);
         createAdditionalEnvsControl(otherRoot);
-        createThemeControl(otherRoot);
         createGoogleAnalyticsControl(otherRoot);
         createAutoTangentGeneratingControl(otherRoot);
         createUseFlippedTextureDefaultControl(otherRoot);

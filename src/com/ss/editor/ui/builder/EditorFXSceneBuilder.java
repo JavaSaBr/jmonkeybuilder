@@ -78,11 +78,11 @@ public class EditorFXSceneBuilder {
         scene.setRoot(root);
 
         final ObservableList<String> stylesheets = scene.getStylesheets();
+        stylesheets.add(theme.getCssFile());
         stylesheets.add(CSS_FILE_BASE);
         stylesheets.add(CSS_FILE_EXTERNAL);
         stylesheets.add(CSS_FILE_CUSTOM_IDS);
         stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
-        stylesheets.add(theme.getCssFile());
 
         final StackPane container = scene.getContainer();
 

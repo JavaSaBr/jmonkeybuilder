@@ -8,10 +8,8 @@
     -fx-min-height: 30px;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -fx-background-background;
     -fx-border-width: 0px 0px 1px 0px;
-    -fx-border-color: black;
-    -fx-effect: null;
+    -fx-border-color: -var-split-line-color;
 }
 
 #EditorLoadingLayer {
@@ -43,7 +41,7 @@
 }
 
 #AssetComponent {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-alignment: top-center;
     -fx-min-width: 250;
     -fx-effect: null;
@@ -79,7 +77,7 @@
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-padding: 10, 0, 0, 0;
 }
 
@@ -101,7 +99,7 @@
 }
 
 #TextEditorTextArea {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-stroke: white;
 }
 
@@ -110,13 +108,13 @@
 }
 
 #TextEditorTextArea .content {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
 }
 
 #EditorDialogBackground {
     -fx-alignment: top-center;
-    -fx-background-color: -fx-background-dialogs;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-background-color: -var-background-color;
+    -fx-effect: -fx-shadow-panel;
 }
 
 #EditorDialogButtonOk {
@@ -267,7 +265,7 @@
 }
 
 #MaterialFileEditorPropertiesComponent {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-alignment: top-left;
     -fx-padding: 0 5 0 4;
 }
@@ -438,8 +436,8 @@
 }
 
 #ImageChannelPreview {
-    -fx-background-color: -fx-background-background;
-    -fx-effect: -fx-material-shadow-panel;
+    -fx-background-color: -var-background-color;
+    -fx-effect: -fx-shadow-panel;
     -fx-padding: 8;
     -fx-hgap: 4;
     -fx-vgap: 4;
@@ -503,7 +501,7 @@
 }
 
 #LogView {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-fill: white;
     -fx-text-fill: white;
 }
@@ -513,7 +511,7 @@
 }
 
 #LogView .content {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-fill: white;
     -fx-text-fill: white;
 }
@@ -567,7 +565,7 @@
 }
 
 #SceneAppStateContainer {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-padding: 4 2 0 0;
 }
 
@@ -697,20 +695,20 @@
 
 #ImageViewEditorContainer {
     -fx-alignment: center;
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
 }
 
 #AudioViewEditorContainer {
     -fx-alignment: center;
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
 }
 
 #Root {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
 }
 
 #AbstractNodeTreeContainer {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-padding: 0 0 0 0;
 }
 
@@ -720,7 +718,7 @@
 }
 
 #ProcessingComponentContainer {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
 }
 
 #TerrainEditingTextureLayerSettings {
@@ -767,7 +765,7 @@
 }
 
 #EditorScriptingComponent {
-    -fx-background-color: -fx-background-background;
+    -fx-background-color: -var-background-color;
     -fx-padding: 5px;
     -fx-vgap: 3px;
 }
