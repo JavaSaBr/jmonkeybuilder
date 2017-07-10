@@ -313,6 +313,9 @@
     -fx-control-big-height: 34;
 
     /* UPDATED CONSTANTS */
+    -fx-focus-color: #5294e2;
+    -fx-accent: -fx-focus-color;
+
     -var-background-color: #404552;
     -var-border-color: #20222a;
     -var-menu-background-color: #383c4a;
@@ -320,19 +323,28 @@
     -var-button-hover-color: red;
     -var-button-arm-color: blue;
 
+    -var-menu-bar-background-color: #2f343f;
+    -var-menu-hover-color: -fx-focus-color;
     -var-menu-item-hover-color: derive(-var-menu-background-color, 50%);
     -var-menu-arrow-color: derive(-var-menu-background-color, 100%);
 
-    -var-arrow-color: derive(-var-background-color, 100%);
+    -var-arrow-color: derive(-var-background-color, 150%);
+    -var-arrow-focused-color: derive(-var-background-color, 230%);
+    -var-arrow-hover-color: derive(-var-background-color, 300%);
 
     -var-font-color: white;
     -var-font-focused-color: white;
     -var-font-hover-color: white;
 
-    -fx-focus-color: #5294e2;
-    -fx-accent: -fx-focus-color;
-
     -var-split-line-color: #2b2e39;
+
+    -var-button-background-color: #444a58;
+    -var-button-hover-background-color: #505666;
+    -var-button-hover-order-color: #505666;
+
+    -var-tab-header-background-color: -var-menu-background-color;
+    -var-tab-background-color: transparent;
+    -var-tab-hover-background-color: #3c404e;
 
     -fx-shadow-panel: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.01, 1, 1);
     -fx-shadow-menu: dropshadow(two-pass-box, rgba(32, 34, 42, 0.5), 20, 0.01, 1, 1);
