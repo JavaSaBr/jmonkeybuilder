@@ -28,6 +28,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
@@ -283,6 +284,9 @@ public class SettingsDialog extends EditorDialog {
         final Label label = new Label(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
+        final HBox fieldContainer = new HBox();
+        fieldContainer.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+
         additionalClasspathField = new TextField();
         additionalClasspathField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         additionalClasspathField.setEditable(false);
@@ -295,13 +299,17 @@ public class SettingsDialog extends EditorDialog {
         final Button removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemoveCF());
+        removeButton.disableProperty().bind(additionalClasspathField.textProperty().isEmpty());
 
-        FXUtils.addToPane(label, additionalClasspathField, addButton, removeButton, container);
+        FXUtils.addToPane(label, fieldContainer, container);
+        FXUtils.addToPane(additionalClasspathField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(label, additionalClasspathField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(addButton, removeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(additionalClasspathField, CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
         HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
@@ -319,6 +327,9 @@ public class SettingsDialog extends EditorDialog {
         final Label label = new Label(Messages.SETTINGS_DIALOG_ENVS_FOLDER_LABEL + ":");
         label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
+        final HBox fieldContainer = new HBox();
+        fieldContainer.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+
         additionalEnvsField = new TextField();
         additionalEnvsField.setId(CSSIds.SETTINGS_DIALOG_FIELD);
         additionalEnvsField.setEditable(false);
@@ -331,17 +342,17 @@ public class SettingsDialog extends EditorDialog {
         final Button removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemoveEF());
+        removeButton.disableProperty().bind(additionalEnvsField.textProperty().isEmpty());
 
-        FXUtils.addToPane(label, container);
-        FXUtils.addToPane(additionalEnvsField, container);
-        FXUtils.addToPane(addButton, container);
-        FXUtils.addToPane(removeButton, container);
+        FXUtils.addToPane(label, fieldContainer, container);
+        FXUtils.addToPane(additionalEnvsField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(additionalEnvsField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(label, additionalEnvsField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(addButton, removeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(additionalEnvsField, CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
         HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
@@ -485,23 +496,29 @@ public class SettingsDialog extends EditorDialog {
      */
     private void createToneMapFilterWhitePointControl(@NotNull final VBox root) {
 
-        final HBox toneMapFilterWhitePointContainer = new HBox();
-        toneMapFilterWhitePointContainer.setAlignment(Pos.CENTER_LEFT);
-        toneMapFilterWhitePointContainer.disableProperty().bind(toneMapFilterCheckBox.selectedProperty().not());
+        final CheckBox filterCheckBox = getToneMapFilterCheckBox();
 
-        final Label toneMapFilterWhitePointLabel = new Label(Messages.SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT + ":");
-        toneMapFilterWhitePointLabel.setId(CSSIds.SETTINGS_DIALOG_LABEL);
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.disableProperty().bind(filterCheckBox.selectedProperty().not());
 
-        final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        final Label label = new Label(Messages.SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT + ":");
+        label.setId(CSSIds.SETTINGS_DIALOG_LABEL);
 
-        final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        final HBox fieldContainer = new HBox();
+        fieldContainer.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        fieldContainer.prefWidthProperty().bind(cameraAngleField.widthProperty());
 
-        final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD);
+        final Label xLabel = new Label("X:");
+        xLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD_SHORT_LABEL);
 
-        SpinnerValueFactory<Double> valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
+        final Label yLabel = new Label("Y:");
+        yLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD_SHORT_LABEL);
+
+        final Label zLabel = new Label("Z:");
+        zLabel.setId(CSSIds.SETTINGS_DIALOG_FIELD_SHORT_LABEL);
+
+        SpinnerValueFactory<Double> valueFactory = new DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
 
         toneMapFilterWhitePointX = new Spinner<>();
         toneMapFilterWhitePointX.setId(CSSIds.SETTINGS_DIALOG_FIELD);
@@ -509,8 +526,9 @@ public class SettingsDialog extends EditorDialog {
         toneMapFilterWhitePointX.setEditable(true);
         toneMapFilterWhitePointX.setOnScroll(event -> processScroll(toneMapFilterWhitePointX, event));
         toneMapFilterWhitePointX.valueProperty().addListener((observable, oldValue, newValue) -> validate());
+        toneMapFilterWhitePointX.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.3));
 
-        valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
+        valueFactory = new DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
 
         toneMapFilterWhitePointY = new Spinner<>();
         toneMapFilterWhitePointY.setId(CSSIds.SETTINGS_DIALOG_FIELD);
@@ -518,8 +536,9 @@ public class SettingsDialog extends EditorDialog {
         toneMapFilterWhitePointY.setEditable(true);
         toneMapFilterWhitePointY.setOnScroll(event -> processScroll(toneMapFilterWhitePointY, event));
         toneMapFilterWhitePointY.valueProperty().addListener((observable, oldValue, newValue) -> validate());
+        toneMapFilterWhitePointY.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.3));
 
-        valueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
+        valueFactory = new DoubleSpinnerValueFactory(-30, 30, 0, 0.1);
 
         toneMapFilterWhitePointZ = new Spinner<>();
         toneMapFilterWhitePointZ.setId(CSSIds.SETTINGS_DIALOG_FIELD);
@@ -527,26 +546,33 @@ public class SettingsDialog extends EditorDialog {
         toneMapFilterWhitePointZ.setEditable(true);
         toneMapFilterWhitePointZ.setOnScroll(event -> processScroll(toneMapFilterWhitePointZ, event));
         toneMapFilterWhitePointZ.valueProperty().addListener((observable, oldValue, newValue) -> validate());
+        toneMapFilterWhitePointZ.prefWidthProperty().bind(fieldContainer.widthProperty().multiply(0.3));
 
-        FXUtils.addToPane(toneMapFilterWhitePointLabel, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(xLabel, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(toneMapFilterWhitePointX, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(yLabel, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(toneMapFilterWhitePointY, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(zLabel, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(toneMapFilterWhitePointZ, toneMapFilterWhitePointContainer);
-        FXUtils.addToPane(toneMapFilterWhitePointContainer, root);
+        TextField field = new TextField("Ascac");
+        field.setId(CSSIds.SETTINGS_DIALOG_FIELD);
 
-        FXUtils.addClassTo(toneMapFilterWhitePointLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(toneMapFilterWhitePointX, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(toneMapFilterWhitePointY, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(toneMapFilterWhitePointZ, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(fieldContainer, container);
+        FXUtils.addToPane(xLabel, fieldContainer);
+        FXUtils.addToPane(toneMapFilterWhitePointX, fieldContainer);
+        FXUtils.addToPane(yLabel, fieldContainer);
+        FXUtils.addToPane(toneMapFilterWhitePointY, fieldContainer);
+        FXUtils.addToPane(zLabel, fieldContainer);
+        FXUtils.addToPane(toneMapFilterWhitePointZ, fieldContainer);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(xLabel, toneMapFilterWhitePointX, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(yLabel, toneMapFilterWhitePointY, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(zLabel, toneMapFilterWhitePointZ, CSSClasses.SPECIAL_FONT_14);
+
+        FXUtils.addClassTo(toneMapFilterWhitePointX, toneMapFilterWhitePointY,
+                toneMapFilterWhitePointZ, CSSClasses.TRANSPARENT_SPINNER);
+
+        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
 
         HBox.setMargin(xLabel, new Insets(0, 0, 0, 4));
-        VBox.setMargin(toneMapFilterWhitePointContainer, FIELD_OFFSET);
+        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**

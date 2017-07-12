@@ -18,12 +18,36 @@
     src: url("/ui/fonts/ubuntu/UbuntuMono-B.ttf");
 }
 
+.root {
+    -fx-control-width: 180;
+    -fx-control-medium-width: 200;
+    -fx-control-bid-width: 240;
+
+    -fx-control-height: 28;
+    -fx-control-medium-height: 30;
+    -fx-control-big-height: 34;
+}
+
 /* Make popups transparent */
 .root.popup {
     -fx-background-color: transparent;
 }
 
-/* ContextMenu */
+/*******************************************************************************
+ *                                                                             *
+ * Label                                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.label {
+    -fx-text-fill: -var-font-color;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ContextMenu                                                                 *
+ *                                                                             *
+ ******************************************************************************/
 
 .context-menu {
     -fx-padding: 0 0 0 0;
@@ -36,9 +60,14 @@
     -fx-effect: -fx-shadow-menu;
 }
 
+.context-menu .separator:horizontal {
+    -fx-padding: 0px 0px 0px 0px;
+}
+
 .context-menu .separator:horizontal .line {
-    -fx-border-color: -fx-box-border transparent transparent transparent;
-    -fx-border-insets: 1 0 0 0;
+    -fx-border-color: -var-split-line-color;
+    -fx-border-width: 1px 0px 0px 0px;
+    -fx-border-insets: 0;
 }
 
 .context-menu > .scroll-arrow {
@@ -58,70 +87,11 @@
     -fx-stroke: -fx-text-fill;
 }
 
-/* ScrollBar */
-
-.corner {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar:horizontal,
-.scroll-bar:vertical,
-.scroll-bar:focused,
-.scroll-bar:vertical:focused {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-}
-
-.scroll-bar > .thumb,
-.scroll-bar:vertical > .thumb {
-    -fx-background-color: -fx-color-600;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-}
-
-.scroll-bar > .track,
-.scroll-bar:vertical > .track {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar > .track-background,
-.scroll-bar:vertical > .track-background {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar > .increment-button,
-.scroll-bar > .decrement-button,
-.scroll-bar > .increment-button:hover,
-.scroll-bar > .decrement-button:hover,
-.scroll-bar > .increment-button:pressed,
-.scroll-bar > .decrement-button:pressed {
-    -fx-padding: 2px;
-}
-
-.scroll-bar > .increment-button > .increment-arrow,
-.scroll-bar > .decrement-button > .decrement-arrow,
-.scroll-bar > .increment-button:hover > .increment-arrow,
-.scroll-bar > .decrement-button:hover > .decrement-arrow,
-.scroll-bar > .increment-button:pressed > .increment-arrow,
-.scroll-bar > .decrement-button:pressed > .decrement-arrow {
-    -fx-padding: 0;
-}
-
-.scroll-bar:horizontal > .decrement-button > .decrement-arrow,
-.scroll-bar:horizontal > .increment-button > .increment-arrow,
-.scroll-bar:vertical > .decrement-button > .decrement-arrow,
-.scroll-bar:vertical > .increment-button > .increment-arrow {
-    -fx-padding: 0;
-}
-
-/* Scroll Pane */
-
-.scroll-pane > .viewport,
-.scroll-pane {
-    -fx-background-color: transparent;
-}
-
-/* SplitPane */
+/*******************************************************************************
+ *                                                                             *
+ * SplitPane                                                                     *
+ *                                                                             *
+ ******************************************************************************/
 
 .split-pane {
     -fx-background-insets: 0;
@@ -159,7 +129,7 @@
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
     -fx-background-color: transparent;
     -fx-alignment: CENTER;
-    -fx-text-fill: -fx-text-base-color;
+    -fx-text-fill: -var-font-color;
 }
 
 .tab-pane > .tab-content-area {
@@ -216,12 +186,12 @@
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:disabled {
-    -fx-opacity: -fx-disabled-opacity;
+    -fx-opacity: -var-disabled-opacity;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:disabled:hover {
     -fx-color: -fx-base;
-    -fx-opacity: -fx-disabled-opacity;
+    -fx-opacity: -var-disabled-opacity;
 }
 
 .tab-pane > .tab-header-area > .tab-header-background {
@@ -312,114 +282,11 @@
     -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
 }
 
-.tab-pane.floating  > .tab-header-area > .headers-region > .tab:selected {
+.tab-pane.floating > .tab-header-area > .headers-region > .tab:selected {
     -fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
     -fx-background-color: yellow;
     -fx-background-insets: 0 1 -1 0, 1 2 -1 1;
     -fx-background-radius: 5 5 0 0, 4 4 0 0;
-}
-
-/*.tab-pane:floating *.control-buttons-tab {
-    -fx-padding: 0.083333em 0.25em 0.083333em 0.25em;
-    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
-    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
-    -fx-background-insets: 0, 1 1 0 1, 2 2 0 2;
-}*/
-
-/* TextArea */
-
-.text-area {
-    -fx-padding: 0;
-    -fx-cursor: default;
-    -fx-background-color: -fx-color-panel-200;
-    -fx-background-radius: 0;
-}
-
-.text-area > .scroll-pane {
-    -fx-background-color: null;
-}
-
-.text-area > .scroll-pane > .scroll-bar:horizontal {
-    -fx-background-radius: 0 0 2 2;
-}
-
-.text-area > .scroll-pane > .scroll-bar:vertical {
-    -fx-background-radius: 0 2 2 0;
-}
-
-.text-area > .scroll-pane > .corner {
-    -fx-background-radius: 0 0 2 0;
-}
-
-.text-area .content {
-    /*the is 1px less top and bottom than TextInput because of scrollpane border */
-    -fx-padding: 0.25em 0.583em 0.25em 0.583em; /* 3 7 3 7 */
-    -fx-cursor: text;
-    -fx-background-color: -fx-color-panel-200;
-    -fx-background-radius: 0;
-}
-
-.text-area:focused .content {
-    -fx-background-color: -fx-color-panel-200;;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-}
-
-/* Buttons */
-
-.toggle-button,
-.radio-button > .radio,
-.choice-box,
-.color-picker.split-button > .color-picker-label {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color;
-    -fx-background-insets: 0;
-    -fx-background-radius: 2px;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-border-insets: 0;
-    -fx-padding: 4, 8, 4, 8; /* 4 8 4 8 */
-    -fx-text-fill: -fx-text-base-color;
-    -fx-alignment: CENTER;
-    -fx-content-display: LEFT;
-    -fx-cursor: hand;
-    -fx-effect: null;
-}
-
-.toggle-button:hover,
-.radio-button:hover > .radio,
-.split-menu-button > .label:hover,
-.split-menu-button > .arrow-button:hover,
-.slider .thumb:hover,
-.scroll-bar > .thumb:hover,
-.scroll-bar > .increment-button:hover,
-.scroll-bar > .decrement-button:hover,
-.choice-box:hover,
-.color-picker.split-button > .arrow-button:hover,
-.color-picker.split-button > .color-picker-label:hover,
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:hover {
-    -fx-body-color: -fx-button-background-hover;
-}
-
-.toggle-button:armed,
-.radio-button:armed > .radio,
-.split-menu-button:armed > .label,
-.split-menu-button > .arrow-button:pressed,
-.split-menu-button:showing > .arrow-button,
-.slider .thumb:pressed,
-.scroll-bar > .thumb:pressed,
-.scroll-bar > .increment-button:pressed,
-.scroll-bar > .decrement-button:pressed,
-.choice-box:showing,
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:pressed {
-    -fx-body-color: -var-button-arm-color;
-}
-
-.toggle-button:focused,
-.radio-button:focused > .rado,
-.choice-box:focused,
-.color-picker.split-button:focused > .color-picker-label,
-.slider:focused .thumb {
 }
 
 /*******************************************************************************
@@ -449,7 +316,7 @@
 }
 
 .button:hover {
-    -fx-border-color: -fx-focus-color;
+    -fx-border-color: -var-button-hover-border-color;
     -fx-background: -var-button-hover-background-color;
 }
 
@@ -467,7 +334,7 @@
 }
 
 .button:disabled {
-    -fx-opacity: -fx-disabled-opacity;
+    -fx-opacity: -var-disabled-opacity;
 }
 
 .button:show-mnemonics > .mnemonic-underline {
@@ -476,12 +343,12 @@
 
 /*******************************************************************************
  *                                                                             *
- * ComboBox                                                                      *
+ * ComboBox                                                                    *
  *                                                                             *
  ******************************************************************************/
 
 /* ------- MAIN BUTTON ------- */
-.combo-box-base  {
+.combo-box-base {
     -fx-background: -var-button-background-color;
     -fx-background-color: -fx-background;
     -fx-background-insets: 0px;
@@ -494,7 +361,7 @@
 }
 
 .combo-box-base:hover {
-    -fx-border-color: -fx-focus-color;
+    -fx-border-color: -var-button-hover-border-color;
     -fx-background: -var-button-hover-background-color;
 }
 
@@ -548,7 +415,6 @@
     -fx-background: -var-arrow-focused-color;
 }
 
-
 /* Customise the ListCell that appears in the ComboBox button itself */
 
 .combo-box > .list-cell {
@@ -584,15 +450,14 @@
     -fx-background: transparent;
 }
 
-.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover,
-.combo-box-popup  > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover,
+.combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
     -fx-background: -var-menu-hover-color;
 }
 
 .combo-box-popup > .list-view > .placeholder > .label {
     -fx-text-fill: -var-font-color;
 }
-
 
 /*******************************************************************************
  *                                                                             *
@@ -682,7 +547,7 @@
 }
 
 .check-box:disabled {
-    -fx-opacity: -fx-disabled-opacity;
+    -fx-opacity: -var-disabled-opacity;
 }
 
 .check-box:show-mnemonics > .mnemonic-underline {
@@ -691,7 +556,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * MenuBar                                                                      *
+ * MenuBar                                                                     *
  *                                                                             *
  ******************************************************************************/
 
@@ -710,6 +575,10 @@
     -fx-background-insets: 0;
 }
 
+.menu-bar > .container > .menu-button > .label {
+    -fx-text-fill: -var-font-color;
+}
+
 .menu-bar > .container > .menu-button:hover, .menu-bar > .container > .menu-button:focused, .menu-bar > .container > .menu-button:showing {
     -fx-background-color: -var-menu-hover-color;
 }
@@ -726,7 +595,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * MenuItem                                                                      *
+ * MenuItem                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -774,7 +643,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Menu                                                                      *
+ * Menu                                                                        *
  *                                                                             *
  ******************************************************************************/
 
@@ -795,426 +664,565 @@
     -fx-background-color: -var-menu-arrow-color;
 }
 
-/* Tooltip */
+/*******************************************************************************
+ *                                                                             *
+ * ScrollBar                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.scroll-bar {
+    -fx-background-color: -var-scroll-bar-background-color;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:hover {
+    -fx-background-color: -var-scroll-bar-hover-background-color;
+}
+
+.scroll-bar:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar:horizontal {
+    -fx-padding: 1px 0px 1px 0px;
+}
+
+.scroll-bar:horizontal:focused {
+    -fx-padding: 1px 0px 1px 0px;
+}
+
+.scroll-bar:vertical {
+    -fx-padding: 0px 1px 0px 1px;
+}
+
+.scroll-bar:vertical:focused {
+    -fx-padding: 0px 1px 0px 1px;
+}
+
+.scroll-bar > .thumb {
+    -fx-background-color: -var-scroll-bar-thumb-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar:focused > .thumb {
+}
+
+.scroll-bar > .thumb:hover {
+}
+
+.scroll-bar > .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0px;
+}
+
+.scroll-bar > .track-background {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0px;
+}
+
+.scroll-bar:vertical > .decrement-button,
+.scroll-bar:vertical > .increment-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0px 2px 0px 2px;
+}
+
+.scroll-bar:horizontal > .decrement-button,
+.scroll-bar:horizontal > .increment-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 2px 0px 2px 0px;
+}
+
+.scroll-bar > .decrement-button > .decrement-arrow,
+.scroll-bar > .increment-button > .increment-arrow {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0px;
+    -fx-shape: null;
+}
+
+.scroll-bar:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ScrollPane                                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0px;
+}
+
+.scroll-pane:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.scroll-pane > * > .scroll-bar:horizontal {
+    -fx-padding: 1px 0px 1px 0px;
+}
+
+.scroll-pane > * > .scroll-bar:vertical {
+    -fx-padding: 0px 1px 0px 1px;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.scroll-pane:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Hyperlink                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.hyperlink {
+    -fx-padding: 1px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Tooltip                                                                     *
+ *                                                                             *
+ ******************************************************************************/
 
 .tooltip {
-    -fx-background-color: -fx-color-panel-900;
-    -fx-background-radius: 0;
-    -fx-effect: -fx-shadow-panel;
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14;
-}
-
-/* Toggle Button */
-.toggle-button {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color;
+    -fx-padding: 6px;
+    -fx-background-color: -var-menu-background-color;
     -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-border-insets: 0;
-    -fx-padding: 0; /* 4 8 4 8 */
-    -fx-text-fill: -fx-text-base-color;
-    -fx-alignment: CENTER;
-    -fx-content-display: CENTER;
-    -fx-cursor: hand;
-    -fx-effect: null;
+    -fx-background-radius: 3px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-effect: -fx-shadow-menu;
 }
 
-.toggle-button:selected {
-    -fx-body-color: -fx-color-500;
-}
+/*******************************************************************************
+ *                                                                             *
+ * TextArea                                                                    *
+ *                                                                             *
+ ******************************************************************************/
 
-/* ColorPicker */
-
-.color-picker {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-0 0%,
-    -fx-color-0 8%,
-    transparent 8%);
-}
-
-.color-palette-region {
-    -fx-background-color: transparent;
-}
-
-.color-picker-grid {
-    -fx-vgap: 0px;
-    -fx-hgap: 0px;
-}
-
-.color-palette {
-    -fx-background-color: -var-background-color;
-    -fx-background-insets: 0;
-    -fx-background-radius: 2px;
-    -fx-effect: -fx-shadow-control;
-}
-
-.hover-square {
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+.text-area {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
+    -fx-padding: 1px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0px;
+    -fx-prompt-text-fill: -var-font-color;
 }
 
-/* CustomColorDialog */
-
-.custom-color-dialog {
-    -fx-background-color: -var-background-color;
-    -fx-padding: 1.25em;
-    -fx-spacing: 1.25em;
-}
-
-.custom-color-dialog > .color-rect-pane {
-    -fx-spacing: 0.75em;
-    -fx-pref-height: 16.666667em;
-    -fx-alignment: top-left;
-    -fx-fill-height: true;
-}
-
-.custom-color-dialog .color-rect-pane .color-rect {
-    -fx-min-width: 16.666667em;
-    -fx-min-height: 16.666667em;
-}
-
-.custom-color-dialog > .color-rect-pane > .color-bar {
-    -fx-min-width: 1.666667em;
-    -fx-min-height: 16.666667em;
-    -fx-max-width: 1.666667em;
-    -fx-border-color: derive(-fx-base, -20%);
-}
-
-.custom-color-dialog .color-rect-pane .color-rect-border {
-    -fx-border-color: derive(-fx-base, -20%);
-}
-
-.custom-color-dialog > .color-rect-pane #color-rect-indicator {
-    -fx-border-color: white;
-    -fx-border-radius: 0.4166667em;
-    -fx-translate-x: -0.4166667em;
-    -fx-translate-y: -0.4166667em;
-    -fx-pref-width: 0.833333em;
-    -fx-pref-height: 0.833333em;
-    -fx-effect: -fx-shadow-control;
-}
-
-.custom-color-dialog > .color-rect-pane > .color-bar > #color-bar-indicator {
-    -fx-border-radius: 0;
-    -fx-border-color: white;
-    -fx-pref-width: 2em;
-    -fx-pref-height: 0.833333em;
-    -fx-translate-x: -0.1666667em;
-    -fx-translate-y: -0.4166667em;
-    -fx-effect: -fx-shadow-control;
-}
-
-.custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
-    -fx-border-color: derive(-fx-base, -20%);
-    -fx-border-width: 2px;
-}
-
-.custom-color-dialog .controls-pane #spacer1 {
-    -fx-min-height: 0.1666667em;
-    -fx-max-height: 0.1666667em;
-    -fx-pref-height: 0.1666667em;
-}
-
-.custom-color-dialog .transparent-pattern {
-    -fx-background-image: url("/com/sun/javafx/scene/control/skin/modena/pattern-transparent.png");
-    -fx-background-repeat: repeat;
-    -fx-background-size: auto;
-}
-
-.custom-color-dialog .controls-pane #spacer2 {
-    -fx-min-height: 1em;
-    -fx-max-height: 1em;
-    -fx-pref-height: 1em;
-}
-
-.custom-color-dialog .controls-pane #settings-pane {
-    -fx-background-color: -var-background-color;
-    -fx-hgap: 0.4166667em;
-    -fx-vgap: 0.3333333em;
-    -fx-padding: 0 0 4px 0;
-}
-
-.custom-color-dialog .controls-pane .customcolor-controls-background {
+.text-area:focused {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-prompt-text-fill: transparent;
+    -fx-padding: 0px;
 }
 
-.custom-color-dialog .controls-pane #spacer-side {
-    -fx-min-width: 0.5em;
-    -fx-pref-width: 0.5em;
+.text-area .content {
+    -fx-background-color: transparent;
+    -fx-padding: 3px 5px 3px 5px;
+    -fx-cursor: text;
 }
 
-.custom-color-dialog .controls-pane .current-new-color-grid .label {
-    -fx-padding: 0 0 0 0.4166667em;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 15px;
+.text-area:disabled {
+    -fx-opacity: -fx-disabled-opacity;
 }
 
-.custom-color-dialog .controls-pane #settings-pane .settings-unit {
-    -fx-max-width: 1em;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
-}
-
-.custom-color-dialog .controls-pane #settings-pane .slider {
-    -fx-pref-width: 8.25em;
-}
-
-.custom-color-dialog .controls-pane .color-input-field {
-    -fx-pref-column-count: 3;
-    -fx-max-width: 3.25em;
-    -fx-min-width: 3.25em;
-    -fx-pref-width: 3.25em;
-    -fx-min-height: 20px;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
-}
-
-.custom-color-dialog .controls-pane .web-field {
-    -fx-pref-column-count: 6;
-    -fx-pref-width: 8.25em;
-    -fx-min-height: 20px;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
-}
-
-.custom-color-dialog .controls-pane #settings-pane .settings-label {
-    -fx-text-alignment: right;
-    -fx-alignment: center-right;
-    -fx-min-width: 110px;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
-}
-
-.custom-color-dialog .controls-pane #spacer-bottom {
-    -fx-pref-height: 0.833333em;
-    -fx-min-height: 0.833333em;
-}
-
-.custom-color-dialog .controls-pane #buttons-hbox {
-    -fx-spacing: 0.333333em;
-    -fx-padding: 1em 0 0 0;
-    -fx-alignment: bottom-right;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 16px;
-}
-
-.custom-color-dialog .controls-pane #settings-pane .left-pill {
-    -fx-min-width: 70px;
-    -fx-min-height: 24px;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 15px;
-}
-
-.custom-color-dialog .controls-pane #settings-pane .center-pill {
-    -fx-min-width: 70px;
-    -fx-min-height: 24px;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 15px;
-}
-
-.custom-color-dialog .controls-pane #settings-pane .right-pill {
-    -fx-min-width: 70px;
-    -fx-min-height: 24px;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 15px;
-}
-
-.custom-color-dialog .controls-pane .current-new-color-grid .color-rect {
-    -fx-min-width: 10.666667em;
-    -fx-min-height: 1.75em;
-    -fx-pref-width: 10.666667em;
-    -fx-pref-height: 1.75em;
-}
-
-/* Spinner */
+/*******************************************************************************
+ *                                                                             *
+ * Spinner                                                                     *
+ *                                                                             *
+ ******************************************************************************/
 
 .spinner {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-border-color: transparent;
+    -fx-background: -var-button-background-color;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 2px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 0px 0px 0px 0px;
+    -fx-text-fill: -var-font-color;
 }
 
 .spinner:focused,
 .spinner:contains-focus {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
-    -fx-border-color: transparent;
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-prompt-text-fill: transparent;
+}
+
+.spinner:disabled {
+    -fx-opacity: -var-disabled-opacity;
 }
 
 .spinner > .text-field {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-0 0%,
-    -fx-color-0 8%,
-    transparent 8%);
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-width: 0;
+    -fx-background: transparent;
     -fx-border-color: transparent;
+    -fx-cursor: text;
 }
 
-.spinner:focused > .text-field,
-.spinner:contains-focus > .text-field {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-500 0%,
-    -fx-color-500 8%,
-    transparent 8%);
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
+.spinner > .text-field:focused {
+    -fx-background: transparent;
+    -fx-padding: 0px 0px 0px 4px;
     -fx-border-width: 0;
-    -fx-border-color: transparent;
+    -fx-border-insets: 0;
 }
 
-.spinner .increment-arrow {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-}
-
+.spinner .decrement-arrow-button,
 .spinner .increment-arrow-button {
     -fx-background-color: transparent;
-    /*Change the two 0's here to -1 to get rid of the horizontal line */
     -fx-background-insets: 0;
-    -fx-background-radius: 10;
-    -fx-padding: 0.333335em 0.666667em 0.333335em 0.666667em; /* 5 8 3 8 */
+    -fx-background-radius: 0;
+    -fx-padding: 4px 6px 4px 6px;
 }
 
 .spinner .decrement-arrow-button {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 10;
-    -fx-padding: 0.333335em 0.666667em 0.333335em 0.666667em; /* 3 8 5 8 */
+    -fx-padding: 4px 6px 5px 6px;
 }
 
-.spinner:focused .increment-arrow-button,
-.spinner:contains-focus .increment-arrow-button,
 .spinner:focused .decrement-arrow-button,
-.spinner:contains-focus .decrement-arrow-button {
-    -fx-background-color: transparent;
+.spinner:contains-focus .decrement-arrow-button,
+.spinner:focused .decrement-arrow-button,
+.spinner:contains-focus .increment-arrow-button {
+    -fx-padding: 4px 5px 4px 5px;
+}
+
+.spinner .increment-arrow-button .increment-arrow,
+.spinner .decrement-arrow-button .decrement-arrow {
+    -fx-background: -var-arrow-color;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+    -fx-padding: 3px 5px 3px 5px;
 }
 
 .spinner .increment-arrow-button .increment-arrow {
-    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
-    -fx-background-insets: 0 0 -1 0, 0;
-    -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
-    -fx-shape: "M 0 4 h 7 l -3.5 -4 z";
+    -fx-rotate: 180;
 }
 
-.spinner .decrement-arrow-button .decrement-arrow {
-    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
-    -fx-background-insets: 0 0 -1 0, 0;
-    -fx-padding: 0.166667em 0.333333em 0.166667em 0.333333em; /* 2 4 2 4 */
-    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+.spinner .decrement-arrow-button:pressed .decrement-arrow,
+.spinner .increment-arrow-button:pressed .increment-arrow {
+    -fx-background: -var-arrow-focused-color;
 }
 
-/** Text Field  */
+.spinner .decrement-arrow-button:hover .decrement-arrow,
+.spinner .increment-arrow-button:hover .increment-arrow {
+    -fx-background: -var-arrow-hover-color;
+}
+
+/* Spinner - Horizontal arrows */
+.spinner.split-arrows-horizontal .increment-arrow-button .increment-arrow,
+.spinner.arrows-on-right-horizontal .increment-arrow-button .increment-arrow,
+.spinner.arrows-on-left-horizontal .increment-arrow-button .increment-arrow,
+.spinner.split-arrows-horizontal .decrement-arrow-button .decrement-arrow,
+.spinner.arrows-on-right-horizontal .decrement-arrow-button .decrement-arrow,
+.spinner.arrows-on-left-horizontal .decrement-arrow-button .decrement-arrow {
+    -fx-padding: 0.333em 0.166em 0.333em 0.166em; /* 4 2 4 2 */
+    -fx-shape: "M 4 0 v 7 l -4 -3.5 z";
+}
+
+/* Spinner - STYLE_CLASS_ARROWS_ON_RIGHT_HORIZONTAL */
+.spinner.arrows-on-right-horizontal .increment-arrow-button {
+    -fx-background-insets: 0 0 1 0, 1 1 2 0, 2 2 3 1;
+    -fx-background-radius: 0 3 3 0, 0 2 2 0, 0 1 1 0;
+    -fx-padding: 0.333em 0.666em 0.333em 0.583em; /* 4 8 4 7 */
+
+}
+
+.spinner.arrows-on-right-horizontal .decrement-arrow-button {
+    -fx-background-insets: 0 0 1 0, 1 1 2 1, 2 2 3 2;
+    -fx-background-radius: 0, 0, 0;
+    -fx-padding: 0.333em 0.666em 0.333em 0.666em; /* 4 8 4 8 */
+}
+
+/* Spinner - STYLE_CLASS_ARROWS_ON_LEFT_VERTICAL */
+.spinner.arrows-on-left-vertical > .text-field {
+    -fx-background-insets: 0 0 1 0, 1 1 2 0;
+    -fx-background-radius: 0 3 3 0, 0 2 2 0;
+}
+
+.spinner.arrows-on-left-vertical .increment-arrow-button {
+    -fx-background-radius: 3 0 0 0, 2 0 0 0, 1 0 0 0;
+}
+
+.spinner.arrows-on-left-vertical .decrement-arrow-button {
+    -fx-background-radius: 0 0 0 3, 0 0 0 2, 0 0 0 1;
+}
+
+/* Spinner - STYLE_CLASS_ARROWS_ON_LEFT_HORIZONTAL */
+.spinner.arrows-on-left-horizontal > .text-field {
+    -fx-background-insets: 0 0 1 -1, 1 1 2 -1;
+    -fx-background-radius: 0 3 3 0, 0 2 2 0;
+}
+
+.spinner.arrows-on-left-horizontal .increment-arrow-button {
+    -fx-background-insets: 0 0 1 0, 1 1 2 0, 2 2 3 1;
+    -fx-background-radius: 0, 0, 0;
+    -fx-padding: 0.333em 0.666em 0.333em 0.583em; /* 4 8 4 7 */
+}
+
+.spinner.arrows-on-left-horizontal .decrement-arrow-button {
+    -fx-background-insets: 0 0 1 0, 1 1 2 1, 2 2 3 2;
+    -fx-background-radius: 3 0 0 3, 2 0 0 2, 1 0 0 1;
+    -fx-padding: 0.333em 0.666em 0.333em 0.666em; /* 4 8 4 8 */
+}
+
+/* Spinner - STYLE_CLASS_SPLIT_ARROWS_VERTICAL */
+.spinner.split-arrows-vertical > .text-field {
+    -fx-background-insets: 0, 0 1 0 1;
+    -fx-background-radius: 0, 0;
+}
+
+.spinner.split-arrows-vertical .increment-arrow-button {
+    -fx-background-radius: 3 3 0 0, 2 2 0 0, 1 1 0 0;
+}
+
+.spinner.split-arrows-vertical .decrement-arrow-button {
+    -fx-background-insets: -1 0 1 0, 0 1 2 1, 1 2 3 2;
+    -fx-background-radius: 0 0 3 3, 0 0 2 2, 0 0 1 1;
+    -fx-padding: 0.25em 0.666em 0.417em 0.666em; /* 3 8 5 8 */
+}
+
+/* Spinner - STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL */
+.spinner.split-arrows-horizontal > .text-field {
+    -fx-background-insets: 0 0 1 0, 1 0 2 0;
+    -fx-background-radius: 0, 0;
+}
+
+.spinner.split-arrows-horizontal .increment-arrow-button {
+    -fx-background-insets: 0 0 1 0, 1 1 2 1, 2 2 3 2;
+    -fx-background-radius: 0 3 3 0, 0 2 2 0, 0 1 1 0;
+    -fx-padding: 0.333em 0.666em 0.333em 0.666em; /* 4 8 4 8 */
+}
+
+.spinner.split-arrows-horizontal .decrement-arrow-button {
+    -fx-background-insets: 0 0 1 0, 1 1 2 1, 2 2 3 2;
+    -fx-background-radius: 3 0 0 3, 2 0 0 2, 1 0 0 1;
+    -fx-padding: 0.333em 0.666em 0.333em 0.666em; /* 4 8 4 8 */
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * TextInput                                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
 .text-input {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-0 0%,
-    -fx-color-0 8%,
-    transparent 8%);
-    -fx-background-insets: 0, 0;
-    -fx-background-radius: 0;
-    -fx-highlight-fill: derive(-fx-control-inner-background, -20%);
-    -fx-highlight-text-fill: -fx-text-inner-color;
-    -fx-prompt-text-fill: -fx-text-inner-color;
-    -fx-cursor: text;
-    -fx-padding: 0 2 0 2;
-    -fx-text-fill: -fx-text-base-color;
-    -fx-effect: null;
+    -fx-text-fill: -var-font-color;
+    -fx-highlight-fill: derive(-fx-focus-color, -20%);
+    -fx-highlight-text-fill: -fx-focus-color;
 }
 
 .text-input:focused {
-    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-fill: -fx-focus-color;
     -fx-highlight-text-fill: white;
-    -fx-prompt-text-fill: transparent;
-    -fx-background-color: -fx-body-color, linear-gradient(to top,
-    -fx-color-500 0%,
-    -fx-color-500 8%,
-    transparent 8%);
 }
 
-/* TextArea */
+/*******************************************************************************
+ *                                                                             *
+ * TextField                                                                   *
+ *                                                                             *
+ ******************************************************************************/
 
-.text-area {
-    -fx-padding: 0;
-    -fx-cursor: default;
-    -fx-background-color: transparent;
-}
-
-.text-area > .scroll-pane {
-    -fx-background-color: null;
-}
-
-.text-area > .scroll-pane > .scroll-bar:horizontal {
-    -fx-background-radius: 0 0 2 2;
-}
-
-.text-area > .scroll-pane > .scroll-bar:vertical {
-    -fx-background-radius: 0 2 2 0;
-}
-
-.text-area > .scroll-pane > .corner {
-    -fx-background-radius: 0 0 2 0;
-}
-
-.text-area .content {
-    /*the is 1px less top and bottom than TextInput because of scrollpane border */
-    -fx-padding: 3 3 3 3; /* 3 7 3 7 */
+.text-field {
+    -fx-background: -var-button-background-color;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 2px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 0px 0px 0px 4px;
+    -fx-text-fill: -var-font-color;
     -fx-cursor: text;
+}
+
+.text-field:focused {
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-padding: 0px 0px 0px 3px;
+    -fx-prompt-text-fill: transparent;
+}
+
+.text-field:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * TreeView and TreeCell                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.tree-view {
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
     -fx-background-color: transparent;
-    -fx-background-radius: 0;
-}
-
-.text-area:focused .content {
-    -fx-background-color: transparent;
-    -fx-background-radius: 0;
-}
-
-/* Slider */
-
-.slider .thumb {
-    -fx-background-color: -fx-color-panel-100;
-    -fx-background-radius: 6px;
-    -fx-padding: 6px;
-    -fx-effect: null;
-}
-.slider:focused .thumb {
-    -fx-background-color: -fx-color-600;
-}
-
-.slider .track {
-    -fx-background-color: -fx-color-panel-100;
-    -fx-background-radius: 0;
     -fx-background-insets: 0;
-    -fx-padding: 2px 3px 2px 3px;
+    -fx-padding: 1px;
 }
 
-.slider:focused .track {
-    -fx-background-color: -fx-color-600;
-}
-
-.slider:vertical .track {
-}
-.slider .axis {
-}
-
-/* hyperlink */
-.hyperlink {
+.tree-view:focused {
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
     -fx-padding: 0px;
+}
+
+.tree-view > .virtual-flow > .scroll-bar:vertical {
+    -fx-background-insets: 0;
+    -fx-padding: 0px 1px 0px 1px;
+}
+
+.tree-view > .virtual-flow > .scroll-bar:horizontal {
+    -fx-background-insets: 0;
+    -fx-padding: 1px 0px 1px 0px;
+}
+
+.tree-view:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+.tree-view > .virtual-flow > .corner {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.tree-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: -var-font-color;
+    -fx-padding: 0px;
+    -fx-indent: 1em;
+}
+
+.tree-cell .label {
+    -fx-padding: 0px 0px 0px 3px;
+}
+
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:hover {
+    -fx-background-color: -var-tree-cell-hover-color;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-hover-color;
+}
+
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:focused:selected {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected,
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected:hover {
+    -fx-background-color: -var-tree-cell-selected-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:focused:selected:hover {
+    -fx-background-color: -var-tree-cell-selected-color;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+/* When the TreeView is _not_ focused, we show alternate selection colors */
+.tree-cell:filled:selected:focused,
+.tree-cell:filled:selected {
+    -fx-background-color: -var-tree-cell-selected-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.tree-cell:filled:selected:focused:disabled,
+.tree-cell:filled:selected:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+.tree-cell > .tree-disclosure-node,
+.tree-table-row-cell > .tree-disclosure-node {
+    -fx-background-color: transparent;
+    -fx-padding: 6px 6px 0px 6px;
+}
+
+.tree-cell > .tree-disclosure-node:disabled,
+.tree-table-row-cell > .tree-disclosure-node:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+.tree-cell > .tree-disclosure-node > .arrow,
+.tree-table-row-cell > .tree-disclosure-node > .arrow {
+    -fx-background-color: -var-arrow-color;
+    -fx-padding: 0.333333em 0.229em 0.333333em 0.229em;
+    -fx-shape: "M 0 -4 L 8 0 L 0 4 z";
+}
+
+.tree-cell:expanded > .tree-disclosure-node > .arrow,
+.tree-table-row-cell:expanded > .tree-disclosure-node > .arrow {
+    -fx-rotate: 90;
+}
+
+.tree-cell:filled:selected > .tree-disclosure-node > .arrow,
+.tree-table-row-cell:filled:selected > .tree-disclosure-node > .arrow {
+    -fx-background-color: -var-arrow-focused-color;
+}
+
+.tree-cell:filled:hover,
+.tree-table-row-cell:filled:hover {
+    -fx-background-color: -var-tree-cell-hover-color;
+    -fx-text-fill: -var-font-hover-color;
+}
+
+.tree-cell:filled:hover > .tree-disclosure-node > .arrow,
+.tree-table-row-cell:filled:hover > .tree-disclosure-node > .arrow {
+    -fx-background-color: -var-arrow-hover-color;
+}
+
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:focused:hover,
+.tree-table-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-table-row-cell:filled:focused:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-hover-color;
+}
+
+.tree-cell:filled:selected:hover > .tree-disclosure-node > .arrow,
+.tree-table-row-cell:filled:selected:hover > .tree-disclosure-node > .arrow {
+    -fx-background-color: -var-arrow-focused-color;
 }

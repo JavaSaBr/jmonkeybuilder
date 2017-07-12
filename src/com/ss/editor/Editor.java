@@ -37,7 +37,6 @@ import com.ss.editor.extension.loader.SceneLoader;
 import com.ss.editor.manager.*;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
-import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
@@ -342,8 +341,6 @@ public class Editor extends JmeToJFXApplication {
             stateManager.attach(environmentCamera);
             stateManager.attach(previewEnvironmentCamera);
         }
-
-        UIUtils.overrideTooltipBehavior(1000, 3000, 500);
 
         createProbe();
 

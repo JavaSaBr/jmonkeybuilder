@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
@@ -16,6 +16,13 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.function.IntObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayComparator;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.ConcurrentArray;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,13 +32,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.function.IntObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayComparator;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.array.ConcurrentArray;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -45,10 +45,16 @@ import java.util.function.Predicate;
  */
 public class ResourceTree extends TreeView<ResourceElement> {
 
+    @NotNull
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
+    
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
+    @NotNull
     private static final ArrayComparator<ResourceElement> COMPARATOR = ResourceElement::compareTo;
+    
+    @NotNull
     private static final ArrayComparator<ResourceElement> NAME_COMPARATOR = (first, second) -> {
 
         final int firstLevel = getLevel(first);
@@ -56,19 +62,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         if (firstLevel != secondLevel) return firstLevel - secondLevel;
 
-        final Path firstFile = requireNonNull(first).getFile();
+        final Path firstFile = notNull(first).getFile();
         final String firstName = firstFile.getFileName().toString();
 
-        final Path secondFile = requireNonNull(second).getFile();
+        final Path secondFile = notNull(second).getFile();
         final String secondName = secondFile.getFileName().toString();
 
         return StringUtils.compareIgnoreCase(firstName, secondName);
     };
 
+    @NotNull
     private static final ArrayComparator<TreeItem<ResourceElement>> ITEM_COMPARATOR = (first, second) -> {
 
-        final ResourceElement firstElement = requireNonNull(first).getValue();
-        final ResourceElement secondElement = requireNonNull(second).getValue();
+        final ResourceElement firstElement = notNull(first).getValue();
+        final ResourceElement secondElement = notNull(second).getValue();
 
         final int firstLevel = getLevel(firstElement);
         final int secondLevel = getLevel(secondElement);
@@ -78,11 +85,12 @@ public class ResourceTree extends TreeView<ResourceElement> {
         return NAME_COMPARATOR.compare(firstElement, secondElement);
     };
 
-    private static int getLevel(final ResourceElement element) {
+    private static int getLevel(@Nullable final ResourceElement element) {
         if (element instanceof FolderElement) return 1;
         return 2;
     }
 
+    @NotNull
     private static final Consumer<ResourceElement> DEFAULT_FUNCTION = element -> {
         final OpenFileAction action = new OpenFileAction(element);
         final EventHandler<ActionEvent> onAction = action.getOnAction();
@@ -164,9 +172,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         this.selectedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
         this.extensionFilter = ArrayFactory.newArray(String.class, 0);
 
-        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
-
-        expandedItemCountProperty().addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
+        expandedItemCountProperty()
+                .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
 
         setFixedCellSize(FXConstants.CELL_SIZE);
         setCellFactory(param -> new ResourceTreeCell());
@@ -174,6 +181,8 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
+
+        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
     }
 
     /**

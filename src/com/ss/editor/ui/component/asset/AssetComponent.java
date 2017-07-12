@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.asset;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.WorkspaceManager;
@@ -11,36 +12,32 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
-import com.ss.editor.ui.event.impl.CreatedFileEvent;
-import com.ss.editor.ui.event.impl.DeletedFileEvent;
-import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.editor.ui.event.impl.RequestedRefreshAssetEvent;
+import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.util.UIUtils;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-
-import javafx.geometry.Insets;
-import javafx.scene.control.TreeItem;
-import javafx.scene.layout.VBox;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.scene.control.TreeItem;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.nio.file.Path;
 
 /**
- * The component for working with asset tree.
+ * The component to work with asset tree.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class AssetComponent extends VBox implements ScreenComponent {
 
+    @NotNull
     private static final String COMPONENT_ID = "AssetComponent";
 
-    private static final Insets TREE_OFFSET = new Insets(0, 0, 0, 0);
-
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
@@ -52,11 +49,13 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * The toolbar of this component.
      */
+    @Nullable
     private AssetBarComponent barComponent;
 
     /**
      * The resource tree.
      */
+    @Nullable
     private ResourceTree resourceTree;
 
     /**
@@ -84,7 +83,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      * @return the list of waited files to select.
      */
     @NotNull
-    public Array<Path> getWaitedFilesToSelect() {
+    private Array<Path> getWaitedFilesToSelect() {
         return waitedFilesToSelect;
     }
 
@@ -175,10 +174,8 @@ public class AssetComponent extends VBox implements ScreenComponent {
         //FIXME пока он не нужен
         //FXUtils.addToPane(barComponent, this);
         FXUtils.addToPane(resourceTree, this);
-        FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(TREE_OFFSET.getTop()));
+        FXUtils.bindFixedHeight(resourceTree, heightProperty());
         //FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
-
-        VBox.setMargin(resourceTree, TREE_OFFSET);
     }
 
     /**
@@ -191,7 +188,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         if (finished && workspace != null) {
             final Array<Path> expandedFolders = workspace.getExpandedAbsoluteFolders();
-            expandedFolders.forEach(resourceTree::markExpand);
+            expandedFolders.forEach(getResourceTree()::markExpand);
         }
 
         if (finished) {
@@ -206,7 +203,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      *
      * @return true if the expand listener is ignored.
      */
-    public boolean isIgnoreExpanded() {
+    private boolean isIgnoreExpanded() {
         return ignoreExpanded;
     }
 
@@ -215,7 +212,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
      *
      * @param ignoreExpanded the flag for ignoring expand changes.
      */
-    public void setIgnoreExpanded(final boolean ignoreExpanded) {
+    private void setIgnoreExpanded(final boolean ignoreExpanded) {
         this.ignoreExpanded = ignoreExpanded;
     }
 
@@ -234,7 +231,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
         allItems.stream().filter(TreeItem::isExpanded)
                 .filter(treeItem -> !treeItem.isLeaf())
                 .map(TreeItem::getValue)
-                .filter(element -> element instanceof FolderElement)
+                .filter(FolderElement.class::isInstance)
                 .map(ResourceElement::getFile)
                 .forEach(expanded::add);
 
@@ -244,15 +241,17 @@ public class AssetComponent extends VBox implements ScreenComponent {
     /**
      * @return the toolbar of this component.
      */
+    @NotNull
     private AssetBarComponent getBarComponent() {
-        return barComponent;
+        return notNull(barComponent);
     }
 
     /**
      * @return the resource tree.
      */
+    @NotNull
     private ResourceTree getResourceTree() {
-        return resourceTree;
+        return notNull(resourceTree);
     }
 
     @Override

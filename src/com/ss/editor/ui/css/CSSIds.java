@@ -47,10 +47,6 @@ public interface CSSIds {
      * The constant ASSET_COMPONENT_BAR_BUTTON.
      */
     String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
-    /**
-     * The constant ASSET_COMPONENT_RESOURCE_TREE_CELL.
-     */
-    String ASSET_COMPONENT_RESOURCE_TREE_CELL = "AssetComponentResourceTreeCell";
 
     /**
      * The constant JME_PREVIEW_MANAGER_IMAGE_VIEW.
@@ -224,6 +220,10 @@ public interface CSSIds {
      * The constant SETTINGS_DIALOG_FIELD.
      */
     String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
+    /**
+     * The constant SETTINGS_DIALOG_FIELD_SHORT_LABEL.
+     */
+    String SETTINGS_DIALOG_FIELD_SHORT_LABEL = "SettingsDialogFieldShortLabel";
 
     /**
      * The constant MODEL_NODE_TREE_CELL.

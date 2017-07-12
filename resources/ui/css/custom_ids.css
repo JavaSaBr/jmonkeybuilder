@@ -43,8 +43,7 @@
 #AssetComponent {
     -fx-background-color: -var-background-color;
     -fx-alignment: top-center;
-    -fx-min-width: 250;
-    -fx-effect: null;
+    -fx-min-width: 30px;
 }
 
 #AssetComponentBar {
@@ -62,9 +61,6 @@
     -fx-min-width: 30;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-#AssetComponentResourceTreeCell {
 }
 
 #EditorAreaComponent {
@@ -183,7 +179,7 @@
 
 #AssetEditorDialogResourcesContainer {
     -fx-alignment: center-left;
-    -fx-padding: 15 0 0 0;
+    -fx-padding: 15px 0px 0px 0px;
 }
 
 #AssetEditorDialogPreviewContainer {
@@ -376,14 +372,25 @@
     -fx-min-width: 250;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-    -fx-min-height: 25;
+    -fx-min-height: 26;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 0 6 0 0;
 }
 
+#SettingsDialogFieldShortLabel {
+    -fx-alignment: center;
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
+    -fx-max-width: -fx-min-width;
+    -fx-mpref-width: -fx-min-width;
+}
+
 #SettingsDialogField {
-    -fx-min-height: 25;
+    -fx-alignment: center-left;
+    -fx-min-height: 26;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20;

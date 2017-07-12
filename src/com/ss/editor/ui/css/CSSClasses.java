@@ -94,18 +94,23 @@ public interface CSSClasses {
     String DIALOG_CONTENT_ROOT = "dialog-content-root";
 
     /**
-     * The constant EDITOR_BAR_BUTTON.
+     * The constant TEXT_INPUT_CONTAINER.
      */
-    String EDITOR_BAR_BUTTON = "editor-bar-button";
+    String TEXT_INPUT_CONTAINER = "text-input-container";
+
+    /**
+     * The constant TRANSPARENT_SPINNER.
+     */
+    String TRANSPARENT_SPINNER = "transparent-spinner";
+    /**
+     * The constant TRANSPARENT_TEXT_FIELD.
+     */
+    String TRANSPARENT_TEXT_FIELD = "transparent-text-field";
 
     /**
      * The constant TRANSPARENT_TREE_VIEW.
      */
     String TRANSPARENT_TREE_VIEW = "transparent-tree-view";
-    /**
-     * The constant TRANSPARENT_TREE_CELL.
-     */
-    String TRANSPARENT_TREE_CELL = "transparent-tree-cell";
     /**
      * The constant TRANSPARENT_LIST_VIEW.
      */
@@ -140,10 +145,9 @@ public interface CSSClasses {
      */
     String TOOLBAR_BUTTON = "toolbar-button";
     /**
-     * The constant DRAWER_BUTTON.
+     * The constant INPUT_CONTROL_TOOLBAR_BUTTON.
      */
-    String DRAWER_BUTTON = "drawer-button";
-
+    String INPUT_CONTROL_TOOLBAR_BUTTON = "input-control-toolbar-button";
     /**
      * The constant FILE_EDITOR_TOOLBAR_BUTTON.
      */

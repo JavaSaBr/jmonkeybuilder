@@ -13,7 +13,6 @@ import com.ss.rlib.util.FileUtils;
 import javafx.application.HostServices;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -62,13 +61,8 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         final JFXApplication application = JFXApplication.getInstance();
         final HostServices hostServices = application.getHostServices();
 
-        final ScrollPane scrollPane = new ScrollPane();
-
         final GridPane gridPane = new GridPane();
         gridPane.setId(CSSIds.ABOUT_DIALOG_GRID_PANE);
-        gridPane.maxWidthProperty().bind(scrollPane.widthProperty().subtract(6));
-
-        scrollPane.setContent(gridPane);
 
         final Label applicationLabel = new Label(Config.TITLE);
         applicationLabel.setId(CSSIds.ABOUT_DIALOG_TITLE_LABEL);
@@ -101,7 +95,10 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         usedIcons.setId(CSSIds.ABOUT_DIALOG_LONG_LABEL);
 
         final TextArea librariesArea = new TextArea(LIBRARIES);
+        librariesArea.setEditable(false);
+
         final TextArea iconsArea = new TextArea(ICONS);
+        iconsArea.setEditable(false);
 
         gridPane.add(applicationLabel, 0, 0, 2, 1);
         gridPane.add(versionLabel, 0, 1, 1, 1);
@@ -116,13 +113,14 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         gridPane.add(usedIcons, 0, 6, 2, 1);
         gridPane.add(iconsArea, 0, 7, 2, 1);
 
-        FXUtils.addToPane(scrollPane, root);
+        FXUtils.addToPane(gridPane, root);
 
         FXUtils.setFixedHeight(librariesArea, AREA_HEIGHT);
         FXUtils.setFixedHeight(iconsArea, AREA_HEIGHT);
 
         FXUtils.addClassTo(versionLabel, projectHomeLabel, forumThreadLabel, CSSClasses.SPECIAL_FONT_16);
         FXUtils.addClassTo(versionField, projectHomeField, forumThreadField, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(librariesArea, iconsArea, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(usedLibrariesLabel, usedIcons, CSSClasses.SPECIAL_FONT_16);
         FXUtils.addClassTo(applicationLabel, CSSClasses.SPECIAL_FONT_22);
     }

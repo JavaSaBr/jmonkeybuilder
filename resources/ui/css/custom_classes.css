@@ -1,4 +1,8 @@
-/* Main Fonts */
+/*******************************************************************************
+ *                                                                             *
+ * Fonts                                                                       *
+ *                                                                             *
+ ******************************************************************************/
 
 .main-font-11 {
     -fx-font-family: "Ubuntu Regular";
@@ -24,7 +28,6 @@
     -fx-font-family: "Ubuntu Regular";
     -fx-font-size: 14px;
     -fx-font-weight: bolder;
-
 }
 
 .main-font-15 {
@@ -89,6 +92,12 @@
     -fx-font-size: 13px;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Dialog                                                                      *
+ *                                                                             *
+ ******************************************************************************/
+
 .dialog-root {
     -fx-padding: 0px;
 }
@@ -102,65 +111,176 @@
     -fx-alignment: center;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * TextInputContainer                                                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.text-input-container {
+    -fx-background: -var-button-background-color;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 2px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 0px 0px 0px 0px;
+    -fx-text-fill: -var-font-color;
+}
+
+.text-input-container:focused {
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-padding: 0px 0px 0px 3px;
+    -fx-prompt-text-fill: transparent;
+}
+
+.text-input-container:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * TransparentSpinner                                                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.transparent-spinner {
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+.transparent-spinner:focused,
+.transparent-spinner:contains-focus {
+    -fx-border-color: transparent;
+}
+
+.transparent-spinner > .text-field:focused {
+    -fx-padding: 0px 0px 0px 5px;
+}
+
+.transparent-spinner .decrement-arrow-button,
+.transparent-spinner .increment-arrow-button {
+    -fx-padding: 4px 6px 4px 6px;
+}
+
+.transparent-spinner .decrement-arrow-button {
+    -fx-padding: 4px 6px 4px 6px;
+}
+
+.transparent-spinner:focused .decrement-arrow-button,
+.transparent-spinner:contains-focus .decrement-arrow-button,
+.transparent-spinner:focused .decrement-arrow-button,
+.transparent-spinner:contains-focus .increment-arrow-button {
+    -fx-padding: 4px 6px 4px 6px;
+}
+
+
+/*******************************************************************************
+ *                                                                             *
+ * TransparentTextField                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+.transparent-text-field {
+    -fx-background: transparent;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 0px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-radius: 0px;
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+.transparent-text-field:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-insets: 0;
+    -fx-padding: 0px 0px 0px 4px;
+    -fx-prompt-text-fill: transparent;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * ToolbarButton                                                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.toolbar-button {
+    -fx-background: transparent;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0px;
+    -fx-background-radius: 0px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-radius: 0px;
+    -fx-content-display: center;
+    -fx-focus-traversable: false;
+}
+
+.toolbar-button:hover {
+    -fx-border-color: transparent;
+}
+
+.toolbar-button:selected {
+    -fx-background-radius: 0px;
+}
+
+.toolbar-button:pressed {
+    -fx-border-color:transparent;
+    -fx-background-radius: 0px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * InputControlToolBarButton                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.input-control-toolbar-button {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * FileEditorToolBarButton                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.file-editor-toolbar-button {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 24;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * TransparentTreeView                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
 /* Transparent TreeView */
 .transparent-tree-view {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
+    -fx-padding: 0px;
     -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-effect: null;
-    -fx-cell-size: 10;
+    -fx-border-width: 0px;
+    -fx-border-radius: 0px;
 }
 
 .transparent-tree-view:focused {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
     -fx-border-color: transparent;
-    -fx-padding: 0;
-    -fx-effect: null;
-}
-
-.transparent-tree-view > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
-    -fx-background: -fx-color-600;
-    -fx-background-insets: 0;
-    -fx-table-cell-border-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-}
-
-.transparent-tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:selected {
-    -fx-background: -fx-color-600;
-    -fx-background-insets: 0;
-    -fx-table-cell-border-color: transparent;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-}
-
-/* Transparent TreeCell */
-
-.transparent-tree-cell {
-    -fx-background: transparent;
-    -fx-padding: 0.25em; /* 3 */
-    -fx-indent: 1em;
-}
-
-.transparent-tree-cell .label {
-    -fx-padding: 0.0em 0.0em 0.0em 0.25em; /* 0 0 0 3 */
-}
-
-.transparent-tree-cell > .tree-disclosure-node {
-    -fx-padding: 2 6 2 8;
-    -fx-background-color: transparent;
-}
-
-.transparent-tree-cell > .tree-disclosure-node > .arrow {
-    -fx-background-color: -var-arrow-color;
-    -fx-padding: 0.333333em 0.229em 0.333333em 0.229em; /* 4 */
-    -fx-shape: "M 0 -3.5 L 4 0 L 0 3.5 z";
-}
-
-.transparent-tree-cell:expanded > .tree-disclosure-node > .arrow {
-    -fx-rotate: 90;
+    -fx-border-width: 0px;
+    -fx-border-insets: 0;
 }
 
 /* transparent list view */
@@ -231,54 +351,6 @@
     -fx-padding: 0;
 }
 
-/** Toolbar Button */
-
-.toolbar-button,
-.editor-bar-button,
-.drawer-button {
-    -fx-body-color: transparent;
-    -fx-background-color: -fx-body-color;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
-    -fx-border-insets: 0;
-    -fx-padding: 0, 0, 0, 0; /* 4 8 4 8 */
-    -fx-text-fill: -fx-text-base-color;
-    -fx-alignment: CENTER;
-    -fx-content-display: LEFT;
-    -fx-cursor: hand;
-    -fx-effect: null;
-    -fx-focus-traversable: false;
-}
-
-.toolbar-button:hover,
-.editor-bar-button:hover {
-    -fx-body-color: -fx-button-background-hover;
-}
-
-.toolbar-button:armed,
-.editor-bar-button:armed {
-    -fx-body-color: -var-button-arm-color;
-}
-
-.toolbar-button:focused,
-.editor-bar-button:focused {
-}
-
-.toolbar-button:selected,
-.editor-bar-button:selected {
-    -fx-body-color: -var-button-arm-color;
-}
-
-.file-editor-toolbar-button {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
 
 .editing-toggle-button-big {
     -fx-min-height: 32;
