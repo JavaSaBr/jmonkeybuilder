@@ -94,12 +94,14 @@
 
 /*******************************************************************************
  *                                                                             *
- * Dialog                                                                      *
+ * EditorDialog                                                                *
  *                                                                             *
  ******************************************************************************/
 
 .dialog-root {
     -fx-padding: 0px;
+    -fx-alignment: top-center;
+    -fx-background-color: -var-background-color;
 }
 
 .dialog-actions-root {
@@ -269,7 +271,6 @@
  *                                                                             *
  ******************************************************************************/
 
-/* Transparent TreeView */
 .transparent-tree-view {
     -fx-padding: 0px;
     -fx-border-color: transparent;
@@ -281,6 +282,41 @@
     -fx-border-color: transparent;
     -fx-border-width: 0px;
     -fx-border-insets: 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Settings Dialog                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
+.settings-dialog-label {
+    -fx-alignment: center-right;
+    -fx-min-width: 250;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 6 0 0;
+}
+
+.settings-dialog-short-label {
+    -fx-alignment: center;
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
+    -fx-max-width: -fx-min-width;
+    -fx-mpref-width: -fx-min-width;
+}
+
+.settings-dialog-field {
+    -fx-alignment: center-left;
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20;
 }
 
 /* transparent list view */
@@ -399,9 +435,6 @@
 
 .editor-bar-button:armed {
     -fx-body-color: -var-button-arm-color;
-}
-
-.transparent-menu-item {
 }
 
 .transparent-combo-box,

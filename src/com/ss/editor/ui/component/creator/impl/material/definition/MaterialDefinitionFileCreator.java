@@ -19,6 +19,8 @@ import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -27,8 +29,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

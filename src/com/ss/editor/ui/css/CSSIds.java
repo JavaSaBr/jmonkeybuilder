@@ -94,10 +94,6 @@ public interface CSSIds {
     String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
 
     /**
-     * The constant EDITOR_DIALOG_BACKGROUND.
-     */
-    String EDITOR_DIALOG_BACKGROUND = "EditorDialogBackground";
-    /**
      * The constant EDITOR_DIALOG_BUTTON_OK.
      */
     String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
@@ -208,22 +204,6 @@ public interface CSSIds {
      * The constant SETTINGS_DIALOG_MESSAGE_LABEL.
      */
     String SETTINGS_DIALOG_MESSAGE_LABEL = "SettingsDialogMessageLabel";
-    /**
-     * The constant SETTINGS_DIALOG_TAB_PANE.
-     */
-    String SETTINGS_DIALOG_TAB_PANE = "SettingsDialogTabPane";
-    /**
-     * The constant SETTINGS_DIALOG_LABEL.
-     */
-    String SETTINGS_DIALOG_LABEL = "SettingsDialogLabel";
-    /**
-     * The constant SETTINGS_DIALOG_FIELD.
-     */
-    String SETTINGS_DIALOG_FIELD = "SettingsDialogField";
-    /**
-     * The constant SETTINGS_DIALOG_FIELD_SHORT_LABEL.
-     */
-    String SETTINGS_DIALOG_FIELD_SHORT_LABEL = "SettingsDialogFieldShortLabel";
 
     /**
      * The constant MODEL_NODE_TREE_CELL.

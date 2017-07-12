@@ -106,7 +106,6 @@ public interface CSSClasses {
      * The constant TRANSPARENT_TEXT_FIELD.
      */
     String TRANSPARENT_TEXT_FIELD = "transparent-text-field";
-
     /**
      * The constant TRANSPARENT_TREE_VIEW.
      */
@@ -119,26 +118,19 @@ public interface CSSClasses {
      * The constant TRANSPARENT_LIST_CELL.
      */
     String TRANSPARENT_LIST_CELL = "transparent-list-cell";
+    /**
+     * The constant TRANSPARENT_COMBO_BOX.
+     */
+    String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
 
     /**
      * The constant LIST_CELL_WITHOUT_PADDING.
      */
     String LIST_CELL_WITHOUT_PADDING = "list-cell-without-padding";
-
     /**
      * The constant LIST_VIEW_WITHOUT_SCROLL.
      */
     String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
-
-    /**
-     * The constant TRANSPARENT_MENU_ITEM.
-     */
-    String TRANSPARENT_MENU_ITEM = "transparent-menu-item";
-
-    /**
-     * The constant TRANSPARENT_COMBO_BOX.
-     */
-    String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
 
     /**
      * The constant TOOLBAR_BUTTON.
@@ -166,4 +158,17 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL.
      */
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
+
+    /**
+     * The constant SETTINGS_DIALOG_LABEL.
+     */
+    String SETTINGS_DIALOG_LABEL = "settings-dialog-label";
+    /**
+     * The constant SETTINGS_DIALOG_FIELD.
+     */
+    String SETTINGS_DIALOG_FIELD = "settings-dialog-field";
+    /**
+     * The constant SETTINGS_DIALOG_SHORT_LABEL.
+     */
+    String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
 }

@@ -4,14 +4,14 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import rlib.util.array.Array;
-import rlib.util.array.ArrayFactory;
 
 /**
  * The class container of processing components.

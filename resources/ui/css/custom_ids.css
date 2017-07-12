@@ -107,12 +107,6 @@
     -fx-background-color: -var-background-color;
 }
 
-#EditorDialogBackground {
-    -fx-alignment: top-center;
-    -fx-background-color: -var-background-color;
-    -fx-effect: -fx-shadow-panel;
-}
-
 #EditorDialogButtonOk {
     -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;
@@ -349,6 +343,12 @@
     -fx-max-height: -fx-min-height;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Settings Dialog                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 #SettingsDialogMessageLabel {
     -fx-alignment: center;
     -fx-text-alignment: center;
@@ -358,42 +358,6 @@
     -fx-fill: red;
     -fx-text-fill: red;
     -fx-wrap-text: true;
-}
-
-#SettingsDialogTabPane {
-}
-
-#SettingsDialogTabPane > .tab-header-area > .tab-header-background {
-    -fx-background-color: transparent;
-}
-
-#SettingsDialogLabel {
-    -fx-alignment: center-right;
-    -fx-min-width: 250;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 26;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 6 0 0;
-}
-
-#SettingsDialogFieldShortLabel {
-    -fx-alignment: center;
-    -fx-min-height: 26;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20;
-    -fx-max-width: -fx-min-width;
-    -fx-mpref-width: -fx-min-width;
-}
-
-#SettingsDialogField {
-    -fx-alignment: center-left;
-    -fx-min-height: 26;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20;
 }
 
 #ModelNodeTreeCell {

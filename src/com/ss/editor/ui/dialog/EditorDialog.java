@@ -7,7 +7,6 @@ import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -129,7 +128,6 @@ public class EditorDialog {
      * @param root the root container.
      */
     protected void createControls(@NotNull final VBox root) {
-        root.setId(CSSIds.EDITOR_DIALOG_BACKGROUND);
 
         final VBox actionsContainer = new VBox();
 

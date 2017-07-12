@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor.impl.scene;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
@@ -14,15 +14,8 @@ import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
-import com.ss.editor.extension.scene.app.state.impl.EditableLightingSceneAppState;
-import com.ss.editor.extension.scene.app.state.impl.EditableSkySceneAppState;
-import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
-import com.ss.editor.extension.scene.filter.impl.EditableCartoonEdgeFilter;
-import com.ss.editor.extension.scene.filter.impl.EditableColorOverlayFilter;
-import com.ss.editor.extension.scene.filter.impl.EditableDepthOfFieldFilter;
-import com.ss.editor.extension.scene.filter.impl.EditableFXAAFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
 import com.ss.editor.ui.Icons;
@@ -41,7 +34,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
@@ -150,17 +142,13 @@ public class SceneFileEditor extends
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
+        final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         Spatial loadedScene = assetManager.loadAsset(modelKey);
 
-        //FIXME back compatibility
-        if (loadedScene instanceof com.ss.extension.scene.SceneNode) {
-            loadedScene = migrateSceneNode(loadedScene);
-        }
 
         final SceneNode model = (SceneNode) loadedScene;
         model.depthFirstTraversal(this::updateVisibility);
@@ -181,129 +169,6 @@ public class SceneFileEditor extends
         }
 
         EXECUTOR_MANAGER.addFXTask(this::loadState);
-    }
-
-    @NotNull
-    private Spatial migrateSceneNode(Spatial loadedScene) {
-
-        final com.ss.extension.scene.SceneNode oldSceneNode = (com.ss.extension.scene.SceneNode) loadedScene;
-        final SceneNode newSceneNode = new SceneNode();
-        newSceneNode.setName(loadedScene.getName());
-
-        final rlib.util.array.Array<com.ss.extension.scene.app.state.SceneAppState> oldAppStates = oldSceneNode.getAppStates();
-        final rlib.util.array.Array<com.ss.extension.scene.filter.SceneFilter<?>> oldFilters = oldSceneNode.getFilters();
-        final rlib.util.array.Array<com.ss.extension.scene.SceneLayer> oldLayers = oldSceneNode.getLayers();
-
-        final Array<SceneAppState> newAppStates = newSceneNode.getAppStates();
-        final Array<SceneLayer> newLayers = newSceneNode.getLayers();
-        final Array<SceneFilter<?>> newFilters = newSceneNode.getFilters();
-
-        // move layers
-        for (final com.ss.extension.scene.SceneLayer oldLayer : oldLayers) {
-
-            SceneLayer newLayer = newLayers.search(sceneLayer -> sceneLayer.getName().equals(oldLayer.getName()));
-
-            if (newLayer == null) {
-                newLayer = new SceneLayer(oldLayer.getName(), false);
-                newSceneNode.addLayer(newLayer);
-            }
-
-            for (final Spatial child : oldLayer.getChildren()) {
-                newLayer.attachChild(child);
-            }
-        }
-
-        // move app states
-        for (final com.ss.extension.scene.app.state.SceneAppState oldAppState : oldAppStates) {
-
-            if (oldAppState instanceof com.ss.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState) {
-
-                final com.ss.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState oldState = (com.ss.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState) oldAppState;
-                final EditableBulletSceneAppState newState = new EditableBulletSceneAppState();
-                newState.setBroadphaseType(oldState.getBroadphaseType());
-                newState.setDebugEnabled(oldState.isDebugEnabled());
-                newState.setSpeed(oldState.getSpeed());
-                newState.setThreadingType(oldState.getThreadingType());
-                newState.setWorldMax(oldState.getWorldMax());
-                newState.setWorldMin(oldState.getWorldMin());
-
-                newAppStates.add(newState);
-
-            } else if (oldAppState instanceof com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState) {
-
-                final com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState oldState = (com.ss.extension.scene.app.state.impl.EditableLightingSceneAppState) oldAppState;
-                final EditableLightingSceneAppState newState = new EditableLightingSceneAppState();
-                newState.setAmbientColor(oldState.getAmbientColor());
-                newState.setOrientation(oldState.getOrientation());
-                newState.setSunColor(oldState.getSunColor());
-                newState.setTimeOfDay(oldState.getTimeOfDay());
-
-                newAppStates.add(newState);
-
-            } else if (oldAppState instanceof com.ss.extension.scene.app.state.impl.EditableSkySceneAppState) {
-
-                final com.ss.extension.scene.app.state.impl.EditableSkySceneAppState oldState = (com.ss.extension.scene.app.state.impl.EditableSkySceneAppState) oldAppState;
-                final EditableSkySceneAppState newState = new EditableSkySceneAppState();
-                newState.setSunColor(oldState.getSunColor());
-                newState.setFlatColor(oldState.getFlatColor());
-                newState.setFlatShaded(oldState.isFlatShaded());
-                newState.setGroundColor(oldState.getGroundColor());
-                newState.setShowGroundGeometry(oldState.isShowGroundGeometry());
-
-                newAppStates.add(newState);
-            }
-        }
-
-        // move filters
-        for (final com.ss.extension.scene.filter.SceneFilter<?> oldFilter : oldFilters) {
-
-            if (oldFilter instanceof com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter) {
-
-                final com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter filter = (com.ss.extension.scene.filter.impl.EditableCartoonEdgeFilter) oldFilter;
-                final EditableCartoonEdgeFilter newFilter = new EditableCartoonEdgeFilter();
-                newFilter.setDepthSensitivity(filter.getDepthSensitivity());
-                newFilter.setDepthThreshold(filter.getDepthThreshold());
-                newFilter.setEdgeColor(filter.getEdgeColor());
-                newFilter.setEdgeIntensity(filter.getEdgeIntensity());
-                newFilter.setEdgeWidth(filter.getEdgeWidth());
-                newFilter.setNormalSensitivity(filter.getNormalSensitivity());
-                newFilter.setNormalThreshold(filter.getNormalThreshold());
-
-                newFilters.add(newFilter);
-
-            } else if (oldFilter instanceof com.ss.extension.scene.filter.impl.EditableColorOverlayFilter) {
-
-                final com.ss.extension.scene.filter.impl.EditableColorOverlayFilter filter = (com.ss.extension.scene.filter.impl.EditableColorOverlayFilter) oldFilter;
-                final EditableColorOverlayFilter newFilter = new EditableColorOverlayFilter();
-                newFilter.setColor(filter.getColor());
-
-                newFilters.add(newFilter);
-
-            } else if (oldFilter instanceof com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter) {
-
-                final com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter filter = (com.ss.extension.scene.filter.impl.EditableDepthOfFieldFilter) oldFilter;
-                final EditableDepthOfFieldFilter newFilter = new EditableDepthOfFieldFilter();
-                newFilter.setBlurScale(filter.getBlurScale());
-                newFilter.setFocusDistance(filter.getFocusDistance());
-                newFilter.setFocusRange(filter.getFocusRange());
-
-                newFilters.add(newFilter);
-
-            } else if (oldFilter instanceof com.ss.extension.scene.filter.impl.EditableFXAAFilter) {
-
-                final com.ss.extension.scene.filter.impl.EditableFXAAFilter filter = (com.ss.extension.scene.filter.impl.EditableFXAAFilter) oldFilter;
-                final EditableFXAAFilter newFilter = new EditableFXAAFilter();
-                newFilter.setReduceMul(filter.getReduceMul());
-                newFilter.setSpanMax(filter.getSpanMax());
-                newFilter.setSubPixelShift(filter.getSubPixelShift());
-                newFilter.setVxOffset(filter.getVxOffset());
-
-                newFilters.add(newFilter);
-            }
-        }
-
-        loadedScene = newSceneNode;
-        return loadedScene;
     }
 
     @Override
@@ -332,7 +197,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private AppStateList getAppStateList() {
-        return requireNonNull(appStateList);
+        return notNull(appStateList);
     }
 
     /**
@@ -340,7 +205,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private FilterList getFilterList() {
-        return requireNonNull(filterList);
+        return notNull(filterList);
     }
 
     /**
@@ -348,7 +213,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private LayerNodeTree getLayerNodeTree() {
-        return requireNonNull(layerNodeTree);
+        return notNull(layerNodeTree);
     }
 
     /**
@@ -356,7 +221,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private VBox getPropertyEditorLayersContainer() {
-        return requireNonNull(propertyEditorLayersContainer);
+        return notNull(propertyEditorLayersContainer);
     }
 
     /**
@@ -364,7 +229,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private VBox getPropertyEditorFiltersContainer() {
-        return requireNonNull(propertyEditorFiltersContainer);
+        return notNull(propertyEditorFiltersContainer);
     }
 
     /**
@@ -372,7 +237,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private VBox getPropertyEditorAppStateContainer() {
-        return requireNonNull(propertyEditorAppStateContainer);
+        return notNull(propertyEditorAppStateContainer);
     }
 
     @Override
@@ -495,7 +360,7 @@ public class SceneFileEditor extends
      */
     @NotNull
     private ToggleButton getLightButton() {
-        return requireNonNull(lightButton);
+        return notNull(lightButton);
     }
 
     /**
@@ -503,14 +368,14 @@ public class SceneFileEditor extends
      */
     @NotNull
     private ToggleButton getAudioButton() {
-        return requireNonNull(audioButton);
+        return notNull(audioButton);
     }
 
     @Override
     protected void loadState() {
         super.loadState();
 
-        final SceneFileEditorState editorState = requireNonNull(getEditorState());
+        final SceneFileEditorState editorState = notNull(getEditorState());
         getLightButton().setSelected(editorState.isShowedLight());
         getAudioButton().setSelected(editorState.isShowedAudio());
     }

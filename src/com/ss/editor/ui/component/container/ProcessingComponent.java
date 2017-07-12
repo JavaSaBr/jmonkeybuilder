@@ -1,8 +1,8 @@
 package com.ss.editor.ui.component.container;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.rlib.util.HasName;
 import org.jetbrains.annotations.NotNull;
-import rlib.util.HasName;
 
 /**
  * The interface to implement a processing component.
