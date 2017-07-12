@@ -77,13 +77,13 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         final Label projectHomeLabel = new Label(Messages.ABOUT_DIALOG_PROJECT_HOME + ":");
         projectHomeLabel.setId(CSSIds.ABOUT_DIALOG_LABEL);
 
-        final Hyperlink projectHomeField = new Hyperlink(PROJECT_HOME);
+        final Hyperlink projectHomeField = new Hyperlink("bitbucket.org");
         projectHomeField.setOnAction(event -> hostServices.showDocument(PROJECT_HOME));
 
         final Label forumThreadLabel = new Label(Messages.ABOUT_DIALOG_FORUM_THREAD + ":");
         forumThreadLabel.setId(CSSIds.ABOUT_DIALOG_LABEL);
 
-        final Hyperlink forumThreadField = new Hyperlink(FORUM_THREAD);
+        final Hyperlink forumThreadField = new Hyperlink("hub.jmonkeyengine.org");
         forumThreadField.setOnAction(event -> hostServices.showDocument(FORUM_THREAD));
 
         final Label usedLibrariesLabel = new Label(Messages.ABOUT_DIALOG_USED_LIBRARIES + ":");
