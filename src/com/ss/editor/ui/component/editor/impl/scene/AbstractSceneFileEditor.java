@@ -1037,17 +1037,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 updateTransformTool(TransformType.SCALE_TOOL, newValue));
 
-        FXUtils.addClassTo(selectionButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(selectionButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(selectionButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(gridButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(gridButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(gridButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(statisticsButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(statisticsButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(statisticsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(moveToolButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(moveToolButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(moveToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(rotationToolButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(rotationToolButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(rotationToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(scaleToolButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(scaleToolButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         FXUtils.addToPane(selectionButton, container);

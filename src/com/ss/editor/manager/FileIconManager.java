@@ -1,6 +1,7 @@
 package com.ss.editor.manager;
 
 import static com.ss.editor.util.EditorUtil.toAssetPath;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.util.EditorUtil;
@@ -11,6 +12,7 @@ import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.IntegerDictionary;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +22,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 
 /**
  * The class to manage file icons.
@@ -113,7 +114,7 @@ public class FileIconManager {
      * The image cache.
      */
     @NotNull
-    private final ObjectDictionary<String, Image> imageCache;
+    private final IntegerDictionary<ObjectDictionary<String, Image>> imageCache;
 
     /**
      * The cache of urs by a file extension.
@@ -123,7 +124,7 @@ public class FileIconManager {
 
     private FileIconManager() {
         InitializeManager.valid(getClass());
-        this.imageCache = DictionaryFactory.newObjectDictionary();
+        this.imageCache = DictionaryFactory.newIntegerDictionary();
         this.extensionToUrl = DictionaryFactory.newObjectDictionary();
     }
 
@@ -230,7 +231,8 @@ public class FileIconManager {
     @FXThread
     public Image getImage(@NotNull final String url, final int size, final boolean useCache) {
         if (!useCache) return new Image(url, size, size, false, true);
-        final Image image = imageCache.get(url, () -> new Image(url, size, size, false, true));
-        return Objects.requireNonNull(image);
+        final ObjectDictionary<String, Image> cache = imageCache.get(size, DictionaryFactory::newObjectDictionary);
+        final Image image = cache.get(url, () -> new Image(url, size, size, false, true));
+        return notNull(image);
     }
 }

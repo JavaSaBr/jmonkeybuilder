@@ -256,9 +256,9 @@ public class SceneFileEditor extends
         audioButton.setSelected(true);
         audioButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeAudio(newValue));
 
-        FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(lightButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(audioButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(audioButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(audioButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         FXUtils.addToPane(lightButton, container);

@@ -14,6 +14,7 @@ import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.ui.window.popup.dialog.AbstractPopupDialog;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -89,17 +90,8 @@ public class EditorDialog {
     public EditorDialog() {
         this.showedTime = LocalTime.now();
 
-        dialog = new Stage();
-        dialog.setTitle(getTitleText());
-        dialog.initStyle(StageStyle.UTILITY);
-        dialog.initModality(Modality.WINDOW_MODAL);
-        dialog.setResizable(isResizable());
-
         container = new VBox();
         container.setAlignment(CENTER);
-
-        createControls(container);
-        configureSize(container);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final CssColorTheme theme = editorConfig.getTheme();
@@ -112,14 +104,23 @@ public class EditorDialog {
         stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
         stylesheets.add(theme.getCssFile());
 
+        createControls(container);
+
+        dialog = new Stage();
+        dialog.setTitle(getTitleText());
+        dialog.initStyle(StageStyle.UTILITY);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.setResizable(isResizable());
         dialog.setScene(scene);
+
+        configureSize(container);
     }
 
     /**
      * @return true if this dialog should be resizable.
      */
     protected boolean isResizable() {
-        return false;
+        return true;
     }
 
     /**
@@ -261,6 +262,8 @@ public class EditorDialog {
 
         GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
+
+        Platform.runLater(dialog::sizeToScene);
     }
 
     /**

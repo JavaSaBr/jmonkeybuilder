@@ -329,7 +329,7 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(additionalClasspathField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON,
+        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
@@ -370,7 +370,7 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(additionalEnvsField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
-        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON,
+        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
         HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);

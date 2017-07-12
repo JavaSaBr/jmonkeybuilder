@@ -1,9 +1,11 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
@@ -11,8 +13,6 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -93,7 +93,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private CodeArea getCodeArea() {
-        return requireNonNull(codeArea);
+        return notNull(codeArea);
     }
 
     @FXThread
@@ -118,7 +118,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private String getOriginalContent() {
-        return requireNonNull(originalContent);
+        return notNull(originalContent);
     }
 
     /**

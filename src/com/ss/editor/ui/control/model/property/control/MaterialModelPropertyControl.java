@@ -195,7 +195,7 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
         HBox.setMargin(editButton, BUTTON_OFFSET);
 
         FXUtils.addClassTo(materialLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, editButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, editButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(changeButton, editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 

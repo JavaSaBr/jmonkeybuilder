@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
@@ -18,6 +18,11 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.Event;
@@ -33,11 +38,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import javax.annotation.Nullable;
 import java.nio.file.Path;
@@ -61,18 +61,25 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * The constant EXECUTOR_MANAGER.
      */
+    @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
     /**
      * The constant FX_EVENT_MANAGER.
      */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
     /**
      * The constant JFX_APPLICATION.
      */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -282,14 +289,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @NotNull
     protected Button createSaveAction() {
 
-        Button action = new Button();
+        final Button action = new Button();
         action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
         action.setOnAction(event -> processSave());
         action.setGraphic(new ImageView(Icons.SAVE_16));
         action.disableProperty().bind(dirtyProperty().not());
 
-        FXUtils.addClassTo(action, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(action, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(action, CSSClasses.FLAT_BUTTON,
+                CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         return action;
     }
@@ -334,14 +341,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @NotNull
     @Override
     public Pane getPage() {
-        final R pane = requireNonNull(root);
+        final R pane = notNull(root);
         return (Pane) pane.getParent().getParent();
     }
 
     @NotNull
     @Override
     public Path getEditFile() {
-        return requireNonNull(file);
+        return notNull(file);
     }
 
     @NotNull
@@ -554,5 +561,4 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     protected boolean isButtonRightDown() {
         return buttonRightDown;
     }
-
 }

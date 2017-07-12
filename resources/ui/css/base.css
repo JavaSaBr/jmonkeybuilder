@@ -45,7 +45,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * ContextMenu                                                                 *
+ * Context Menu                                                                 *
  *                                                                             *
  ******************************************************************************/
 
@@ -89,7 +89,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * SplitPane                                                                     *
+ * Split Pane                                                                     *
  *                                                                             *
  ******************************************************************************/
 
@@ -116,7 +116,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * TabPane                                                                     *
+ * Tab Pane                                                                     *
  *                                                                             *
  ******************************************************************************/
 
@@ -232,63 +232,6 @@
     -fx-background-color: -var-arrow-hover-color;
 }
 
-/* CONTROL BUTTONS */
-.tab-pane > .tab-header-area > .control-buttons-tab {
-    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
-    -fx-background-color: red;
-    -fx-background-insets: 0, 1, 2;
-    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
-    -fx-padding: 0.083333em 0.25em 0.083333em 0.25em; /* 1 3 1 3 */
-}
-
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0.0em 0.416667em 0.0em 0.416667em; /* 0 5 0 5 */
-}
-
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button:hover {
-    -fx-background-color: -fx-body-color;
-    -fx-color: -fx-hover-base;
-}
-
-.tab-pane > .tab-header-area > .control-buttons-tab > .container > .tab-down-button .arrow {
-    -fx-background-color: -fx-mark-highlight-color, -fx-mark-color;
-    -fx-background-insets: 1 0 -1 0, 0;
-    -fx-padding: 0.238083em 0.416667em 0.238083em 0.416667em; /* 2.857 5 2.857 5 */
-    -fx-shape: "M 0 0 H 7 L 3.5 4 z";
-}
-
-/* FLOATING TABS CUSTOMISATION */
-.tab-pane.floating > .tab-header-area > .tab-header-background {
-    -fx-background-color: null;
-}
-
-.tab-pane.floating > .tab-header-area {
-    -fx-background-color: null;
-}
-
-.tab-pane.floating > .tab-content-area {
-    -fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
-    -fx-background-color: green;
-    -fx-background-insets: 0, 1;
-    -fx-background-radius: 5, 4;
-    -fx-padding: 2;
-}
-
-.tab-pane.floating > .tab-header-area > .headers-region > .tab {
-    -fx-background-color: -fx-tab-border-color, -fx-inner-border, -fx-body-color;
-    -fx-background-color: orange;
-    -fx-background-insets: 0 1 1 0, 1 2 1 1, 2 3 1 2;
-    -fx-background-radius: 5 5 0 0, 4 4 0 0, 3 3 0 0;
-}
-
-.tab-pane.floating > .tab-header-area > .headers-region > .tab:selected {
-    -fx-background-color: -fx-tab-border-color, -fx-control-inner-background;
-    -fx-background-color: yellow;
-    -fx-background-insets: 0 1 -1 0, 1 2 -1 1;
-    -fx-background-radius: 5 5 0 0, 4 4 0 0;
-}
-
 /*******************************************************************************
  *                                                                             *
  * Button                                                                      *
@@ -326,13 +269,6 @@
     -fx-background-radius: 2px;
 }
 
-.button:default {
-    -fx-base: red;
-}
-
-.button:cancel {
-}
-
 .button:disabled {
     -fx-opacity: -var-disabled-opacity;
 }
@@ -343,7 +279,56 @@
 
 /*******************************************************************************
  *                                                                             *
- * ComboBox                                                                    *
+ * ToggleButton                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+.toggle-button {
+    -fx-background: transparent;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 0;
+    -fx-text-fill: -var-font-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.toggle-button:focused {
+    -fx-background: transparent;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.toggle-button:hover {
+    -fx-border-color: transparent;
+    -fx-background: -var-button-hover-background-color;
+}
+
+.toggle-button:selected {
+    -fx-background: -fx-focus-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.toggle-button:selected:focused {
+    -fx-background: -fx-focus-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.toggle-button:selected:hover {
+    -fx-border-color: transparent;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.toggle-button:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Combo Box                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -461,7 +446,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * CheckBox                                                                    *
+ * Check Box                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -556,7 +541,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * MenuBar                                                                     *
+ * Menu Bar                                                                     *
  *                                                                             *
  ******************************************************************************/
 
@@ -595,7 +580,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * MenuItem                                                                    *
+ * Menu Item                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -666,7 +651,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * ScrollBar                                                                   *
+ * Scroll Bar                                                                   *
  *                                                                             *
  ******************************************************************************/
 
@@ -753,7 +738,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * ScrollPane                                                                  *
+ * Scroll Pane                                                                  *
  *                                                                             *
  ******************************************************************************/
 
@@ -821,7 +806,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * TextArea                                                                    *
+ * Text Area                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -1035,7 +1020,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * TextInput                                                                   *
+ * Text Input                                                                   *
  *                                                                             *
  ******************************************************************************/
 
@@ -1052,7 +1037,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * TextField                                                                   *
+ * Text Field                                                                   *
  *                                                                             *
  ******************************************************************************/
 
@@ -1083,7 +1068,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * TreeView and TreeCell                                                       *
+ * Tree View and Tree Cell                                                       *
  *                                                                             *
  ******************************************************************************/
 

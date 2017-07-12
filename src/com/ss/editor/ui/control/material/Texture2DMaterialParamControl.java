@@ -164,7 +164,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         FXUtils.addToPane(flipButton, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassTo(addButton, removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, removeButton, CSSClasses.FLAT_BUTTON);
         HBox.setMargin(addButton, BUTTON_OFFSET);
 
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());

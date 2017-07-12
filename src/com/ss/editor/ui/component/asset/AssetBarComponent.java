@@ -31,7 +31,7 @@ public class AssetBarComponent extends HBox {
         refreshAction.setGraphic(new ImageView(Icons.REFRESH_18));
         refreshAction.setOnAction(event -> FX_EVENT_MANAGER.notify(new RequestedRefreshAssetEvent()));
 
-        FXUtils.addClassTo(refreshAction, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(refreshAction, CSSClasses.FLAT_BUTTON);
         FXUtils.addToPane(refreshAction, this);
     }
 }

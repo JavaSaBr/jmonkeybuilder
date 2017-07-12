@@ -94,7 +94,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * EditorDialog                                                                *
+ * Editor Dialog                                                                *
  *                                                                             *
  ******************************************************************************/
 
@@ -115,7 +115,56 @@
 
 /*******************************************************************************
  *                                                                             *
- * TextInputContainer                                                          *
+ * Audio Editor                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+.audio-viewer-editor-param-label {
+    -fx-alignment: center-right;
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 26;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-padding: 0 6px 0 0;
+}
+
+.audio-viewer-editor-param-value {
+    -fx-min-height: 26px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.audio-viewer-editor-button {
+    -fx-min-height: 142px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 142px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Custom Buttons                                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.button-without-left-border {
+    -fx-border-width: 1px 1px 1px 0px;
+}
+
+.button-without-right-border {
+    -fx-border-width: 1px 0px 1px 1px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Text Input Container                                                          *
  *                                                                             *
  ******************************************************************************/
 
@@ -145,7 +194,27 @@
 
 /*******************************************************************************
  *                                                                             *
- * TransparentSpinner                                                          *
+ * Transparent Text Area                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.transparent-text-area {
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-radius: 0px;
+    -fx-padding: 0px;
+}
+
+.transparent-text-area:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-insets: 0;
+    -fx-padding: 0px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Transparent Spinner                                                         *
  *                                                                             *
  ******************************************************************************/
 
@@ -181,7 +250,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * TransparentTextField                                                        *
+ * Transparent Text Field                                                        *
  *                                                                             *
  ******************************************************************************/
 
@@ -206,15 +275,15 @@
 
 /*******************************************************************************
  *                                                                             *
- * ToolbarButton                                                               *
+ * Flat Button                                                                 *
  *                                                                             *
  ******************************************************************************/
 
-.toolbar-button {
+.flat-button {
     -fx-background: transparent;
     -fx-background-color: -fx-background;
-    -fx-background-insets: 0px;
-    -fx-background-radius: 0px;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2px;
     -fx-border-color: transparent;
     -fx-border-width: 0px;
     -fx-border-radius: 0px;
@@ -222,22 +291,22 @@
     -fx-focus-traversable: false;
 }
 
-.toolbar-button:hover {
+.flat-button:hover {
     -fx-border-color: transparent;
 }
 
-.toolbar-button:selected {
+.flat-button:selected {
     -fx-background-radius: 0px;
 }
 
-.toolbar-button:pressed {
+.flat-button:pressed {
     -fx-border-color:transparent;
     -fx-background-radius: 0px;
 }
 
 /*******************************************************************************
  *                                                                             *
- * InputControlToolBarButton                                                   *
+ * Input Control Toolbar Button                                                *
  *                                                                             *
  ******************************************************************************/
 
@@ -252,7 +321,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * FileEditorToolBarButton                                                     *
+ * File Editor Toolbar Button                                                  *
  *                                                                             *
  ******************************************************************************/
 
@@ -267,7 +336,30 @@
 
 /*******************************************************************************
  *                                                                             *
- * TransparentTreeView                                                         *
+ * File Editor Toolbar Label                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.file-editor-toolbar-label {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+/*******************************************************************************
+ *                                                                             *
+ * File Editor Toolbar Field                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.file-editor-toolbar-field {
+    -fx-min-height: 24;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Transparent Tree View                                                       *
  *                                                                             *
  ******************************************************************************/
 
@@ -449,68 +541,4 @@
 
 .abstract-param-control {
     -fx-padding: 0 0 0 0;
-}
-
-.plain-code {
-    -fx-fill: white;
-}
-
-.keyword {
-    -fx-fill: #f92670;
-    -fx-font-weight: bold;
-}
-
-.value-type {
-    -fx-fill: #62c59f;
-    -fx-font-weight: bold;
-}
-
-.value-value {
-    -fx-fill: #a776a7;
-    -fx-font-weight: bold;
-}
-
-
-.semicolon {
-    -fx-fill: white;
-    -fx-font-weight: bold;
-}
-
-.paren {
-    -fx-fill: white;
-    -fx-font-weight: bold;
-}
-
-.bracket {
-    -fx-fill: white;
-    -fx-font-weight: bold;
-}
-
-.brace {
-    -fx-fill: white;
-    -fx-font-weight: bold;
-}
-
-.string {
-    -fx-fill: #ddb03f;
-}
-
-.comment {
-    -fx-fill: #5f6c5a;
-}
-
-.paragraph-box:has-caret {
-    -fx-background-color: #f2f9fc;
-}
-
-.log-severity {
-    -fx-fill: #f92670;
-}
-
-.log-framework {
-    -fx-fill: #ddb03f;
-}
-
-.log-class {
-    -fx-fill: #62c59f;
 }

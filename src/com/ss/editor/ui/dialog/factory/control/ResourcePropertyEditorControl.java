@@ -80,7 +80,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         HBox.setMargin(changeButton, BUTTON_OFFSET);
 
         FXUtils.addClassTo(resourceLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 

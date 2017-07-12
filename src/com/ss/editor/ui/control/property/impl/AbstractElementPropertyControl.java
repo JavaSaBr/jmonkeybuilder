@@ -110,9 +110,9 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
         HBox.setMargin(editButton, BUTTON_OFFSET);
 
         FXUtils.addClassTo(elementLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(editButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 

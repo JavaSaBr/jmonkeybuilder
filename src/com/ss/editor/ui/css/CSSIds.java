@@ -147,19 +147,6 @@ public interface CSSIds {
      * The constant PARTICLES_ASSET_EDITOR_DIALOG_CONTROL.
      */
     String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
-
-    /**
-     * The constant MATERIAL_FILE_EDITOR_TOOLBAR_LABEL.
-     */
-    String MATERIAL_FILE_EDITOR_TOOLBAR_LABEL = "MaterialFileEditorToolbarLabel";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_TOOLBAR_BOX.
-     */
-    String MATERIAL_FILE_EDITOR_TOOLBAR_BOX = "MaterialFileEditorToolbarBox";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX.
-     */
-    String MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX = "MaterialFileEditorToolbarSmallBox";
     /**
      * The constant MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT.
      */
@@ -268,21 +255,10 @@ public interface CSSIds {
      */
     String AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER = "AudioViewerEditorButtonContainer";
     /**
-     * The constant AUDIO_VIEWER_EDITOR_BUTTON.
-     */
-    String AUDIO_VIEWER_EDITOR_BUTTON = "AudioViewerEditorButton";
-    /**
      * The constant AUDIO_VIEWER_EDITOR_PARAM_CONTAINER.
      */
     String AUDIO_VIEWER_EDITOR_PARAM_CONTAINER = "AudioViewerEditorParamContainer";
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_PARAM_LABEL.
-     */
-    String AUDIO_VIEWER_EDITOR_PARAM_LABEL = "AudioViewerEditorParamLabel";
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_PARAM_VALUE.
-     */
-    String AUDIO_VIEWER_EDITOR_PARAM_VALUE = "AudioViewerEditorParamValue";
+
 
     /**
      * The constant GENERATE_LOD_DIALOG_LIST_VIEW.
@@ -448,10 +424,6 @@ public interface CSSIds {
      * The constant ABOUT_DIALOG_GRID_PANE.
      */
     String ABOUT_DIALOG_GRID_PANE = "AboutDialogGridPane";
-    /**
-     * The constant ABOUT_DIALOG_LABEL.
-     */
-    String ABOUT_DIALOG_LABEL = "AboutDialogLabel";
     /**
      * The constant ABOUT_DIALOG_LONG_LABEL.
      */

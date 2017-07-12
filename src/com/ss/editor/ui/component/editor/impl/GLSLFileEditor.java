@@ -1,11 +1,6 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Collections.singleton;
-import static java.util.Objects.requireNonNull;
-import com.jme3.asset.AssetKey;
-import com.jme3.asset.AssetManager;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
@@ -13,7 +8,6 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +35,7 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
         DESCRIPTION.addExtension(FileExtensions.GLSL_LIB);
     }
 
+    @NotNull
     private static final String[] KEYWORDS = {
             "define", "undef", "if", "ifdef", "ifndef",
             "else", "elif", "endif", "error", "pragma",
@@ -52,6 +47,7 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
             "void", "true", "false", "invariant", "discard", "return", "struct"
     };
 
+    @NotNull
     private static final String[] VALUE_TYPES = {
             "float", "double", "int", "bool", "mat2", "mat3", "mat4", "uint", "uvec2", "uvec3", "uvec4",
             "sampler1D", "sampler2D", "sampler3D", "samplerCube", "vec2", "vec3", "vec4"
@@ -77,7 +73,8 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
-    private static StyleSpans<Collection<String>> computeHighlighting(final String text) {
+    @NotNull
+    private static StyleSpans<Collection<String>> computeHighlighting(@NotNull final String text) {
 
         final Matcher matcher = PATTERN.matcher(text);
         final StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
@@ -133,19 +130,6 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
     @Override
     protected StyleSpans<? extends Collection<String>> getStyleSpans(@NotNull final String text) {
         return computeHighlighting(text);
-    }
-
-    @Override
-    public void doSave() {
-
-        final Path editFile = getEditFile();
-        final Path assetFile = requireNonNull(getAssetFile(editFile));
-        final String assetPath = toAssetPath(assetFile);
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
-        assetManager.deleteFromCache(new AssetKey<>(assetPath));
-
-        super.doSave();
     }
 
     @NotNull

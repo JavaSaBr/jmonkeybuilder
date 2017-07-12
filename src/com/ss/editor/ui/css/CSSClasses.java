@@ -122,6 +122,19 @@ public interface CSSClasses {
      * The constant TRANSPARENT_COMBO_BOX.
      */
     String TRANSPARENT_COMBO_BOX = "transparent-combo-box";
+    /**
+     * The constant TRANSPARENT_TEXT_AREA.
+     */
+    String TRANSPARENT_TEXT_AREA = "transparent-text-area";
+
+    /**
+     * The constant BUTTON_WITHOUT_LEFT_BORDER.
+     */
+    String BUTTON_WITHOUT_LEFT_BORDER = "button-without-left-border";
+    /**
+     * The constant BUTTON_WITHOUT_RIGHT_BORDER.
+     */
+    String BUTTON_WITHOUT_RIGHT_BORDER = "button-without-right-border";
 
     /**
      * The constant LIST_CELL_WITHOUT_PADDING.
@@ -133,9 +146,9 @@ public interface CSSClasses {
     String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
 
     /**
-     * The constant TOOLBAR_BUTTON.
+     * The constant FLAT_BUTTON.
      */
-    String TOOLBAR_BUTTON = "toolbar-button";
+    String FLAT_BUTTON = "flat-button";
     /**
      * The constant INPUT_CONTROL_TOOLBAR_BUTTON.
      */
@@ -144,6 +157,14 @@ public interface CSSClasses {
      * The constant FILE_EDITOR_TOOLBAR_BUTTON.
      */
     String FILE_EDITOR_TOOLBAR_BUTTON = "file-editor-toolbar-button";
+    /**
+     * The constant FILE_EDITOR_TOOLBAR_LABEL.
+     */
+    String FILE_EDITOR_TOOLBAR_LABEL = "file-editor-toolbar-label";
+    /**
+     * The constant FILE_EDITOR_TOOLBAR_FIELD.
+     */
+    String FILE_EDITOR_TOOLBAR_FIELD = "file-editor-toolbar-field";
 
     /**
      * The constant EDITING_TOGGLE_BUTTON_BIG.
@@ -171,4 +192,17 @@ public interface CSSClasses {
      * The constant SETTINGS_DIALOG_SHORT_LABEL.
      */
     String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
+
+    /**
+     * The constant AUDIO_VIEWER_EDITOR_PARAM_LABEL.
+     */
+    String AUDIO_VIEWER_EDITOR_PARAM_LABEL = "audio-viewer-editor-param-label";
+    /**
+     * The constant AUDIO_VIEWER_EDITOR_PARAM_VALUE.
+     */
+    String AUDIO_VIEWER_EDITOR_PARAM_VALUE = "audio-viewer-editor-param-value";
+    /**
+     * The constant AUDIO_VIEWER_EDITOR_BUTTON.
+     */
+    String AUDIO_VIEWER_EDITOR_BUTTON = "audio-viewer-editor-button";
 }

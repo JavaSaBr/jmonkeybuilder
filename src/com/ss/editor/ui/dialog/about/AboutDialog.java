@@ -69,19 +69,16 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         applicationLabel.setGraphic(new ImageView(Icons.APPLICATION_64));
 
         final Label versionLabel = new Label(Messages.ABOUT_DIALOG_VERSION + ":");
-        versionLabel.setId(CSSIds.ABOUT_DIALOG_LABEL);
         versionLabel.prefWidthProperty().bind(gridPane.widthProperty().multiply(0.5));
 
         final Label versionField = new Label(Config.VERSION);
 
         final Label projectHomeLabel = new Label(Messages.ABOUT_DIALOG_PROJECT_HOME + ":");
-        projectHomeLabel.setId(CSSIds.ABOUT_DIALOG_LABEL);
 
         final Hyperlink projectHomeField = new Hyperlink("bitbucket.org");
         projectHomeField.setOnAction(event -> hostServices.showDocument(PROJECT_HOME));
 
         final Label forumThreadLabel = new Label(Messages.ABOUT_DIALOG_FORUM_THREAD + ":");
-        forumThreadLabel.setId(CSSIds.ABOUT_DIALOG_LABEL);
 
         final Hyperlink forumThreadField = new Hyperlink("hub.jmonkeyengine.org");
         forumThreadField.setOnAction(event -> hostServices.showDocument(FORUM_THREAD));

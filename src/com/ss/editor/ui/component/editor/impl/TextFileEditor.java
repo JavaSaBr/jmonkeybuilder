@@ -1,18 +1,18 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         textArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(textArea, root);
-        FXUtils.addClassTo(textArea, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassesTo(textArea, CSSClasses.MAIN_FONT_13, CSSClasses.TRANSPARENT_TEXT_AREA);
     }
 
     /**
@@ -94,7 +94,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextArea getTextArea() {
-        return requireNonNull(textArea);
+        return notNull(textArea);
     }
 
     @FXThread
@@ -113,7 +113,7 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private String getOriginalContent() {
-        return requireNonNull(originalContent);
+        return notNull(originalContent);
     }
 
     /**

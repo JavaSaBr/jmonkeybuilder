@@ -1,4 +1,13 @@
 
 .code-area {
+    -fx-background-color: transparent;
+    -fx-stroke: -var-font-color;
+}
 
+.code-area .caret {
+    -fx-stroke: -var-font-color;
+}
+
+.code-area .content {
+    -fx-background-color: transparent;
 }

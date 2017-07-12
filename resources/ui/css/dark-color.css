@@ -45,3 +45,73 @@
     -fx-shadow-menu: dropshadow(two-pass-box, rgba(32, 34, 42, 0.5), 20, 0.01, 1, 1);
     -fx-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1, 0, 1);
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Syntax highlighting                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.plain-code {
+    -fx-fill: white;
+}
+
+.keyword {
+    -fx-fill: #f92670;
+    -fx-font-weight: bold;
+}
+
+.value-type {
+    -fx-fill: #62c59f;
+    -fx-font-weight: bold;
+}
+
+.value-value {
+    -fx-fill: #a776a7;
+    -fx-font-weight: bold;
+}
+
+
+.semicolon {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+}
+
+.paren {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+}
+
+.bracket {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+}
+
+.brace {
+    -fx-fill: white;
+    -fx-font-weight: bold;
+}
+
+.string {
+    -fx-fill: #ddb03f;
+}
+
+.comment {
+    -fx-fill: #5f6c5a;
+}
+
+.paragraph-box:has-caret {
+    -fx-background-color: #f2f9fc;
+}
+
+.log-severity {
+    -fx-fill: #f92670;
+}
+
+.log-framework {
+    -fx-fill: #ddb03f;
+}
+
+.log-class {
+    -fx-fill: #62c59f;
+}

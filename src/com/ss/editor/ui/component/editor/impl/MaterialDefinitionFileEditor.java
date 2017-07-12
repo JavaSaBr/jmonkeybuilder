@@ -32,10 +32,12 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL_DEFINITION);
     }
 
+    @NotNull
     private static final String[] KEYWORDS = {
             "MaterialDef", "MaterialParameters", "Technique", "WorldParameters", "Defines", "ForcedRenderState"
     };
 
+    @NotNull
     private static final String[] VALUE_TYPES = {
             "Texture2D", "Float", "Boolean", "Int", "Color", "Vector3", "TextureCubeMap", "Matrix4", "Vector4", "Vector2",
             "VertexShader", "TessellationEvaluationShader ", "TessellationControlShader", "FragmentShader", "LightMode",
@@ -46,10 +48,12 @@ public class MaterialDefinitionFileEditor extends CodeAreaFileEditor {
             "Matrix3Array", "Matrix4Array", "TextureBuffer", "Texture3D", "TextureArray", "GeometryShader"
     };
 
+    @NotNull
     private static final String[] VALUE_VALUES = {
             "true", "false", "Off", "On", "True", "False", "Disable", "SinglePass", "MultiPass",
             "SinglePassAndImageBased", "FixedPipeline", "StaticPass", "InPass", "PostPass", "World", "View",
-            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400", "GLSL330"
+            "Legacy", "GLSL100", "GLSL110", "GLSL120", "GLSL130", "GLSL140", "GLSL150", "GLSL400", "GLSL330",
+            "GLSL410", "GLSL420", "GLSL430", "GLSL440", "GLSL450",
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";

@@ -169,8 +169,8 @@ public class ChooseTextureControl extends HBox {
         FXUtils.addToPane(removeButton, this);
 
         FXUtils.addClassTo(textureLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, CSSClasses.FLAT_BUTTON);
+        FXUtils.addClassTo(removeButton, CSSClasses.FLAT_BUTTON);
 
         HBox.setMargin(previewContainer, ELEMENT_OFFSET);
         HBox.setMargin(addButton, ELEMENT_OFFSET);

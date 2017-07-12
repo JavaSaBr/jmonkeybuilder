@@ -24,7 +24,6 @@ import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -208,18 +207,16 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final Label fastSkyLabel = new Label(Messages.MODEL_FILE_EDITOR_FAST_SKY + ":");
 
         fastSkyComboBox = new ComboBox<>();
-        fastSkyComboBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
         fastSkyComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeFastSky(newValue));
 
         final ObservableList<String> skyItems = fastSkyComboBox.getItems();
-
-        FAST_SKY_LIST.forEach(skyItems::add);
+        skyItems.addAll(FAST_SKY_LIST);
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
         final Array<Path> additionalEnvs = resourceManager.getAdditionalEnvs();
         additionalEnvs.forEach(path -> skyItems.add(path.toString()));
 
-        FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(lightButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
         FXUtils.addClassTo(fastSkyLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addClassTo(fastSkyComboBox, CSSClasses.SPECIAL_FONT_13);

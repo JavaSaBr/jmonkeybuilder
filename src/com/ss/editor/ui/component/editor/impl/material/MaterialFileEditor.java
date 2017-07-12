@@ -1,10 +1,12 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
+import static com.jme3.renderer.queue.RenderQueue.Bucket.*;
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
@@ -36,7 +38,6 @@ import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
@@ -84,13 +85,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
     @NotNull
-    private static final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();
+    private static final ObservableList<RenderQueue.Bucket> BUCKETS = observableArrayList(values());
 
     @NotNull
-    private static final Insets SMALL_OFFSET = new Insets(0, 0, 0, 3);
+    private static final Insets SMALL_OFFSET = new Insets(0, 1, 0, 3);
 
     @NotNull
-    private static final Insets BIG_OFFSET = new Insets(0, 0, 0, 6);
+    private static final Insets BIG_OFFSET = new Insets(0, 1, 0, 6);
 
     /**
      * The operation control.
@@ -530,9 +531,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
             final MaterialEditorAppState editorState = getEditorAppState();
             editorState.updateMaterial(material);
 
-            final ToggleButton cubeButton = getCubeButton();
-            cubeButton.setSelected(true);
-
             final MaterialTexturesComponent materialTexturesComponent = getMaterialTexturesComponent();
             materialTexturesComponent.buildFor(material);
 
@@ -577,39 +575,37 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         cubeButton = new ToggleButton();
         cubeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_CUBE + " (C)"));
         cubeButton.setGraphic(new ImageView(Icons.CUBE_16));
-        cubeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.BOX, newValue));
+        cubeButton.selectedProperty().addListener((observable, oldValue, newValue) ->
+                changeModelType(ModelType.BOX, newValue));
 
         sphereButton = new ToggleButton();
         sphereButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_SPHERE + " (S)"));
         sphereButton.setGraphic(new ImageView(Icons.SPHERE_16));
-        sphereButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.SPHERE, newValue));
+        sphereButton.selectedProperty().addListener((observable, oldValue, newValue) ->
+                changeModelType(ModelType.SPHERE, newValue));
 
         planeButton = new ToggleButton();
         planeButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_PLANE + " (P)"));
         planeButton.setGraphic(new ImageView(Icons.PLANE_16));
-        planeButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeModelType(ModelType.QUAD, newValue));
+        planeButton.selectedProperty().addListener((observable, oldValue, newValue) ->
+                changeModelType(ModelType.QUAD, newValue));
 
         lightButton = new ToggleButton();
         lightButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_LIGHT + " (L)"));
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
-        lightButton.setSelected(true);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
         final Label materialDefinitionLabel = new Label(Messages.MATERIAL_EDITOR_MATERIAL_TYPE_LABEL + ":");
-        materialDefinitionLabel.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_LABEL);
 
         materialDefinitionBox = new ComboBox<>();
-        materialDefinitionBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_BOX);
         materialDefinitionBox.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> changeType(newValue));
 
         final Label bucketLabel = new Label(Messages.MATERIAL_FILE_EDITOR_BUCKET_TYPE_LABEL + ":");
-        bucketLabel.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_LABEL);
 
-        bucketComboBox = new ComboBox<>(FXCollections.observableArrayList(BUCKETS));
-        bucketComboBox.setId(CSSIds.MATERIAL_FILE_EDITOR_TOOLBAR_SMALL_BOX);
-        bucketComboBox.getSelectionModel().select(RenderQueue.Bucket.Inherit);
+        bucketComboBox = new ComboBox<>(BUCKETS);
+        bucketComboBox.getSelectionModel().select(Inherit);
         bucketComboBox.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> changeBucketType(newValue));
@@ -624,18 +620,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addToPane(bucketLabel, container);
         FXUtils.addToPane(bucketComboBox, container);
 
-        FXUtils.addClassTo(cubeButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(cubeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(sphereButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(sphereButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(planeButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(planeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(lightButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(materialDefinitionLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(materialDefinitionBox, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(bucketLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(bucketComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(materialDefinitionLabel, bucketLabel, CSSClasses.FILE_EDITOR_TOOLBAR_LABEL);
+        FXUtils.addClassTo(materialDefinitionBox, bucketComboBox, CSSClasses.FILE_EDITOR_TOOLBAR_FIELD);
+        FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(materialDefinitionLabel, materialDefinitionBox, bucketLabel, bucketComboBox,
+                CSSClasses.SPECIAL_FONT_13);
 
         HBox.setMargin(cubeButton, SMALL_OFFSET);
         HBox.setMargin(sphereButton, SMALL_OFFSET);
@@ -743,6 +732,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
             cubeButton.setMouseTransparent(true);
             sphereButton.setMouseTransparent(false);
             planeButton.setMouseTransparent(false);
+            cubeButton.setSelected(true);
             sphereButton.setSelected(false);
             planeButton.setSelected(false);
             editorAppState.changeMode(modelType);
@@ -751,6 +741,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
             sphereButton.setMouseTransparent(true);
             planeButton.setMouseTransparent(false);
             cubeButton.setSelected(false);
+            sphereButton.setSelected(true);
             planeButton.setSelected(false);
             editorAppState.changeMode(modelType);
         } else if (modelType == ModelType.QUAD) {
@@ -759,6 +750,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
             planeButton.setMouseTransparent(true);
             sphereButton.setSelected(false);
             cubeButton.setSelected(false);
+            planeButton.setSelected(true);
             editorAppState.changeMode(modelType);
         }
 

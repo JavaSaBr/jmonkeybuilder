@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.jme3.audio.AudioSource.Status.Playing;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
@@ -17,6 +17,8 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,7 +28,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.nio.file.Path;
 
@@ -40,6 +41,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     /**
      * The constant DESCRIPTION.
      */
+    @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
     static {
@@ -115,38 +117,24 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         root.setId(CSSIds.AUDIO_VIEW_EDITOR_CONTAINER);
 
         final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
-        durationLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
-
         final Label bitsPerSampleLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL + ":");
-        bitsPerSampleLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
-
         final Label channelsLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_CHANNELS_LABEL + ":");
-        channelsLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
-
         final Label dataTypeLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DATA_TYPE_LABEL + ":");
-        dataTypeLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
-
         final Label sampleRateLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_SAMPLE_RATE_LABEL + ":");
-        sampleRateLabel.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
 
         durationField = new TextField();
-        durationField.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
         durationField.setEditable(false);
 
         bitsPerSampleField = new TextField();
-        bitsPerSampleField.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
         bitsPerSampleField.setEditable(false);
 
         channelsField = new TextField();
-        channelsField.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
         channelsField.setEditable(false);
 
         dataTypeField = new TextField();
-        dataTypeField.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
         dataTypeField.setEditable(false);
 
         sampleRateField = new TextField();
-        sampleRateField.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
         sampleRateField.setEditable(false);
 
         final GridPane gridPane = new GridPane();
@@ -166,12 +154,10 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         container.setId(CSSIds.AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER);
 
         playButton = new Button();
-        playButton.setId(CSSIds.AUDIO_VIEWER_EDITOR_BUTTON);
         playButton.setGraphic(new ImageView(Icons.PLAY_128));
         playButton.setOnAction(event -> processPlay());
 
         stopButton = new Button();
-        stopButton.setId(CSSIds.AUDIO_VIEWER_EDITOR_BUTTON);
         stopButton.setGraphic(new ImageView(Icons.STOP_128));
         stopButton.setOnAction(event -> processStop());
         stopButton.setDisable(true);
@@ -181,16 +167,17 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         FXUtils.addToPane(stopButton, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(durationLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(durationField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(bitsPerSampleLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(bitsPerSampleField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(channelsLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(channelsField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(dataTypeLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(dataTypeField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(sampleRateLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(sampleRateField, CSSClasses.SPECIAL_FONT_16);
+        HBox.setMargin(stopButton, new Insets(0, 0, 0, 0));
+
+        FXUtils.addClassesTo(durationLabel, durationField, bitsPerSampleLabel, bitsPerSampleField, sampleRateField,
+                channelsLabel, channelsField, dataTypeLabel, dataTypeField, sampleRateLabel, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassesTo(durationLabel, bitsPerSampleLabel, channelsLabel, dataTypeLabel, sampleRateLabel,
+                CSSClasses.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
+        FXUtils.addClassesTo(durationField, bitsPerSampleField, sampleRateField, channelsField,  dataTypeField,
+                CSSClasses.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
+        FXUtils.addClassesTo(playButton, stopButton, CSSClasses.AUDIO_VIEWER_EDITOR_BUTTON);
+        FXUtils.addClassTo(playButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(stopButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
     }
 
     /**
@@ -217,7 +204,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = requireNonNull(EditorUtil.getAssetFile(file));
+        final Path assetFile = notNull(EditorUtil.getAssetFile(file));
         final String assetPath = EditorUtil.toAssetPath(assetFile);
 
         final AudioKey audioKey = new AudioKey(assetPath);
@@ -292,7 +279,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private Button getPlayButton() {
-        return requireNonNull(playButton);
+        return notNull(playButton);
     }
 
     /**
@@ -300,7 +287,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private Button getStopButton() {
-        return requireNonNull(stopButton);
+        return notNull(stopButton);
     }
 
     /**
@@ -308,7 +295,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getChannelsField() {
-        return requireNonNull(channelsField);
+        return notNull(channelsField);
     }
 
     /**
@@ -316,7 +303,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getDurationField() {
-        return requireNonNull(durationField);
+        return notNull(durationField);
     }
 
     /**
@@ -324,7 +311,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getDataTypeField() {
-        return requireNonNull(dataTypeField);
+        return notNull(dataTypeField);
     }
 
     /**
@@ -332,7 +319,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getSampleRateField() {
-        return requireNonNull(sampleRateField);
+        return notNull(sampleRateField);
     }
 
     /**
@@ -340,7 +327,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private TextField getBitsPerSampleField() {
-        return requireNonNull(bitsPerSampleField);
+        return notNull(bitsPerSampleField);
     }
 
     @Override

@@ -575,17 +575,17 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         createRoughControlSettings();
         createPaintControlSettings();
 
-        FXUtils.addClassTo(raiseLowerButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(raiseLowerButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(raiseLowerButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
-        FXUtils.addClassTo(smoothButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(smoothButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(smoothButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
-        FXUtils.addClassTo(roughButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(roughButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(roughButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
-        FXUtils.addClassTo(levelButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(levelButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(levelButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
-        FXUtils.addClassTo(slopeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(slopeButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(slopeButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
-        FXUtils.addClassTo(paintButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(paintButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(paintButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
 
         FXUtils.addClassTo(brushSizeLabel, CSSClasses.SPECIAL_FONT_13);

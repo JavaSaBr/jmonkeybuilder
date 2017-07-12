@@ -186,9 +186,9 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
         HBox.setMargin(openButton, BUTTON_OFFSET);
 
         FXUtils.addClassTo(audioKeyLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(changeButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(openButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(openButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(openButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
     }
 

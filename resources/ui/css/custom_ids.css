@@ -68,17 +68,24 @@
     -fx-tab-max-height: 18;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * File Editor                                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
 #FileEditorToolbar {
-    -fx-alignment: center-left;
+    -fx-background-color: -var-background-color;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 0px 0px 1px 0px;
     -fx-min-height: 30;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-background-color: -var-background-color;
     -fx-padding: 10, 0, 0, 0;
+    -fx-alignment: center-left;
 }
 
 #FileEditorEditorArea {
-
 }
 
 #FileEditorMainSplitPane {
@@ -94,17 +101,13 @@
     -fx-min-width: 26;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Text File Editor                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
 #TextEditorTextArea {
-    -fx-background-color: -var-background-color;
-    -fx-stroke: white;
-}
-
-#TextEditorTextArea .caret {
-    -fx-stroke: white;
-}
-
-#TextEditorTextArea .content {
-    -fx-background-color: -var-background-color;
 }
 
 #EditorDialogButtonOk {
@@ -230,11 +233,11 @@
     -fx-max-width: -fx-min-width;
 }
 
-#MaterialFileEditorToolbarLabel {
-    -fx-min-height: 28;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
+/*******************************************************************************
+ *                                                                             *
+ * Material Editor                                                             *
+ *                                                                             *
+ ******************************************************************************/
 
 #MaterialFileEditorToolbarBox {
     -fx-min-height: 24;
@@ -487,40 +490,25 @@
     -fx-text-fill: white;
 }
 
-#AudioViewerEditorButtonContainer {
+/*******************************************************************************
+ *                                                                             *
+ * Audio Editor                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+#AudioViewEditorContainer {
     -fx-alignment: center;
+    -fx-background-color: -var-background-color;
 }
 
-#AudioViewerEditorButton {
-    -fx-min-height: 142px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 142px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
+#AudioViewerEditorButtonContainer {
+    -fx-alignment: center;
 }
 
 #AudioViewerEditorParamContainer {
     -fx-alignment: center;
     -fx-padding: 20px;
-}
-
-#AudioViewerEditorParamLabel {
-    -fx-alignment: center-right;
-    -fx-min-width: 200px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 26;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 6px 0 0;
-}
-
-#AudioViewerEditorParamValue {
-    -fx-min-height: 26px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20px;
+    -fx-vgap: 2px;
 }
 
 #GenerateLoDDialogListView {
@@ -669,11 +657,6 @@
     -fx-background-color: -var-background-color;
 }
 
-#AudioViewEditorContainer {
-    -fx-alignment: center;
-    -fx-background-color: -var-background-color;
-}
-
 #Root {
     -fx-background-color: -var-background-color;
 }
@@ -755,12 +738,15 @@
     -fx-border-color: black;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * About Dialog                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
 #AboutDialogGridPane {
     -fx-vgap: 4px;
     -fx-hgap: 2px;
-}
-
-#AboutDialogLabel {
 }
 
 #AboutDialogLongLabel {

@@ -109,8 +109,8 @@ public class ChooseFolderControl extends HBox {
         FXUtils.addToPane(removeButton, this);
 
         FXUtils.addClassTo(folderLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(addButton, CSSClasses.TOOLBAR_BUTTON);
-        FXUtils.addClassTo(removeButton, CSSClasses.TOOLBAR_BUTTON);
+        FXUtils.addClassTo(addButton, CSSClasses.FLAT_BUTTON);
+        FXUtils.addClassTo(removeButton, CSSClasses.FLAT_BUTTON);
 
         HBox.setMargin(addButton, ELEMENT_OFFSET);
         HBox.setMargin(removeButton, ELEMENT_OFFSET);
