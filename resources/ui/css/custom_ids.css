@@ -302,11 +302,6 @@
     -fx-max-height: -fx-min-height;
 }
 
-#AbstractParamControlLabelValue {
-    -fx-alignment: center-left;
-    -fx-text-alignment: left;
-}
-
 #AbstractParamControlNumberLabel {
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;

@@ -169,10 +169,6 @@ public interface CSSIds {
     String SCENE_APP_STATE_LIST_CELL = "SceneAppStateListCell";
 
     /**
-     * The constant ABSTRACT_PARAM_CONTROL_LABEL_VALUE.
-     */
-    String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "AbstractParamControlLabelValue";
-    /**
      * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F.
      */
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F = "AbstractParamControlNumberLabel2F";

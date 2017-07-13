@@ -1,20 +1,18 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The default implementation of the property control.
@@ -24,16 +22,19 @@ import com.ss.rlib.ui.util.FXUtils;
  * @param <T> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D, T> extends AbstractPropertyControl<C, D, T> {
+public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D, T>
+        extends AbstractPropertyControl<C, D, T> {
 
     /**
      * The label with value of the property.
      */
+    @Nullable
     protected Label propertyValueLabel;
 
     /**
      * The string function.
      */
+    @Nullable
     private Function<T, String> toStringFunction;
 
     /**
@@ -55,13 +56,14 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
      *
      * @param toStringFunction the string function.
      */
-    public void setToStringFunction(final Function<T, String> toStringFunction) {
+    public void setToStringFunction(@Nullable final Function<T, String> toStringFunction) {
         this.toStringFunction = toStringFunction;
     }
 
     /**
      * @return the string function.
      */
+    @Nullable
     private Function<T, String> getToStringFunction() {
         return toStringFunction;
     }
@@ -69,8 +71,9 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
     /**
      * @return the label with value of the property.
      */
+    @NotNull
     private Label getPropertyValueLabel() {
-        return propertyValueLabel;
+        return notNull(propertyValueLabel);
     }
 
     @Override
@@ -78,9 +81,10 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
         super.createComponents(container);
 
         propertyValueLabel = new Label();
-        propertyValueLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_LABEL_VALUE);
 
-        FXUtils.addClassTo(propertyValueLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassesTo(propertyValueLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_LABEL_VALUE,
+                CSSClasses.TEXT_INPUT_CONTAINER);
+
         FXUtils.addToPane(propertyValueLabel, container);
     }
 
@@ -91,6 +95,7 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
         final Function<T, String> function = getToStringFunction();
 
         final Label propertyValueLabel = getPropertyValueLabel();
-        propertyValueLabel.setText(function == null ? String.valueOf(getPropertyValue()) : function.apply(getPropertyValue()));
+        propertyValueLabel.setText(function == null ? String.valueOf(getPropertyValue()) :
+                function.apply(getPropertyValue()));
     }
 }

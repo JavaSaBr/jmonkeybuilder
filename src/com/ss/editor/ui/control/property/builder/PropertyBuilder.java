@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import javafx.scene.layout.VBox;
 
 /**
- * The interface for implementing property builder for creating property controls for some objects.
+ * The interface to implement property builder to create property controls for some objects.
  *
  * @author JavaSaBr
  */

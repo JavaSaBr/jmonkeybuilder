@@ -1,14 +1,12 @@
 package com.ss.editor.ui.control.property.impl;
 
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
-
-import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
 
 /**
  * The default implementation of the property control.
@@ -18,7 +16,8 @@ import com.ss.rlib.function.SixObjectConsumer;
  * @param <T> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractDefaultSinglePropertyControl<C extends ChangeConsumer, D, T> extends AbstractDefaultPropertyControl<C, D, T> {
+public abstract class AbstractDefaultSinglePropertyControl<C extends ChangeConsumer, D, T>
+        extends AbstractDefaultPropertyControl<C, D, T> {
 
     /**
      * Instantiates a new Abstract default single property control.

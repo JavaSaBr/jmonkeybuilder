@@ -579,6 +579,7 @@
  *                                                                             *
  ******************************************************************************/
 
+
 .abstract-param-control-container {
     -fx-alignment: top-center;
     -fx-padding: 2px 6px 4px 4px;
@@ -628,6 +629,13 @@
 
 
 .abstract-param-control-vector3f-field {
+}
+
+.abstract-param-control-label-value {
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+    -fx-min-height: -var-default-field-height;
+    -fx-padding: 0px 0px 0px 4px;
 }
 
 .abstract-param-control-number-label {

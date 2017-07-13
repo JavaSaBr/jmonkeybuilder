@@ -312,6 +312,10 @@ public interface CSSClasses {
      */
     String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "abstract-param-control-vector3f-field";
     /**
+     * The constant ABSTRACT_PARAM_CONTROL_LABEL_VALUE.
+     */
+    String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "abstract-param-control-label-value";
+    /**
      * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL.
      */
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
