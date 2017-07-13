@@ -86,7 +86,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     /**
      * Create controls.
      */
-    protected void createControls() {
+    private void createControls() {
 
         final Label propertyNameLabel = new Label(getControlTitle() + ":");
 
@@ -208,8 +208,6 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
             label.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(label, root);
-
-            FXUtils.addClassTo(label, CSSClasses.SPECIAL_FONT_13);
         }
     }
 

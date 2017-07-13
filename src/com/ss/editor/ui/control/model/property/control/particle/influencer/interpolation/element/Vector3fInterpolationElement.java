@@ -1,18 +1,13 @@
 package com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element;
 
-import static java.lang.Float.parseFloat;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,22 +20,26 @@ import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInfluencer, C extends AbstractInterpolationInfluencerControl<P>> extends InterpolationElement<P, Parent, C> {
+public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluencer, C extends AbstractInterpolationInfluencerControl<P>>
+        extends InterpolationElement<P, Parent, C> {
 
     /**
      * The field X.
      */
-    private TextField xField;
+    @Nullable
+    private FloatTextField xField;
 
     /**
      * The field Y.
      */
-    private TextField yField;
+    @Nullable
+    private FloatTextField yField;
 
     /**
      * The field Z.
      */
-    private TextField zField;
+    @Nullable
+    private FloatTextField zField;
 
     /**
      * Instantiates a new Vector 3 f and interpolation element.
@@ -48,7 +47,7 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
      * @param control the control
      * @param index   the index
      */
-    public Vector3fAndInterpolationElement(@NotNull final C control, final int index) {
+    public Vector3fInterpolationElement(@NotNull final C control, final int index) {
         super(control, index);
     }
 
@@ -59,20 +58,21 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
         final Label yLabel = new Label("y:");
         final Label zLabel = new Label("z:");
 
-        xField = new TextField();
-        xField.setOnScroll(this::processScroll);
-        xField.setOnKeyReleased(this::processChange);
+        xField = new FloatTextField();
+        xField.setMinMax(getMinValue(), getMaxValue());
+        xField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
-        yField = new TextField();
-        yField.setOnScroll(this::processScroll);
-        yField.setOnKeyReleased(this::processChange);
+        yField = new FloatTextField();
+        yField.setMinMax(getMinValue(), getMaxValue());
+        yField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
-        zField = new TextField();
-        zField.setOnScroll(this::processScroll);
-        zField.setOnKeyReleased(this::processChange);
+        zField = new FloatTextField();
+        zField.setMinMax(getMinValue(), getMaxValue());
+        zField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
         final HBox container = new HBox(xLabel, xField, yLabel, yField, zLabel, zField);
 
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
         FXUtils.addClassTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
 
@@ -91,38 +91,12 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
     }
 
     /**
-     * The process of scrolling value.
-     */
-    private void processScroll(final ScrollEvent event) {
-        if (!event.isControlDown()) return;
-
-        final TextField source = (TextField) event.getSource();
-        final String text = source.getText();
-
-        float value;
-        try {
-            value = parseFloat(text);
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        long longValue = (long) (value * 1000);
-        longValue += event.getDeltaY() * 10;
-
-        final String result = String.valueOf(max(min(longValue / 1000F, getMaxValue()), getMinValue()));
-        source.setText(result);
-        source.positionCaret(result.length());
-
-        processChange((KeyEvent) null);
-    }
-
-    /**
      * Gets min value.
      *
      * @return the min available value.
      */
     protected float getMinValue() {
-        return 0F;
+        return Integer.MIN_VALUE;
     }
 
     /**
@@ -131,37 +105,44 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
      * @return the max available value.
      */
     protected float getMaxValue() {
-        return 1F;
+        return Integer.MAX_VALUE;
     }
 
     /**
      * Handle changing vector value.
      */
-    private void processChange(@Nullable final KeyEvent event) {
-        if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+    private void processChange() {
+        if (isIgnoreListeners()) return;
 
-        float x;
-        try {
-            x = Float.parseFloat(xField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        float y;
-        try {
-            y = Float.parseFloat(yField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        float z;
-        try {
-            z = Float.parseFloat(zField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
+        final float x = getXField().getValue();
+        final float y = getYField().getValue();
+        final float z = getZField().getValue();
 
         requestToChange(x, y, z);
+    }
+
+    /**
+     * @return the field X.
+     */
+    @NotNull
+    private FloatTextField getXField() {
+        return notNull(xField);
+    }
+
+    /**
+     * @return the field Y.
+     */
+    @NotNull
+    private FloatTextField getYField() {
+        return notNull(yField);
+    }
+
+    /**
+     * @return the field Z.
+     */
+    @NotNull
+    private FloatTextField getZField() {
+        return notNull(zField);
     }
 
     /**
@@ -184,14 +165,17 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
 
         final Vector3f value = getValue(influencer);
 
-        xField.setText(String.valueOf(value.getX()));
+        final FloatTextField xField = getXField();
+        xField.setValue(value.getX());
         xField.positionCaret(xField.getText().length());
 
-        yField.setText(String.valueOf(value.getY()));
-        yField.positionCaret(xField.getText().length());
+        final FloatTextField yField = getYField();
+        yField.setValue(value.getY());
+        yField.positionCaret(yField.getText().length());
 
-        zField.setText(String.valueOf(value.getZ()));
-        zField.positionCaret(xField.getText().length());
+        final FloatTextField zField = getZField();
+        zField.setValue(value.getZ());
+        zField.positionCaret(zField.getText().length());
 
         super.reload();
     }
@@ -202,7 +186,7 @@ public class Vector3fAndInterpolationElement<P extends InterpolatedParticleInflu
      * @param influencer the influencer
      * @return the value
      */
-    protected Vector3f getValue(final P influencer) {
+    protected Vector3f getValue(@NotNull final P influencer) {
         throw new UnsupportedOperationException();
     }
 }

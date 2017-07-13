@@ -3,42 +3,22 @@ package com.ss.editor.ui.control.model.property.builder.impl;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.BooleanParticleInfluencerPropertyControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.EnumParticleInfluencerEmitterPropertyControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.FloatParticleInfluencerPropertyControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.IntArrayParticleInfluencerPropertyControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.PhysicsNodeListControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.Vector3fParticleInfluencerPropertyControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.AlphaInfluencerControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.ColorInfluencerControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.DestinationInfluencerControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.RotationInfluencerControl;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.SizeInfluencerControl;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.*;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.layout.VBox;
-import com.ss.rlib.ui.util.FXUtils;
 import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.influencers.ParticleInfluencer;
-import tonegod.emitter.influencers.impl.AlphaInfluencer;
-import tonegod.emitter.influencers.impl.ColorInfluencer;
-import tonegod.emitter.influencers.impl.DestinationInfluencer;
-import tonegod.emitter.influencers.impl.GravityInfluencer;
+import tonegod.emitter.influencers.impl.*;
 import tonegod.emitter.influencers.impl.GravityInfluencer.GravityAlignment;
-import tonegod.emitter.influencers.impl.ImpulseInfluencer;
-import tonegod.emitter.influencers.impl.PhysicsInfluencer;
 import tonegod.emitter.influencers.impl.PhysicsInfluencer.CollisionReaction;
-import tonegod.emitter.influencers.impl.RadialVelocityInfluencer;
 import tonegod.emitter.influencers.impl.RadialVelocityInfluencer.RadialPullAlignment;
 import tonegod.emitter.influencers.impl.RadialVelocityInfluencer.RadialPullCenter;
 import tonegod.emitter.influencers.impl.RadialVelocityInfluencer.RadialUpAlignment;
-import tonegod.emitter.influencers.impl.RotationInfluencer;
-import tonegod.emitter.influencers.impl.SizeInfluencer;
-import tonegod.emitter.influencers.impl.SpriteInfluencer;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link ParticleInfluencer}.
@@ -47,10 +27,19 @@ import tonegod.emitter.influencers.impl.SpriteInfluencer;
  */
 public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final GravityAlignment[] GRAVITY_ALIGNMENTS = GravityAlignment.values();
+
+    @NotNull
     private static final CollisionReaction[] COLLISION_REACTIONS = CollisionReaction.values();
+
+    @NotNull
     private static final RadialPullCenter[] RADIAL_PULL_CENTERS = RadialPullCenter.values();
+
+    @NotNull
     private static final RadialPullAlignment[] RADIAL_PULL_ALIGNMENTS = RadialPullAlignment.values();
+
+    @NotNull
     private static final RadialUpAlignment[] RADIAL_UP_ALIGNMENTS = RadialUpAlignment.values();
 
     @NotNull
@@ -71,10 +60,11 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
     }
 
     @Override
-    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
-                                @NotNull final ModelChangeConsumer changeConsumer) {
+    protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
+                                @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
         if (!(object instanceof ParticleInfluencer) || parent == null) return;
+
 
         if (object instanceof AlphaInfluencer) {
             createControls(container, changeConsumer, (AlphaInfluencer) object, parent);
@@ -111,8 +101,9 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull InterpolatedParticleInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final InterpolatedParticleInfluencer influencer,
+                                @NotNull final Object parent) {
 
         final float fixedDuration = influencer.getFixedDuration();
 
@@ -134,13 +125,15 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final AlphaInfluencer influencer, @NotNull final Object parent) {
 
         final AlphaInfluencerControl influencerControl = new AlphaInfluencerControl(changeConsumer, influencer, parent);
         influencerControl.reload();
 
         FXUtils.addToPane(influencerControl, container);
+
+        buildSplitLine(container);
     }
 
     /**
@@ -151,8 +144,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final ColorInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomStartColor = influencer.isRandomStartColor();
 
@@ -167,6 +160,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         randomStartColorControl.setEditObject(influencer);
 
         FXUtils.addToPane(colorControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(randomStartColorControl, container);
     }
 
@@ -178,11 +172,10 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final SizeInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomSize = influencer.isRandomSize();
-
         final float randomSizeTolerance = influencer.getRandomSizeTolerance();
 
         final SizeInfluencerControl sizeControl = new SizeInfluencerControl(changeConsumer, influencer, parent);
@@ -205,6 +198,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         sizeVariationToleranceControl.setEditObject(influencer);
 
         FXUtils.addToPane(sizeControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(randomStartSizeControl, container);
         FXUtils.addToPane(sizeVariationToleranceControl, container);
     }
@@ -217,8 +211,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final SpriteInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final SpriteInfluencer influencer, @NotNull final Object parent) {
 
         final int[] frameSequence = influencer.getFrameSequence();
         final float fixedDuration = influencer.getFixedDuration();
@@ -272,8 +266,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomStartDestination = influencer.isRandomStartDestination();
 
@@ -289,6 +283,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         randomStartDestinationControl.setEditObject(influencer);
 
         FXUtils.addToPane(influencerControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(randomStartDestinationControl, container);
     }
 
@@ -300,8 +295,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final ImpulseInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final ImpulseInfluencer influencer, @NotNull final Object parent) {
 
         final float chance = influencer.getChance();
         final float strength = influencer.getStrength();
@@ -344,8 +339,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final GravityInfluencer influencer, @NotNull final Object parent) {
 
         final Vector3f gravity = influencer.getGravity().clone();
         final GravityAlignment alignment = influencer.getAlignment();
@@ -389,8 +384,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final PhysicsInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final PhysicsInfluencer influencer, @NotNull final Object parent) {
 
         final CollisionReaction collisionReaction = influencer.getCollisionReaction();
         final float restitution = influencer.getRestitution();
@@ -414,9 +409,9 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         restitutionControl.setApplyHandler(PhysicsInfluencer::setRestitution);
         restitutionControl.setEditObject(influencer);
 
-        FXUtils.addToPane(nodeListControl, container);
         FXUtils.addToPane(reactionControl, container);
         FXUtils.addToPane(restitutionControl, container);
+        FXUtils.addToPane(nodeListControl, container);
     }
 
     /**
@@ -427,8 +422,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final RadialVelocityInfluencer influencer, @NotNull final Object parent) {
 
         final RadialPullCenter pullCenter = influencer.getRadialPullCenter();
         final RadialPullAlignment pullAlignment = influencer.getRadialPullAlignment();
@@ -503,8 +498,8 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
      * @param influencer     the influencer
      * @param parent         the parent
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
 
         final boolean randomDirection = influencer.isRandomDirection();
         final boolean randomSpeed = influencer.isRandomSpeed();
@@ -556,6 +551,7 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         randomStartRotationZControl.setEditObject(influencer);
 
         FXUtils.addToPane(influencerControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(randomDirectionControl, container);
         FXUtils.addToPane(randomSpeedControl, container);
         FXUtils.addToPane(randomStartRotationXControl, container);

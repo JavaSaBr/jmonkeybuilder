@@ -13,7 +13,7 @@ import tonegod.emitter.influencers.impl.SizeInfluencer;
  *
  * @author JavaSaBr
  */
-public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement<SizeInfluencer, SizeInfluencerControl> {
+public class SizeInterpolationElement extends Vector3fInterpolationElement<SizeInfluencer, SizeInfluencerControl> {
 
     /**
      * Instantiates a new Size and interpolation element.
@@ -21,7 +21,7 @@ public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement
      * @param control the control
      * @param index   the index
      */
-    public SizeAndInterpolationElement(@NotNull final SizeInfluencerControl control, final int index) {
+    public SizeInterpolationElement(@NotNull final SizeInfluencerControl control, final int index) {
         super(control, index);
     }
 
@@ -29,6 +29,16 @@ public class SizeAndInterpolationElement extends Vector3fAndInterpolationElement
     @Override
     protected String getEditableTitle() {
         return Messages.MODEL_PROPERTY_SIZE;
+    }
+
+    @Override
+    protected float getMaxValue() {
+        return 1F;
+    }
+
+    @Override
+    protected float getMinValue() {
+        return 0F;
     }
 
     @Override

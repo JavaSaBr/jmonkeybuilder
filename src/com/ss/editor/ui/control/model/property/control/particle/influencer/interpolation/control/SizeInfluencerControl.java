@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.SizeAndInterpolationElement;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.SizeInterpolationElement;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +58,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
 
         for (int i = 0, length = sizes.size(); i < length; i++) {
 
-            final SizeAndInterpolationElement element = new SizeAndInterpolationElement(this, i);
+            final SizeInterpolationElement element = new SizeInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(element, root);

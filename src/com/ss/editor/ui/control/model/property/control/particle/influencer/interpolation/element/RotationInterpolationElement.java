@@ -13,7 +13,8 @@ import tonegod.emitter.influencers.impl.RotationInfluencer;
  *
  * @author JavaSaBr
  */
-public class RotationAndInterpolationElement extends Vector3fAndInterpolationElement<RotationInfluencer, RotationInfluencerControl> {
+public class RotationInterpolationElement extends
+        Vector3fInterpolationElement<RotationInfluencer, RotationInfluencerControl> {
 
     /**
      * Instantiates a new Rotation and interpolation element.
@@ -21,7 +22,7 @@ public class RotationAndInterpolationElement extends Vector3fAndInterpolationEle
      * @param control the control
      * @param index   the index
      */
-    public RotationAndInterpolationElement(@NotNull final RotationInfluencerControl control, final int index) {
+    public RotationInterpolationElement(@NotNull final RotationInfluencerControl control, final int index) {
         super(control, index);
     }
 
@@ -38,17 +39,7 @@ public class RotationAndInterpolationElement extends Vector3fAndInterpolationEle
     }
 
     @Override
-    protected Vector3f getValue(final RotationInfluencer influencer) {
+    protected Vector3f getValue(@NotNull final RotationInfluencer influencer) {
         return influencer.getRotationSpeed(getIndex());
-    }
-
-    @Override
-    protected float getMaxValue() {
-        return Float.MAX_VALUE;
-    }
-
-    @Override
-    protected float getMinValue() {
-        return Float.MIN_VALUE;
     }
 }

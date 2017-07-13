@@ -276,13 +276,13 @@ public interface CSSClasses {
      */
     String ABSTRACT_PARAM_CONTROL_CONTAINER = "abstract-param-control-container";
     /**
+     * The constant ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE.
+     */
+    String ABSTRACT_PARAM_CONTROL_CONTAINER_SPLIT_LINE = "abstract-param-control-container-split-line";
+    /**
      * The constant ABSTRACT_PARAM_CONTROL.
      */
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_SPLIT_LINE.
-     */
-    String ABSTRACT_PARAM_CONTROL_SPLIT_LINE = "AbstractParamControlSplitLine";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW.
      */
@@ -315,6 +315,10 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL.
      */
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_2.
+     */
+    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_2 = "abstract-param-control-number-label-2";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER.
      */

@@ -54,8 +54,11 @@ public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E
         super.createComponents(container);
 
         enumComboBox = new ComboBox<>();
-        enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
-        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        enumComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> updateCullHint());
+        enumComboBox.prefWidthProperty()
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(enumComboBox, container);
         FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);

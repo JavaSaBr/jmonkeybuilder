@@ -1,16 +1,13 @@
 package com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element;
 
-import static java.lang.Float.parseFloat;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector3f;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.DestinationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,25 +24,25 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
      * The field X.
      */
     @Nullable
-    private TextField xField;
+    private FloatTextField xField;
 
     /**
      * The field Y.
      */
     @Nullable
-    private TextField yField;
+    private FloatTextField yField;
 
     /**
      * The field Z.
      */
     @Nullable
-    private TextField zField;
+    private FloatTextField zField;
 
     /**
-     * The weight.
+     * The weight field.
      */
     @Nullable
-    private TextField weightField;
+    private FloatTextField weightField;
 
     /**
      * Instantiates a new Destination weight and interpolation element.
@@ -65,21 +62,17 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
         final Label zLabel = new Label("z:");
         final Label weightLabel = new Label("w:");
 
-        xField = new TextField();
-        xField.setOnScroll(this::processScroll);
-        xField.setOnKeyReleased(this::processDestinationChange);
+        xField = new FloatTextField();
+        xField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
 
-        yField = new TextField();
-        yField.setOnScroll(this::processScroll);
-        yField.setOnKeyReleased(this::processDestinationChange);
+        yField = new FloatTextField();
+        yField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
 
-        zField = new TextField();
-        zField.setOnScroll(this::processScroll);
-        zField.setOnKeyReleased(this::processDestinationChange);
+        zField = new FloatTextField();
+        zField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
 
-        weightField = new TextField();
-        weightField.setOnScroll(this::processScroll);
-        weightField.setOnKeyReleased(this::processDestinationChange);
+        weightField = new FloatTextField();
+        weightField.addChangeListener((observable, oldValue, newValue) -> processWeightChange());
 
         final HBox container = new HBox(xLabel, xField, yLabel, yField, zLabel, zField, weightLabel, weightField);
 
@@ -103,61 +96,14 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     }
 
     /**
-     * The process of scrolling value.
-     */
-    private void processScroll(final ScrollEvent event) {
-        if (!event.isControlDown()) return;
-
-        final TextField source = (TextField) event.getSource();
-        final String text = source.getText();
-
-        float value;
-        try {
-            value = parseFloat(text);
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        long longValue = (long) (value * 1000);
-        longValue += event.getDeltaY() * 10;
-
-        final String result = String.valueOf(longValue / 1000F);
-        source.setText(result);
-        source.positionCaret(result.length());
-
-        if (source == weightField) {
-            processWeightChange(null);
-        } else {
-            processDestinationChange(null);
-        }
-    }
-
-    /**
      * Handle changing destination value.
      */
-    private void processDestinationChange(@Nullable final KeyEvent event) {
-        if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+    private void processDestinationChange() {
+        if (isIgnoreListeners()) return;
 
-        float x;
-        try {
-            x = Float.parseFloat(xField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        float y;
-        try {
-            y = Float.parseFloat(yField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
-
-        float z;
-        try {
-            z = Float.parseFloat(zField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
+        final float x = getXField().getValue();
+        final float y = getYField().getValue();
+        final float z = getZField().getValue();
 
         final DestinationInfluencerControl control = getControl();
         control.requestToChange(new Vector3f(x, y, z), getIndex());
@@ -166,18 +112,45 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     /**
      * Handle changing weight value.
      */
-    private void processWeightChange(@Nullable final KeyEvent event) {
-        if (isIgnoreListeners() || (event != null && event.getCode() != KeyCode.ENTER)) return;
+    private void processWeightChange() {
+        if (isIgnoreListeners()) return;
 
-        float weight;
-        try {
-            weight = Float.parseFloat(weightField.getText());
-        } catch (final NumberFormatException e) {
-            return;
-        }
+        final float weight = weightField.getValue();
 
         final DestinationInfluencerControl control = getControl();
         control.requestToChange(weight, getIndex());
+    }
+
+    /**
+     * @return the field X.
+     */
+    @NotNull
+    private FloatTextField getXField() {
+        return notNull(xField);
+    }
+
+    /**
+     * @return the field Y.
+     */
+    @NotNull
+    private FloatTextField getYField() {
+        return notNull(yField);
+    }
+
+    /**
+     * @return the field Z.
+     */
+    @NotNull
+    private FloatTextField getZField() {
+        return notNull(zField);
+    }
+
+    /**
+     * @return the weight field.
+     */
+    @NotNull
+    private FloatTextField getWeightField() {
+        return notNull(weightField);
     }
 
     @Override
@@ -189,16 +162,20 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
         final Vector3f destination = influencer.getDestination(getIndex());
         final Float weight = influencer.getWeight(getIndex());
 
-        xField.setText(String.valueOf(destination.getX()));
+        final FloatTextField xField = getXField();
+        xField.setValue(destination.getX());
         xField.positionCaret(xField.getText().length());
 
-        yField.setText(String.valueOf(destination.getY()));
-        yField.positionCaret(xField.getText().length());
+        final FloatTextField yField = getYField();
+        yField.setValue(destination.getY());
+        yField.positionCaret(yField.getText().length());
 
-        zField.setText(String.valueOf(destination.getZ()));
-        zField.positionCaret(xField.getText().length());
+        final FloatTextField zField = getZField();
+        zField.setValue(destination.getZ());
+        zField.positionCaret(zField.getText().length());
 
-        weightField.setText(String.valueOf(weight));
+        final FloatTextField weightField = getWeightField();
+        weightField.setValue(weight);
         weightField.positionCaret(weightField.getText().length());
 
         super.reload();

@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.RotationAndInterpolationElement;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.RotationInterpolationElement;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -64,7 +64,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
 
         for (int i = 0, length = speeds.size(); i < length; i++) {
 
-            final RotationAndInterpolationElement element = new RotationAndInterpolationElement(this, i);
+            final RotationInterpolationElement element = new RotationInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(element, root);

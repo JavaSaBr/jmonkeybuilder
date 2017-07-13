@@ -54,7 +54,8 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
 
         valueField = new TextField();
         valueField.setOnKeyReleased(this::updateValue);
-        valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        valueField.prefWidthProperty()
+                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
@@ -93,7 +94,7 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
     /**
      * Update the value.
      */
-    private void updateValue(final KeyEvent event) {
+    private void updateValue(@Nullable final KeyEvent event) {
         UIUtils.consumeIfIsNotHotKey(event);
 
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;

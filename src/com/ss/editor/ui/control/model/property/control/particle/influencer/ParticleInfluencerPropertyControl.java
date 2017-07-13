@@ -30,7 +30,8 @@ public class ParticleInfluencerPropertyControl<D extends ParticleInfluencer, T> 
      * @return the six object consumer
      */
     @NotNull
-    public static <D extends ParticleInfluencer, T> SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler(@NotNull final Object parent) {
+    public static <D extends ParticleInfluencer, T> SixObjectConsumer<ModelChangeConsumer, D, String, T, T, BiConsumer<D, T>>
+    newChangeHandler(@NotNull final Object parent) {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
             final ParticleInfluencerPropertyOperation<D, T> operation =
