@@ -1,16 +1,15 @@
 package com.ss.editor.ui.control.material;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.IntegerMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -43,12 +42,11 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
         super.createComponents();
 
         integerField = new IntegerTextField();
-        integerField.setId(CSSIds.MATERIAL_PARAM_CONTROL_SPINNER);
         integerField.addChangeListener((observable, oldValue, newValue) -> processChange(newValue));
         integerField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
 
         FXUtils.addToPane(integerField, this);
-        FXUtils.addClassTo(integerField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(integerField, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_SPINNER);
     }
 
     @Override
@@ -75,7 +73,7 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private IntegerTextField getIntegerField() {
-        return requireNonNull(integerField);
+        return notNull(integerField);
     }
 
     @Override

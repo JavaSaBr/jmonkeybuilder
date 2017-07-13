@@ -161,58 +161,6 @@
 
 /*******************************************************************************
  *                                                                             *
- * Material Editor                                                             *
- *                                                                             *
- ******************************************************************************/
-
-#MaterialParamControlSpinner {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#MaterialParamComboBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#MaterialParamControlCheckbox {
-    -fx-alignment: center;
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#MaterialParamControlCheckbox > .box {
-    -fx-min-height: 16;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 16;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#MaterialParamControlCheckbox > .box > .mark {
-    -fx-min-height: 12;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 12;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#MaterialRenderStatePolyOffsetField {
-    -fx-min-height: 22;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-/*******************************************************************************
- *                                                                             *
  * Settings Dialog                                                             *
  *                                                                             *
  ******************************************************************************/

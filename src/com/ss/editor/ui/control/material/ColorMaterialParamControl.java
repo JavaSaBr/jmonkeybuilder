@@ -70,9 +70,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         FXUtils.addToPane(colorPicker, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassesTo(colorPicker, CSSClasses.SPECIAL_FONT_13,
-                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER);
-
+        FXUtils.addClassesTo(colorPicker, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER);
         FXUtils.addClassesTo(removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON);
 

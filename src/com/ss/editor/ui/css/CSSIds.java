@@ -102,25 +102,6 @@ public interface CSSIds {
      */
     String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
 
-
-    /**
-     * The constant MATERIAL_PARAM_CONTROL_COMBO_BOX.
-     */
-    String MATERIAL_PARAM_CONTROL_COMBO_BOX = "MaterialParamComboBox";
-    /**
-     * The constant MATERIAL_PARAM_CONTROL_CHECKBOX.
-     */
-    String MATERIAL_PARAM_CONTROL_CHECKBOX = "MaterialParamControlCheckbox";
-    /**
-     * The constant MATERIAL_PARAM_CONTROL_SPINNER.
-     */
-    String MATERIAL_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
-
-    /**
-     * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD.
-     */
-    String MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD = "MaterialRenderStatePolyOffsetField";
-
     /**
      * The constant SETTINGS_DIALOG_MESSAGE_LABEL.
      */

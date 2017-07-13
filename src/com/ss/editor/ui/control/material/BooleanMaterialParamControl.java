@@ -1,16 +1,15 @@
 package com.ss.editor.ui.control.material;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.operation.BooleanMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.CheckBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
 
@@ -44,12 +43,11 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
         super.createComponents();
 
         checkBox = new CheckBox();
-        checkBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
         checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH2));
 
         FXUtils.addToPane(checkBox, this);
-        FXUtils.addClassTo(checkBox, CSSClasses.MAIN_FONT_13);
+        FXUtils.addClassTo(checkBox, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_CHECKBOX);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private CheckBox getCheckBox() {
-        return requireNonNull(checkBox);
+        return notNull(checkBox);
     }
 
     /**

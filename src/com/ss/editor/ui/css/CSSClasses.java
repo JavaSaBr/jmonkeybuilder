@@ -231,6 +231,18 @@ public interface CSSClasses {
      * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER.
      */
     String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER = "material-file-editor-param-control-color-picker";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_CHECKBOX.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_CHECKBOX = "material-file-editor-param-control-checkbox";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_SPINNER.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX = "material-file-editor-param-control-combo-box";
 
     /**
      * The constant ABSTRACT_PARAM_CONTROL.

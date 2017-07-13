@@ -138,9 +138,7 @@ public class MaterialParamControl extends HBox {
 
         bindParamNameLabel();
 
-        FXUtils.addClassesTo(paramNameLabel, CSSClasses.SPECIAL_FONT_13,
-                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME);
-
+        FXUtils.addClassesTo(paramNameLabel, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME);
         FXUtils.addToPane(paramNameLabel, this);
     }
 

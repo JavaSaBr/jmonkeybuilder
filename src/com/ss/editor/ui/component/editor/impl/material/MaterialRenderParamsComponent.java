@@ -12,7 +12,8 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.component.editor.impl.material.operation.RenderStateOperation;
 import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -22,8 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
 
@@ -34,7 +33,10 @@ import java.util.function.Consumer;
  */
 public class MaterialRenderParamsComponent extends VBox {
 
+    @NotNull
     private static final ObservableList<FaceCullMode> FACE_CULL_MODES = observableArrayList(FaceCullMode.values());
+
+    @NotNull
     private static final ObservableList<BlendMode> BLEND_MODES = observableArrayList(BlendMode.values());
 
     /**
@@ -146,7 +148,6 @@ public class MaterialRenderParamsComponent extends VBox {
         faceCullModeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         faceCullModeComboBox = new ComboBox<>(FACE_CULL_MODES);
-        faceCullModeComboBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_COMBO_BOX);
         faceCullModeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
         faceCullModeComboBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
@@ -154,7 +155,6 @@ public class MaterialRenderParamsComponent extends VBox {
         blendModeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         blendModeComboBox = new ComboBox<>(BLEND_MODES);
-        blendModeComboBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_COMBO_BOX);
         blendModeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
         blendModeComboBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
@@ -162,7 +162,6 @@ public class MaterialRenderParamsComponent extends VBox {
         polyOffsetFactorLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         polyOffsetFactorField = new FloatTextField();
-        polyOffsetFactorField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
         polyOffsetFactorField.addChangeListener((observable, oldValue, newValue) -> processChangeFactor(newValue));
         polyOffsetFactorField.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
         polyOffsetFactorField.setScrollPower(5F);
@@ -171,7 +170,6 @@ public class MaterialRenderParamsComponent extends VBox {
         polyOffsetUnitsLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         polyOffsetUnitsField = new FloatTextField();
-        polyOffsetUnitsField.setId(CSSIds.MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD);
         polyOffsetUnitsField.addChangeListener((observable, oldValue, newValue) -> processChangeUnits(newValue));
         polyOffsetUnitsField.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
         polyOffsetUnitsField.setScrollPower(5F);
@@ -180,7 +178,6 @@ public class MaterialRenderParamsComponent extends VBox {
         depthWriteLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         depthWriteCheckBox = new CheckBox();
-        depthWriteCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         depthWriteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> pointChangeDepthWrite(newValue));
         depthWriteCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
@@ -188,7 +185,6 @@ public class MaterialRenderParamsComponent extends VBox {
         colorWriteLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         colorWriteCheckBox = new CheckBox();
-        colorWriteCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         colorWriteCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeColorWrite(newValue));
         colorWriteCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
@@ -196,7 +192,6 @@ public class MaterialRenderParamsComponent extends VBox {
         depthTestLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         depthTestCheckBox = new CheckBox();
-        depthTestCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         depthTestCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeDepthTest(newValue));
         depthTestCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
@@ -204,7 +199,6 @@ public class MaterialRenderParamsComponent extends VBox {
         wireframeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         wireframeCheckBox = new CheckBox();
-        wireframeCheckBox.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         wireframeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> processChangeWireframe(newValue));
         wireframeCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
@@ -242,13 +236,19 @@ public class MaterialRenderParamsComponent extends VBox {
         FXUtils.addToPane(wireframeContainer, container);
         FXUtils.addToPane(container, this);
 
+        FXUtils.addClassesTo(faceCullModeContainer, blendModeContainer, polyOffsetFactorContainer,
+                polyOffsetUnitsContainer, depthWriteContainer, colorWriteContainer, depthTestContainer,
+                wireframeContainer, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL);
+
         FXUtils.addClassesTo(faceCullModeLabel, blendModeLabel, polyOffsetFactorLabel, polyOffsetUnitsLabel,
                 depthWriteLabel, colorWriteLabel, depthTestLabel, wireframeLabel,
                 CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME);
 
-        FXUtils.addClassesTo(faceCullModeLabel, faceCullModeComboBox, blendModeLabel, blendModeComboBox,
-                polyOffsetFactorLabel, polyOffsetUnitsLabel, polyOffsetFactorField, polyOffsetUnitsField,
-                depthWriteLabel, colorWriteLabel, depthTestLabel, wireframeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassesTo(faceCullModeComboBox, colorWriteCheckBox, polyOffsetFactorField, polyOffsetUnitsField,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX);
+
+        FXUtils.addClassesTo(depthWriteCheckBox, colorWriteCheckBox, depthTestCheckBox, wireframeCheckBox,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME);
     }
 
     /**

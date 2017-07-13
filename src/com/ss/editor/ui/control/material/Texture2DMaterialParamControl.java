@@ -4,7 +4,6 @@ import static com.ss.editor.Messages.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.material.MatParamTexture;
@@ -276,7 +275,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         }
 
         final AssetManager assetManager = EDITOR.getAssetManager();
-        final Path assetFile = requireNonNull(getAssetFile(path), "Can't get an asset file for " + path);
+        final Path assetFile = notNull(getAssetFile(path), "Can't get an asset file for " + path);
         final String assetPath = toAssetPath(assetFile);
 
         final CheckBox flipButton = getFlipButton();

@@ -479,6 +479,8 @@
     -fx-padding: 0px 0px 0px 0px;
     -fx-label-padding: 0.0em 0.0em 0.0em 0.416667em;
     -fx-text-fill: -var-font-color;
+    -fx-min-height: -var-default-field-height;
+    -fx-min-width: -var-default-field-height;
 }
 
 .check-box:focused {

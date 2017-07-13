@@ -1,15 +1,12 @@
 package com.ss.editor.ui.component.tab;
 
-import com.ss.editor.ui.css.CSSClasses;
-
-import org.jetbrains.annotations.NotNull;
-
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The component to contain editor tool components.
@@ -40,7 +37,6 @@ public class ScrollableEditorToolComponent extends EditorToolComponent {
 
         getTabs().add(tab);
 
-        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
         FXUtils.bindFixedHeight(scrollPane, heightProperty());
     }
 }

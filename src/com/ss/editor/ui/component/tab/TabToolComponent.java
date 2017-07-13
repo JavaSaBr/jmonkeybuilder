@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.tab;
 
 import com.ss.editor.ui.component.ScreenComponent;
-import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -15,7 +15,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The component to contain tool components.
@@ -127,7 +126,6 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
 
         getTabs().add(tab);
 
-        FXUtils.addClassTo(tab, CSSClasses.SPECIAL_FONT_14);
         FXUtils.bindFixedHeight(component, heightProperty());
     }
 

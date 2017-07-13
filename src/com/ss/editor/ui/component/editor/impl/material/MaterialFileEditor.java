@@ -623,8 +623,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addClassTo(materialDefinitionLabel, bucketLabel, CSSClasses.FILE_EDITOR_TOOLBAR_LABEL);
         FXUtils.addClassTo(materialDefinitionBox, bucketComboBox, CSSClasses.FILE_EDITOR_TOOLBAR_FIELD);
         FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(materialDefinitionLabel, materialDefinitionBox, bucketLabel, bucketComboBox,
-                CSSClasses.SPECIAL_FONT_13);
 
         HBox.setMargin(cubeButton, SMALL_OFFSET);
         HBox.setMargin(sphereButton, SMALL_OFFSET);

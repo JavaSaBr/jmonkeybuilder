@@ -249,6 +249,18 @@
 
 /*******************************************************************************
  *                                                                             *
+ * Transparent Combo Box                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.transparent-combo-box,
+.transparent-combo-box:editable,
+.transparent-combo-box:editable > .arrow-button {
+    -fx-background-color: -fx-body-color;
+}
+
+/*******************************************************************************
+ *                                                                             *
  * Transparent Spinner                                                         *
  *                                                                             *
  ******************************************************************************/
@@ -427,9 +439,6 @@
 }
 
 .material-file-editor-param-control-name {
-    -fx-min-height: 24px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
     -fx-alignment: center-right;
     -fx-text-alignment: right;
     -fx-padding: 0px 2px 0px 0px;
@@ -457,9 +466,17 @@
 }
 
 .material-file-editor-param-control-color-picker {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
+}
+
+
+.material-file-editor-param-control-checkbox {
+    -fx-alignment: center;
+}
+
+.material-file-editor-param-control-spinner {
+}
+
+.material-file-editor-param-control-combo-box {
 }
 
 /*******************************************************************************
@@ -593,52 +610,6 @@
     -fx-min-width: 32;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-/** Drawer button */
-
-.drawer-button {
-    -fx-min-height: 40;
-    -fx-effect: null;
-}
-
-.drawer-button:hover {
-    -fx-body-color: -fx-button-background-hover;
-}
-
-.drawer-button:armed {
-    -fx-body-color: -var-button-arm-color;
-}
-
-.drawer-button:focused {
-}
-
-.drawer-button:selected {
-    -fx-body-color: -fx-color-panel-900;
-}
-
-.editor-bar-button {
-    -fx-min-height: 32;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 32;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-background-radius: 32px;
-}
-
-.editor-bar-button:hover {
-    -fx-body-color: transparent;
-}
-
-.editor-bar-button:armed {
-    -fx-body-color: -var-button-arm-color;
-}
-
-.transparent-combo-box,
-.transparent-combo-box:editable,
-.transparent-combo-box:editable > .arrow-button {
-    -fx-background-color: -fx-body-color;
 }
 
 .abstract-param-control {
