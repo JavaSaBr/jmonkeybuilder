@@ -6,7 +6,6 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -80,31 +79,25 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
         super.createSettings(root);
 
         final Label widthLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH + ":");
-        widthLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         widthLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         widthField = new IntegerTextField();
-        widthField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         widthField.setMinMax(2, 1024);
         widthField.setValue(2);
         widthField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label heightLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT + ":");
-        heightLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         heightField = new IntegerTextField();
-        heightField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         heightField.setMinMax(2, 1024);
         heightField.setValue(2);
         heightField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label colorLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR + ":");
-        colorLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         colorLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         colorPicker = new ColorPicker(Color.GRAY);
-        colorPicker.setId(CSSIds.EDITOR_DIALOG_FIELD);
         colorPicker.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(widthLabel, 0, 1);
@@ -114,8 +107,8 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
         root.add(colorLabel, 0, 3);
         root.add(colorPicker, 1, 3);
 
-        FXUtils.addClassTo(widthLabel, widthField, heightLabel, heightField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(colorLabel, colorPicker, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(widthLabel, heightLabel, colorLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(widthField, heightField, colorPicker, CSSClasses.DIALOG_FIELD);
     }
 
     /**

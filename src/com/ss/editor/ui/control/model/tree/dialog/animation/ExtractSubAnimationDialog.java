@@ -11,7 +11,6 @@ import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.editor.util.EditorUtil;
@@ -126,27 +125,21 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label nameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_NAME + ":");
-        nameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         nameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         nameField = new TextField();
-        nameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         nameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label startFrameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_START_FRAME + ":");
-        startFrameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         startFrameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         startFrameField = new IntegerTextField();
-        startFrameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         startFrameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label endFrameLabel = new Label(Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_END_FRAME + ":");
-        endFrameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         endFrameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         endFrameField = new IntegerTextField();
-        endFrameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         endFrameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(nameLabel, 0, 0);
@@ -156,9 +149,8 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
         root.add(endFrameLabel, 0, 2);
         root.add(endFrameField, 1, 2);
 
-        FXUtils.addClassTo(nameLabel, nameField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(startFrameLabel, startFrameField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(endFrameLabel, endFrameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(nameLabel, startFrameLabel, endFrameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(nameField, endFrameField, startFrameField, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

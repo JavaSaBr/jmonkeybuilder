@@ -3,7 +3,6 @@ package com.ss.editor.ui.dialog;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -50,18 +49,17 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label nameLabel = new Label(Messages.RENAME_DIALOG_NEW_NAME_LABEL + ":");
-        nameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         nameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         nameField = new TextField();
-        nameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         nameField.textProperty().addListener((observable, oldValue, newValue) -> validateName(newValue));
         nameField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         root.add(nameLabel, 0, 0);
         root.add(nameField, 1, 0);
 
-        FXUtils.addClassTo(nameLabel, nameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(nameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(nameField, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

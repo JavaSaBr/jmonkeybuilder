@@ -295,50 +295,40 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         settingsRoot = new VBox();
 
         final Label baseTextureLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_BASE_TEXTURE + ":");
-        baseTextureLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         baseTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         baseTextureControl = new ChooseTextureControl();
         baseTextureControl.setChangeHandler(this::validate);
 
         final Label alphaTextureFolderLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_FOLDER_ALPHA_TEXTURE + ":");
-        alphaTextureFolderLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         alphaTextureFolderLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         alphaTextureFolderControl = new ChooseFolderControl();
         alphaTextureFolderControl.setChangeHandler(this::validate);
 
         final Label totalSizeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_TOTAL_SIZE + ":");
-        totalSizeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         totalSizeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         totalSizeComboBox = new ComboBox<>(TOTAL_SIZE_VARIANTS);
-        totalSizeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         totalSizeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
         totalSizeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updatePathSizeValues());
 
         final Label pathSizeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_PATCH_SIZE + ":");
-        pathSizeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         pathSizeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         patchSizeComboBox = new ComboBox<>(observableArrayList(PATCH_SIZE_VARIANTS));
-        patchSizeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         patchSizeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
 
         final Label alphaBlendTextureSizeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_ALPHA_BLEND_TEXTURE_SIZE + ":");
-        alphaBlendTextureSizeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         alphaBlendTextureSizeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         alphaBlendTextureSizeComboBox = new ComboBox<>(SIZE_VARIANTS);
-        alphaBlendTextureSizeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         alphaBlendTextureSizeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
 
         final Label heightMapTypeLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_TERRAIN_TYPE + ":");
-        heightMapTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapTypeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         heightMapTypeComboBox = new ComboBox<>(HEIGHT_MAP_TYPES);
-        heightMapTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         heightMapTypeComboBox.prefWidthProperty().bind(baseTextureControl.widthProperty());
 
         final SingleSelectionModel<HeightMapType> selectionModel = heightMapTypeComboBox.getSelectionModel();
@@ -363,29 +353,24 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         flatSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
 
         final Label heightMapImageControlLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE + ":");
-        heightMapImageControlLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapImageControlLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         heightMapImageControl = new ChooseTextureControl();
         heightMapImageControl.setChangeHandler(this::validate);
 
         final Label heightMapSmoothLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_SMOOTH + ":");
-        heightMapSmoothLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapSmoothLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         heightMapSmoothField = new FloatTextField();
-        heightMapSmoothField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         heightMapSmoothField.prefWidthProperty().bind(baseTextureControl.widthProperty());
         heightMapSmoothField.setMinMax(0F, 1F);
         heightMapSmoothField.setScrollPower(1F);
         heightMapSmoothField.setValue(0.5F);
 
         final Label heightMapScaleLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_SCALE + ":");
-        heightMapScaleLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         heightMapScaleLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         heightMapScaleField = new FloatTextField();
-        heightMapScaleField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         heightMapScaleField.prefWidthProperty().bind(baseTextureControl.widthProperty());
         heightMapScaleField.setValue(1);
 
@@ -399,42 +384,34 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         heightMapSettings.add(heightMapScaleField, 1, 2);
 
         final Label hillIterationsLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_ITERATIONS + ":");
-        hillIterationsLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillIterationsLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         hillIterationsField = new IntegerTextField();
-        hillIterationsField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         hillIterationsField.prefWidthProperty().bind(baseTextureControl.widthProperty());
         hillIterationsField.setMinMax(0, 10000);
         hillIterationsField.setValue(2000);
 
         final Label hillFlatteningLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_FLATTENING + ":");
-        hillFlatteningLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillFlatteningLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         hillFlatteningField = new IntegerTextField();
-        hillFlatteningField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         hillFlatteningField.prefWidthProperty().bind(baseTextureControl.widthProperty());
         hillFlatteningField.setMinMax(0, 127);
         hillFlatteningField.setValue(4);
 
         final Label hillMinRadiusLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_MIN_RADIUS + ":");
-        hillMinRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillMinRadiusLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         hillMinRadiusField = new FloatTextField();
-        hillMinRadiusField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         hillMinRadiusField.prefWidthProperty().bind(baseTextureControl.widthProperty());
         hillMinRadiusField.setMinMax(0, 1000);
         hillMinRadiusField.setValue(20);
         hillMinRadiusField.addChangeListener((observable, oldValue, newValue) -> validate());
 
         final Label hillMaxRadiusLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_MAX_RADIUS + ":");
-        hillMaxRadiusLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         hillMaxRadiusLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
 
         hillMaxRadiusField = new FloatTextField();
-        hillMaxRadiusField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         hillMaxRadiusField.prefWidthProperty().bind(baseTextureControl.widthProperty());
         hillMaxRadiusField.setMinMax(0, 1000);
         hillMaxRadiusField.setValue(50);
@@ -451,31 +428,15 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         hillSettings.add(hillMaxRadiusLabel, 0, 3);
         hillSettings.add(hillMaxRadiusField, 1, 3);
 
-        FXUtils.addClassTo(baseTextureLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(totalSizeLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(pathSizeLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightMapTypeLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(totalSizeComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(patchSizeComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(alphaBlendTextureSizeLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(alphaBlendTextureSizeComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightMapTypeComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(alphaTextureFolderLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassesTo(baseTextureLabel, totalSizeLabel, pathSizeLabel, heightMapTypeLabel,
+                alphaBlendTextureSizeLabel, alphaTextureFolderLabel, heightMapImageControlLabel, heightMapSmoothLabel,
+                heightMapScaleLabel, hillIterationsLabel, hillFlatteningLabel, hillMinRadiusLabel, hillMaxRadiusLabel,
+                CSSClasses.DIALOG_DYNAMIC_LABEL);
 
-        FXUtils.addClassTo(heightMapImageControlLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightMapSmoothLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightMapSmoothField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightMapScaleLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(heightMapScaleField, CSSClasses.SPECIAL_FONT_14);
-
-        FXUtils.addClassTo(hillIterationsLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillIterationsField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillFlatteningLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillFlatteningField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillMinRadiusLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillMinRadiusField, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillMaxRadiusLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(hillMaxRadiusField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassesTo(totalSizeComboBox, patchSizeComboBox, alphaBlendTextureSizeComboBox, heightMapTypeComboBox,
+                heightMapSmoothField, heightMapScaleField, hillIterationsField, hillFlatteningField,
+                hillMinRadiusField, hillMaxRadiusField, hillFlatteningLabel, hillMinRadiusLabel, hillMaxRadiusLabel,
+                CSSClasses.DIALOG_DYNAMIC_LABEL);
 
         FXUtils.addToPane(baseSettings, settingsRoot);
         FXUtils.addToPane(settingsRoot, root);

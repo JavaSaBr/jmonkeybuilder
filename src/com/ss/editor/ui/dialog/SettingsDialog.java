@@ -285,10 +285,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty());
 
-        FXUtils.addClassTo(messageLabel, CSSClasses.SPECIAL_FONT_15);
-        FXUtils.addClassTo(graphicsSettings, CSSClasses.SPECIAL_FONT_15);
-        FXUtils.addClassTo(otherSettings, CSSClasses.SPECIAL_FONT_15);
-
         FXUtils.addToPane(tabPane, root);
         FXUtils.addToPane(messageLabel, root);
 
@@ -324,7 +320,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(additionalClasspathField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, additionalClasspathField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(additionalClasspathField, CSSClasses.TRANSPARENT_TEXT_FIELD);
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
@@ -365,7 +360,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(additionalEnvsField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, additionalEnvsField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(additionalEnvsField, CSSClasses.TRANSPARENT_TEXT_FIELD);
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
@@ -501,7 +495,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(toneMapFilterCheckBox, toneMapFilterContainer);
         FXUtils.addToPane(toneMapFilterContainer, root);
 
-        FXUtils.addClassTo(toneMapFilterLabel, toneMapFilterCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(toneMapFilterLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(toneMapFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -565,10 +558,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(toneMapFilterWhitePointZ, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassesTo(label, CSSClasses.SPECIAL_FONT_14, CSSClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassesTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.SETTINGS_DIALOG_SHORT_LABEL);
-        FXUtils.addClassTo(xLabel, toneMapFilterWhitePointX, yLabel, toneMapFilterWhitePointY,
-                zLabel, toneMapFilterWhitePointZ, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(fieldContainer, toneMapFilterWhitePointX, toneMapFilterWhitePointY, toneMapFilterWhitePointZ,
                 CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -613,7 +604,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(fxaaFilterCheckBox, fxaaContainer);
         FXUtils.addToPane(fxaaContainer, root);
 
-        FXUtils.addClassTo(label, fxaaFilterCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -637,7 +627,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(googleAnalyticsCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, googleAnalyticsCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(googleAnalyticsCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -661,7 +650,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(autoTangentGeneratingCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, autoTangentGeneratingCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(autoTangentGeneratingCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -685,7 +673,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(defaultUseFlippedTextureCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, defaultUseFlippedTextureCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(defaultUseFlippedTextureCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -709,7 +696,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(defaultCameraLampEnabledCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, defaultCameraLampEnabledCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(defaultCameraLampEnabledCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -736,7 +722,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(anisotropyComboBox, anisotropyContainer);
         FXUtils.addToPane(anisotropyContainer, root);
 
-        FXUtils.addClassTo(label, anisotropyComboBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(anisotropyComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -766,7 +751,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(themeComboBox, anisotropyContainer);
         FXUtils.addToPane(anisotropyContainer, root);
 
-        FXUtils.addClassTo(label, themeComboBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(themeComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -795,7 +779,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(frameRateField, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, frameRateField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(frameRateField, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -821,7 +804,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(cameraAngleField, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(label, cameraAngleField, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(cameraAngleField, CSSClasses.SETTINGS_DIALOG_FIELD);
 
@@ -1088,15 +1070,12 @@ public class SettingsDialog extends EditorDialog {
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         final Button okButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_OK);
-        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
 
         final Button cancelButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
 
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);

@@ -2,30 +2,29 @@ package com.ss.editor.ui.control.filter.dialog;
 
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.filter.operation.AddSceneFilterOperation;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.extension.scene.filter.impl.*;
+import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.control.filter.operation.AddSceneFilterOperation;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.awt.*;
 
@@ -108,30 +107,24 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label customBoxLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_CUSTOM_BOX + ":");
-        customBoxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         customBoxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         customCheckBox = new CheckBox();
-        customCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         customCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label builtInLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_BUILT_IN + ":");
-        builtInLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         builtInLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         builtInBox = new ComboBox<>();
-        builtInBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         builtInBox.disableProperty().bind(customCheckBox.selectedProperty());
         builtInBox.getItems().addAll(BUILT_IN_NAMES);
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
         builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label customNameLabel = new Label(Messages.CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         filterNameField = new TextField();
-        filterNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         filterNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
         filterNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
@@ -142,11 +135,8 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         root.add(customNameLabel, 0, 2);
         root.add(filterNameField, 1, 2);
 
-        FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(customBoxLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(filterNameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(builtInLabel, customBoxLabel, customNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(builtInBox, customCheckBox, filterNameField, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
@@ -129,30 +128,24 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label customBoxLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_BOX + ":");
-        customBoxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         customBoxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         customCheckBox = new CheckBox();
-        customCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         customCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label builtInLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN + ":");
-        builtInLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         builtInLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         builtInBox = new ComboBox<>();
-        builtInBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         builtInBox.disableProperty().bind(customCheckBox.selectedProperty());
         builtInBox.getItems().addAll(BUILT_IN_NAMES);
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
         builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label customNameLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         controlNameField = new TextField();
-        controlNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         controlNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
         controlNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
@@ -166,11 +159,8 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
         FXUtils.addToPane(settingsContainer, root);
 
-        FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(customBoxLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(controlNameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(builtInLabel, customBoxLabel, customNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(builtInBox, customCheckBox, controlNameField, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

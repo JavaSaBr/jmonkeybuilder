@@ -14,7 +14,6 @@ import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -113,15 +112,12 @@ public class MaterialDefinitionFileCreator extends AbstractFileCreator {
         super.createSettings(root);
 
         final Label glslLabel = new Label(Messages.MATERIAL_DEFINITION_FILE_CREATOR_GLSL_LABEL + ":");
-        glslLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         glslLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         glslComboBox = new ComboBox<>();
-        glslComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         glslComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final TextField editor = glslComboBox.getEditor();
-        editor.setId(CSSIds.EDITOR_DIALOG_FIELD);
 
         final ObservableList<String> items = glslComboBox.getItems();
         items.clear();
@@ -136,8 +132,8 @@ public class MaterialDefinitionFileCreator extends AbstractFileCreator {
         root.add(glslLabel, 0, 1);
         root.add(glslComboBox, 1, 1);
 
-        FXUtils.addClassTo(glslLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(glslComboBox, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(glslLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(glslComboBox, editor, CSSClasses.DIALOG_FIELD);
     }
 
     @NotNull

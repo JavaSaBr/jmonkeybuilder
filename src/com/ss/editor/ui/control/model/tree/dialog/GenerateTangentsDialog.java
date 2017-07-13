@@ -11,7 +11,6 @@ import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -123,22 +122,18 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label algorithmTypeLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL + ":");
-        algorithmTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         algorithmTypeLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         algorithmTypeComboBox = new ComboBox<>(GenerateTangentsDialog.ALGORITHM_TYPES);
-        algorithmTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         algorithmTypeComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final SingleSelectionModel<AlgorithmType> selectionModel = algorithmTypeComboBox.getSelectionModel();
         selectionModel.select(AlgorithmType.STANDARD);
 
         final Label splitMirroredLabel = new Label(Messages.GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED + ":");
-        splitMirroredLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         splitMirroredLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         splitMirroredCheckBox = new CheckBox();
-        splitMirroredCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         splitMirroredCheckBox.disableProperty().bind(selectionModel.selectedItemProperty().isNotEqualTo(AlgorithmType.STANDARD));
         splitMirroredCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
@@ -147,10 +142,8 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
         root.add(splitMirroredLabel, 0, 1);
         root.add(splitMirroredCheckBox, 1, 1);
 
-        FXUtils.addClassTo(algorithmTypeLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(algorithmTypeComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(splitMirroredLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(splitMirroredCheckBox, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(algorithmTypeLabel, splitMirroredLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(algorithmTypeComboBox, splitMirroredCheckBox, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

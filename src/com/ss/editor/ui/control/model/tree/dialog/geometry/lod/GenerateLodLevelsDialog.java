@@ -174,11 +174,9 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         final HBox reductionMethodContainer = new HBox();
 
         final Label reductionMethodLabel = new Label(Messages.GENERATE_LOD_DIALOG_METHOD + ":");
-        reductionMethodLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         reductionMethodLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         reductionMethodComboBox = new ComboBox<>(GenerateLodLevelsDialog.METHOD_TYPES);
-        reductionMethodComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         reductionMethodComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final SingleSelectionModel<ReductionMethod> selectionModel = reductionMethodComboBox.getSelectionModel();
@@ -217,8 +215,9 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(addRemoveButtonsContainer, root);
 
         FXUtils.addClassTo(levelsList, CSSClasses.TRANSPARENT_LIST_VIEW);
-        FXUtils.addClassTo(reductionMethodLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(reductionMethodComboBox, CSSClasses.SPECIAL_FONT_14);
+
+        FXUtils.addClassTo(reductionMethodLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(reductionMethodComboBox, CSSClasses.DIALOG_FIELD);
 
         VBox.setMargin(reductionMethodContainer, FIELD_OFFSET);
     }

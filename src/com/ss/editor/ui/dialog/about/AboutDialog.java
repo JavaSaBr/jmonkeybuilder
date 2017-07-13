@@ -77,11 +77,13 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
 
         final Hyperlink projectHomeField = new Hyperlink("bitbucket.org");
         projectHomeField.setOnAction(event -> hostServices.showDocument(PROJECT_HOME));
+        projectHomeField.setFocusTraversable(false);
 
         final Label forumThreadLabel = new Label(Messages.ABOUT_DIALOG_FORUM_THREAD + ":");
 
         final Hyperlink forumThreadField = new Hyperlink("hub.jmonkeyengine.org");
         forumThreadField.setOnAction(event -> hostServices.showDocument(FORUM_THREAD));
+        forumThreadField.setFocusTraversable(false);
 
         final Label usedLibrariesLabel = new Label(Messages.ABOUT_DIALOG_USED_LIBRARIES + ":");
         usedLibrariesLabel.prefWidthProperty().bind(gridPane.widthProperty());
@@ -93,9 +95,11 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
 
         final TextArea librariesArea = new TextArea(LIBRARIES);
         librariesArea.setEditable(false);
+        librariesArea.setFocusTraversable(false);
 
         final TextArea iconsArea = new TextArea(ICONS);
         iconsArea.setEditable(false);
+        iconsArea.setFocusTraversable(false);
 
         gridPane.add(applicationLabel, 0, 0, 2, 1);
         gridPane.add(versionLabel, 0, 1, 1, 1);
@@ -115,10 +119,8 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         FXUtils.setFixedHeight(librariesArea, AREA_HEIGHT);
         FXUtils.setFixedHeight(iconsArea, AREA_HEIGHT);
 
-        FXUtils.addClassTo(versionLabel, projectHomeLabel, forumThreadLabel, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(versionField, projectHomeField, forumThreadField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(librariesArea, iconsArea, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(usedLibrariesLabel, usedIcons, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassesTo(versionLabel, projectHomeLabel, forumThreadLabel, usedLibrariesLabel, usedIcons,
+                versionField, projectHomeField, forumThreadField, CSSClasses.SPECIAL_FONT_16);
         FXUtils.addClassTo(applicationLabel, CSSClasses.SPECIAL_FONT_22);
     }
 

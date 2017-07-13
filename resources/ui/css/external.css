@@ -2,6 +2,8 @@
 .code-area {
     -fx-background-color: transparent;
     -fx-stroke: -var-font-color;
+    -fx-font-family: "Ubuntu Mono";
+    -fx-font-size: 13px;
 }
 
 .code-area .caret {

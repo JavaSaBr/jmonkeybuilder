@@ -29,6 +29,9 @@
 
     -var-dialog-button-height: 32;
     -var-dialog-button-width: 150;
+
+    -var-default-label-height: 26px;
+    -var-default-field-height: 26px;
 }
 
 /* Make popups transparent */
@@ -46,6 +49,7 @@
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14px;
     -fx-text-fill: -var-font-color;
+    -fx-max-height: -var-default-label-height;
 }
 
 /*******************************************************************************
@@ -149,6 +153,11 @@
     -fx-background-radius: 0;
     -fx-padding: 3px, 6px, 3px, 6px;
     -fx-border-color: transparent;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 15px;
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab:hover {
@@ -350,6 +359,7 @@
     -fx-border-radius: 1px;
     -fx-padding: 0px 0px 0px 0px;
     -fx-text-fill: -var-font-color;
+    -fx-min-height: -var-default-field-height;
 }
 
 .combo-box-base:hover {
@@ -414,6 +424,8 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0 0 0 4px;
     -fx-cell-size: -1;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
 }
 
 .combo-box-popup > .list-view {
@@ -1053,6 +1065,9 @@
     -fx-padding: 0px 0px 0px 4px;
     -fx-text-fill: -var-font-color;
     -fx-cursor: text;
+    -fx-min-height: -var-default-field-height;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
 }
 
 .text-field:focused {
@@ -1126,12 +1141,12 @@
     -fx-background-insets: 0;
     -fx-text-fill: -var-font-hover-color;
 }
+
 .tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:hover {
     -fx-background-color: -var-tree-cell-hover-color;
     -fx-background-insets: 0;
     -fx-text-fill: -var-font-hover-color;
 }
-
 
 .tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:focused {
     -fx-background-color: transparent;
@@ -1256,16 +1271,17 @@
     -fx-background-radius: 10px;
     -fx-padding: 3px;
 }
+
 .slider:vertical .track {
-    -fx-background-color:
-            -fx-shadow-highlight-color,
-            -fx-text-box-border,
-            linear-gradient(to right,
+    -fx-background-color: -fx-shadow-highlight-color,
+    -fx-text-box-border,
+    linear-gradient(to right,
             derive(-fx-control-inner-background, -9%),
             -fx-control-inner-background,
             derive(-fx-control-inner-background, -9%)
-            );
+    );
 }
+
 .slider .axis {
     -fx-tick-label-fill: derive(-fx-text-background-color, 30%);
     -fx-tick-length: 5px;
@@ -1357,10 +1373,9 @@
     -fx-padding: 0px;
 }
 
-
 /* ------- CUSTOM COLOR DIALOG ------- */
 
-.custom-color-dialog  {
+.custom-color-dialog {
     -fx-background-color: -var-background-color;
     -fx-padding: 10px 15px 10px 15px;
     -fx-spacing: 0px;
@@ -1444,10 +1459,12 @@
     -fx-background: transparent;
     -fx-text-fill: -var-font-focused-color;
 }
+
 .custom-color-dialog .controls-pane .toggle-button:selected {
     -fx-background: -fx-focus-color;
     -fx-text-fill: -var-font-focused-color;
 }
+
 .custom-color-dialog .controls-pane .toggle-button:selected:focused {
     -fx-background: -fx-focus-color;
     -fx-text-fill: -var-font-focused-color;
@@ -1463,10 +1480,12 @@
     -fx-border-radius: 1px 0px 1px 0px;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .left-pill:hover {
     -fx-background-color: -var-button-hover-background-color;
     -fx-border-color: -var-button-hover-border-color;
 }
+
 .custom-color-dialog .controls-pane .left-pill:focused {
     -fx-background-color: -fx-focus-color;
     -fx-background-radius: 2px 0px 0px 2px;
@@ -1474,11 +1493,13 @@
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .left-pill:selected, .controls-pane .left-pill:selected:focused {
     -fx-background-radius: 2px 0px 0px 2px;
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .center-pill {
     -fx-background-color: -var-button-background-color;
     -fx-background-radius: 0px;
@@ -1488,10 +1509,12 @@
     -fx-border-width: 1px 0px 1px 0px;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .center-pill:hover {
     -fx-background-color: -var-button-hover-background-color;
     -fx-border-color: -var-button-hover-border-color;
 }
+
 .custom-color-dialog .controls-pane .center-pill:focused {
     -fx-background-color: -fx-focus-color;
     -fx-background-radius: 0px;
@@ -1499,11 +1522,13 @@
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .center-pill:selected, .controls-pane .center-pill:selected:focused {
     -fx-background-insets: 0px;
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .right-pill {
     -fx-background-color: -var-button-background-color;
     -fx-background-radius: 0px 2px 2px 0px;
@@ -1514,10 +1539,12 @@
     -fx-border-width: 1px 1px 1px 0px;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .right-pill:hover {
     -fx-background-color: -var-button-hover-background-color;
     -fx-border-color: -var-button-hover-border-color;
 }
+
 .custom-color-dialog .controls-pane .right-pill:focused {
     -fx-background-color: -fx-focus-color;
     -fx-background-radius: 0px 2px 2px 0px;
@@ -1525,11 +1552,13 @@
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .right-pill:selected, .controls-pane .right-pill:selected:focused {
     -fx-background-insets: 0;
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
 }
+
 .custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
     -fx-border-color: -var-border-color;
     -fx-border-width: 1px;

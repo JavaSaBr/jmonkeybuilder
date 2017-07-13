@@ -506,22 +506,18 @@ public class AssetEditorDialog<C> extends EditorDialog {
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         warningLabel = new Label();
-        warningLabel.setId(CSSIds.EDITOR_DIALOG_LABEL_WARNING);
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
         okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
-        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processSelect());
         okButton.disableProperty().bind(buildDisableCondition());
 
         final Button cancelButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
-        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
-        FXUtils.addClassTo(warningLabel, CSSClasses.MAIN_FONT_15_BOLD);
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(warningLabel, CSSClasses.DIALOG_LABEL_WARNING);
+        FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
 
         FXUtils.addToPane(warningLabel, container);
         FXUtils.addToPane(okButton, container);

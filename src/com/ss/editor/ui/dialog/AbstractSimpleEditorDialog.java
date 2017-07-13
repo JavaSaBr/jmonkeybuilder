@@ -131,19 +131,16 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         okButton = new Button(getButtonOkLabel());
-        okButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> safeProcessOk());
 
         final Button cancelButton = new Button(getButtonCancelLabel());
-        cancelButton.setId(CSSIds.EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> processCancel());
 
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(okButton, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(cancelButton, CSSClasses.SPECIAL_FONT_16);
+        FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
 
         HBox.setMargin(okButton, OK_BUTTON_OFFSET);
     }

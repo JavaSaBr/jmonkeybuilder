@@ -10,7 +10,6 @@ import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
@@ -88,15 +87,12 @@ public class MaterialFileCreator extends AbstractFileCreator {
         super.createSettings(root);
 
         final Label materialTypeLabel = new Label(Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL + ":");
-        materialTypeLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         materialTypeLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         materialTypeComboBox = new ComboBox<>();
-        materialTypeComboBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         materialTypeComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final TextField editor = materialTypeComboBox.getEditor();
-        editor.setId(CSSIds.EDITOR_DIALOG_FIELD);
 
         AutoCompleteComboBoxListener.install(materialTypeComboBox);
 
@@ -122,8 +118,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
         root.add(materialTypeLabel, 0, 1);
         root.add(materialTypeComboBox, 1, 1);
 
-        FXUtils.addClassTo(materialTypeLabel, materialTypeComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(materialTypeComboBox, CSSClasses.TRANSPARENT_COMBO_BOX);
+        FXUtils.addClassTo(materialTypeLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(materialTypeComboBox, editor, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

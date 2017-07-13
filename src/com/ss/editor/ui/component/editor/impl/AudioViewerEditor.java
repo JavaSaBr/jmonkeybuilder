@@ -169,8 +169,6 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
 
         HBox.setMargin(stopButton, new Insets(0, 0, 0, 0));
 
-        FXUtils.addClassesTo(durationLabel, durationField, bitsPerSampleLabel, bitsPerSampleField, sampleRateField,
-                channelsLabel, channelsField, dataTypeLabel, dataTypeField, sampleRateLabel, CSSClasses.SPECIAL_FONT_16);
         FXUtils.addClassesTo(durationLabel, bitsPerSampleLabel, channelsLabel, dataTypeLabel, sampleRateLabel,
                 CSSClasses.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
         FXUtils.addClassesTo(durationField, bitsPerSampleField, sampleRateField, channelsField,  dataTypeField,

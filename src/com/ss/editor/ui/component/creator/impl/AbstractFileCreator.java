@@ -250,11 +250,9 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     protected void createSettings(@NotNull final GridPane root) {
 
         final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
-        fileNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         fileNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         fileNameField = new TextField();
-        fileNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         fileNameField.prefWidthProperty().bind(root.widthProperty());
         fileNameField.textProperty().addListener((observable, oldValue, newValue) -> validateFileName());
         fileNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
@@ -262,8 +260,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         root.add(fileNameLabel, 0, 0);
         root.add(fileNameField, 1, 0);
 
-        FXUtils.addClassTo(fileNameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(fileNameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(fileNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(fileNameField, CSSClasses.DIALOG_FIELD);
     }
 
     /**

@@ -73,31 +73,6 @@ public interface CSSIds {
     String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
 
     /**
-     * The constant EDITOR_DIALOG_BUTTON_OK.
-     */
-    String EDITOR_DIALOG_BUTTON_OK = "EditorDialogButtonOk";
-    /**
-     * The constant EDITOR_DIALOG_BUTTON_CANCEL.
-     */
-    String EDITOR_DIALOG_BUTTON_CANCEL = "EditorDialogButtonCancel";
-    /**
-     * The constant EDITOR_DIALOG_LABEL_WARNING.
-     */
-    String EDITOR_DIALOG_LABEL_WARNING = "EditorDialogLabelWarning";
-    /**
-     * The constant EDITOR_DIALOG_SHORT_LABEL.
-     */
-    String EDITOR_DIALOG_SHORT_LABEL = "EditorDialogShortLabel";
-    /**
-     * The constant EDITOR_DIALOG_DYNAMIC_LABEL.
-     */
-    String EDITOR_DIALOG_DYNAMIC_LABEL = "EditorDialogDynamicLabel";
-    /**
-     * The constant EDITOR_DIALOG_FIELD.
-     */
-    String EDITOR_DIALOG_FIELD = "EditorDialogField";
-
-    /**
      * The constant ASSET_EDITOR_DIALOG_BUTTON_CONTAINER.
      */
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";

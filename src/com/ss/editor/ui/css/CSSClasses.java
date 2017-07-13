@@ -82,16 +82,30 @@ public interface CSSClasses {
      * The constant DIALOG_ROOT.
      */
     String DIALOG_ROOT = "dialog-root";
-
     /**
      * The constant DIALOG_ACTIONS_ROOT.
      */
     String DIALOG_ACTIONS_ROOT = "dialog-actions-root";
-
     /**
      * The constant DIALOG_CONTENT_ROOT.
      */
     String DIALOG_CONTENT_ROOT = "dialog-content-root";
+    /**
+     * The constant DIALOG_BUTTON.
+     */
+    String DIALOG_BUTTON = "dialog-button";
+    /**
+     * The constant DIALOG_LABEL_WARNING.
+     */
+    String DIALOG_LABEL_WARNING = "dialog-label-warning";
+    /**
+     * The constant DIALOG_DYNAMIC_LABEL.
+     */
+    String DIALOG_DYNAMIC_LABEL = "dialog-dynamic-label";
+    /**
+     * The constant DIALOG_FIELD.
+     */
+    String DIALOG_FIELD = "EditorDialogField";
 
     /**
      * The constant TEXT_INPUT_CONTAINER.

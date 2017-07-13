@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -85,16 +84,13 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label filenameLabel = new Label(Messages.MODEL_CONVERTER_DIALOG_RESULT_NAME + ":");
-        filenameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         filenameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         filenameField = new TextField();
-        filenameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         filenameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         filenameField.textProperty().addListener((observable, oldValue, newValue) -> validate());
 
         final Label destinationLabel = new Label(Messages.MODEL_CONVERTER_DIALOG_DESTINATION_FOLDER + ":");
-        destinationLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         destinationLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         destinationControl = new ChooseFolderControl();
@@ -102,30 +98,24 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         destinationControl.setChangeHandler(this::validate);
 
         final Label exportMaterialsLabel = new Label(Messages.MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS + ":");
-        exportMaterialsLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         exportMaterialsLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         exportMaterialsCheckBox = new CheckBox();
-        exportMaterialsCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         exportMaterialsCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         exportMaterialsCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
         final Label materialsFolderLabel = new Label(Messages.MODEL_CONVERTER_DIALOG_MATERIAL_FOLDER + ":");
-        materialsFolderLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         materialsFolderLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         materialsFolderControl = new ChooseFolderControl();
-        materialsFolderControl.setId(CSSIds.EDITOR_DIALOG_FIELD);
         materialsFolderControl.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         materialsFolderControl.disableProperty().bind(exportMaterialsCheckBox.selectedProperty().not());
         materialsFolderControl.setChangeHandler(this::validate);
 
         final Label overwiteMaterials = new Label(Messages.MODEL_CONVERTER_DIALOG_OVERWRITE_MATERIALS + ":");
-        overwiteMaterials.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         overwiteMaterials.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         overwriteMaterialsCheckBox = new CheckBox();
-        overwriteMaterialsCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         overwriteMaterialsCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         overwriteMaterialsCheckBox.disableProperty().bind(exportMaterialsCheckBox.selectedProperty().not());
 
@@ -140,8 +130,11 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         root.add(overwiteMaterials, 0, 4);
         root.add(overwriteMaterialsCheckBox, 1, 4);
 
-        FXUtils.addClassTo(filenameLabel, filenameField, destinationLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(exportMaterialsLabel, materialsFolderLabel, overwiteMaterials, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(filenameLabel, destinationLabel, exportMaterialsLabel, materialsFolderLabel,
+                overwiteMaterials, CSSClasses.DIALOG_DYNAMIC_LABEL);
+
+        FXUtils.addClassTo(filenameField, destinationControl, exportMaterialsCheckBox, materialsFolderControl,
+                overwriteMaterialsCheckBox, CSSClasses.SPECIAL_FONT_14);
     }
 
     @Override

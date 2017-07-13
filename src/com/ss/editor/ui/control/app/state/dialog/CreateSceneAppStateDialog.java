@@ -15,7 +15,6 @@ import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
@@ -99,30 +98,24 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         final Label customBoxLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_BOX + ":");
-        customBoxLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         customBoxLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         customCheckBox = new CheckBox();
-        customCheckBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         customCheckBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label builtInLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_BUILT_IN + ":");
-        builtInLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         builtInLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         builtInBox = new ComboBox<>();
-        builtInBox.setId(CSSIds.EDITOR_DIALOG_FIELD);
         builtInBox.disableProperty().bind(customCheckBox.selectedProperty());
         builtInBox.getItems().addAll(BUILT_IN_NAMES);
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
         builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
         final Label customNameLabel = new Label(Messages.CREATE_SCENE_APP_STATE_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.setId(CSSIds.EDITOR_DIALOG_DYNAMIC_LABEL);
         customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         stateNameField = new TextField();
-        stateNameField.setId(CSSIds.EDITOR_DIALOG_FIELD);
         stateNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
         stateNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
@@ -136,11 +129,8 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
         FXUtils.addToPane(settingsContainer, root);
 
-        FXUtils.addClassTo(builtInLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(builtInBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(customBoxLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(customNameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(stateNameField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(builtInLabel, customBoxLabel, customNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(builtInBox, customCheckBox, stateNameField, CSSClasses.DIALOG_FIELD);
     }
 
     @Override

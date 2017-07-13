@@ -2,7 +2,6 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
-import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -56,7 +55,6 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         codeArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(codeArea, root);
-        FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);
     }
 
     /**
