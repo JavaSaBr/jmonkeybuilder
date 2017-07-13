@@ -7,7 +7,6 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.resource.FileElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
@@ -175,7 +174,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         expandedItemCountProperty()
                 .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
 
-        setFixedCellSize(FXConstants.CELL_SIZE);
         setCellFactory(param -> new ResourceTreeCell());
         setOnKeyPressed(this::processKey);
         setShowRoot(true);

@@ -354,8 +354,6 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         FXUtils.addToPane(spriteCountControl, container);
         FXUtils.addToPane(forceMinMaxControl, container);
         FXUtils.addToPane(lifeMinMaxControl, container);
-
-        addSplitLine(container);
     }
 
     private void buildFor(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
@@ -492,7 +490,5 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         FXUtils.addToPane(imagesControl, container);
         FXUtils.addToPane(gravityControl, container);
         FXUtils.addToPane(faceNormalControl, container);
-
-        addSplitLine(container);
     }
 }

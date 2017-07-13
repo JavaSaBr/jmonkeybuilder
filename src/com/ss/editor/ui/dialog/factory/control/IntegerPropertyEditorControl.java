@@ -2,7 +2,6 @@ package com.ss.editor.ui.dialog.factory.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.control.input.IntegerTextField;
@@ -34,12 +33,11 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
         super.createComponents();
 
         valueField = new IntegerTextField();
-        valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(0.5F));
 
-        FXUtils.addClassTo(valueField, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
     }
 

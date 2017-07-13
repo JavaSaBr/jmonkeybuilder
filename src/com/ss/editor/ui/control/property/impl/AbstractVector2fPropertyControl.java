@@ -1,26 +1,23 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static java.util.Objects.requireNonNull;
-
 import com.jme3.math.Vector2f;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BiConsumer;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit {@link Vector2f} values.
@@ -64,7 +61,6 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F);
 
         xField = new FloatTextField();
-        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
         xField.setOnKeyReleased(this::updateVector);
         xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         xField.prefWidthProperty().bind(widthProperty().divide(2));
@@ -74,7 +70,6 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F);
 
         yField = new FloatTextField();
-        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
         yField.setOnKeyReleased(this::updateVector);
         yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         yField.prefWidthProperty().bind(widthProperty().divide(2));
@@ -85,10 +80,7 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         FXUtils.addToPane(yLabel, container);
         FXUtils.addToPane(yField, container);
 
-        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(xLabel, yLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
     }
 
     /**

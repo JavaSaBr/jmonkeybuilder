@@ -1,24 +1,22 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ArrayUtils;
 import com.ss.rlib.util.StringUtils;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BiConsumer;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit int array values.
@@ -33,6 +31,7 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
     /**
      * The filed with current value.
      */
+    @Nullable
     private TextField valueField;
 
     /**
@@ -54,11 +53,10 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
         super.createComponents(container);
 
         valueField = new TextField();
-        valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         valueField.setOnKeyReleased(this::updateValue);
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 
@@ -70,8 +68,9 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
     /**
      * @return the filed with current value.
      */
+    @NotNull
     private TextField getValueField() {
-        return valueField;
+        return notNull(valueField);
     }
 
     @Override
@@ -99,7 +98,7 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
 
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
-        final String textValue = valueField.getText();
+        final String textValue = getValueField().getText();
         int[] newValue = null;
 
         if (!StringUtils.isEmpty(textValue)) {

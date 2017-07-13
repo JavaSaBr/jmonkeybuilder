@@ -1,24 +1,20 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static java.lang.Math.min;
-
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
-
-import javafx.scene.control.ColorPicker;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit a color values.
@@ -53,12 +49,11 @@ public abstract class AbstractColorPropertyControl<C extends ChangeConsumer, T> 
         super.createComponents(container);
 
         colorPicker = new ColorPicker();
-        colorPicker.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> updateValue());
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(colorPicker, container);
+        FXUtils.addClassTo(colorPicker, CSSClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
     }
 
     @Override

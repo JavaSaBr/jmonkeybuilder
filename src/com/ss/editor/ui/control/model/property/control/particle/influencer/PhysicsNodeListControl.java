@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.control.particle.influencer;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.renderer.queue.GeometryList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
@@ -11,12 +12,11 @@ import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,7 +25,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 import tonegod.emitter.influencers.impl.PhysicsInfluencer;
 
 import java.util.function.BiConsumer;
@@ -40,25 +39,31 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     /**
      * The constant JFX_APPLICATION.
      */
+    @NotNull
     public static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
      * The consumer of changes.
      */
+    @NotNull
     private final ModelChangeConsumer modelChangeConsumer;
 
     /**
      * The physics influencer.
      */
+    @NotNull
     private final PhysicsInfluencer influencer;
 
     /**
      * The parent.
      */
+    @NotNull
     private final Object parent;
 
     /**
      * The element container.
      */
+    @Nullable
     private VBox elementContainer;
 
     /**
@@ -71,11 +76,11 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     public PhysicsNodeListControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
                                   @NotNull final PhysicsInfluencer influencer,
                                   @NotNull final Object parent) {
-        setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_CONTROL);
         this.modelChangeConsumer = modelChangeConsumer;
         this.parent = parent;
         this.influencer = influencer;
         createControls();
+        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
     }
 
     /**
@@ -84,23 +89,19 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
     protected void createControls() {
 
         final Label propertyNameLabel = new Label(getControlTitle() + ":");
-        propertyNameLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
 
         elementContainer = new VBox();
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_16));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
         removeButton.setDisable(true);
 
         final HBox buttonContainer = new HBox(addButton, removeButton);
-        buttonContainer.setAlignment(Pos.CENTER);
 
         final ObservableList<Node> children = elementContainer.getChildren();
         children.addListener((ListChangeListener<Node>) c -> removeButton.setDisable(children.size() < (getMinElements() + 1)));
@@ -109,8 +110,10 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         FXUtils.addToPane(elementContainer, this);
         FXUtils.addToPane(buttonContainer, this);
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(addButton, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
     }
 
     /**
@@ -149,7 +152,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      */
     @NotNull
     protected VBox getElementContainer() {
-        return elementContainer;
+        return notNull(elementContainer);
     }
 
     /**

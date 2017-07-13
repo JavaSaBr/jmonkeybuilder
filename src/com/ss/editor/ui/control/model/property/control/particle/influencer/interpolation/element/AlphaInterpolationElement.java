@@ -3,18 +3,16 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 import static java.lang.Float.parseFloat;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.AlphaInfluencerControl;
-import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;
 
 /**
@@ -22,7 +20,7 @@ import tonegod.emitter.influencers.impl.AlphaInfluencer;
  *
  * @author JavaSaBr
  */
-public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfluencer, TextField, AlphaInfluencerControl> {
+public class AlphaInterpolationElement extends InterpolationElement<AlphaInfluencer, TextField, AlphaInfluencerControl> {
 
     /**
      * Instantiates a new Alpha and interpolation element.
@@ -30,7 +28,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
      * @param control the control
      * @param index   the index
      */
-    public AlphaAndInterpolationElement(@NotNull final AlphaInfluencerControl control, final int index) {
+    public AlphaInterpolationElement(@NotNull final AlphaInfluencerControl control, final int index) {
         super(control, index);
     }
 
@@ -45,9 +43,10 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
 
         final TextField textField = new TextField();
         textField.setOnScroll(this::processScroll);
-        textField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
         textField.prefWidthProperty().bind(widthProperty().multiply(0.35));
         textField.setOnKeyReleased(this::processChange);
+
+        FXUtils.addClassTo(textField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD);
 
         return textField;
     }
@@ -55,7 +54,7 @@ public class AlphaAndInterpolationElement extends InterpolationElement<AlphaInfl
     /**
      * The process of scrolling value.
      */
-    private void processScroll(final ScrollEvent event) {
+    private void processScroll(@NotNull final ScrollEvent event) {
         if (!event.isControlDown()) return;
 
         final TextField source = (TextField) event.getSource();

@@ -1,9 +1,9 @@
 package com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.AbstractInterpolationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.InterpolatedParticleInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
 import tonegod.emitter.interpolation.InterpolationManager;
@@ -26,11 +27,13 @@ import tonegod.emitter.interpolation.InterpolationManager;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class InterpolationElement<P extends InterpolatedParticleInfluencer, E extends Node, C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
+public abstract class InterpolationElement<P extends InterpolatedParticleInfluencer, E extends Node,
+        C extends AbstractInterpolationInfluencerControl<P>> extends HBox {
 
     /**
      * The constant STRING_CONVERTER.
      */
+    @NotNull
     protected static final StringConverter<Interpolation> STRING_CONVERTER = new StringConverter<Interpolation>() {
 
         @Override
@@ -47,6 +50,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     /**
      * The constant INTERPOLATIONS.
      */
+    @NotNull
     protected static final ObservableList<Interpolation> INTERPOLATIONS;
 
     static {
@@ -60,11 +64,13 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
     /**
      * The editable control.
      */
+    @Nullable
     protected E editableControl;
 
     /**
      * The interpolation chooser.
      */
+    @Nullable
     protected ComboBox<Interpolation> interpolationComboBox;
 
     /**
@@ -84,13 +90,13 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
      * @param index   the index
      */
     public InterpolationElement(@NotNull final C control, final int index) {
-        setId(CSSIds.MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT);
         this.control = control;
         this.index = index;
         createComponents();
         setIgnoreListeners(true);
         reload();
         setIgnoreListeners(false);
+        FXUtils.addClassesTo(this, CSSClasses.DEF_HBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT);
     }
 
     /**
@@ -101,19 +107,19 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         Label editableLabel = null;
 
         if (isNeedEditableLabel()) {
+
             editableLabel = new Label(getEditableTitle() + ":");
-            editableLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
             editableLabel.prefWidthProperty().bind(widthProperty().multiply(0.2));
+
+            FXUtils.addClassTo(editableLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         }
 
         editableControl = createEditableControl();
 
         final Label interpolationLabel = new Label(Messages.MODEL_PROPERTY_INTERPOLATION + ":");
-        interpolationLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         interpolationLabel.prefWidthProperty().bind(widthProperty().multiply(0.25));
 
         interpolationComboBox = new ComboBox<>();
-        interpolationComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         interpolationComboBox.setEditable(false);
         interpolationComboBox.prefWidthProperty().bind(widthProperty().multiply(0.35));
         interpolationComboBox.setConverter(STRING_CONVERTER);
@@ -128,13 +134,8 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
         FXUtils.addToPane(interpolationLabel, this);
         FXUtils.addToPane(interpolationComboBox, this);
 
-        if (editableLabel != null) {
-            FXUtils.addClassTo(editableLabel, CSSClasses.SPECIAL_FONT_13);
-        }
-
-        FXUtils.addClassTo(editableControl, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(interpolationLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(interpolationComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(interpolationLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(interpolationComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -209,7 +210,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
      */
     @NotNull
     protected E getEditableControl() {
-        return editableControl;
+        return notNull(editableControl);
     }
 
     /**
@@ -219,7 +220,7 @@ public abstract class InterpolationElement<P extends InterpolatedParticleInfluen
      */
     @NotNull
     protected ComboBox<Interpolation> getInterpolationComboBox() {
-        return interpolationComboBox;
+        return notNull(interpolationComboBox);
     }
 
     /**

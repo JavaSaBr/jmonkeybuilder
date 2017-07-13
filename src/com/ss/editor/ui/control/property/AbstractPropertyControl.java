@@ -6,7 +6,6 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -241,13 +240,10 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
 
         propertyNameLabel = new Label(getPropertyName() + ":");
 
-        if (isSingleRow()) {
-            propertyNameLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
-        } else {
-            propertyNameLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
-        }
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(propertyNameLabel, isSingleRow() ? CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW :
+                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.SPECIAL_FONT_13);
         FXUtils.addToPane(propertyNameLabel, isSingleRow() ? container : this);
 
         createComponents(container);

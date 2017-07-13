@@ -30,7 +30,6 @@ import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -46,8 +45,6 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditorAppState, ModelFileEditorState> {
-
-    private static final Insets FAST_SKY_OFFSET = new Insets(0, 0, 0, 4);
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -216,16 +213,11 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final Array<Path> additionalEnvs = resourceManager.getAdditionalEnvs();
         additionalEnvs.forEach(path -> skyItems.add(path.toString()));
 
-        FXUtils.addClassTo(lightButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(fastSkyLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(fastSkyComboBox, CSSClasses.SPECIAL_FONT_13);
 
         FXUtils.addToPane(lightButton, container);
         FXUtils.addToPane(fastSkyLabel, container);
         FXUtils.addToPane(fastSkyComboBox, container);
-
-        HBox.setMargin(fastSkyLabel, FAST_SKY_OFFSET);
     }
 
     /**

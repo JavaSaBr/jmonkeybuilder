@@ -39,7 +39,6 @@ import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -86,12 +85,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @NotNull
     private static final ObservableList<RenderQueue.Bucket> BUCKETS = observableArrayList(values());
-
-    @NotNull
-    private static final Insets SMALL_OFFSET = new Insets(0, 1, 0, 3);
-
-    @NotNull
-    private static final Insets BIG_OFFSET = new Insets(0, 1, 0, 6);
 
     /**
      * The operation control.
@@ -623,13 +616,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addClassTo(materialDefinitionLabel, bucketLabel, CSSClasses.FILE_EDITOR_TOOLBAR_LABEL);
         FXUtils.addClassTo(materialDefinitionBox, bucketComboBox, CSSClasses.FILE_EDITOR_TOOLBAR_FIELD);
         FXUtils.addClassTo(cubeButton, sphereButton, planeButton, lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-
-        HBox.setMargin(cubeButton, SMALL_OFFSET);
-        HBox.setMargin(sphereButton, SMALL_OFFSET);
-        HBox.setMargin(planeButton, SMALL_OFFSET);
-        HBox.setMargin(lightButton, BIG_OFFSET);
-        HBox.setMargin(materialDefinitionLabel, BIG_OFFSET);
-        HBox.setMargin(bucketLabel, BIG_OFFSET);
     }
 
     /**

@@ -27,7 +27,8 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
      * @param influencer          the influencer
      * @param parent              the parent
      */
-    public RotationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
+    public RotationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
+                                     @NotNull final RotationInfluencer influencer, @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
 

@@ -1,28 +1,24 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiConsumer;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BiConsumer;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit layers.
@@ -31,6 +27,7 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, SceneLayer> {
 
+    @NotNull
     private class LayerCell extends ListCell<SceneLayer> {
 
         @Override
@@ -62,6 +59,7 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
     /**
      * The layers combo box.
      */
+    @Nullable
     private ComboBox<SceneLayer> layerComboBox;
 
     /**
@@ -95,7 +93,6 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
         super.createComponents(container);
 
         layerComboBox = new ComboBox<>();
-        layerComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         layerComboBox.setCellFactory(param -> new LayerCell());
         layerComboBox.setButtonCell(new LayerCell());
         layerComboBox.setEditable(false);
@@ -104,7 +101,7 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
                 .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
 
         FXUtils.addToPane(layerComboBox, container);
-        FXUtils.addClassTo(layerComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(layerComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     private void updateLevel(@Nullable final SceneLayer layer) {
@@ -118,8 +115,8 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
      * @return the layers combo box.
      */
     @NotNull
-    public ComboBox<SceneLayer> getLayerComboBox() {
-        return requireNonNull(layerComboBox);
+    protected ComboBox<SceneLayer> getLayerComboBox() {
+        return notNull(layerComboBox);
     }
 
     @Override

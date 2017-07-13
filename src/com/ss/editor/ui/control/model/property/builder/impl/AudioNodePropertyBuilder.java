@@ -179,8 +179,6 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         FXUtils.addToPane(innerAngleControl, container);
         FXUtils.addToPane(outerAngleControl, container);
 
-        addSplitLine(container);
-
         final AudioKeyModelPropertyEditor audioKeyControl = new AudioKeyModelPropertyEditor(key,
                 Messages.MODEL_PROPERTY_AUDIO_DATA, changeConsumer);
 
@@ -205,7 +203,5 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         FXUtils.addToPane(audioKeyControl, container);
         FXUtils.addToPane(velocityControl, container);
         FXUtils.addToPane(directionControl, container);
-
-        addSplitLine(container);
     }
 }

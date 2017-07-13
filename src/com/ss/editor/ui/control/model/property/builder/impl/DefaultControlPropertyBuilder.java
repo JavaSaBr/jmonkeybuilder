@@ -175,9 +175,6 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         rotationControl.setEditObject(control);
 
         FXUtils.addToPane(directionTypeControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(directionControl, container);
         FXUtils.addToPane(rotationControl, container);
     }
@@ -267,9 +264,6 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(gravityControl, container);
         FXUtils.addToPane(jumpSpeedControl, container);
         FXUtils.addToPane(maxSlopeControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(viewDirectionControl, container);
         FXUtils.addToPane(walkDirectionControl, container);
     }
@@ -500,9 +494,6 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(suspensionStiffnessControl, container);
         FXUtils.addToPane(restLengthControl, container);
         FXUtils.addToPane(rollInfluenceControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(wheelSpatialControl, container);
         FXUtils.addToPane(wheelIdControl, container);
         FXUtils.addToPane(locationControl, container);
@@ -628,9 +619,6 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         }
 
         FXUtils.addToPane(restitutionControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(angularVelocityControl, container);
         FXUtils.addToPane(gravityControl, container);
         FXUtils.addToPane(linearFactorControl, container);

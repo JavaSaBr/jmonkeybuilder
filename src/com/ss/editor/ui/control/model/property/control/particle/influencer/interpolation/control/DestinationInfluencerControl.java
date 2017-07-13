@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.DestinationWeightAndInterpolationElement;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.DestinationWeightInterpolationElement;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,8 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
      * @param influencer          the influencer
      * @param parent              the parent
      */
-    public DestinationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer, @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
+    public DestinationInfluencerControl(@NotNull final ModelChangeConsumer modelChangeConsumer,
+                                        @NotNull final DestinationInfluencer influencer, @NotNull final Object parent) {
         super(modelChangeConsumer, influencer, parent);
     }
 
@@ -77,7 +78,7 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
 
         for (int i = 0, length = speeds.size(); i < length; i++) {
 
-            final DestinationWeightAndInterpolationElement element = new DestinationWeightAndInterpolationElement(this, i);
+            final DestinationWeightInterpolationElement element = new DestinationWeightInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(element, root);

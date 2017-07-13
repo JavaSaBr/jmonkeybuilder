@@ -177,52 +177,6 @@
     -fx-font-size: 15px;
 }
 
-#ModelNodeTreeCell {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#ModelNodeTreeCellDragged {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-background: -fx-color-A400;
-}
-
-#ModelNodeTreeCellDropAvailable {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-background: -fx-color-A200;
-}
-
-#ModelParamControlVector4fField {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 50;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#ModelParamControlInfluencerControl {
-    -fx-alignment: top-center;
-}
-
-#ModelParamControlInfluencerElement {
-    -fx-padding: 2;
-}
-
-#ModelParamControlInfluencerIconButton {
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
 #ImageChannelPreview {
     -fx-background-color: -var-background-color;
     -fx-effect: -fx-shadow-panel;
@@ -348,92 +302,12 @@
     -fx-max-height: -fx-min-height;
 }
 
-#AbstractParamControlParamName {
-    -fx-min-height: 18;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-    -fx-padding: 2 0 0 0;
-}
-
-#AbstractParamControlParamNameSingleRow {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-right;
-    -fx-padding: 0 3 0 2;
-}
-
-#AbstractParamControlCheckbox {
-    -fx-alignment: center;
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#AbstractParamControlCheckbox > .box {
-    -fx-min-height: 16;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 16;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#AbstractParamControlCheckbox > .box > .mark {
-    -fx-min-height: 12;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 12;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#AbstractParamControlColorPicker {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
 #AbstractParamControlLabelValue {
     -fx-alignment: center-left;
     -fx-text-alignment: left;
 }
 
-#AbstractParamControlComboBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
 #AbstractParamControlNumberLabel {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-}
-
-#AbstractParamControlVector3fField {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-}
-
-#AbstractParamControlNumberLabel2F {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 0 2 0 2;
-    -fx-min-width: 60;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-    -fx-text-alignment: right;
-}
-
-#AbstractParamControlVector2fField {
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
@@ -451,16 +325,6 @@
 #AbstractParamControlElementButton {
 }
 
-#AbstractParamControlContainer {
-    -fx-alignment: top-center;
-    -fx-padding: 2 6 4 4;
-}
-
-#AbstractParamControlSplitLine {
-    -fx-stroke: -fx-color-600;
-    -fx-stroke-width: 2;
-}
-
 #AbstractParamControlMultiValuesContainer {
     -fx-alignment: center;
     -fx-hgap: 2px;
@@ -473,16 +337,6 @@
 
 #Root {
     -fx-background-color: -var-background-color;
-}
-
-#AbstractNodeTreeContainer {
-    -fx-background-color: -var-background-color;
-    -fx-padding: 0 0 0 0;
-}
-
-#AbstractNodeTreeTransparentContainer {
-    -fx-background-color: transparent;
-    -fx-padding: 4 0 0 0;
 }
 
 #ProcessingComponentContainer {
@@ -528,9 +382,6 @@
     -fx-hgap: 3px;
 }
 
-#SceneEditorStatsContainer {
-    -fx-alignment: bottom-left;
-}
 
 #EditorScriptingComponent {
     -fx-background-color: -var-background-color;

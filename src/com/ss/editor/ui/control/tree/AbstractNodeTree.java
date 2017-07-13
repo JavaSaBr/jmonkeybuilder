@@ -2,20 +2,19 @@ package com.ss.editor.ui.control.tree;
 
 import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 
 import java.util.function.Consumer;
 
@@ -55,10 +54,10 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * @param consumer         the consumer
      */
     public AbstractNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final C consumer) {
-        setId(CSSIds.ABSTRACT_NODE_TREE_CONTAINER);
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
         createComponents();
+        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_NODE_TREE_CONTAINER);
     }
 
     /**
@@ -67,7 +66,6 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
     protected void createComponents() {
 
         treeView = new TreeView<>();
-        treeView.setFixedCellSize(FXConstants.CELL_SIZE);
         treeView.setCellFactory(param -> createNodeTreeCell());
         treeView.setShowRoot(true);
         treeView.setEditable(true);
@@ -112,7 +110,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      */
     @NotNull
     protected TreeView<ModelNode<?>> getTreeView() {
-        return treeView;
+        return notNull(treeView);
     }
 
     /**

@@ -79,6 +79,15 @@ public interface CSSClasses {
     String MONO_FONT_13 = "mono-font-13";
 
     /**
+     * The constant DEF_HBOX.
+     */
+    String DEF_HBOX = "hbox";
+    /**
+     * The constant DEF_VBOX.
+     */
+    String DEF_VBOX = "vbox";
+
+    /**
      * The constant DIALOG_ROOT.
      */
     String DIALOG_ROOT = "dialog-root";
@@ -145,6 +154,10 @@ public interface CSSClasses {
      * The constant BUTTON_WITHOUT_LEFT_BORDER.
      */
     String BUTTON_WITHOUT_LEFT_BORDER = "button-without-left-border";
+    /**
+     * The constant BUTTON_WITHOUT_LEFT_RIGHT_BORDER.
+     */
+    String BUTTON_WITHOUT_LEFT_RIGHT_BORDER = "button-without-left-right-border";
     /**
      * The constant BUTTON_WITHOUT_RIGHT_BORDER.
      */
@@ -245,9 +258,71 @@ public interface CSSClasses {
     String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COMBO_BOX = "material-file-editor-param-control-combo-box";
 
     /**
+     * The constant SCENE_EDITOR_STATS_CONTAINER.
+     */
+    String SCENE_EDITOR_STATS_CONTAINER = "scene-editor-stats-container";
+
+    /**
+     * The constant ABSTRACT_NODE_TREE_CONTAINER.
+     */
+    String ABSTRACT_NODE_TREE_CONTAINER = "abstract-node-tree-container";
+    /**
+     * The constant ABSTRACT_NODE_TREE_CELL.
+     */
+    String ABSTRACT_NODE_TREE_CELL = "abstract-node-tree-cell";
+
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_CONTAINER.
+     */
+    String ABSTRACT_PARAM_CONTROL_CONTAINER = "abstract-param-control-container";
+    /**
      * The constant ABSTRACT_PARAM_CONTROL.
      */
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_SPLIT_LINE.
+     */
+    String ABSTRACT_PARAM_CONTROL_SPLIT_LINE = "AbstractParamControlSplitLine";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW.
+     */
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME.
+     */
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "AbstractParamControlParamName";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_CHECK_BOX.
+     */
+    String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "abstract-param-control-checkbox";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_COLOR_PICKER.
+     */
+    String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "abstract-param-control-param-color-picker";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_COMBO_BOX.
+     */
+    String ABSTRACT_PARAM_CONTROL_COMBO_BOX = "abstract-param-control-combobox";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD.
+     */
+    String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "abstract-param-control-vector2f-field";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD.
+     */
+    String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "abstract-param-control-vector3f-field";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL.
+     */
+    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER.
+     */
+    String ABSTRACT_PARAM_CONTROL_INFLUENCER = "abstract-param-control-influencer";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT.
+     */
+    String ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT = "abstract-param-control-influencer-element";
 
     /**
      * The constant SETTINGS_DIALOG_LABEL.

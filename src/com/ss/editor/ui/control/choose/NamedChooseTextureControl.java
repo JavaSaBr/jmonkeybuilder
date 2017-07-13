@@ -1,10 +1,11 @@
 package com.ss.editor.ui.control.choose;
 
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.StringUtils;
 
 import javax.annotation.Nullable;
 
@@ -37,9 +38,10 @@ public class NamedChooseTextureControl extends ChooseTextureControl {
         super.createComponents();
 
         final Label textureLabel = getTextureLabel();
-        textureLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         textureLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
         textureLabel.maxWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
+
+        FXUtils.addClassTo(textureLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -66,30 +65,24 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
         super.createComponents(container);
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new FloatTextField();
-        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnKeyReleased(this::updateVector);
         xField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         xField.prefWidthProperty().bind(widthProperty().divide(3));
         xField.setScrollPower(getScrollPower());
 
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         yField = new FloatTextField();
-        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         yField.setOnKeyReleased(this::updateVector);
         yField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         yField.prefWidthProperty().bind(widthProperty().divide(3));
         yField.setScrollPower(getScrollPower());
 
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         zField = new FloatTextField();
-        zField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnKeyReleased(this::updateVector);
         zField.addChangeListener((observable, oldValue, newValue) -> updateVector(null));
         zField.prefWidthProperty().bind(widthProperty().divide(3));
@@ -102,12 +95,8 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
 
-        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
+        FXUtils.addClassTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
     }
 
     /**

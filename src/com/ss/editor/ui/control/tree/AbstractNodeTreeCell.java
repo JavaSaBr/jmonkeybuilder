@@ -2,18 +2,20 @@ package com.ss.editor.ui.control.tree;
 
 import static com.ss.editor.ui.util.UIUtils.findItem;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static java.util.Objects.requireNonNull;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-import javafx.geometry.Insets;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.BooleanPropertyBase;
+import javafx.css.PseudoClass;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
@@ -24,8 +26,6 @@ import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
 
 import java.util.Set;
 
@@ -39,14 +39,18 @@ import java.util.Set;
 public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends AbstractNodeTree<C>> extends TextFieldTreeCell<ModelNode<?>> {
 
     @NotNull
+    private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
+
+    @NotNull
+    private static final PseudoClass DRAGGED_PSEUDO_CLASS = PseudoClass.getPseudoClass("dragged");
+
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
     private static final DataFormat DATA_FORMAT = new DataFormat(AbstractNodeTreeCell.class.getName());
 
     @NotNull
-    private static final Insets VISIBLE_ICON_OFFSET = new Insets(0, 0, 0, 2);
-
     private final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
 
         @Override
@@ -63,6 +67,46 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
             item.changeName(getNodeTree(), string);
 
             return item;
+        }
+    };
+
+    /**
+     * The dragged state.
+     */
+    @NotNull
+    private final BooleanProperty dragged = new BooleanPropertyBase(false) {
+        public void invalidated() {
+            pseudoClassStateChanged(DRAGGED_PSEUDO_CLASS, get());
+        }
+
+        @Override
+        public Object getBean() {
+            return AbstractNodeTreeCell.this;
+        }
+
+        @Override
+        public String getName() {
+            return "dragged";
+        }
+    };
+
+    /**
+     * The drop available state.
+     */
+    @NotNull
+    private final BooleanProperty dropAvailable = new BooleanPropertyBase(false) {
+        public void invalidated() {
+            pseudoClassStateChanged(DROP_AVAILABLE_PSEUDO_CLASS, get());
+        }
+
+        @Override
+        public Object getBean() {
+            return AbstractNodeTreeCell.this;
+        }
+
+        @Override
+        public String getName() {
+            return "drop available";
         }
     };
 
@@ -116,8 +160,6 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
         this.visibleIcon.setOnMouseReleased(this::processHide);
         this.visibleIcon.setPickOnBounds(true);
 
-        setId(CSSIds.MODEL_NODE_TREE_CELL);
-        setMinHeight(FXConstants.CELL_SIZE);
         setOnMouseClicked(this::processClick);
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
@@ -128,16 +170,14 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
             if (isEditing()) event.consume();
         });
 
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(text, CSSClasses.SPECIAL_FONT_13);
-
         FXUtils.addToPane(icon, content);
         FXUtils.addToPane(visibleIcon, content);
         FXUtils.addToPane(text, content);
 
-        HBox.setMargin(visibleIcon, VISIBLE_ICON_OFFSET);
-
         setConverter(stringConverter);
+
+        FXUtils.addClassTo(content, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_NODE_TREE_CELL);
     }
 
     /**
@@ -291,7 +331,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
      * Handle stopping dragging.
      */
     private void stopDrag(@NotNull final DragEvent event) {
-        setId(CSSIds.MODEL_NODE_TREE_CELL);
+        dragged.setValue(false);
         setCursor(Cursor.DEFAULT);
         event.consume();
     }
@@ -318,7 +358,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
 
         dragBoard.setContent(content);
 
-        setId(CSSIds.MODEL_NODE_TREE_CELL_DRAGGED);
+        dragged.setValue(true);
         setCursor(Cursor.MOVE);
 
         mouseEvent.consume();
@@ -409,13 +449,13 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
         dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();
 
-        setId(CSSIds.MODEL_NODE_TREE_CELL_DROP_AVAILABLE);
+        dropAvailable.setValue(true);
     }
 
     /**
      * Handle exiting a dragged element.
      */
     private void dragExited(@NotNull final DragEvent dragEvent) {
-        setId(CSSIds.MODEL_NODE_TREE_CELL);
+        dropAvailable.setValue(false);
     }
 }

@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -55,12 +54,11 @@ public abstract class AbstractEnumPropertyControl<C extends ChangeConsumer, T, E
         super.createComponents(container);
 
         enumComboBox = new ComboBox<>();
-        enumComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> updateCullHint());
         enumComboBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(enumComboBox, container);
-        FXUtils.addClassTo(enumComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**

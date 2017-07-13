@@ -1,21 +1,19 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
-
+import com.ss.rlib.function.SixObjectConsumer;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
-
-import javafx.scene.layout.HBox;
-import com.ss.rlib.function.SixObjectConsumer;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit float values.
@@ -30,6 +28,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
     /**
      * The filed with current value.
      */
+    @Nullable
     private FloatTextField valueField;
 
     /**
@@ -51,12 +50,11 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
         super.createComponents(container);
 
         valueField = new FloatTextField();
-        valueField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
-        FXUtils.addClassTo(valueField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, container);
     }
 
@@ -67,7 +65,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
      */
     @FXThread
     public void setScrollPower(final float scrollPower) {
-        valueField.setScrollPower(scrollPower);
+        getValueField().setScrollPower(scrollPower);
     }
 
     /**
@@ -77,7 +75,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
      */
     @FXThread
     public float getScrollPower() {
-        return valueField.getScrollPower();
+        return getValueField().getScrollPower();
     }
 
     /**
@@ -88,7 +86,7 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
      */
     @FXThread
     public void setMinMax(final float min, final float max) {
-        valueField.setMinMax(min, max);
+        getValueField().setMinMax(min, max);
     }
 
     @Override
@@ -99,8 +97,9 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
     /**
      * @return the filed with current value.
      */
+    @NotNull
     private FloatTextField getValueField() {
-        return valueField;
+        return notNull(valueField);
     }
 
     @Override

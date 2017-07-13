@@ -1,15 +1,10 @@
 package com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element;
 
 import static java.lang.Float.parseFloat;
-
 import com.jme3.math.Vector3f;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.DestinationInfluencerControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,7 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.influencers.impl.DestinationInfluencer;
 
 /**
@@ -25,26 +21,30 @@ import tonegod.emitter.influencers.impl.DestinationInfluencer;
  *
  * @author JavaSaBr
  */
-public class DestinationWeightAndInterpolationElement extends InterpolationElement<DestinationInfluencer, Parent, DestinationInfluencerControl> {
+public class DestinationWeightInterpolationElement extends InterpolationElement<DestinationInfluencer, Parent, DestinationInfluencerControl> {
 
     /**
      * The field X.
      */
+    @Nullable
     private TextField xField;
 
     /**
      * The field Y.
      */
+    @Nullable
     private TextField yField;
 
     /**
      * The field Z.
      */
+    @Nullable
     private TextField zField;
 
     /**
      * The weight.
      */
+    @Nullable
     private TextField weightField;
 
     /**
@@ -53,7 +53,7 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
      * @param control the control
      * @param index   the index
      */
-    public DestinationWeightAndInterpolationElement(@NotNull final DestinationInfluencerControl control, final int index) {
+    public DestinationWeightInterpolationElement(@NotNull final DestinationInfluencerControl control, final int index) {
         super(control, index);
     }
 
@@ -61,52 +61,36 @@ public class DestinationWeightAndInterpolationElement extends InterpolationEleme
     protected Parent createEditableControl() {
 
         final Label xLabel = new Label("x:");
-        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-
         final Label yLabel = new Label("y:");
-        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-
         final Label zLabel = new Label("z:");
-        zLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-
         final Label weightLabel = new Label("w:");
-        weightLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
 
         xField = new TextField();
-        xField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         xField.setOnScroll(this::processScroll);
         xField.setOnKeyReleased(this::processDestinationChange);
 
         yField = new TextField();
-        yField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         yField.setOnScroll(this::processScroll);
         yField.setOnKeyReleased(this::processDestinationChange);
 
         zField = new TextField();
-        zField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         zField.setOnScroll(this::processScroll);
         zField.setOnKeyReleased(this::processDestinationChange);
 
         weightField = new TextField();
-        weightField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
         weightField.setOnScroll(this::processScroll);
         weightField.setOnKeyReleased(this::processDestinationChange);
 
         final HBox container = new HBox(xLabel, xField, yLabel, yField, zLabel, zField, weightLabel, weightField);
 
-        FXUtils.addClassTo(xLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(zLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(weightLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(xField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(yField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(zField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(weightField, CSSClasses.SPECIAL_FONT_13);
-
         xField.prefWidthProperty().bind(container.widthProperty().divide(6));
         yField.prefWidthProperty().bind(container.widthProperty().divide(6));
         zField.prefWidthProperty().bind(container.widthProperty().divide(6));
         weightField.prefWidthProperty().bind(container.widthProperty().divide(6));
+
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(xLabel, yLabel, zLabel, weightLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
+        FXUtils.addClassTo(xField, yField, zField, weightField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
 
         container.prefWidthProperty().bind(widthProperty().multiply(0.6));
 

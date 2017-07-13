@@ -118,8 +118,6 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
             rotationControl.setSyncHandler(Spatial::getLocalRotation);
             rotationControl.setEditObject(spatial);
 
-            addSplitLine(container);
-
             FXUtils.addToPane(locationControl, container);
             FXUtils.addToPane(scaleControl, container);
             FXUtils.addToPane(rotationControl, container);
@@ -138,8 +136,6 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         if(count < 1) {
             return;
         }
-
-        addSplitLine(container);
 
         final Array<String> sortedKeys = ArrayFactory.newSortedArray(String.class);
         sortedKeys.addAll(userDataKeys);

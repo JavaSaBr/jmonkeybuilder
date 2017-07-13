@@ -4,7 +4,6 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
-import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
@@ -43,7 +42,6 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
      * Instantiates a new Resource tree cell.
      */
     protected ResourceTreeCell() {
-        setMinHeight(FXConstants.CELL_SIZE);
         setOnMouseClicked(this::processClick);
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);

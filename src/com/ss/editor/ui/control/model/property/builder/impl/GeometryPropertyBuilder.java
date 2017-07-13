@@ -131,8 +131,6 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
 
         FXUtils.addToPane(boundingVolumeControl, container);
 
-        addSplitLine(container);
-
         final LodLevelModelPropertyControl lodLevelControl = new LodLevelModelPropertyControl(lodLevel,
                 Messages.MODEL_PROPERTY_LOD, changeConsumer);
 

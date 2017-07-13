@@ -6,9 +6,4 @@ package com.ss.editor.ui;
  * @author JavaSaBr
  */
 public interface FXConstants {
-
-    /**
-     * The constant CELL_SIZE.
-     */
-    int CELL_SIZE = 22;
 }

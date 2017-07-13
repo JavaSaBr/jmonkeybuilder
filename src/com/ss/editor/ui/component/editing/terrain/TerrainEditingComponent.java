@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editing.terrain;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
@@ -22,6 +22,13 @@ import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -35,13 +42,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.util.function.Function;
 
@@ -434,7 +434,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private VBox getControlSettings() {
-        return requireNonNull(controlSettings);
+        return notNull(controlSettings);
     }
 
     /**
@@ -442,7 +442,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private ToggleButton getLevelButton() {
-        return requireNonNull(levelButton);
+        return notNull(levelButton);
     }
 
     /**
@@ -450,7 +450,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private ToggleButton getPaintButton() {
-        return requireNonNull(paintButton);
+        return notNull(paintButton);
     }
 
     /**
@@ -458,7 +458,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private ToggleButton getSlopeButton() {
-        return requireNonNull(slopeButton);
+        return notNull(slopeButton);
     }
 
     /**
@@ -466,7 +466,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private ToggleButton getRoughButton() {
-        return requireNonNull(roughButton);
+        return notNull(roughButton);
     }
 
     /**
@@ -474,7 +474,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private ToggleButton getSmoothButton() {
-        return requireNonNull(smoothButton);
+        return notNull(smoothButton);
     }
 
     /**
@@ -482,7 +482,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private ToggleButton getRaiseLowerButton() {
-        return requireNonNull(raiseLowerButton);
+        return notNull(raiseLowerButton);
     }
 
     /**
@@ -490,7 +490,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getBrushPowerField() {
-        return requireNonNull(brushPowerField);
+        return notNull(brushPowerField);
     }
 
     /**
@@ -498,7 +498,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getBrushSizeField() {
-        return requireNonNull(brushSizeField);
+        return notNull(brushSizeField);
     }
 
     @Override
@@ -535,21 +535,17 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         buttonsContainer.prefWidthProperty().bind(widthProperty());
 
         final Label brushSizeLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_SIZE + ":");
-        brushSizeLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         brushSizeLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         brushSizeField = new FloatTextField();
-        brushSizeField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         brushSizeField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         brushSizeField.setMinMax(0.0001F, Integer.MAX_VALUE);
         brushSizeField.addChangeListener((observable, oldValue, newValue) -> changeBrushSize(newValue));
 
         final Label brushPowerLabel = new Label(Messages.EDITING_COMPONENT_BRUSH_POWER + ":");
-        brushPowerLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         brushPowerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         brushPowerField = new FloatTextField();
-        brushPowerField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         brushPowerField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         brushPowerField.setScrollPower(3F);
         brushPowerField.setMinMax(0.0001F, Integer.MAX_VALUE);
@@ -587,11 +583,9 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         FXUtils.addClassTo(slopeButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
         FXUtils.addClassTo(paintButton, CSSClasses.FLAT_BUTTON);
         FXUtils.addClassTo(paintButton, CSSClasses.EDITING_TOGGLE_BUTTON_BIG);
-
-        FXUtils.addClassTo(brushSizeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(brushSizeField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(brushPowerLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(brushPowerField, CSSClasses.SPECIAL_FONT_13);
+        
+        FXUtils.addClassTo(brushSizeLabel, brushPowerLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(brushSizeField, brushPowerField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -600,20 +594,16 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     private void createSlopeControlSettings() {
 
         final Label smoothlyLabel = new Label(Messages.EDITING_COMPONENT_SMOOTHLY + ":");
-        smoothlyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         slopeControlSmoothly = new CheckBox();
-        slopeControlSmoothly.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         slopeControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         slopeControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
 
         final Label limitedLabel = new Label(Messages.EDITING_COMPONENT_LIMITED + ":");
-        limitedLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         limitedLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         slopeControlLimited = new CheckBox();
-        slopeControlLimited.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         slopeControlLimited.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         slopeControlLimited.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlLimited(newValue));
 
@@ -623,10 +613,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         slopeControlSettings.add(limitedLabel, 0, 1);
         slopeControlSettings.add(slopeControlLimited, 1, 1);
 
-        FXUtils.addClassTo(smoothlyLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(slopeControlSmoothly, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(limitedLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(slopeControlLimited, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(smoothlyLabel, limitedLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(slopeControlSmoothly, slopeControlLimited, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     /**
@@ -635,29 +623,23 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     private void createLevelControlSettings() {
 
         final Label smoothlyLabel = new Label(Messages.EDITING_COMPONENT_SMOOTHLY + ":");
-        smoothlyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         smoothlyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlSmoothly = new CheckBox();
-        levelControlSmoothly.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         levelControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         levelControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
 
         final Label useMarkerLabel = new Label(Messages.EDITING_COMPONENT_USE_MARKER + ":");
-        useMarkerLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         useMarkerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlUseMarker = new CheckBox();
-        levelControlUseMarker.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         levelControlUseMarker.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         levelControlUseMarker.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
 
         final Label levelLabel = new Label(Messages.EDITING_COMPONENT_LEVEL + ":");
-        levelLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         levelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlLevelField = new FloatTextField();
-        levelControlLevelField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         levelControlLevelField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         levelControlLevelField.setMinMax(0F, Integer.MAX_VALUE);
         levelControlLevelField.addChangeListener((observable, oldValue, newValue) -> changeLevelControlLevel(newValue));
@@ -671,12 +653,11 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         levelControlSettings.add(levelLabel, 0, 2);
         levelControlSettings.add(levelControlLevelField, 1, 2);
 
-        FXUtils.addClassTo(smoothlyLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(levelControlSmoothly, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(useMarkerLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(levelControlUseMarker, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(levelLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(levelControlLevelField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(smoothlyLabel, useMarkerLabel, levelLabel,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+
+        FXUtils.addClassTo(levelControlLevelField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(levelControlSmoothly, levelControlUseMarker, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     /**
@@ -685,51 +666,41 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     private void createRoughControlSettings() {
 
         final Label roughnessLabel = new Label(Messages.EDITING_COMPONENT_ROUGHNESS + ":");
-        roughnessLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         roughnessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlRoughnessField = new FloatTextField();
-        roughControlRoughnessField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         roughControlRoughnessField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         roughControlRoughnessField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlRoughnessField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlRoughness(newValue));
 
         final Label frequencyLabel = new Label(Messages.EDITING_COMPONENT_FREQUENCY + ":");
-        frequencyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         frequencyLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlFrequencyField = new FloatTextField();
-        roughControlFrequencyField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         roughControlFrequencyField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         roughControlFrequencyField.setMinMax(0.1F, Integer.MAX_VALUE);
         roughControlFrequencyField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlFrequency(newValue));
 
         final Label lacunarityLabel = new Label(Messages.EDITING_COMPONENT_LACUNARITY + ":");
-        lacunarityLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         lacunarityLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlLacunarityField = new FloatTextField();
-        roughControlLacunarityField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         roughControlLacunarityField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         roughControlLacunarityField.setMinMax(1.1F, Integer.MAX_VALUE);
         roughControlLacunarityField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlLacunarity(newValue));
 
         final Label octavesLabel = new Label(Messages.EDITING_COMPONENT_OCTAVES + ":");
-        octavesLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         octavesLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlOctavesField = new FloatTextField();
-        roughControlOctavesField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         roughControlOctavesField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         roughControlOctavesField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlOctavesField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlOctaves(newValue));
 
         final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
-        scaleLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         scaleLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         roughControlScaleField = new FloatTextField();
-        roughControlScaleField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         roughControlScaleField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         roughControlScaleField.setMinMax(0F, Integer.MAX_VALUE);
         roughControlScaleField.addChangeListener((observable, oldValue, newValue) -> changeRoughControlScale(newValue));
@@ -746,16 +717,11 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         roughControlSettings.add(scaleLabel, 0, 4);
         roughControlSettings.add(roughControlScaleField, 1, 4);
 
-        FXUtils.addClassTo(roughnessLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(roughControlRoughnessField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(frequencyLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(roughControlFrequencyField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(lacunarityLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(roughControlLacunarityField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(octavesLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(roughControlOctavesField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(scaleLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(roughControlScaleField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(roughnessLabel, frequencyLabel, lacunarityLabel, octavesLabel, scaleLabel,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+
+        FXUtils.addClassTo(roughControlRoughnessField, roughControlFrequencyField, roughControlLacunarityField,
+                roughControlOctavesField, roughControlScaleField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -764,20 +730,16 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     private void createPaintControlSettings() {
 
         final Label triPlanarLabelLabel = new Label(Messages.EDITING_COMPONENT_TRI_PLANAR + ":");
-        triPlanarLabelLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         triPlanarLabelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         triPlanarCheckBox = new CheckBox();
-        triPlanarCheckBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         triPlanarCheckBox.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         triPlanarCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
 
         final Label shininessLabel = new Label(Messages.EDITING_COMPONENT_SHININESS + ":");
-        shininessLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         shininessField = new FloatTextField();
-        shininessField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         shininessField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         shininessField.setMinMax(0F, Integer.MAX_VALUE);
         shininessField.addChangeListener((observable, oldValue, newValue) -> changePaintControlShininess(newValue));
@@ -791,10 +753,9 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         paintControlSettings.add(triPlanarCheckBox, 1, 1);
         paintControlSettings.add(textureLayerSettings, 0, 2, 2, 1);
 
-        FXUtils.addClassTo(triPlanarLabelLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(triPlanarCheckBox, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(shininessLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(shininessField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(shininessLabel, triPlanarLabelLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(triPlanarCheckBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
+        FXUtils.addClassTo(shininessField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**
@@ -989,7 +950,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     protected CheckBox getTriPlanarCheckBox() {
-        return requireNonNull(triPlanarCheckBox);
+        return notNull(triPlanarCheckBox);
     }
 
     /**
@@ -999,7 +960,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     protected FloatTextField getShininessField() {
-        return requireNonNull(shininessField);
+        return notNull(shininessField);
     }
 
     /**
@@ -1007,7 +968,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private CheckBox getLevelControlSmoothly() {
-        return requireNonNull(levelControlSmoothly);
+        return notNull(levelControlSmoothly);
     }
 
     /**
@@ -1015,7 +976,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private CheckBox getLevelControlUseMarker() {
-        return requireNonNull(levelControlUseMarker);
+        return notNull(levelControlUseMarker);
     }
 
     /**
@@ -1023,7 +984,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getLevelControlLevelField() {
-        return requireNonNull(levelControlLevelField);
+        return notNull(levelControlLevelField);
     }
 
     /**
@@ -1031,7 +992,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private CheckBox getSlopeControlLimited() {
-        return requireNonNull(slopeControlLimited);
+        return notNull(slopeControlLimited);
     }
 
     /**
@@ -1039,7 +1000,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private CheckBox getSlopeControlSmoothly() {
-        return requireNonNull(slopeControlSmoothly);
+        return notNull(slopeControlSmoothly);
     }
 
     /**
@@ -1047,7 +1008,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getRoughControlFrequencyField() {
-        return requireNonNull(roughControlFrequencyField);
+        return notNull(roughControlFrequencyField);
     }
 
     /**
@@ -1055,7 +1016,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getRoughControlLacunarityField() {
-        return requireNonNull(roughControlLacunarityField);
+        return notNull(roughControlLacunarityField);
     }
 
     /**
@@ -1063,7 +1024,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getRoughControlOctavesField() {
-        return requireNonNull(roughControlOctavesField);
+        return notNull(roughControlOctavesField);
     }
 
     /**
@@ -1071,7 +1032,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getRoughControlRoughnessField() {
-        return requireNonNull(roughControlRoughnessField);
+        return notNull(roughControlRoughnessField);
     }
 
     /**
@@ -1079,7 +1040,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private FloatTextField getRoughControlScaleField() {
-        return requireNonNull(roughControlScaleField);
+        return notNull(roughControlScaleField);
     }
 
     /**
@@ -1087,7 +1048,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @NotNull
     private TextureLayerSettings getTextureLayerSettings() {
-        return requireNonNull(textureLayerSettings);
+        return notNull(textureLayerSettings);
     }
 
     /**

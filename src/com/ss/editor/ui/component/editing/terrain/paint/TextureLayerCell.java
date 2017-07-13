@@ -73,7 +73,6 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         settingContainer.maxWidthProperty().bind(maxWidth);
 
         layerField = new Label();
-        layerField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
         layerField.prefWidthProperty().bind(settingContainer.widthProperty());
 
         diffuseTextureControl = new NamedChooseTextureControl("Diffuse");
@@ -83,11 +82,9 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         normalTextureControl.setChangeHandler(this::updateNormal);
 
         final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
-        scaleLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
 
         scaleField = new FloatTextField();
-        scaleField.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         scaleField.setMinMax(0.0001F, Integer.MAX_VALUE);
         scaleField.setScrollPower(3F);
         scaleField.addChangeListener((observable, oldValue, newValue) -> updateScale(newValue));
@@ -101,9 +98,9 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
         FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_LIST_CELL);
         FXUtils.addClassTo(this, CSSClasses.LIST_CELL_WITHOUT_PADDING);
-        FXUtils.addClassTo(layerField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(scaleLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(scaleField, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(layerField, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
+        FXUtils.addClassTo(scaleLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
+        FXUtils.addClassTo(scaleField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     /**

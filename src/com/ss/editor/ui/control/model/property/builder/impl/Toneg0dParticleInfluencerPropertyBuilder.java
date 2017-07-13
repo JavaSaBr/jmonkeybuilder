@@ -141,8 +141,6 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         influencerControl.reload();
 
         FXUtils.addToPane(influencerControl, container);
-
-        addSplitLine(container);
     }
 
     /**
@@ -169,9 +167,6 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         randomStartColorControl.setEditObject(influencer);
 
         FXUtils.addToPane(colorControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(randomStartColorControl, container);
     }
 
@@ -210,9 +205,6 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         sizeVariationToleranceControl.setEditObject(influencer);
 
         FXUtils.addToPane(sizeControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(randomStartSizeControl, container);
         FXUtils.addToPane(sizeVariationToleranceControl, container);
     }
@@ -297,9 +289,6 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         randomStartDestinationControl.setEditObject(influencer);
 
         FXUtils.addToPane(influencerControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(randomStartDestinationControl, container);
     }
 
@@ -567,9 +556,6 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         randomStartRotationZControl.setEditObject(influencer);
 
         FXUtils.addToPane(influencerControl, container);
-
-        addSplitLine(container);
-
         FXUtils.addToPane(randomDirectionControl, container);
         FXUtils.addToPane(randomSpeedControl, container);
         FXUtils.addToPane(randomStartRotationXControl, container);

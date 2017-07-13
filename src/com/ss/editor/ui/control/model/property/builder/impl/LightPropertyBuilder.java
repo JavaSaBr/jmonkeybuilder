@@ -15,13 +15,10 @@ import com.ss.editor.ui.control.model.property.control.FloatLightPropertyControl
 import com.ss.editor.ui.control.model.property.control.PositionLightPropertyControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The implementation of the {@link PropertyBuilder} to build property controls for {@link Light} objects.
@@ -75,8 +72,6 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         directionControl.setEditObject(light);
 
         FXUtils.addToPane(directionControl, container);
-
-        addSplitLine(container);
     }
 
     private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,
@@ -98,13 +93,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         radiusControl.setMinMax(0, Integer.MAX_VALUE);
         radiusControl.setEditObject(light);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(positionControl, container);
-        FXUtils.addToPane(splitLine, container);
         FXUtils.addToPane(radiusControl, container);
-
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     private void buildForSpotLight(@NotNull final SpotLight light, @NotNull final VBox container,
@@ -152,16 +142,11 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         outerAngleControl.setScrollPower(1F);
         outerAngleControl.setEditObject(light);
 
-        final Line splitLine = createSplitLine(container);
-
         FXUtils.addToPane(directionControl, container);
         FXUtils.addToPane(positionControl, container);
-        FXUtils.addToPane(splitLine, container);
         FXUtils.addToPane(rangeControl, container);
         FXUtils.addToPane(innerAngleControl, container);
         FXUtils.addToPane(outerAngleControl, container);
-
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
     }
 
     private void buildForLight(@NotNull final Light object, @NotNull final VBox container,

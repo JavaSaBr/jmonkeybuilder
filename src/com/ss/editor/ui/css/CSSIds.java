@@ -108,36 +108,6 @@ public interface CSSIds {
     String SETTINGS_DIALOG_MESSAGE_LABEL = "SettingsDialogMessageLabel";
 
     /**
-     * The constant MODEL_NODE_TREE_CELL.
-     */
-    String MODEL_NODE_TREE_CELL = "ModelNodeTreeCell";
-    /**
-     * The constant MODEL_NODE_TREE_CELL_DRAGGED.
-     */
-    String MODEL_NODE_TREE_CELL_DRAGGED = "ModelNodeTreeCellDragged";
-    /**
-     * The constant MODEL_NODE_TREE_CELL_DROP_AVAILABLE.
-     */
-    String MODEL_NODE_TREE_CELL_DROP_AVAILABLE = "ModelNodeTreeCellDropAvailable";
-
-    /**
-     * The constant MODEL_PARAM_CONTROL_VECTOR4F_FIELD.
-     */
-    String MODEL_PARAM_CONTROL_VECTOR4F_FIELD = "ModelParamControlVector4fField";
-    /**
-     * The constant MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT.
-     */
-    String MODEL_PARAM_CONTROL_INFLUENCER_ELEMENT = "ModelParamControlInfluencerElement";
-    /**
-     * The constant MODEL_PARAM_CONTROL_INFLUENCER_CONTROL.
-     */
-    String MODEL_PARAM_CONTROL_INFLUENCER_CONTROL = "ModelParamControlInfluencerControl";
-    /**
-     * The constant MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON.
-     */
-    String MODEL_PARAM_CONTROL_INFLUENCER_ICON_BUTTON = "ModelParamControlInfluencerIconButton";
-
-    /**
      * The constant IMAGE_CHANNEL_PREVIEW.
      */
     String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
@@ -199,53 +169,13 @@ public interface CSSIds {
     String SCENE_APP_STATE_LIST_CELL = "SceneAppStateListCell";
 
     /**
-     * The constant ABSTRACT_PARAM_CONTROL_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_CONTAINER = "AbstractParamControlContainer";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_SPLIT_LINE.
-     */
-    String ABSTRACT_PARAM_CONTROL_SPLIT_LINE = "AbstractParamControlSplitLine";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW.
-     */
-    String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "AbstractParamControlParamNameSingleRow";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME.
-     */
-    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "AbstractParamControlParamName";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_CHECK_BOX.
-     */
-    String ABSTRACT_PARAM_CONTROL_CHECK_BOX = "AbstractParamControlCheckbox";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_COLOR_PICKER.
-     */
-    String ABSTRACT_PARAM_CONTROL_COLOR_PICKER = "AbstractParamControlColorPicker";
-    /**
      * The constant ABSTRACT_PARAM_CONTROL_LABEL_VALUE.
      */
     String ABSTRACT_PARAM_CONTROL_LABEL_VALUE = "AbstractParamControlLabelValue";
     /**
-     * The constant ABSTRACT_PARAM_CONTROL_COMBO_BOX.
-     */
-    String ABSTRACT_PARAM_CONTROL_COMBO_BOX = "AbstractParamControlComboBox";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL.
-     */
-    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "AbstractParamControlNumberLabel";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD.
-     */
-    String ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD = "AbstractParamControlVector3fField";
-    /**
      * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F.
      */
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F = "AbstractParamControlNumberLabel2F";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD.
-     */
-    String ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD = "AbstractParamControlVector2fField";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL.
      */
@@ -267,15 +197,6 @@ public interface CSSIds {
      * The constant AUDIO_VIEW_EDITOR_CONTAINER.
      */
     String AUDIO_VIEW_EDITOR_CONTAINER = "AudioViewEditorContainer";
-
-    /**
-     * The constant ABSTRACT_NODE_TREE_CONTAINER.
-     */
-    String ABSTRACT_NODE_TREE_CONTAINER = "AbstractNodeTreeContainer";
-    /**
-     * The constant ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER.
-     */
-    String ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER = "AbstractNodeTreeTransparentContainer";
 
     /**
      * The constant ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER.
@@ -317,10 +238,6 @@ public interface CSSIds {
      * The constant STATS_APP_STATE_STATS_CONTAINER.
      */
     String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
-    /**
-     * The constant SCENE_EDITOR_STATS_CONTAINER.
-     */
-    String SCENE_EDITOR_STATS_CONTAINER = "SceneEditorStatsContainer";
 
     /**
      * The constant EDITOR_SCRIPTING_COMPONENT.

@@ -193,6 +193,10 @@
     -fx-border-width: 1px 1px 1px 0px;
 }
 
+.button-without-left-right-border {
+    -fx-border-width: 1px 0px 1px 0px;
+}
+
 .button-without-right-border {
     -fx-border-width: 1px 0px 1px 1px;
 }
@@ -373,10 +377,10 @@
  ******************************************************************************/
 
 .file-editor-toolbar-button {
-    -fx-min-height: 24px;
+    -fx-min-height: -var-default-toolbar-button-size;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-min-width: 24px;
+    -fx-min-width: -var-default-toolbar-button-size;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
 }
@@ -401,11 +405,12 @@
     -fx-background-color: -var-background-color;
     -fx-border-color: -var-border-color;
     -fx-border-width: 0px 0px 1px 0px;
-    -fx-min-height: 30px;
+    -fx-min-height: 31px;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-padding: 10px, 0px, 0px, 0px;
     -fx-alignment: center-left;
+    -fx-spacing: 2px;
 }
 
 .file-editor-editor-area {
@@ -430,7 +435,7 @@
 .material-file-editor-properties-component {
     -fx-background-color: transparent;
     -fx-alignment: top-left;
-    -fx-padding: 0px 5px 0px 4px;
+    -fx-padding: 1px 5px 0px 4px;
 }
 
 .material-file-editor-param-control {
@@ -477,6 +482,41 @@
 }
 
 .material-file-editor-param-control-combo-box {
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Scene File Editor                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.scene-editor-stats-container {
+    -fx-alignment: bottom-left;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Abstract Node Tree                                                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.abstract-node-tree-container {
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+.abstract-node-tree-cell {
+}
+
+.abstract-node-tree-cell > .hbox {
+    -fx-alignment: center-left;
+    -fx-spacing: 2px;
+}
+
+.abstract-node-tree-cell:dragged {
+}
+
+.abstract-node-tree-cell:drop-available {
+    -fx-background-color: -var-tree-cell-selected-color;
 }
 
 /*******************************************************************************
@@ -531,6 +571,92 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Abstract Property Component                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.abstract-param-control-container {
+    -fx-alignment: top-center;
+    -fx-padding: 2px 6px 4px 4px;
+}
+
+.abstract-param-control {
+    -fx-padding: 1px 0px 1px 0px;
+    -fx-spacing: 2px;
+}
+
+.abstract-param-control > .hbox {
+    -fx-spacing: 2px;
+}
+
+.abstract-param-control-param-name {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+.abstract-param-control-param-name-single-row {
+    -fx-alignment: center-right;
+}
+
+.abstract-param-control-param-color-picker {
+}
+
+.abstract-param-control-checkbox {
+}
+
+.abstract-param-control-combobox {
+}
+
+.abstract-param-control-vector2f-field {
+}
+
+
+.abstract-param-control-vector3f-field {
+}
+
+.abstract-param-control-number-label {
+    -fx-min-width: 10px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+}
+
+.abstract-param-control-influencer-element {
+    -fx-spacing: 2px;
+    -fx-padding: 0px;
+}
+
+.abstract-param-control-influencer-element > .hbox {
+    -fx-spacing: 2px;
+}
+
+.abstract-param-control-influencer {
+    -fx-alignment: top-center;
+    -fx-spacing: 2px;
+}
+
+.abstract-param-control-influencer > .vbox {
+    -fx-spacing: 2px;
+}
+
+.abstract-param-control-influencer > .hbox {
+    -fx-alignment: center;
+    -fx-padding: 4px 0px 0px 0px;
+}
+
+.abstract-param-control-influencer > .hbox > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 
@@ -610,8 +736,4 @@
     -fx-min-width: 32;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-.abstract-param-control {
-    -fx-padding: 0 0 0 0;
 }

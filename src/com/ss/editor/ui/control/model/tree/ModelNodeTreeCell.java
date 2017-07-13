@@ -1,18 +1,14 @@
 package com.ss.editor.ui.control.model.tree;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTreeCell;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
-
 import javafx.scene.control.TreeItem;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * THe implementation of {@link AbstractNodeTreeCell} to show model nodes.
@@ -38,7 +34,7 @@ public class ModelNodeTreeCell extends AbstractNodeTreeCell<ModelChangeConsumer,
         if (element instanceof Spatial) {
 
             final ModelNodeTree nodeTree = getNodeTree();
-            final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+            final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
             final TreeItem<ModelNode<?>> parent = dragTreeItem.getParent();
 

@@ -1,10 +1,10 @@
 package com.ss.editor.ui.control.model.property;
 
+import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyEditor;
-import com.ss.editor.util.NodeUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
@@ -31,7 +31,7 @@ public class ModelPropertyEditor extends AbstractPropertyEditor<ModelChangeConsu
         final Object currentObject = getCurrentObject();
 
         if (currentObject instanceof ParticleNode && object instanceof ParticleEmitterNode) {
-            final Object parent = NodeUtils.findParent((Spatial) currentObject, spatial -> spatial instanceof ParticleEmitterNode);
+            final Object parent = findParent((Spatial) currentObject, ParticleEmitterNode.class::isInstance);
             return parent == object;
         }
 
@@ -42,7 +42,7 @@ public class ModelPropertyEditor extends AbstractPropertyEditor<ModelChangeConsu
     protected boolean canEdit(@NotNull final Object object) {
 
         if (object instanceof Spatial) {
-            final Object parent = NodeUtils.findParent((Spatial) object, spatial -> spatial instanceof AssetLinkNode);
+            final Object parent = findParent((Spatial) object, AssetLinkNode.class::isInstance);
             return parent == null || parent == object;
         }
 

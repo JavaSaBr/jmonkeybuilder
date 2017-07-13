@@ -4,8 +4,8 @@ import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KE
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -29,12 +29,13 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
+import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.manager.WorkspaceManager;
+import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
@@ -58,12 +59,14 @@ import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperati
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
-import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.geometry.Point2D;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
@@ -78,10 +81,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.io.IOException;
@@ -95,10 +94,10 @@ import java.util.function.Supplier;
 /**
  * The base implementation of a model file editor.
  *
- * @param <IM> the type parameter
- * @param <M>  the type parameter
- * @param <MA> the type parameter
- * @param <ES> the type parameter
+ * @param <IM> the type of {@link AbstractSceneFileEditor}
+ * @param <M>  the type edited object.
+ * @param <MA> the type of {@link AbstractSceneEditorAppState}
+ * @param <ES> the type of an editor state.
  * @author JavaSaBr
  */
 public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
@@ -324,7 +323,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     protected ModelNodeTree getModelNodeTree() {
-        return requireNonNull(modelNodeTree);
+        return notNull(modelNodeTree);
     }
 
     /**
@@ -334,7 +333,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     protected ModelPropertyEditor getModelPropertyEditor() {
-        return requireNonNull(modelPropertyEditor);
+        return notNull(modelPropertyEditor);
     }
 
     /**
@@ -342,7 +341,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private EditingComponentContainer getEditingComponentContainer() {
-        return requireNonNull(editingComponentContainer);
+        return notNull(editingComponentContainer);
     }
 
     /**
@@ -350,7 +349,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private VBox getPropertyEditorObjectsContainer() {
-        return requireNonNull(propertyEditorObjectsContainer);
+        return notNull(propertyEditorObjectsContainer);
     }
 
     /**
@@ -358,7 +357,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private VBox getModelNodeTreeEditingContainer() {
-        return requireNonNull(modelNodeTreeEditingContainer);
+        return notNull(modelNodeTreeEditingContainer);
     }
 
     /**
@@ -366,7 +365,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private VBox getModelNodeTreeObjectsContainer() {
-        return requireNonNull(modelNodeTreeObjectsContainer);
+        return notNull(modelNodeTreeObjectsContainer);
     }
 
     @Override
@@ -387,7 +386,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     private void updateMaterial(@NotNull final Path file) {
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final M currentModel = getCurrentModel();
@@ -488,7 +487,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent.buildHeader();
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = requireNonNull(workspaceManager.getCurrentWorkspace(),
+        final Workspace currentWorkspace = notNull(workspaceManager.getCurrentWorkspace(),
                 "Current workspace can't be null.");
 
         editorState = currentWorkspace.getEditorState(getEditFile(), getStateConstructor());
@@ -663,7 +662,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @NotNull
     @Override
     public M getCurrentModel() {
-        return requireNonNull(currentModel);
+        return notNull(currentModel);
     }
 
     @Override
@@ -879,7 +878,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private Pane getEditorAreaPane() {
-        return requireNonNull(editorAreaPane);
+        return notNull(editorAreaPane);
     }
 
     @Override
@@ -932,7 +931,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private ToggleButton getScaleToolButton() {
-        return requireNonNull(scaleToolButton);
+        return notNull(scaleToolButton);
     }
 
     /**
@@ -940,7 +939,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private ToggleButton getMoveToolButton() {
-        return requireNonNull(moveToolButton);
+        return notNull(moveToolButton);
     }
 
     /**
@@ -948,7 +947,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     private ToggleButton getRotationToolButton() {
-        return requireNonNull(rotationToolButton);
+        return notNull(rotationToolButton);
     }
 
     /**
@@ -1037,18 +1036,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 updateTransformTool(TransformType.SCALE_TOOL, newValue));
 
-        FXUtils.addClassTo(selectionButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(selectionButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(gridButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(gridButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(statisticsButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(statisticsButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(moveToolButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(moveToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(rotationToolButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(rotationToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(scaleToolButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(selectionButton, gridButton, statisticsButton, moveToolButton, rotationToolButton,
+                scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 
         FXUtils.addToPane(selectionButton, container);
         FXUtils.addToPane(gridButton, container);
@@ -1067,7 +1056,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAreaPane.setOnDragDropped(this::dragDropped);
 
         statsContainer = new VBox();
-        statsContainer.setId(CSSIds.SCENE_EDITOR_STATS_CONTAINER);
         statsContainer.setMouseTransparent(true);
         statsContainer.prefHeightProperty().bind(editorAreaPane.heightProperty());
 
@@ -1110,6 +1098,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
         FXUtils.addClassTo(objectsSplitContainer, editingSplitContainer, CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
+        FXUtils.addClassTo(statsContainer, CSSClasses.SCENE_EDITOR_STATS_CONTAINER);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));
@@ -1133,7 +1122,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @NotNull
     protected EditorToolComponent getEditorToolComponent() {
-        return requireNonNull(editorToolComponent);
+        return notNull(editorToolComponent);
     }
 
     /**
@@ -1201,7 +1190,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     private void applyMaterial(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final MaterialKey materialKey = new MaterialKey(assetPath);
@@ -1240,7 +1229,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final M currentModel = getCurrentModel();
         if (!(currentModel instanceof Node)) return;
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final ModelKey modelKey = new ModelKey(assetPath);

@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.ColorAndInterpolationElement;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.ColorInterpolationElement;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +44,7 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
 
         for (int i = 0, length = colors.size(); i < length; i++) {
 
-            final ColorAndInterpolationElement element = new ColorAndInterpolationElement(this, i);
+            final ColorInterpolationElement element = new ColorInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(element, root);

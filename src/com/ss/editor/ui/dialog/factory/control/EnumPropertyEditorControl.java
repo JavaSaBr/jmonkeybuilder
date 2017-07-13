@@ -3,7 +3,6 @@ package com.ss.editor.ui.dialog.factory.control;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -41,11 +40,10 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
         super.createComponents();
 
         enumComboBox = new ComboBox<>();
-        enumComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> change());
         enumComboBox.prefWidthProperty().bind(widthProperty().multiply(0.5F));
 
-        FXUtils.addClassTo(enumComboBox, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(enumComboBox, this);
     }
 

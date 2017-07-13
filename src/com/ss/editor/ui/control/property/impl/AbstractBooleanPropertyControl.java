@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.property.impl;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.CheckBox;
@@ -48,11 +48,11 @@ public abstract class AbstractBooleanPropertyControl<C extends ChangeConsumer, T
         super.createComponents(container);
 
         checkBox = new CheckBox();
-        checkBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateValue());
         checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(checkBox, container);
+        FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     @Override

@@ -1,17 +1,15 @@
 package com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element;
 
 import static java.lang.Math.min;
-
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.control.ColorInfluencerControl;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
-
-import org.jetbrains.annotations.NotNull;
-
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.ColorInfluencer;
 
 /**
@@ -19,7 +17,7 @@ import tonegod.emitter.influencers.impl.ColorInfluencer;
  *
  * @author JavaSaBr
  */
-public class ColorAndInterpolationElement extends InterpolationElement<ColorInfluencer, ColorPicker, ColorInfluencerControl> {
+public class ColorInterpolationElement extends InterpolationElement<ColorInfluencer, ColorPicker, ColorInfluencerControl> {
 
     /**
      * Instantiates a new Color and interpolation element.
@@ -27,7 +25,7 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
      * @param control the control
      * @param index   the index
      */
-    public ColorAndInterpolationElement(@NotNull final ColorInfluencerControl control, final int index) {
+    public ColorInterpolationElement(@NotNull final ColorInfluencerControl control, final int index) {
         super(control, index);
     }
 
@@ -41,9 +39,10 @@ public class ColorAndInterpolationElement extends InterpolationElement<ColorInfl
     protected ColorPicker createEditableControl() {
 
         final ColorPicker colorPicker = new ColorPicker();
-        colorPicker.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(0.35));
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+
+        FXUtils.addClassTo(colorPicker, CSSClasses.ABSTRACT_PARAM_CONTROL_COLOR_PICKER);
 
         return colorPicker;
     }

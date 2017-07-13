@@ -3,15 +3,9 @@ package com.ss.editor.ui.control.property.builder.impl;
 import com.ss.editor.Editor;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
-import com.ss.editor.ui.css.CSSIds;
-
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.geometry.Insets;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
-import com.ss.rlib.ui.util.FXUtils;
 
 /**
  * The base implementation of the {@link PropertyBuilder}.
@@ -20,11 +14,6 @@ import com.ss.rlib.ui.util.FXUtils;
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implements PropertyBuilder {
-
-    /**
-     * The constant SPLIT_LINE_OFFSET.
-     */
-    protected static final Insets SPLIT_LINE_OFFSET = new Insets(6, 0, 6, 0);
 
     /**
      * The constant EDITOR.
@@ -42,34 +31,6 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
      */
     protected AbstractPropertyBuilder(final @NotNull Class<C> type) {
         this.type = type;
-    }
-
-    /**
-     * Create a new line for splitting properties.
-     *
-     * @param container the container
-     * @return the line
-     */
-    @NotNull
-    protected Line createSplitLine(@NotNull final VBox container) {
-
-        final Line line = new Line();
-        line.setId(CSSIds.ABSTRACT_PARAM_CONTROL_SPLIT_LINE);
-        line.setStartX(0);
-        line.endXProperty().bind(container.widthProperty().subtract(50));
-
-        return line;
-    }
-
-    /**
-     * Create a new line for splitting properties and add this to the container.
-     *
-     * @param container the container
-     */
-    protected void addSplitLine(final @NotNull VBox container) {
-        final Line splitLine = createSplitLine(container);
-        VBox.setMargin(splitLine, SPLIT_LINE_OFFSET);
-        FXUtils.addToPane(splitLine, container);
     }
 
     @Override

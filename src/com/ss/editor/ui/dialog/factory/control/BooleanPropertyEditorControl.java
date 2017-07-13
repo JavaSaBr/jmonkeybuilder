@@ -1,7 +1,7 @@
 package com.ss.editor.ui.dialog.factory.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -32,11 +32,11 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
         super.createComponents();
 
         checkBox = new CheckBox();
-        checkBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> change());
         checkBox.prefWidthProperty().bind(widthProperty().multiply(0.5F));
 
         FXUtils.addToPane(checkBox, this);
+        FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
     }
 
     @NotNull

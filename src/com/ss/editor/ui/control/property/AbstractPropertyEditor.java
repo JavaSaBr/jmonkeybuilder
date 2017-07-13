@@ -4,7 +4,8 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderFactory;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -15,12 +16,12 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The component to contains property controls in the editor.
  *
- * @param <C> the type parameter
+ * @param <C> the type of {@link ChangeConsumer}
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    private static final int WIDTH_OFFSET = 6;
+    private static final int WIDTH_OFFSET = 14;
 
     /**
      * The consumer of changes.
@@ -62,10 +63,17 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
      * Create components.
      */
     private void createComponents() {
-        container = new VBox();
-        container.setId(CSSIds.ABSTRACT_PARAM_CONTROL_CONTAINER);
-        container.prefWidthProperty().bind(widthProperty().subtract(WIDTH_OFFSET));
-        setContent(new VBox(container));
+        this.container = new VBox();
+        this.container.prefWidthProperty()
+                .bind(widthProperty().subtract(WIDTH_OFFSET));
+
+        final VBox wrapper = new VBox(container);
+
+        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_CONTROL_CONTAINER);
+        FXUtils.addClassTo(container, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(wrapper, CSSClasses.DEF_VBOX);
+
+        setContent(wrapper);
     }
 
     /**

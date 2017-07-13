@@ -2,7 +2,6 @@ package com.ss.editor.ui.dialog.factory.control;
 
 import com.ss.editor.Editor;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -93,10 +92,9 @@ public class PropertyEditorControl<T> extends HBox {
         setAlignment(Pos.CENTER_RIGHT);
 
         propertyNameLabel = new Label(getName() + ":");
-        propertyNameLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         propertyNameLabel.prefWidthProperty().bind(widthProperty().multiply(0.5F));
 
-        FXUtils.addClassTo(propertyNameLabel, CSSClasses.SPECIAL_FONT_14);
+        FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         FXUtils.addToPane(propertyNameLabel, this);
     }
 

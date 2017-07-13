@@ -32,6 +32,8 @@
 
     -var-default-label-height: 26px;
     -var-default-field-height: 26px;
+    -var-default-cell-height: 22px;
+    -var-default-toolbar-button-size: 24px;
 }
 
 /* Make popups transparent */
@@ -448,6 +450,8 @@
     -fx-padding: 0px 0px 0px 4px;
     -fx-background-color: -fx-background;
     -fx-cell-size: 26;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
@@ -798,6 +802,8 @@
 .hyperlink {
     -fx-padding: 1px;
     -fx-text-fill: -fx-focus-color;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
 }
 
 /*******************************************************************************
@@ -1128,6 +1134,7 @@
 }
 
 .tree-cell {
+    -fx-min-height: -var-default-cell-height;
     -fx-background-color: transparent;
     -fx-text-fill: -var-font-color;
     -fx-padding: 0px;
@@ -1298,12 +1305,14 @@
  ******************************************************************************/
 
 .color-picker {
+    -fx-min-height: -var-default-field-height;
+    -fx-max-height: -var-default-field-height;
     -fx-color-rect-width: 14px;
     -fx-color-rect-height: 14px;
 }
 
 .color-picker.button {
-    -fx-padding: 0 5 0 0;
+    -fx-padding: 0px 5px 0px 0px;
 }
 
 .color-picker > .color-picker-label {
@@ -1395,7 +1404,6 @@
 }
 
 .custom-color-dialog .color-rect-pane .color-rect {
-    -fx-background-color: transparent;
     -fx-min-width: 200px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
@@ -1496,6 +1504,10 @@
     -fx-padding: 4px;
 }
 
+.custom-color-dialog .controls-pane .left-pill:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
 .custom-color-dialog .controls-pane .left-pill:selected, .controls-pane .left-pill:selected:focused {
     -fx-background-radius: 2px 0px 0px 2px;
     -fx-border-color: -var-border-color;
@@ -1531,6 +1543,10 @@
     -fx-padding: 4px;
 }
 
+.custom-color-dialog .controls-pane .center-pill:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
 .custom-color-dialog .controls-pane .right-pill {
     -fx-background-color: -var-button-background-color;
     -fx-background-radius: 0px 2px 2px 0px;
@@ -1559,6 +1575,10 @@
     -fx-background-insets: 0;
     -fx-border-color: -var-border-color;
     -fx-padding: 4px;
+}
+
+.custom-color-dialog .controls-pane .right-pill:selected {
+    -fx-background-color: -fx-focus-color;
 }
 
 .custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {

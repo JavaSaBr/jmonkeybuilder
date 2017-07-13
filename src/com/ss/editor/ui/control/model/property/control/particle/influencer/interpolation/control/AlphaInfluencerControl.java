@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.AlphaAndInterpolationElement;
+import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.AlphaInterpolationElement;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +58,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
 
         for (int i = 0, length = alphas.size(); i < length; i++) {
 
-            final AlphaAndInterpolationElement element = new AlphaAndInterpolationElement(this, i);
+            final AlphaInterpolationElement element = new AlphaInterpolationElement(this, i);
             element.prefWidthProperty().bind(widthProperty());
 
             FXUtils.addToPane(element, root);

@@ -5,7 +5,6 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -97,7 +96,6 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         nodeTree = new ModelNodeTree(this::processSelect, null);
-        nodeTree.setId(CSSIds.ABSTRACT_NODE_TREE_TRANSPARENT_CONTAINER);
         nodeTree.prefHeightProperty().bind(heightProperty());
         nodeTree.prefWidthProperty().bind(widthProperty());
 

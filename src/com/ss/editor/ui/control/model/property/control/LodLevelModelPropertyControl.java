@@ -6,18 +6,14 @@ import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
-
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ObjectUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of the {@link ModelPropertyControl} for editing the LOD levels.
@@ -81,7 +77,6 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
         super.createComponents(container);
 
         levelComboBox = new ComboBox<>();
-        levelComboBox.setId(CSSIds.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         levelComboBox.setCellFactory(param -> new LodLevelCell());
         levelComboBox.setButtonCell(new LodLevelCell());
         levelComboBox.setEditable(false);
@@ -90,7 +85,7 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
                 .addListener((observable, oldValue, newValue) -> updateLevel(newValue));
 
         FXUtils.addToPane(levelComboBox, container);
-        FXUtils.addClassTo(levelComboBox, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassTo(levelComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
     }
 
     private void updateLevel(@Nullable final Integer newValue) {
@@ -111,8 +106,8 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
      * @return The lod level combobox.
      */
     @NotNull
-    public ComboBox<Integer> getLevelComboBox() {
-        return Objects.requireNonNull(levelComboBox);
+    protected ComboBox<Integer> getLevelComboBox() {
+        return ObjectUtils.notNull(levelComboBox);
     }
 
     @Override
@@ -123,7 +118,7 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
         final Mesh mesh = geometry.getMesh();
         if (mesh == null) return;
 
-        final Integer element = getPropertyValue() == null ? 0 : getPropertyValue();
+        final Integer element = getPropertyValue();
         final ComboBox<Integer> levelComboBox = getLevelComboBox();
         final ObservableList<Integer> items = levelComboBox.getItems();
         items.clear();
