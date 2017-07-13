@@ -41,6 +41,8 @@
     -var-tree-cell-selected-color: -fx-focus-color;
     -var-tree-cell-hover-color: derive(-var-background-color, 50%);
 
+    -var-slider-track-background-color: #2d303b;
+
     -fx-shadow-panel: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.01, 1, 1);
     -fx-shadow-menu: dropshadow(two-pass-box, rgba(32, 34, 42, 0.5), 20, 0.01, 1, 1);
     -fx-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1, 0, 1);

@@ -68,27 +68,6 @@ public interface CSSIds {
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     /**
-     * The constant FILE_EDITOR_TOOLBAR.
-     */
-    String FILE_EDITOR_TOOLBAR = "FileEditorToolbar";
-    /**
-     * The constant FILE_EDITOR_EDITOR_AREA.
-     */
-    String FILE_EDITOR_EDITOR_AREA = "FileEditorEditorArea";
-    /**
-     * The constant FILE_EDITOR_MAIN_SPLIT_PANE.
-     */
-    String FILE_EDITOR_MAIN_SPLIT_PANE = "FileEditorMainSplitPane";
-    /**
-     * The constant FILE_EDITOR_TOOL_SPLIT_PANE.
-     */
-    String FILE_EDITOR_TOOL_SPLIT_PANE = "FileEditorToolSplitPane";
-    /**
-     * The constant FILE_EDITOR_TOOL_COMPONENT.
-     */
-    String FILE_EDITOR_TOOL_COMPONENT = "FileEditorToolComponent";
-
-    /**
      * The constant TEXT_EDITOR_TEXT_AREA.
      */
     String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
@@ -147,27 +126,12 @@ public interface CSSIds {
      * The constant PARTICLES_ASSET_EDITOR_DIALOG_CONTROL.
      */
     String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
-    /**
-     * The constant MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT.
-     */
-    String MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT = "MaterialFileEditorPropertiesComponent";
 
-    /**
-     * The constant MATERIAL_PARAM_CONTROL_PARAM_NAME.
-     */
-    String MATERIAL_PARAM_CONTROL_PARAM_NAME = "MaterialParamControlParamName";
-    /**
-     * The constant MATERIAL_PARAM_CONTROL_COLOR_PICKER.
-     */
-    String MATERIAL_PARAM_CONTROL_COLOR_PICKER = "MaterialParamColorPicker";
+
     /**
      * The constant MATERIAL_PARAM_CONTROL_COMBO_BOX.
      */
     String MATERIAL_PARAM_CONTROL_COMBO_BOX = "MaterialParamComboBox";
-    /**
-     * The constant MATERIAL_PARAM_CONTROL_BUTTON.
-     */
-    String MATERIAL_PARAM_CONTROL_BUTTON = "MaterialParamControlButton";
     /**
      * The constant MATERIAL_PARAM_CONTROL_CHECKBOX.
      */
@@ -176,11 +140,6 @@ public interface CSSIds {
      * The constant MATERIAL_PARAM_CONTROL_SPINNER.
      */
     String MATERIAL_PARAM_CONTROL_SPINNER = "MaterialParamControlSpinner";
-
-    /**
-     * The constant TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW.
-     */
-    String TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW = "Texture2DMaterialParamControlPreview";
 
     /**
      * The constant MATERIAL_RENDER_STATE_POLY_OFFSET_FIELD.

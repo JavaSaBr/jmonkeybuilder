@@ -5,15 +5,13 @@ import com.jme3.material.Material;
 import com.jme3.shader.VarType;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
-
+import com.ss.rlib.ui.util.FXUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-import com.ss.rlib.ui.util.FXUtils;
-
 /**
- * The component for editing material texture properties.
+ * The component to edit material texture properties.
  *
  * @author JavaSaBr
  */

@@ -1063,7 +1063,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.selectionNodeHandler = this::selectNodeFromTree;
 
         editorAreaPane = new StackPane();
-        editorAreaPane.setId(CSSIds.FILE_EDITOR_EDITOR_AREA);
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
 
@@ -1088,17 +1087,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent = new EditorScriptingComponent(this::refreshTree);
 
         final SplitPane objectsSplitContainer = new SplitPane(modelNodeTreeObjectsContainer, propertyEditorObjectsContainer);
-        objectsSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         objectsSplitContainer.prefHeightProperty().bind(root.heightProperty());
         objectsSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
         final SplitPane editingSplitContainer = new SplitPane(modelNodeTreeEditingContainer, editingComponentContainer);
-        editingSplitContainer.setId(CSSIds.FILE_EDITOR_TOOL_SPLIT_PANE);
         editingSplitContainer.prefHeightProperty().bind(root.heightProperty());
         editingSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
-        mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
         editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
@@ -1111,6 +1107,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         FXUtils.addToPane(mainSplitContainer, root);
         FXUtils.addToPane(statsContainer, editorAreaPane);
+        FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
+        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FXUtils.addClassTo(objectsSplitContainer, editingSplitContainer, CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));

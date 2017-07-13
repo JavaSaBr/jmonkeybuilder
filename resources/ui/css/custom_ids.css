@@ -26,17 +26,35 @@
     -fx-max-width: -fx-min-width;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Main Split Pane                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 #MainSplitPane {
     -fx-background-color: transparent;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Global Left Tool Component                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
 #GlobalLeftToolComponent {
-    -fx-min-width: 26;
+    -fx-min-width: 28;
     -fx-tab-max-height: 18;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Global Bottom Tool Component                                                *
+ *                                                                             *
+ ******************************************************************************/
+
 #GlobalBottomToolComponent {
-    -fx-min-height: 26;
+    -fx-min-height: 28;
     -fx-tab-max-height: 18;
 }
 
@@ -66,39 +84,6 @@
 #EditorAreaComponent {
     -fx-min-width: 500;
     -fx-tab-max-height: 18;
-}
-
-/*******************************************************************************
- *                                                                             *
- * File Editor                                                                 *
- *                                                                             *
- ******************************************************************************/
-
-#FileEditorToolbar {
-    -fx-background-color: -var-background-color;
-    -fx-border-color: -var-border-color;
-    -fx-border-width: 0px 0px 1px 0px;
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-padding: 10, 0, 0, 0;
-    -fx-alignment: center-left;
-}
-
-#FileEditorEditorArea {
-}
-
-#FileEditorMainSplitPane {
-    -fx-background-color: transparent;
-}
-
-#FileEditorToolSplitPane {
-    -fx-background-color: transparent;
-    -fx-orientation: vertical;
-}
-
-#FileEditorToolComponent {
-    -fx-min-width: 26;
 }
 
 /*******************************************************************************
@@ -239,57 +224,7 @@
  *                                                                             *
  ******************************************************************************/
 
-#MaterialFileEditorToolbarBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 300;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#MaterialFileEditorToolbarSmallBox {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 150;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#MaterialFileEditorPropertiesComponent {
-    -fx-background-color: -var-background-color;
-    -fx-alignment: top-left;
-    -fx-padding: 0 5 0 4;
-}
-
-#MaterialParamControlParamName {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-right;
-    -fx-text-alignment: right;
-    -fx-padding: 0 2 0 0;
-}
-
-#MaterialParamControlButton {
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 20;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-padding: 1;
-}
-
 #MaterialParamControlSpinner {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
-#MaterialParamControlColorPicker {
-    -fx-alignment: center;
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
@@ -327,17 +262,6 @@
     -fx-min-width: 12;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-#Texture2DMaterialParamControlPreview {
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 30;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-border-color: -fx-color-panel-50;
-    -fx-border-width: 1;
 }
 
 #MaterialRenderStatePolyOffsetField {

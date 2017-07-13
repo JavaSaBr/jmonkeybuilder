@@ -1,8 +1,8 @@
 package com.ss.editor.ui.control.material;
 
 import static com.ss.editor.Messages.COLOR_MATERIAL_PARAM_CONTROL_REMOVE;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Math.min;
-import static java.util.Objects.requireNonNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
@@ -10,8 +10,8 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.material.operation.ColorMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -21,7 +21,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.function.Consumer;
 
@@ -59,12 +58,10 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         super.createComponents();
 
         colorPicker = new ColorPicker();
-        colorPicker.setId(CSSIds.MATERIAL_PARAM_CONTROL_COLOR_PICKER);
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
         colorPicker.prefWidthProperty().bind(widthProperty().multiply(CONTROL_PERCENT_WIDTH));
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(COLOR_MATERIAL_PARAM_CONTROL_REMOVE));
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
@@ -72,8 +69,12 @@ public class ColorMaterialParamControl extends MaterialParamControl {
 
         FXUtils.addToPane(colorPicker, this);
         FXUtils.addToPane(removeButton, this);
-        FXUtils.addClassTo(colorPicker, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(removeButton, CSSClasses.FLAT_BUTTON);
+
+        FXUtils.addClassesTo(colorPicker, CSSClasses.SPECIAL_FONT_13,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER);
+
+        FXUtils.addClassesTo(removeButton, CSSClasses.FLAT_BUTTON,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON);
 
         HBox.setMargin(colorPicker, ELEMENT_OFFSET);
         HBox.setMargin(removeButton, ELEMENT_OFFSET);
@@ -84,7 +85,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
      */
     @NotNull
     private ColorPicker getColorPicker() {
-        return requireNonNull(colorPicker);
+        return notNull(colorPicker);
     }
 
     /**

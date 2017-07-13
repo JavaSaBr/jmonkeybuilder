@@ -1,11 +1,10 @@
 package com.ss.editor.ui.component.tab;
 
-import com.ss.editor.ui.css.CSSIds;
-
-import org.jetbrains.annotations.NotNull;
-
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Side;
 import javafx.scene.control.SplitPane;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The component to contain editor tool components.
@@ -22,8 +21,8 @@ public class EditorToolComponent extends TabToolComponent {
      */
     public EditorToolComponent(@NotNull final SplitPane pane, final int index) {
         super(pane);
-        setId(CSSIds.FILE_EDITOR_TOOL_COMPONENT);
         setSide(Side.RIGHT);
+        FXUtils.addClassTo(this, CSSClasses.FILE_EDITOR_TOOL_COMPONENT);
     }
 
     @Override

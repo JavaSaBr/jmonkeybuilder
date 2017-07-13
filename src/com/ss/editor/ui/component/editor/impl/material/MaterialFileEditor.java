@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
-import static com.jme3.renderer.queue.RenderQueue.Bucket.*;
+import static com.jme3.renderer.queue.RenderQueue.Bucket.Inherit;
+import static com.jme3.renderer.queue.RenderQueue.Bucket.values;
 import static com.ss.editor.Messages.MATERIAL_EDITOR_NAME;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -34,7 +35,6 @@ import com.ss.editor.ui.component.editor.state.impl.MaterialFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -372,7 +372,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         materialOtherParamsComponent = new MaterialOtherParamsComponent(changeHandler);
 
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
-        mainSplitContainer.setId(CSSIds.FILE_EDITOR_MAIN_SPLIT_PANE);
 
         editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
@@ -388,6 +387,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
+        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
     }
 
     /**

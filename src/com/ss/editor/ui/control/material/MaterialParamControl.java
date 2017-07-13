@@ -5,13 +5,12 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -100,7 +99,7 @@ public class MaterialParamControl extends HBox {
             setIgnoreListeners(false);
         }
 
-        FXUtils.addClassTo(this, CSSClasses.MATERIAL_PARAM_CONTROL);
+        FXUtils.addClassTo(this, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL);
     }
 
     /**
@@ -135,13 +134,13 @@ public class MaterialParamControl extends HBox {
      * Create components.
      */
     protected void createComponents() {
-
         paramNameLabel = new Label(getParameterName() + ":");
-        paramNameLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
 
         bindParamNameLabel();
 
-        FXUtils.addClassTo(paramNameLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassesTo(paramNameLabel, CSSClasses.SPECIAL_FONT_13,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME);
+
         FXUtils.addToPane(paramNameLabel, this);
     }
 

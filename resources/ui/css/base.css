@@ -26,6 +26,9 @@
     -fx-control-height: 28;
     -fx-control-medium-height: 30;
     -fx-control-big-height: 34;
+
+    -var-dialog-button-height: 32;
+    -var-dialog-button-width: 150;
 }
 
 /* Make popups transparent */
@@ -40,12 +43,14 @@
  ******************************************************************************/
 
 .label {
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
     -fx-text-fill: -var-font-color;
 }
 
 /*******************************************************************************
  *                                                                             *
- * Context Menu                                                                 *
+ * Context Menu                                                                *
  *                                                                             *
  ******************************************************************************/
 
@@ -89,7 +94,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Split Pane                                                                     *
+ * Split Pane                                                                  *
  *                                                                             *
  ******************************************************************************/
 
@@ -116,7 +121,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Tab Pane                                                                     *
+ * Tab Pane                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -250,6 +255,8 @@
     -fx-text-fill: -var-font-color;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
 }
 
 .button:focused {
@@ -328,7 +335,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Combo Box                                                                    *
+ * Combo Box                                                                   *
  *                                                                             *
  ******************************************************************************/
 
@@ -446,7 +453,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Check Box                                                                    *
+ * Check Box                                                                   *
  *                                                                             *
  ******************************************************************************/
 
@@ -541,7 +548,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Menu Bar                                                                     *
+ * Menu Bar                                                                    *
  *                                                                             *
  ******************************************************************************/
 
@@ -580,7 +587,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Menu Item                                                                    *
+ * Menu Item                                                                   *
  *                                                                             *
  ******************************************************************************/
 
@@ -600,8 +607,6 @@
 }
 
 .menu-item > .label {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
     -fx-text-fill: -var-font-color;
     -fx-padding: 0em 0.5em 0em 0em;
 }
@@ -636,11 +641,6 @@
     -fx-cursor: hand;
 }
 
-.menu > .label {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
-}
-
 .menu > .right-container > .arrow {
     -fx-background-color: -var-menu-arrow-color;
 }
@@ -651,7 +651,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Scroll Bar                                                                   *
+ * Scroll Bar                                                                  *
  *                                                                             *
  ******************************************************************************/
 
@@ -738,7 +738,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Scroll Pane                                                                  *
+ * Scroll Pane                                                                 *
  *                                                                             *
  ******************************************************************************/
 
@@ -783,6 +783,7 @@
 
 .hyperlink {
     -fx-padding: 1px;
+    -fx-text-fill: -fx-focus-color;
 }
 
 /*******************************************************************************
@@ -1020,7 +1021,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Text Input                                                                   *
+ * Text Input                                                                  *
  *                                                                             *
  ******************************************************************************/
 
@@ -1037,7 +1038,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Text Field                                                                   *
+ * Text Field                                                                  *
  *                                                                             *
  ******************************************************************************/
 
@@ -1068,7 +1069,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Tree View and Tree Cell                                                       *
+ * Tree View and Tree Cell                                                     *
  *                                                                             *
  ******************************************************************************/
 
@@ -1121,10 +1122,16 @@
 }
 
 .tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-hover-color;
+}
+.tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:filled:hover {
     -fx-background-color: -var-tree-cell-hover-color;
     -fx-background-insets: 0;
     -fx-text-fill: -var-font-hover-color;
 }
+
 
 .tree-view:focused > .virtual-flow > .clipped-container > .sheet > .tree-cell:focused {
     -fx-background-color: transparent;
@@ -1210,4 +1217,442 @@
 .tree-cell:filled:selected:hover > .tree-disclosure-node > .arrow,
 .tree-table-row-cell:filled:selected:hover > .tree-disclosure-node > .arrow {
     -fx-background-color: -var-arrow-focused-color;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Slider                                                                      *
+ *                                                                             *
+ ******************************************************************************/
+
+.slider .thumb {
+    -fx-background: -var-button-background-color;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-padding: 6px;
+    -fx-effect: null;
+}
+
+.slider:focused .thumb {
+}
+
+.slider .thumb:hover {
+    -fx-border-color: -var-button-hover-border-color;
+    -fx-background: -var-button-hover-background-color;
+}
+
+.slider .thumb:pressed {
+    -fx-border-color: -var-border-color;
+    -fx-background: -fx-focus-color;
+}
+
+.slider .track {
+    -fx-background-color: -var-slider-track-background-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10px;
+    -fx-padding: 3px;
+}
+.slider:vertical .track {
+    -fx-background-color:
+            -fx-shadow-highlight-color,
+            -fx-text-box-border,
+            linear-gradient(to right,
+            derive(-fx-control-inner-background, -9%),
+            -fx-control-inner-background,
+            derive(-fx-control-inner-background, -9%)
+            );
+}
+.slider .axis {
+    -fx-tick-label-fill: derive(-fx-text-background-color, 30%);
+    -fx-tick-length: 5px;
+    -fx-minor-tick-length: 3px;
+    -fx-border-color: null;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Color Picker                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+.color-picker {
+    -fx-color-rect-width: 14px;
+    -fx-color-rect-height: 14px;
+}
+
+.color-picker.button {
+    -fx-padding: 0 5 0 0;
+}
+
+.color-picker > .color-picker-label {
+    -fx-alignment: center;
+}
+
+.color-picker.button > .arrow-button {
+}
+
+.color-picker > .split-button > .arrow-button:hover {
+}
+
+.color-picker > .split-button > .color-picker-label:hover {
+}
+
+.color-picker > .color-picker-label > .picker-color {
+    -fx-padding: 1px 1px 1px 1px;
+    -fx-background-color: null;
+}
+
+.color-picker > .color-picker-label > .picker-color > .picker-color-rect {
+    -fx-stroke: -fx-pressed-base;
+    -fx-stroke-type: inside;
+}
+
+.color-palette {
+    -fx-spacing: 15px;
+    -fx-background-color: -var-menu-background-color;
+    -fx-background-insets: 0;
+    -fx-background-radius: 3px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-effect: -fx-shadow-menu;
+}
+
+.color-palette > .color-picker-grid > .color-square > .color-rect {
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0.4;
+    -fx-border-color: transparent;
+}
+
+.color-palette > .color-picker-grid {
+    -fx-border-color: transparent;
+}
+
+.color-palette > .color-picker-grid > .color-square {
+    -fx-background-color: transparent;
+    -fx-background-insets: -1, 0;
+    -fx-padding: 0.5;
+}
+
+/* the color over which the user is hovering */
+.color-palette-region > .color-square.hover-square {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0px;
+}
+
+.color-palette > .hyperlink {
+    -fx-text-fill: -fx-focus-color;
+}
+
+.color-palette > .separator > .line {
+    -fx-border-color: -var-border-color transparent transparent transparent,
+    transparent transparent transparent transparent;
+    -fx-border-insets: 0, 1 0 0 0;
+    -fx-border-style: none;
+    -fx-padding: 0px;
+}
+
+
+/* ------- CUSTOM COLOR DIALOG ------- */
+
+.custom-color-dialog  {
+    -fx-background-color: -var-background-color;
+    -fx-padding: 10px 15px 10px 15px;
+    -fx-spacing: 0px;
+}
+
+.custom-color-dialog > .color-rect-pane {
+    -fx-background-color: transparent;
+    -fx-spacing: 0.75em;
+    -fx-min-height: 200px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-alignment: top-left;
+    -fx-fill-height: true;
+    -fx-padding: 0px 10px 0px 0px;
+}
+
+.custom-color-dialog .color-rect-pane .color-rect {
+    -fx-background-color: transparent;
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 200px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .color-rect-pane .color-rect-border {
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+}
+
+.custom-color-dialog > .color-rect-pane #color-rect-indicator {
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-border-radius: 0.4166667em;
+    -fx-translate-x: -0.4166667em;
+    -fx-translate-y: -0.4166667em;
+    -fx-pref-width: 0.833333em;
+    -fx-pref-height: 0.833333em;
+    -fx-effect: -fx-shadow-control;
+}
+
+.custom-color-dialog > .color-rect-pane > .color-bar {
+    -fx-min-height: 200px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 20px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+}
+
+.custom-color-dialog > .color-rect-pane > .color-bar > #color-bar-indicator {
+    -fx-border-radius: 1px;
+    -fx-border-color: white;
+    -fx-effect: -fx-shadow-control;
+    -fx-min-width: 24px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 12px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-translate-x: -0.1666667em;
+    -fx-translate-y: -0.4166667em;
+}
+
+/* -------- Toggle Button ---------------- */
+.custom-color-dialog .controls-pane .toggle-button {
+    -fx-background: transparent;
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 2px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-border-radius: 1px;
+    -fx-padding: 0px;
+}
+
+.custom-color-dialog .controls-pane .toggle-button:focused {
+    -fx-background: transparent;
+    -fx-text-fill: -var-font-focused-color;
+}
+.custom-color-dialog .controls-pane .toggle-button:selected {
+    -fx-background: -fx-focus-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+.custom-color-dialog .controls-pane .toggle-button:selected:focused {
+    -fx-background: -fx-focus-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.custom-color-dialog .controls-pane .left-pill {
+    -fx-background-color: -var-button-background-color;
+    -fx-background-radius: 2px 0px 0px 2px;
+    -fx-background-insets: 0px;
+    -fx-border-color: -var-border-color;
+    -fx-border-insets: 0px;
+    -fx-border-width: 1px 0px 1px 1px;
+    -fx-border-radius: 1px 0px 1px 0px;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .left-pill:hover {
+    -fx-background-color: -var-button-hover-background-color;
+    -fx-border-color: -var-button-hover-border-color;
+}
+.custom-color-dialog .controls-pane .left-pill:focused {
+    -fx-background-color: -fx-focus-color;
+    -fx-background-radius: 2px 0px 0px 2px;
+    -fx-background-insets: 0px;
+    -fx-border-color: -var-border-color;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .left-pill:selected, .controls-pane .left-pill:selected:focused {
+    -fx-background-radius: 2px 0px 0px 2px;
+    -fx-border-color: -var-border-color;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .center-pill {
+    -fx-background-color: -var-button-background-color;
+    -fx-background-radius: 0px;
+    -fx-background-insets: 0px;
+    -fx-border-color: -var-border-color;
+    -fx-border-insets: 0px;
+    -fx-border-width: 1px 0px 1px 0px;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .center-pill:hover {
+    -fx-background-color: -var-button-hover-background-color;
+    -fx-border-color: -var-button-hover-border-color;
+}
+.custom-color-dialog .controls-pane .center-pill:focused {
+    -fx-background-color: -fx-focus-color;
+    -fx-background-radius: 0px;
+    -fx-background-insets: 0px;
+    -fx-border-color: -var-border-color;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .center-pill:selected, .controls-pane .center-pill:selected:focused {
+    -fx-background-insets: 0px;
+    -fx-border-color: -var-border-color;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .right-pill {
+    -fx-background-color: -var-button-background-color;
+    -fx-background-radius: 0px 2px 2px 0px;
+    -fx-background-insets: 0;
+    -fx-border-color: -var-border-color;
+    -fx-border-insets: 0px;
+    -fx-border-radius: 0px 1px 1px 0px;
+    -fx-border-width: 1px 1px 1px 0px;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .right-pill:hover {
+    -fx-background-color: -var-button-hover-background-color;
+    -fx-border-color: -var-button-hover-border-color;
+}
+.custom-color-dialog .controls-pane .right-pill:focused {
+    -fx-background-color: -fx-focus-color;
+    -fx-background-radius: 0px 2px 2px 0px;
+    -fx-background-insets: 0;
+    -fx-border-color: -var-border-color;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .right-pill:selected, .controls-pane .right-pill:selected:focused {
+    -fx-background-insets: 0;
+    -fx-border-color: -var-border-color;
+    -fx-padding: 4px;
+}
+.custom-color-dialog .controls-pane .current-new-color-grid #current-new-color-border {
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+}
+
+.custom-color-dialog .controls-pane .current-new-color-grid .color-rect {
+    -fx-min-width: 230px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 24px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .transparent-pattern {
+    -fx-background-image: url("/com/sun/javafx/scene/control/skin/modena/pattern-transparent.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: auto;
+}
+
+.custom-color-dialog .controls-pane #spacer1 {
+    -fx-min-width: 400px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 6px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .controls-pane #spacer2 {
+    -fx-min-width: 400px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 6px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .controls-pane #settings-pane {
+    -fx-hgap: 0.4166667em;
+    -fx-vgap: 0.3333333em;
+    -fx-min-width: 460px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 160px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .controls-pane #settings-pane .settings-label {
+    -fx-min-width: 110px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-text-alignment: right;
+    -fx-alignment: center-right;
+}
+
+.custom-color-dialog .controls-pane #settings-pane .settings-unit {
+    -fx-min-width: 30px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.custom-color-dialog .controls-pane #settings-pane .slider {
+    -fx-min-height: 24px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 230px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.custom-color-dialog .controls-pane .color-input-field {
+    -fx-min-width: 40px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 22px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .controls-pane .web-field {
+    -fx-min-width: 230px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: 22px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+}
+
+.custom-color-dialog .controls-pane #spacer-side {
+    -fx-min-width: 0.5em;
+    -fx-pref-width: 0.5em;
+}
+
+.custom-color-dialog .controls-pane #spacer-bottom {
+    -fx-pref-height: 0.833333em;
+    -fx-min-height: 0.833333em;
+}
+
+.custom-color-dialog .controls-pane .customcolor-controls-background {
+    -fx-background-color: transparent;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 0px;
+}
+
+.custom-color-dialog .controls-pane .current-new-color-grid .label {
+    -fx-padding: 0 0 0 0.4166667em;
+}
+
+.custom-color-dialog .controls-pane #buttons-hbox {
+    -fx-spacing: 0.333333em;
+    -fx-padding: 1em 0 0 0;
+    -fx-alignment: bottom-right;
+}
+
+.custom-color-dialog .controls-pane #buttons-hbox .button {
+    -fx-min-width: -var-dialog-button-width;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-min-height: -var-dialog-button-height;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-font-size: 16px;
 }

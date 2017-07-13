@@ -167,14 +167,57 @@ public interface CSSClasses {
     String FILE_EDITOR_TOOLBAR_FIELD = "file-editor-toolbar-field";
 
     /**
+     * The constant FILE_EDITOR_TOOLBAR.
+     */
+    String FILE_EDITOR_TOOLBAR = "file-editor-toolbar";
+    /**
+     * The constant FILE_EDITOR_EDITOR_AREA.
+     */
+    String FILE_EDITOR_EDITOR_AREA = "file-editor-editor-area";
+    /**
+     * The constant FILE_EDITOR_MAIN_SPLIT_PANE.
+     */
+    String FILE_EDITOR_MAIN_SPLIT_PANE = "file-editor-main-split-pane";
+    /**
+     * The constant FILE_EDITOR_TOOL_SPLIT_PANE.
+     */
+    String FILE_EDITOR_TOOL_SPLIT_PANE = "file-editor-tool-split-pane";
+    /**
+     * The constant FILE_EDITOR_TOOL_COMPONENT.
+     */
+    String FILE_EDITOR_TOOL_COMPONENT = "file-editor-tool-component";
+
+
+    /**
      * The constant EDITING_TOGGLE_BUTTON_BIG.
      */
     String EDITING_TOGGLE_BUTTON_BIG = "editing-toggle-button-big";
 
     /**
-     * The constant MATERIAL_PARAM_CONTROL.
+     * The constant MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT.
      */
-    String MATERIAL_PARAM_CONTROL = "material-param-control";
+    String MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT = "material-file-editor-properties-component";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL = "material-file-editor-param-control";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME = "material-file-editor-param-control-name";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW = "material-file-editor-param-control-texture-preview";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON = "material-file-editor-param-control-button";
+    /**
+     * The constant MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER.
+     */
+    String MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER = "material-file-editor-param-control-color-picker";
+
     /**
      * The constant ABSTRACT_PARAM_CONTROL.
      */

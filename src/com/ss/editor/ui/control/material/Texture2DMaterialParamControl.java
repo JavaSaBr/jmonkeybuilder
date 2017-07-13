@@ -24,10 +24,12 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.geometry.Insets;
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
@@ -39,9 +41,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 import java.util.function.Consumer;
@@ -125,7 +124,6 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         textureTooltip = new ImageChannelPreview();
 
         final VBox previewContainer = new VBox();
-        previewContainer.setId(CSSIds.TEXTURE_2D_MATERIAL_PARAM_CONTROL_PREVIEW);
 
         texturePreview = new ImageView();
         texturePreview.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
@@ -136,23 +134,19 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         Tooltip.install(texturePreview, textureTooltip);
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         addButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_ADD));
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         repeatButton = new CheckBox();
-        repeatButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         repeatButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REPEAT));
         repeatButton.selectedProperty().addListener((observ, old, newValue) -> processChangeRepeat(newValue));
 
         flipButton = new CheckBox();
-        flipButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_CHECKBOX);
         flipButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_FLIP));
         flipButton.selectedProperty().addListener((observ, old, newValue) -> processChangeFlip(newValue));
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.MATERIAL_PARAM_CONTROL_BUTTON);
         removeButton.setTooltip(new Tooltip(TEXTURE_2D_MATERIAL_PARAM_CONTROL_REMOVE));
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
@@ -164,7 +158,11 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         FXUtils.addToPane(flipButton, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassTo(addButton, removeButton, CSSClasses.FLAT_BUTTON);
+        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON);
+
+        FXUtils.addClassTo(previewContainer, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW);
+
         HBox.setMargin(addButton, BUTTON_OFFSET);
 
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());

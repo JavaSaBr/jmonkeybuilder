@@ -15,7 +15,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.rlib.logging.Logger;
@@ -176,11 +175,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         if (needToolbar()) {
 
             toolbar = new HBox();
-            toolbar.setId(CSSIds.FILE_EDITOR_TOOLBAR);
             toolbar.prefWidthProperty().bind(container.widthProperty());
 
             createToolbar(toolbar);
 
+            FXUtils.addClassTo(toolbar, CSSClasses.FILE_EDITOR_TOOLBAR);
             FXUtils.addToPane(toolbar, container);
         }
 

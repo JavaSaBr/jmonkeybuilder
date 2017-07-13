@@ -108,9 +108,9 @@ public class MaterialRenderParamsComponent extends VBox {
      * @param changeHandler the change handler
      */
     MaterialRenderParamsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
-        setId(CSSIds.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
         this.changeHandler = changeHandler;
         createControls();
+        FXUtils.addClassTo(this, CSSClasses.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
     }
 
     /**
@@ -143,7 +143,6 @@ public class MaterialRenderParamsComponent extends VBox {
         final VBox container = new VBox();
 
         final Label faceCullModeLabel = new Label(Messages.MATERIAL_RENDER_STATE_FACE_CULL_MODE + ":");
-        faceCullModeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         faceCullModeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         faceCullModeComboBox = new ComboBox<>(FACE_CULL_MODES);
@@ -152,7 +151,6 @@ public class MaterialRenderParamsComponent extends VBox {
         faceCullModeComboBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label blendModeLabel = new Label(Messages.MATERIAL_RENDER_STATE_BLEND_MODE + ":");
-        blendModeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         blendModeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         blendModeComboBox = new ComboBox<>(BLEND_MODES);
@@ -161,7 +159,6 @@ public class MaterialRenderParamsComponent extends VBox {
         blendModeComboBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label polyOffsetFactorLabel = new Label(Messages.MATERIAL_RENDER_STATE_POLY_OFFSET_FACTOR + ":");
-        polyOffsetFactorLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         polyOffsetFactorLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         polyOffsetFactorField = new FloatTextField();
@@ -171,7 +168,6 @@ public class MaterialRenderParamsComponent extends VBox {
         polyOffsetFactorField.setScrollPower(5F);
 
         final Label polyOffsetUnitsLabel = new Label(Messages.MATERIAL_RENDER_STATE_POLY_OFFSET_UNITS + ":");
-        polyOffsetUnitsLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         polyOffsetUnitsLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         polyOffsetUnitsField = new FloatTextField();
@@ -181,7 +177,6 @@ public class MaterialRenderParamsComponent extends VBox {
         polyOffsetUnitsField.setScrollPower(5F);
 
         final Label depthWriteLabel = new Label(Messages.MATERIAL_RENDER_STATE_DEPTH_WRITE + ":");
-        depthWriteLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         depthWriteLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         depthWriteCheckBox = new CheckBox();
@@ -190,7 +185,6 @@ public class MaterialRenderParamsComponent extends VBox {
         depthWriteCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label colorWriteLabel = new Label(Messages.MATERIAL_RENDER_STATE_COLOR_WRITE + ":");
-        colorWriteLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         colorWriteLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         colorWriteCheckBox = new CheckBox();
@@ -199,7 +193,6 @@ public class MaterialRenderParamsComponent extends VBox {
         colorWriteCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label depthTestLabel = new Label(Messages.MATERIAL_RENDER_STATE_DEPTH_TEST + ":");
-        depthTestLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         depthTestLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         depthTestCheckBox = new CheckBox();
@@ -208,7 +201,6 @@ public class MaterialRenderParamsComponent extends VBox {
         depthTestCheckBox.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.CONTROL_PERCENT_WIDTH2));
 
         final Label wireframeLabel = new Label(Messages.MATERIAL_RENDER_STATE_WIREFRAME + ":");
-        wireframeLabel.setId(CSSIds.MATERIAL_PARAM_CONTROL_PARAM_NAME);
         wireframeLabel.prefWidthProperty().bind(widthProperty().multiply(MaterialParamControl.LABEL_PERCENT_WIDTH2));
 
         wireframeCheckBox = new CheckBox();
@@ -250,18 +242,13 @@ public class MaterialRenderParamsComponent extends VBox {
         FXUtils.addToPane(wireframeContainer, container);
         FXUtils.addToPane(container, this);
 
-        FXUtils.addClassTo(faceCullModeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(faceCullModeComboBox, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(blendModeLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(blendModeComboBox, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(polyOffsetFactorLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(polyOffsetUnitsLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(polyOffsetFactorField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(polyOffsetUnitsField, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(depthWriteLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(colorWriteLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(depthTestLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(wireframeLabel, CSSClasses.SPECIAL_FONT_13);
+        FXUtils.addClassesTo(faceCullModeLabel, blendModeLabel, polyOffsetFactorLabel, polyOffsetUnitsLabel,
+                depthWriteLabel, colorWriteLabel, depthTestLabel, wireframeLabel,
+                CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_NAME);
+
+        FXUtils.addClassesTo(faceCullModeLabel, faceCullModeComboBox, blendModeLabel, blendModeComboBox,
+                polyOffsetFactorLabel, polyOffsetUnitsLabel, polyOffsetFactorField, polyOffsetUnitsField,
+                depthWriteLabel, colorWriteLabel, depthTestLabel, wireframeLabel, CSSClasses.SPECIAL_FONT_13);
     }
 
     /**
