@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
 import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Quaternion;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
@@ -35,16 +36,19 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
     /**
      * The field Y.
      */
+    @Nullable
     private FloatTextField xField;
 
     /**
      * The field X.
      */
-    private FloatTextField yFiled;
+    @Nullable
+    private FloatTextField yField;
 
     /**
      * The field Z.
      */
+    @Nullable
     private FloatTextField zField;
 
     /**
@@ -74,10 +78,10 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
 
         final Label yLabel = new Label("y:");
 
-        yFiled = new FloatTextField();
-        yFiled.setOnKeyReleased(this::updateRotation);
-        yFiled.addChangeListener((observable, oldValue, newValue) -> updateRotation(null));
-        yFiled.prefWidthProperty().bind(widthProperty().divide(3));
+        yField = new FloatTextField();
+        yField.setOnKeyReleased(this::updateRotation);
+        yField.addChangeListener((observable, oldValue, newValue) -> updateRotation(null));
+        yField.prefWidthProperty().bind(widthProperty().divide(3));
 
         final Label zLabel = new Label("z:");
 
@@ -89,33 +93,39 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
         FXUtils.addToPane(xLabel, container);
         FXUtils.addToPane(xField, container);
         FXUtils.addToPane(yLabel, container);
-        FXUtils.addToPane(yFiled, container);
+        FXUtils.addToPane(yField, container);
         FXUtils.addToPane(zLabel, container);
         FXUtils.addToPane(zField, container);
 
         FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassTo(xField, yFiled, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
+        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER);
+        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CSSClasses.TRANSPARENT_TEXT_FIELD);
     }
 
     /**
      * @return the field X.
      */
+    @NotNull
     private FloatTextField getXField() {
-        return xField;
+        return notNull(xField);
     }
 
     /**
      * @return the field Y.
      */
+    @NotNull
     private FloatTextField getYFiled() {
-        return yFiled;
+        return notNull(yField);
     }
 
     /**
      * @return the field Z.
      */
+    @NotNull
     private FloatTextField getZField() {
-        return zField;
+        return notNull(zField);
     }
 
     @Override

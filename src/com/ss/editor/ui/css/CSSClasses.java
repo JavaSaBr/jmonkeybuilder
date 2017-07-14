@@ -317,6 +317,10 @@ public interface CSSClasses {
      */
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
     /**
+     * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER.
+     */
+    String ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER = "abstract-abstract-param-control-multi-value-container-control";
+    /**
      * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW.
      */
     String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
@@ -376,6 +380,33 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT.
      */
     String ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT = "abstract-param-control-influencer-element";
+
+    /**
+     * The constant EDITOR_SCRIPTING_COMPONENT.
+     */
+    String EDITOR_SCRIPTING_COMPONENT = "editor-scripting-component";
+    /**
+     * The constant GROOVY_EDITOR_COMPONENT.
+     */
+    String GROOVY_EDITOR_COMPONENT = "groovy-editor-component";
+
+    /**
+     * The constant SCENE_APP_STATE_CONTAINER.
+     */
+    String SCENE_APP_STATE_CONTAINER = "scene-app-state-container";
+    /**
+     * The constant SCENE_APP_STATE_LIST_CELL.
+     */
+    String SCENE_APP_STATE_LIST_CELL = "scene-app-state-list-cell";
+
+    /**
+     * The constant SCENE_FILTER_CONTAINER.
+     */
+    String SCENE_FILTER_CONTAINER = "scene-filter-container";
+    /**
+     * The constant SCENE_FILTER_LIST_CELL.
+     */
+    String SCENE_FILTER_LIST_CELL = "scene-filter-list-cell";
 
     /**
      * The constant SETTINGS_DIALOG_LABEL.

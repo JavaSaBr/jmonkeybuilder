@@ -483,7 +483,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent.addImport(SpotLight.class);
         scriptingComponent.addImport(Material.class);
         scriptingComponent.addImport(Texture.class);
-        scriptingComponent.setExampleCode("root.attachChild(new Node(\"created from Groovy\"));");
+        scriptingComponent.setExampleCode("root.attachChild(\nnew Node(\"created from Groovy\"));");
         scriptingComponent.buildHeader();
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
@@ -1151,13 +1151,22 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final int oldIndex = oldValue == null ? -1 : oldValue.intValue();
         final int newIndex = newValue.intValue();
 
+        final VBox propertyContainer = getPropertyEditorObjectsContainer();
+
         if (newIndex == OBJECTS_TOOL) {
-            FXUtils.addToPane(modelPropertyEditor, getPropertyEditorObjectsContainer());
+            FXUtils.addToPane(modelPropertyEditor, propertyContainer);
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeObjectsContainer());
+            modelPropertyEditor.rebuild();
         } else if (newIndex == EDITING_TOOL) {
             FXUtils.addToPane(modelNodeTree, getModelNodeTreeEditingContainer());
             editingComponentContainer.notifyShowed();
         }
+
+        EXECUTOR_MANAGER.addFXTask(() -> {
+            propertyContainer.requestLayout();
+            propertyContainer.applyCss();
+            propertyContainer.layout();
+        });
 
         if (oldIndex == EDITING_TOOL) {
             editingComponentContainer.notifyHided();

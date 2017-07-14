@@ -1,25 +1,21 @@
 package com.ss.editor.ui.control.app.state.list;
 
+import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.app.state.operation.DisableAppStateOperation;
 import com.ss.editor.ui.control.app.state.operation.EnableAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javafx.geometry.Insets;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of list cell to present an editable scene app state.
@@ -27,8 +23,6 @@ import com.ss.rlib.util.StringUtils;
  * @author JavaSaBr
  */
 public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
-
-    private static final Insets VISIBLE_ICON_OFFSET = new Insets(0, 3, 0, 0);
 
     /**
      * The list of app states.
@@ -59,7 +53,7 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
      *
      * @param stateList the state list
      */
-    public AppStateListCell(final @NotNull AppStateList stateList) {
+    public AppStateListCell(@NotNull final AppStateList stateList) {
         this.stateList = stateList;
         this.content = new HBox();
         this.text = new Label();
@@ -68,17 +62,13 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
         this.visibleIcon.setOnMouseReleased(this::processHide);
         this.visibleIcon.setPickOnBounds(true);
 
-        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_LIST_CELL);
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(text, CSSClasses.SPECIAL_FONT_13);
-
         FXUtils.addToPane(visibleIcon, content);
         FXUtils.addToPane(text, content);
 
-        HBox.setMargin(visibleIcon, VISIBLE_ICON_OFFSET);
-
-        setId(CSSIds.SCENE_APP_STATE_LIST_CELL);
         setEditable(false);
+
+        FXUtils.addClassTo(content, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(this, CSSClasses.SCENE_APP_STATE_LIST_CELL);
     }
 
     /**

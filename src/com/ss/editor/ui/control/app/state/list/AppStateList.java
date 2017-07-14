@@ -1,18 +1,19 @@
 package com.ss.editor.ui.control.app.state.list;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
+import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.app.state.dialog.CreateSceneAppStateDialog;
 import com.ss.editor.ui.control.app.state.operation.RemoveAppStateOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.extension.scene.SceneNode;
-import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
-import com.ss.editor.extension.scene.app.state.SceneAppState;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
@@ -20,8 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -32,6 +32,7 @@ import java.util.function.Consumer;
  */
 public class AppStateList extends VBox {
 
+    @NotNull
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
@@ -49,6 +50,7 @@ public class AppStateList extends VBox {
     /**
      * The list view with created scene app states.
      */
+    @Nullable
     private ListView<EditableSceneAppState> listView;
 
     /**
@@ -59,10 +61,10 @@ public class AppStateList extends VBox {
      */
     public AppStateList(@NotNull final Consumer<EditableSceneAppState> selectHandler,
                         @NotNull final SceneChangeConsumer changeConsumer) {
-        setId(CSSIds.SCENE_APP_STATE_CONTAINER);
         this.changeConsumer = changeConsumer;
         this.selectHandler = selectHandler;
         createComponents();
+        FXUtils.addClassTo(this, CSSClasses.SCENE_APP_STATE_CONTAINER);
     }
 
     /**
@@ -76,6 +78,7 @@ public class AppStateList extends VBox {
         listView.setFocusTraversable(true);
         listView.prefHeightProperty().bind(heightProperty());
         listView.prefWidthProperty().bind(widthProperty());
+        listView.setFixedCellSize(22);
 
         final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) ->
@@ -91,10 +94,13 @@ public class AppStateList extends VBox {
         removeButton.disableProperty().bind(selectionModel.selectedItemProperty().isNull());
 
         final HBox buttonContainer = new HBox(addButton, removeButton);
-        buttonContainer.setAlignment(Pos.CENTER);
 
         FXUtils.addToPane(listView, this);
         FXUtils.addToPane(buttonContainer, this);
+
+        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
     }
 
@@ -105,6 +111,7 @@ public class AppStateList extends VBox {
      */
     public void fill(@NotNull final SceneNode sceneNode) {
 
+        final ListView<EditableSceneAppState> listView = getListView();
         final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
         final EditableSceneAppState selected = selectionModel.getSelectedItem();
 
@@ -112,8 +119,8 @@ public class AppStateList extends VBox {
         items.clear();
 
         final Array<SceneAppState> appStates = sceneNode.getAppStates();
-        appStates.stream().filter(appState -> appState instanceof EditableSceneAppState)
-                .map(editableState -> (EditableSceneAppState) editableState)
+        appStates.stream().filter(EditableSceneAppState.class::isInstance)
+                .map(EditableSceneAppState.class::cast)
                 .forEach(items::add);
 
         if (selected != null && appStates.contains(selected)) {
@@ -122,10 +129,18 @@ public class AppStateList extends VBox {
     }
 
     /**
+     * @return the list view with created scene app states.
+     */
+    @NotNull
+    private ListView<EditableSceneAppState> getListView() {
+        return notNull(listView);
+    }
+
+    /**
      * Clear selection.
      */
     public void clearSelection() {
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
         selectionModel.select(null);
     }
 
@@ -143,7 +158,7 @@ public class AppStateList extends VBox {
      */
     private void removeAppState() {
 
-        final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
+        final MultipleSelectionModel<EditableSceneAppState> selectionModel = getListView().getSelectionModel();
         final EditableSceneAppState appState = selectionModel.getSelectedItem();
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
 

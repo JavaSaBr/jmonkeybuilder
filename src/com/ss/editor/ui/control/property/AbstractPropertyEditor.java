@@ -144,6 +144,13 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
     }
 
     /**
+     * Rebuild this editor.
+     */
+    public void rebuild() {
+        rebuildFor(getCurrentObject(), null);
+    }
+
+    /**
      * Is need update boolean.
      *
      * @param object the object

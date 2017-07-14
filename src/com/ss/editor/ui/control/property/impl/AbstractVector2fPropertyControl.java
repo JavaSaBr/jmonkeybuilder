@@ -79,7 +79,11 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         FXUtils.addToPane(yLabel, container);
         FXUtils.addToPane(yField, container);
 
+        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER);
         FXUtils.addClassTo(xLabel, yLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_3);
+        FXUtils.addClassesTo(xField, yField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR2F_FIELD,
+                CSSClasses.TRANSPARENT_TEXT_FIELD);
     }
 
     /**

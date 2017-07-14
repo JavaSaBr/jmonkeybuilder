@@ -1134,6 +1134,7 @@
     -fx-background-insets: 0;
 }
 
+.text-field-list-cell,
 .list-cell {
     -fx-min-height: -var-default-cell-height;
     -fx-background-color: transparent;
@@ -1142,10 +1143,12 @@
     -fx-indent: 1em;
 }
 
+.text-field-list-cell,
 .list-cell .label {
     -fx-padding: 0px 0px 0px 3px;
 }
 
+.text-field-list-cell,
 .list-cell:odd {
     -fx-background-color: transparent;
 }

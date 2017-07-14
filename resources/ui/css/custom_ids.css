@@ -270,17 +270,6 @@
     -fx-max-height: -fx-min-height;
 }
 
-#SceneAppStateContainer {
-    -fx-background-color: -var-background-color;
-    -fx-padding: 4 2 0 0;
-}
-
-#SceneAppStateListCell {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-}
-
 #AbstractParamControlNumberLabel {
     -fx-min-height: 24;
     -fx-pref-height: -fx-min-height;
@@ -322,27 +311,6 @@
     -fx-padding: 5px;
     -fx-vgap: 3px;
     -fx-hgap: 3px;
-}
-
-
-#EditorScriptingComponent {
-    -fx-background-color: -var-background-color;
-    -fx-padding: 5px;
-    -fx-vgap: 3px;
-}
-
-#EditorScriptingComponentButtonRun {
-    -fx-min-height: 32;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 150;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#GroovyEditorComponent {
-    -fx-border-width: 1px;
-    -fx-border-color: black;
 }
 
 /*******************************************************************************

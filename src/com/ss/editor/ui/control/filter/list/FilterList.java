@@ -1,18 +1,18 @@
 package com.ss.editor.ui.control.filter.list;
 
 import com.ss.editor.JFXApplication;
+import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.filter.EditableSceneFilter;
+import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.filter.dialog.CreateSceneFilterDialog;
 import com.ss.editor.ui.control.filter.operation.RemoveSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.extension.scene.SceneNode;
-import com.ss.editor.extension.scene.filter.EditableSceneFilter;
-import com.ss.editor.extension.scene.filter.SceneFilter;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MultipleSelectionModel;
@@ -20,8 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 
 import java.util.function.Consumer;
 
@@ -59,10 +57,10 @@ public class FilterList extends VBox {
      */
     public FilterList(@NotNull final Consumer<EditableSceneFilter<?>> selectHandler,
                       @NotNull final SceneChangeConsumer changeConsumer) {
-        setId(CSSIds.SCENE_APP_STATE_CONTAINER);
         this.changeConsumer = changeConsumer;
         this.selectHandler = selectHandler;
         createComponents();
+        FXUtils.addClassTo(this, CSSClasses.SCENE_FILTER_CONTAINER);
     }
 
     /**
@@ -76,6 +74,7 @@ public class FilterList extends VBox {
         listView.setFocusTraversable(true);
         listView.prefHeightProperty().bind(heightProperty());
         listView.prefWidthProperty().bind(widthProperty());
+        listView.setFixedCellSize(22);
 
         final MultipleSelectionModel<EditableSceneFilter<?>> selectionModel = listView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) ->
@@ -91,10 +90,13 @@ public class FilterList extends VBox {
         removeButton.disableProperty().bind(selectionModel.selectedItemProperty().isNull());
 
         final HBox buttonContainer = new HBox(addButton, removeButton);
-        buttonContainer.setAlignment(Pos.CENTER);
 
         FXUtils.addToPane(listView, this);
         FXUtils.addToPane(buttonContainer, this);
+
+        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
     }
 
@@ -112,8 +114,8 @@ public class FilterList extends VBox {
         items.clear();
 
         final Array<SceneFilter<?>> filters = sceneNode.getFilters();
-        filters.stream().filter(sceneFilter -> sceneFilter instanceof EditableSceneFilter<?>)
-                .map(editableFilter -> (EditableSceneFilter<?>) editableFilter)
+        filters.stream().filter(EditableSceneFilter.class::isInstance)
+                .map(EditableSceneFilter.class::cast)
                 .forEach(items::add);
 
         if (selected != null && filters.contains(selected)) {

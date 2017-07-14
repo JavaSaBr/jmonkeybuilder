@@ -110,7 +110,6 @@ public class GroovyEditorComponent extends VBox {
      * @param editable the editable
      */
     public GroovyEditorComponent(final boolean editable) {
-        setId(CSSIds.GROOVY_EDITOR_COMPONENT);
 
         codeArea = new CodeArea();
         codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
@@ -120,7 +119,7 @@ public class GroovyEditorComponent extends VBox {
         codeArea.setEditable(editable);
 
         FXUtils.addToPane(codeArea, this);
-        FXUtils.addClassTo(codeArea, CSSClasses.MONO_FONT_13);
+        FXUtils.addClassTo(this, CSSClasses.GROOVY_EDITOR_COMPONENT);
     }
 
     @NotNull

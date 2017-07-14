@@ -676,6 +676,10 @@
     -fx-spacing: 2px;
 }
 
+.abstract-param-control-multi-value-container {
+    -fx-padding: 0px 2px 0px 2px;
+}
+
 .abstract-param-control-param-name {
     -fx-alignment: center;
     -fx-text-alignment: center;
@@ -772,6 +776,98 @@
     -fx-min-width: -var-default-toolbar-button-size;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Editor Scripting Component                                                  *
+ *                                                                             *
+ ******************************************************************************/
+
+.editor-scripting-component {
+    -fx-background-color: -var-background-color;
+    -fx-padding: 5px;
+    -fx-vgap: 3px;
+}
+
+.editor-scripting-component > .button {
+    -fx-min-height: 32;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Scene App State List Component                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.scene-app-state-container {
+}
+
+.scene-app-state-container > .hbox {
+    -fx-alignment: center;
+    -fx-padding: 4px;
+}
+
+.scene-app-state-container > .hbox > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.scene-app-state-list-cell {
+}
+
+.scene-app-state-list-cell > .hbox {
+    -fx-alignment: center-left;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Scene Filter List Component                                                 *
+ *                                                                             *
+ ******************************************************************************/
+
+.scene-filter-container {
+}
+
+.scene-filter-container > .hbox {
+    -fx-alignment: center;
+    -fx-padding: 4px;
+}
+
+.scene-filter-container > .hbox > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.scene-filter-list-cell {
+}
+
+.scene-filter-list-cell > .hbox {
+    -fx-alignment: center-left;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Groovy Editor Component                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.groovy-editor-component {
+    -fx-border-width: 1px;
+    -fx-border-color: -var-border-color;
 }
 
 /*******************************************************************************

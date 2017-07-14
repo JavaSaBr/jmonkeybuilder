@@ -3,18 +3,17 @@ package com.ss.editor.ui.component.editor.scripting;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.scripting.GroovyEditorComponent;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
-import groovy.lang.GroovyShell;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import groovy.lang.GroovyShell;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The component to work with scripts in an editor.
@@ -66,13 +65,12 @@ public class EditorScriptingComponent extends GridPane {
      */
     public EditorScriptingComponent(@NotNull final Runnable applyHandler) {
         this.applyHandler = applyHandler;
-        setId(CSSIds.EDITOR_SCRIPTING_COMPONENT);
 
         this.editorComponent = new GroovyEditorComponent(true);
-        this.editorComponent.prefHeightProperty().bind(heightProperty());
+        this.editorComponent.prefHeightProperty().bind(heightProperty().multiply(0.6));
         this.editorComponent.prefWidthProperty().bind(widthProperty());
         this.headerComponent = new GroovyEditorComponent(false);
-        this.headerComponent.prefHeightProperty().bind(heightProperty().multiply(0.2));
+        this.headerComponent.prefHeightProperty().bind(heightProperty().multiply(0.4));
         this.headerComponent.prefWidthProperty().bind(widthProperty());
         this.shell = new GroovyShell();
         this.variables = DictionaryFactory.newObjectDictionary();
@@ -82,20 +80,15 @@ public class EditorScriptingComponent extends GridPane {
         final Label scriptBodyLabel = new Label(Messages.EDITOR_SCRIPTING_COMPONENT_BODY + ":");
 
         final Button runButton = new Button(Messages.EDITOR_SCRIPTING_COMPONENT_RUN);
-        runButton.setId(CSSIds.EDITOR_SCRIPTING_COMPONENT_BUTTON_RUN);
         runButton.setOnAction(event -> run());
-
-        FXUtils.addClassTo(headersLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(scriptBodyLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(editorComponent, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(headerComponent, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(runButton, CSSClasses.SPECIAL_FONT_14);
 
         add(headersLabel, 0, 0, 1, 1);
         add(headerComponent, 0, 1, 1, 1);
         add(scriptBodyLabel, 0, 2, 1, 1);
-        add(editorComponent, 0, 3, 1, 5);
-        add(runButton, 0, 8, 1, 1);
+        add(editorComponent, 0, 3, 1, 1);
+        add(runButton, 0, 4, 1, 1);
+
+        FXUtils.addClassTo(this, CSSClasses.EDITOR_SCRIPTING_COMPONENT);
     }
 
     /**

@@ -151,15 +151,6 @@ public interface CSSIds {
     String LOG_VIEW = "LogView";
 
     /**
-     * The constant SCENE_APP_STATE_CONTAINER.
-     */
-    String SCENE_APP_STATE_CONTAINER = "SceneAppStateContainer";
-    /**
-     * The constant SCENE_APP_STATE_LIST_CELL.
-     */
-    String SCENE_APP_STATE_LIST_CELL = "SceneAppStateListCell";
-
-    /**
      * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER.
      */
     String ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER = "AbstractParamControlMultiValuesContainer";
@@ -192,18 +183,6 @@ public interface CSSIds {
      */
     String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
 
-    /**
-     * The constant EDITOR_SCRIPTING_COMPONENT.
-     */
-    String EDITOR_SCRIPTING_COMPONENT = "EditorScriptingComponent";
-    /**
-     * The constant EDITOR_SCRIPTING_COMPONENT_BUTTON_RUN.
-     */
-    String EDITOR_SCRIPTING_COMPONENT_BUTTON_RUN = "EditorScriptingComponentButtonRun";
-    /**
-     * The constant GROOVY_EDITOR_COMPONENT.
-     */
-    String GROOVY_EDITOR_COMPONENT = "GroovyEditorComponent";
 
     /**
      * The constant ABOUT_DIALOG_GRID_PANE.
