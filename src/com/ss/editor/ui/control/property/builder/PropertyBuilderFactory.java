@@ -24,7 +24,7 @@ public class PropertyBuilderFactory {
 
     static {
         BUILDERS.add(AudioNodePropertyBuilder.getInstance());
-        BUILDERS.add(ParticleEmitterPropertyBuilder.getInstance());
+        BUILDERS.add(Toneg0dParticleEmitterPropertyBuilder.getInstance());
         BUILDERS.add(GeometryPropertyBuilder.getInstance());
         BUILDERS.add(LightPropertyBuilder.getInstance());
         BUILDERS.add(SpatialPropertyBuilder.getInstance());

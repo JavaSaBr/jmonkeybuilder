@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    private static final int WIDTH_OFFSET = 14;
+    private static final int WIDTH_OFFSET = 17;
 
     /**
      * The consumer of changes.

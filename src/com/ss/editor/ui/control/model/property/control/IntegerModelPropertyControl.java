@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link ModelPropertyControl} to edit integer values.
  *
- * @param <T> the type parameter
+ * @param <T> the type of edited object
  * @author JavaSaBr
  */
 public class IntegerModelPropertyControl<T> extends AbstractIntegerPropertyControl<ModelChangeConsumer, T> {

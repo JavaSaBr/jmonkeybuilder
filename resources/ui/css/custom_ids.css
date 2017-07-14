@@ -309,17 +309,6 @@
     -fx-padding: 0 2 0 2;
 }
 
-#AbstractParamControlElementLabel {
-    -fx-min-height: 20;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-left;
-    -fx-text-alignment: left;
-}
-
-#AbstractParamControlElementButton {
-}
-
 #AbstractParamControlMultiValuesContainer {
     -fx-alignment: center;
     -fx-hgap: 2px;

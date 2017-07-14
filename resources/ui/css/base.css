@@ -1316,7 +1316,8 @@
 }
 
 .color-picker > .color-picker-label {
-    -fx-alignment: center;
+    -fx-alignment: center-left;
+    -fx-padding: 0px 0px 0px 0px;
 }
 
 .color-picker.button > .arrow-button {
@@ -1329,7 +1330,7 @@
 }
 
 .color-picker > .color-picker-label > .picker-color {
-    -fx-padding: 1px 1px 1px 1px;
+    -fx-padding: 1px 1px 1px 6px;
     -fx-background-color: null;
 }
 

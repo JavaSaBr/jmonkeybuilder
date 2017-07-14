@@ -72,7 +72,7 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
      * @return the label with value of the property.
      */
     @NotNull
-    private Label getPropertyValueLabel() {
+    protected Label getPropertyValueLabel() {
         return notNull(propertyValueLabel);
     }
 
@@ -81,6 +81,7 @@ public abstract class AbstractDefaultPropertyControl<C extends ChangeConsumer, D
         super.createComponents(container);
 
         propertyValueLabel = new Label();
+        propertyValueLabel.prefWidthProperty().bind(container.widthProperty());
 
         FXUtils.addClassesTo(propertyValueLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_LABEL_VALUE,
                 CSSClasses.TEXT_INPUT_CONTAINER);

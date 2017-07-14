@@ -11,12 +11,10 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -47,12 +45,6 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
      */
     @NotNull
     protected static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
-
-    /**
-     * The constant BUTTON_OFFSET.
-     */
-    @NotNull
-    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     /**
      * The constant FX_EVENT_MANAGER.
@@ -123,6 +115,7 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
         }
 
         final File file = files.get(0);
+
         if (!file.getName().endsWith(FileExtensions.JME_MATERIAL)) {
             return;
         }
@@ -143,6 +136,7 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
         }
 
         final File file = files.get(0);
+
         if (!file.getName().endsWith(FileExtensions.JME_MATERIAL)) {
             return;
         }
@@ -169,34 +163,29 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
         super.createComponents(container);
 
         materialLabel = new Label(NO_MATERIAL);
-        materialLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         final Button changeButton = new Button();
-        changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processChange());
 
         final Button editButton = new Button();
-        editButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         editButton.setGraphic(new ImageView(Icons.EDIT_16));
         editButton.disableProperty().bind(materialLabel.textProperty().isEqualTo(NO_MATERIAL));
         editButton.setOnAction(event -> processEdit());
 
         materialLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(changeButton.widthProperty())
-                .subtract(editButton.widthProperty())
-                .subtract(BUTTON_OFFSET.getLeft() * 2));
+                .subtract(editButton.widthProperty()));
 
         FXUtils.addToPane(materialLabel, container);
         FXUtils.addToPane(changeButton, container);
         FXUtils.addToPane(editButton, container);
 
-        HBox.setMargin(changeButton, BUTTON_OFFSET);
-        HBox.setMargin(editButton, BUTTON_OFFSET);
-
-        FXUtils.addClassTo(materialLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, editButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(changeButton, editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassesTo(container, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
+        FXUtils.addClassTo(materialLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(changeButton, editButton, CSSClasses.FLAT_BUTTON,
+                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
     /**

@@ -1,11 +1,10 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -32,11 +31,13 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
     /**
      * The field X.
      */
+    @Nullable
     private FloatTextField xField;
 
     /**
      * The field Y.
      */
+    @Nullable
     private FloatTextField yField;
 
     /**
@@ -58,7 +59,6 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         super.createComponents(container);
 
         final Label xLabel = new Label(getXLabelText());
-        xLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F);
 
         xField = new FloatTextField();
         xField.setOnKeyReleased(this::updateVector);
@@ -67,7 +67,6 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         xField.setScrollPower(10F);
 
         final Label yLabel = new Label(getYLabelText());
-        yLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL2F);
 
         yField = new FloatTextField();
         yField.setOnKeyReleased(this::updateVector);
@@ -80,7 +79,7 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         FXUtils.addToPane(yLabel, container);
         FXUtils.addToPane(yField, container);
 
-        FXUtils.addClassTo(xLabel, yLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
+        FXUtils.addClassTo(xLabel, yLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_3);
     }
 
     /**
@@ -130,8 +129,9 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
      *
      * @return the field X.
      */
+    @NotNull
     protected FloatTextField getXField() {
-        return xField;
+        return notNull(xField);
     }
 
     /**
@@ -139,14 +139,15 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
      *
      * @return the field Y.
      */
+    @NotNull
     protected FloatTextField getYField() {
-        return yField;
+        return notNull(yField);
     }
 
     @Override
     protected void reload() {
 
-        final Vector2f element = requireNonNull(getPropertyValue(), "The property value can't be null.");
+        final Vector2f element = notNull(getPropertyValue(), "The property value can't be null.");
 
         final FloatTextField xField = getXField();
         xField.setValue(element.getX());
@@ -162,7 +163,7 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
      *
      * @param event the event
      */
-    protected void updateVector(@Nullable final KeyEvent event) {
+    private void updateVector(@Nullable final KeyEvent event) {
         UIUtils.consumeIfIsNotHotKey(event);
 
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
@@ -173,7 +174,7 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         final FloatTextField yField = getYField();
         final float y = yField.getValue();
 
-        final Vector2f oldValue = requireNonNull(getPropertyValue(), "The property value can't be null.");
+        final Vector2f oldValue = notNull(getPropertyValue(), "The property value can't be null.");
         final Vector2f newValue = new Vector2f();
         newValue.set(checkResultXValue(x, y), checkResultYValue(x, y));
 

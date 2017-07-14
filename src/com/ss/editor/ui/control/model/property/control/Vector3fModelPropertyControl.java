@@ -7,6 +7,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.impl.AbstractVector3fPropertyControl;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of the {@link AbstractVector3fPropertyControl} to edot vector3f values.
@@ -23,7 +24,7 @@ public class Vector3fModelPropertyControl<T> extends AbstractVector3fPropertyCon
      * @param paramName           the param name
      * @param modelChangeConsumer the model change consumer
      */
-    public Vector3fModelPropertyControl(@NotNull final Vector3f element, @NotNull final String paramName,
+    public Vector3fModelPropertyControl(@Nullable final Vector3f element, @NotNull final String paramName,
                                         @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer, newChangeHandler());
     }

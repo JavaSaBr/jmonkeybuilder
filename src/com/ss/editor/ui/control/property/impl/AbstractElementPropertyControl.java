@@ -7,7 +7,6 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
@@ -84,15 +83,12 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
         super.createComponents(container);
 
         elementLabel = new Label(NO_ELEMENT);
-        elementLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         final Button changeButton = new Button();
-        changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processAdd());
 
         final Button editButton = new Button();
-        editButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         editButton.setGraphic(new ImageView(Icons.REMOVE_12));
         editButton.disableProperty().bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
         editButton.setOnAction(event -> processRemove());
@@ -109,11 +105,9 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
         HBox.setMargin(changeButton, BUTTON_OFFSET);
         HBox.setMargin(editButton, BUTTON_OFFSET);
 
-        FXUtils.addClassTo(elementLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(editButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(elementLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(changeButton, editButton, CSSClasses.FLAT_BUTTON,
+                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
     /**

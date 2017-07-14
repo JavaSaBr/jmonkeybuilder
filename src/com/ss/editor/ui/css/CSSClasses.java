@@ -290,7 +290,15 @@ public interface CSSClasses {
     /**
      * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME.
      */
-    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "AbstractParamControlParamName";
+    String ABSTRACT_PARAM_CONTROL_PARAM_NAME = "abstract-param-control-param-name";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL.
+     */
+    String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "abstract-param-control-element-label";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER.
+     */
+    String ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER = "abstract-param-control-input-container";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_CHECK_BOX.
      */
@@ -323,6 +331,10 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_2.
      */
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_2 = "abstract-param-control-number-label-2";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_3.
+     */
+    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_3 = "abstract-param-control-number-label-3";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER.
      */

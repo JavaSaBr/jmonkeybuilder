@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
+import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.jme3.effect.influencers.RadialParticleInfluencer;
 import com.jme3.math.Vector3f;
@@ -50,19 +51,6 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
 
         final float velocityVariation = influencer.getVelocityVariation();
 
-        final FloatModelPropertyControl<ParticleInfluencer> velocityVariationControl =
-                new FloatModelPropertyControl<>(velocityVariation, Messages.MODEL_PROPERTY_VELOCITY_VARIATION, changeConsumer);
-
-        velocityVariationControl.setSyncHandler(ParticleInfluencer::getVelocityVariation);
-        velocityVariationControl.setApplyHandler(ParticleInfluencer::setVelocityVariation);
-        velocityVariationControl.setEditObject(influencer);
-
-        FXUtils.addToPane(velocityVariationControl, container);
-
-        if (object instanceof RadialParticleInfluencer) {
-            createControls(container, changeConsumer, (RadialParticleInfluencer) object);
-        }
-
         final Vector3fModelPropertyControl<ParticleInfluencer> initialVelocityControl =
                 new Vector3fModelPropertyControl<>(initialVelocity, Messages.MODEL_PROPERTY_INITIAL_VELOCITY, changeConsumer);
 
@@ -71,6 +59,25 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         initialVelocityControl.setEditObject(influencer);
 
         FXUtils.addToPane(initialVelocityControl, container);
+
+        if (object instanceof RadialParticleInfluencer) {
+            createControls(container, changeConsumer, (RadialParticleInfluencer) object);
+        } else {
+            buildSplitLine(initialVelocityControl);
+        }
+
+        if (influencer instanceof EmptyParticleInfluencer) {
+            initialVelocityControl.setDisable(true);
+        }
+
+        final FloatModelPropertyControl<ParticleInfluencer> velocityVariationControl =
+                new FloatModelPropertyControl<>(velocityVariation, Messages.MODEL_PROPERTY_VELOCITY_VARIATION, changeConsumer);
+
+        velocityVariationControl.setSyncHandler(ParticleInfluencer::getVelocityVariation);
+        velocityVariationControl.setApplyHandler(ParticleInfluencer::setVelocityVariation);
+        velocityVariationControl.setEditObject(influencer);
+
+        FXUtils.addToPane(velocityVariationControl, container);
     }
 
     /**
@@ -80,8 +87,8 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
      * @param changeConsumer the change consumer
      * @param influencer     the influencer
      */
-    protected void createControls(final @NotNull VBox container, final @NotNull ModelChangeConsumer changeConsumer,
-                                  @NotNull final RadialParticleInfluencer influencer) {
+    private void createControls(@NotNull final VBox container, final @NotNull ModelChangeConsumer changeConsumer,
+                                @NotNull final RadialParticleInfluencer influencer) {
 
         final Vector3f origin = influencer.getOrigin();
         final float radialVelocity = influencer.getRadialVelocity();
@@ -101,7 +108,6 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         horizontalControl.setApplyHandler(RadialParticleInfluencer::setHorizontal);
         horizontalControl.setEditObject(influencer);
 
-
         final Vector3fModelPropertyControl<RadialParticleInfluencer> originControl =
                 new Vector3fModelPropertyControl<>(origin, Messages.MODEL_PROPERTY_ORIGIN, changeConsumer);
 
@@ -109,8 +115,9 @@ public class ParticleInfluencerPropertyBuilder extends AbstractPropertyBuilder<M
         originControl.setApplyHandler(RadialParticleInfluencer::setOrigin);
         originControl.setEditObject(influencer);
 
+        FXUtils.addToPane(originControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(radialVelocityControl, container);
         FXUtils.addToPane(horizontalControl, container);
-        FXUtils.addToPane(originControl, container);
     }
 }

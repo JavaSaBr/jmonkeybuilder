@@ -17,8 +17,8 @@ import java.util.function.BiConsumer;
 /**
  * The implementation of the {@link AbstractPropertyControl} to edit integer values.
  *
- * @param <C> the type parameter
- * @param <T> the type parameter
+ * @param <C> the type of {@link ChangeConsumer}
+ * @param <T> the type of edited object
  * @author JavaSaBr
  */
 public abstract class AbstractIntegerPropertyControl<C extends ChangeConsumer, T>

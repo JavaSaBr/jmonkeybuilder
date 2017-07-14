@@ -32,7 +32,7 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class Toneg0dParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     @NotNull
     private static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
@@ -149,7 +149,7 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
     };
 
     @NotNull
-    private static final PropertyBuilder INSTANCE = new ParticleEmitterPropertyBuilder();
+    private static final PropertyBuilder INSTANCE = new Toneg0dParticleEmitterPropertyBuilder();
 
     /**
      * Gets instance.
@@ -161,7 +161,7 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         return INSTANCE;
     }
 
-    private ParticleEmitterPropertyBuilder() {
+    private Toneg0dParticleEmitterPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 
@@ -169,11 +169,17 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent,
                                 @NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer) {
 
+        if (!(object instanceof ParticleEmitterNode || object instanceof ParticleEmitter)) {
+            return;
+        }
+
         if (object instanceof ParticleEmitterNode) {
             buildFor(container, changeConsumer, (ParticleEmitterNode) object);
-        } else if (object instanceof ParticleEmitter) {
+        } else {
             buildFor(container, changeConsumer, (ParticleEmitter) object);
         }
+
+        buildSplitLine(container);
     }
 
     private void buildFor(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
@@ -314,7 +320,6 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         materialControl.setSyncHandler(ParticleEmitterNode::getParticlesMaterial);
         materialControl.setEditObject(emitterNode);
 
-
         final MinMaxModelPropertyControl<ParticleEmitterNode> forceMinMaxControl =
                 new MinMaxModelPropertyControl<>(forceMinMax, Messages.MODEL_PROPERTY_INITIAL_FORCE, changeConsumer);
         forceMinMaxControl.setApplyHandler(FORCE_MIN_MAX_HANDLER);
@@ -350,7 +355,9 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
         FXUtils.addToPane(emitterLifeControl, container);
         FXUtils.addToPane(emitterDelayControl, container);
         FXUtils.addToPane(magnitudeControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(materialControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(spriteCountControl, container);
         FXUtils.addToPane(forceMinMaxControl, container);
         FXUtils.addToPane(lifeMinMaxControl, container);

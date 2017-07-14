@@ -33,10 +33,16 @@ import java.util.Collection;
  */
 public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
+    @NotNull
     private static final CullHint[] CULL_HINTS = CullHint.values();
+
+    @NotNull
     private static final ShadowMode[] SHADOW_MODES = ShadowMode.values();
+
+    @NotNull
     private static final Bucket[] BUCKETS = Bucket.values();
 
+    @NotNull
     private static final PropertyBuilder INSTANCE = new SpatialPropertyBuilder();
 
     /**
@@ -44,6 +50,7 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
      *
      * @return the instance
      */
+    @NotNull
     public static PropertyBuilder getInstance() {
         return INSTANCE;
     }
@@ -96,6 +103,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
         if (canEditTransformation(spatial)) {
 
+            buildSplitLine(container);
+
             final Vector3f location = spatial.getLocalTranslation().clone();
             final Vector3f scale = spatial.getLocalScale().clone();
             final Quaternion rotation = spatial.getLocalRotation().clone();
@@ -136,6 +145,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
         if(count < 1) {
             return;
         }
+
+        buildSplitLine(container);
 
         final Array<String> sortedKeys = ArrayFactory.newSortedArray(String.class);
         sortedKeys.addAll(userDataKeys);

@@ -61,8 +61,8 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
      * @param changeConsumer the change consumer
      * @param shape          the shape
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final EmitterPointShape shape) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final EmitterPointShape shape) {
 
         final Vector3f point = shape.getPoint();
 
@@ -83,8 +83,8 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
      * @param changeConsumer the change consumer
      * @param shape          the shape
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final EmitterBoxShape shape) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final EmitterBoxShape shape) {
 
         final Vector3f length = shape.getLen();
         final Vector3f min = shape.getMin();
@@ -114,8 +114,8 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
      * @param changeConsumer the change consumer
      * @param shape          the shape
      */
-    protected void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
-                                  @NotNull final EmitterSphereShape shape) {
+    private void createControls(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
+                                @NotNull final EmitterSphereShape shape) {
 
         final Vector3f center = shape.getCenter();
         final float radius = shape.getRadius();
@@ -134,7 +134,8 @@ public class EmitterShapePropertyBuilder extends AbstractPropertyBuilder<ModelCh
         centerControl.setApplyHandler(EmitterSphereShape::setCenter);
         centerControl.setEditObject(shape);
 
-        FXUtils.addToPane(radiusControl, container);
         FXUtils.addToPane(centerControl, container);
+        buildSplitLine(container);
+        FXUtils.addToPane(radiusControl, container);
     }
 }

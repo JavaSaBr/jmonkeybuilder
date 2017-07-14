@@ -15,10 +15,14 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileActio
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -30,11 +34,6 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -160,15 +159,12 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
         super.createComponents(container);
 
         audioKeyLabel = new Label(NO_AUDIO);
-        audioKeyLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         final Button changeButton = new Button();
-        changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processChange());
 
         final Button openButton = new Button();
-        openButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         openButton.setGraphic(new ImageView(Icons.EDIT_16));
         openButton.disableProperty().bind(audioKeyLabel.textProperty().isEqualTo(NO_AUDIO));
         openButton.setOnAction(event -> processOpen());
@@ -185,11 +181,9 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
         HBox.setMargin(changeButton, BUTTON_OFFSET);
         HBox.setMargin(openButton, BUTTON_OFFSET);
 
-        FXUtils.addClassTo(audioKeyLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-        FXUtils.addClassTo(openButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(openButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(audioKeyLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(changeButton, openButton, CSSClasses.FLAT_BUTTON,
+                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
     /**

@@ -5,7 +5,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -63,10 +62,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         super.createComponents();
 
         resourceLabel = new Label(NOT_SELECTED);
-        resourceLabel.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
 
         final Button changeButton = new Button();
-        changeButton.setId(CSSIds.ABSTRACT_PARAM_CONTROL_ELEMENT_BUTTON);
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processSelect());
 
@@ -79,9 +76,8 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
 
         HBox.setMargin(changeButton, BUTTON_OFFSET);
 
-        FXUtils.addClassTo(resourceLabel, CSSClasses.SPECIAL_FONT_13);
-        FXUtils.addClassTo(changeButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(changeButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(resourceLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(changeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
     }
 
     /**

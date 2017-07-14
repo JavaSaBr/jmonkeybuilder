@@ -47,6 +47,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
     @Override
     protected void buildForImpl(@NotNull final Object object, @Nullable final Object parent, @NotNull final VBox container,
                                 @NotNull final ModelChangeConsumer changeConsumer) {
+
         if (object instanceof DirectionalLight) {
             buildForDirectionLight((DirectionalLight) object, container, changeConsumer);
         } else if (object instanceof SpotLight) {
@@ -72,6 +73,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         directionControl.setEditObject(light);
 
         FXUtils.addToPane(directionControl, container);
+
+        buildSplitLine(container);
     }
 
     private void buildForPointLight(@NotNull final PointLight light, @NotNull final VBox container,
@@ -94,6 +97,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         radiusControl.setEditObject(light);
 
         FXUtils.addToPane(positionControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(radiusControl, container);
     }
 
@@ -144,6 +148,7 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
 
         FXUtils.addToPane(directionControl, container);
         FXUtils.addToPane(positionControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(rangeControl, container);
         FXUtils.addToPane(innerAngleControl, container);
         FXUtils.addToPane(outerAngleControl, container);

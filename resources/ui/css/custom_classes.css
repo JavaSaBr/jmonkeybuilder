@@ -611,8 +611,17 @@
     -fx-padding: 0px 0px 0px 0px;
 }
 
+.abstract-param-control-element-label {
+    -fx-alignment: center-left;
+    -fx-text-alignment: left;
+}
+
 .abstract-param-control-param-name-single-row {
     -fx-alignment: center-right;
+}
+
+.abstract-param-control-input-container {
+    -fx-padding: 0px 0px 0px 6px;
 }
 
 .abstract-param-control-param-color-picker {
@@ -648,6 +657,14 @@
 
 .abstract-param-control-number-label-2 {
     -fx-min-width: 30px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+}
+
+.abstract-param-control-number-label-3 {
+    -fx-min-width: 60px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;

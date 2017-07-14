@@ -141,18 +141,18 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
     @Override
     protected void reload() {
 
-        final Vector3f element = notNull(getPropertyValue(), "The property value can't be null.");
+        final Vector3f vector = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
 
         final FloatTextField xField = getXField();
-        xField.setValue(element.getX());
+        xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
         final FloatTextField yFiled = getYFiled();
-        yFiled.setValue(element.getY());
+        yFiled.setValue(vector.getY());
         yFiled.positionCaret(xField.getText().length());
 
         final FloatTextField zField = getZField();
-        zField.setValue(element.getZ());
+        zField.setValue(vector.getZ());
         zField.positionCaret(xField.getText().length());
     }
 
@@ -175,7 +175,7 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
         final FloatTextField zField = getZField();
         final float z = zField.getValue();
 
-        final Vector3f oldValue = notNull(getPropertyValue(), "The property value can't be null.");
+        final Vector3f oldValue = getPropertyValue() == null ? Vector3f.ZERO : getPropertyValue();
         final Vector3f newValue = new Vector3f();
         newValue.set(x, y, z);
 
