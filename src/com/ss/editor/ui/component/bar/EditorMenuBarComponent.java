@@ -15,17 +15,18 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class EditorMenuComponent extends MenuBar implements ScreenComponent {
+public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
 
     /**
      * The constant COMPONENT_ID.
      */
-    public static final String COMPONENT_ID = "EditorMenuComponent";
+    @NotNull
+    private static final String COMPONENT_ID = "EditorMenuBarComponent";
 
     /**
      * Instantiates a new Editor bar component.
      */
-    public EditorMenuComponent() {
+    public EditorMenuBarComponent() {
         super();
         setId(CSSIds.EDITOR_MENU_BAR_COMPONENT);
         createComponents();

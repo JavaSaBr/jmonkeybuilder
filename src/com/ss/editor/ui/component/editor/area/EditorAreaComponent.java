@@ -20,12 +20,20 @@ import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.editor.FileEditor;
-import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.concurrent.util.ThreadUtils;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.dictionary.ConcurrentObjectDictionary;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.DictionaryUtils;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -36,16 +44,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.concurrent.util.ThreadUtils;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.dictionary.ConcurrentObjectDictionary;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.DictionaryUtils;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -60,25 +58,46 @@ import java.util.Objects;
  */
 public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorAreaComponent.class);
 
     /**
      * The constant COMPONENT_ID.
      */
-    public static final String COMPONENT_ID = "EditorAreaComponent";
+    @NotNull
+    private static final String COMPONENT_ID = "EditorAreaComponent";
+
     /**
      * The constant KEY_EDITOR.
      */
-    public static final String KEY_EDITOR = "editor";
+    @NotNull
+    private static final String KEY_EDITOR = "editor";
 
+    @NotNull
     private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
+
+    @NotNull
     private static final FileCreatorRegistry CREATOR_REGISTRY = FileCreatorRegistry.getInstance();
+
+    @NotNull
     private static final WorkspaceManager WORKSPACE_MANAGER = WorkspaceManager.getInstance();
+
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    @NotNull
     private static final EditorRegistry EDITOR_REGISTRY = EditorRegistry.getInstance();
+
+    @NotNull
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
+
+    @NotNull
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -412,8 +431,6 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final Tab tab = new Tab(editor.getFileName());
         tab.setGraphic(new ImageView(ICON_MANAGER.getIcon(editFile, DEFAULT_FILE_ICON_SIZE)));
         tab.setContent(editor.getPage());
-
-        FXUtils.addClassTo(tab, CSSClasses.MAIN_FONT_12);
 
         final ObservableMap<Object, Object> properties = tab.getProperties();
         properties.put(KEY_EDITOR, editor);

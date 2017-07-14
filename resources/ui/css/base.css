@@ -1828,3 +1828,28 @@
     -fx-max-height: -fx-min-height;
     -fx-font-size: 16px;
 }
+
+
+/*******************************************************************************
+ *                                                                             *
+ * ProgressIndicator                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.progress-indicator {
+}
+.progress-indicator > .determinate-indicator > .indicator {
+}
+.progress-indicator > .determinate-indicator > .progress {
+}
+.progress-indicator > .determinate-indicator > .tick {
+}
+.progress-indicator > .percentage {
+}
+.progress-indicator:indeterminate > .spinner {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.progress-indicator:indeterminate .segment {
+    -fx-background-color: -fx-focus-color;
+}

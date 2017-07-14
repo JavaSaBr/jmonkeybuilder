@@ -22,6 +22,25 @@ public interface CSSIds {
     String EDITOR_MENU_BAR_COMPONENT = "EditorMenuBarComponent";
 
     /**
+     * The constant EDITOR_AREA_COMPONENT.
+     */
+    String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
+
+    /**
+     * The constant GLOBAL_LEFT_TOOL_COMPONENT.
+     */
+    String GLOBAL_LEFT_TOOL_COMPONENT = "GlobalLeftToolComponent";
+    /**
+     * The constant GLOBAL_BOTTOM_TOOL_COMPONENT.
+     */
+    String GLOBAL_BOTTOM_TOOL_COMPONENT = "GlobalBottomToolComponent";
+
+    /**
+     * The constant LOG_VIEW.
+     */
+    String LOG_VIEW = "LogView";
+
+    /**
      * The constant EDITOR_LOADING_LAYER.
      */
     String EDITOR_LOADING_LAYER = "EditorLoadingLayer";
@@ -29,11 +48,6 @@ public interface CSSIds {
      * The constant EDITOR_LOADING_PROGRESS.
      */
     String EDITOR_LOADING_PROGRESS = "EditorLoadingProgress";
-
-    /**
-     * The constant MAIN_SPLIT_PANEL.
-     */
-    String MAIN_SPLIT_PANEL = "MainSplitPane";
 
     /**
      * The constant ASSET_COMPONENT.
@@ -53,19 +67,6 @@ public interface CSSIds {
      */
     String JME_PREVIEW_MANAGER_IMAGE_VIEW = "JmePreviewManagerImageView";
 
-    /**
-     * The constant GLOBAL_LEFT_TOOL_COMPONENT.
-     */
-    String GLOBAL_LEFT_TOOL_COMPONENT = "GlobalLeftToolComponent";
-    /**
-     * The constant GLOBAL_BOTTOM_TOOL_COMPONENT.
-     */
-    String GLOBAL_BOTTOM_TOOL_COMPONENT = "GlobalBottomToolComponent";
-
-    /**
-     * The constant EDITOR_AREA_COMPONENT.
-     */
-    String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     /**
      * The constant ASSET_EDITOR_DIALOG_BUTTON_CONTAINER.
@@ -129,11 +130,6 @@ public interface CSSIds {
      * The constant GENERATE_LOD_DIALOG_LIST_VIEW_CELL.
      */
     String GENERATE_LOD_DIALOG_LIST_VIEW_CELL = "GenerateLoDDialogListViewCell";
-
-    /**
-     * The constant LOG_VIEW.
-     */
-    String LOG_VIEW = "LogView";
 
     /**
      * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER.

@@ -4,64 +4,6 @@
  *                                                                             *
  ******************************************************************************/
 
-.main-font-11 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 11px;
-}
-
-.main-font-12 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 12px;
-}
-
-.main-font-13 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 13px;
-}
-
-.main-font-14 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 14px;
-}
-
-.main-font-14-bold {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 14px;
-    -fx-font-weight: bolder;
-}
-
-.main-font-15 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 15px;
-}
-
-.main-font-15-bold {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 15px;
-    -fx-font-weight: bolder;
-}
-
-.main-font-15-bold-with-shadow {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 15px;
-    -fx-effect: dropshadow(one-pass-box, black, 2, 1, 1, 1);
-}
-
-.main-font-17 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 17px;
-}
-
-.main-font-20 {
-    -fx-font-family: "Ubuntu Regular";
-    -fx-font-size: 20px;
-}
-
-.special-font-12 {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 12px;
-}
-
 .special-font-13 {
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 13px;
@@ -87,9 +29,14 @@
     -fx-font-size: 22;
 }
 
-.mono-font-13 {
-    -fx-font-family: "Ubuntu Mono";
-    -fx-font-size: 13px;
+/*******************************************************************************
+ *                                                                             *
+ * Main Split Pane                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
+.main-split-pane {
+    -fx-background-color: transparent;
 }
 
 /*******************************************************************************

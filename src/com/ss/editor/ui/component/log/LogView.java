@@ -2,9 +2,12 @@ package com.ss.editor.ui.component.log;
 
 import static com.jme3x.jfx.util.JFXPlatform.runInFXThread;
 import static java.util.Collections.singleton;
-import com.ss.editor.ui.css.CSSClasses;
+import com.jme3.material.Material;
+import com.jme3.texture.Texture;
+import com.jme3.texture.Texture2D;
+import com.jme3.texture.TextureCubeMap;
+import com.jme3.texture.image.ColorSpace;
 import com.ss.editor.ui.css.CSSIds;
-import com.ss.rlib.ui.util.FXUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
@@ -53,8 +56,18 @@ public class LogView extends CodeArea {
     private static final String[] CLASSES = {
             BufferOverflowException.class.getName(),
             NullPointerException.class.getName(),
+            Material.class.getName(),
+            ColorSpace.class.getName(),
+            Texture.class.getName(),
+            Texture2D.class.getName(),
+            TextureCubeMap.class.getName(),
             BufferOverflowException.class.getSimpleName(),
             NullPointerException.class.getSimpleName(),
+            Material.class.getSimpleName(),
+            ColorSpace.class.getSimpleName(),
+            Texture.class.getSimpleName(),
+            Texture2D.class.getSimpleName(),
+            TextureCubeMap.class.getSimpleName(),
     };
 
     @NotNull
@@ -116,12 +129,8 @@ public class LogView extends CodeArea {
         setId(CSSIds.LOG_VIEW);
         setWrapText(true);
         setEditable(false);
-
         richChanges().subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
-
         System.setErr(new OutputStreamWrapper(System.err, externalAppendText()));
-
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
     }
 
     @NotNull

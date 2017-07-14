@@ -5,14 +5,14 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.asset.AssetComponent;
-import com.ss.editor.ui.component.bar.EditorMenuComponent;
+import com.ss.editor.ui.component.bar.EditorMenuBarComponent;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.component.split.pane.GlobalBottomToolSplitPane;
 import com.ss.editor.ui.component.split.pane.GlobalLeftToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -103,18 +103,15 @@ public class EditorFXSceneBuilder {
                               @NotNull final Stage stage) {
 
         final Canvas canvas = scene.getCanvas();
-        final EditorMenuComponent barComponent = new EditorMenuComponent();
+        final EditorMenuBarComponent barComponent = new EditorMenuBarComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 
         new EventRedirector(editorAreaComponent, canvas, stage);
 
         final GlobalLeftToolSplitPane leftSplitContainer = new GlobalLeftToolSplitPane(scene);
-        leftSplitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
         leftSplitContainer.prefHeightProperty().bind(container.heightProperty());
 
         final GlobalBottomToolSplitPane bottomSplitContainer = new GlobalBottomToolSplitPane(scene);
-        bottomSplitContainer.setId(CSSIds.MAIN_SPLIT_PANEL);
-
         final GlobalLeftToolComponent globalLeftToolComponent = new GlobalLeftToolComponent(leftSplitContainer);
         globalLeftToolComponent.addComponent(new AssetComponent(), Messages.EDITOR_TOOL_ASSET);
 
@@ -128,5 +125,7 @@ public class EditorFXSceneBuilder {
 
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
+
+        FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CSSClasses.MAIN_SPLIT_PANEL);
     }
 }

@@ -8,51 +8,6 @@ package com.ss.editor.ui.css;
 public interface CSSClasses {
 
     /**
-     * The constant MAIN_FONT_11.
-     */
-    String MAIN_FONT_11 = "main-font-11";
-    /**
-     * The constant MAIN_FONT_12.
-     */
-    String MAIN_FONT_12 = "main-font-12";
-    /**
-     * The constant MAIN_FONT_13.
-     */
-    String MAIN_FONT_13 = "main-font-13";
-    /**
-     * The constant MAIN_FONT_14.
-     */
-    String MAIN_FONT_14 = "main-font-14";
-    /**
-     * The constant MAIN_FONT_14_BOLD.
-     */
-    String MAIN_FONT_14_BOLD = "main-font-14-bold";
-    /**
-     * The constant MAIN_FONT_15.
-     */
-    String MAIN_FONT_15 = "main-font-15";
-    /**
-     * The constant MAIN_FONT_15_BOLD.
-     */
-    String MAIN_FONT_15_BOLD = "main-font-15-bold";
-    /**
-     * The constant MAIN_FONT_15_BOLD_WITH_SHADOW.
-     */
-    String MAIN_FONT_15_BOLD_WITH_SHADOW = "main-font-15-bold-with-shadow";
-    /**
-     * The constant MAIN_FONT_17.
-     */
-    String MAIN_FONT_17 = "main-font-17";
-    /**
-     * The constant MAIN_FONT_20.
-     */
-    String MAIN_FONT_20 = "main-font-20";
-
-    /**
-     * The constant SPECIAL_FONT_12.
-     */
-    String SPECIAL_FONT_12 = "special-font-12";
-    /**
      * The constant SPECIAL_FONT_13.
      */
     String SPECIAL_FONT_13 = "special-font-13";
@@ -73,10 +28,11 @@ public interface CSSClasses {
      */
     String SPECIAL_FONT_22 = "special-font-22";
 
+
     /**
-     * The constant MONO_FONT_13.
+     * The constant MAIN_SPLIT_PANEL.
      */
-    String MONO_FONT_13 = "mono-font-13";
+    String MAIN_SPLIT_PANEL = "main-split-pane";
 
     /**
      * The constant DEF_HBOX.

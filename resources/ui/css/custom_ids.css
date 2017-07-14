@@ -1,7 +1,22 @@
+/*******************************************************************************
+ *                                                                             *
+ * Root                                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+#Root {
+    -fx-background-color: -var-background-color;
+}
 
 #RootContainer {
     -fx-alignment: top-center;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Editor MenuBar Component                                                    *
+ *                                                                             *
+ ******************************************************************************/
 
 #EditorMenuBarComponent {
     -fx-padding: 0px;
@@ -12,28 +27,15 @@
     -fx-border-color: -var-split-line-color;
 }
 
-#EditorLoadingLayer {
-    -fx-background-color: rgba(0, 0, 0, 0.3);
-    -fx-alignment: center;
-}
-
-#EditorLoadingProgress {
-    -fx-min-height: 150;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 150;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
 /*******************************************************************************
  *                                                                             *
- * Main Split Pane                                                             *
+ * Editor Area Component                                                       *
  *                                                                             *
  ******************************************************************************/
 
-#MainSplitPane {
-    -fx-background-color: transparent;
+#EditorAreaComponent {
+    -fx-min-width: 500;
+    -fx-tab-max-height: 18;
 }
 
 /*******************************************************************************
@@ -58,6 +60,56 @@
     -fx-tab-max-height: 18;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Log View                                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+#LogView {
+    -fx-background-color: -var-background-color;
+    -fx-fill: -var-font-color;
+    -fx-text-fill: -var-font-color;
+    -fx-font-family: "Ubuntu Mono";
+    -fx-font-size: 13px;
+}
+
+#LogView .caret {
+    -fx-stroke: transparent;
+}
+
+#LogView .content {
+    -fx-background-color: -var-background-color;
+    -fx-fill: -var-font-color;
+    -fx-text-fill: -var-font-color;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Editor Loading                                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+#EditorLoadingLayer {
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-alignment: center;
+}
+
+#EditorLoadingProgress {
+    -fx-min-height: 150;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 150;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Asset Component                                                             *
+ *                                                                             *
+ ******************************************************************************/
+
 #AssetComponent {
     -fx-background-color: -var-background-color;
     -fx-alignment: top-center;
@@ -79,11 +131,6 @@
     -fx-min-width: 30;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-#EditorAreaComponent {
-    -fx-min-width: 500;
-    -fx-tab-max-height: 18;
 }
 
 #AssetEditorDialogButtonContainer {
@@ -212,22 +259,6 @@
 #JmePreviewManagerImageView {
 }
 
-#LogView {
-    -fx-background-color: -var-background-color;
-    -fx-fill: white;
-    -fx-text-fill: white;
-}
-
-#LogView .caret {
-    -fx-stroke: white;
-}
-
-#LogView .content {
-    -fx-background-color: -var-background-color;
-    -fx-fill: white;
-    -fx-text-fill: white;
-}
-
 #GenerateLoDDialogListView {
     -fx-min-height: 160px;
     -fx-pref-height: -fx-min-height;
@@ -250,10 +281,6 @@
 #AbstractParamControlMultiValuesContainer {
     -fx-alignment: center;
     -fx-hgap: 2px;
-}
-
-#Root {
-    -fx-background-color: -var-background-color;
 }
 
 #AbstractDialogGridSettingsContainer {

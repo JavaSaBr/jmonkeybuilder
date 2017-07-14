@@ -264,7 +264,6 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
         FXUtils.addToPane(imageView, previewContainer);
         FXUtils.addToPane(textView, previewContainer);
-        FXUtils.addClassTo(textView, CSSClasses.MAIN_FONT_13);
 
         HBox.setMargin(previewContainer, SECOND_PART_OFFSET_OFFSET);
 
