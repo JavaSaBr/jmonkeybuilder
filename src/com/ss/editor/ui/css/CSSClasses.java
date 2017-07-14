@@ -422,15 +422,18 @@ public interface CSSClasses {
     String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
 
     /**
-     * The constant AUDIO_VIEWER_EDITOR_PARAM_LABEL.
+     * The constant AUDIO_VIEW_EDITOR_CONTAINER.
      */
-    String AUDIO_VIEWER_EDITOR_PARAM_LABEL = "audio-viewer-editor-param-label";
+    String AUDIO_VIEW_EDITOR_CONTAINER = "audio-view-editor-container";
+
     /**
-     * The constant AUDIO_VIEWER_EDITOR_PARAM_VALUE.
+     * The constant TEXT_EDITOR_TEXT_AREA.
      */
-    String AUDIO_VIEWER_EDITOR_PARAM_VALUE = "audio-viewer-editor-param-value";
+    String TEXT_EDITOR_TEXT_AREA = "text-editor-text-area";
+
     /**
-     * The constant AUDIO_VIEWER_EDITOR_BUTTON.
+     * The constant IMAGE_VIEW_EDITOR_CONTAINER.
      */
-    String AUDIO_VIEWER_EDITOR_BUTTON = "audio-viewer-editor-button";
+    String IMAGE_VIEW_EDITOR_CONTAINER = "image-view-editor-container";
+
 }

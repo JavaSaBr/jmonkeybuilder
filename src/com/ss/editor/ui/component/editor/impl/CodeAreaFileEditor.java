@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import javafx.scene.layout.HBox;
@@ -48,13 +48,13 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     protected void createContent(@NotNull final VBox root) {
 
         codeArea = new CodeArea();
-        codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
         codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
         codeArea.prefHeightProperty().bind(root.heightProperty());
         codeArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(codeArea, root);
+        FXUtils.addClassTo(codeArea, CSSClasses.TEXT_EDITOR_TEXT_AREA);
     }
 
     /**

@@ -86,15 +86,6 @@
     -fx-tab-max-height: 18;
 }
 
-/*******************************************************************************
- *                                                                             *
- * Text File Editor                                                            *
- *                                                                             *
- ******************************************************************************/
-
-#TextEditorTextArea {
-}
-
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
     -fx-padding: 0 0 0 0;
@@ -237,27 +228,6 @@
     -fx-text-fill: white;
 }
 
-/*******************************************************************************
- *                                                                             *
- * Audio Editor                                                                *
- *                                                                             *
- ******************************************************************************/
-
-#AudioViewEditorContainer {
-    -fx-alignment: center;
-    -fx-background-color: -var-background-color;
-}
-
-#AudioViewerEditorButtonContainer {
-    -fx-alignment: center;
-}
-
-#AudioViewerEditorParamContainer {
-    -fx-alignment: center;
-    -fx-padding: 20px;
-    -fx-vgap: 2px;
-}
-
 #GenerateLoDDialogListView {
     -fx-min-height: 160px;
     -fx-pref-height: -fx-min-height;
@@ -280,11 +250,6 @@
 #AbstractParamControlMultiValuesContainer {
     -fx-alignment: center;
     -fx-hgap: 2px;
-}
-
-#ImageViewEditorContainer {
-    -fx-alignment: center;
-    -fx-background-color: -var-background-color;
 }
 
 #Root {

@@ -15,10 +15,8 @@ import com.ss.editor.state.editor.impl.audio.AudioViewerAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -112,9 +110,9 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         return new VBox();
     }
 
+
     @Override
     protected void createContent(@NotNull final VBox root) {
-        root.setId(CSSIds.AUDIO_VIEW_EDITOR_CONTAINER);
 
         final Label durationLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_DURATION_LABEL + ":");
         final Label bitsPerSampleLabel = new Label(Messages.AUDIO_VIEWER_EDITOR_BITS_PER_SAMPLE_LABEL + ":");
@@ -138,7 +136,6 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         sampleRateField.setEditable(false);
 
         final GridPane gridPane = new GridPane();
-        gridPane.setId(CSSIds.AUDIO_VIEWER_EDITOR_PARAM_CONTAINER);
         gridPane.add(durationLabel, 0, 0);
         gridPane.add(bitsPerSampleLabel, 0, 1);
         gridPane.add(channelsLabel, 0, 2);
@@ -150,9 +147,6 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         gridPane.add(dataTypeField, 1, 3);
         gridPane.add(sampleRateField, 1, 4);
 
-        final HBox container = new HBox();
-        container.setId(CSSIds.AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER);
-
         playButton = new Button();
         playButton.setGraphic(new ImageView(Icons.PLAY_128));
         playButton.setOnAction(event -> processPlay());
@@ -162,20 +156,18 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         stopButton.setOnAction(event -> processStop());
         stopButton.setDisable(true);
 
+        final HBox container = new HBox();
+
         FXUtils.addToPane(gridPane, container);
         FXUtils.addToPane(playButton, container);
         FXUtils.addToPane(stopButton, container);
         FXUtils.addToPane(container, root);
 
-        HBox.setMargin(stopButton, new Insets(0, 0, 0, 0));
-
-        FXUtils.addClassesTo(durationLabel, bitsPerSampleLabel, channelsLabel, dataTypeLabel, sampleRateLabel,
-                CSSClasses.AUDIO_VIEWER_EDITOR_PARAM_LABEL);
-        FXUtils.addClassesTo(durationField, bitsPerSampleField, sampleRateField, channelsField,  dataTypeField,
-                CSSClasses.AUDIO_VIEWER_EDITOR_PARAM_VALUE);
-        FXUtils.addClassesTo(playButton, stopButton, CSSClasses.AUDIO_VIEWER_EDITOR_BUTTON);
         FXUtils.addClassTo(playButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(stopButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(gridPane, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassesTo(root, CSSClasses.DEF_VBOX, CSSClasses.AUDIO_VIEW_EDITOR_CONTAINER);
     }
 
     /**

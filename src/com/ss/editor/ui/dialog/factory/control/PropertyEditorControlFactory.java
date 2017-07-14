@@ -5,7 +5,7 @@ import com.ss.rlib.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The factory to create editable controls for a defintion.
+ * The factory to create editable controls for a definition.
  *
  * @author JavaSaBr
  */

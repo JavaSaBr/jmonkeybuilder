@@ -97,6 +97,14 @@ public interface FileExtensions {
      */
     String GLSL_FRAGMENT = "frag";
     /**
+     * The constant GLSL_TESSELLATION_CONTROL.
+     */
+    String GLSL_TESSELLATION_CONTROL = "tsctrl";
+    /**
+     * The constant GLSL_TESSELLATION_EVALUATION.
+     */
+    String GLSL_TESSELLATION_EVALUATION = "tseval";
+    /**
      * The constant GLSL_GEOM.
      */
     String GLSL_GEOM = "geom";

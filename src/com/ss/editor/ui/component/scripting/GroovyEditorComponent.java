@@ -2,13 +2,12 @@ package com.ss.editor.ui.component.scripting;
 
 import static java.util.Collections.singleton;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -112,14 +111,13 @@ public class GroovyEditorComponent extends VBox {
     public GroovyEditorComponent(final boolean editable) {
 
         codeArea = new CodeArea();
-        codeArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
         codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
         codeArea.prefHeightProperty().bind(heightProperty());
         codeArea.prefWidthProperty().bind(widthProperty());
         codeArea.setEditable(editable);
 
         FXUtils.addToPane(codeArea, this);
-        FXUtils.addClassTo(this, CSSClasses.GROOVY_EDITOR_COMPONENT);
+        FXUtils.addClassesTo(this, CSSClasses.TEXT_EDITOR_TEXT_AREA, CSSClasses.GROOVY_EDITOR_COMPONENT);
     }
 
     @NotNull

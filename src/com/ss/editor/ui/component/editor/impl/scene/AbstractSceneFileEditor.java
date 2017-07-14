@@ -1162,12 +1162,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             editingComponentContainer.notifyShowed();
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> {
-            propertyContainer.requestLayout();
-            propertyContainer.applyCss();
-            propertyContainer.layout();
-        });
-
         if (oldIndex == EDITING_TOOL) {
             editingComponentContainer.notifyHided();
         }
@@ -1197,7 +1191,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @param dragEvent the drag event.
      * @param file      the file.
      */
-    private void applyMaterial(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
+    private void applyMaterial(@NotNull final DragEvent dragEvent, @NotNull final Path file) {
 
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
@@ -1233,7 +1227,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @param dragEvent the drag event.
      * @param file      the file.
      */
-    private void addNewModel(final @NotNull DragEvent dragEvent, @NotNull final Path file) {
+    private void addNewModel(@NotNull final DragEvent dragEvent, @NotNull final Path file) {
 
         final M currentModel = getCurrentModel();
         if (!(currentModel instanceof Node)) return;

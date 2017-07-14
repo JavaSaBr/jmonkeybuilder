@@ -6,7 +6,6 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import javafx.scene.control.TextArea;
@@ -62,13 +61,12 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     protected void createContent(@NotNull final VBox root) {
 
         textArea = new TextArea();
-        textArea.setId(CSSIds.TEXT_EDITOR_TEXT_AREA);
         textArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
         textArea.prefHeightProperty().bind(root.heightProperty());
         textArea.prefWidthProperty().bind(root.widthProperty());
 
         FXUtils.addToPane(textArea, root);
-        FXUtils.addClassesTo(textArea, CSSClasses.MAIN_FONT_13, CSSClasses.TRANSPARENT_TEXT_AREA);
+        FXUtils.addClassesTo(textArea, CSSClasses.TRANSPARENT_TEXT_AREA);
     }
 
     /**

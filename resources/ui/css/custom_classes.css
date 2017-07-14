@@ -151,38 +151,6 @@
     -fx-min-width: 20;
 }
 
-
-/*******************************************************************************
- *                                                                             *
- * Audio Editor                                                                *
- *                                                                             *
- ******************************************************************************/
-
-.audio-viewer-editor-param-label {
-    -fx-alignment: center-right;
-    -fx-min-width: 200px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-font-size: 16px;
-    -fx-padding: 0px 6px 0px 0px;
-}
-
-.audio-viewer-editor-param-value {
-    -fx-min-width: 200px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-font-size: 16px;
-}
-
-.audio-viewer-editor-button {
-    -fx-min-height: 142px;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 142px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
 /*******************************************************************************
  *                                                                             *
  * Custom Buttons                                                              *
@@ -647,6 +615,75 @@
 
 /*******************************************************************************
  *                                                                             *
+ * Audio Editor                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+.audio-view-editor-container {
+    -fx-alignment: center;
+    -fx-background-color: -var-background-color;
+}
+
+.audio-view-editor-container > .label {
+    -fx-alignment: center-right;
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-font-size: 16px;
+    -fx-padding: 0px 6px 0px 0px;
+}
+
+.audio-view-editor-container > .text-field {
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+    -fx-font-size: 16px;
+}
+
+.audio-view-editor-container > .hbox {
+    -fx-alignment: center;
+}
+
+.audio-view-editor-container > .hbox > .button {
+    -fx-min-height: 142px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 142px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+.audio-view-editor-container > .hbox > .grid-pane {
+    -fx-alignment: center;
+    -fx-padding: 20px;
+    -fx-vgap: 2px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Text File Editor                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.text-editor-text-area {
+    -fx-font-family: "Ubuntu Mono";
+    -fx-font-size: 13px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Image View Editor                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.image-view-editor-container {
+    -fx-alignment: center;
+    -fx-background-color: -var-background-color;
+}
+
+
+/*******************************************************************************
+ *                                                                             *
  * Abstract Property Component                                                 *
  *                                                                             *
  ******************************************************************************/
@@ -710,7 +747,6 @@
 
 .abstract-param-control-vector2f-field {
 }
-
 
 .abstract-param-control-vector3f-field {
 }

@@ -68,11 +68,6 @@ public interface CSSIds {
     String EDITOR_AREA_COMPONENT = "EditorAreaComponent";
 
     /**
-     * The constant TEXT_EDITOR_TEXT_AREA.
-     */
-    String TEXT_EDITOR_TEXT_AREA = "TextEditorTextArea";
-
-    /**
      * The constant ASSET_EDITOR_DIALOG_BUTTON_CONTAINER.
      */
     String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
@@ -127,16 +122,6 @@ public interface CSSIds {
     String CHOOSE_FOLDER_CONTROL_FOLDER_LABEL = "ChooseFolderControlFolderLabel";
 
     /**
-     * The constant AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER.
-     */
-    String AUDIO_VIEWER_EDITOR_BUTTON_CONTAINER = "AudioViewerEditorButtonContainer";
-    /**
-     * The constant AUDIO_VIEWER_EDITOR_PARAM_CONTAINER.
-     */
-    String AUDIO_VIEWER_EDITOR_PARAM_CONTAINER = "AudioViewerEditorParamContainer";
-
-
-    /**
      * The constant GENERATE_LOD_DIALOG_LIST_VIEW.
      */
     String GENERATE_LOD_DIALOG_LIST_VIEW = "GenerateLoDDialogListView";
@@ -155,14 +140,6 @@ public interface CSSIds {
      */
     String ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER = "AbstractParamControlMultiValuesContainer";
 
-    /**
-     * The constant IMAGE_VIEW_EDITOR_CONTAINER.
-     */
-    String IMAGE_VIEW_EDITOR_CONTAINER = "ImageViewEditorContainer";
-    /**
-     * The constant AUDIO_VIEW_EDITOR_CONTAINER.
-     */
-    String AUDIO_VIEW_EDITOR_CONTAINER = "AudioViewEditorContainer";
 
     /**
      * The constant ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER.

@@ -1,20 +1,20 @@
 package com.ss.editor.ui.component.editor.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.nio.file.Path;
 
@@ -64,11 +64,11 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
 
     @Override
     protected void createContent(@NotNull final VBox root) {
-        root.setId(CSSIds.IMAGE_VIEW_EDITOR_CONTAINER);
 
         imageView = new ImageView();
 
         FXUtils.addToPane(imageView, root);
+        FXUtils.addClassTo(root, CSSClasses.IMAGE_VIEW_EDITOR_CONTAINER);
     }
 
     /**
@@ -76,7 +76,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     private ImageView getImageView() {
-        return requireNonNull(imageView);
+        return notNull(imageView);
     }
 
     @Override

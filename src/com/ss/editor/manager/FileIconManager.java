@@ -86,6 +86,8 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_VERTEX, "text-x-csharp");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_GEOM, "text-x-csharp");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_LIB, "text-x-csharp");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_TESSELLATION_CONTROL, "text-x-csharp");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.GLSL_TESSELLATION_EVALUATION, "text-x-csharp");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_XBUF, "image-svg+xml-compressed");
     }
 
