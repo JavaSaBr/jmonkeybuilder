@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.property.builder.PropertyBuilderFactory;
 import com.ss.editor.ui.css.CSSClasses;
@@ -21,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends ScrollPane {
 
-    private static final int WIDTH_OFFSET = 17;
 
     /**
      * The consumer of changes.
@@ -65,7 +65,7 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
     private void createComponents() {
         this.container = new VBox();
         this.container.prefWidthProperty()
-                .bind(widthProperty().subtract(WIDTH_OFFSET));
+                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
 
         final VBox wrapper = new VBox(container);
 

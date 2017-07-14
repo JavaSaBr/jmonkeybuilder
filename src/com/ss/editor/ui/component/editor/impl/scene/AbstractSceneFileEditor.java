@@ -171,7 +171,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * The scripting component.
      */
-    @NotNull
+    @Nullable
     private EditorScriptingComponent scriptingComponent;
 
     /**

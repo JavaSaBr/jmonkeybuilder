@@ -540,6 +540,78 @@
 
 /*******************************************************************************
  *                                                                             *
+ * Choose Texture control                                                      *
+ *                                                                             *
+ ******************************************************************************/
+
+.choose-texture-control {
+    -fx-alignment: center-right;
+    -fx-spacing: 1px;
+}
+
+.choose-texture-control > .hbox {
+    -fx-alignment: center-right;
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+.choose-texture-control > .label {
+    -fx-alignment: center-right;
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+.choose-texture-control-texture-label {
+    -fx-alignment: center-left;
+}
+
+.choose-texture-control-preview {
+    -fx-min-height: -var-default-field-height;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-field-height;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Transparent List View                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.transparent-list-view {
+    -fx-padding: 0px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-radius: 0px;
+}
+
+.transparent-list-view:focused {
+    -fx-border-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-insets: 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * List View Without Scroll                                                    *
+ *                                                                             *
+ ******************************************************************************/
+
+.list-view-without-scroll .scroll-bar:vertical,
+.list-view-without-scroll .scroll-bar:horizontal,
+.list-view-without-scroll .scroll-bar:vertical .increment-arrow,
+.list-view-without-scroll .scroll-bar:vertical .decrement-arrow,
+.list-view-without-scroll .scroll-bar:vertical .increment-button,
+.list-view-without-scroll .scroll-bar:vertical .decrement-button,
+.list-view-without-scroll .scroll-bar:horizontal .increment-arrow,
+.list-view-without-scroll .scroll-bar:horizontal .decrement-arrow,
+.list-view-without-scroll .scroll-bar:horizontal .increment-button,
+.list-view-without-scroll .scroll-bar:horizontal .decrement-button {
+    -fx-padding: 0;
+}
+
+/*******************************************************************************
+ *                                                                             *
  * Settings Dialog                                                             *
  *                                                                             *
  ******************************************************************************/
@@ -578,7 +650,6 @@
  * Abstract Property Component                                                 *
  *                                                                             *
  ******************************************************************************/
-
 
 .abstract-param-control-container {
     -fx-alignment: top-center;
@@ -703,77 +774,67 @@
     -fx-max-width: -fx-min-width;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Paint Processing                                                            *
+ *                                                                             *
+ ******************************************************************************/
 
-/* transparent list view */
-
-.transparent-list-view {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0px;
-    -fx-padding: 0px;
-    -fx-effect: null;
+.processing-component-container {
 }
 
-.transparent-list-view:focused {
-    -fx-background-color: transparent;
+.processing-component-terrain-editor {
+    -fx-spacing: 2px;
+    -fx-padding: 0px 0px 0px 4px;
 }
 
-.transparent-list-view > .virtual-flow > .corner {
-    -fx-background-color: derive(-fx-base, -1%);
+.processing-component-terrain-editor > .grid-pane {
+    -fx-vgap: 2px;
+    -fx-hgap: 2px;
 }
 
-.transparent-list-view:focused > .virtual-flow > .clipped-container > .sheet > .transparent-list-cell:filled:selected {
-    -fx-background: -fx-color-500;
-    -fx-table-cell-border-color: transparent;
-    -fx-text-fill: -fx-font-color;
+.processing-component-terrain-editor > .vbox > .grid-pane {
+    -fx-vgap: 2px;
+    -fx-hgap: 2px;
 }
 
-.transparent-list-view:focused > .virtual-flow > .clipped-container > .sheet > .transparent-list-cell:focused {
-    -fx-background-color: -fx-background;
-    -fx-background-insets: 0;
-    -fx-text-fill: -fx-font-color;
+.processing-component-terrain-editor > .vbox > .grid-pane > .vbox {
+    -fx-padding: 0px -2px 0px 0px;
 }
 
-/* list view without scrolls */
-
-.list-view-without-scroll .scroll-bar:vertical,
-.list-view-without-scroll .scroll-bar:horizontal,
-.list-view-without-scroll .scroll-bar:vertical .increment-arrow,
-.list-view-without-scroll .scroll-bar:vertical .decrement-arrow,
-.list-view-without-scroll .scroll-bar:vertical .increment-button,
-.list-view-without-scroll .scroll-bar:vertical .decrement-button,
-.list-view-without-scroll .scroll-bar:horizontal .increment-arrow,
-.list-view-without-scroll .scroll-bar:horizontal .decrement-arrow,
-.list-view-without-scroll .scroll-bar:horizontal .increment-button,
-.list-view-without-scroll .scroll-bar:horizontal .decrement-button {
-    -fx-padding: 0;
+.processing-component-terrain-layer {
+    -fx-padding: 4px 0px 4px 2px;
+    -fx-min-height: 108px;
+    -fx-max-height: -fx-min-height;
 }
 
-/* transparent list cell */
-
-.transparent-list-cell {
-    -fx-background: transparent;
-    -fx-background-color: -fx-background;
-    -fx-text-fill: -fx-font-color;
+.processing-component-terrain-layer > .grid-pane {
+    -fx-vgap: 1px;
+    -fx-padding: 0px 0px 0px 0px;
 }
 
-.transparent-list-cell:filled:selected {
-    -fx-background: -fx-selection-bar-non-focused;
-    -fx-table-cell-border-color: transparent;
-    -fx-text-fill: -fx-font-color;
+.processing-component-terrain-texture-layers-settings-buttons {
+    -fx-alignment: center;
+    -fx-padding: 4px;
 }
 
-/* list cell without any padding */
-
-.list-cell-without-padding {
-    -fx-padding: 0;
-}
-
-.list-cell-without-padding:filled:selected {
-    -fx-padding: 0;
+.processing-component-terrain-texture-layers-settings-buttons > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 
-.editing-toggle-button-big {
+/*******************************************************************************
+ *                                                                             *
+ * Medium Toggle Button                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+.medium-toggle-button {
     -fx-min-height: 32;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;

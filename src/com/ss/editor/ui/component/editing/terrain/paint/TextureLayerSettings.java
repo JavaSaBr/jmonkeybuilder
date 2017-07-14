@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.editing.terrain.paint;
 
 import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.TERRAIN_PARAM;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.scene.Geometry;
@@ -10,14 +10,18 @@ import com.jme3.terrain.Terrain;
 import com.jme3.texture.Texture;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editing.terrain.control.PaintTerrainToolControl;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.NodeUtils;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import javafx.beans.binding.DoubleBinding;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -25,9 +29,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.util.function.Function;
 
@@ -38,7 +39,7 @@ import java.util.function.Function;
  */
 public class TextureLayerSettings extends VBox {
 
-    private static final int CELL_HEIGHT = 102;
+    private static final double CELL_SIZE = 108;
 
     /**
      * The list of cells.
@@ -99,10 +100,10 @@ public class TextureLayerSettings extends VBox {
      * @param editingComponent the editing component
      */
     public TextureLayerSettings(@NotNull final TerrainEditingComponent editingComponent) {
-        setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS);
         this.cells = ArrayFactory.newArray(TextureLayerCell.class);
         this.editingComponent = editingComponent;
         createComponents();
+        FXUtils.addClassTo(this, CSSClasses.DEF_VBOX);
     }
 
     private void createComponents() {
@@ -126,12 +127,14 @@ public class TextureLayerSettings extends VBox {
         removeButton.disableProperty().bind(selectionModel.selectedItemProperty().isNull());
 
         final HBox buttonContainer = new HBox(addButton, removeButton);
-        buttonContainer.setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS);
 
         FXUtils.addToPane(listView, this);
         FXUtils.addToPane(buttonContainer, this);
-        FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
-        FXUtils.addClassTo(listView, CSSClasses.LIST_VIEW_WITHOUT_SCROLL);
+
+        FXUtils.addClassesTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW, CSSClasses.LIST_VIEW_WITHOUT_SCROLL);
+        FXUtils.addClassTo(buttonContainer, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS);
+        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
     }
 
     /**
@@ -151,8 +154,12 @@ public class TextureLayerSettings extends VBox {
 
     @NotNull
     private ListCell<TextureLayer> newCell() {
-        final TextureLayerCell cell = new TextureLayerCell(widthProperty(), widthProperty());
+
+        final DoubleBinding width = widthProperty().subtract(4D);
+        final TextureLayerCell cell = new TextureLayerCell(width, width);
+
         cells.add(cell);
+
         return cell;
     }
 
@@ -266,7 +273,7 @@ public class TextureLayerSettings extends VBox {
      */
     @NotNull
     private ListView<TextureLayer> getListView() {
-        return requireNonNull(listView);
+        return notNull(listView);
     }
 
     /**
@@ -298,8 +305,9 @@ public class TextureLayerSettings extends VBox {
             selectionModel.select(items.get(0));
         }
 
-        refreshHeight();
-        refreshAddButton();
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addFXTask(this::refreshHeight);
+        executorManager.addFXTask(this::refreshAddButton);
     }
 
     /**
@@ -322,7 +330,11 @@ public class TextureLayerSettings extends VBox {
         final ListView<TextureLayer> listView = getListView();
         final ObservableList<TextureLayer> items = listView.getItems();
 
-        listView.setPrefHeight(items.size() * CELL_HEIGHT);
+        if (items.isEmpty()) {
+            listView.setPrefHeight(0D);
+        } else {
+            listView.setPrefHeight(items.size() * CELL_SIZE);
+        }
     }
 
     /**
@@ -583,7 +595,7 @@ public class TextureLayerSettings extends VBox {
      */
     @NotNull
     private Button getAddButton() {
-        return requireNonNull(addButton);
+        return notNull(addButton);
     }
 
     /**

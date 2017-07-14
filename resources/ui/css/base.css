@@ -1090,6 +1090,123 @@
     -fx-opacity: -var-disabled-opacity;
 }
 
+
+/*******************************************************************************
+ *                                                                             *
+ * ListView and ListCell                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.list-view {
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 1px;
+}
+
+.list-view:focused {
+    -fx-border-color: -var-border-color, -fx-focus-color;
+    -fx-border-width: 1px, 1px;
+    -fx-border-insets: 0 0 0 0, 1 1 1 1;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0px;
+}
+
+.list-view > .virtual-flow > .scroll-bar:vertical {
+    -fx-background-insets: 0;
+    -fx-padding: 0px 1px 0px 1px;
+}
+
+.list-view > .virtual-flow > .scroll-bar:horizontal {
+    -fx-background-insets: 0;
+    -fx-padding: 1px 0px 1px 0px;
+}
+
+.list-view:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+.list-view > .virtual-flow > .corner {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.list-cell {
+    -fx-min-height: -var-default-cell-height;
+    -fx-background-color: transparent;
+    -fx-text-fill: -var-font-color;
+    -fx-padding: 0px;
+    -fx-indent: 1em;
+}
+
+.list-cell .label {
+    -fx-padding: 0px 0px 0px 3px;
+}
+
+.list-cell:odd {
+    -fx-background-color: transparent;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-hover-color;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
+    -fx-background-color: -var-tree-cell-hover-color;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-hover-color;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:focused {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:focused:selected {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected,
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover {
+    -fx-background-color: -var-tree-cell-selected-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:focused:selected:hover {
+    -fx-background-color: -var-tree-cell-selected-color;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.list-cell:filled:selected:focused,
+.list-cell:filled:selected {
+    -fx-background-color: -var-tree-cell-selected-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.list-cell:filled:selected:focused:disabled,
+.list-cell:filled:selected:disabled {
+    -fx-opacity: -var-disabled-opacity;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: -var-tree-cell-hover-color;
+    -fx-text-fill: -var-font-hover-color;
+}
+
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:focused:hover {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: -var-font-hover-color;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Tree View and Tree Cell                                                     *

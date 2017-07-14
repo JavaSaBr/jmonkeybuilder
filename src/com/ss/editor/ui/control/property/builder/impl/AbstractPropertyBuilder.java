@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The base implementation of the {@link PropertyBuilder}.
  *
- * @param <C> the type parameter
+ * @param <C> the type of a {@link ChangeConsumer}
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implements PropertyBuilder {
@@ -33,7 +33,7 @@ public abstract class AbstractPropertyBuilder<C extends ChangeConsumer> implemen
      *
      * @param type the type
      */
-    protected AbstractPropertyBuilder(final @NotNull Class<C> type) {
+    protected AbstractPropertyBuilder(@NotNull final Class<C> type) {
         this.type = type;
     }
 

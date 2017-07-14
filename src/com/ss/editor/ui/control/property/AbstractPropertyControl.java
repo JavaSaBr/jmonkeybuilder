@@ -42,6 +42,15 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     public static final double CONTROL_WIDTH_PERCENT = 0.4;
 
     /**
+     * The constant CONTROL_WIDTH_PERCENT_2.
+     */
+    public static final double CONTROL_WIDTH_PERCENT_2 = 0.6;
+    /**
+     * The constant CONTROL_WIDTH_PERCENT_3.
+     */
+    public static final double CONTROL_WIDTH_PERCENT_3 = 0.7;
+
+    /**
      * The constant EXECUTOR_MANAGER.
      */
     @NotNull

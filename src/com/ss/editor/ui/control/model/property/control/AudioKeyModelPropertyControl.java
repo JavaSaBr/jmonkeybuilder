@@ -1,13 +1,12 @@
 package com.ss.editor.ui.control.model.property.control;
 
+import static com.ss.editor.FileExtensions.AUDIO_EXTENSIONS;
 import static com.ss.editor.util.EditorUtil.*;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
 import com.ss.editor.Editor;
-import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -20,35 +19,26 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 /**
- * The implementation of the {@link ModelPropertyControl} for editing the {@link AudioData}.
+ * The implementation of the {@link ModelPropertyControl} to edit the {@link AudioData}.
  *
  * @author JavaSaBr
  */
-public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode, AudioKey> {
+public class AudioKeyModelPropertyControl extends ModelPropertyControl<AudioNode, AudioKey> {
 
     @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
@@ -76,15 +66,6 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
-    @NotNull
-    private static final Array<String> AUDIO_EXTENSIONS = ArrayFactory.newArray(String.class);
-
-    static {
-        AUDIO_EXTENSIONS.add(FileExtensions.AUDIO_MP3);
-        AUDIO_EXTENSIONS.add(FileExtensions.AUDIO_WAV);
-        AUDIO_EXTENSIONS.add(FileExtensions.AUDIO_OGG);
-    }
-
     /**
      * The label with name of the audio key.
      */
@@ -98,8 +79,8 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
      * @param paramName      the param name
      * @param changeConsumer the change consumer
      */
-    public AudioKeyModelPropertyEditor(@Nullable final AudioKey element, @NotNull final String paramName,
-                                       @NotNull final ModelChangeConsumer changeConsumer) {
+    public AudioKeyModelPropertyControl(@Nullable final AudioKey element, @NotNull final String paramName,
+                                        @NotNull final ModelChangeConsumer changeConsumer) {
         super(element, paramName, changeConsumer);
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
@@ -117,48 +98,14 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
      * Handle dropped files to editor.
      */
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName());
-
-        if (!AUDIO_EXTENSIONS.contains(extension)) {
-            return;
-        }
-
-        addAudioData(file.toPath());
+        UIUtils.handleDroppedFile(dragEvent, AUDIO_EXTENSIONS, this, AudioKeyModelPropertyControl::addAudioData);
     }
 
     /**
      * Handle drag over.
      */
     private void dragOver(@NotNull final DragEvent dragEvent) {
-
-        final Dragboard dragboard = dragEvent.getDragboard();
-        final List<File> files = unsafeCast(dragboard.getContent(DataFormat.FILES));
-
-        if (files == null || files.size() != 1) {
-            return;
-        }
-
-        final File file = files.get(0);
-        final String extension = FileUtils.getExtension(file.getName());
-
-        if (!AUDIO_EXTENSIONS.contains(extension)) {
-            return;
-        }
-
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-        dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
-        dragEvent.consume();
+        UIUtils.acceptIfHasFile(dragEvent, AUDIO_EXTENSIONS);
     }
 
     @Override

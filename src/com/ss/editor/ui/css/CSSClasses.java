@@ -86,6 +86,10 @@ public interface CSSClasses {
      * The constant DEF_VBOX.
      */
     String DEF_VBOX = "vbox";
+    /**
+     * The constant DEF_GRID_PANE.
+     */
+    String DEF_GRID_PANE = "grid-pane";
 
     /**
      * The constant DIALOG_ROOT.
@@ -120,6 +124,19 @@ public interface CSSClasses {
      * The constant TEXT_INPUT_CONTAINER.
      */
     String TEXT_INPUT_CONTAINER = "text-input-container";
+
+    /**
+     * The constant CHOOSE_TEXTURE_CONTROL.
+     */
+    String CHOOSE_TEXTURE_CONTROL = "choose-texture-control";
+    /**
+     * The constant CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL.
+     */
+    String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "choose-texture-control-texture-label";
+    /**
+     * The constant CHOOSE_TEXTURE_CONTROL_PREVIEW.
+     */
+    String CHOOSE_TEXTURE_CONTROL_PREVIEW = "choose-texture-control-preview";
 
     /**
      * The constant TRANSPARENT_SPINNER.
@@ -162,6 +179,23 @@ public interface CSSClasses {
      * The constant BUTTON_WITHOUT_RIGHT_BORDER.
      */
     String BUTTON_WITHOUT_RIGHT_BORDER = "button-without-right-border";
+
+    /**
+     * The constant PROCESSING_COMPONENT_CONTAINER.
+     */
+    String PROCESSING_COMPONENT_CONTAINER = "processing-component-container";
+    /**
+     * The constant PROCESSING_COMPONENT_TERRAIN_EDITOR.
+     */
+    String PROCESSING_COMPONENT_TERRAIN_EDITOR = "processing-component-terrain-editor";
+    /**
+     * The constant PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER.
+     */
+    String PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER = "processing-component-terrain-layer";
+    /**
+     * The constant TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS.
+     */
+    String PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS = "processing-component-terrain-texture-layers-settings-buttons";
 
     /**
      * The constant LIST_CELL_WITHOUT_PADDING.
@@ -214,11 +248,10 @@ public interface CSSClasses {
      */
     String FILE_EDITOR_TOOL_COMPONENT = "file-editor-tool-component";
 
-
     /**
-     * The constant EDITING_TOGGLE_BUTTON_BIG.
+     * The constant MEDIUM_TOGGLE_BUTTON.
      */
-    String EDITING_TOGGLE_BUTTON_BIG = "editing-toggle-button-big";
+    String MEDIUM_TOGGLE_BUTTON = "medium-toggle-button";
 
     /**
      * The constant MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT.

@@ -4,15 +4,15 @@ import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent
 import static com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent.LABEL_PERCENT;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.choose.NamedChooseTextureControl;
+import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-import javafx.beans.property.ReadOnlyDoubleProperty;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.nio.file.Path;
 
@@ -60,15 +60,13 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
     /**
      * Instantiates a new Texture layer cell.
-     *
-     * @param prefWidth the pref width
+     *  @param prefWidth the pref width
      * @param maxWidth  the max width
      */
-    public TextureLayerCell(@NotNull final ReadOnlyDoubleProperty prefWidth,
-                            @NotNull final ReadOnlyDoubleProperty maxWidth) {
+    public TextureLayerCell(final DoubleBinding prefWidth,
+                            final DoubleBinding maxWidth) {
 
         settingContainer = new GridPane();
-        settingContainer.setId(CSSIds.TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS);
         settingContainer.prefWidthProperty().bind(prefWidth);
         settingContainer.maxWidthProperty().bind(maxWidth);
 
@@ -77,9 +75,11 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
 
         diffuseTextureControl = new NamedChooseTextureControl("Diffuse");
         diffuseTextureControl.setChangeHandler(this::updateDiffuse);
+        diffuseTextureControl.setControlWidthPercent(AbstractPropertyControl.CONTROL_WIDTH_PERCENT_2);
 
         normalTextureControl = new NamedChooseTextureControl("Normal");
         normalTextureControl.setChangeHandler(this::updateNormal);
+        normalTextureControl.setControlWidthPercent(AbstractPropertyControl.CONTROL_WIDTH_PERCENT_2);
 
         final Label scaleLabel = new Label(Messages.EDITING_COMPONENT_SCALE + ":");
         scaleLabel.prefWidthProperty().bind(settingContainer.widthProperty().multiply(LABEL_PERCENT));
@@ -96,11 +96,11 @@ public class TextureLayerCell extends ListCell<TextureLayer> {
         settingContainer.add(scaleLabel, 0, 3);
         settingContainer.add(scaleField, 1, 3);
 
-        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_LIST_CELL);
-        FXUtils.addClassTo(this, CSSClasses.LIST_CELL_WITHOUT_PADDING);
+        FXUtils.addClassTo(settingContainer, CSSClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(layerField, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME);
         FXUtils.addClassTo(scaleLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         FXUtils.addClassTo(scaleField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
+        FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_TEXTURE_LAYER);
     }
 
     /**

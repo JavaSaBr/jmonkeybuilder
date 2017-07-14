@@ -3,7 +3,9 @@ package com.ss.editor.ui.component.container;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.FXConstants;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
@@ -72,10 +74,13 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
         this.components = ArrayFactory.newArray(componentType);
         this.componentType = componentType;
         this.container = new VBox();
-        this.container.prefWidthProperty().bind(widthProperty());
+        this.container.prefWidthProperty()
+                .bind(widthProperty().subtract(FXConstants.PROPERTY_LIST_OFFSET));
 
-        setId(CSSIds.PROCESSING_COMPONENT_CONTAINER);
         setContent(container);
+
+        FXUtils.addClassTo(container, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_CONTAINER);
     }
 
     /**
@@ -123,6 +128,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
                 .map(componentType::cast)
                 .peek(ProcessingComponent::notifyHided)
                 .forEach(ProcessingComponent::stopProcessing);
+
         children.clear();
 
         if (element == null) return;

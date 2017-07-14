@@ -122,15 +122,6 @@ public interface CSSIds {
     String CHOOSE_RESOURCE_CONTROL_BUTTON = "ChooseResourceControlButton";
 
     /**
-     * The constant CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL.
-     */
-    String CHOOSE_TEXTURE_CONTROL_TEXTURE_LABEL = "ChooseTextureControlTextureLabel";
-    /**
-     * The constant CHOOSE_TEXTURE_CONTROL_PREVIEW.
-     */
-    String CHOOSE_TEXTURE_CONTROL_PREVIEW = "ChooseTextureControlPreview";
-
-    /**
      * The constant CHOOSE_FOLDER_CONTROL_FOLDER_LABEL.
      */
     String CHOOSE_FOLDER_CONTROL_FOLDER_LABEL = "ChooseFolderControlFolderLabel";
@@ -186,28 +177,6 @@ public interface CSSIds {
      * The constant ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER.
      */
     String ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER = "AbstractDialogGridSettingsContainer";
-
-    /**
-     * The constant PROCESSING_COMPONENT_CONTAINER.
-     */
-    String PROCESSING_COMPONENT_CONTAINER = "ProcessingComponentContainer";
-
-    /**
-     * The constant TERRAIN_EDITING_CONTROL_SETTINGS.
-     */
-    String TERRAIN_EDITING_CONTROL_SETTINGS = "TerrainEditingTextureControlSettings";
-    /**
-     * The constant TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS.
-     */
-    String TERRAIN_EDITING_TEXTURE_LAYER_SETTINGS = "TerrainEditingTextureLayerSettings";
-    /**
-     * The constant TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS.
-     */
-    String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS = "TerrainEditingTextureLayersSettings";
-    /**
-     * The constant TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS.
-     */
-    String TERRAIN_EDITING_TEXTURE_LAYERS_SETTINGS_BUTTONS = "TerrainEditingTextureLayersSettingsButtons";
 
     /**
      * The constant FILE_CREATOR_DIALOG_CONTAINER.

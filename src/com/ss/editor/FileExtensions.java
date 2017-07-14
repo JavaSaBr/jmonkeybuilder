@@ -1,5 +1,9 @@
 package com.ss.editor;
 
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The list of all file extensions.
  *
@@ -125,4 +129,20 @@ public interface FileExtensions {
      * The constant MODEL_XBUF.
      */
     String MODEL_XBUF = "xbuf";
+
+    @NotNull
+    Array<String> TEXTURE_EXTENSIONS = ArrayFactory.asArray(
+            FileExtensions.IMAGE_PNG,
+            FileExtensions.IMAGE_JPG,
+            FileExtensions.IMAGE_JPEG,
+            FileExtensions.IMAGE_TGA,
+            FileExtensions.IMAGE_DDS,
+            FileExtensions.IMAGE_HDR);
+
+
+    @NotNull
+    Array<String> AUDIO_EXTENSIONS = ArrayFactory.asArray(
+            FileExtensions.AUDIO_MP3,
+            FileExtensions.AUDIO_WAV,
+            FileExtensions.AUDIO_OGG);
 }

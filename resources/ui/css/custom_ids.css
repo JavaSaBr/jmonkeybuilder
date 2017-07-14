@@ -208,27 +208,6 @@
     -fx-max-width: -fx-min-width;
 }
 
-#ChooseTextureControlTextureLabel {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 250;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-left;
-}
-
-#ChooseTextureControlPreview {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-border-color: -fx-color-panel-50;
-    -fx-border-width: 1;
-}
-
 #ChooseFolderControlFolderLabel {
     -fx-min-height: 25;
     -fx-pref-height: -fx-min-height;
@@ -321,27 +300,6 @@
 
 #Root {
     -fx-background-color: -var-background-color;
-}
-
-#ProcessingComponentContainer {
-    -fx-background-color: -var-background-color;
-}
-
-#TerrainEditingTextureLayerSettings {
-    -fx-vgap: 2px;
-    -fx-padding: 2 0 2 0;
-}
-
-#TerrainEditingTextureControlSettings {
-    -fx-padding: 0 10 0 0;
-}
-
-#TerrainEditingTextureLayersSettings {
-    -fx-padding: 10 0 0 0;
-}
-
-#TerrainEditingTextureLayersSettingsButtons {
-    -fx-alignment: center;
 }
 
 #AbstractDialogGridSettingsContainer {

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.component.container.impl;
 
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.editor.Editor3DProvider;
@@ -41,7 +41,7 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     protected T processedObject;
 
     /**
-     * The flag of showing this compnent.
+     * The flag of showing this component.
      */
     protected boolean showed;
 
@@ -65,7 +65,7 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
      */
     @NotNull
     public C getContainer() {
-        return requireNonNull(container);
+        return notNull(container);
     }
 
     /**
@@ -82,7 +82,7 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
     @NotNull
     @Override
     public T getProcessedObject() {
-        return requireNonNull(processedObject);
+        return notNull(processedObject);
     }
 
     @Override

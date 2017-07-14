@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.material;
 
+import static com.ss.editor.FileExtensions.TEXTURE_EXTENSIONS;
 import static com.ss.editor.Messages.*;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -14,7 +15,6 @@ import com.jme3.texture.Texture.WrapMode;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.Texture3D;
 import com.ss.editor.Editor;
-import com.ss.editor.FileExtensions;
 import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
@@ -27,8 +27,6 @@ import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 import javafx.geometry.Insets;
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
@@ -59,18 +57,6 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
-
-    @NotNull
-    private static final Array<String> TEXTURE_EXTENSIONS = ArrayFactory.newArray(String.class);
-
-    static {
-        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_PNG);
-        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_JPG);
-        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_JPEG);
-        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_TGA);
-        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_DDS);
-        TEXTURE_EXTENSIONS.add(FileExtensions.IMAGE_HDR);
-    }
 
     @NotNull
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
