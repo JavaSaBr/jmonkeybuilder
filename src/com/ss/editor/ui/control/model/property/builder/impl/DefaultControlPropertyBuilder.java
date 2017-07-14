@@ -35,7 +35,10 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
     @NotNull
     private static final PropertyBuilder INSTANCE = new DefaultControlPropertyBuilder();
 
+    @NotNull
     private static final MotionEvent.Direction[] DIRECTIONS = MotionEvent.Direction.values();
+
+    @NotNull
     private static final LoopMode[] LOOP_MODES = LoopMode.values();
 
     /**
@@ -175,6 +178,9 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         rotationControl.setEditObject(control);
 
         FXUtils.addToPane(directionTypeControl, container);
+
+        buildSplitLine(container);
+
         FXUtils.addToPane(directionControl, container);
         FXUtils.addToPane(rotationControl, container);
     }
@@ -264,6 +270,9 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         FXUtils.addToPane(gravityControl, container);
         FXUtils.addToPane(jumpSpeedControl, container);
         FXUtils.addToPane(maxSlopeControl, container);
+
+        buildSplitLine(container);
+
         FXUtils.addToPane(viewDirectionControl, container);
         FXUtils.addToPane(walkDirectionControl, container);
     }
@@ -619,6 +628,9 @@ public class DefaultControlPropertyBuilder extends AbstractPropertyBuilder<Model
         }
 
         FXUtils.addToPane(restitutionControl, container);
+
+        buildSplitLine(container);
+
         FXUtils.addToPane(angularVelocityControl, container);
         FXUtils.addToPane(gravityControl, container);
         FXUtils.addToPane(linearFactorControl, container);

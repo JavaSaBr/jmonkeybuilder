@@ -149,7 +149,7 @@ public class GeometryPropertyBuilder extends AbstractPropertyBuilder<ModelChange
      * @param geometry the geometry
      * @return the boolean
      */
-    protected boolean canEditMaterial(final Geometry geometry) {
+    private boolean canEditMaterial(final Geometry geometry) {
         return !(geometry instanceof ParticleGeometry);
     }
 }

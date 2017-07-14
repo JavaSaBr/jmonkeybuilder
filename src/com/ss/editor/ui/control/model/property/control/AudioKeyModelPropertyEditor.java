@@ -2,6 +2,7 @@ package com.ss.editor.ui.control.model.property.control;
 
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
@@ -23,7 +24,6 @@ import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -40,7 +40,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -51,26 +50,33 @@ import java.util.function.Predicate;
  */
 public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode, AudioKey> {
 
+    @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
             type == DeleteFileAction.class ||
             type == RenameFileAction.class;
 
+    @NotNull
     private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
-    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     /**
      * The constant FX_EVENT_MANAGER.
      */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
     /**
      * The constant JFX_APPLICATION.
      */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
+    @NotNull
     private static final Array<String> AUDIO_EXTENSIONS = ArrayFactory.newArray(String.class);
 
     static {
@@ -82,6 +88,7 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
     /**
      * The label with name of the audio key.
      */
+    @Nullable
     private Label audioKeyLabel;
 
     /**
@@ -171,16 +178,14 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
 
         audioKeyLabel.prefWidthProperty().bind(widthProperty()
                 .subtract(changeButton.widthProperty())
-                .subtract(openButton.widthProperty())
-                .subtract(BUTTON_OFFSET.getLeft() * 2));
+                .subtract(openButton.widthProperty()));
 
         FXUtils.addToPane(audioKeyLabel, container);
         FXUtils.addToPane(changeButton, container);
         FXUtils.addToPane(openButton, container);
 
-        HBox.setMargin(changeButton, BUTTON_OFFSET);
-        HBox.setMargin(openButton, BUTTON_OFFSET);
-
+        FXUtils.addClassesTo(container, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassTo(audioKeyLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
         FXUtils.addClassesTo(changeButton, openButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
@@ -195,7 +200,7 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
 
     private void addAudioData(@NotNull final Path file) {
 
-        final Path assetFile = Objects.requireNonNull(getAssetFile(file));
+        final Path assetFile = notNull(getAssetFile(file));
         final AudioKey audioKey = new AudioKey(toAssetPath(assetFile));
 
         changed(audioKey, getPropertyValue());
@@ -219,7 +224,7 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
         if (StringUtils.isEmpty(assetPath)) return;
 
         final Path assetFile = Paths.get(assetPath);
-        final Path realFile = Objects.requireNonNull(getRealFile(assetFile));
+        final Path realFile = notNull(getRealFile(assetFile));
         if (!Files.exists(realFile)) return;
 
         final RequestedOpenFileEvent event = new RequestedOpenFileEvent();
@@ -233,8 +238,9 @@ public class AudioKeyModelPropertyEditor extends ModelPropertyControl<AudioNode,
      *
      * @return the label with name of the audio key.
      */
-    protected Label getAudioKeyLabel() {
-        return audioKeyLabel;
+    @NotNull
+    private Label getAudioKeyLabel() {
+        return notNull(audioKeyLabel);
     }
 
     @Override

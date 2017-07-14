@@ -200,8 +200,12 @@ public class AudioNodePropertyBuilder extends AbstractPropertyBuilder<ModelChang
         directionControl.setSyncHandler(AudioNode::getDirection);
         directionControl.setEditObject(audioNode);
 
+        buildSplitLine(container);
+
         FXUtils.addToPane(audioKeyControl, container);
         FXUtils.addToPane(velocityControl, container);
         FXUtils.addToPane(directionControl, container);
+
+        buildSplitLine(container);
     }
 }

@@ -1,23 +1,22 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.editor.extension.scene.control.EditableControl;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.editor.extension.scene.control.EditableControl;
-import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.array.Array;
-
-import java.util.Objects;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The property builder to build property controls of editable controls.
@@ -62,7 +61,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
                 case BOOLEAN: {
 
                     final EditableProperty<Boolean, ?> property = cast(editableProperty);
-                    final Boolean value = Objects.requireNonNull(property.getValue(), "Boolean value can't be null.");
+                    final Boolean value = notNull(property.getValue(), "Boolean value can't be null.");
 
                     final BooleanModelPropertyControl<EditableProperty<Boolean, ?>> propertyControl =
                             new BooleanModelPropertyControl<>(value, property.getName(), changeConsumer);
@@ -73,7 +72,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
                 case FLOAT: {
 
                     final EditableProperty<Float, ?> property = cast(editableProperty);
-                    final Float value = Objects.requireNonNull(property.getValue(), "Float value can't be null.");
+                    final Float value = notNull(property.getValue(), "Float value can't be null.");
 
                     final FloatModelPropertyControl<EditableProperty<Float, ?>> propertyControl =
                             new FloatModelPropertyControl<>(value, property.getName(), changeConsumer);
@@ -101,7 +100,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
                 case INTEGER: {
 
                     final EditableProperty<Integer, ?> property = cast(editableProperty);
-                    final Integer value = Objects.requireNonNull(property.getValue(), "Integer value can't be null.");
+                    final Integer value = notNull(property.getValue(), "Integer value can't be null.");
 
                     final IntegerModelPropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerModelPropertyControl<>(value, property.getName(), changeConsumer);
@@ -123,7 +122,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
                 case VECTOR_2F: {
 
                     final EditableProperty<Vector2f, ?> property = cast(editableProperty);
-                    final Vector2f value = Objects.requireNonNull(property.getValue(), "Vector2f value can't be null.");
+                    final Vector2f value = notNull(property.getValue(), "Vector2f value can't be null.");
 
                     final Vector2fModelPropertyControl<EditableProperty<Vector2f, ?>> propertyControl =
                             new Vector2fModelPropertyControl<>(value, property.getName(), changeConsumer);
@@ -134,7 +133,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
                 case VECTOR_3F: {
 
                     final EditableProperty<Vector3f, ?> property = cast(editableProperty);
-                    final Vector3f value = Objects.requireNonNull(property.getValue(), "Vector3f value can't be null.");
+                    final Vector3f value = notNull(property.getValue(), "Vector3f value can't be null.");
 
                     final Vector3fModelPropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
                             new Vector3fModelPropertyControl<>(value, property.getName(), changeConsumer);
@@ -145,7 +144,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
                 case ENUM: {
 
                     final EditableProperty<Enum<?>, ?> property = cast(editableProperty);
-                    final Enum<?> value = Objects.requireNonNull(property.getValue(), "Enum value can't be null.");
+                    final Enum<?> value = notNull(property.getValue(), "Enum value can't be null.");
 
                     final EnumControlPropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
                             new EnumControlPropertyControl<>(value, property.getName(), changeConsumer);
@@ -178,6 +177,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
         FXUtils.addToPane(propertyControl, container);
     }
 
+    @NotNull
     private <T> EditableProperty<T, ?> cast(@NotNull final EditableProperty<?, ?> property) {
         return ClassUtils.unsafeCast(property);
     }
