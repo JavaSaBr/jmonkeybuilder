@@ -1117,3 +1117,21 @@
     -fx-min-width: 500px;
     -fx-border-color: -var-border-color;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Create Terrain Dialog                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.create-terrain-dialog {
+
+}
+
+.create-terrain-dialog > .vbox {
+    -fx-spacing: 2px;
+}
+
+.create-terrain-dialog > .vbox > .grid-pane {
+    -fx-vgap: 2px;
+}

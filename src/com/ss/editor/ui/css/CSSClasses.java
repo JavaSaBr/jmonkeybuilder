@@ -419,6 +419,11 @@ public interface CSSClasses {
     String GENERATE_LOD_DIALOG = "generate-lod-dialog";
 
     /**
+     * The constant CREATE_TERRAIN_DIALOG.
+     */
+    String CREATE_TERRAIN_DIALOG = "create-terrain-dialog";
+
+    /**
      * The constant NODE_SELECTOR_DIALOG.
      */
     String NODE_SELECTOR_DIALOG = "node-selector-dialog";
