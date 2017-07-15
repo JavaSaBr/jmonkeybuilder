@@ -24,17 +24,16 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,13 +49,7 @@ import java.nio.file.Path;
 public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Insets SINGLE_TEXTURE_SITTINGS_OFFSET = new Insets(4, 0, 0, 0);
-
-    @NotNull
-    private static final Insets MULTIPLY_TEXTURE_SETTINGS_OFFSET = new Insets(4, 0, 0, 0);
-
-    @NotNull
-    private static final Point DIALOG_SIZE = new Point(614, 0);
+    private static final Point DIALOG_SIZE = new Point(500, -1);
 
     @NotNull
     private static final ObservableList<SkyType> SKY_TYPES_LIST = observableArrayList(SkyType.VALUES);
@@ -261,39 +254,44 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         skyTypeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         skyTypeComboBox = new ComboBox<>(SKY_TYPES_LIST);
-        skyTypeComboBox.prefWidthProperty().bind(getSingleTextureControl().widthProperty());
-        skyTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processChange(newValue));
+        skyTypeComboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        skyTypeComboBox.getSelectionModel()
+                .selectedItemProperty().
+                addListener((observable, oldValue, newValue) -> processChange(newValue));
 
         final Label normalScaleLabel = new Label(Messages.CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL + ":");
-        normalScaleLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        normalScaleLabel.prefWidthProperty().bind(skyTypeLabel.widthProperty());
 
         normalScaleXField = new FloatTextField();
-        normalScaleXField.prefWidthProperty().bind(singleTextureControl.widthProperty().multiply(0.33));
-
         normalScaleYField = new FloatTextField();
-        normalScaleYField.prefWidthProperty().bind(singleTextureControl.widthProperty().multiply(0.33));
-
         normalScaleZField = new FloatTextField();
-        normalScaleZField.prefWidthProperty().bind(singleTextureControl.widthProperty().multiply(0.33));
+
+        final HBox normalScaleContainer = new HBox(normalScaleXField, normalScaleYField, normalScaleZField);
+        normalScaleContainer.prefWidthProperty().bind(skyTypeComboBox.widthProperty());
 
         final GridPane baseSettings = new GridPane();
-        baseSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
         baseSettings.add(skyTypeLabel, 0, 0);
-        baseSettings.add(skyTypeComboBox, 1, 0, 3, 1);
+        baseSettings.add(skyTypeComboBox, 1, 0);
         baseSettings.add(normalScaleLabel, 0, 1);
-        baseSettings.add(normalScaleXField, 1, 1);
-        baseSettings.add(normalScaleYField, 2, 1);
-        baseSettings.add(normalScaleZField, 3, 1);
+        baseSettings.add(normalScaleContainer, 1, 1);
 
         FXUtils.addToPane(baseSettings, settingsRoot);
         FXUtils.addToPane(settingsRoot, root);
 
-        VBox.setMargin(multipleTextureSettings, MULTIPLY_TEXTURE_SETTINGS_OFFSET);
-        VBox.setMargin(singleTextureSettings, SINGLE_TEXTURE_SITTINGS_OFFSET);
+        settingsRoot.prefWidthProperty().bind(root.widthProperty());
+        baseSettings.prefWidthProperty().bind(settingsRoot.widthProperty());
+        singleTextureSettings.prefWidthProperty().bind(settingsRoot.widthProperty());
+        multipleTextureSettings.prefWidthProperty().bind(settingsRoot.widthProperty());
 
+        FXUtils.addClassesTo(normalScaleContainer, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassTo(settingsRoot, CSSClasses.DEF_VBOX);
+        FXUtils.addClassTo(root, CSSClasses.CREATE_SKY_DIALOG);
+        FXUtils.addClassTo(singleTextureSettings, multipleTextureSettings, baseSettings, CSSClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(skyTypeLabel, normalScaleLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
         FXUtils.addClassTo(skyTypeComboBox, normalScaleXField, normalScaleYField, normalScaleZField,
                 CSSClasses.DIALOG_FIELD);
+        FXUtils.addClassTo(normalScaleXField, normalScaleYField, normalScaleZField,
+                CSSClasses.TRANSPARENT_TEXT_FIELD);
     }
 
     /**
@@ -302,56 +300,61 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     private void createMultipleTextureSettings() {
 
         multipleTextureSettings = new GridPane();
-        multipleTextureSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
 
         final Label northTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_NORTH_LABEL + ":");
         northTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         northTextureControl = new ChooseTextureControl();
+        northTextureControl.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
         northTextureControl.setChangeHandler(this::validate);
 
         final Label southTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_SOUTH_LABEL + ":");
-        southTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        southTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         southTextureControl = new ChooseTextureControl();
+        southTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         southTextureControl.setChangeHandler(this::validate);
 
         final Label eastTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_EAST_LABEL + ":");
-        eastTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        eastTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         eastTextureControl = new ChooseTextureControl();
+        eastTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         eastTextureControl.setChangeHandler(this::validate);
 
         final Label westTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_WEST_LABEL + ":");
-        westTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        westTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         westTextureControl = new ChooseTextureControl();
+        westTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         westTextureControl.setChangeHandler(this::validate);
 
         final Label topTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TOP_LABEL + ":");
-        topTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        topTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         topTextureControl = new ChooseTextureControl();
+        topTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         topTextureControl.setChangeHandler(this::validate);
 
         final Label bottomTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_BOTTOM_LABEL + ":");
-        bottomTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        bottomTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         bottomTextureControl = new ChooseTextureControl();
+        bottomTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         bottomTextureControl.setChangeHandler(this::validate);
 
-        multipleTextureSettings.add(northTextureLabel, 0, 0, 1, 1);
-        multipleTextureSettings.add(northTextureControl, 1, 0, 3, 1);
-        multipleTextureSettings.add(southTextureLabel, 0, 1, 1, 1);
-        multipleTextureSettings.add(southTextureControl, 1, 1, 3, 1);
-        multipleTextureSettings.add(eastTextureLabel, 0, 2, 1, 1);
-        multipleTextureSettings.add(eastTextureControl, 1, 2, 3, 1);
-        multipleTextureSettings.add(westTextureLabel, 0, 3, 1, 1);
-        multipleTextureSettings.add(westTextureControl, 1, 3, 3, 1);
-        multipleTextureSettings.add(topTextureLabel, 0, 4, 1, 1);
-        multipleTextureSettings.add(topTextureControl, 1, 4, 3, 1);
-        multipleTextureSettings.add(bottomTextureLabel, 0, 5, 1, 1);
-        multipleTextureSettings.add(bottomTextureControl, 1, 5, 3, 1);
+        multipleTextureSettings.add(northTextureLabel, 0, 0);
+        multipleTextureSettings.add(northTextureControl, 1, 0);
+        multipleTextureSettings.add(southTextureLabel, 0, 1);
+        multipleTextureSettings.add(southTextureControl, 1, 1);
+        multipleTextureSettings.add(eastTextureLabel, 0, 2);
+        multipleTextureSettings.add(eastTextureControl, 1, 2);
+        multipleTextureSettings.add(westTextureLabel, 0, 3);
+        multipleTextureSettings.add(westTextureControl, 1, 3);
+        multipleTextureSettings.add(topTextureLabel, 0, 4);
+        multipleTextureSettings.add(topTextureControl, 1, 4);
+        multipleTextureSettings.add(bottomTextureLabel, 0, 5);
+        multipleTextureSettings.add(bottomTextureControl, 1, 5);
 
         FXUtils.addClassTo(northTextureLabel, southTextureLabel, eastTextureLabel, westTextureLabel, topTextureLabel,
                 bottomTextureLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
@@ -363,33 +366,35 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     private void createSingleTextureSettings() {
 
         singleTextureSettings = new GridPane();
-        singleTextureSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
 
         final Label singleTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE_LABEL + ":");
         singleTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         singleTextureControl = new ChooseTextureControl();
         singleTextureControl.setChangeHandler(this::validate);
+        singleTextureControl.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final Label envMapTypeLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL + ":");
-        envMapTypeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        envMapTypeLabel.prefWidthProperty().bind(singleTextureLabel.widthProperty());
 
         envMapTypeComboBox = new ComboBox<>(ENV_MAP_TYPE_LIST);
         envMapTypeComboBox.prefWidthProperty().bind(singleTextureControl.widthProperty());
-        envMapTypeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> validate());
+        envMapTypeComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> validate());
 
         final Label flipYLabel = new Label(Messages.CREATE_SKY_DIALOG_FLIP_Y_LABEL + ":");
-        flipYLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
+        flipYLabel.prefWidthProperty().bind(singleTextureLabel.widthProperty());
 
         flipYCheckBox = new CheckBox();
         flipYCheckBox.prefWidthProperty().bind(singleTextureControl.widthProperty());
 
-        singleTextureSettings.add(singleTextureLabel, 0, 0, 1, 1);
-        singleTextureSettings.add(singleTextureControl, 1, 0, 3, 1);
-        singleTextureSettings.add(envMapTypeLabel, 0, 1, 1, 1);
-        singleTextureSettings.add(envMapTypeComboBox, 1, 1, 3, 1);
-        singleTextureSettings.add(flipYLabel, 0, 2, 1, 1);
-        singleTextureSettings.add(flipYCheckBox, 1, 2, 3, 1);
+        singleTextureSettings.add(singleTextureLabel, 0, 0);
+        singleTextureSettings.add(singleTextureControl, 1, 0);
+        singleTextureSettings.add(envMapTypeLabel, 0, 1);
+        singleTextureSettings.add(envMapTypeComboBox, 1, 1);
+        singleTextureSettings.add(flipYLabel, 0, 2);
+        singleTextureSettings.add(flipYCheckBox, 1, 2);
 
         FXUtils.addClassTo(singleTextureLabel, envMapTypeLabel, flipYLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
         FXUtils.addClassTo(envMapTypeComboBox, CSSClasses.DIALOG_FIELD);
@@ -442,6 +447,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         }
 
         validate();
+        getDialog().sizeToScene();
     }
 
     /**

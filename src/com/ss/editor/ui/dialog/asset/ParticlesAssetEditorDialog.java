@@ -116,8 +116,6 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
         settingsContainer.add(applyLightingTransformCheckBox, 1, 1);
         settingsContainer.add(previewContainer, 0, 2, 2, 2);
 
-        HBox.setMargin(settingsContainer, SECOND_PART_OFFSET_OFFSET);
-
         return settingsContainer;
     }
 

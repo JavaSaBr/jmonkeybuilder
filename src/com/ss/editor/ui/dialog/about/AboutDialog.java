@@ -6,7 +6,6 @@ import com.ss.editor.config.Config;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
@@ -60,10 +59,8 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         final HostServices hostServices = application.getHostServices();
 
         final GridPane gridPane = new GridPane();
-        gridPane.setId(CSSIds.ABOUT_DIALOG_GRID_PANE);
 
         final Label applicationLabel = new Label(Config.TITLE);
-        applicationLabel.setId(CSSIds.ABOUT_DIALOG_TITLE_LABEL);
         applicationLabel.setGraphic(new ImageView(Icons.APPLICATION_64));
 
         final Label versionLabel = new Label(Messages.ABOUT_DIALOG_VERSION + ":");
@@ -85,11 +82,9 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
 
         final Label usedLibrariesLabel = new Label(Messages.ABOUT_DIALOG_USED_LIBRARIES + ":");
         usedLibrariesLabel.prefWidthProperty().bind(gridPane.widthProperty());
-        usedLibrariesLabel.setId(CSSIds.ABOUT_DIALOG_LONG_LABEL);
 
         final Label usedIcons = new Label(Messages.ABOUT_DIALOG_USED_ICONS + ":");
         usedIcons.prefWidthProperty().bind(gridPane.widthProperty());
-        usedIcons.setId(CSSIds.ABOUT_DIALOG_LONG_LABEL);
 
         final TextArea librariesArea = new TextArea(LIBRARIES);
         librariesArea.setEditable(false);
@@ -106,7 +101,6 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         gridPane.add(projectHomeField, 1, 2, 1, 1);
         gridPane.add(forumThreadLabel, 0, 3, 1, 1);
         gridPane.add(forumThreadField, 1, 3, 1, 1);
-
         gridPane.add(usedLibrariesLabel, 0, 4, 2, 1);
         gridPane.add(librariesArea, 0, 5, 2, 1);
         gridPane.add(usedIcons, 0, 6, 2, 1);
@@ -114,9 +108,12 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
 
         FXUtils.addToPane(gridPane, root);
 
+        FXUtils.addClassTo(root, CSSClasses.ABOUT_DIALOG);
+        FXUtils.addClassTo(gridPane, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(usedLibrariesLabel, usedIcons, CSSClasses.ABOUT_DIALOG_LONG_LABEL);
         FXUtils.addClassesTo(versionLabel, projectHomeLabel, forumThreadLabel, usedLibrariesLabel, usedIcons,
                 versionField, projectHomeField, forumThreadField, CSSClasses.SPECIAL_FONT_16);
-        FXUtils.addClassTo(applicationLabel, CSSClasses.SPECIAL_FONT_22);
+        FXUtils.addClassTo(applicationLabel, CSSClasses.ABOUT_DIALOG_TITLE_LABEL);
     }
 
     @NotNull

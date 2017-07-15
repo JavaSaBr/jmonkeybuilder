@@ -16,18 +16,9 @@ public interface CSSClasses {
      */
     String SPECIAL_FONT_14 = "special-font-14";
     /**
-     * The constant SPECIAL_FONT_15.
-     */
-    String SPECIAL_FONT_15 = "special-font-15";
-    /**
      * The constant SPECIAL_FONT_16.
      */
     String SPECIAL_FONT_16 = "special-font-16";
-    /**
-     * The constant SPECIAL_FONT_22.
-     */
-    String SPECIAL_FONT_22 = "special-font-22";
-
 
     /**
      * The constant MAIN_SPLIT_PANEL.
@@ -46,6 +37,10 @@ public interface CSSClasses {
      * The constant DEF_GRID_PANE.
      */
     String DEF_GRID_PANE = "grid-pane";
+    /**
+     * The constant DEF_STACK_PANE.
+     */
+    String DEF_STACK_PANE = "stack-pane";
 
     /**
      * The constant DIALOG_ROOT.
@@ -93,6 +88,11 @@ public interface CSSClasses {
      * The constant CHOOSE_TEXTURE_CONTROL_PREVIEW.
      */
     String CHOOSE_TEXTURE_CONTROL_PREVIEW = "choose-texture-control-preview";
+
+    /**
+     * The constant CHOOSE_RESOURCE_CONTROL.
+     */
+    String CHOOSE_RESOURCE_CONTROL = "choose-resource-control";
 
     /**
      * The constant TRANSPARENT_SPINNER.
@@ -386,6 +386,57 @@ public interface CSSClasses {
     String SETTINGS_DIALOG_MESSAGE_LABEL = "settings-dialog-message-label";
 
     /**
+     * The constant CONFIRM_DIALOG.
+     */
+    String CONFIRM_DIALOG = "confirm-dialog";
+
+    /**
+     * The constant CREATE_SKY_DIALOG.
+     */
+    String CREATE_SKY_DIALOG = "create-sky-dialog";
+
+    /**
+     * The constant ABOUT_DIALOG.
+     */
+    String ABOUT_DIALOG = "about-dialog";
+    /**
+     * The constant ABOUT_DIALOG_LONG_LABEL.
+     */
+    String ABOUT_DIALOG_LONG_LABEL = "about-dialog-long-label";
+    /**
+     * The constant ABOUT_DIALOG_TITLE_LABEL.
+     */
+    String ABOUT_DIALOG_TITLE_LABEL = "about-dialog-title-label";
+
+    /**
+     * The constant FILE_CREATOR_DIALOG.
+     */
+    String FILE_CREATOR_DIALOG = "file-creator-dialog";
+
+    /**
+     * The constant GENERATE_LOD_DIALOG.
+     */
+    String GENERATE_LOD_DIALOG = "generate-lod-dialog";
+
+    /**
+     * The constant NODE_SELECTOR_DIALOG.
+     */
+    String NODE_SELECTOR_DIALOG = "node-selector-dialog";
+
+    /**
+     * The constant ASSET_EDITOR_DIALOG.
+     */
+    String ASSET_EDITOR_DIALOG = "asset-editor-dialog";
+    /**
+     * The constant ASSET_EDITOR_DIALOG_ACTIONS.
+     */
+    String ASSET_EDITOR_DIALOG_ACTIONS = "asset-editor-dialog-actions";
+    /**
+     * The constant ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER.
+     */
+    String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "asset-editor-dialog-preview-container";
+
+    /**
      * The constant AUDIO_VIEW_EDITOR_CONTAINER.
      */
     String AUDIO_VIEW_EDITOR_CONTAINER = "audio-view-editor-container";
@@ -400,4 +451,8 @@ public interface CSSClasses {
      */
     String IMAGE_VIEW_EDITOR_CONTAINER = "image-view-editor-container";
 
+    /**
+     * The constant PHYSICS_NODE_LIST_CONTROL.
+     */
+    String PHYSICS_NODE_LIST_CONTROL = "physics-node-list-control";
 }

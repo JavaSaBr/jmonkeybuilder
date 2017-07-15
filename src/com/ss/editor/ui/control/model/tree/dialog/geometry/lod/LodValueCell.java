@@ -2,15 +2,10 @@ package com.ss.editor.ui.control.model.tree.dialog.geometry.lod;
 
 import com.jme3.scene.Mesh;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.lod.GenerateLodLevelsDialog.ReductionMethod;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
-
 import com.ss.editor.ui.util.UIUtils;
-import org.jetbrains.annotations.NotNull;
-
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.util.StringConverter;
-import com.ss.rlib.ui.util.FXUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The implementation of the list cell to edit LoD levels.
@@ -19,6 +14,7 @@ import com.ss.rlib.ui.util.FXUtils;
  */
 public class LodValueCell extends TextFieldListCell<Number> {
 
+    @NotNull
     private final StringConverter<Number> converter = new StringConverter<Number>() {
 
         @Override
@@ -63,13 +59,8 @@ public class LodValueCell extends TextFieldListCell<Number> {
      * @param dialog the dialog
      */
     LodValueCell(@NotNull final GenerateLodLevelsDialog dialog) {
-        setId(CSSIds.GENERATE_LOD_DIALOG_LIST_VIEW_CELL);
         setConverter(converter);
-
         this.dialog = dialog;
-
-        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_LIST_CELL);
-        FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_15);
     }
 
     @Override

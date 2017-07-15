@@ -114,29 +114,14 @@
 
 /*******************************************************************************
  *                                                                             *
- * Asset Editor Dialog                                                         *
+ * Stats App State                                                             *
  *                                                                             *
  ******************************************************************************/
 
-#AssetEditorDialogButtonContainer {
-    -fx-alignment: center-right;
-    -fx-padding: 0 0 0 0;
-}
-
-#AssetEditorDialogResourcesContainer {
-    -fx-alignment: center-left;
-    -fx-padding: 15px 0px 0px 0px;
-}
-
-#AssetEditorDialogPreviewContainer {
-    -fx-border-color: -fx-color-0;
-    -fx-border-width: 1;
-    -fx-min-height: 600;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 600;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
+#StatsAppStateStatsContainer {
+    -fx-padding: 5px;
+    -fx-vgap: 3px;
+    -fx-hgap: 3px;
 }
 
 #ParticlesAssetEditorDialogSettingsContainer {
@@ -204,25 +189,6 @@
     -fx-fit-to-width: 122;
 }
 
-#ChooseResourceControlButton {
-    -fx-min-height: 24;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 24;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
-
-#ChooseFolderControlFolderLabel {
-    -fx-min-height: 25;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 277;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-left;
-}
-
 #JmePreviewManagerImageView {
 }
 
@@ -248,42 +214,4 @@
 #AbstractParamControlMultiValuesContainer {
     -fx-alignment: center;
     -fx-hgap: 2px;
-}
-
-#AbstractDialogGridSettingsContainer {
-    -fx-alignment: center-left;
-    -fx-vgap: 2;
-    -fx-hgap: 2;
-}
-
-#FileCreatorDialogContainer {
-    -fx-alignment: center-left;
-}
-
-#FileCreatorDialogGridSettingsContainer {
-    -fx-alignment: top-left;
-    -fx-vgap: 2;
-    -fx-hgap: 2;
-}
-
-#StatsAppStateStatsContainer {
-    -fx-padding: 5px;
-    -fx-vgap: 3px;
-    -fx-hgap: 3px;
-}
-
-/*******************************************************************************
- *                                                                             *
- * About Dialog                                                                *
- *                                                                             *
- ******************************************************************************/
-
-#AboutDialogGridPane {
-    -fx-vgap: 4px;
-    -fx-hgap: 2px;
-}
-
-#AboutDialogLongLabel {
-    -fx-alignment: center;
-    -fx-text-alignment: center;
 }

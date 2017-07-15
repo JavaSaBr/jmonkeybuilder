@@ -30,9 +30,12 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.control.input.IntegerTextField;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -44,10 +47,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.control.input.FloatTextField;
-import com.ss.rlib.ui.control.input.IntegerTextField;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -335,7 +334,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processChangeType(newValue));
 
         final GridPane baseSettings = new GridPane();
-        baseSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
         baseSettings.add(totalSizeLabel, 0, 0);
         baseSettings.add(totalSizeComboBox, 1, 0);
         baseSettings.add(pathSizeLabel, 0, 1);
@@ -350,7 +348,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         baseSettings.add(baseTextureControl, 1, 5);
 
         flatSettings = new GridPane();
-        flatSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
 
         final Label heightMapImageControlLabel = new Label(Messages.CREATE_TERRAIN_DIALOG_HEIGHT_MAP_IMAGE + ":");
         heightMapImageControlLabel.prefWidthProperty().bind(heightMapTypeLabel.widthProperty());
@@ -375,7 +372,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         heightMapScaleField.setValue(1);
 
         heightMapSettings = new GridPane();
-        heightMapSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
         heightMapSettings.add(heightMapImageControlLabel, 0, 0);
         heightMapSettings.add(heightMapImageControl, 1, 0);
         heightMapSettings.add(heightMapSmoothLabel, 0, 1);
@@ -418,7 +414,6 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         hillMaxRadiusField.addChangeListener((observable, oldValue, newValue) -> validate());
 
         hillSettings = new GridPane();
-        hillSettings.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
         hillSettings.add(hillIterationsLabel, 0, 0);
         hillSettings.add(hillIterationsField, 1, 0);
         hillSettings.add(hillFlatteningLabel, 0, 1);

@@ -409,9 +409,12 @@ public class Toneg0dParticleInfluencerPropertyBuilder extends AbstractPropertyBu
         restitutionControl.setApplyHandler(PhysicsInfluencer::setRestitution);
         restitutionControl.setEditObject(influencer);
 
+        FXUtils.addToPane(nodeListControl, container);
+
+        buildSplitLine(container);
+
         FXUtils.addToPane(reactionControl, container);
         FXUtils.addToPane(restitutionControl, container);
-        FXUtils.addToPane(nodeListControl, container);
     }
 
     /**

@@ -6,6 +6,7 @@ import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.app.state.dialog.CreateSceneAppStateDialog;
 import com.ss.editor.ui.control.app.state.operation.RemoveAppStateOperation;
@@ -78,7 +79,7 @@ public class AppStateList extends VBox {
         listView.setFocusTraversable(true);
         listView.prefHeightProperty().bind(heightProperty());
         listView.prefWidthProperty().bind(widthProperty());
-        listView.setFixedCellSize(22);
+        listView.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
 
         final MultipleSelectionModel<EditableSceneAppState> selectionModel = listView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) ->

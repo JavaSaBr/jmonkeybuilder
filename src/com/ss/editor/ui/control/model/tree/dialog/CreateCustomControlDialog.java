@@ -34,7 +34,7 @@ import java.awt.*;
 public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(415, 0);
+    private static final Point DIALOG_SIZE = new Point(415, -1);
 
     @NotNull
     private static final ObjectDictionary<String, EditableControl> BUILT_IN = newObjectDictionary();

@@ -9,17 +9,16 @@ import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -31,7 +30,6 @@ import jme3tools.optimize.LodGenerator;
 import jme3tools.optimize.LodGenerator.TriangleReductionMethod;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
 
 import java.awt.*;
 
@@ -42,13 +40,15 @@ import java.awt.*;
  */
 public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
+    @NotNull
     private static final ObservableList<ReductionMethod> METHOD_TYPES = observableArrayList(ReductionMethod.VALUES);
 
-    private static final Point DIALOG_SIZE = new Point(360, 0);
-    private static final Insets FIELD_OFFSET = new Insets(6, 0, 6, 0);
+    @NotNull
+    private static final Point DIALOG_SIZE = new Point(360, -1);
 
     private static final double LIST_WIDTH_PERCENT = 0.94;
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
@@ -169,8 +169,6 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
-        root.setAlignment(Pos.CENTER_LEFT);
-
         final HBox reductionMethodContainer = new HBox();
 
         final Label reductionMethodLabel = new Label(Messages.GENERATE_LOD_DIALOG_METHOD + ":");
@@ -188,18 +186,18 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(reductionMethodContainer, root);
 
         levelsList = new ListView<>();
-        levelsList.setId(CSSIds.GENERATE_LOD_DIALOG_LIST_VIEW);
         levelsList.setCellFactory(param -> new LodValueCell(this));
         levelsList.setEditable(true);
         levelsList.prefWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
         levelsList.maxWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
         levelsList.getItems().addListener((ListChangeListener<? super Number>) c -> updateButtonOk());
+        levelsList.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
 
         FXUtils.addToPane(levelsList, root);
 
-        final HBox addRemoveButtonsContainer = new HBox();
-        addRemoveButtonsContainer.prefWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
-        addRemoveButtonsContainer.maxWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
+        final HBox buttonContainer = new HBox();
+        buttonContainer.prefWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
+        buttonContainer.maxWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
 
         final Button addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
@@ -210,16 +208,16 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         removeButton.setOnAction(event -> processRemove());
         removeButton.disableProperty().bind(levelsList.getSelectionModel().selectedItemProperty().isNull());
 
-        FXUtils.addToPane(addButton, addRemoveButtonsContainer);
-        FXUtils.addToPane(removeButton, addRemoveButtonsContainer);
-        FXUtils.addToPane(addRemoveButtonsContainer, root);
+        FXUtils.addToPane(addButton, buttonContainer);
+        FXUtils.addToPane(removeButton, buttonContainer);
+        FXUtils.addToPane(buttonContainer, root);
 
-        FXUtils.addClassTo(levelsList, CSSClasses.TRANSPARENT_LIST_VIEW);
-
+        FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(reductionMethodLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
         FXUtils.addClassTo(reductionMethodComboBox, CSSClasses.DIALOG_FIELD);
-
-        VBox.setMargin(reductionMethodContainer, FIELD_OFFSET);
+        FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
+        FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
+        FXUtils.addClassTo(root, CSSClasses.GENERATE_LOD_DIALOG);
     }
 
     /**

@@ -10,7 +10,6 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileActio
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -137,16 +136,16 @@ public class ChooseTextureControl extends HBox {
         Tooltip.install(texturePreview, textureTooltip);
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
         wrapper = new HBox(textureLabel, previewContainer, addButton, removeButton);
+        wrapper.prefWidthProperty().bind(widthProperty());
+
         textureLabel.prefWidthProperty().bind(wrapper.widthProperty());
 
         FXUtils.addToPane(wrapper, this);

@@ -14,19 +14,9 @@
     -fx-font-size: 14px;
 }
 
-.special-font-15 {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 15px;
-}
-
 .special-font-16 {
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 16;
-}
-
-.special-font-22 {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 22;
 }
 
 /*******************************************************************************
@@ -49,6 +39,12 @@
     -fx-padding: 0px;
     -fx-alignment: top-center;
     -fx-background-color: -var-background-color;
+}
+
+.dialog-root > .grid-pane {
+    -fx-alignment: center-left;
+    -fx-vgap: 2;
+    -fx-hgap: 2;
 }
 
 .dialog-actions-root {
@@ -494,6 +490,30 @@
 
 /*******************************************************************************
  *                                                                             *
+ * Choose Resource control                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.choose-resource-control {
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Node Selector Dialog                                                        *
+ *                                                                             *
+ ******************************************************************************/
+
+.node-selector-dialog {
+
+}
+
+.node-selector-dialog > .abstract-node-tree-container {
+    -fx-min-height: 400px;
+}
+
+/*******************************************************************************
+ *                                                                             *
  * Transparent List View                                                       *
  *                                                                             *
  ******************************************************************************/
@@ -659,6 +679,22 @@
     -fx-background-color: -var-background-color;
 }
 
+/*******************************************************************************
+ *                                                                             *
+ * Confirm Dialog                                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.confirm-dialog {
+}
+
+.confirm-dialog > .label {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-wrap-text: true;
+    -fx-min-height: 60px;
+    -fx-font-size: 15px;
+}
 
 /*******************************************************************************
  *                                                                             *
@@ -770,6 +806,7 @@
 }
 
 .abstract-param-control-influencer {
+    -fx-padding: 4px 0px 0px 0px;
     -fx-alignment: top-center;
     -fx-spacing: 4px;
 }
@@ -811,6 +848,20 @@
     -fx-min-width: 150;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Physics Node List Control                                                   *
+ *                                                                             *
+ ******************************************************************************/
+
+.physics-node-list-control {
+
+}
+
+.physics-node-list-control > .vbox > .label {
+    -fx-min-height: -var-default-label-height;
 }
 
 /*******************************************************************************
@@ -937,7 +988,6 @@
     -fx-max-width: -fx-min-width;
 }
 
-
 /*******************************************************************************
  *                                                                             *
  * Medium Toggle Button                                                        *
@@ -951,4 +1001,119 @@
     -fx-min-width: 32;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Create Sky Dialog                                                           *
+ *                                                                             *
+ ******************************************************************************/
+
+.create-sky-dialog {
+
+}
+
+.create-sky-dialog > .vbox {
+    -fx-spacing: 2px;
+}
+
+.create-sky-dialog > .vbox > .grid-pane {
+    -fx-vgap: 2px;
+    -fx-hgap: 2px;
+}
+
+.create-sky-dialog > .vbox > .grid-pane > .hbox {
+    -fx-spacing: 2px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * About Dialog                                                                *
+ *                                                                             *
+ ******************************************************************************/
+
+.about-dialog {
+}
+
+.about-dialog > .grid-pane {
+    -fx-hgap: 2px;
+    -fx-vgap: 2px;
+}
+
+.about-dialog-title-label {
+    -fx-font-size: 22px;
+}
+
+.about-dialog-long-label {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * File Creator Dialog                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
+.file-creator-dialog {
+}
+
+.file-creator-dialog > .hbox {
+    -fx-alignment: center-left;
+}
+
+.file-creator-dialog > .hbox > .grid-pane {
+    -fx-alignment: top-left;
+    -fx-vgap: 2;
+    -fx-hgap: 2;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Generate LoD Dialog                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
+.generate-lod-dialog {
+    -fx-alignment: center;
+    -fx-spacing: 2px;
+}
+
+.generate-lod-dialog > .hbox {
+    -fx-alignment: center;
+    -fx-padding: 4px 0px 0px 0px;
+}
+
+.generate-lod-dialog > .hbox > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Asset Editor Dialog                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
+.asset-editor-dialog {
+}
+
+.asset-editor-dialog > .hbox {
+    -fx-alignment: center-left;
+    -fx-spacing: 10px;
+}
+
+.asset-editor-dialog > .hbox > .tree-view {
+    -fx-min-height: 500px;
+    -fx-max-width: 598px;
+}
+
+.asset-editor-dialog-preview-container {
+    -fx-min-height: 500px;
+    -fx-min-width: 500px;
+    -fx-border-color: -var-border-color;
 }

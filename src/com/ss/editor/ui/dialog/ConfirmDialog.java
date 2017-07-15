@@ -4,12 +4,10 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +22,7 @@ import java.util.function.Consumer;
 public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, 0);
+    private static final Point DIALOG_SIZE = new Point(600, -1);
 
     /**
      * The handler of an answer.
@@ -69,13 +67,10 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
         super.createContent(root);
 
         questionLabel = new Label();
-        questionLabel.setWrapText(true);
-        questionLabel.setAlignment(Pos.CENTER);
-        questionLabel.setTextAlignment(TextAlignment.CENTER);
         questionLabel.minWidthProperty().bind(widthProperty().multiply(0.9));
 
         FXUtils.addToPane(questionLabel, root);
-        FXUtils.addClassTo(questionLabel, CSSClasses.SPECIAL_FONT_15);
+        FXUtils.addClassTo(root, CSSClasses.CONFIRM_DIALOG);
     }
 
     @NotNull

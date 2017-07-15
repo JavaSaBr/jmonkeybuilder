@@ -30,7 +30,7 @@
     -var-dialog-button-height: 32;
     -var-dialog-button-width: 150;
 
-    -var-default-label-height: 26px;
+    -var-default-label-height: 22px;
     -var-default-field-height: 26px;
     -var-default-cell-height: 22px;
     -var-default-toolbar-button-size: 24px;
@@ -1144,6 +1144,8 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0px;
     -fx-indent: 1em;
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14px;
 }
 
 .text-field-list-cell,

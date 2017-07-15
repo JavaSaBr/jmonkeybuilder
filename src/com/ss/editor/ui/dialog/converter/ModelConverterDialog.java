@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 public class ModelConverterDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(570, 238);
+    private static final Point DIALOG_SIZE = new Point(570, -1);
 
     /**
      * The callback.
@@ -94,7 +94,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         destinationLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         destinationControl = new ChooseFolderControl();
-        filenameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
+        destinationControl.maxWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         destinationControl.setChangeHandler(this::validate);
 
         final Label exportMaterialsLabel = new Label(Messages.MODEL_CONVERTER_DIALOG_EXPORT_MATERIALS + ":");
@@ -108,7 +108,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
         materialsFolderLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
         materialsFolderControl = new ChooseFolderControl();
-        materialsFolderControl.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
+        materialsFolderControl.maxWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
         materialsFolderControl.disableProperty().bind(exportMaterialsCheckBox.selectedProperty().not());
         materialsFolderControl.setChangeHandler(this::validate);
 
@@ -132,9 +132,6 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
 
         FXUtils.addClassTo(filenameLabel, destinationLabel, exportMaterialsLabel, materialsFolderLabel,
                 overwiteMaterials, CSSClasses.DIALOG_DYNAMIC_LABEL);
-
-        FXUtils.addClassTo(filenameField, destinationControl, exportMaterialsCheckBox, materialsFolderControl,
-                overwriteMaterialsCheckBox, CSSClasses.SPECIAL_FONT_14);
     }
 
     @Override

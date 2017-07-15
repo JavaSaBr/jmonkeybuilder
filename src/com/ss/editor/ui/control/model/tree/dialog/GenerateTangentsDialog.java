@@ -35,7 +35,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     private static final ObservableList<AlgorithmType> ALGORITHM_TYPES = observableArrayList(AlgorithmType.VALUES);
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(530, 0);
+    private static final Point DIALOG_SIZE = new Point(530, -1);
 
     /**
      * The enum Algorithm type.

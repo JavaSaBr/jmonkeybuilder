@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -103,7 +102,6 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     @Override
     protected void createContent(@NotNull final GridPane root) {
         super.createContent(root);
-        root.setId(CSSIds.ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER);
     }
 
     /**

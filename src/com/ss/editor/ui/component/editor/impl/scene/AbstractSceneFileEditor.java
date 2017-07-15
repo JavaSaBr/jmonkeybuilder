@@ -1099,6 +1099,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
         FXUtils.addClassTo(objectsSplitContainer, editingSplitContainer, CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
         FXUtils.addClassTo(statsContainer, CSSClasses.SCENE_EDITOR_STATS_CONTAINER);
+        FXUtils.addClassTo(modelNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
 
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
         root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));

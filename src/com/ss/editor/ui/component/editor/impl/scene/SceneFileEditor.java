@@ -315,6 +315,7 @@ public class SceneFileEditor extends
         editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
         editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
 
+        FXUtils.addClassTo(layerNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
         FXUtils.addClassTo(filtersSplitContainer, appStateSplitContainer, layersSplitContainer,
                 CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
 

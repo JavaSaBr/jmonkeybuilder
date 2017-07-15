@@ -8,4 +8,6 @@ package com.ss.editor.ui;
 public interface FXConstants {
 
     int PROPERTY_LIST_OFFSET = 17;
+
+    int LIST_CELL_HEIGHT = 26;
 }

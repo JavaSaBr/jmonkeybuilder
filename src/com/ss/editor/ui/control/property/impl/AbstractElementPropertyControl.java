@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
@@ -10,7 +11,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -18,7 +18,6 @@ import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -34,21 +33,25 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
     /**
      * The constant NO_ELEMENT.
      */
+    @NotNull
     protected static final String NO_ELEMENT = Messages.ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
-    
-    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
 
     /**
      * The constant FX_EVENT_MANAGER.
      */
+    @NotNull
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
     /**
      * The constant JFX_APPLICATION.
      */
+    @NotNull
     protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
     /**
      * The constant EDITOR.
      */
+    @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -60,6 +63,7 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
     /**
      * The label with name of the element.
      */
+    @Nullable
     private Label elementLabel;
 
     /**
@@ -83,6 +87,7 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
         super.createComponents(container);
 
         elementLabel = new Label(NO_ELEMENT);
+        elementLabel.prefWidthProperty().bind(container.widthProperty());
 
         final Button changeButton = new Button();
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
@@ -93,18 +98,12 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
         editButton.disableProperty().bind(elementLabel.textProperty().isEqualTo(NO_ELEMENT));
         editButton.setOnAction(event -> processRemove());
 
-        elementLabel.prefWidthProperty().bind(widthProperty()
-                .subtract(changeButton.widthProperty())
-                .subtract(editButton.widthProperty())
-                .subtract(BUTTON_OFFSET.getLeft() * 2));
-
         FXUtils.addToPane(elementLabel, container);
         FXUtils.addToPane(changeButton, container);
         FXUtils.addToPane(editButton, container);
 
-        HBox.setMargin(changeButton, BUTTON_OFFSET);
-        HBox.setMargin(editButton, BUTTON_OFFSET);
-
+        FXUtils.addClassesTo(container, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassTo(elementLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
         FXUtils.addClassesTo(changeButton, editButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
@@ -130,6 +129,6 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
      */
     @NotNull
     protected Label getElementLabel() {
-        return Objects.requireNonNull(elementLabel);
+        return notNull(elementLabel);
     }
 }

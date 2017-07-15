@@ -15,7 +15,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.EditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.CreatedFileEvent;
@@ -31,7 +30,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -64,28 +62,10 @@ import java.util.function.Predicate;
 public class AssetEditorDialog<C> extends EditorDialog {
 
     /**
-     * The constant OK_BUTTON_OFFSET.
-     */
-    @NotNull
-    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-
-    /**
-     * The constant CANCEL_BUTTON_OFFSET.
-     */
-    @NotNull
-    protected static final Insets CANCEL_BUTTON_OFFSET = new Insets(0, 15, 0, 0);
-
-    /**
-     * The constant SECOND_PART_OFFSET_OFFSET.
-     */
-    @NotNull
-    protected static final Insets SECOND_PART_OFFSET_OFFSET = new Insets(0, CANCEL_BUTTON_OFFSET.getRight(), 0, 4);
-
-    /**
      * The constant DIALOG_SIZE.
      */
     @NotNull
-    protected static final Point DIALOG_SIZE = new Point(1204, 721);
+    protected static final Point DIALOG_SIZE = new Point(-1, -1);
 
     /**
      * The constant JAVA_FX_IMAGE_MANAGER.
@@ -226,12 +206,13 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected void createContent(@NotNull final VBox root) {
 
         final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER);
 
         resourceTree = new ResourceTree(this::processOpen, false);
         resourceTree.prefHeightProperty().bind(root.heightProperty());
         resourceTree.prefWidthProperty().bind(root.widthProperty());
-        resourceTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelected(newValue));
+        resourceTree.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> processSelected(newValue));
 
         final Parent secondPart = buildSecondPart(container);
 
@@ -240,6 +221,9 @@ public class AssetEditorDialog<C> extends EditorDialog {
         FXUtils.addToPane(container, root);
 
         root.setOnKeyReleased(this::processKeyEvent);
+
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(root, CSSClasses.ASSET_EDITOR_DIALOG);
     }
 
     /**
@@ -252,20 +236,21 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected Parent buildSecondPart(@NotNull final HBox container) {
 
         final StackPane previewContainer = new StackPane();
-        previewContainer.setId(CSSIds.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         imageView = new ImageView();
         imageView.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
         imageView.fitWidthProperty().bind(previewContainer.widthProperty().subtract(2));
 
         textView = new TextArea();
+        textView.setEditable(false);
         textView.prefWidthProperty().bind(previewContainer.widthProperty().subtract(2));
         textView.prefHeightProperty().bind(previewContainer.heightProperty().subtract(2));
 
         FXUtils.addToPane(imageView, previewContainer);
         FXUtils.addToPane(textView, previewContainer);
 
-        HBox.setMargin(previewContainer, SECOND_PART_OFFSET_OFFSET);
+        FXUtils.addClassTo(previewContainer, CSSClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
+        FXUtils.addClassTo(textView, CSSClasses.TRANSPARENT_TEXT_AREA);
 
         return previewContainer;
     }
@@ -428,7 +413,10 @@ public class AssetEditorDialog<C> extends EditorDialog {
     private void updatePreview(@Nullable final Path file) {
 
         final ImageView imageView = getImageView();
+        imageView.setVisible(false);
+
         final TextArea textView = getTextView();
+        textView.setVisible(false);
 
         final int width = (int) imageView.getFitWidth();
         final int height = (int) imageView.getFitHeight();
@@ -440,20 +428,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
             final ImageView sourceView = previewManager.getImageView();
             final ObjectProperty<Image> imageProperty = imageView.imageProperty();
+            imageProperty.bind(sourceView.imageProperty());
 
-            if (!imageProperty.isBound()) {
-                imageProperty.bind(sourceView.imageProperty());
-            }
-
-            textView.setVisible(false);
             imageView.setVisible(true);
 
         } else if (JavaFXImageManager.isImage(file)) {
 
             final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, width, height);
             imageView.setImage(preview);
-
-            textView.setVisible(false);
             imageView.setVisible(true);
 
         } else if (JMEFilePreviewManager.isAudioFile(file)) {
@@ -464,15 +446,10 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
             textView.setText(FileUtils.read(file));
             textView.setVisible(true);
-            imageView.setVisible(false);
 
         } else {
-
             imageView.imageProperty().unbind();
             imageView.setImage(null);
-
-            textView.setVisible(false);
-            imageView.setVisible(false);
         }
     }
 
@@ -502,7 +479,6 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected void createActions(@NotNull final VBox root) {
 
         final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         warningLabel = new Label();
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
@@ -515,16 +491,15 @@ public class AssetEditorDialog<C> extends EditorDialog {
         final Button cancelButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(warningLabel, CSSClasses.DIALOG_LABEL_WARNING);
         FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
+        FXUtils.addClassTo(root, CSSClasses.ASSET_EDITOR_DIALOG_ACTIONS);
 
         FXUtils.addToPane(warningLabel, container);
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);
         FXUtils.addToPane(container, root);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
-        HBox.setMargin(cancelButton, CANCEL_BUTTON_OFFSET);
     }
 
     /**

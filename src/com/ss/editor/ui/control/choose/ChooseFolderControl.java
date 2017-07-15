@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.choose;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
@@ -9,20 +9,17 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileActio
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;
@@ -33,9 +30,6 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 public class ChooseFolderControl extends HBox {
-
-    @NotNull
-    private static final Insets ELEMENT_OFFSET = new Insets(0, 0, 0, 3);
 
     @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
@@ -64,7 +58,6 @@ public class ChooseFolderControl extends HBox {
      * Instantiates a new Choose folder control.
      */
     public ChooseFolderControl() {
-        setAlignment(Pos.CENTER_LEFT);
         createComponents();
         reload();
     }
@@ -92,15 +85,13 @@ public class ChooseFolderControl extends HBox {
     protected void createComponents() {
 
         folderLabel = new Label(StringUtils.EMPTY);
-        folderLabel.setId(CSSIds.CHOOSE_FOLDER_CONTROL_FOLDER_LABEL);
+        folderLabel.prefWidthProperty().bind(widthProperty());
 
         final Button addButton = new Button();
-        addButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
         addButton.setGraphic(new ImageView(Icons.ADD_12));
         addButton.setOnAction(event -> processAdd());
 
         final Button removeButton = new Button();
-        removeButton.setId(CSSIds.CHOOSE_RESOURCE_CONTROL_BUTTON);
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
         removeButton.setOnAction(event -> processRemove());
 
@@ -108,14 +99,11 @@ public class ChooseFolderControl extends HBox {
         FXUtils.addToPane(addButton, this);
         FXUtils.addToPane(removeButton, this);
 
-        FXUtils.addClassTo(folderLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(addButton, CSSClasses.FLAT_BUTTON);
-        FXUtils.addClassTo(removeButton, CSSClasses.FLAT_BUTTON);
+        FXUtils.addClassesTo(this, CSSClasses.TEXT_INPUT_CONTAINER, CSSClasses.CHOOSE_RESOURCE_CONTROL);
+        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
-        HBox.setMargin(addButton, ELEMENT_OFFSET);
-        HBox.setMargin(removeButton, ELEMENT_OFFSET);
-
-        removeButton.disableProperty().bind(folderLabel.textProperty().isEmpty());
+        removeButton.disableProperty()
+                .bind(folderLabel.textProperty().isEmpty());
     }
 
     /**
@@ -123,7 +111,7 @@ public class ChooseFolderControl extends HBox {
      */
     @NotNull
     private Label getFolderLabel() {
-        return requireNonNull(folderLabel);
+        return notNull(folderLabel);
     }
 
     /**
@@ -183,7 +171,7 @@ public class ChooseFolderControl extends HBox {
             return;
         }
 
-        final Path assetFile = requireNonNull(getAssetFile(folder));
+        final Path assetFile = notNull(getAssetFile(folder));
         folderLabel.setText(assetFile.toString());
     }
 }

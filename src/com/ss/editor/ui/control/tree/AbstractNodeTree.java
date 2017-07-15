@@ -77,7 +77,6 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> processSelect(newValue));
 
         FXUtils.addToPane(treeView, this);
-        FXUtils.addClassTo(treeView, CSSClasses.TRANSPARENT_TREE_VIEW);
     }
 
     /**
@@ -109,7 +108,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * @return the tree of this model.
      */
     @NotNull
-    protected TreeView<ModelNode<?>> getTreeView() {
+    public TreeView<ModelNode<?>> getTreeView() {
         return notNull(treeView);
     }
 

@@ -10,7 +10,6 @@ import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.creator.FileCreator;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
@@ -213,11 +212,9 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         super.createContent(root);
 
         final HBox container = new HBox();
-        container.setId(CSSIds.FILE_CREATOR_DIALOG_CONTAINER);
         container.prefWidthProperty().bind(widthProperty());
 
         final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER);
         settingsContainer.prefHeightProperty().bind(container.heightProperty());
         settingsContainer.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
 
@@ -232,6 +229,10 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         FXUtils.addToPane(resourceTree, container);
         FXUtils.addToPane(settingsContainer, container);
         FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(root, CSSClasses.FILE_CREATOR_DIALOG);
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
     }
 
     /**

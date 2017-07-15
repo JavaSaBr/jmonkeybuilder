@@ -111,7 +111,9 @@ public class GroovyEditorComponent extends VBox {
     public GroovyEditorComponent(final boolean editable) {
 
         codeArea = new CodeArea();
-        codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
+        codeArea.richChanges()
+                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
+                .subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
         codeArea.prefHeightProperty().bind(heightProperty());
         codeArea.prefWidthProperty().bind(widthProperty());
         codeArea.setEditable(editable);

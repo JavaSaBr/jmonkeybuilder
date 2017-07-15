@@ -5,7 +5,9 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +25,7 @@ import java.util.function.Consumer;
 public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, 451);
+    private static final Point DIALOG_SIZE = new Point(600, -1);
 
     /**
      * The type of selectable objects.
@@ -100,6 +102,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
         nodeTree.prefWidthProperty().bind(widthProperty());
 
         root.add(nodeTree, 0, 0);
+
+        FXUtils.addClassTo(root, CSSClasses.NODE_SELECTOR_DIALOG);
     }
 
     @Override

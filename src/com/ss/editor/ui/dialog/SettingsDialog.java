@@ -49,7 +49,7 @@ import java.nio.file.Path;
 public class SettingsDialog extends EditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, -1);
+    private static final Point DIALOG_SIZE = new Point(600, 360);
 
     @NotNull
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);

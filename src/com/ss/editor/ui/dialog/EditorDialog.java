@@ -114,9 +114,6 @@ public class EditorDialog {
         dialog.setScene(scene);
 
         configureSize(container);
-
-        container.heightProperty().addListener((observable, oldValue, newValue) -> dialog.sizeToScene());
-        container.widthProperty().addListener((observable, oldValue, newValue) -> dialog.sizeToScene());
     }
 
     /**
@@ -135,22 +132,23 @@ public class EditorDialog {
 
         final VBox actionsContainer = new VBox();
 
+        FXUtils.addClassTo(actionsContainer, CSSClasses.DIALOG_ACTIONS_ROOT);
+
         if (isGridStructure()) {
             final GridPane container = new GridPane();
+            FXUtils.addClassesTo(container, CSSClasses.DEF_GRID_PANE, CSSClasses.DIALOG_CONTENT_ROOT);
             createContent(container);
             FXUtils.addToPane(container, root);
-            FXUtils.addClassTo(container, CSSClasses.DIALOG_CONTENT_ROOT);
         } else {
             final VBox container = new VBox();
+            FXUtils.addClassesTo(container, CSSClasses.DEF_VBOX, CSSClasses.DIALOG_CONTENT_ROOT);
             createContent(container);
             FXUtils.addToPane(container, root);
-            FXUtils.addClassTo(container, CSSClasses.DIALOG_CONTENT_ROOT);
         }
 
         createActions(actionsContainer);
 
         FXUtils.addToPane(actionsContainer, root);
-        FXUtils.addClassTo(actionsContainer, CSSClasses.DIALOG_ACTIONS_ROOT);
         FXUtils.addClassTo(root, CSSClasses.DIALOG_ROOT);
 
         root.addEventHandler(KeyEvent.KEY_RELEASED, this::processKey);

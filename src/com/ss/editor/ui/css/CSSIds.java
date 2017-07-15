@@ -55,22 +55,19 @@ public interface CSSIds {
     String ASSET_COMPONENT = "AssetComponent";
 
     /**
+     * The constant STATS_APP_STATE_STATS_CONTAINER.
+     */
+    String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
+
+
+
+
+
+
+    /**
      * The constant JME_PREVIEW_MANAGER_IMAGE_VIEW.
      */
     String JME_PREVIEW_MANAGER_IMAGE_VIEW = "JmePreviewManagerImageView";
-
-    /**
-     * The constant ASSET_EDITOR_DIALOG_BUTTON_CONTAINER.
-     */
-    String ASSET_EDITOR_DIALOG_BUTTON_CONTAINER = "AssetEditorDialogButtonContainer";
-    /**
-     * The constant ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER.
-     */
-    String ASSET_EDITOR_DIALOG_RESOURCES_CONTAINER = "AssetEditorDialogResourcesContainer";
-    /**
-     * The constant ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER.
-     */
-    String ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "AssetEditorDialogPreviewContainer";
 
     /**
      * The constant PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER.
@@ -100,60 +97,7 @@ public interface CSSIds {
     String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
 
     /**
-     * The constant CHOOSE_RESOURCE_CONTROL_BUTTON.
-     */
-    String CHOOSE_RESOURCE_CONTROL_BUTTON = "ChooseResourceControlButton";
-
-    /**
-     * The constant CHOOSE_FOLDER_CONTROL_FOLDER_LABEL.
-     */
-    String CHOOSE_FOLDER_CONTROL_FOLDER_LABEL = "ChooseFolderControlFolderLabel";
-
-    /**
-     * The constant GENERATE_LOD_DIALOG_LIST_VIEW.
-     */
-    String GENERATE_LOD_DIALOG_LIST_VIEW = "GenerateLoDDialogListView";
-    /**
-     * The constant GENERATE_LOD_DIALOG_LIST_VIEW_CELL.
-     */
-    String GENERATE_LOD_DIALOG_LIST_VIEW_CELL = "GenerateLoDDialogListViewCell";
-
-    /**
      * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER.
      */
     String ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER = "AbstractParamControlMultiValuesContainer";
-
-
-    /**
-     * The constant ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER.
-     */
-    String ABSTRACT_DIALOG_GRID_SETTINGS_CONTAINER = "AbstractDialogGridSettingsContainer";
-
-    /**
-     * The constant FILE_CREATOR_DIALOG_CONTAINER.
-     */
-    String FILE_CREATOR_DIALOG_CONTAINER = "FileCreatorDialogContainer";
-    /**
-     * The constant FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER.
-     */
-    String FILE_CREATOR_DIALOG_GRID_SETTINGS_CONTAINER = "FileCreatorDialogGridSettingsContainer";
-
-    /**
-     * The constant STATS_APP_STATE_STATS_CONTAINER.
-     */
-    String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
-
-
-    /**
-     * The constant ABOUT_DIALOG_GRID_PANE.
-     */
-    String ABOUT_DIALOG_GRID_PANE = "AboutDialogGridPane";
-    /**
-     * The constant ABOUT_DIALOG_LONG_LABEL.
-     */
-    String ABOUT_DIALOG_LONG_LABEL = "AboutDialogLongLabel";
-    /**
-     * The constant ABOUT_DIALOG_TITLE_LABEL.
-     */
-    String ABOUT_DIALOG_TITLE_LABEL = "AboutDialogTitleLabel";
 }

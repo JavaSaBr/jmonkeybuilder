@@ -80,7 +80,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         this.parent = parent;
         this.influencer = influencer;
         createControls();
-        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER);
+        FXUtils.addClassesTo(this, CSSClasses.DEF_VBOX, CSSClasses.ABSTRACT_PARAM_CONTROL_INFLUENCER,
+                CSSClasses.PHYSICS_NODE_LIST_CONTROL);
     }
 
     /**
@@ -114,6 +115,7 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
+        FXUtils.addClassTo(elementContainer, CSSClasses.DEF_VBOX);
     }
 
     /**
