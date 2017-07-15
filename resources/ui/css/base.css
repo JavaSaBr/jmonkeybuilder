@@ -212,7 +212,7 @@
 
 .tab-pane > .tab-header-area > .tab-header-background {
     -fx-background-color: -var-tab-header-background-color;
-    -fx-border-color: -var-split-line-color;
+    -fx-border-color: -var-border-color;
     -fx-border-width: 0px 0px 1px 0px;
     -fx-effect: null;
 }
@@ -263,11 +263,11 @@
     -fx-border-width: 1px;
     -fx-border-radius: 1px;
     -fx-padding: 0px 0px 0px 0px;
-    -fx-text-fill: -var-font-color;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14px;
+    -fx-text-fill: -var-font-color;
 }
 
 .button:focused {
@@ -285,6 +285,7 @@
     -fx-border-color: -var-border-color;
     -fx-background: -fx-focus-color;
     -fx-background-radius: 2px;
+    -fx-text-fill: -var-font-focused-color;
 }
 
 .button:disabled {
@@ -456,11 +457,13 @@
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
     -fx-background: transparent;
+    -fx-text-fill: -var-font-color;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected:hover,
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:hover {
     -fx-background: -var-menu-hover-color;
+    -fx-text-fill: -var-font-focused-hover-color;
 }
 
 .combo-box-popup > .list-view > .placeholder > .label {
@@ -589,18 +592,19 @@
     -fx-text-fill: -var-font-color;
 }
 
-.menu-bar > .container > .menu-button:hover, .menu-bar > .container > .menu-button:focused, .menu-bar > .container > .menu-button:showing {
-    -fx-background-color: -var-menu-hover-color;
+.menu-bar > .container > .menu-button:showing > .label,
+.menu-bar > .container > .menu-button:hover > .label {
+    -fx-text-fill: -var-font-focused-color;
 }
 
-.menu-bar > .container > .menu-button:hover {
-    -fx-background: red;
+.menu-bar > .container > .menu-button:hover,
+.menu-bar > .container > .menu-button:focused,
+.menu-bar > .container > .menu-button:showing {
     -fx-background-color: -var-menu-hover-color;
-    -fx-text-fill: -fx-selection-bar-text;
 }
 
 .menu-bar:show-mnemonics > .mnemonic-underline {
-    -fx-stroke: -fx-text-fill;
+    -fx-stroke: -var-font-color;
 }
 
 /*******************************************************************************
@@ -633,8 +637,9 @@
     -fx-body-color: -var-menu-item-hover-color;
 }
 
+.menu-item:showing > .label,
 .menu-item:focused > .label {
-    -fx-text-fill: -var-font-focused-color;
+    -fx-text-fill: -var-font-hover-color;
 }
 
 .menu-item:hover > .label {
@@ -1187,6 +1192,10 @@
     -fx-text-fill: -var-font-focused-color;
 }
 
+.list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
+    -fx-text-fill: -var-font-focused-color;
+}
+
 .list-view:focused > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:focused:selected:hover {
     -fx-background-color: -var-tree-cell-selected-color;
     -fx-background-insets: 0;
@@ -1196,6 +1205,11 @@
 .list-cell:filled:selected:focused,
 .list-cell:filled:selected {
     -fx-background-color: -var-tree-cell-selected-color;
+    -fx-text-fill: -var-font-focused-color;
+}
+
+.list-cell:filled:selected:focused > .hbox > .label,
+.list-cell:filled:selected > .hbox > .label {
     -fx-text-fill: -var-font-focused-color;
 }
 
@@ -1349,6 +1363,11 @@
 .tree-table-row-cell:filled:hover {
     -fx-background-color: -var-tree-cell-hover-color;
     -fx-text-fill: -var-font-hover-color;
+}
+
+.tree-cell:filled:selected:focused > .hbox > .label,
+.tree-cell:filled:selected > .hbox > .label {
+    -fx-text-fill: -var-font-focused-color;
 }
 
 .tree-cell:filled:hover > .tree-disclosure-node > .arrow,

@@ -24,6 +24,7 @@ import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -212,6 +213,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final ResourceManager resourceManager = ResourceManager.getInstance();
         final Array<Path> additionalEnvs = resourceManager.getAdditionalEnvs();
         additionalEnvs.forEach(path -> skyItems.add(path.toString()));
+
+        DynamicIconSupport.addSupport(lightButton);
 
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 

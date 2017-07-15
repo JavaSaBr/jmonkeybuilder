@@ -7,6 +7,7 @@ import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.InterpolationElement;
 import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
@@ -105,6 +106,8 @@ public abstract class AbstractInterpolationInfluencerControl<I extends Interpola
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**

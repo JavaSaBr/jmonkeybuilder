@@ -12,6 +12,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
@@ -101,6 +102,8 @@ public class ChooseFolderControl extends HBox {
 
         FXUtils.addClassesTo(this, CSSClasses.TEXT_INPUT_CONTAINER, CSSClasses.CHOOSE_RESOURCE_CONTROL);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
 
         removeButton.disableProperty()
                 .bind(folderLabel.textProperty().isEmpty());

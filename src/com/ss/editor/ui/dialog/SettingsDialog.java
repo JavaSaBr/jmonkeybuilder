@@ -16,6 +16,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -308,6 +309,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(additionalClasspathField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**
@@ -344,6 +347,8 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(additionalEnvsField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**
@@ -694,7 +699,7 @@ public class SettingsDialog extends EditorDialog {
         final HBox anisotropyContainer = new HBox();
         anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
 
-        final Label label = new Label("Theme" + ":");
+        final Label label = new Label(Messages.SETTINGS_DIALOG_THEME_LABEL + ":");
 
         themeComboBox = new ComboBox<>();
         themeComboBox.prefWidthProperty().bind(root.widthProperty());

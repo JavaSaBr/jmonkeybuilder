@@ -24,17 +24,16 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.material.operation.TextureMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.geometry.Insets;
 import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,9 +48,6 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 public class Texture2DMaterialParamControl extends MaterialParamControl {
-
-    @NotNull
-    private static final Insets BUTTON_OFFSET = new Insets(0, 4, 0, 4);
 
     @NotNull
     private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
@@ -145,10 +141,9 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
 
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON);
-
         FXUtils.addClassTo(previewContainer, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_TEXTURE_PREVIEW);
 
-        HBox.setMargin(addButton, BUTTON_OFFSET);
+        DynamicIconSupport.addSupport(addButton, removeButton);
 
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());
         repeatButton.disableProperty().bind(texturePreview.imageProperty().isNull());

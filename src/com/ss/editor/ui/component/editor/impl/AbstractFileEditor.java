@@ -17,6 +17,7 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -296,6 +297,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         FXUtils.addClassesTo(action, CSSClasses.FLAT_BUTTON,
                 CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(action);
 
         return action;
     }

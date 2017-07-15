@@ -4,6 +4,8 @@ import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.config.EditorConfig;
+import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -15,6 +17,10 @@ import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.IntegerDictionary;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,6 +125,12 @@ public class FileIconManager {
     private final IntegerDictionary<ObjectDictionary<String, Image>> imageCache;
 
     /**
+     * The cache of original images.
+     */
+    @NotNull
+    private final ObjectDictionary<Image, Image> originalImageCache;
+
+    /**
      * The cache of urs by a file extension.
      */
     @NotNull
@@ -128,6 +140,7 @@ public class FileIconManager {
         InitializeManager.valid(getClass());
         this.imageCache = DictionaryFactory.newIntegerDictionary();
         this.extensionToUrl = DictionaryFactory.newObjectDictionary();
+        this.originalImageCache = DictionaryFactory.newObjectDictionary();
     }
 
     /**
@@ -232,9 +245,63 @@ public class FileIconManager {
     @NotNull
     @FXThread
     public Image getImage(@NotNull final String url, final int size, final boolean useCache) {
-        if (!useCache) return new Image(url, size, size, false, true);
+        if (!useCache) return buildImage(url, size);
         final ObjectDictionary<String, Image> cache = imageCache.get(size, DictionaryFactory::newObjectDictionary);
-        final Image image = cache.get(url, () -> new Image(url, size, size, false, true));
+        final Image image = cache.get(url, () -> buildImage(url, size));
         return notNull(image);
+    }
+
+    @NotNull
+    private Image buildImage(@NotNull final String url, final int size) {
+
+        final Image image = new Image(url, size, size, false, true);
+
+        if (!url.contains("icons/svg/")) {
+            originalImageCache.put(image, image);
+            return image;
+        }
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final CssColorTheme theme = config.getTheme();
+
+        if (!theme.isDark()) {
+
+            final WritableImage wimage = new WritableImage(size, size);
+            final PixelWriter pixelWriter = wimage.getPixelWriter();
+            final PixelReader pixelReader = image.getPixelReader();
+
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    final Color color = pixelReader.getColor(i, j);
+                    if (color.getOpacity() > 0.1) {
+                        pixelWriter.setColor(i, j, color.invert());
+                    }
+                }
+            }
+
+            originalImageCache.put(wimage, image);
+
+            return wimage;
+        }
+
+        originalImageCache.put(image, image);
+
+        return image;
+    }
+
+    /**
+     * Gets an original image of the image.
+     *
+     * @param image the image.
+     * @return the original image.
+     */
+    @NotNull
+    public Image getOriginal(@NotNull final Image image) {
+
+        if (!(image instanceof WritableImage)) {
+            throw new IllegalArgumentException("The image " + image.impl_getUrl() + " wasn't edited");
+        }
+
+        return notNull(originalImageCache.get(image), "not found original for " + image.impl_getUrl());
     }
 }

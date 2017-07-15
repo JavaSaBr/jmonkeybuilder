@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.List;
 
 /**
@@ -28,9 +27,6 @@ import java.util.List;
  * @author JavaSaBr
  */
 public class CreateMeshVertexShapeEmitterAction extends AbstractCreateShapeEmitterAction {
-
-    @NotNull
-    private static final Point DIALOG_SIZE = new Point(550, 0);
 
     @NotNull
     private static final String PROPERTY_GEOMETRY = "geometry";
@@ -83,11 +79,5 @@ public class CreateMeshVertexShapeEmitterAction extends AbstractCreateShapeEmitt
     @NotNull
     protected EmitterMeshVertexShape createEmitterShape(final List<Mesh> meshes) {
         return new EmitterMeshVertexShape(meshes);
-    }
-
-    @Nullable
-    @Override
-    protected Point getDialogSize() {
-        return DIALOG_SIZE;
     }
 }

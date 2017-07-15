@@ -19,7 +19,6 @@ public interface CSSClasses {
      * The constant SPECIAL_FONT_16.
      */
     String SPECIAL_FONT_16 = "special-font-16";
-
     /**
      * The constant MAIN_SPLIT_PANEL.
      */
@@ -154,10 +153,6 @@ public interface CSSClasses {
     String PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS = "processing-component-terrain-texture-layers-settings-buttons";
 
     /**
-     * The constant LIST_CELL_WITHOUT_PADDING.
-     */
-    String LIST_CELL_WITHOUT_PADDING = "list-cell-without-padding";
-    /**
      * The constant LIST_VIEW_WITHOUT_SCROLL.
      */
     String LIST_VIEW_WITHOUT_SCROLL = "list-view-without-scroll";
@@ -273,6 +268,10 @@ public interface CSSClasses {
      */
     String ABSTRACT_PARAM_CONTROL = "abstract-param-control";
     /**
+     * The constant ABSTRACT_PARAM_EDITOR_CONTROL.
+     */
+    String ABSTRACT_PARAM_EDITOR_CONTROL = "abstract-param-editor-control";
+    /**
      * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER.
      */
     String ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER = "abstract-abstract-param-control-multi-value-container-control";
@@ -336,6 +335,10 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT.
      */
     String ABSTRACT_PARAM_CONTROL_INFLUENCER_ELEMENT = "abstract-param-control-influencer-element";
+    /**
+     * The constant ABSTRACT_RESOURCE_PROPERTY_CONTROL.
+     */
+    String ABSTRACT_RESOURCE_PROPERTY_CONTROL = "abstract-resource-property-control";
 
     /**
      * The constant EDITOR_SCRIPTING_COMPONENT.

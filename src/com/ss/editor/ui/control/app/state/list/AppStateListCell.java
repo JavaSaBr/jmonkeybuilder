@@ -2,18 +2,11 @@ package com.ss.editor.ui.control.app.state.list;
 
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.app.state.operation.DisableAppStateOperation;
 import com.ss.editor.ui.control.app.state.operation.EnableAppStateOperation;
+import com.ss.editor.ui.control.list.AbstractListCell;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.StringUtils;
-import javafx.scene.control.Label;
-import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
+public class AppStateListCell extends AbstractListCell<EditableSceneAppState> {
 
     /**
      * The list of app states.
@@ -31,43 +24,12 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
     private final AppStateList stateList;
 
     /**
-     * The content box.
-     */
-    @NotNull
-    private final HBox content;
-
-    /**
-     * The label of this cell.
-     */
-    @NotNull
-    private final Label text;
-
-    /**
-     * The visible icon.
-     */
-    @NotNull
-    private final ImageView visibleIcon;
-
-    /**
      * Instantiates a new App state list cell.
      *
      * @param stateList the state list
      */
     public AppStateListCell(@NotNull final AppStateList stateList) {
         this.stateList = stateList;
-        this.content = new HBox();
-        this.text = new Label();
-        this.visibleIcon = new ImageView();
-        this.visibleIcon.addEventFilter(MouseEvent.MOUSE_RELEASED, this::processHide);
-        this.visibleIcon.setOnMouseReleased(this::processHide);
-        this.visibleIcon.setPickOnBounds(true);
-
-        FXUtils.addToPane(visibleIcon, content);
-        FXUtils.addToPane(text, content);
-
-        setEditable(false);
-
-        FXUtils.addClassTo(content, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(this, CSSClasses.SCENE_APP_STATE_LIST_CELL);
     }
 
@@ -79,15 +41,8 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
         return stateList;
     }
 
-    /**
-     * Update hide status.
-     */
-    private void processHide(@NotNull final MouseEvent event) {
-        event.consume();
-
-        if (event.getButton() != MouseButton.PRIMARY) {
-            return;
-        }
+    @Override
+    protected void processHideImpl() {
 
         final EditableSceneAppState item = getItem();
         final AppStateList stateList = getStateList();
@@ -101,23 +56,13 @@ public class AppStateListCell extends TextFieldListCell<EditableSceneAppState> {
     }
 
     @Override
-    public void updateItem(@Nullable final EditableSceneAppState item, final boolean empty) {
-        super.updateItem(item, empty);
+    protected boolean isEnabled(@Nullable final EditableSceneAppState item) {
+        return item != null && item.isEnabled();
+    }
 
-        if (item == null) {
-            setText(StringUtils.EMPTY);
-            setGraphic(null);
-            return;
-        }
-
-        visibleIcon.setVisible(true);
-        visibleIcon.setManaged(true);
-        visibleIcon.setImage(!item.isEnabled() ? Icons.INVISIBLE_16 : Icons.VISIBLE_16);
-        visibleIcon.setOpacity(!item.isEnabled() ? 0.5D : 1D);
-
-        text.setText(item.getName());
-
-        setText(StringUtils.EMPTY);
-        setGraphic(content);
+    @NotNull
+    @Override
+    protected String getName(@Nullable final EditableSceneAppState item) {
+        return item == null ? "" : item.getName();
     }
 }

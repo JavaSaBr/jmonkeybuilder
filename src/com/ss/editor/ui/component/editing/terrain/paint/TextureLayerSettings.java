@@ -17,6 +17,7 @@ import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editing.terrain.control.PaintTerrainToolControl;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
@@ -135,6 +136,8 @@ public class TextureLayerSettings extends VBox {
         FXUtils.addClassTo(buttonContainer, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR_LAYERS_SETTINGS_BUTTONS);
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**

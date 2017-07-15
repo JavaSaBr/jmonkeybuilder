@@ -9,6 +9,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -107,6 +108,8 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
         FXUtils.addClassTo(elementLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
         FXUtils.addClassesTo(changeButton, editButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(changeButton, editButton);
     }
 
     /**

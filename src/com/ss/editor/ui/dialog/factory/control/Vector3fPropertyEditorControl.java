@@ -2,7 +2,6 @@ package com.ss.editor.ui.dialog.factory.control;
 
 import com.jme3.math.Vector3f;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
@@ -47,7 +46,6 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         super.createComponents();
 
         final GridPane gridPane = new GridPane();
-        gridPane.setId(CSSIds.ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER);
         gridPane.prefWidthProperty().bind(widthProperty().multiply(0.5F));
 
         xField = new FloatTextField();
@@ -69,7 +67,10 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         gridPane.add(yField, 1, 0);
         gridPane.add(zField, 2, 0);
 
-        FXUtils.addClassTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
+        FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CSSClasses.TRANSPARENT_TEXT_FIELD);
+
         FXUtils.addToPane(gridPane, this);
     }
 

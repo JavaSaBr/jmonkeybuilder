@@ -77,7 +77,7 @@ public class PropertyEditorControl<T> extends HBox {
             setIgnoreListener(false);
         }
 
-        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_CONTROL);
+        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_PARAM_EDITOR_CONTROL);
     }
 
     protected void reload() {

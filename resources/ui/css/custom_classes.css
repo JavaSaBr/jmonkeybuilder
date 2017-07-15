@@ -1135,3 +1135,28 @@
 .create-terrain-dialog > .vbox > .grid-pane {
     -fx-vgap: 2px;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Abstract Resource Property Control                                          *
+ *                                                                             *
+ ******************************************************************************/
+
+.abstract-resource-property-control {
+
+}
+
+.abstract-resource-property-control > .hbox {
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Abstract Param Editor Control                                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.abstract-param-editor-control {
+    -fx-padding: 1px 0px 1px 0px;
+    -fx-spacing: 2px;
+}

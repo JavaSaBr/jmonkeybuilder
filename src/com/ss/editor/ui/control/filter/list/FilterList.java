@@ -11,6 +11,7 @@ import com.ss.editor.ui.control.filter.dialog.CreateSceneFilterDialog;
 import com.ss.editor.ui.control.filter.operation.RemoveSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
@@ -99,6 +100,8 @@ public class FilterList extends VBox {
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(listView, CSSClasses.TRANSPARENT_LIST_VIEW);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**

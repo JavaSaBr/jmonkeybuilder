@@ -15,6 +15,7 @@ import com.ss.editor.state.editor.impl.audio.AudioViewerAppState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -168,6 +169,8 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(gridPane, CSSClasses.DEF_GRID_PANE);
         FXUtils.addClassesTo(root, CSSClasses.DEF_VBOX, CSSClasses.AUDIO_VIEW_EDITOR_CONTAINER);
+
+        DynamicIconSupport.addSupport(playButton, stopButton);
     }
 
     /**

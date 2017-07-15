@@ -9,18 +9,19 @@
     -var-button-hover-color: red;
     -var-button-arm-color: blue;
 
-    -var-menu-bar-background-color: #2f343f;
-    -var-menu-hover-color: -fx-focus-color;
-    -var-menu-item-hover-color: derive(-var-menu-background-color, 50%);
-    -var-menu-arrow-color: derive(-var-menu-background-color, 100%);
-
     -var-arrow-color: derive(-var-background-color, 150%);
     -var-arrow-focused-color: derive(-var-background-color, 230%);
     -var-arrow-hover-color: derive(-var-background-color, 300%);
 
+    -var-menu-bar-background-color: #2f343f;
+    -var-menu-hover-color: -fx-focus-color;
+    -var-menu-item-hover-color: derive(-var-menu-background-color, 50%);
+    -var-menu-arrow-color: -var-arrow-color;
+
     -var-font-color: white;
     -var-font-focused-color: white;
     -var-font-hover-color: white;
+    -var-font-focused-hover-color: white;
 
     -var-split-line-color: #2b2e39;
 

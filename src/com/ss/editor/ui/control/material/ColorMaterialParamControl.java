@@ -10,6 +10,7 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.material.operation.ColorMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.geometry.Insets;
@@ -73,6 +74,8 @@ public class ColorMaterialParamControl extends MaterialParamControl {
         FXUtils.addClassesTo(colorPicker, CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_COLOR_PICKER);
         FXUtils.addClassesTo(removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.MATERIAL_FILE_EDITOR_PARAM_CONTROL_BUTTON);
+
+        DynamicIconSupport.addSupport(removeButton);
 
         HBox.setMargin(colorPicker, ELEMENT_OFFSET);
         HBox.setMargin(removeButton, ELEMENT_OFFSET);

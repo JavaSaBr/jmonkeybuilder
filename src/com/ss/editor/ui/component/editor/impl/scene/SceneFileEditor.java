@@ -31,6 +31,7 @@ import com.ss.editor.ui.control.layer.LayersRoot;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.SplitPane;
@@ -254,6 +255,8 @@ public class SceneFileEditor extends
         audioButton.setGraphic(new ImageView(Icons.AUDIO_16));
         audioButton.setSelected(true);
         audioButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeAudio(newValue));
+
+        DynamicIconSupport.addSupport(lightButton, audioButton);
 
         FXUtils.addClassesTo(lightButton, audioButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
 

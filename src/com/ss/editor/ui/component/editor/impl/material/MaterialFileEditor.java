@@ -36,6 +36,7 @@ import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -612,6 +613,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         FXUtils.addToPane(materialDefinitionBox, container);
         FXUtils.addToPane(bucketLabel, container);
         FXUtils.addToPane(bucketComboBox, container);
+
+        DynamicIconSupport.addSupport(cubeButton, sphereButton, planeButton, lightButton);
 
         FXUtils.addClassTo(materialDefinitionLabel, bucketLabel, CSSClasses.FILE_EDITOR_TOOLBAR_LABEL);
         FXUtils.addClassTo(materialDefinitionBox, bucketComboBox, CSSClasses.FILE_EDITOR_TOOLBAR_FIELD);

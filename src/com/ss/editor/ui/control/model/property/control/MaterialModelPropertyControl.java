@@ -12,6 +12,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -186,6 +187,8 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
         FXUtils.addClassTo(materialLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
         FXUtils.addClassesTo(changeButton, editButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(changeButton, editButton);
     }
 
     /**

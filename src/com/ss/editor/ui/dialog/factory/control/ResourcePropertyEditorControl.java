@@ -6,9 +6,9 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -32,12 +32,6 @@ import java.util.Set;
 public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorControl<T> {
 
     /**
-     * The constant BUTTON_OFFSET.
-     */
-    @NotNull
-    private static final Insets BUTTON_OFFSET = new Insets(0, 0, 0, 3);
-
-    /**
      * The constant NOT_SELECTED.
      */
     @NotNull
@@ -55,6 +49,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
         setOnDragExited(this::dragExited);
+        FXUtils.addClassTo(this, CSSClasses.ABSTRACT_RESOURCE_PROPERTY_CONTROL);
     }
 
     @Override
@@ -67,17 +62,17 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processSelect());
 
-        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(0.5)
-                .subtract(changeButton.widthProperty())
-                .subtract(BUTTON_OFFSET.getLeft()));
+        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
-        FXUtils.addToPane(resourceLabel, this);
-        FXUtils.addToPane(changeButton, this);
+        final HBox container = new HBox(resourceLabel, changeButton);
 
-        HBox.setMargin(changeButton, BUTTON_OFFSET);
+        FXUtils.addToPane(container, this);
 
-        FXUtils.addClassTo(resourceLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassesTo(changeButton, CSSClasses.FLAT_BUTTON, CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+        FXUtils.addClassTo(resourceLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL);
+
+        DynamicIconSupport.addSupport(changeButton);
     }
 
     /**

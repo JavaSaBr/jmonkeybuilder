@@ -86,7 +86,6 @@ public interface CSSIds {
      */
     String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
 
-
     /**
      * The constant IMAGE_CHANNEL_PREVIEW.
      */
@@ -95,9 +94,4 @@ public interface CSSIds {
      * The constant IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER.
      */
     String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
-
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_MULTI_VALUES_CONTAINER = "AbstractParamControlMultiValuesContainer";
 }

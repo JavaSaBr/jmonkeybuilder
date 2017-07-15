@@ -13,6 +13,7 @@ import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPrope
 import com.ss.editor.ui.control.model.tree.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
@@ -116,6 +117,8 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(elementContainer, CSSClasses.DEF_VBOX);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**

@@ -11,6 +11,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.tooltip.ImageChannelPreview;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Button;
@@ -156,6 +157,8 @@ public class ChooseTextureControl extends HBox {
         FXUtils.addClassesTo(wrapper, CSSClasses.TEXT_INPUT_CONTAINER, CSSClasses.DEF_HBOX);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
 
         removeButton.disableProperty().bind(texturePreview.imageProperty().isNull());
     }

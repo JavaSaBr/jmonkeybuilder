@@ -3,13 +3,14 @@ package com.ss.editor.ui.control.tree;
 import static com.ss.editor.ui.util.UIUtils.findItem;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -274,6 +275,8 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
 
         icon.setImage(item.getIcon());
 
+        DynamicIconSupport.updateListener(this, icon, selectedProperty());
+
         final TreeItem<ModelNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
 
@@ -288,6 +291,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
             visibleIcon.setManaged(true);
             visibleIcon.setImage(hideable.isHided() ? Icons.INVISIBLE_16 : Icons.VISIBLE_16);
             visibleIcon.setOpacity(hideable.isHided() ? 0.5D : 1D);
+            DynamicIconSupport.updateListener2(this, visibleIcon, selectedProperty());
         } else {
             visibleIcon.setVisible(false);
             visibleIcon.setManaged(false);
@@ -396,7 +400,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
         } else if (item.canAcceptExternal(dragboard)) {
 
             final M nodeTree = getNodeTree();
-            final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+            final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
             item.acceptExternal(dragboard, changeConsumer);
         }

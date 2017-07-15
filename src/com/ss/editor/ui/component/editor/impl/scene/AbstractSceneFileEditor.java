@@ -60,6 +60,7 @@ import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
@@ -1035,6 +1036,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scaleToolButton.setGraphic(new ImageView(Icons.SCALE_16));
         scaleToolButton.selectedProperty().addListener((observable, oldValue, newValue) ->
                 updateTransformTool(TransformType.SCALE_TOOL, newValue));
+
+        DynamicIconSupport.addSupport(selectionButton, gridButton, statisticsButton, moveToolButton, rotationToolButton,
+                scaleToolButton);
 
         FXUtils.addClassesTo(selectionButton, gridButton, statisticsButton, moveToolButton, rotationToolButton,
                 scaleToolButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);

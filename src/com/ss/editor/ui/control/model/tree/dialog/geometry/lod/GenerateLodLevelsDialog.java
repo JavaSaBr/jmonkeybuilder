@@ -15,6 +15,7 @@ import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.tree.AbstractNodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ListChangeListener;
@@ -218,6 +219,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);
         FXUtils.addClassTo(removeButton, CSSClasses.BUTTON_WITHOUT_LEFT_BORDER);
         FXUtils.addClassTo(root, CSSClasses.GENERATE_LOD_DIALOG);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
     }
 
     /**
