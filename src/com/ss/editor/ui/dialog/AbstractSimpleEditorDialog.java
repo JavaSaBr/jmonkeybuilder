@@ -7,7 +7,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -58,12 +57,6 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
      * The constant DEFAULT_FIELD_W_PERCENT4.
      */
     protected static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
-
-    /**
-     * The constant OK_BUTTON_OFFSET.
-     */
-    @NotNull
-    protected static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
 
     /**
      * The constant EXECUTOR_MANAGER.
@@ -128,7 +121,6 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         super.createActions(root);
 
         final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         okButton = new Button(getButtonOkLabel());
         okButton.setOnAction(event -> safeProcessOk());
@@ -141,8 +133,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
         FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
     }
 
     private void safeProcessOk() {

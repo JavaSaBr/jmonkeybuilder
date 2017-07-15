@@ -55,6 +55,11 @@
     -fx-padding: 15px 15px 15px 15px;
 }
 
+.dialog-actions-root > .hbox {
+    -fx-alignment: center-right;
+    -fx-spacing: 4px;
+}
+
 .dialog-content-root {
     -fx-padding: 10px 15px 0px 15px;
     -fx-alignment: center;
@@ -531,6 +536,22 @@
  *                                                                             *
  ******************************************************************************/
 
+.settings-dialog {
+}
+
+.settings-dialog > .dialog-content-root {
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+.settings-dialog > .dialog-content-root > .tab-pane  {
+    -fx-max-height: 260px;
+}
+
+.settings-dialog > .dialog-content-root > .tab-pane > .tab-content-area > .vbox {
+    -fx-spacing: 2px;
+    -fx-padding: 6px 15px 0px 0px;
+}
+
 .settings-dialog-label {
     -fx-alignment: center-right;
     -fx-min-width: 250px;
@@ -558,6 +579,18 @@
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20px;
+}
+
+.settings-dialog-message-label {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-min-height: 35;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-fill: red;
+    -fx-text-fill: red;
+    -fx-wrap-text: true;
+    -fx-font-size: 15px;
 }
 
 /*******************************************************************************

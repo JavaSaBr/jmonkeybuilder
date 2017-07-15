@@ -116,22 +116,11 @@
     -fx-min-width: 30px;
 }
 
-#AssetComponentBar {
-    -fx-background-color: transparent;
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-alignment: center-left;
-}
-
-#AssetComponentBarButton {
-    -fx-min-height: 30;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-min-width: 30;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-}
+/*******************************************************************************
+ *                                                                             *
+ * Asset Editor Dialog                                                         *
+ *                                                                             *
+ ******************************************************************************/
 
 #AssetEditorDialogButtonContainer {
     -fx-alignment: center-right;
@@ -195,24 +184,6 @@
     -fx-min-width: 356;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-}
-
-/*******************************************************************************
- *                                                                             *
- * Settings Dialog                                                             *
- *                                                                             *
- ******************************************************************************/
-
-#SettingsDialogMessageLabel {
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-    -fx-min-height: 35;
-    -fx-pref-height: -fx-min-height;
-    -fx-max-height: -fx-min-height;
-    -fx-fill: red;
-    -fx-text-fill: red;
-    -fx-wrap-text: true;
-    -fx-font-size: 15px;
 }
 
 #ImageChannelPreview {

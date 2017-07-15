@@ -10,6 +10,7 @@ import com.ss.editor.ui.component.asset.tree.ResourceTree;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
@@ -173,9 +174,11 @@ public class AssetComponent extends VBox implements ScreenComponent {
 
         //FIXME пока он не нужен
         //FXUtils.addToPane(barComponent, this);
+        //FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
+
         FXUtils.addToPane(resourceTree, this);
         FXUtils.bindFixedHeight(resourceTree, heightProperty());
-        //FXUtils.bindFixedHeight(resourceTree, heightProperty().subtract(barComponent.heightProperty()));
+        FXUtils.addClassTo(resourceTree, CSSClasses.TRANSPARENT_LIST_VIEW);
     }
 
     /**

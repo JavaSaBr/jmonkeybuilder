@@ -114,6 +114,9 @@ public class EditorDialog {
         dialog.setScene(scene);
 
         configureSize(container);
+
+        container.heightProperty().addListener((observable, oldValue, newValue) -> dialog.sizeToScene());
+        container.widthProperty().addListener((observable, oldValue, newValue) -> dialog.sizeToScene());
     }
 
     /**

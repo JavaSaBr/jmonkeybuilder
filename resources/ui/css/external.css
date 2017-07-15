@@ -1,6 +1,6 @@
 
 .code-area {
-    -fx-background-color: transparent;
+    -fx-background-color: -var-background-color;
     -fx-stroke: -var-font-color;
     -fx-font-family: "Ubuntu Mono";
     -fx-font-size: 13px;

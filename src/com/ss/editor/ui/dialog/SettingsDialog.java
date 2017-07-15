@@ -14,7 +14,6 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.ui.control.input.IntegerTextField;
@@ -23,7 +22,6 @@ import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
@@ -51,25 +49,7 @@ import java.nio.file.Path;
 public class SettingsDialog extends EditorDialog {
 
     @NotNull
-    private static final Insets OK_BUTTON_OFFSET = new Insets(0, 4, 0, 0);
-
-    @NotNull
-    private static final Insets MESSAGE_OFFSET = new Insets(5, 0, 10, 0);
-
-    @NotNull
-    private static final Insets FIELD_OFFSET = new Insets(5, 15, 0, 0);
-
-    @NotNull
-    private static final Insets ADD_REMOVE_BUTTON_OFFSET = new Insets(0, 0, 0, 2);
-
-    @NotNull
-    private static final Insets TONE_MAP_X_LABEL_OFFSET = new Insets(0, 0, 0, 4);
-
-    @NotNull
-    private static final Insets TAB_PANE_OFFSET = new Insets(-10, 0, 0, 0);
-
-    @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, 400);
+    private static final Point DIALOG_SIZE = new Point(600, -1);
 
     @NotNull
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
@@ -215,6 +195,10 @@ public class SettingsDialog extends EditorDialog {
      */
     private boolean ignoreListeners;
 
+    public SettingsDialog() {
+        FXUtils.addClassTo(getContainer(), CSSClasses.SETTINGS_DIALOG);
+    }
+
     @Override
     public void show(@NotNull final Window owner) {
         super.show(owner);
@@ -245,7 +229,6 @@ public class SettingsDialog extends EditorDialog {
         super.createContent(root);
 
         messageLabel = new Label();
-        messageLabel.setId(CSSIds.SETTINGS_DIALOG_MESSAGE_LABEL);
 
         final VBox graphicsRoot = new VBox();
         graphicsRoot.prefHeightProperty().bind(root.heightProperty());
@@ -284,12 +267,11 @@ public class SettingsDialog extends EditorDialog {
         createDefaultCameraLampEnabledControl(otherRoot);
 
         FXUtils.bindFixedWidth(messageLabel, root.widthProperty());
+        FXUtils.addClassTo(messageLabel, CSSClasses.SETTINGS_DIALOG_MESSAGE_LABEL);
+        FXUtils.addClassTo(graphicsRoot, otherRoot, CSSClasses.DEF_VBOX);
 
         FXUtils.addToPane(tabPane, root);
         FXUtils.addToPane(messageLabel, root);
-
-        VBox.setMargin(messageLabel, MESSAGE_OFFSET);
-        VBox.setMargin(tabPane, TAB_PANE_OFFSET);
     }
 
     /**
@@ -326,10 +308,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(additionalClasspathField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
-
-        HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
-        HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -366,10 +344,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(additionalEnvsField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
-
-        HBox.setMargin(addButton, ADD_REMOVE_BUTTON_OFFSET);
-        HBox.setMargin(removeButton, ADD_REMOVE_BUTTON_OFFSET);
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -474,8 +448,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(gammaCorrectionLabel, gammaCorrectionCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(gammaCorrectionLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(gammaCorrectionCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(gammaCorrectionContainer, FIELD_OFFSET);
     }
 
     /**
@@ -497,8 +469,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(toneMapFilterLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(toneMapFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(toneMapFilterContainer, FIELD_OFFSET);
     }
 
     /**
@@ -567,9 +537,6 @@ public class SettingsDialog extends EditorDialog {
                 toneMapFilterWhitePointZ, CSSClasses.TRANSPARENT_SPINNER);
 
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
-
-        HBox.setMargin(xLabel, TONE_MAP_X_LABEL_OFFSET);
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -606,8 +573,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(fxaaContainer, FIELD_OFFSET);
     }
 
     /**
@@ -629,8 +594,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(googleAnalyticsCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -652,8 +615,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(autoTangentGeneratingCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -675,8 +636,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(defaultUseFlippedTextureCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -698,8 +657,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(defaultCameraLampEnabledCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -724,8 +681,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(anisotropyComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(anisotropyContainer, FIELD_OFFSET);
 
         final ObservableList<Integer> items = anisotropyComboBox.getItems();
         items.addAll(ANISOTROPYCS);
@@ -754,8 +709,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(themeComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
-        VBox.setMargin(anisotropyContainer, FIELD_OFFSET);
-
         final ObservableList<CssColorTheme> items = themeComboBox.getItems();
         items.addAll(THEMES);
     }
@@ -781,8 +734,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(frameRateField, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -806,8 +757,6 @@ public class SettingsDialog extends EditorDialog {
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(cameraAngleField, CSSClasses.SETTINGS_DIALOG_FIELD);
-
-        VBox.setMargin(container, FIELD_OFFSET);
     }
 
     /**
@@ -1022,6 +971,8 @@ public class SettingsDialog extends EditorDialog {
 
         setAdditionalClasspathFolder(additionalClasspath);
         setAdditionalEnvsFolder(additionalEnvs);
+
+
     }
 
     /**
@@ -1067,7 +1018,6 @@ public class SettingsDialog extends EditorDialog {
         super.createActions(root);
 
         final HBox container = new HBox();
-        container.setId(CSSIds.ASSET_EDITOR_DIALOG_BUTTON_CONTAINER);
 
         final Button okButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
@@ -1076,12 +1026,11 @@ public class SettingsDialog extends EditorDialog {
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
+        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
 
         FXUtils.addToPane(okButton, container);
         FXUtils.addToPane(cancelButton, container);
         FXUtils.addToPane(container, root);
-
-        HBox.setMargin(okButton, OK_BUTTON_OFFSET);
     }
 
     /**

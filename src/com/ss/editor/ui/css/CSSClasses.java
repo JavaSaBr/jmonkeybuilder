@@ -365,6 +365,10 @@ public interface CSSClasses {
     String SCENE_FILTER_LIST_CELL = "scene-filter-list-cell";
 
     /**
+     * The constant SETTINGS_DIALOG.
+     */
+    String SETTINGS_DIALOG = "settings-dialog";
+    /**
      * The constant SETTINGS_DIALOG_LABEL.
      */
     String SETTINGS_DIALOG_LABEL = "settings-dialog-label";
@@ -376,6 +380,10 @@ public interface CSSClasses {
      * The constant SETTINGS_DIALOG_SHORT_LABEL.
      */
     String SETTINGS_DIALOG_SHORT_LABEL = "settings-dialog-short-label";
+    /**
+     * The constant SETTINGS_DIALOG_MESSAGE_LABEL.
+     */
+    String SETTINGS_DIALOG_MESSAGE_LABEL = "settings-dialog-message-label";
 
     /**
      * The constant AUDIO_VIEW_EDITOR_CONTAINER.

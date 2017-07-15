@@ -94,6 +94,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
 
         final TextField editor = materialTypeComboBox.getEditor();
 
+        FXUtils.addClassTo(editor, CSSClasses.TRANSPARENT_TEXT_FIELD);
+
         AutoCompleteComboBoxListener.install(materialTypeComboBox);
 
         definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();

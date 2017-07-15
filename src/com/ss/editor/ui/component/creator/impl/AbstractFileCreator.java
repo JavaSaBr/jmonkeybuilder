@@ -50,7 +50,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * The constant DIALOG_SIZE.
      */
     @NotNull
-    protected static final Point DIALOG_SIZE = new Point(900, 401);
+    protected static final Point DIALOG_SIZE = new Point(900, -1);
 
     /**
      * The constant EXECUTOR_MANAGER.

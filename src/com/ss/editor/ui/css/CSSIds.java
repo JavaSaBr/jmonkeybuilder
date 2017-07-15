@@ -53,20 +53,11 @@ public interface CSSIds {
      * The constant ASSET_COMPONENT.
      */
     String ASSET_COMPONENT = "AssetComponent";
-    /**
-     * The constant ASSET_COMPONENT_BAR.
-     */
-    String ASSET_COMPONENT_BAR = "AssetComponentBar";
-    /**
-     * The constant ASSET_COMPONENT_BAR_BUTTON.
-     */
-    String ASSET_COMPONENT_BAR_BUTTON = "AssetComponentBarButton";
 
     /**
      * The constant JME_PREVIEW_MANAGER_IMAGE_VIEW.
      */
     String JME_PREVIEW_MANAGER_IMAGE_VIEW = "JmePreviewManagerImageView";
-
 
     /**
      * The constant ASSET_EDITOR_DIALOG_BUTTON_CONTAINER.
@@ -98,10 +89,6 @@ public interface CSSIds {
      */
     String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
 
-    /**
-     * The constant SETTINGS_DIALOG_MESSAGE_LABEL.
-     */
-    String SETTINGS_DIALOG_MESSAGE_LABEL = "SettingsDialogMessageLabel";
 
     /**
      * The constant IMAGE_CHANNEL_PREVIEW.

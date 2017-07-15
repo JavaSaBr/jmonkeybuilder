@@ -12,11 +12,9 @@ import com.ss.editor.ui.component.asset.tree.resource.FileElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
-import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.IntObjectConsumer;
-import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayComparator;
@@ -179,8 +177,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
         setShowRoot(true);
         setContextMenu(new ContextMenu());
         setFocusTraversable(true);
-
-        FXUtils.addClassTo(this, CSSClasses.TRANSPARENT_TREE_VIEW);
     }
 
     /**
