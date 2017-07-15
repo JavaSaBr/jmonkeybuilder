@@ -832,6 +832,9 @@
  ******************************************************************************/
 
 .text-area {
+    -fx-font-family: "Ubuntu Mono";
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
@@ -860,7 +863,7 @@
 }
 
 .text-area:disabled {
-    -fx-opacity: -fx-disabled-opacity;
+    -fx-opacity: -var-disabled-opacity;
 }
 
 /*******************************************************************************

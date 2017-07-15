@@ -1,9 +1,29 @@
 
+.styled-text-area {
+    -fx-highlight-fill: -fx-focus-color;
+}
+
+.styled-text-area .text {
+    -rtfx-background-color: transparent;
+    -fx-font-family: "Ubuntu Mono";
+    -fx-font-size: 14;
+}
+
+.styled-text-area .virtual-flow {
+    -fx-background-color: transparent;
+}
+
+.styled-text-area .paragraph-text {
+    -fx-background-color: transparent;
+}
+
+.styled-text-area .virtual-flow .paragraph-box {
+    -fx-background-color: transparent;
+}
+
 .code-area {
     -fx-background-color: -var-background-color;
     -fx-stroke: -var-font-color;
-    -fx-font-family: "Ubuntu Mono";
-    -fx-font-size: 13px;
 }
 
 .code-area .caret {

@@ -396,9 +396,28 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
     private void processOpenFileImpl(@NotNull final RequestedOpenFileEvent event, @NotNull final Path file) {
 
-        final EditorDescription description = event.getDescription();
-        final FileEditor editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) : EDITOR_REGISTRY.createEditorFor(description, file);
-        if (editor == null) return;
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+
+        FileEditor editor = null;
+        try {
+
+            final EditorDescription description = event.getDescription();
+
+            editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) :
+                    EDITOR_REGISTRY.createEditorFor(description, file);
+
+        } catch (final Exception e) {
+            EditorUtil.handleException(null, this, new Exception(e));
+            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            return;
+        }
+
+        if (editor == null) {
+            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            return;
+        }
+
+        final FileEditor resultEditor = editor;
 
         final long stamp = EDITOR.asyncLock();
         try {
@@ -406,16 +425,15 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         } catch (final NoClassDefFoundError | Exception e) {
             EditorUtil.handleException(null, this, new Exception(e));
             EXECUTOR_MANAGER.addFXTask(() -> {
-                final EditorFXScene scene = JFX_APPLICATION.getScene();
                 scene.decrementLoading();
-                editor.notifyClosed();
+                resultEditor.notifyClosed();
             });
             return;
         } finally {
             EDITOR.asyncUnlock(stamp);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> addEditor(editor, event.isNeedShow()));
+        EXECUTOR_MANAGER.addFXTask(() -> addEditor(resultEditor, event.isNeedShow()));
     }
 
     /**

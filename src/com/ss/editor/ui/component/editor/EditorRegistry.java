@@ -1,16 +1,16 @@
 package com.ss.editor.ui.component.editor;
 
 import static com.ss.rlib.util.array.ArrayFactory.newArray;
-
-import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
-import com.ss.editor.ui.component.editor.impl.GLSLFileEditor;
-import com.ss.editor.ui.component.editor.impl.ImageViewerEditor;
-import com.ss.editor.ui.component.editor.impl.MaterialDefinitionFileEditor;
-import com.ss.editor.ui.component.editor.impl.TextFileEditor;
+import com.ss.editor.ui.component.editor.impl.*;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
-
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.dictionary.DictionaryFactory;
+import com.ss.rlib.util.dictionary.ObjectDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,13 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.concurrent.Callable;
-
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 
 /**
  * THe registry of editors.
@@ -183,11 +176,9 @@ public class EditorRegistry {
 
         try {
             return constructor.call();
-        } catch (Exception e) {
-            LOGGER.warning(e);
+        } catch (final Exception e) {
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     /**

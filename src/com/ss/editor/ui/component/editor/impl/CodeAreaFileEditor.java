@@ -8,7 +8,7 @@ import com.ss.rlib.util.FileUtils;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.undo.UndoManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,7 +48,9 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     protected void createContent(@NotNull final VBox root) {
 
         codeArea = new CodeArea();
-        codeArea.richChanges().subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
+        codeArea.richChanges()
+                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
+                .subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
         codeArea.prefHeightProperty().bind(root.heightProperty());
         codeArea.prefWidthProperty().bind(root.widthProperty());

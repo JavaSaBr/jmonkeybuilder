@@ -29,8 +29,6 @@ import java.io.InputStream;
  */
 public class AboutDialog extends AbstractSimpleEditorDialog {
 
-    private static final int AREA_HEIGHT = 200;
-
     @NotNull
     private static final String PROJECT_HOME = "https://bitbucket.org/JavaSabr/jme3-spaceshift-editor";
 
@@ -115,9 +113,6 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         gridPane.add(iconsArea, 0, 7, 2, 1);
 
         FXUtils.addToPane(gridPane, root);
-
-        FXUtils.setFixedHeight(librariesArea, AREA_HEIGHT);
-        FXUtils.setFixedHeight(iconsArea, AREA_HEIGHT);
 
         FXUtils.addClassesTo(versionLabel, projectHomeLabel, forumThreadLabel, usedLibrariesLabel, usedIcons,
                 versionField, projectHomeField, forumThreadField, CSSClasses.SPECIAL_FONT_16);

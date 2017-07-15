@@ -9,8 +9,8 @@ import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.ColorSpace;
 import com.ss.editor.ui.css.CSSIds;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.StyleSpans;
-import org.fxmisc.richtext.StyleSpansBuilder;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.BufferOverflowException;
@@ -129,7 +129,9 @@ public class LogView extends CodeArea {
         setId(CSSIds.LOG_VIEW);
         setWrapText(true);
         setEditable(false);
-        richChanges().subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
+        richChanges()
+                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
+                .subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
         System.setErr(new OutputStreamWrapper(System.err, externalAppendText()));
     }
 

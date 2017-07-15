@@ -4,8 +4,8 @@ import static java.util.Collections.singleton;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.editor.EditorDescription;
-import org.fxmisc.richtext.StyleSpans;
-import org.fxmisc.richtext.StyleSpansBuilder;
+import org.fxmisc.richtext.model.StyleSpans;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

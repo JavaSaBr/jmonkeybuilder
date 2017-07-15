@@ -70,8 +70,6 @@
     -fx-background-color: -var-background-color;
     -fx-fill: -var-font-color;
     -fx-text-fill: -var-font-color;
-    -fx-font-family: "Ubuntu Mono";
-    -fx-font-size: 13px;
 }
 
 #LogView .caret {
@@ -80,8 +78,6 @@
 
 #LogView .content {
     -fx-background-color: -var-background-color;
-    -fx-fill: -var-font-color;
-    -fx-text-fill: -var-font-color;
 }
 
 /*******************************************************************************
