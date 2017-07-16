@@ -113,7 +113,7 @@ public abstract class EditorUtil {
      */
     @NotNull
     public static InputStream getInputStream(@NotNull final String path) {
-        return Object.class.getResourceAsStream(path);
+        return JFXApplication.class.getResourceAsStream(path);
     }
 
     /**
