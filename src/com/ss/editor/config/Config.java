@@ -2,6 +2,7 @@ package com.ss.editor.config;
 
 import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
+import com.ss.editor.util.AppVersion;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.util.Utils;
@@ -32,10 +33,16 @@ public abstract class Config {
     public static final String TITLE = "jME3 SpaceShift Editor";
 
     /**
-     * The constant VERSION.
+     * The constant APP_VERSION.
      */
     @NotNull
-    public static final String VERSION = "v.0.9.10";
+    public static final AppVersion APP_VERSION = new AppVersion("0.9.10");
+
+    /**
+     * The constant STRING_VERSION.
+     */
+    @NotNull
+    public static final String STRING_VERSION = APP_VERSION.toString();
 
     /**
      * The path to application folder.

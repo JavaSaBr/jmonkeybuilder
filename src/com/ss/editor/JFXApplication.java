@@ -20,6 +20,7 @@ import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.OpenGLVersion;
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -83,6 +84,11 @@ public class JFXApplication extends Application {
         // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
+
+        final EditorConfig editorConfig = EditorConfig.getInstance();
+        final OpenGLVersion openGLVersion = editorConfig.getOpenGLVersion();
+
+        System.setProperty("jfx.background.render", openGLVersion.getRender());
 
         // some settings for the render of JavaFX
         //System.setProperty("prism.cacheshapes", "true");

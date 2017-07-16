@@ -17,6 +17,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -59,6 +60,9 @@ public class SettingsDialog extends EditorDialog {
     private static final Array<CssColorTheme> THEMES = ArrayFactory.newArray(CssColorTheme.class);
 
     @NotNull
+    private static final Array<OpenGLVersion> GL_VERSIONS = ArrayFactory.newArray(OpenGLVersion.class);
+
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
@@ -75,6 +79,7 @@ public class SettingsDialog extends EditorDialog {
         ANISOTROPYCS.add(16);
         THEMES.add(CssColorTheme.LIGHT);
         THEMES.add(CssColorTheme.DARK);
+        GL_VERSIONS.addAll(OpenGLVersion.values());
     }
 
     /**
@@ -94,6 +99,12 @@ public class SettingsDialog extends EditorDialog {
      */
     @Nullable
     private ComboBox<CssColorTheme> themeComboBox;
+
+    /**
+     * The list with open GL versions.
+     */
+    @Nullable
+    private ComboBox<OpenGLVersion> openGLVersionComboBox;
 
     /**
      * The white point X.
@@ -251,6 +262,7 @@ public class SettingsDialog extends EditorDialog {
         tabPane.maxWidthProperty().bind(widthProperty());
         tabPane.prefHeightProperty().bind(heightProperty());
 
+        createOpenGLControl(graphicsRoot);
         createAnisotropyControl(graphicsRoot);
         createGammaCorrectionControl(graphicsRoot);
         createFrameRateControl(graphicsRoot);
@@ -438,17 +450,17 @@ public class SettingsDialog extends EditorDialog {
      */
     private void createGammaCorrectionControl(@NotNull final VBox root) {
 
-        final HBox gammaCorrectionContainer = new HBox();
-        gammaCorrectionContainer.setAlignment(Pos.CENTER_LEFT);
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
 
         final Label gammaCorrectionLabel = new Label(Messages.SETTINGS_DIALOG_GAMMA_CORRECTION + ":");
 
         gammaCorrectionCheckBox = new CheckBox();
         gammaCorrectionCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
-        FXUtils.addToPane(gammaCorrectionLabel, gammaCorrectionContainer);
-        FXUtils.addToPane(gammaCorrectionCheckBox, gammaCorrectionContainer);
-        FXUtils.addToPane(gammaCorrectionContainer, root);
+        FXUtils.addToPane(gammaCorrectionLabel, container);
+        FXUtils.addToPane(gammaCorrectionCheckBox, container);
+        FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(gammaCorrectionLabel, gammaCorrectionCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(gammaCorrectionLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
@@ -460,17 +472,17 @@ public class SettingsDialog extends EditorDialog {
      */
     private void createToneMapFilterControl(@NotNull final VBox root) {
 
-        final HBox toneMapFilterContainer = new HBox();
-        toneMapFilterContainer.setAlignment(Pos.CENTER_LEFT);
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
 
         final Label toneMapFilterLabel = new Label(Messages.SETTINGS_DIALOG_TONEMAP_FILTER + ":");
 
         toneMapFilterCheckBox = new CheckBox();
         toneMapFilterCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
-        FXUtils.addToPane(toneMapFilterLabel, toneMapFilterContainer);
-        FXUtils.addToPane(toneMapFilterCheckBox, toneMapFilterContainer);
-        FXUtils.addToPane(toneMapFilterContainer, root);
+        FXUtils.addToPane(toneMapFilterLabel, container);
+        FXUtils.addToPane(toneMapFilterCheckBox, container);
+        FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(toneMapFilterLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(toneMapFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
@@ -564,17 +576,17 @@ public class SettingsDialog extends EditorDialog {
      */
     private void createFXAAControl(@NotNull final VBox root) {
 
-        final HBox fxaaContainer = new HBox();
-        fxaaContainer.setAlignment(Pos.CENTER_LEFT);
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
 
         final Label label = new Label(Messages.SETTINGS_DIALOG_FXAA + ":");
 
         fxaaFilterCheckBox = new CheckBox();
         fxaaFilterCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
 
-        FXUtils.addToPane(label, fxaaContainer);
-        FXUtils.addToPane(fxaaFilterCheckBox, fxaaContainer);
-        FXUtils.addToPane(fxaaContainer, root);
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(fxaaFilterCheckBox, container);
+        FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(fxaaFilterCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
@@ -669,8 +681,8 @@ public class SettingsDialog extends EditorDialog {
      */
     private void createAnisotropyControl(@NotNull final VBox root) {
 
-        final HBox anisotropyContainer = new HBox();
-        anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
 
         final Label label = new Label(Messages.SETTINGS_DIALOG_ANISOTROPY + ":");
 
@@ -680,9 +692,9 @@ public class SettingsDialog extends EditorDialog {
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> validate());
 
-        FXUtils.addToPane(label, anisotropyContainer);
-        FXUtils.addToPane(anisotropyComboBox, anisotropyContainer);
-        FXUtils.addToPane(anisotropyContainer, root);
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(anisotropyComboBox, container);
+        FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(anisotropyComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
@@ -696,8 +708,8 @@ public class SettingsDialog extends EditorDialog {
      */
     private void createThemeControl(@NotNull final VBox root) {
 
-        final HBox anisotropyContainer = new HBox();
-        anisotropyContainer.setAlignment(Pos.CENTER_LEFT);
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
 
         final Label label = new Label(Messages.SETTINGS_DIALOG_THEME_LABEL + ":");
 
@@ -707,15 +719,42 @@ public class SettingsDialog extends EditorDialog {
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> validate());
 
-        FXUtils.addToPane(label, anisotropyContainer);
-        FXUtils.addToPane(themeComboBox, anisotropyContainer);
-        FXUtils.addToPane(anisotropyContainer, root);
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(themeComboBox, container);
+        FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(themeComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
 
         final ObservableList<CssColorTheme> items = themeComboBox.getItems();
         items.addAll(THEMES);
+    }
+
+    /**
+     * Create the open GL control
+     */
+    private void createOpenGLControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_OPEN_GL_LABEL + ":");
+
+        openGLVersionComboBox = new ComboBox<>();
+        openGLVersionComboBox.prefWidthProperty().bind(root.widthProperty());
+        openGLVersionComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(openGLVersionComboBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(openGLVersionComboBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+
+        final ObservableList<OpenGLVersion> items = openGLVersionComboBox.getItems();
+        items.addAll(GL_VERSIONS);
     }
 
     /**
@@ -885,6 +924,8 @@ public class SettingsDialog extends EditorDialog {
         int needRestart = 0;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
+        final CssColorTheme currentTheme = editorConfig.getTheme();
+        final OpenGLVersion currentOpenGLVersion = editorConfig.getOpenGLVersion();
         final int currentAnisotropy = editorConfig.getAnisotropy();
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
 
@@ -894,9 +935,19 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
 
+        final ComboBox<CssColorTheme> themeComboBox = getThemeComboBox();
+        final CssColorTheme theme = themeComboBox.getSelectionModel().getSelectedItem();
+
+        final ComboBox<OpenGLVersion> openGLVersionComboBox = getOpenGLVersionComboBox();
+        final OpenGLVersion glVersion = openGLVersionComboBox.getSelectionModel().getSelectedItem();
+
         if (currentAnisotropy != anisotropy) {
             needRestart++;
         } else if (currentGammaCorrection != gammaCorrection) {
+            needRestart++;
+        } else if (currentTheme != theme) {
+            needRestart++;
+        } else if (currentOpenGLVersion != glVersion) {
             needRestart++;
         }
 
@@ -921,6 +972,10 @@ public class SettingsDialog extends EditorDialog {
         final ComboBox<CssColorTheme> themeComboBox = getThemeComboBox();
         final SingleSelectionModel<CssColorTheme> selectedTheme = themeComboBox.getSelectionModel();
         selectedTheme.select(editorConfig.getTheme());
+
+        final ComboBox<OpenGLVersion> openGLVersionComboBox = getOpenGLVersionComboBox();
+        final SingleSelectionModel<OpenGLVersion> selectionGLVersion = openGLVersionComboBox.getSelectionModel();
+        selectionGLVersion.select(editorConfig.getOpenGLVersion());
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         fxaaFilterCheckBox.setSelected(editorConfig.isFXAA());
@@ -976,8 +1031,6 @@ public class SettingsDialog extends EditorDialog {
 
         setAdditionalClasspathFolder(additionalClasspath);
         setAdditionalEnvsFolder(additionalEnvs);
-
-
     }
 
     /**
@@ -986,6 +1039,14 @@ public class SettingsDialog extends EditorDialog {
     @NotNull
     private ComboBox<CssColorTheme> getThemeComboBox() {
         return notNull(themeComboBox);
+    }
+
+    /**
+     * @return the list with open GL versions.
+     */
+    @NotNull
+    private ComboBox<OpenGLVersion> getOpenGLVersionComboBox() {
+        return notNull(openGLVersionComboBox);
     }
 
     /**
@@ -1052,6 +1113,7 @@ public class SettingsDialog extends EditorDialog {
         final int currentCameraAngle = editorConfig.getCameraAngle();
 
         final CssColorTheme currentTheme = editorConfig.getTheme();
+        final OpenGLVersion currentOpenGLVersion = editorConfig.getOpenGLVersion();
 
         final boolean currentGammaCorrection = editorConfig.isGammaCorrection();
 
@@ -1060,6 +1122,9 @@ public class SettingsDialog extends EditorDialog {
 
         final ComboBox<CssColorTheme> themeComboBox = getThemeComboBox();
         final CssColorTheme theme = themeComboBox.getSelectionModel().getSelectedItem();
+
+        final ComboBox<OpenGLVersion> openGLVersionComboBox = getOpenGLVersionComboBox();
+        final OpenGLVersion glVersion = openGLVersionComboBox.getSelectionModel().getSelectedItem();
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
@@ -1102,6 +1167,8 @@ public class SettingsDialog extends EditorDialog {
             needRestart++;
         } else if (theme != currentTheme) {
             needRestart++;
+        } else if (currentOpenGLVersion != glVersion) {
+            needRestart++;
         }
 
         editorConfig.setAnisotropy(anisotropy);
@@ -1118,6 +1185,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setDefaultUseFlippedTexture(useFlippedTextures);
         editorConfig.setDefaultEditorCameraEnabled(cameraLampEnabled);
         editorConfig.setTheme(theme);
+        editorConfig.setOpenGLVersion(glVersion);
         editorConfig.save();
 
         if (cameraAngle != currentCameraAngle) {

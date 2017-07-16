@@ -1,5 +1,6 @@
 package com.ss.editor.config;
 
+import static com.ss.editor.util.OpenGLVersion.GL_32;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.get;
 import com.jme3.asset.AssetEventListener;
@@ -12,6 +13,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +53,7 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
     private static final String PREF_SCREEN_MAXIMIZED = SCREEN_ALIAS + "." + "screenMaximized";
 
+    private static final String PREF_GRAPHIC_OPEN_GL = GRAPHICS_ALIAS + "." + "openGL";
     private static final String PREF_GRAPHIC_ANISOTROPY = GRAPHICS_ALIAS + "." + "anisotropy";
     private static final String PREF_GRAPHIC_FRAME_RATE = GRAPHICS_ALIAS + "." + "frameRate";
     private static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
@@ -69,7 +72,7 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
     private static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
     private static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
-    private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion" + Config.VERSION;
+    private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion" + Config.STRING_VERSION;
 
     private static final String PREF_GLOBAL_LEFT_TOOL_WIDTH = ASSET_OTHER + "." + "globalLeftToolWidth";
     private static final String PREF_GLOBAL_LEFT_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalLeftToolCollapsed";
@@ -115,6 +118,12 @@ public final class EditorConfig implements AssetEventListener {
      */
     @Nullable
     private volatile Path currentAsset;
+
+    /**
+     * The current open GL version.
+     */
+    @Nullable
+    private volatile OpenGLVersion openGLVersion;
 
     /**
      * The path to the folder with additional classpath.
@@ -731,6 +740,21 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
+     * @return the current open GL version.
+     */
+    @NotNull
+    public OpenGLVersion getOpenGLVersion() {
+        return notNull(openGLVersion);
+    }
+
+    /**
+     * @param openGLVersion the current open GL version.
+     */
+    public void setOpenGLVersion(@NotNull final OpenGLVersion openGLVersion) {
+        this.openGLVersion = openGLVersion;
+    }
+
+    /**
      * Gets settings.
      *
      * @return the settings for JME.
@@ -794,6 +818,7 @@ public final class EditorConfig implements AssetEventListener {
         this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_CAMERA_LAMP_ENABLED, true);
         this.analyticsQuestion = prefs.getBoolean(PREF_ANALYTICS_QUESTION, false);
         this.theme = prefs.getInt(PREF_THEME, CssColorTheme.DARK.ordinal());
+        this.openGLVersion = OpenGLVersion.valueOf(prefs.getInt(PREF_GRAPHIC_OPEN_GL, GL_32.ordinal()));
 
         final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
 
@@ -867,6 +892,7 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putBoolean(PREF_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
         prefs.putBoolean(PREF_ANALYTICS_QUESTION, isAnalyticsQuestion());
         prefs.putInt(PREF_THEME, getTheme().ordinal());
+        prefs.putInt(PREF_GRAPHIC_OPEN_GL, getOpenGLVersion().ordinal());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
 

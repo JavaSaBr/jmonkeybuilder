@@ -4,6 +4,7 @@ import static org.apache.http.impl.client.HttpClients.createMinimal;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.Config;
+import com.ss.editor.util.AppVersion;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
@@ -58,9 +59,11 @@ public class CheckNewVersionTask implements Runnable {
             Header encoding = entity.getContentEncoding();
             String enc = encoding == null ? "UTF-8" : encoding.getValue();
 
-            final String targetVersion = IOUtils.toString(content, enc).trim();
+            final String targetVersion = IOUtils.toString(content, enc)
+                    .trim()
+                    .replace("v.", "");
 
-            if (Config.VERSION.equals(targetVersion)) {
+            if (Config.APP_VERSION.compareTo(new AppVersion(targetVersion)) <= 0) {
                 return;
             }
 

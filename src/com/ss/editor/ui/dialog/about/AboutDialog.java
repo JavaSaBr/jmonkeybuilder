@@ -66,7 +66,7 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
         final Label versionLabel = new Label(Messages.ABOUT_DIALOG_VERSION + ":");
         versionLabel.prefWidthProperty().bind(gridPane.widthProperty().multiply(0.5));
 
-        final Label versionField = new Label(Config.VERSION);
+        final Label versionField = new Label(Config.STRING_VERSION);
 
         final Label projectHomeLabel = new Label(Messages.ABOUT_DIALOG_PROJECT_HOME + ":");
 

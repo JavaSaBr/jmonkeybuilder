@@ -251,7 +251,7 @@ public class GAnalytics extends EditorThread {
 
         final String distribution = operatingSystem.getDistribution();
         final String os = StringUtils.isEmpty(distribution) ? operatingSystem.getName() + " " + operatingSystem.getVersion() : distribution;
-        final String appVersion = Config.VERSION;
+        final String appVersion = Config.STRING_VERSION;
         final String language = Locale.getDefault().toString();
         final String userId = Utils.getUserName();
         final String javaVersion = System.getProperty("java.vm.name", "unknown") + " " +
