@@ -5,6 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
@@ -1430,7 +1431,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
             final RenderManager renderManager = EDITOR.getRenderManager();
             try {
                 renderManager.preloadScene(geometry);
-            } catch (final RendererException | UnsupportedOperationException e) {
+            } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
 
                 EditorUtil.handleException(LOGGER, this,
                         new RuntimeException("Found invalid material in the geometry: [" + geometry.getName() + "]. " +
