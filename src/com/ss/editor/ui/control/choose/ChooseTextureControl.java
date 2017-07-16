@@ -195,7 +195,7 @@ public class ChooseTextureControl extends HBox {
      * Add new texture.
      */
     private void processAdd() {
-        UIUtils.openAssetDialog(this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
+        UIUtils.openAssetDialog(this, this::setTextureFile, TEXTURE_EXTENSIONS, ACTION_TESTER);
     }
 
     /**

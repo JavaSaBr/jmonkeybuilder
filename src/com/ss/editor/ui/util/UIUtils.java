@@ -453,6 +453,24 @@ public class UIUtils {
     }
 
     /**
+     * Open an asset dialog.
+     *
+     * @param owner        the owner.
+     * @param handler      the result handler.
+     * @param extensions   the extensions list.
+     * @param actionTester the action tester.
+     */
+    @FXThread
+    public static void openAssetDialog(@NotNull Node owner, @NotNull final Consumer<Path> handler,
+                                       @NotNull final Array<String> extensions,
+                                       @Nullable final Predicate<Class<?>> actionTester) {
+        final AssetEditorDialog<Path> dialog = new FileAssetEditorDialog(handler);
+        dialog.setExtensionFilter(extensions);
+        dialog.setActionTester(actionTester);
+        dialog.show(owner);
+    }
+
+    /**
      * Accept a drag event if it has a file with required extensions.
      *
      * @param dragEvent  the drag event.

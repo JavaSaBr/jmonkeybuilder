@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.choose;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
@@ -11,7 +10,6 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.asset.AssetEditorDialog;
 import com.ss.editor.ui.dialog.asset.FolderAssetEditorDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -121,13 +119,9 @@ public class ChooseFolderControl extends HBox {
      * Add a folder.
      */
     private void processAdd() {
-
-        final JFXApplication jfxApplication = JFXApplication.getInstance();
-        final EditorFXScene scene = jfxApplication.getScene();
-
         final AssetEditorDialog<Path> dialog = new FolderAssetEditorDialog(this::setFolder);
         dialog.setActionTester(ACTION_TESTER);
-        dialog.show(scene.getWindow());
+        dialog.show(this);
     }
 
     /**

@@ -169,7 +169,7 @@ public class FileIconManager {
         if (contentType != null) contentType = contentType.replace("/", "-");
 
         if (contentType == null) {
-            LOGGER.warning("not found content type for " + path);
+            LOGGER.debug("not found content type for " + path);
             contentType = "none";
         }
 

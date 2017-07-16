@@ -21,6 +21,7 @@
     <target name="setup-staging-area">
         <delete dir="externalLibs"/>
         <delete dir="project"/>
+        <delete dir="licenses"/>
         <delete dir="projectRefs"/>
 
         <mkdir dir="externalLibs"/>
@@ -69,10 +70,15 @@
         </copy>
 
         <mkdir dir="licenses"/>
+        <mkdir dir="licenses/libraries-licenses"/>
         <copy todir="licenses">
             <fileset dir="../" >
-                <include name="*license*"/>
-                <include name="*LICENSE*"/>
+                <include name="LICENSE"/>
+            </fileset>
+        </copy>
+        <copy todir="licenses/libraries-licenses">
+            <fileset dir="../libraries-licenses" >
+                <include name="*"/>
             </fileset>
         </copy>
 
@@ -158,6 +164,12 @@
             </fileset>
         </copy>
 
+        <copy todir="dist/licenses/libraries-licenses">
+            <fileset dir="licenses/libraries-licenses" >
+                <include name="*"/>
+            </fileset>
+        </copy>
+
         <copy todir="dist/libs">
             <fileset dir="externalLibs">
                 <include name="*"/>
@@ -209,6 +221,7 @@
         <fx:resources id="appRes">
             <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
             <fx:fileset dir="dist" includes="licenses/*"/>
+            <fx:fileset dir="dist" includes="licenses/libraries-licenses/*"/>
             <fx:fileset dir="dist" includes="libs/*"/>
             <fx:fileset dir="dist" includes="libs/jME/*"/>
             <fx:fileset dir="dist" includes="libs/svg/*"/>

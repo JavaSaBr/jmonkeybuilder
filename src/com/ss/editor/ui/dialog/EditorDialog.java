@@ -249,11 +249,29 @@ public class EditorDialog {
         }
     }
 
+    /**
+     * Shows this dialog.
+     *
+     * @param owner the owner.
+     */
+    public void show(@NotNull final Node owner) {
+        show(owner.getScene().getWindow());
+    }
+
+    /**
+     * Shows this dialog.
+     *
+     * @param owner the owner.
+     */
     public void show(@NotNull final Window owner) {
 
-        final EditorFXScene scene = (EditorFXScene) owner.getScene();
-        final StackPane container = scene.getContainer();
-        container.setFocusTraversable(false);
+        final Scene scene = owner.getScene();
+
+        if (scene instanceof EditorFXScene) {
+            final EditorFXScene editorFXScene = (EditorFXScene) scene;
+            final StackPane container = editorFXScene.getContainer();
+            container.setFocusTraversable(false);
+        }
 
         focusOwner = scene.getFocusOwner();
 
@@ -283,9 +301,13 @@ public class EditorDialog {
         final int seconds = (int) duration.getSeconds();
 
         final Window window = dialog.getOwner();
-        final EditorFXScene scene = (EditorFXScene) window.getScene();
-        final StackPane container = scene.getContainer();
-        container.setFocusTraversable(true);
+        final Scene scene = window.getScene();
+
+        if (scene instanceof EditorFXScene) {
+            final EditorFXScene editorFXScene = (EditorFXScene) scene;
+            final StackPane container = editorFXScene.getContainer();
+            container.setFocusTraversable(true);
+        }
 
         if (focusOwner != null) {
             focusOwner.requestFocus();

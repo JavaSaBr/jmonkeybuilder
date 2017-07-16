@@ -3,6 +3,7 @@ package com.ss.editor;
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
+import com.jme3.util.BufferAllocatorFactory;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
@@ -21,6 +22,7 @@ import com.ss.editor.ui.component.log.LogView;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
+import com.ss.editor.util.SynchronizedByteBufferAllocator;
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -84,6 +86,8 @@ public class JFXApplication extends Application {
         // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
+        System.setProperty(BufferAllocatorFactory.PROPERTY_BUFFER_ALLOCATOR_IMPLEMENTATION,
+                SynchronizedByteBufferAllocator.class.getName());
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OpenGLVersion openGLVersion = editorConfig.getOpenGLVersion();

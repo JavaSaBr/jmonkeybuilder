@@ -52,7 +52,7 @@ public abstract class AssetResourcePropertyEditorControl<T> extends ResourceProp
     @Override
     protected void processSelect() {
         super.processSelect();
-        UIUtils.openAssetDialog(this::processSelect, getExtensions(), getActionTester());
+        UIUtils.openAssetDialog(this, this::processSelect, getExtensions(), getActionTester());
     }
 
     /**
