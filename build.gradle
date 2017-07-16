@@ -7,6 +7,10 @@ version = '0.9.11'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+project.buildDir = 'build-gradle'
+
+//java.srcDirs = ['src']
+
 ext.jmeVersion = "3.2_branch-SNAPSHOT"
 
 repositories {
@@ -16,13 +20,18 @@ repositories {
 }
 
 dependencies {
-    // https://mvnrepository.com/artifact/org.jetbrains/annotations
-    compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
-    compile 'com.github.JavaSaBr:RLib:6.1.0'
+
+    // base
+    compile 'com.github.JavaSaBr:RlibFX:4.1.2'
+
+    // jME
     compile 'com.github.JavaSaBr:SimFX:1.0.3'
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-core:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-bullet:$jmeVersion"
+
+    // extensions
+    compile 'com.github.JavaSaBr:jme3-spaceshift-extension:1.1.0'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
