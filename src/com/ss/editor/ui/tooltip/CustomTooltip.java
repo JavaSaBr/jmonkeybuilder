@@ -1,10 +1,11 @@
 package com.ss.editor.ui.tooltip;
 
-import org.jetbrains.annotations.NotNull;
-
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Region;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The base implementation of custom tooltip.
@@ -25,11 +26,14 @@ public abstract class CustomTooltip<R extends Region> extends Tooltip {
      */
     CustomTooltip() {
         this.root = createRoot();
+        this.root.setStyle("-fx-background-color: -var-menu-background-color;");
 
         final Scene scene = getScene();
         scene.setRoot(root);
 
         createContent(root);
+
+        FXUtils.addClassTo(root, CSSClasses.CUSTOM_TOOLTIP);
     }
 
     /**

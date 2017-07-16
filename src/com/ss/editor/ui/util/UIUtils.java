@@ -229,7 +229,8 @@ public class UIUtils {
                 return;
             }
 
-            Constructor<?> constructor = tooltipBehaviourClass.getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
+            Constructor<?> constructor = tooltipBehaviourClass.
+                    getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
 
             if (constructor == null) {
                 return;
@@ -237,7 +238,9 @@ public class UIUtils {
 
             constructor.setAccessible(true);
 
-            Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis), new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
+            Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis),
+                    new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
+
             Field field = Tooltip.class.getDeclaredField("BEHAVIOR");
 
             if (field == null) {

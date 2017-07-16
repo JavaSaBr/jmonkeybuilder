@@ -12,15 +12,14 @@ import com.jme3.shader.VarType;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.ObservableList;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,48 +72,44 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
 
     @NotNull
     @Override
-    protected Parent buildSecondPart(@NotNull final HBox container) {
-
-        final GridPane settingsContainer = new GridPane();
-        settingsContainer.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER);
+    protected Region buildSecondPart(@NotNull final HBox container) {
 
         textureParamNameLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL + ":");
-        textureParamNameLabel.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_LABEL);
+        textureParamNameLabel.prefWidthProperty().bind(container.widthProperty().multiply(0.25));
 
         applyLightingTransformLabel = new Label(Messages.PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL + ":");
-        applyLightingTransformLabel.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_LABEL);
+        applyLightingTransformLabel.prefWidthProperty().bind(container.widthProperty().multiply(0.25));
 
         textureParamNameComboBox = new ComboBox<>();
-        textureParamNameComboBox.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_CONTROL);
+        textureParamNameComboBox.prefWidthProperty().bind(container.widthProperty().multiply(0.25));
 
         applyLightingTransformCheckBox = new CheckBox();
-        applyLightingTransformCheckBox.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_CONTROL);
+        applyLightingTransformCheckBox.prefWidthProperty().bind(container.widthProperty().multiply(0.25));
 
         final StackPane previewContainer = new StackPane();
-        previewContainer.setId(CSSIds.PARTICLES_ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
 
         imageView = new ImageView();
         imageView.fitHeightProperty().bind(previewContainer.heightProperty().subtract(2));
         imageView.fitWidthProperty().bind(previewContainer.widthProperty().subtract(2));
 
         textView = new TextArea();
+        textView.setEditable(false);
         textView.prefWidthProperty().bind(previewContainer.widthProperty().subtract(2));
         textView.prefHeightProperty().bind(previewContainer.heightProperty().subtract(2));
 
         FXUtils.addToPane(imageView, previewContainer);
         FXUtils.addToPane(textView, previewContainer);
 
-        FXUtils.addClassTo(textView, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(textureParamNameLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(applyLightingTransformLabel, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(textureParamNameComboBox, CSSClasses.SPECIAL_FONT_14);
-        FXUtils.addClassTo(applyLightingTransformCheckBox, CSSClasses.SPECIAL_FONT_14);
-
+        final GridPane settingsContainer = new GridPane();
         settingsContainer.add(textureParamNameLabel, 0, 0);
         settingsContainer.add(textureParamNameComboBox, 1, 0);
         settingsContainer.add(applyLightingTransformLabel, 0, 1);
         settingsContainer.add(applyLightingTransformCheckBox, 1, 1);
-        settingsContainer.add(previewContainer, 0, 2, 2, 2);
+        settingsContainer.add(previewContainer, 0, 2, 2, 1);
+
+        FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
+        FXUtils.addClassTo(previewContainer, CSSClasses.ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER);
+        FXUtils.addClassTo(textView, CSSClasses.TRANSPARENT_TEXT_AREA);
 
         return settingsContainer;
     }
@@ -165,7 +160,8 @@ public class ParticlesAssetEditorDialog extends AssetEditorDialog<ParticlesMater
     protected BooleanBinding buildDisableCondition() {
         final ComboBox<String> comboBox = getTextureParamNameComboBox();
         final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
-        return super.buildDisableCondition().or(selectionModel.selectedItemProperty().isNull());
+        return super.buildDisableCondition().or(selectionModel.selectedItemProperty()
+                .isNull().or(selectionModel.selectedItemProperty().isEqualTo("")));
     }
 
     @Override

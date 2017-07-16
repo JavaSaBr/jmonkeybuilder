@@ -58,40 +58,4 @@ public interface CSSIds {
      * The constant STATS_APP_STATE_STATS_CONTAINER.
      */
     String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
-
-
-
-
-
-
-    /**
-     * The constant JME_PREVIEW_MANAGER_IMAGE_VIEW.
-     */
-    String JME_PREVIEW_MANAGER_IMAGE_VIEW = "JmePreviewManagerImageView";
-
-    /**
-     * The constant PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER.
-     */
-    String PARTICLES_ASSET_EDITOR_DIALOG_SETTINGS_CONTAINER = "ParticlesAssetEditorDialogSettingsContainer";
-    /**
-     * The constant PARTICLES_ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER.
-     */
-    String PARTICLES_ASSET_EDITOR_DIALOG_PREVIEW_CONTAINER = "ParticlesAssetEditorDialogPreviewContainer";
-    /**
-     * The constant PARTICLES_ASSET_EDITOR_DIALOG_LABEL.
-     */
-    String PARTICLES_ASSET_EDITOR_DIALOG_LABEL = "ParticlesAssetEditorDialogLabel";
-    /**
-     * The constant PARTICLES_ASSET_EDITOR_DIALOG_CONTROL.
-     */
-    String PARTICLES_ASSET_EDITOR_DIALOG_CONTROL = "ParticlesAssetEditorDialogControl";
-
-    /**
-     * The constant IMAGE_CHANNEL_PREVIEW.
-     */
-    String IMAGE_CHANNEL_PREVIEW = "ImageChannelPreview";
-    /**
-     * The constant IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER.
-     */
-    String IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER = "ImageChannelPreviewImageContainer";
 }

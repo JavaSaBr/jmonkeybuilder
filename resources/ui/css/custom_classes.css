@@ -1112,6 +1112,15 @@
     -fx-max-width: 598px;
 }
 
+.asset-editor-dialog > .hbox > .grid-pane {
+    -fx-hgap: 2px;
+}
+
+.asset-editor-dialog > .hbox > .grid-pane > .label {
+    -fx-alignment: center-right;
+    -fx-text-alignment: right;
+}
+
 .asset-editor-dialog-preview-container {
     -fx-min-height: 500px;
     -fx-min-width: 500px;
@@ -1159,4 +1168,33 @@
 .abstract-param-editor-control {
     -fx-padding: 1px 0px 1px 0px;
     -fx-spacing: 2px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Image Channel Preview                                                       *
+ *                                                                             *
+ ******************************************************************************/
+
+.image-channel-preview {
+    -fx-hgap: 4px;
+    -fx-vgap: 4px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Custom Tooltip                                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.custom-tooltip {
+    -fx-font-family: "Ubuntu Condensed";
+    -fx-font-size: 14;
+    -fx-padding: 6px;
+    -fx-background-insets: 0;
+    -fx-background-radius: 3px;
+    -fx-border-color: -var-border-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-effect: -fx-shadow-menu;
 }

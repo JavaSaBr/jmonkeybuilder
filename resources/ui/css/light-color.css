@@ -4,12 +4,12 @@
 
     -var-background-color: #ffffff;
     -var-border-color: #dcdfe3;
-    -var-menu-background-color: #ffffff;
 
     -var-arrow-color: #70788d;
     -var-arrow-focused-color: white;
     -var-arrow-hover-color: #70788d;
 
+    -var-menu-background-color: #ffffff;
     -var-menu-bar-background-color: #f5f6f7;
     -var-menu-hover-color: -fx-focus-color;
     -var-menu-item-hover-color: derive(-var-menu-background-color, -10%);

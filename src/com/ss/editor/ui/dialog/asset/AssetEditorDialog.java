@@ -30,7 +30,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
@@ -40,6 +39,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
@@ -209,12 +209,14 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
         resourceTree = new ResourceTree(this::processOpen, false);
         resourceTree.prefHeightProperty().bind(root.heightProperty());
-        resourceTree.prefWidthProperty().bind(root.widthProperty());
+        resourceTree.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
         resourceTree.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> processSelected(newValue));
 
-        final Parent secondPart = buildSecondPart(container);
+        final Region secondPart = buildSecondPart(container);
+        secondPart.prefHeightProperty().bind(root.heightProperty());
+        secondPart.prefWidthProperty().bind(root.widthProperty().multiply(0.5));
 
         FXUtils.addToPane(resourceTree, container);
         FXUtils.addToPane(secondPart, container);
@@ -233,7 +235,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @return the parent
      */
     @NotNull
-    protected Parent buildSecondPart(@NotNull final HBox container) {
+    protected Region buildSecondPart(@NotNull final HBox container) {
 
         final StackPane previewContainer = new StackPane();
 

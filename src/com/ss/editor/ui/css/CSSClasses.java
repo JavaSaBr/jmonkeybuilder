@@ -463,4 +463,14 @@ public interface CSSClasses {
      * The constant PHYSICS_NODE_LIST_CONTROL.
      */
     String PHYSICS_NODE_LIST_CONTROL = "physics-node-list-control";
+
+    /**
+     * The constant CUSTOM_TOOLTIP.
+     */
+    String CUSTOM_TOOLTIP = "custom-tooltip";
+
+    /**
+     * The constant IMAGE_CHANNEL_PREVIEW.
+     */
+    String IMAGE_CHANNEL_PREVIEW = "image-channel-preview";
 }

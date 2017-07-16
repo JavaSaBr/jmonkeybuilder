@@ -16,6 +16,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.hanlder.WindowResizeHandler;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -127,5 +128,7 @@ public class EditorFXSceneBuilder {
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
 
         FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CSSClasses.MAIN_SPLIT_PANEL);
+
+        UIUtils.overrideTooltipBehavior(100, 5000, 100);
     }
 }

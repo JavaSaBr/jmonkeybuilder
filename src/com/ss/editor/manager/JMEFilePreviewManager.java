@@ -3,8 +3,8 @@ package com.ss.editor.manager;
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
 import static com.ss.rlib.util.FileUtils.getExtension;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.DirectionalLight;
@@ -25,20 +25,19 @@ import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
-import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 
@@ -99,7 +98,7 @@ public class JMEFilePreviewManager extends AbstractControl {
                 }
             }
         }
-        return requireNonNull(instance);
+        return notNull(instance);
     }
 
     /**
@@ -166,7 +165,6 @@ public class JMEFilePreviewManager extends AbstractControl {
 
     private JMEFilePreviewManager() {
         this.imageView = new ImageView();
-        this.imageView.setId(CSSIds.JME_PREVIEW_MANAGER_IMAGE_VIEW);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.modelNode = new Node("Model Node");
 
@@ -212,7 +210,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         imageView.setFitHeight(fitHeight);
         imageView.setFitWidth(fitWidth);
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "File can't be null.");
+        final Path assetFile = notNull(getAssetFile(file), "File can't be null.");
         final String path = toAssetPath(assetFile);
         final String extension = getExtension(assetFile);
 

@@ -3,7 +3,8 @@ package com.ss.editor.ui.tooltip;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.JavaFXImageManager;
-import com.ss.editor.ui.css.CSSIds;
+import com.ss.editor.ui.css.CSSClasses;
+import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.*;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
  */
 public class ImageChannelPreview extends CustomTooltip<GridPane> {
 
+    @NotNull
     private static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
     /**
@@ -116,21 +118,12 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
 
     @Override
     protected void createContent(@NotNull final GridPane root) {
-        root.setId(CSSIds.IMAGE_CHANNEL_PREVIEW);
-
         super.createContent(root);
 
         redView = new ImageView();
-        redView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-
         greenView = new ImageView();
-        greenView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-
         blueView = new ImageView();
-        blueView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
-
         alphaView = new ImageView();
-        alphaView.setId(CSSIds.IMAGE_CHANNEL_PREVIEW_IMAGE_CONTAINER);
 
         root.add(redView, 0, 0);
         root.add(greenView, 1, 0);
@@ -141,7 +134,9 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
     @NotNull
     @Override
     protected GridPane createRoot() {
-        return new GridPane();
+        final GridPane gridPane = new GridPane();
+        FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.IMAGE_CHANNEL_PREVIEW);
+        return gridPane;
     }
 
     /**
