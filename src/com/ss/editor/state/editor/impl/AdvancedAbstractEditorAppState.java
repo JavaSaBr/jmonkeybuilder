@@ -1,7 +1,7 @@
 package com.ss.editor.state.editor.impl;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.commons.lang3.ArrayUtils.toArray;
+import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.util.array.ArrayFactory.toArray;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.input.InputManager;
@@ -470,7 +470,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
             final Node nodeForCamera = getNodeForCamera();
             nodeForCamera.setLocalTranslation(camera.getLocation());
 
-            final EditorCamera editorCamera = requireNonNull(getEditorCamera());
+            final EditorCamera editorCamera = notNull(getEditorCamera());
             editorCamera.setTargetDistance(0);
         }
 

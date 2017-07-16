@@ -4,8 +4,7 @@ import com.jme3.animation.AnimControl;
 import com.jme3.animation.Track;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of node to show {@link Track}.

@@ -12,6 +12,7 @@ project.buildDir = 'build-gradle'
 //java.srcDirs = ['src']
 
 ext.jmeVersion = "3.2_branch-SNAPSHOT"
+ext.jme3_xbuf_version = '213c6a499d'
 
 repositories {
     mavenCentral()
@@ -23,15 +24,48 @@ dependencies {
 
     // base
     compile 'com.github.JavaSaBr:RlibFX:4.1.2'
+    compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
+    compile 'com.github.JavaSaBr:JME3-JFX:1.5.2'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+
+
+    // extend image support
+    // https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-batik
+    compile group: 'com.twelvemonkeys.imageio', name: 'imageio-batik', version: '3.3.2'
+    // https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-hdr
+    compile group: 'com.twelvemonkeys.imageio', name: 'imageio-hdr', version: '3.3.2'
+    // https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-tiff
+    compile group: 'com.twelvemonkeys.imageio', name: 'imageio-tiff', version: '3.3.2'
+
+    // SVG support
+    // https://mvnrepository.com/artifact/de.codecentric.centerdevice/javafxsvg
+    compile group: 'de.codecentric.centerdevice', name: 'javafxsvg', version: '1.2.1'
 
     // jME
     compile 'com.github.JavaSaBr:SimFX:1.0.3'
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-core:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-bullet:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-lwjgl3:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-desktop:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-terrain:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-plugins:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-blender:$jmeVersion"
+
+    // http support
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
     compile 'com.github.JavaSaBr:jme3-spaceshift-extension:1.1.0'
+    compile 'com.github.JavaSaBr:tonegodemitter:2.2.3'
+    compile "org.xbuf.jme3_xbuf:jme3_xbuf_loader:${jme3_xbuf_version}"
+
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
+    compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-beta-1'
+
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
