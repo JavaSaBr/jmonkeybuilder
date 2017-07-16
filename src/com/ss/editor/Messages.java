@@ -342,6 +342,10 @@ public class Messages {
      */
     public static final String SETTINGS_DIALOG_FXAA;
     /**
+     * The constant SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS.
+     */
+    public static final String SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS;
+    /**
      * The constant SETTINGS_DIALOG_FRAME_RATE.
      */
     public static final String SETTINGS_DIALOG_FRAME_RATE;
@@ -2393,6 +2397,7 @@ public class Messages {
 
         SETTINGS_DIALOG_TITLE = bundle.getString("SettingsDialogTitle");
         SETTINGS_DIALOG_FXAA = bundle.getString("SettingsDialogFXAA");
+        SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS = bundle.getString("SettingsDialogStopRenderOnLostFocus");
         SETTINGS_DIALOG_FRAME_RATE = bundle.getString("SettingsDialogFrameRate");
         SETTINGS_DIALOG_GAMMA_CORRECTION = bundle.getString("SettingsDialogGammaCorrection");
         SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");

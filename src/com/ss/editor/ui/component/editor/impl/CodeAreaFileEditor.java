@@ -144,4 +144,18 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
         setOriginalContent(newContent);
         updateDirty(newContent);
     }
+
+    @Override
+    protected void handleExternalChanges() {
+        super.handleExternalChanges();
+
+        final String newContent = FileUtils.read(getEditFile());
+
+        final CodeArea codeArea = getCodeArea();
+        final String currentContent = codeArea.getText();
+        codeArea.replaceText(0, currentContent.length(), newContent);
+
+        setOriginalContent(currentContent);
+        updateDirty(newContent);
+    }
 }

@@ -226,6 +226,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
+        super.processChangedFile(event);
 
         final Material currentMaterial = getCurrentMaterial();
         final Path file = event.getFile();
@@ -267,7 +268,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Execute the operation.
      */
-    private void handleChanges(final EditorOperation operation) {
+    private void handleChanges(@NotNull final EditorOperation operation) {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.execute(operation);
     }
@@ -286,6 +287,25 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         }
 
         setDirty(false);
+    }
+
+    @Override
+    protected void handleExternalChanges() {
+        super.handleExternalChanges();
+
+        final Path assetFile = getAssetFile(getEditFile());
+
+        notNull(assetFile, "Asset file can't be null.");
+
+        final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
+
+        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Material material = assetManager.loadAsset(materialKey);
+
+        reload(material);
+
+        final EditorOperationControl operationControl = getOperationControl();
+        operationControl.clear();
     }
 
     @NotNull

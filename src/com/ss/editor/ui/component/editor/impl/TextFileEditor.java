@@ -138,6 +138,20 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
         updateDirty(newContent);
     }
 
+    @Override
+    protected void handleExternalChanges() {
+        super.handleExternalChanges();
+
+        final String newContent = FileUtils.read(getEditFile());
+
+        final TextArea textArea = getTextArea();
+        final String currentContent = textArea.getText();
+        textArea.setText(newContent);
+
+        setOriginalContent(currentContent);
+        updateDirty(newContent);
+    }
+
     @NotNull
     @Override
     public EditorDescription getDescription() {

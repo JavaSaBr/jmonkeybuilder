@@ -564,12 +564,15 @@
 }
 
 .settings-dialog > .dialog-content-root > .tab-pane  {
-    -fx-max-height: 260px;
+    -fx-max-height: 300px;
+    -fx-min-height: -fx-max-height;
 }
 
 .settings-dialog > .dialog-content-root > .tab-pane > .tab-content-area > .vbox {
     -fx-spacing: 2px;
-    -fx-padding: 6px 15px 0px 0px;
+    -fx-padding: 6px 0px 0px 0px;
+    -fx-max-width: 585px;
+    -fx-min-height: 300px;
 }
 
 .settings-dialog-label {

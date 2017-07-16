@@ -45,9 +45,9 @@ public final class EditorConfig implements AssetEventListener {
 
     private static final String GRAPHICS_ALIAS = "Graphics";
     private static final String SCREEN_ALIAS = "Screen";
-    private static final String ASSET_ALIAS = "ASSET";
-    private static final String ASSET_OTHER = "Other";
-    private static final String ASSET_EDITING = "Editing";
+    private static final String ASSET_ALIAS = "Asset";
+    private static final String OTHER_ALIAS = "Other";
+    private static final String EDITING_ALIAS = "Editing";
 
     private static final String PREF_SCREEN_WIDTH = SCREEN_ALIAS + "." + "screenWidth";
     private static final String PREF_SCREEN_HEIGHT = SCREEN_ALIAS + "." + "screenHeight";
@@ -59,25 +59,28 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_GRAPHIC_CAMERA_ANGLE = GRAPHICS_ALIAS + "." + "cameraAngle";
     private static final String PREF_GRAPHIC_FXAA = GRAPHICS_ALIAS + "." + "fxaa";
     private static final String PREF_GRAPHIC_GAMA_CORRECTION = GRAPHICS_ALIAS + "." + "gammaCorrection";
+    private static final String PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS = GRAPHICS_ALIAS + "." + "stopRenderOnLostFocus";
     private static final String PREF_GRAPHIC_TONEMAP_FILTER = GRAPHICS_ALIAS + "." + "toneMapFilter";
     private static final String PREF_GRAPHIC_TONEMAP_FILTER_WHITE_POINT = GRAPHICS_ALIAS + "." + "toneMapFilterWhitePoint";
 
-    private static final String PREF_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
-    private static final String PREF_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
+    private static final String PREF_ASSET_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
+    private static final String PREF_ASSET_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
-    private static final String PREF_ADDITIONAL_CLASSPATH = ASSET_OTHER + "." + "additionalClasspath";
-    private static final String PREF_ADDITIONAL_ENVS = ASSET_OTHER + "." + "additionalEnvs";
-    private static final String PREF_THEME = ASSET_OTHER + "." + "theme";
-    private static final String PREF_ANALYTICS = ASSET_OTHER + "." + "analytics";
-    private static final String PREF_AUTO_TANGENT_GENERATING = ASSET_EDITING + "." + "autoTangentGenerating";
-    private static final String PREF_DEFAULT_USE_FLIPPED_TEXTURE = ASSET_EDITING + "." + "defaultUseFlippedTexture";
-    private static final String PREF_CAMERA_LAMP_ENABLED = ASSET_EDITING + "." + "defaultCameraLampEnabled";
-    private static final String PREF_ANALYTICS_QUESTION = ASSET_OTHER + "." + "analyticsQuestion" + Config.STRING_VERSION;
+    private static final String PREF_OTHER_ADDITIONAL_CLASSPATH = OTHER_ALIAS + "." + "additionalClasspath";
+    private static final String PREF_OTHER_ADDITIONAL_ENVS = OTHER_ALIAS + "." + "additionalEnvs";
+    private static final String PREF_OTHER_THEME = OTHER_ALIAS + "." + "theme";
+    private static final String PREF_OTHER_ANALYTICS = OTHER_ALIAS + "." + "analytics";
+    private static final String PREF_OTHER_ANALYTICS_QUESTION = OTHER_ALIAS + "." + "analyticsQuestion" + Config.STRING_VERSION;
 
-    private static final String PREF_GLOBAL_LEFT_TOOL_WIDTH = ASSET_OTHER + "." + "globalLeftToolWidth";
-    private static final String PREF_GLOBAL_LEFT_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalLeftToolCollapsed";
-    private static final String PREF_GLOBAL_BOTTOM_TOOL_WIDTH = ASSET_OTHER + "." + "globalBottomToolHeight";
-    private static final String PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED = ASSET_OTHER + "." + "globalBottomToolCollapsed";
+    private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_WIDTH = OTHER_ALIAS + "." + "globalLeftToolWidth";
+    private static final String PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED = OTHER_ALIAS + "." + "globalLeftToolCollapsed";
+    private static final String PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH = OTHER_ALIAS + "." + "globalBottomToolHeight";
+    private static final String PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED = OTHER_ALIAS + "." + "globalBottomToolCollapsed";
+    
+    private static final String PREF_EDITING_AUTO_TANGENT_GENERATING = EDITING_ALIAS + "." + "autoTangentGenerating";
+    private static final String PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE = EDITING_ALIAS + "." + "defaultUseFlippedTexture";
+    private static final String PREF_EDITING_CAMERA_LAMP_ENABLED = EDITING_ALIAS + "." + "defaultCameraLampEnabled";
+
 
     @Nullable
     private static volatile EditorConfig instance;
@@ -196,6 +199,11 @@ public final class EditorConfig implements AssetEventListener {
      * Flag is for enabling the gamma correction.
      */
     private volatile boolean gammaCorrection;
+
+    /**
+     * Flag is for enabling stoping render on lost focus.
+     */
+    private volatile boolean stopRenderOnLostFocus;
 
     /**
      * Flag is for enabling the tone map filter.
@@ -403,6 +411,26 @@ public final class EditorConfig implements AssetEventListener {
     @FromAnyThread
     public void setGammaCorrection(final boolean gammaCorrection) {
         this.gammaCorrection = gammaCorrection;
+    }
+
+    /**
+     * Is stop render on lost focus boolean.
+     *
+     * @return true if need to stop render on lost focus.
+     */
+    @FromAnyThread
+    public boolean isStopRenderOnLostFocus() {
+        return stopRenderOnLostFocus;
+    }
+
+    /**
+     * Sets stop render on lost focus.
+     *
+     * @param stopRenderOnLostFocus true if need to stop render on lost focus.
+     */
+    @FromAnyThread
+    public void setStopRenderOnLostFocus(final boolean stopRenderOnLostFocus) {
+        this.stopRenderOnLostFocus = stopRenderOnLostFocus;
     }
 
     /**
@@ -726,6 +754,7 @@ public final class EditorConfig implements AssetEventListener {
      * @return the current theme.
      */
     @NotNull
+    @FromAnyThread
     public CssColorTheme getTheme() {
         return CssColorTheme.valueOf(theme);
     }
@@ -735,21 +764,28 @@ public final class EditorConfig implements AssetEventListener {
      *
      * @param theme the current theme.
      */
+    @FromAnyThread
     public void setTheme(@NotNull final CssColorTheme theme) {
         this.theme = theme.ordinal();
     }
 
     /**
+     * Gets open gl version.
+     *
      * @return the current open GL version.
      */
     @NotNull
+    @FromAnyThread
     public OpenGLVersion getOpenGLVersion() {
         return notNull(openGLVersion);
     }
 
     /**
+     * Sets open gl version.
+     *
      * @param openGLVersion the current open GL version.
      */
+    @FromAnyThread
     public void setOpenGLVersion(@NotNull final OpenGLVersion openGLVersion) {
         this.openGLVersion = openGLVersion;
     }
@@ -802,37 +838,38 @@ public final class EditorConfig implements AssetEventListener {
         this.anisotropy = prefs.getInt(PREF_GRAPHIC_ANISOTROPY, 0);
         this.fxaa = prefs.getBoolean(PREF_GRAPHIC_FXAA, false);
         this.gammaCorrection = prefs.getBoolean(PREF_GRAPHIC_GAMA_CORRECTION, false);
+        this.stopRenderOnLostFocus = prefs.getBoolean(PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS, true);
         this.toneMapFilter = prefs.getBoolean(PREF_GRAPHIC_TONEMAP_FILTER, false);
         this.maximized = prefs.getBoolean(PREF_SCREEN_MAXIMIZED, false);
         this.screenHeight = prefs.getInt(PREF_SCREEN_HEIGHT, 800);
         this.screenWidth = prefs.getInt(PREF_SCREEN_WIDTH, 1200);
-        this.globalLeftToolWidth = prefs.getInt(PREF_GLOBAL_LEFT_TOOL_WIDTH, 300);
-        this.globalLeftToolCollapsed = prefs.getBoolean(PREF_GLOBAL_LEFT_TOOL_COLLAPSED, false);
-        this.globalBottomToolHeight = prefs.getInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
-        this.globalBottomToolCollapsed = prefs.getBoolean(PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
-        this.analytics = prefs.getBoolean(PREF_ANALYTICS, true);
+        this.globalLeftToolWidth = prefs.getInt(PREF_OTHER_GLOBAL_LEFT_TOOL_WIDTH, 300);
+        this.globalLeftToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED, false);
+        this.globalBottomToolHeight = prefs.getInt(PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH, 300);
+        this.globalBottomToolCollapsed = prefs.getBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, true);
+        this.analytics = prefs.getBoolean(PREF_OTHER_ANALYTICS, true);
         this.frameRate = prefs.getInt(PREF_GRAPHIC_FRAME_RATE, 40);
         this.cameraAngle = prefs.getInt(PREF_GRAPHIC_CAMERA_ANGLE, 45);
-        this.autoTangentGenerating = prefs.getBoolean(PREF_AUTO_TANGENT_GENERATING, false);
-        this.defaultUseFlippedTexture = prefs.getBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, true);
-        this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_CAMERA_LAMP_ENABLED, true);
-        this.analyticsQuestion = prefs.getBoolean(PREF_ANALYTICS_QUESTION, false);
-        this.theme = prefs.getInt(PREF_THEME, CssColorTheme.DARK.ordinal());
+        this.autoTangentGenerating = prefs.getBoolean(PREF_EDITING_AUTO_TANGENT_GENERATING, false);
+        this.defaultUseFlippedTexture = prefs.getBoolean(PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE, true);
+        this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_EDITING_CAMERA_LAMP_ENABLED, true);
+        this.analyticsQuestion = prefs.getBoolean(PREF_OTHER_ANALYTICS_QUESTION, false);
+        this.theme = prefs.getInt(PREF_OTHER_THEME, CssColorTheme.DARK.ordinal());
         this.openGLVersion = OpenGLVersion.valueOf(prefs.getInt(PREF_GRAPHIC_OPEN_GL, GL_32.ordinal()));
 
-        final String currentAssetURI = prefs.get(PREF_CURRENT_ASSET, null);
+        final String currentAssetURI = prefs.get(PREF_ASSET_CURRENT_ASSET, null);
 
         if (currentAssetURI != null) {
             this.currentAsset = get(currentAssetURI, uri -> Paths.get(new URI(uri)));
         }
 
-        final String classpathURI = prefs.get(PREF_ADDITIONAL_CLASSPATH, null);
+        final String classpathURI = prefs.get(PREF_OTHER_ADDITIONAL_CLASSPATH, null);
 
         if (classpathURI != null) {
             this.additionalClasspath = get(classpathURI, uri -> Paths.get(new URI(uri)));
         }
 
-        final String envsURI = prefs.get(PREF_ADDITIONAL_ENVS, null);
+        final String envsURI = prefs.get(PREF_OTHER_ADDITIONAL_ENVS, null);
 
         if (envsURI != null) {
             this.additionalEnvs = get(envsURI, uri -> Paths.get(new URI(uri)));
@@ -853,7 +890,7 @@ public final class EditorConfig implements AssetEventListener {
             }
         }
 
-        final byte[] byteArray = prefs.getByteArray(PREF_LAST_OPENED_ASSETS, null);
+        final byte[] byteArray = prefs.getByteArray(PREF_ASSET_LAST_OPENED_ASSETS, null);
         if (byteArray == null) return;
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
@@ -876,22 +913,23 @@ public final class EditorConfig implements AssetEventListener {
         prefs.putInt(PREF_GRAPHIC_ANISOTROPY, getAnisotropy());
         prefs.putBoolean(PREF_GRAPHIC_FXAA, isFXAA());
         prefs.putBoolean(PREF_GRAPHIC_GAMA_CORRECTION, isGammaCorrection());
+        prefs.putBoolean(PREF_GRAPHIC_STOP_RENDER_ON_LOST_FOCUS, isStopRenderOnLostFocus());
         prefs.putBoolean(PREF_GRAPHIC_TONEMAP_FILTER, isToneMapFilter());
         prefs.putInt(PREF_SCREEN_HEIGHT, getScreenHeight());
         prefs.putInt(PREF_SCREEN_WIDTH, getScreenWidth());
         prefs.putBoolean(PREF_SCREEN_MAXIMIZED, isMaximized());
-        prefs.putInt(PREF_GLOBAL_LEFT_TOOL_WIDTH, getGlobalLeftToolWidth());
-        prefs.putBoolean(PREF_GLOBAL_LEFT_TOOL_COLLAPSED, isGlobalLeftToolCollapsed());
-        prefs.putInt(PREF_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolHeight());
-        prefs.putBoolean(PREF_GLOBAL_BOTTOM_TOOL_COLLAPSED, isGlobalBottomToolCollapsed());
-        prefs.putBoolean(PREF_ANALYTICS, isAnalytics());
+        prefs.putInt(PREF_OTHER_GLOBAL_LEFT_TOOL_WIDTH, getGlobalLeftToolWidth());
+        prefs.putBoolean(PREF_OTHER_GLOBAL_LEFT_TOOL_COLLAPSED, isGlobalLeftToolCollapsed());
+        prefs.putInt(PREF_OTHER_GLOBAL_BOTTOM_TOOL_WIDTH, getGlobalBottomToolHeight());
+        prefs.putBoolean(PREF_OTHER_GLOBAL_BOTTOM_TOOL_COLLAPSED, isGlobalBottomToolCollapsed());
+        prefs.putBoolean(PREF_OTHER_ANALYTICS, isAnalytics());
         prefs.putInt(PREF_GRAPHIC_FRAME_RATE, getFrameRate());
         prefs.putInt(PREF_GRAPHIC_CAMERA_ANGLE, getCameraAngle());
-        prefs.putBoolean(PREF_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
-        prefs.putBoolean(PREF_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
-        prefs.putBoolean(PREF_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
-        prefs.putBoolean(PREF_ANALYTICS_QUESTION, isAnalyticsQuestion());
-        prefs.putInt(PREF_THEME, getTheme().ordinal());
+        prefs.putBoolean(PREF_EDITING_AUTO_TANGENT_GENERATING, isAutoTangentGenerating());
+        prefs.putBoolean(PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE, isDefaultUseFlippedTexture());
+        prefs.putBoolean(PREF_EDITING_CAMERA_LAMP_ENABLED, isDefaultEditorCameraEnabled());
+        prefs.putBoolean(PREF_OTHER_ANALYTICS_QUESTION, isAnalyticsQuestion());
+        prefs.putInt(PREF_OTHER_THEME, getTheme().ordinal());
         prefs.putInt(PREF_GRAPHIC_OPEN_GL, getOpenGLVersion().ordinal());
 
         final Vector3f whitePoint = getToneMapFilterWhitePoint();
@@ -907,26 +945,26 @@ public final class EditorConfig implements AssetEventListener {
         }
 
         if (currentAsset != null) {
-            prefs.put(PREF_CURRENT_ASSET, currentAsset.toUri().toString());
+            prefs.put(PREF_ASSET_CURRENT_ASSET, currentAsset.toUri().toString());
         } else {
-            prefs.remove(PREF_CURRENT_ASSET);
+            prefs.remove(PREF_ASSET_CURRENT_ASSET);
         }
 
         if (additionalClasspath != null) {
-            prefs.put(PREF_ADDITIONAL_CLASSPATH, additionalClasspath.toUri().toString());
+            prefs.put(PREF_OTHER_ADDITIONAL_CLASSPATH, additionalClasspath.toUri().toString());
         } else {
-            prefs.remove(PREF_ADDITIONAL_CLASSPATH);
+            prefs.remove(PREF_OTHER_ADDITIONAL_CLASSPATH);
         }
 
         if (additionalEnvs != null) {
-            prefs.put(PREF_ADDITIONAL_ENVS, additionalEnvs.toUri().toString());
+            prefs.put(PREF_OTHER_ADDITIONAL_ENVS, additionalEnvs.toUri().toString());
         } else {
-            prefs.remove(PREF_ADDITIONAL_ENVS);
+            prefs.remove(PREF_OTHER_ADDITIONAL_ENVS);
         }
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
 
-        prefs.putByteArray(PREF_LAST_OPENED_ASSETS, EditorUtil.serialize((Serializable) lastOpenedAssets));
+        prefs.putByteArray(PREF_ASSET_LAST_OPENED_ASSETS, EditorUtil.serialize((Serializable) lastOpenedAssets));
         try {
             prefs.flush();
         } catch (final BackingStoreException e) {

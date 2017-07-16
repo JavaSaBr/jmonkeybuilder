@@ -5,19 +5,40 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.concurrent.locks.StampedLock;
 
 /**
  * @author JavaSaBr
  */
 public class SynchronizedByteBufferAllocator extends LWJGLBufferAllocator {
 
-    @Override
-    public synchronized void destroyDirectBuffer(@NotNull final Buffer buffer) {
-        super.destroyDirectBuffer(buffer);
+    /**
+     * The synchronizer.
+     */
+    @NotNull
+    private final StampedLock stampedLock;
+
+    public SynchronizedByteBufferAllocator() {
+        this.stampedLock = new StampedLock();
     }
 
     @Override
-    public synchronized ByteBuffer allocate(final int size) {
-        return super.allocate(size);
+    public void destroyDirectBuffer(@NotNull final Buffer buffer) {
+        final long stamp = stampedLock.writeLock();
+        try {
+            super.destroyDirectBuffer(buffer);
+        } finally {
+            stampedLock.unlockWrite(stamp);
+        }
+    }
+
+    @Override
+    public ByteBuffer allocate(final int size) {
+        final long stamp = stampedLock.writeLock();
+        try {
+            return super.allocate(size);
+        } finally {
+            stampedLock.unlockWrite(stamp);
+        }
     }
 }

@@ -23,6 +23,7 @@ import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -51,7 +52,7 @@ import java.nio.file.Path;
 public class SettingsDialog extends EditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, 360);
+    private static final Point DIALOG_SIZE = new Point(600, -1);
 
     @NotNull
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
@@ -143,6 +144,12 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox fxaaFilterCheckBox;
 
     /**
+     * The Stop Render On Lost Focus checkbox.
+     */
+    @Nullable
+    private CheckBox stopRenderOnLostFocusCheckBox;
+
+    /**
      * The checkbox for enabling google analytics.
      */
     @Nullable
@@ -220,6 +227,7 @@ public class SettingsDialog extends EditorDialog {
         } finally {
             setIgnoreListeners(false);
         }
+        EXECUTOR_MANAGER.addFXTask(() -> getDialog().sizeToScene());
     }
 
     /**
@@ -259,7 +267,6 @@ public class SettingsDialog extends EditorDialog {
         final TabPane tabPane = new TabPane();
         tabPane.getTabs().addAll(graphicsSettings, otherSettings);
         tabPane.prefWidthProperty().bind(widthProperty());
-        tabPane.maxWidthProperty().bind(widthProperty());
         tabPane.prefHeightProperty().bind(heightProperty());
 
         createOpenGLControl(graphicsRoot);
@@ -268,6 +275,7 @@ public class SettingsDialog extends EditorDialog {
         createFrameRateControl(graphicsRoot);
         createCameraAngleControl(graphicsRoot);
         createFXAAControl(graphicsRoot);
+        createStopRenderControl(graphicsRoot);
         createToneMapFilterControl(graphicsRoot);
         createToneMapFilterWhitePointControl(graphicsRoot);
 
@@ -593,6 +601,27 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * Create stop render control.
+     */
+    private void createStopRenderControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_STOP_RENDER_ON_LOST_FOCUS + ":");
+
+        stopRenderOnLostFocusCheckBox = new CheckBox();
+        stopRenderOnLostFocusCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> validate());
+
+        FXUtils.addToPane(label, container);
+        FXUtils.addToPane(stopRenderOnLostFocusCheckBox, container);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(stopRenderOnLostFocusCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
+    }
+
+    /**
      * Create the checkbox for configuring enabling google analytics.
      */
     private void createGoogleAnalyticsControl(@NotNull final VBox root) {
@@ -852,6 +881,14 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
+     * @return the Stop Render On Lost Focus checkbox.
+     */
+    @NotNull
+    private CheckBox getStopRenderOnLostFocusCheckBox() {
+        return notNull(stopRenderOnLostFocusCheckBox);
+    }
+
+    /**
      * @return the list with anisotropy levels.
      */
     @NotNull
@@ -979,6 +1016,9 @@ public class SettingsDialog extends EditorDialog {
 
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         fxaaFilterCheckBox.setSelected(editorConfig.isFXAA());
+
+        final CheckBox stopRenderOnLostFocusCheckBox = getStopRenderOnLostFocusCheckBox();
+        stopRenderOnLostFocusCheckBox.setSelected(editorConfig.isStopRenderOnLostFocus());
 
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         gammaCorrectionCheckBox.setSelected(editorConfig.isGammaCorrection());
@@ -1129,6 +1169,9 @@ public class SettingsDialog extends EditorDialog {
         final CheckBox fxaaFilterCheckBox = getFXAAFilterCheckBox();
         final boolean fxaa = fxaaFilterCheckBox.isSelected();
 
+        final CheckBox stopRenderOnLostFocusCheckBox = getStopRenderOnLostFocusCheckBox();
+        final boolean isStopRenderOnLostFocus = stopRenderOnLostFocusCheckBox.isSelected();
+
         final CheckBox gammaCorrectionCheckBox = getGammaCorrectionCheckBox();
         final boolean gammaCorrection = gammaCorrectionCheckBox.isSelected();
 
@@ -1175,6 +1218,7 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setFXAA(fxaa);
         editorConfig.setAnalytics(analytics);
         editorConfig.setGammaCorrection(gammaCorrection);
+        editorConfig.setStopRenderOnLostFocus(isStopRenderOnLostFocus);
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
         editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
@@ -1210,7 +1254,7 @@ public class SettingsDialog extends EditorDialog {
         resourceManager.updateAdditionalEnvs();
 
         if (needRestart > 0) {
-            System.exit(2);
+            Platform.exit();
         } else {
             hide();
         }

@@ -17,7 +17,6 @@ import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.ui.hanlder.WindowResizeHandler;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -93,8 +92,6 @@ public class EditorFXSceneBuilder {
         //bindFixedSize(container, scene.widthProperty().divide(1.5), scene.heightProperty().divide(1.5));
 
         stage.setScene(scene);
-
-        WindowResizeHandler.install(stage, container);
 
         return scene;
     }

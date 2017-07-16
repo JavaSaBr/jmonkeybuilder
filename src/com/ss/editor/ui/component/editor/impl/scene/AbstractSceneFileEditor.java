@@ -371,6 +371,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
+        super.processChangedFile(event);
 
         final Path file = event.getFile();
         final String extension = FileUtils.getExtension(file);
@@ -891,6 +892,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     public void doSave() {
+        super.doSave();
 
         final Path editFile = getEditFile();
         final M currentModel = getCurrentModel();

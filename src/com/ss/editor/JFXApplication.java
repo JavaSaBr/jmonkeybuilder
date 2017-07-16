@@ -282,7 +282,10 @@ public class JFXApplication extends Application {
         this.sceneProcessor = sceneProcessor;
 
         final Stage stage = notNull(getStage());
-        stage.focusedProperty().addListener((observable, oldValue, newValue) -> editor.setPaused(!newValue));
+        stage.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            final EditorConfig editorConfig = EditorConfig.getInstance();
+            editor.setPaused(editorConfig.isStopRenderOnLostFocus() && !newValue);
+        });
 
         Platform.runLater(scene::notifyFinishBuild);
     }

@@ -17,6 +17,7 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -132,6 +133,11 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * Is middle button pressed.
      */
     private boolean buttonMiddleDown;
+
+    /**
+     * The flag of saving process.
+     */
+    private boolean saving;
 
     /**
      * Instantiates a new Abstract file editor.
@@ -492,6 +498,27 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @param event the event
      */
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
+
+        final Path file = event.getFile();
+        final Path editFile = getEditFile();
+
+        if (!file.equals(editFile)) {
+            return;
+        }
+
+        if (isSaving()) {
+            notifyFinishSaving();
+            return;
+        }
+
+        handleExternalChanges();
+    }
+
+    /**
+     * Handle external changes of the edited file.
+     */
+    protected void handleExternalChanges() {
+
     }
 
     /**
@@ -562,5 +589,46 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     protected boolean isButtonRightDown() {
         return buttonRightDown;
+    }
+
+    /**
+     * Is saving boolean.
+     *
+     * @return the boolean
+     */
+    protected boolean isSaving() {
+        return saving;
+    }
+
+    /**
+     * Sets saving.
+     *
+     * @param saving the saving
+     */
+    protected void setSaving(final boolean saving) {
+        this.saving = saving;
+    }
+
+    @Override
+    public void doSave() {
+        notifyStartSaving();
+    }
+
+    /**
+     * Notify start saving.
+     */
+    protected void notifyStartSaving() {
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        scene.incrementLoading();
+        setSaving(true);
+    }
+
+    /**
+     * Notify finish saving.
+     */
+    protected void notifyFinishSaving() {
+        setSaving(false);
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        scene.decrementLoading();
     }
 }
