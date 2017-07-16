@@ -6,6 +6,7 @@ import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.FileUtils.getExtension;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
@@ -14,6 +15,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -31,6 +33,9 @@ import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.executor.impl.EditorThreadExecutor;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -47,6 +52,9 @@ import java.nio.file.Path;
  * @author JavaSaBr
  */
 public class JMEFilePreviewManager extends AbstractControl {
+
+    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(JMEFilePreviewManager.class);
 
     @NotNull
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
@@ -238,11 +246,20 @@ public class JMEFilePreviewManager extends AbstractControl {
         camera.setLocation(CAMERA_LOCATION);
         camera.setRotation(CAMERA_ROTATION);
 
+        modelNode.detachAllChildren();
+
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Spatial model = assetManager.loadModel(path);
+        try {
 
-        modelNode.detachAllChildren();
-        modelNode.attachChild(model);
+            final RenderManager renderManager = EDITOR.getRenderManager();
+            renderManager.preloadScene(model);
+
+            modelNode.attachChild(model);
+
+        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
+            EditorUtil.handleException(LOGGER, this, e);
+        }
 
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.detachChild(modelNode);
@@ -266,10 +283,19 @@ public class JMEFilePreviewManager extends AbstractControl {
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Material material = assetManager.loadMaterial(path);
 
-        testBox.setMaterial(material);
-
         modelNode.detachAllChildren();
-        modelNode.attachChild(testBox);
+
+        testBox.setMaterial(material);
+        try {
+
+            final RenderManager renderManager = EDITOR.getRenderManager();
+            renderManager.preloadScene(testBox);
+
+            modelNode.attachChild(testBox);
+
+        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
+            EditorUtil.handleException(LOGGER, this, e);
+        }
 
         final Node rootNode = EDITOR.getPreviewNode();
         rootNode.detachChild(modelNode);

@@ -828,6 +828,7 @@
     -fx-border-width: 1px;
     -fx-border-radius: 2px;
     -fx-effect: -fx-shadow-menu;
+    -fx-text-fill: -var-font-color;
 }
 
 /*******************************************************************************

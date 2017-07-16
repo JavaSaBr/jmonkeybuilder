@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.asset.AssetNotFoundException;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -220,7 +221,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         final RenderManager renderManager = EDITOR.getRenderManager();
         try {
             renderManager.preloadScene(testBox);
-        } catch (final RendererException | UnsupportedOperationException e) {
+        } catch (final RendererException | AssetNotFoundException | UnsupportedOperationException e) {
             EditorUtil.handleException(LOGGER, this, e);
             testBox.setMaterial(EDITOR.getDefaultMaterial());
             testQuad.setMaterial(EDITOR.getDefaultMaterial());
