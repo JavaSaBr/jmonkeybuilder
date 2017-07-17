@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 public abstract class Config {
 
     @NotNull
-    private static final String CONFIG_RESOURCE_PATH = "/com/ss/editor/config/config.xml";
+    private static final String CONFIG_RESOURCE_PATH = "/app-config.xml";
 
     @NotNull
     private static final String SS_FOLDER_IN_USER_HOME = ".jme3-spaceshift-editor";
