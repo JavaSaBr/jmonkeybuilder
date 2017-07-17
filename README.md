@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.9 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.10 #
 ## License: Apache Version 2.0 ##
 
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
@@ -6,6 +6,16 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+
+## ver. 0.9.10 ##
+* -Added supporting macOS.
+* -Updated icon-set to use only SVG icons and removed icons which were under GPLv2 license.
+* -Added actions to a menu bar: About and Exit.
+* -Implemented new light/dark themes and added an option to a settings dialog to choose it,
+* -Added an option to a settings dialog to choose OpenGL version of jME render.
+* -Added an option to a settings dialog to disable/enable stop a render on lost focus of a window of.
+* -Improved auto-synchronizing of a workspace to handle more cases of external changes.
+* -Fixed some bugs.
 
 ## ver. 0.9.9 ##
 * -Implemented integration with built-in of jME3 particle system.
