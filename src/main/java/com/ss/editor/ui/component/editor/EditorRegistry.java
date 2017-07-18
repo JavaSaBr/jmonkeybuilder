@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
  */
 public class EditorRegistry {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(EditorRegistry.class);
 
     /**
@@ -33,6 +34,7 @@ public class EditorRegistry {
      */
     public static final String ALL_FORMATS = "*";
 
+    @NotNull
     private static final EditorRegistry INSTANCE = new EditorRegistry();
 
     /**
@@ -48,11 +50,13 @@ public class EditorRegistry {
     /**
      * The table with editor descriptions.
      */
+    @NotNull
     private final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions;
 
     /**
      * The table with mapping editor id to editor description.
      */
+    @NotNull
     private final ObjectDictionary<String, EditorDescription> editorIdToDescription;
 
     /**
@@ -87,7 +91,7 @@ public class EditorRegistry {
     }
 
     /**
-     * @return the table with maaping editor id to editor description.
+     * @return the table with mapping editor id to editor description.
      */
     @NotNull
     private ObjectDictionary<String, EditorDescription> getEditorIdToDescription() {
@@ -97,7 +101,7 @@ public class EditorRegistry {
     /**
      * Add new description.
      */
-    private void addDescription(@NotNull final EditorDescription description) {
+    public void addDescription(@NotNull final EditorDescription description) {
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
 

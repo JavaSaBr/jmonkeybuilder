@@ -331,6 +331,7 @@ public class Editor extends JmeToJFXApplication {
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
         InitializeManager.register(ClasspathManager.class);
+        InitializeManager.register(PluginManager.class);
         InitializeManager.initialize();
 
         if (Config.ENABLE_PBR) {

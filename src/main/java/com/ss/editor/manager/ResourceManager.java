@@ -147,7 +147,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     /**
      * Instantiates a new Resource manager.
      */
-    public ResourceManager() {
+    private ResourceManager() {
         InitializeManager.valid(getClass());
 
         this.assetCacheTable = DictionaryFactory.newObjectDictionary();
@@ -159,7 +159,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         this.materialDefinitions = ArrayFactory.newArray(String.class);
 
         classPathScanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
-        classPathScanner.scanning(path -> {
+        classPathScanner.scan(path -> {
 
             if (!(path.contains("jme3-core") || path.contains("jme3-effects") || path.contains("tonegod"))) {
                 return false;
