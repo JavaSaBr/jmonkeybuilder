@@ -9,10 +9,9 @@ targetCompatibility = 1.8
 
 project.buildDir = 'build-gradle'
 
-//java.srcDirs = ['src']
-
 ext.jmeVersion = "3.2_branch-SNAPSHOT"
 ext.jme3_xbuf_version = '213c6a499d'
+ext.lwjglVersion = "3.1.2"
 
 repositories {
     mavenCentral()
@@ -26,9 +25,9 @@ dependencies {
     compile 'com.github.JavaSaBr:RlibFX:4.1.2'
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
     compile 'com.github.JavaSaBr:JME3-JFX:1.5.2'
+
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
-
 
     // extend image support
     // https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-batik
@@ -43,7 +42,6 @@ dependencies {
     compile group: 'de.codecentric.centerdevice', name: 'javafxsvg', version: '1.2.1'
 
     // jME
-    compile 'com.github.JavaSaBr:SimFX:1.0.3'
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-core:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-bullet:$jmeVersion"
@@ -53,19 +51,51 @@ dependencies {
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-plugins:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-blender:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-jogg:$jmeVersion"
+
+    // LWJGL
+    compile "org.lwjgl:lwjgl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-glfw:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-openal:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opencl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-opengl:${lwjglVersion}"
+    compile "org.lwjgl:lwjgl-stb:${lwjglVersion}"
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:natives-windows"
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:natives-linux"
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:natives-macos"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-windows"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-linux"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:natives-macos"
+    runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-windows"
+    runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-linux"
+    runtime "org.lwjgl:lwjgl-jemalloc:${lwjglVersion}:natives-macos"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-windows"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-linux"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-macos"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-windows"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-linux"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:natives-macos"
+    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-windows"
+    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-linux"
+    runtime "org.lwjgl:lwjgl-stb:${lwjglVersion}:natives-macos"
 
     // http support
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile 'com.github.JavaSaBr:jme3-spaceshift-extension:1.1.0'
-    compile 'com.github.JavaSaBr:tonegodemitter:2.2.3'
+    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.1.0') {
+        exclude group: 'org.jmonkeyengine'
+    }
+    compile ('com.github.JavaSaBr:tonegodemitter:2.2.3') {
+        exclude group: 'org.jmonkeyengine'
+    }
+
     compile "org.xbuf.jme3_xbuf:jme3_xbuf_loader:${jme3_xbuf_version}"
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-beta-1'
-
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

@@ -82,6 +82,8 @@ public class JFXApplication extends Application {
 
         // need to disable to work on macos
         Configuration.GLFW_CHECK_THREAD0.set(false);
+        // use jemalloc
+        Configuration.MEMORY_ALLOCATOR.set("jemalloc");
 
         // fix of the fonts render
         System.setProperty("prism.lcdtext", "false");

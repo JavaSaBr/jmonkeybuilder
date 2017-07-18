@@ -1,20 +1,16 @@
 @font-face {
-    font-family: Ubuntu Regular;
     src: url("/ui/fonts/ubuntu/Ubuntu-R.ttf");
 }
 
 @font-face {
-    font-family: Ubuntu Condensed;
     src: url("/ui/fonts/ubuntu/Ubuntu-C.ttf");
 }
 
 @font-face {
-    font-family: Ubuntu Mono;
     src: url("/ui/fonts/ubuntu/Ubuntu-M.ttf");
 }
 
 @font-face {
-    font-family: Ubuntu Mono Bold;
     src: url("/ui/fonts/ubuntu/UbuntuMono-B.ttf");
 }
 

@@ -45,7 +45,6 @@ import com.ss.rlib.manager.InitializeManager;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.Configuration;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 import java.nio.file.Files;
@@ -92,7 +91,6 @@ public class Editor extends JmeToJFXApplication {
      */
     @NotNull
     static Editor prepareToStart() {
-        Configuration.MEMORY_ALLOCATOR.set("jemalloc");
 
         if (Config.DEV_DEBUG) {
             System.err.println("config is loaded.");
