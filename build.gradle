@@ -24,9 +24,10 @@ javadoc {
 }
 
 dependencies {
-
+    
     // base
     compile 'com.github.JavaSaBr:RlibFX:4.1.2'
+    compile 'com.github.JavaSaBr:Rlib:6.2.2-SNAPSHOT'
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
     compile 'com.github.JavaSaBr:JME3-JFX:1.5.2'
 
