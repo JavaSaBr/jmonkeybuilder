@@ -45,6 +45,7 @@ dependencies {
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-core:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-bullet:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-bullet-native:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-lwjgl3:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-desktop:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-terrain:$jmeVersion"
@@ -96,6 +97,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-beta-1'
+}
+
+task copyToLib(type: Copy) {
+    into "$buildDir/dependences"
+    from configurations.runtime
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

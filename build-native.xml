@@ -2,7 +2,19 @@
 <project name="jME SpaceShift Editor" default="do-deploy" basedir="build"
          xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-    <property name="editor.version" value="0.9.10" />
+    <property name="editor.version" value="0.9.11"/>
+    <property environment="env"/>
+
+    <condition property="gradle.executable" value="${env.GRADLE_HOME}/bin/gradle.bat"
+               else="${env.GRADLE_HOME}/bin/gradle">
+        <os family="windows"/>
+    </condition>
+
+    <target name="prepare-dependences">
+        <exec executable="${gradle.executable}" dir="../">
+            <arg value="copyToLib"/>
+        </exec>
+    </target>
 
     <target name="init-fx-tasks">
         <path id="fxant">
@@ -18,53 +30,24 @@
                  classpathref="fxant"/>
     </target>
 
-    <target name="setup-staging-area">
+    <target name="setup-staging-area" depends="prepare-dependences">
         <delete dir="externalLibs"/>
         <delete dir="project"/>
         <delete dir="licenses"/>
         <delete dir="projectRefs"/>
+        <delete dir="deploy"/>
+        <delete dir="dist"/>
 
         <mkdir dir="externalLibs"/>
 
         <copy todir="externalLibs">
-            <fileset dir="../libs" >
-                <exclude name="**/*sources*"/>
-                <exclude name="**/*javadoc*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="externalLibs/extensions">
-            <fileset dir="../libs/extensions" >
-                <include name="**/*sources*"/>
-                <include name="**/*javadoc*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="externalLibs/extensions/xbuf">
-            <fileset dir="../libs/extensions/xbuf" >
-                <include name="**/*sources*"/>
-                <include name="**/*javadoc*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="externalLibs/extensions/simsilica">
-            <fileset dir="../libs/extensions/simsilica" >
-                <include name="**/*sources*"/>
-                <include name="**/*javadoc*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="externalLibs/extensions/toneg0d">
-            <fileset dir="../libs/extensions/toneg0d" >
-                <include name="**/*sources*"/>
-                <include name="**/*javadoc*"/>
-            </fileset>
+            <fileset dir="../build-gradle/dependences" />
         </copy>
 
         <mkdir dir="project"/>
         <copy todir="project">
-            <fileset dir="../">
-                <include name="src/**"/>
+            <fileset dir="../src/main/">
+                <include name="java/**"/>
                 <include name="resources/**"/>
             </fileset>
         </copy>
@@ -72,12 +55,12 @@
         <mkdir dir="licenses"/>
         <mkdir dir="licenses/libraries-licenses"/>
         <copy todir="licenses">
-            <fileset dir="../" >
+            <fileset dir="../">
                 <include name="LICENSE"/>
             </fileset>
         </copy>
         <copy todir="licenses/libraries-licenses">
-            <fileset dir="../libraries-licenses" >
+            <fileset dir="../libraries-licenses">
                 <include name="*"/>
             </fileset>
         </copy>
@@ -100,7 +83,7 @@
 
         <!-- Copy project sources itself -->
         <copy todir="build/src">
-            <fileset dir="project/src">
+            <fileset dir="project/java">
                 <include name="**/*"/>
             </fileset>
             <fileset dir="project/resources">
@@ -114,33 +97,12 @@
                 <fileset dir="build/libs">
                     <include name="*"/>
                 </fileset>
-                <fileset dir="build/libs/jME">
-                    <include name="*"/>
-                </fileset>
-                <fileset dir="build/libs/svg">
-                    <include name="*"/>
-                </fileset>
-                <fileset dir="build/libs/http">
-                    <include name="*"/>
-                </fileset>
-                <fileset dir="build/libs/extensions">
-                    <include name="*"/>
-                </fileset>
-                <fileset dir="build/libs/extensions/xbuf">
-                    <include name="*"/>
-                </fileset>
-                <fileset dir="build/libs/extensions/toneg0d">
-                    <include name="*"/>
-                </fileset>
-                <fileset dir="build/libs/extensions/simsilica">
-                    <include name="*"/>
-                </fileset>
             </classpath>
         </javac>
 
         <!-- Copy over none Java-Files -->
         <copy todir="build/classes">
-            <fileset dir="project/src">
+            <fileset dir="project/java">
                 <exclude name="**/*.java"/>
             </fileset>
             <fileset dir="project/resources">
@@ -159,13 +121,13 @@
         <mkdir dir="dist/licenses"/>
 
         <copy todir="dist/licenses">
-            <fileset dir="licenses" >
+            <fileset dir="licenses">
                 <include name="*"/>
             </fileset>
         </copy>
 
         <copy todir="dist/licenses/libraries-licenses">
-            <fileset dir="licenses/libraries-licenses" >
+            <fileset dir="licenses/libraries-licenses">
                 <include name="*"/>
             </fileset>
         </copy>
@@ -176,60 +138,11 @@
             </fileset>
         </copy>
 
-        <copy todir="dist/libs/jME">
-            <fileset dir="externalLibs/jME">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="dist/libs/svg">
-            <fileset dir="externalLibs/svg">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="dist/libs/http">
-            <fileset dir="externalLibs/http">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="dist/libs/extensions">
-            <fileset dir="externalLibs/extensions">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="dist/libs/extensions/xbuf">
-            <fileset dir="externalLibs/extensions/xbuf">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="dist/libs/extensions/toneg0d">
-            <fileset dir="externalLibs/extensions/toneg0d">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
-        <copy todir="dist/libs/extensions/simsilica">
-            <fileset dir="externalLibs/extensions/simsilica">
-                <include name="*"/>
-            </fileset>
-        </copy>
-
         <fx:resources id="appRes">
             <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
             <fx:fileset dir="dist" includes="licenses/*"/>
             <fx:fileset dir="dist" includes="licenses/libraries-licenses/*"/>
             <fx:fileset dir="dist" includes="libs/*"/>
-            <fx:fileset dir="dist" includes="libs/jME/*"/>
-            <fx:fileset dir="dist" includes="libs/svg/*"/>
-            <fx:fileset dir="dist" includes="libs/http/*"/>
-            <fx:fileset dir="dist" includes="libs/extensions/*"/>
-            <fx:fileset dir="dist" includes="libs/extensions/xbuf/*"/>
-            <fx:fileset dir="dist" includes="libs/extensions/toneg0d/*"/>
-            <fx:fileset dir="dist" includes="libs/extensions/simsilica/*"/>
             <fx:fileset dir="package"/>
         </fx:resources>
 
@@ -237,7 +150,7 @@
                         name="jME3-SpaceShift-Editor"
                         mainClass="com.ss.editor.JFXApplication"
                         toolkit="fx"
-                        version="${editor.version}" />
+                        version="${editor.version}"/>
 
         <mkdir dir="build/classes/META-INF"/>
 
@@ -266,7 +179,7 @@
                 outfile="jME3 SpaceShift Editor" nativeBundles="all"
                 updatemode="background" verbose="true">
 
-            <fx:platform >
+            <fx:platform>
                 <fx:jvmarg value="-Xms1024m"/>
                 <fx:jvmarg value="-Xmx2048m"/>
                 <fx:jvmarg value="-XX:+AggressiveOpts"/>
@@ -278,9 +191,10 @@
                 <!--<fx:jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=192.168.94.210:6005,suspend=y"/>-->
             </fx:platform>
 
-            <preferences shortcut="true" menu="true" install="false" />
+            <preferences shortcut="true" menu="true" install="false"/>
 
-            <info category="graphics" copyright="spaceshift.ru" description="Editor for jMonkeyEngine 3 by SpaceShift Team"
+            <info category="graphics" copyright="spaceshift.ru"
+                  description="Editor for jMonkeyEngine 3 by SpaceShift Team"
                   email="javasabr@gmail.com" license="Freeware" title="jME3 SpaceShift Editor" vendor="spaceshift.ru"/>
 
             <application refId="fxApplication"/>
