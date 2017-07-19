@@ -529,7 +529,7 @@ public class SceneFileEditor extends
             layerNodeTree.notifyAdded((Spatial) added);
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCurrentModel().notifyAdded(added));
+        EXECUTOR_MANAGER.addJMETask(() -> getCurrentModel().notifyAdded(added));
     }
 
     @Override
@@ -544,7 +544,7 @@ public class SceneFileEditor extends
             layerNodeTree.notifyRemoved(null, removed);
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCurrentModel().notifyRemoved(removed));
+        EXECUTOR_MANAGER.addJMETask(() -> getCurrentModel().notifyRemoved(removed));
     }
 
     @Override

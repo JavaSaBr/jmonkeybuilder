@@ -48,7 +48,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final int index = parent.getChildIndex(oldSpatial);
             parent.detachChildAt(index);
@@ -60,7 +60,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final int index = parent.getChildIndex(newSpatial);
             parent.detachChildAt(index);

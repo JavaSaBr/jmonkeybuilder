@@ -39,7 +39,7 @@ public class AddAppStateOperation extends AbstractEditorOperation<SceneChangeCon
 
     @Override
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             sceneNode.addAppState(newState);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedAppState(newState));
         });
@@ -47,7 +47,7 @@ public class AddAppStateOperation extends AbstractEditorOperation<SceneChangeCon
 
     @Override
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             sceneNode.removeAppState(newState);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedAppState(newState));
         });

@@ -24,7 +24,7 @@ javadoc {
 }
 
 dependencies {
-    
+
     // base
     compile 'com.github.JavaSaBr:RlibFX:4.1.2'
     compile 'com.github.JavaSaBr:Rlib:6.2.2-SNAPSHOT'

@@ -53,7 +53,7 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             newParent.attachChildAt(moved, 0);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(oldParent, newParent, moved, 0));
         });
@@ -61,7 +61,7 @@ public class MoveChildOperation extends AbstractEditorOperation<ModelChangeConsu
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             oldParent.attachChildAt(moved, childIndex);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyMoved(newParent, oldParent, moved, childIndex));
         });

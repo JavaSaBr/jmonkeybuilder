@@ -3,7 +3,7 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
-import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.executor.impl.FXEditorTaskExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +60,7 @@ public class ExecutorManager {
      * The executor of editor tasks.
      */
     @NotNull
-    private final EditorThreadExecutor editorThreadExecutor;
+    private final JMEThreadExecutor jmeTasksExecutor;
 
     /**
      * The executor of javaFX tasks.
@@ -83,7 +83,7 @@ public class ExecutorManager {
             backgroundTaskExecutors[i] = new BackgroundEditorTaskExecutor(i + 1);
         }
 
-        this.editorThreadExecutor = EditorThreadExecutor.getInstance();
+        this.jmeTasksExecutor = JMEThreadExecutor.getInstance();
         this.fxEditorTaskExecutor = new FXEditorTaskExecutor();
 
         this.nextBackgroundTaskExecutor = new AtomicInteger(0);
@@ -129,8 +129,8 @@ public class ExecutorManager {
      * @param task the editor task.
      */
     @FromAnyThread
-    public void addEditorThreadTask(@NotNull final Runnable task) {
-        final EditorThreadExecutor executor = getEditorThreadExecutor();
+    public void addJMETask(@NotNull final Runnable task) {
+        final JMEThreadExecutor executor = getJmeTasksExecutor();
         executor.addToExecute(task);
     }
 
@@ -162,8 +162,8 @@ public class ExecutorManager {
      * @return the executor of editor tasks.
      */
     @NotNull
-    private EditorThreadExecutor getEditorThreadExecutor() {
-        return editorThreadExecutor;
+    private JMEThreadExecutor getJmeTasksExecutor() {
+        return jmeTasksExecutor;
     }
 
     /**

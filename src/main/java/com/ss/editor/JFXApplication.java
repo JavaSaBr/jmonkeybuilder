@@ -13,9 +13,8 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.executor.impl.EditorThreadExecutor;
-import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.manager.JMEFilePreviewManager;
+import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.manager.*;
 import com.ss.editor.task.CheckNewVersionTask;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
 import com.ss.editor.ui.component.log.LogView;
@@ -23,6 +22,7 @@ import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.SynchronizedByteBufferAllocator;
+import com.ss.rlib.manager.InitializeManager;
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -121,7 +121,26 @@ public class JFXApplication extends Application {
             return;
         }
 
-        new EditorThread(new ThreadGroup("LWJGL"), application::start, "LWJGL Render").start();
+        InitializeManager.register(ResourceManager.class);
+        InitializeManager.register(JavaFXImageManager.class);
+        InitializeManager.register(FileIconManager.class);
+        InitializeManager.register(WorkspaceManager.class);
+        InitializeManager.register(CustomClasspathManager.class);
+        InitializeManager.register(PluginManager.class);
+        InitializeManager.initialize();
+
+        new EditorThread(new ThreadGroup("LWJGL"),
+                () -> startJMEApplication(application), "LWJGL Render").start();
+    }
+
+    private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
+        final PluginManager pluginManager = PluginManager.getInstance();
+        pluginManager.onBeforeCreateJMEContext();
+        try {
+            application.start();
+        } finally {
+            pluginManager.onBeforeCreateJMEContext();
+        }
     }
 
     /**
@@ -165,6 +184,10 @@ public class JFXApplication extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
+
+        final PluginManager pluginManager = PluginManager.getInstance();
+        pluginManager.onBeforeCreateJavaFXContext();
+
         LogView.getInstance();
         JFXApplication.instance = this;
         this.stage = stage;
@@ -225,7 +248,7 @@ public class JFXApplication extends Application {
         final EditorConfig config = EditorConfig.getInstance();
         config.save();
 
-        final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
+        final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
         executor.addToExecute(() -> {
             final Editor editor = Editor.getInstance();
             editor.destroy();
@@ -241,10 +264,13 @@ public class JFXApplication extends Application {
     private void buildScene() {
         this.scene = EditorFXSceneBuilder.build(notNull(stage));
 
+        final PluginManager pluginManager = PluginManager.getInstance();
+        pluginManager.onAfterCreateJavaFXContext();
+
         final EditorFXScene scene = getScene();
 
         final Editor editor = Editor.getInstance();
-        final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
+        final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
         executor.addToExecute(() -> createSceneProcessor(scene, editor));
 
         JMEFilePreviewManager.getInstance();

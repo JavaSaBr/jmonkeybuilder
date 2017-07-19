@@ -2,12 +2,17 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.ss.editor.Editor;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.plugin.EditorPlugin;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.plugin.ConfigurablePluginSystem;
+import com.ss.rlib.plugin.Plugin;
 import com.ss.rlib.plugin.PluginSystem;
 import com.ss.rlib.util.Utils;
+import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,5 +65,60 @@ public class PluginManager {
         configurablePluginSystem.initialize();
 
         this.pluginSystem = configurablePluginSystem;
+    }
+
+    /**
+     * Do some things before when JME context will be created.
+     */
+    @JMEThread
+    public void onBeforeCreateJMEContext() {
+        final Array<Plugin> plugins = pluginSystem.getPlugins();
+        plugins.stream().filter(EditorPlugin.class::isInstance)
+                .map(EditorPlugin.class::cast)
+                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJMEContext(pluginSystem));
+    }
+
+    /**
+     * Do some things after when JME context was created.
+     */
+    @JMEThread
+    public void onAfterCreateJMEContext() {
+        final Array<Plugin> plugins = pluginSystem.getPlugins();
+        plugins.stream().filter(EditorPlugin.class::isInstance)
+                .map(EditorPlugin.class::cast)
+                .forEach(editorPlugin -> editorPlugin.onAfterCreateJMEContext(pluginSystem));
+    }
+
+    /**
+     * Do some things before when JavaFX context will be created.
+     */
+    @FXThread
+    public void onBeforeCreateJavaFXContext() {
+        final Array<Plugin> plugins = pluginSystem.getPlugins();
+        plugins.stream().filter(EditorPlugin.class::isInstance)
+                .map(EditorPlugin.class::cast)
+                .forEach(editorPlugin -> editorPlugin.onBeforeCreateJavaFXContext(pluginSystem));
+    }
+
+    /**
+     * Do some things after when JavaFX context was created.
+     */
+    @FXThread
+    public void onAfterCreateJavaFXContext() {
+        final Array<Plugin> plugins = pluginSystem.getPlugins();
+        plugins.stream().filter(EditorPlugin.class::isInstance)
+                .map(EditorPlugin.class::cast)
+                .forEach(editorPlugin -> editorPlugin.onAfterCreateJavaFXContext(pluginSystem));
+    }
+
+    /**
+     * Do some things before when the editor is ready to work.
+     */
+    @FXThread
+    public void onFinishLoading() {
+        final Array<Plugin> plugins = pluginSystem.getPlugins();
+        plugins.stream().filter(EditorPlugin.class::isInstance)
+                .map(EditorPlugin.class::cast)
+                .forEach(editorPlugin -> editorPlugin.onFinishLoading(pluginSystem));
     }
 }

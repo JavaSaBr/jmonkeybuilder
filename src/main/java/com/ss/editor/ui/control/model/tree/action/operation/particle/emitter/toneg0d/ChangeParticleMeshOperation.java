@@ -41,7 +41,7 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchInfo(editor));
+        EXECUTOR_MANAGER.addJMETask(() -> switchInfo(editor));
     }
 
     private void switchInfo(final @NotNull ModelChangeConsumer editor) {
@@ -56,6 +56,6 @@ public class ChangeParticleMeshOperation extends AbstractEditorOperation<ModelCh
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchInfo(editor));
+        EXECUTOR_MANAGER.addJMETask(() -> switchInfo(editor));
     }
 }

@@ -30,7 +30,7 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
-import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
@@ -81,13 +81,7 @@ public class JMEFilePreviewManager extends AbstractControl {
     }
 
     @NotNull
-    private static final EditorThreadExecutor EDITOR_THREAD_EXECUTOR = EditorThreadExecutor.getInstance();
-
-    @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private static final JMEThreadExecutor EDITOR_THREAD_EXECUTOR = JMEThreadExecutor.getInstance();
 
     @Nullable
     private static volatile JMEFilePreviewManager instance;
@@ -176,21 +170,28 @@ public class JMEFilePreviewManager extends AbstractControl {
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.modelNode = new Node("Model Node");
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final StackPane container = scene.getHideLayer();
-        FXUtils.addToPane(imageView, container);
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addFXTask(() -> {
 
-        TangentGenerator.useMikktspaceGenerator(testBox);
+            final JFXApplication application = JFXApplication.getInstance();
+            final EditorFXScene scene = application.getScene();
+            final StackPane container = scene.getHideLayer();
 
-        final EditorThreadExecutor executor = EditorThreadExecutor.getInstance();
-        executor.addToExecute(this::prepareScene);
+            FXUtils.addToPane(imageView, container);
+
+            TangentGenerator.useMikktspaceGenerator(testBox);
+
+            final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
+            executor.addToExecute(this::prepareScene);
+        });
     }
 
     @Override
     protected void controlUpdate(final float tpf) {
 
         if (frame == 2) {
-            EDITOR.updatePreviewProbe(probeHandler);
+            final Editor editor = Editor.getInstance();
+            editor.updatePreviewProbe(probeHandler);
         }
 
         frame++;
@@ -198,7 +199,8 @@ public class JMEFilePreviewManager extends AbstractControl {
 
     @JMEThread
     private void notifyProbeComplete() {
-        final Node rootNode = EDITOR.getPreviewNode();
+        final Editor editor = Editor.getInstance();
+        final Node rootNode = editor.getPreviewNode();
         rootNode.attachChild(modelNode);
     }
 
@@ -242,17 +244,18 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         frame = 0;
 
-        final Camera camera = EDITOR.getPreviewCamera();
+        final Editor editor = Editor.getInstance();
+        final Camera camera = editor.getPreviewCamera();
         camera.setLocation(CAMERA_LOCATION);
         camera.setRotation(CAMERA_ROTATION);
 
         modelNode.detachAllChildren();
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = editor.getAssetManager();
         final Spatial model = assetManager.loadModel(path);
         try {
 
-            final RenderManager renderManager = EDITOR.getRenderManager();
+            final RenderManager renderManager = editor.getRenderManager();
             renderManager.preloadScene(model);
 
             modelNode.attachChild(model);
@@ -261,7 +264,7 @@ public class JMEFilePreviewManager extends AbstractControl {
             EditorUtil.handleException(LOGGER, this, e);
         }
 
-        final Node rootNode = EDITOR.getPreviewNode();
+        final Node rootNode = editor.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -276,11 +279,12 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         frame = 0;
 
-        final Camera camera = EDITOR.getPreviewCamera();
+        final Editor editor = Editor.getInstance();
+        final Camera camera = editor.getPreviewCamera();
         camera.setLocation(CAMERA_LOCATION);
         camera.setRotation(CAMERA_ROTATION);
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final AssetManager assetManager = editor.getAssetManager();
         final Material material = assetManager.loadMaterial(path);
 
         modelNode.detachAllChildren();
@@ -288,7 +292,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         testBox.setMaterial(material);
         try {
 
-            final RenderManager renderManager = EDITOR.getRenderManager();
+            final RenderManager renderManager = editor.getRenderManager();
             renderManager.preloadScene(testBox);
 
             modelNode.attachChild(testBox);
@@ -297,7 +301,7 @@ public class JMEFilePreviewManager extends AbstractControl {
             EditorUtil.handleException(LOGGER, this, e);
         }
 
-        final Node rootNode = EDITOR.getPreviewNode();
+        final Node rootNode = editor.getPreviewNode();
         rootNode.detachChild(modelNode);
     }
 
@@ -312,7 +316,8 @@ public class JMEFilePreviewManager extends AbstractControl {
     @JMEThread
     private void clearImpl() {
 
-        final Node rootNode = EDITOR.getPreviewNode();
+        final Editor editor = Editor.getInstance();
+        final Node rootNode = editor.getPreviewNode();
         rootNode.detachChild(modelNode);
 
         if (processor != null) processor.setEnabled(false);
@@ -337,20 +342,21 @@ public class JMEFilePreviewManager extends AbstractControl {
     @NotNull
     private FrameTransferSceneProcessor prepareScene() {
 
-        final AssetManager assetManager = EDITOR.getAssetManager();
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
         final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
                         SkyFactory.EnvMapType.EquirectMap);
 
         final DirectionalLight light = new DirectionalLight();
         light.setDirection(LIGHT_DIRECTION);
 
-        final Node rootNode = EDITOR.getPreviewNode();
+        final Node rootNode = editor.getPreviewNode();
         rootNode.addControl(this);
         rootNode.attachChild(sky);
         rootNode.addLight(light);
         rootNode.attachChild(modelNode);
 
-        processor = bind(EDITOR, imageView, imageView, EDITOR.getPreviewViewPort(), false);
+        processor = bind(editor, imageView, imageView, editor.getPreviewViewPort(), false);
         processor.setEnabled(false);
 
         return processor;

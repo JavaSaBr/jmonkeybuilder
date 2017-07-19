@@ -148,7 +148,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
             workspace.updateCurrentEditedFile(newCurrentFile);
 
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> processShowEditor(oldValue, newValue));
+            EXECUTOR_MANAGER.addJMETask(() -> processShowEditor(oldValue, newValue));
         });
 
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));

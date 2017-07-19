@@ -201,7 +201,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      * @param material the material
      */
     public void updateMaterial(@NotNull final Material material) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterialImpl(material));
+        EXECUTOR_MANAGER.addJMETask(() -> updateMaterialImpl(material));
     }
 
     /**
@@ -243,7 +243,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      * @param modelType the model type
      */
     public void changeMode(@NotNull final ModelType modelType) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeModeImpl(modelType));
+        EXECUTOR_MANAGER.addJMETask(() -> changeModeImpl(modelType));
     }
 
     /**
@@ -278,7 +278,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      * @param bucket the bucket
      */
     public void changeBucketType(@NotNull final Bucket bucket) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeBucketTypeImpl(bucket));
+        EXECUTOR_MANAGER.addJMETask(() -> changeBucketTypeImpl(bucket));
     }
 
     /**
@@ -373,7 +373,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      * @param enabled the enabled
      */
     public void updateLightEnabled(final boolean enabled) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightEnabledImpl(enabled));
+        EXECUTOR_MANAGER.addJMETask(() -> updateLightEnabledImpl(enabled));
     }
 
     /**

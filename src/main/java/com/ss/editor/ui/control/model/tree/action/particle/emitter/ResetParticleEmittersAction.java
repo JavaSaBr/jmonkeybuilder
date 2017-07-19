@@ -52,7 +52,7 @@ public class ResetParticleEmittersAction extends AbstractNodeAction<ModelChangeC
         final ModelNode<?> modelNode = getNode();
         final Node node = (Node) modelNode.getElement();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> visitSpatial(node, ParticleEmitterNode.class, ParticleEmitterNode::reset));
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> visitSpatial(node, ParticleEmitter.class, ParticleEmitter::killAllParticles));
+        EXECUTOR_MANAGER.addJMETask(() -> visitSpatial(node, ParticleEmitterNode.class, ParticleEmitterNode::reset));
+        EXECUTOR_MANAGER.addJMETask(() -> visitSpatial(node, ParticleEmitter.class, ParticleEmitter::killAllParticles));
     }
 }

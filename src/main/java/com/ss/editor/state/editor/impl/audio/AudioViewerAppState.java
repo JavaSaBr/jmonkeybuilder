@@ -62,7 +62,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      */
     @FromAnyThread
     public void load(@NotNull final AudioData audioData, @NotNull final AudioKey audioKey) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> loadImpl(audioData, audioKey));
+        EXECUTOR_MANAGER.addJMETask(() -> loadImpl(audioData, audioKey));
     }
 
     /**
@@ -111,7 +111,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      */
     @FromAnyThread
     public void play() {
-        EXECUTOR_MANAGER.addEditorThreadTask(this::playImpl);
+        EXECUTOR_MANAGER.addJMETask(this::playImpl);
     }
 
     /**
@@ -150,7 +150,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      */
     @FromAnyThread
     public void pause() {
-        EXECUTOR_MANAGER.addEditorThreadTask(this::pauseImpl);
+        EXECUTOR_MANAGER.addJMETask(this::pauseImpl);
     }
 
     /**
@@ -167,7 +167,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      */
     @FromAnyThread
     public void stop() {
-        EXECUTOR_MANAGER.addEditorThreadTask(this::stopImpl);
+        EXECUTOR_MANAGER.addJMETask(this::stopImpl);
     }
 
     /**

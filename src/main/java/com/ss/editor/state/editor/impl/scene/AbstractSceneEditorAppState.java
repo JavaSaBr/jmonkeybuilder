@@ -873,7 +873,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void updateSelection(@NotNull final Array<Spatial> spatials) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateSelectionImpl(spatials));
+        EXECUTOR_MANAGER.addJMETask(() -> updateSelectionImpl(spatials));
     }
 
     /**
@@ -1074,7 +1074,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void updateShowSelection(final boolean showSelection) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateShowSelectionImpl(showSelection));
+        EXECUTOR_MANAGER.addJMETask(() -> updateShowSelectionImpl(showSelection));
     }
 
     @Override
@@ -1247,7 +1247,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void updateShowGrid(final boolean showGrid) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateShowGridImpl(showGrid));
+        EXECUTOR_MANAGER.addJMETask(() -> updateShowGridImpl(showGrid));
     }
 
     /**
@@ -1413,7 +1413,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void openModel(@NotNull final M model) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> openModelImpl(model));
+        EXECUTOR_MANAGER.addJMETask(() -> openModelImpl(model));
     }
 
     /**
@@ -1471,7 +1471,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void addLight(@NotNull final Light light) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addLightImpl(light));
+        EXECUTOR_MANAGER.addJMETask(() -> addLightImpl(light));
     }
 
     /**
@@ -1544,7 +1544,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void moveCameraTo(@NotNull final Vector3f location) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getNodeForCamera().setLocalTranslation(location));
+        EXECUTOR_MANAGER.addJMETask(() -> getNodeForCamera().setLocalTranslation(location));
     }
 
     /**
@@ -1554,7 +1554,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void removeLight(@NotNull final Light light) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeLightImpl(light));
+        EXECUTOR_MANAGER.addJMETask(() -> removeLightImpl(light));
     }
 
     /**
@@ -1586,7 +1586,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void addAudioNode(@NotNull final AudioNode audioNode) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addAudioNodeImpl(audioNode));
+        EXECUTOR_MANAGER.addJMETask(() -> addAudioNodeImpl(audioNode));
     }
 
     /**
@@ -1632,7 +1632,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void removeAudioNode(@NotNull final AudioNode audio) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeAudioNodeImpl(audio));
+        EXECUTOR_MANAGER.addJMETask(() -> removeAudioNodeImpl(audio));
     }
 
     /**
@@ -1730,7 +1730,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      */
     @FromAnyThread
     public void changeEditingMode(final boolean editingMode) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeEditingModeImpl(editingMode));
+        EXECUTOR_MANAGER.addJMETask(() -> changeEditingModeImpl(editingMode));
     }
 
     /**

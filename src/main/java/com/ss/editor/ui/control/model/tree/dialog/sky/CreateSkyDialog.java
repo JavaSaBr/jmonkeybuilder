@@ -694,7 +694,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final Texture topTexture = assetManager.loadTexture(toAssetPath(topTextureAssetFile));
         final Texture bottomTexture = assetManager.loadTexture(toAssetPath(bottomTextureAssetFile));
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Spatial skyModel = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture,
                     southTexture, topTexture, bottomTexture, scale);
@@ -734,7 +734,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             textureKey.setTextureTypeHint(Texture.Type.CubeMap);
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
             sky.setUserData(SceneEditorControl.SKY_NODE_KEY, Boolean.TRUE);

@@ -58,7 +58,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final AudioKey audioKey = AudioNodeUtils.getAudioKey(audioNode);
             final AudioData audioData = assetManager.loadAudio(audioKey);

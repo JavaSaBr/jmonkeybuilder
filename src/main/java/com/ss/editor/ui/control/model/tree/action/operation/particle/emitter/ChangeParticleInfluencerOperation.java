@@ -40,7 +40,7 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchInfluencer(editor));
+        EXECUTOR_MANAGER.addJMETask(() -> switchInfluencer(editor));
     }
 
     private void switchInfluencer(final @NotNull ModelChangeConsumer editor) {
@@ -55,6 +55,6 @@ public class ChangeParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchInfluencer(editor));
+        EXECUTOR_MANAGER.addJMETask(() -> switchInfluencer(editor));
     }
 }

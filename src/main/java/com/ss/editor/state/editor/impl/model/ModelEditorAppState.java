@@ -186,7 +186,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      * @param enabled the enabled
      */
     public void updateLightEnabled(final boolean enabled) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightEnabledImpl(enabled));
+        EXECUTOR_MANAGER.addJMETask(() -> updateLightEnabledImpl(enabled));
     }
 
     /**
@@ -213,7 +213,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      * @param fastSky the fast sky
      */
     public void changeFastSky(final Spatial fastSky) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> changeFastSkyImpl(fastSky));
+        EXECUTOR_MANAGER.addJMETask(() -> changeFastSkyImpl(fastSky));
     }
 
     /**
@@ -246,7 +246,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      * @param sky the sky
      */
     public void addCustomSky(@NotNull final Spatial sky) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addCustomSkyImpl(sky));
+        EXECUTOR_MANAGER.addJMETask(() -> addCustomSkyImpl(sky));
     }
 
     /**
@@ -263,7 +263,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      * @param sky the sky
      */
     public void removeCustomSky(@NotNull final Spatial sky) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeCustomSkyImpl(sky));
+        EXECUTOR_MANAGER.addJMETask(() -> removeCustomSkyImpl(sky));
     }
 
     /**
@@ -278,7 +278,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      * Update the light probe.
      */
     public void updateLightProbe() {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Node stateNode = getStateNode();
             stateNode.detachChild(getModelNode());

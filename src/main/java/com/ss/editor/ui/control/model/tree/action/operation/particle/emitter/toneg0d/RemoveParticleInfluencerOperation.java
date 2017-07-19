@@ -50,7 +50,7 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             emitterNode.killAllParticles();
             emitterNode.removeInfluencer(influencer);
@@ -62,7 +62,7 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             emitterNode.killAllParticles();
             emitterNode.addInfluencer(influencer, childIndex);

@@ -38,7 +38,7 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             control.addAnim(animation);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(control, animation, 0));
         });
@@ -46,7 +46,7 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             control.removeAnim(animation);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(control, animation));
         });

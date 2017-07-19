@@ -5,7 +5,7 @@ import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of the {@link EditorThreadExecutor} for executing task in the background.
+ * The implementation of the {@link JMEThreadExecutor} for executing task in the background.
  *
  * @author JavaSaBr
  */

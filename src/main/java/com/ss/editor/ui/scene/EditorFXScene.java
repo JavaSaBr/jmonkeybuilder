@@ -3,6 +3,7 @@ package com.ss.editor.ui.scene;
 import static com.ss.editor.ui.util.UIUtils.fillComponents;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.manager.PluginManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
@@ -238,8 +239,12 @@ public class EditorFXScene extends Scene {
      */
     @FXThread
     public void notifyFinishBuild() {
+
         final Array<ScreenComponent> components = getComponents();
         fillComponents(components, getContainer());
         components.forEach(ScreenComponent::notifyFinishBuild);
+
+        final PluginManager pluginManager = PluginManager.getInstance();
+        pluginManager.onFinishLoading();
     }
 }

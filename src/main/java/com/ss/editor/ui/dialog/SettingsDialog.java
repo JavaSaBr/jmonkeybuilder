@@ -9,7 +9,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.ClasspathManager;
+import com.ss.editor.manager.CustomClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
@@ -1237,7 +1237,7 @@ public class SettingsDialog extends EditorDialog {
             sceneProcessor.reshape();
         }
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
             fxaaFilter.setEnabled(editorConfig.isFXAA());
@@ -1247,8 +1247,8 @@ public class SettingsDialog extends EditorDialog {
             filter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         });
 
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
-        classpathManager.updateAdditionalCL();
+        final CustomClasspathManager customClasspathManager = CustomClasspathManager.getInstance();
+        customClasspathManager.updateAdditionalCL();
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
         resourceManager.updateAdditionalEnvs();

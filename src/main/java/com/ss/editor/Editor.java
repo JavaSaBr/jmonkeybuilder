@@ -32,16 +32,16 @@ import com.jme3x.jfx.util.os.OperatingSystem;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.executor.impl.EditorThreadExecutor;
+import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.extension.loader.SceneLoader;
-import com.ss.editor.manager.*;
+import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.WindowChangeFocusEvent;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerLevel;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.logging.impl.FolderFileListener;
-import com.ss.rlib.manager.InitializeManager;
 import jme3_ext_xbuf.XbufLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -326,14 +326,6 @@ public class Editor extends JmeToJFXApplication {
 
         viewPort.addProcessor(postProcessor);
 
-        InitializeManager.register(ResourceManager.class);
-        InitializeManager.register(JavaFXImageManager.class);
-        InitializeManager.register(FileIconManager.class);
-        InitializeManager.register(WorkspaceManager.class);
-        InitializeManager.register(ClasspathManager.class);
-        InitializeManager.register(PluginManager.class);
-        InitializeManager.initialize();
-
         if (Config.ENABLE_PBR) {
             environmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
             previewEnvironmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
@@ -404,8 +396,8 @@ public class Editor extends JmeToJFXApplication {
         final long stamp = syncLock();
         try {
 
-            final EditorThreadExecutor editorThreadExecutor = EditorThreadExecutor.getInstance();
-            editorThreadExecutor.execute();
+            final JMEThreadExecutor executor = JMEThreadExecutor.getInstance();
+            executor.execute();
 
             //System.out.println(cam.getRotation());
             //System.out.println(cam.getLocation());
@@ -458,7 +450,7 @@ public class Editor extends JmeToJFXApplication {
         }
 
         if (environmentCamera.getApplication() == null) {
-            final EditorThreadExecutor gameThreadExecutor = EditorThreadExecutor.getInstance();
+            final JMEThreadExecutor gameThreadExecutor = JMEThreadExecutor.getInstance();
             gameThreadExecutor.addToExecute(this::createProbe);
             return;
         }

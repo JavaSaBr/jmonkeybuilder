@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 
 /**
- * The base implementation of the {@link EditorThreadExecutor}.
+ * The base implementation of the {@link JMEThreadExecutor}.
  *
  * @author JavaSaBr
  */

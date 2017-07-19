@@ -30,7 +30,7 @@ public class EnableAppStateOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             appState.setEnabled(true);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangedAppState(appState));
         });
@@ -38,7 +38,7 @@ public class EnableAppStateOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             appState.setEnabled(false);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangedAppState(appState));
         });

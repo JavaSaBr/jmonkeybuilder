@@ -39,7 +39,7 @@ public class AddSceneFilterOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             sceneNode.addFilter(sceneFilter);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedFilter(sceneFilter));
         });
@@ -47,7 +47,7 @@ public class AddSceneFilterOperation extends AbstractEditorOperation<SceneChange
 
     @Override
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             sceneNode.removeFilter(sceneFilter);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedFilter(sceneFilter));
         });

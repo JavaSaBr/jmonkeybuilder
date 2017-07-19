@@ -45,7 +45,7 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             parent.detachChild(child);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(parent, child));
         });
@@ -53,7 +53,7 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             parent.attachChildAt(child, childIndex);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(parent, child, childIndex));
         });

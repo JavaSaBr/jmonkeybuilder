@@ -60,7 +60,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             final Spatial currentModel = editor.getCurrentModel();
             currentModel.depthFirstTraversal(this::clean);
             sceneNode.removeLayer(layer);
@@ -79,7 +79,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             sceneNode.addLayer(layer);
             toRevert.forEach(spatial -> SceneLayer.setLayer(layer, spatial));
             toRevert.forEach(spatial -> spatial.setVisible(layer.isShowed()));

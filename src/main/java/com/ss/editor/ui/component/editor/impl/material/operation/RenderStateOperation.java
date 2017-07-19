@@ -55,7 +55,7 @@ public class RenderStateOperation<T> extends AbstractEditorOperation<MaterialCha
 
     @Override
     protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
             final RenderState renderState = currentMaterial.getAdditionalRenderState();
@@ -68,7 +68,7 @@ public class RenderStateOperation<T> extends AbstractEditorOperation<MaterialCha
 
     @Override
     protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
             final RenderState renderState = currentMaterial.getAdditionalRenderState();

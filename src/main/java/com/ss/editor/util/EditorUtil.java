@@ -12,7 +12,7 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.ClasspathManager;
+import com.ss.editor.manager.CustomClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -489,7 +489,7 @@ public abstract class EditorUtil {
                                               @NotNull final Class<T> resultType) {
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
-        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+        final CustomClasspathManager customClasspathManager = CustomClasspathManager.getInstance();
 
         Object newExample = null;
         try {
@@ -507,7 +507,7 @@ public abstract class EditorUtil {
                 }
             }
 
-            final URLClassLoader additionalCL = classpathManager.getAdditionalCL();
+            final URLClassLoader additionalCL = customClasspathManager.getAdditionalCL();
             if (additionalCL != null) {
                 try {
                     final Class<?> targetClass = additionalCL.loadClass(className);

@@ -41,7 +41,7 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchShape(editor));
+        EXECUTOR_MANAGER.addJMETask(() -> switchShape(editor));
     }
 
     private void switchShape(final @NotNull ModelChangeConsumer editor) {
@@ -56,6 +56,6 @@ public class ChangeEmitterMeshOperation extends AbstractEditorOperation<ModelCha
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> switchShape(editor));
+        EXECUTOR_MANAGER.addJMETask(() -> switchShape(editor));
     }
 }

@@ -49,7 +49,7 @@ public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeCons
 
         if (element instanceof RigidBodyControl) {
             final RigidBodyControl control = (RigidBodyControl) element;
-            EXECUTOR_MANAGER.addEditorThreadTask(control::activate);
+            EXECUTOR_MANAGER.addJMETask(control::activate);
         }
     }
 }

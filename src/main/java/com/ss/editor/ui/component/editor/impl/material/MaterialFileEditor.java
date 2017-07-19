@@ -231,7 +231,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final Material currentMaterial = getCurrentMaterial();
         final Path file = event.getFile();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
 
@@ -530,7 +530,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
     }
 
     /**

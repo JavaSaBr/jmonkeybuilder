@@ -68,7 +68,7 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
 
     @Override
     protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
 
@@ -84,7 +84,7 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
 
     @Override
     protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Material currentMaterial = editor.getCurrentMaterial();
 

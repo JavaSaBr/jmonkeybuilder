@@ -119,7 +119,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      */
     @FromAnyThread
     public void addAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addAppStateImpl(appState));
+        EXECUTOR_MANAGER.addJMETask(() -> addAppStateImpl(appState));
     }
 
     private void addAppStateImpl(@NotNull final SceneAppState appState) {
@@ -134,7 +134,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      */
     @FromAnyThread
     public void removeAppState(@NotNull final SceneAppState appState) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeAppStateImpl(appState));
+        EXECUTOR_MANAGER.addJMETask(() -> removeAppStateImpl(appState));
     }
 
     private void removeAppStateImpl(@NotNull final SceneAppState appState) {
@@ -149,7 +149,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      */
     @FromAnyThread
     public void addFilter(@NotNull final SceneFilter<?> sceneFilter) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> addFilterImpl(sceneFilter));
+        EXECUTOR_MANAGER.addJMETask(() -> addFilterImpl(sceneFilter));
     }
 
     private void addFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
@@ -164,7 +164,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      */
     @FromAnyThread
     public void removeFilter(@NotNull final SceneFilter<?> sceneFilter) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> removeFilterImpl(sceneFilter));
+        EXECUTOR_MANAGER.addJMETask(() -> removeFilterImpl(sceneFilter));
     }
 
     private void removeFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
@@ -206,7 +206,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      * @param showed the showed
      */
     public void updateLightShowed(final boolean showed) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateLightShowedImpl(showed));
+        EXECUTOR_MANAGER.addJMETask(() -> updateLightShowedImpl(showed));
     }
 
     /**
@@ -233,7 +233,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      * @param showed the showed
      */
     public void updateAudioShowed(final boolean showed) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> updateAudioShowedImpl(showed));
+        EXECUTOR_MANAGER.addJMETask(() -> updateAudioShowedImpl(showed));
     }
 
     /**

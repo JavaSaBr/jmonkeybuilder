@@ -33,7 +33,7 @@ public class ModelPropertyOperation<D, T> extends AbstractPropertyOperation<Mode
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
         });
@@ -41,7 +41,7 @@ public class ModelPropertyOperation<D, T> extends AbstractPropertyOperation<Mode
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
         });

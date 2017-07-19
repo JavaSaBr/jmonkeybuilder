@@ -21,13 +21,7 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class ClasspathManager {
-
-    @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
-
-    @NotNull
-    private static final AssetManager ASSET_MANAGER = EDITOR.getAssetManager();
+public class CustomClasspathManager {
 
     @NotNull
     private static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
@@ -36,7 +30,7 @@ public class ClasspathManager {
     private static final String[] EXTENSIONS = toArray(FileExtensions.JAVA_LIBRARY);
 
     @Nullable
-    private static ClasspathManager instance;
+    private static CustomClasspathManager instance;
 
     /**
      * Gets instance.
@@ -44,8 +38,8 @@ public class ClasspathManager {
      * @return the instance
      */
     @NotNull
-    public static ClasspathManager getInstance() {
-        if (instance == null) instance = new ClasspathManager();
+    public static CustomClasspathManager getInstance() {
+        if (instance == null) instance = new CustomClasspathManager();
         return instance;
     }
 
@@ -55,9 +49,11 @@ public class ClasspathManager {
     @Nullable
     private volatile URLClassLoader additionalCL;
 
-    private ClasspathManager() {
+    private CustomClasspathManager() {
         InitializeManager.valid(getClass());
-        updateAdditionalCL();
+
+        ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addJMETask(this::updateAdditionalCL);
     }
 
     /**
@@ -66,10 +62,12 @@ public class ClasspathManager {
     @FromAnyThread
     public synchronized void updateAdditionalCL() {
 
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
         final URLClassLoader currentCL = getAdditionalCL();
 
         if (currentCL != null) {
-            ASSET_MANAGER.removeClassLoader(currentCL);
+            assetManager.removeClassLoader(currentCL);
             setAdditionalCL(null);
         }
 
@@ -82,7 +80,7 @@ public class ClasspathManager {
 
         final URLClassLoader newCL = new URLClassLoader(urls, getClass().getClassLoader());
 
-        ASSET_MANAGER.addClassLoader(newCL);
+        assetManager.addClassLoader(newCL);
 
         setAdditionalCL(newCL);
     }

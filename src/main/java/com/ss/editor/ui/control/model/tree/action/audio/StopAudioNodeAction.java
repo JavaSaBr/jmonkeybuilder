@@ -52,6 +52,6 @@ public class StopAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
         final AudioModelNode audioModelNode = (AudioModelNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(audioNode::stop);
+        EXECUTOR_MANAGER.addJMETask(audioNode::stop);
     }
 }

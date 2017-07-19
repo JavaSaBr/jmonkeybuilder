@@ -845,7 +845,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeLevelControlSmoothly(@NotNull final Boolean newValue) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getLevelToolControl().setPrecision(!newValue));
+        EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setPrecision(!newValue));
     }
 
     /**
@@ -853,7 +853,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeLevelControlUseMarker(@NotNull final Boolean newValue) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getLevelToolControl().setUseMarker(newValue));
+        EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setUseMarker(newValue));
     }
 
     /**
@@ -861,7 +861,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeLevelControlLevel(@NotNull final Float newLevel) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getLevelToolControl().setLevel(newLevel));
+        EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setLevel(newLevel));
     }
 
     /**
@@ -869,7 +869,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeSlopeControlSmoothly(@NotNull final Boolean newValue) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getSlopeToolControl().setPrecision(!newValue));
+        EXECUTOR_MANAGER.addJMETask(() -> getSlopeToolControl().setPrecision(!newValue));
     }
 
     /**
@@ -877,7 +877,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeSlopeControlLimited(@NotNull final Boolean newValue) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getSlopeToolControl().setLock(newValue));
+        EXECUTOR_MANAGER.addJMETask(() -> getSlopeToolControl().setLock(newValue));
     }
 
     /**
@@ -885,7 +885,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlScale(@NotNull final Float newScale) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setScale(newScale));
+        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setScale(newScale));
     }
 
     /**
@@ -893,7 +893,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlFrequency(@NotNull final Float newFrequency) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setFrequency(newFrequency));
+        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setFrequency(newFrequency));
     }
 
     /**
@@ -901,7 +901,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlLacunarity(@NotNull final Float newLacunarity) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setLacunarity(newLacunarity));
+        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setLacunarity(newLacunarity));
     }
 
     /**
@@ -909,7 +909,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlOctaves(@NotNull final Float newOctaves) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setOctaves(newOctaves));
+        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setOctaves(newOctaves));
     }
 
     /**
@@ -917,7 +917,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlRoughness(@NotNull final Float newRoughness) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getRoughToolControl().setRoughness(newRoughness));
+        EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setRoughness(newRoughness));
     }
 
     /**
@@ -925,7 +925,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeBrushSize(@NotNull final Float size) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(size, TerrainToolControl::setBrushSize);
         });
@@ -936,7 +936,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeBrushPower(@NotNull final Float power) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(power, TerrainToolControl::setBrushPower);
         });
@@ -1083,7 +1083,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         if (!isShowed()) return;
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
             final Node cursorNode = getCursorNode();
             cursorNode.removeControl(TerrainToolControl.class);
             cursorNode.addControl(toolControl);
@@ -1151,13 +1151,13 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @Override
     public void notifyShowed() {
         super.notifyShowed();
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().addControl(getToolControl()));
+        EXECUTOR_MANAGER.addJMETask(() -> getCursorNode().addControl(getToolControl()));
     }
 
     @Override
     public void notifyHided() {
         super.notifyHided();
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> getCursorNode().removeControl(TerrainToolControl.class));
+        EXECUTOR_MANAGER.addJMETask(() -> getCursorNode().removeControl(TerrainToolControl.class));
     }
 
     /**

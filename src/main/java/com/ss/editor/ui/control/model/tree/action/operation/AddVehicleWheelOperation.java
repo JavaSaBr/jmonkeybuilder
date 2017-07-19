@@ -86,7 +86,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final VehicleWheel vehicleWheel = control.addWheel(connectionPoint, direction, axle, restLength,
                     wheelRadius, isFrontWheel);
@@ -99,7 +99,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             for (int i = 0, length = control.getNumWheels(); i < length; i++) {
                 final VehicleWheel wheel = control.getWheel(i);

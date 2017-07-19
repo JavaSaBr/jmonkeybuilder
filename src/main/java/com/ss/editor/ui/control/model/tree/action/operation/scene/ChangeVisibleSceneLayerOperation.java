@@ -38,7 +38,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
 
@@ -63,7 +63,7 @@ public class ChangeVisibleSceneLayerOperation extends AbstractEditorOperation<Mo
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Spatial currentModel = editor.getCurrentModel();
 

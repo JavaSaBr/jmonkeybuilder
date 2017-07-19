@@ -377,9 +377,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final String extension = FileUtils.getExtension(file);
 
         if (extension.endsWith(FileExtensions.JME_MATERIAL)) {
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterial(file));
+            EXECUTOR_MANAGER.addJMETask(() -> updateMaterial(file));
         } else if (MaterialUtils.isShaderFile(file) || MaterialUtils.isTextureFile(file)) {
-            EXECUTOR_MANAGER.addEditorThreadTask(() -> updateMaterials(file));
+            EXECUTOR_MANAGER.addJMETask(() -> updateMaterials(file));
         }
     }
 
@@ -525,7 +525,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
     }
 
     @Override
@@ -1210,7 +1210,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final float sceneX = (float) dragEvent.getSceneX();
         final float sceneY = camera.getHeight() - (float) dragEvent.getSceneY();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final MA editorAppState = getEditorAppState();
             final Geometry geometry = editorAppState.getGeometryByScreenPos(sceneX, sceneY);
@@ -1248,7 +1248,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final float sceneX = (float) dragEvent.getSceneX();
         final float sceneY = camera.getHeight() - (float) dragEvent.getSceneY();
 
-        EXECUTOR_MANAGER.addEditorThreadTask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> {
 
             final MA editorAppState = getEditorAppState();
             final SceneLayer defaultLayer = getDefaultLayer(this);
