@@ -10,7 +10,7 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.EditorAppState;
+import com.ss.editor.state.editor.Editor3DState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.FileEditor;
@@ -87,7 +87,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * The array of 3D parts of this editor.
      */
     @NotNull
-    private final Array<EditorAppState> editorStates;
+    private final Array<Editor3DState> editorStates;
 
     /**
      * The file changes listener.
@@ -144,7 +144,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     protected AbstractFileEditor() {
         this.showedTime = LocalTime.now();
-        this.editorStates = ArrayFactory.newArray(EditorAppState.class);
+        this.editorStates = ArrayFactory.newArray(Editor3DState.class);
         this.dirtyProperty = new SimpleBooleanProperty(this, "dirty", false);
         this.fileChangedHandler = event -> processChangedFile((FileChangedEvent) event);
         createContent();
@@ -153,10 +153,10 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Add the new 3D part of this editor.
      *
-     * @param editorAppState the editor app state
+     * @param editor3DState the editor app state
      */
-    protected void addEditorState(@NotNull final EditorAppState editorAppState) {
-        this.editorStates.add(editorAppState);
+    protected void addEditorState(@NotNull final Editor3DState editor3DState) {
+        this.editorStates.add(editor3DState);
     }
 
     /**
@@ -405,7 +405,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @NotNull
     @Override
-    public Array<EditorAppState> getStates() {
+    public Array<Editor3DState> getStates() {
         return editorStates;
     }
 

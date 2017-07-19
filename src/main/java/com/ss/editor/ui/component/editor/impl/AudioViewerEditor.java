@@ -11,7 +11,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.impl.audio.AudioViewerAppState;
+import com.ss.editor.state.editor.impl.audio.AudioViewer3DState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
@@ -56,7 +56,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * The editor app state.
      */
     @NotNull
-    private final AudioViewerAppState editorAppState;
+    private final AudioViewer3DState editorAppState;
 
     /**
      * The play button.
@@ -101,7 +101,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
     private TextField sampleRateField;
 
     private AudioViewerEditor() {
-        this.editorAppState = new AudioViewerAppState(this);
+        this.editorAppState = new AudioViewer3DState(this);
         addEditorState(editorAppState);
     }
 
@@ -184,7 +184,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      * Play the audio.
      */
     private void processPlay() {
-        final AudioViewerAppState appState = getEditorAppState();
+        final AudioViewer3DState appState = getEditorAppState();
         if (appState.getPrevStatus() == Playing) {
             appState.pause();
         } else {
@@ -210,7 +210,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         final AudioData.DataType dataType = audioData.getDataType();
         final int sampleRate = audioData.getSampleRate();
 
-        final AudioViewerAppState editorAppState = getEditorAppState();
+        final AudioViewer3DState editorAppState = getEditorAppState();
         editorAppState.load(audioData, audioKey);
 
         getChannelsField().setText(String.valueOf(channels));
@@ -231,7 +231,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
      */
     @NotNull
     @FromAnyThread
-    private AudioViewerAppState getEditorAppState() {
+    private AudioViewer3DState getEditorAppState() {
         return editorAppState;
     }
 

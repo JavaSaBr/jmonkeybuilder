@@ -6,7 +6,7 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource.Status;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.impl.AbstractEditorAppState;
+import com.ss.editor.state.editor.impl.AbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ import java.util.Objects;
  *
  * @author JavaSaBr
  */
-public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEditor> {
+public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor> {
 
     /**
      * The previous status.
@@ -50,7 +50,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
      *
      * @param fileEditor the editor.
      */
-    public AudioViewerAppState(@NotNull final AudioViewerEditor fileEditor) {
+    public AudioViewer3DState(@NotNull final AudioViewerEditor fileEditor) {
         super(fileEditor);
     }
 
@@ -257,7 +257,7 @@ public class AudioViewerAppState extends AbstractEditorAppState<AudioViewerEdito
 
     @Override
     public String toString() {
-        return "AudioViewerAppState{" +
+        return "AudioViewer3DState{" +
                 "prevStatus=" + prevStatus +
                 ", audioNode=" + audioNode +
                 ", audioData=" + audioData +

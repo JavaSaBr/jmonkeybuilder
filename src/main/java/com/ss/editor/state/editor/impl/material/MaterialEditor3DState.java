@@ -28,7 +28,7 @@ import com.jme3.util.SkyFactory;
 import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.BooleanFloatConsumer;
@@ -43,17 +43,27 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<MaterialFileEditor> {
+public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<MaterialFileEditor> {
 
+    @NotNull
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
+
+    @NotNull
     private static final Vector3f LIGHT_DIRECTION = new Vector3f(0.007654993F, 0.39636374F, 0.9180617F).negate();
 
     private static final float H_ROTATION = AngleUtils.degreeToRadians(75);
     private static final float V_ROTATION = AngleUtils.degreeToRadians(25);
 
+    @NotNull
     private static final String KEY_C = "SSEditor.materialEditorState.C";
+
+    @NotNull
     private static final String KEY_S = "SSEditor.materialEditorState.S";
+
+    @NotNull
     private static final String KEY_P = "SSEditor.materialEditorState.P";
+
+    @NotNull
     private static final String KEY_L = "SSEditor.materialEditorState.L";
 
     static {
@@ -63,6 +73,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
         TRIGGERS.put(KEY_L, new KeyTrigger(KeyInput.KEY_L));
     }
 
+    @NotNull
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
         @Override
@@ -117,7 +128,7 @@ public class MaterialEditorAppState extends AdvancedAbstractEditorAppState<Mater
      *
      * @param fileEditor the file editor
      */
-    public MaterialEditorAppState(@NotNull final MaterialFileEditor fileEditor) {
+    public MaterialEditor3DState(@NotNull final MaterialFileEditor fileEditor) {
         super(fileEditor);
         this.testBox = new Geometry("Box", new Box(2, 2, 2));
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));

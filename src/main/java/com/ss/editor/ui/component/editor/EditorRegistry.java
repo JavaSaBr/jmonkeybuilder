@@ -100,6 +100,8 @@ public class EditorRegistry {
 
     /**
      * Add new description.
+     *
+     * @param description the description of an editor.
      */
     public void addDescription(@NotNull final EditorDescription description) {
 

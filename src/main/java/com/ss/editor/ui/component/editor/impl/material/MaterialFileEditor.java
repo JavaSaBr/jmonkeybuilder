@@ -26,8 +26,8 @@ import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.serializer.MaterialSerializer;
-import com.ss.editor.state.editor.impl.material.MaterialEditorAppState;
-import com.ss.editor.state.editor.impl.material.MaterialEditorAppState.ModelType;
+import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
+import com.ss.editor.state.editor.impl.material.MaterialEditor3DState.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -103,7 +103,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * 3D part of this editor.
      */
     @NotNull
-    private final MaterialEditorAppState editorAppState;
+    private final MaterialEditor3DState editorAppState;
 
     /**
      * The state of this editor.
@@ -207,7 +207,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private boolean ignoreListeners;
 
     private MaterialFileEditor() {
-        this.editorAppState = new MaterialEditorAppState(this);
+        this.editorAppState = new MaterialEditor3DState(this);
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         addEditorState(editorAppState);
@@ -465,7 +465,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final AssetManager assetManager = EDITOR.getAssetManager();
         final Material material = assetManager.loadAsset(materialKey);
 
-        final MaterialEditorAppState editorState = getEditorAppState();
+        final MaterialEditor3DState editorState = getEditorAppState();
         editorState.changeMode(ModelType.BOX);
 
         reload(material);
@@ -523,7 +523,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         mainSplitContainer.updateFor(editorState);
         lightButton.setSelected(editorState.isLightEnable());
 
-        final MaterialEditorAppState editorAppState = getEditorAppState();
+        final MaterialEditor3DState editorAppState = getEditorAppState();
         final Vector3f cameraLocation = editorState.getCameraLocation();
 
         final float hRotation = editorState.getCameraHRotation();
@@ -542,7 +542,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         setIgnoreListeners(true);
         try {
 
-            final MaterialEditorAppState editorState = getEditorAppState();
+            final MaterialEditor3DState editorState = getEditorAppState();
             editorState.updateMaterial(material);
 
             final MaterialTexturesComponent materialTexturesComponent = getMaterialTexturesComponent();
@@ -646,7 +646,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     private void changeBucketType(@NotNull final RenderQueue.Bucket newValue) {
 
-        final MaterialEditorAppState editorAppState = getEditorAppState();
+        final MaterialEditor3DState editorAppState = getEditorAppState();
         editorAppState.changeBucketType(newValue);
 
         final MaterialFileEditorState editorState = getEditorState();
@@ -684,7 +684,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      */
     private void changeLight(@NotNull final Boolean newValue) {
 
-        final MaterialEditorAppState editorAppState = getEditorAppState();
+        final MaterialEditor3DState editorAppState = getEditorAppState();
         editorAppState.updateLightEnabled(newValue);
 
         final MaterialFileEditorState editorState = getEditorState();
@@ -729,7 +729,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private void changeModelType(@NotNull final ModelType modelType, @NotNull final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
-        final MaterialEditorAppState editorAppState = getEditorAppState();
+        final MaterialEditor3DState editorAppState = getEditorAppState();
 
         final ToggleButton cubeButton = getCubeButton();
         final ToggleButton sphereButton = getSphereButton();
@@ -801,7 +801,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return 3D part of this editor.
      */
     @NotNull
-    private MaterialEditorAppState getEditorAppState() {
+    private MaterialEditor3DState getEditorAppState() {
         return editorAppState;
     }
 

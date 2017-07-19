@@ -17,7 +17,7 @@ import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.state.editor.impl.scene.SceneEditorAppState;
+import com.ss.editor.state.editor.impl.scene.SceneEditor3DState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -54,7 +54,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class SceneFileEditor extends
-        AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditorAppState, SceneFileEditorState> implements
+        AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditor3DState, SceneFileEditorState> implements
         SceneChangeConsumer {
 
     private static final int LAYERS_TOOL = 3;
@@ -133,8 +133,8 @@ public class SceneFileEditor extends
 
     @NotNull
     @Override
-    protected SceneEditorAppState createEditorAppState() {
-        return new SceneEditorAppState(this);
+    protected SceneEditor3DState createEditorAppState() {
+        return new SceneEditor3DState(this);
     }
 
     @FXThread
@@ -155,7 +155,7 @@ public class SceneFileEditor extends
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final SceneEditorAppState editorState = getEditorAppState();
+        final SceneEditor3DState editorState = getEditorAppState();
         editorState.openModel(model);
 
         handleAddedObject(model);
@@ -270,7 +270,7 @@ public class SceneFileEditor extends
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final SceneEditorAppState editorAppState = getEditorAppState();
+        final SceneEditor3DState editorAppState = getEditorAppState();
         editorAppState.updateLightShowed(newValue);
 
         if (editorState != null) editorState.setShowedLight(newValue);
@@ -282,7 +282,7 @@ public class SceneFileEditor extends
     private void changeAudio(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final SceneEditorAppState editorAppState = getEditorAppState();
+        final SceneEditor3DState editorAppState = getEditorAppState();
         editorAppState.updateAudioShowed(newValue);
 
         if (editorState != null) editorState.setShowedAudio(newValue);

@@ -2,25 +2,22 @@ package com.ss.editor.state.editor.impl.model;
 
 import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
 import static com.ss.editor.util.NodeUtils.findParent;
-
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
-import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
+import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.util.NodeUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.geometry.ParticleGeometry;
 
 /**
- * The class with utilities methods for {@link ModelEditorAppState}.
+ * The class with utilities methods for {@link ModelEditor3DState}.
  *
  * @author JavaSaBr
  */
@@ -37,10 +34,10 @@ public class ModelEditorUtils {
      */
     @Nullable
     public static <T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial> Object findToSelect(
-            @NotNull final AbstractSceneEditorAppState<T, M> state, @NotNull final Object object) {
+            @NotNull final AbstractSceneEditor3DState<T, M> state, @NotNull final Object object) {
 
         if (object instanceof ParticleGeometry) {
-            final Spatial parent = findParent((Spatial) object, spatial -> spatial instanceof ParticleEmitterNode);
+            final Spatial parent = findParent((Spatial) object, ParticleEmitterNode.class::isInstance);
             if (parent != null && parent.isVisible()) return parent;
         }
 
@@ -56,7 +53,7 @@ public class ModelEditorUtils {
             final EditorAudioNode audioNode = parent == null ? null : state.getAudioNode(parent);
             if (audioNode != null) return audioNode;
 
-            parent = NodeUtils.findParent(spatial, p -> p instanceof AssetLinkNode);
+            parent = NodeUtils.findParent(spatial, AssetLinkNode.class::isInstance);
             if (parent != null) return parent;
 
             parent = NodeUtils.findParent(spatial, p -> p.getUserData(LOADED_MODEL_KEY) == Boolean.TRUE);

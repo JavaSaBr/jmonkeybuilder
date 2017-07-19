@@ -1,12 +1,12 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.editor.ui.builder.EditorFXSceneBuilder.*;
 import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.Editor;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -55,6 +55,12 @@ public class EditorDialog {
     protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
 
     /**
+     * The CSS registry.
+     */
+    @NotNull
+    private static final CSSRegistry CSS_REGISTRY = CSSRegistry.getInstance();
+
+    /**
      * The default dialog size.
      */
     @NotNull
@@ -98,10 +104,7 @@ public class EditorDialog {
 
         final Scene scene = new Scene(container);
         final ObservableList<String> stylesheets = scene.getStylesheets();
-        stylesheets.add(CSS_FILE_BASE);
-        stylesheets.add(CSS_FILE_EXTERNAL);
-        stylesheets.add(CSS_FILE_CUSTOM_IDS);
-        stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
+        stylesheets.addAll(CSS_REGISTRY.getAvailableCssFiles());
         stylesheets.add(theme.getCssFile());
 
         createControls(container);

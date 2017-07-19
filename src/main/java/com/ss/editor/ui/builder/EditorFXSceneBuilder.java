@@ -13,6 +13,7 @@ import com.ss.editor.ui.component.split.pane.GlobalLeftToolSplitPane;
 import com.ss.editor.ui.component.tab.GlobalBottomToolComponent;
 import com.ss.editor.ui.component.tab.GlobalLeftToolComponent;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.event.EventRedirector;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -32,6 +33,12 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr.
  */
 public class EditorFXSceneBuilder {
+
+    /**
+     * The CSS registry.
+     */
+    @NotNull
+    private static final CSSRegistry CSS_REGISTRY = CSSRegistry.getInstance();
 
     /**
      * The path to the base CSS styles.
@@ -57,6 +64,13 @@ public class EditorFXSceneBuilder {
     @NotNull
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
+    static {
+        CSS_REGISTRY.addCssFile(CSS_FILE_BASE);
+        CSS_REGISTRY.addCssFile(CSS_FILE_EXTERNAL);
+        CSS_REGISTRY.addCssFile(CSS_FILE_CUSTOM_IDS);
+        CSS_REGISTRY.addCssFile(CSS_FILE_CUSTOM_CLASSES);
+    }
+
     /**
      * Build editor fx scene.
      *
@@ -78,11 +92,8 @@ public class EditorFXSceneBuilder {
         scene.setRoot(root);
 
         final ObservableList<String> stylesheets = scene.getStylesheets();
+        stylesheets.addAll(CSS_REGISTRY.getAvailableCssFiles());
         stylesheets.add(theme.getCssFile());
-        stylesheets.add(CSS_FILE_BASE);
-        stylesheets.add(CSS_FILE_EXTERNAL);
-        stylesheets.add(CSS_FILE_CUSTOM_IDS);
-        stylesheets.add(CSS_FILE_CUSTOM_CLASSES);
 
         final StackPane container = scene.getContainer();
 

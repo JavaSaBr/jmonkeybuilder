@@ -26,146 +26,203 @@ import com.ss.rlib.util.dictionary.ObjectDictionary;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
- * The base implementation of the {@link com.jme3.app.state.AppState} for the editor.
+ * The base implementation of the {@link com.ss.editor.state.editor.Editor3DState} for a file editor.
  *
- * @param <T> the type parameter
+ * @param <T> the type of a file editor.
  * @author JavaSaBr
  */
-public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> extends AbstractEditorAppState<T> {
+public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extends AbstractEditor3DState<T> {
 
     /**
      * The constant TRIGGERS.
      */
+    @NotNull
     protected static final ObjectDictionary<String, Trigger> TRIGGERS = DictionaryFactory.newObjectDictionary();
+
     /**
      * The constant MULTI_TRIGGERS.
      */
+    @NotNull
     protected static final ObjectDictionary<String, Trigger[]> MULTI_TRIGGERS = DictionaryFactory.newObjectDictionary();
 
     /**
      * The constant MOUSE_RIGHT_CLICK.
      */
+    @NotNull
     protected static final String MOUSE_RIGHT_CLICK = "SSEditor.editorState.mouseRightClick";
+
     /**
      * The constant MOUSE_LEFT_CLICK.
      */
+    @NotNull
     protected static final String MOUSE_LEFT_CLICK = "SSEditor.editorState.mouseLeftClick";
+
     /**
      * The constant MOUSE_MIDDLE_CLICK.
      */
+    @NotNull
     protected static final String MOUSE_MIDDLE_CLICK = "SSEditor.editorState.mouseMiddleClick";
 
     /**
      * The constant MOUSE_X_AXIS.
      */
+    @NotNull
     protected static final String MOUSE_X_AXIS = "SSEditor.editorState.mouseXAxis";
+
     /**
      * The constant MOUSE_X_AXIS_NEGATIVE.
      */
+    @NotNull
     protected static final String MOUSE_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseXAxisNegative";
+
     /**
      * The constant MOUSE_Y_AXIS.
      */
+    @NotNull
     protected static final String MOUSE_Y_AXIS = "SSEditor.editorState.mouseYAxis";
+
     /**
      * The constant MOUSE_Y_AXIS_NEGATIVE.
      */
+    @NotNull
     protected static final String MOUSE_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseYAxisNegative";
 
     /**
      * The constant MOUSE_MOVE_CAMERA_X_AXIS.
      */
+    @NotNull
     protected static final String MOUSE_MOVE_CAMERA_X_AXIS = "SSEditor.editorState.mouseMoveCameraXAxis";
+
     /**
      * The constant MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE.
      */
+    @NotNull
     protected static final String MOUSE_MOVE_CAMERA_X_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraXAxisNegative";
+
     /**
      * The constant MOUSE_MOVE_CAMERA_Y_AXIS.
      */
+    @NotNull
     protected static final String MOUSE_MOVE_CAMERA_Y_AXIS = "SSEditor.editorState.mouseMoveCameraYAxis";
+
     /**
      * The constant MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE.
      */
+    @NotNull
     protected static final String MOUSE_MOVE_CAMERA_Y_AXIS_NEGATIVE = "SSEditor.editorState.mouseMoveCameraYAxisNegative";
 
     /**
      * The constant KEY_CTRL.
      */
+    @NotNull
     protected static final String KEY_CTRL = "SSEditor.editorState.keyCtrl";
+
     /**
      * The constant KEY_ALT.
      */
+    @NotNull
     protected static final String KEY_ALT = "SSEditor.editorState.keyAlt";
+
     /**
      * The constant KEY_SHIFT.
      */
+    @NotNull
     protected static final String KEY_SHIFT = "SSEditor.editorState.keyShift";
+
     /**
      * The constant KEY_CTRL_S.
      */
+    @NotNull
     protected static final String KEY_CTRL_S = "SSEditor.editorState.Ctrl.S";
+
     /**
      * The constant KEY_CTRL_Z.
      */
+    @NotNull
     protected static final String KEY_CTRL_Z = "SSEditor.editorState.Ctrl.Z";
+
     /**
      * The constant KEY_CTRL_Y.
      */
+    @NotNull
     protected static final String KEY_CTRL_Y = "SSEditor.editorState.Ctrl.Y";
 
     /**
      * The constant KEY_FLY_CAMERA_W.
      */
+    @NotNull
     protected static final String KEY_FLY_CAMERA_W = "SSEditor.editorState.keyFlyCameraW";
+
     /**
      * The constant KEY_FLY_CAMERA_S.
      */
+    @NotNull
     protected static final String KEY_FLY_CAMERA_S = "SSEditor.editorState.keyFlyCameraS";
+
     /**
      * The constant KEY_FLY_CAMERA_A.
      */
+    @NotNull
     protected static final String KEY_FLY_CAMERA_A = "SSEditor.editorState.keyFlyCameraA";
+
     /**
      * The constant KEY_FLY_CAMERA_D.
      */
+    @NotNull
     protected static final String KEY_FLY_CAMERA_D = "SSEditor.editorState.keyFlyCameraD";
 
     /**
      * The constant KEY_NUM_1.
      */
+    @NotNull
     protected static final String KEY_NUM_1 = "SSEditor.editorState.num1";
+
     /**
      * The constant KEY_NUM_2.
      */
+    @NotNull
     protected static final String KEY_NUM_2 = "SSEditor.editorState.num2";
+
     /**
      * The constant KEY_NUM_3.
      */
+    @NotNull
     protected static final String KEY_NUM_3 = "SSEditor.editorState.num3";
+
     /**
      * The constant KEY_NUM_4.
      */
+    @NotNull
     protected static final String KEY_NUM_4 = "SSEditor.editorState.num4";
+
     /**
      * The constant KEY_NUM_5.
      */
+    @NotNull
     protected static final String KEY_NUM_5 = "SSEditor.editorState.num5";
+
     /**
      * The constant KEY_NUM_6.
      */
+    @NotNull
     protected static final String KEY_NUM_6 = "SSEditor.editorState.num6";
+
     /**
      * The constant KEY_NUM_7.
      */
+    @NotNull
     protected static final String KEY_NUM_7 = "SSEditor.editorState.num7";
+
     /**
      * The constant KEY_NUM_8.
      */
+    @NotNull
     protected static final String KEY_NUM_8 = "SSEditor.editorState.num8";
+
     /**
      * The constant KEY_NUM_9.
      */
+    @NotNull
     protected static final String KEY_NUM_9 = "SSEditor.editorState.num9";
 
     static {
@@ -257,6 +314,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     /**
      * The current state manager.
      */
+    @Nullable
     protected AppStateManager stateManager;
 
     /**
@@ -319,7 +377,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      *
      * @param fileEditor the file editor
      */
-    public AdvancedAbstractEditorAppState(@NotNull final T fileEditor) {
+    public AdvancedAbstractEditor3DState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
@@ -590,7 +648,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * @param perspective the perspective
      * @param isPressed   the is pressed
      */
-    protected void rotateTo(final EditorCamera.Perspective perspective, final boolean isPressed) {
+    protected void rotateTo(@NotNull final EditorCamera.Perspective perspective, final boolean isPressed) {
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null && isPressed) editorCamera.rotateTo(perspective);
     }
@@ -601,7 +659,7 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      * @param direction the direction
      * @param isPressed the is pressed
      */
-    protected void rotateTo(final EditorCamera.Direction direction, final boolean isPressed) {
+    protected void rotateTo(@NotNull final EditorCamera.Direction direction, final boolean isPressed) {
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera != null && isPressed) editorCamera.rotateTo(direction, 10F);
     }
@@ -766,9 +824,9 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
      *
      * @param inputManager the input manager
      */
-    protected void checkAndAddMappings(final InputManager inputManager) {
-        TRIGGERS.forEach(inputManager, AdvancedAbstractEditorAppState::addMapping);
-        MULTI_TRIGGERS.forEach(inputManager, AdvancedAbstractEditorAppState::addMapping);
+    protected void checkAndAddMappings(@NotNull final InputManager inputManager) {
+        TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3DState::addMapping);
+        MULTI_TRIGGERS.forEach(inputManager, AdvancedAbstractEditor3DState::addMapping);
     }
 
     private static void addMapping(@NotNull final InputManager inputManager, @NotNull final String name,
@@ -853,7 +911,6 @@ public abstract class AdvancedAbstractEditorAppState<T extends FileEditor> exten
     protected EditorCamera createEditorCamera() {
 
         final Camera camera = EDITOR.getCamera();
-
         final EditorCamera editorCamera = new EditorCamera(camera, getNodeForCamera());
         editorCamera.setMaxDistance(10000);
         editorCamera.setMinDistance(0.01F);

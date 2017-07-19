@@ -2,16 +2,14 @@ package com.ss.editor.ui.component.editor;
 
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.state.editor.EditorAppState;
-
+import com.ss.editor.state.editor.Editor3DState;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import javafx.beans.property.BooleanProperty;
+import javafx.scene.Parent;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
-
-import javafx.beans.property.BooleanProperty;
-import javafx.scene.Parent;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The interface for implementing file editor.
@@ -23,7 +21,7 @@ public interface FileEditor {
     /**
      * The Empty states.
      */
-    Array<EditorAppState> EMPTY_STATES = ArrayFactory.newArray(EditorAppState.class);
+    Array<Editor3DState> EMPTY_STATES = ArrayFactory.newArray(Editor3DState.class);
 
     /**
      * Get the page for showing the editor.
@@ -89,7 +87,7 @@ public interface FileEditor {
      */
     @NotNull
     @FXThread
-    default Array<EditorAppState> getStates() {
+    default Array<Editor3DState> getStates() {
         return EMPTY_STATES;
     }
 

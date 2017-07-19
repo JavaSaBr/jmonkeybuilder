@@ -1,32 +1,32 @@
 package com.ss.editor.state.editor.impl;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.renderer.Statistics;
 import com.jme3.system.Timer;
 import com.ss.editor.manager.ExecutorManager;
-import com.ss.editor.state.editor.EditorAppState;
+import com.ss.editor.state.editor.Editor3DState;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSIds;
+import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.ArrayUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The app state to get and to show statistics of rendering.
+ * The 3D state to get and to show statistics of rendering.
  *
  * @author JavaSaBr
  */
-public class StatsAppState extends AbstractAppState implements EditorAppState {
+public class Stats3DState extends AbstractAppState implements Editor3DState {
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -165,7 +165,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      *
      * @param parent the parent
      */
-    public StatsAppState(@NotNull final Pane parent) {
+    public Stats3DState(@NotNull final Pane parent) {
         this.parent = parent;
         this.statsContainer = new GridPane();
         this.frameCounter = 0;
@@ -279,7 +279,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Application getApplication() {
-        return requireNonNull(application);
+        return notNull(application);
     }
 
     /**
@@ -287,7 +287,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Statistics getStatistics() {
-        return requireNonNull(statistics);
+        return notNull(statistics);
     }
 
     /**
@@ -295,7 +295,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private int[] getStatsData() {
-        return requireNonNull(statsData);
+        return notNull(statsData);
     }
 
     /**
@@ -311,7 +311,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getFpsField() {
-        return requireNonNull(fpsField);
+        return notNull(fpsField);
     }
 
     /**
@@ -319,7 +319,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getVerticesField() {
-        return requireNonNull(verticesField);
+        return notNull(verticesField);
     }
 
     /**
@@ -327,7 +327,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getTrianglesField() {
-        return requireNonNull(trianglesField);
+        return notNull(trianglesField);
     }
 
     /**
@@ -335,7 +335,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getUniformsField() {
-        return requireNonNull(uniformsField);
+        return notNull(uniformsField);
     }
 
     /**
@@ -343,7 +343,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getObjectsField() {
-        return requireNonNull(objectsField);
+        return notNull(objectsField);
     }
 
     /**
@@ -351,7 +351,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getShadersFField() {
-        return requireNonNull(shadersFField);
+        return notNull(shadersFField);
     }
 
     /**
@@ -359,7 +359,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getShadersMField() {
-        return requireNonNull(shadersMField);
+        return notNull(shadersMField);
     }
 
     /**
@@ -367,7 +367,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getShadersSField() {
-        return requireNonNull(shadersSField);
+        return notNull(shadersSField);
     }
 
     /**
@@ -375,7 +375,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getTexturesFField() {
-        return requireNonNull(texturesFField);
+        return notNull(texturesFField);
     }
 
     /**
@@ -383,7 +383,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getTexturesMField() {
-        return requireNonNull(texturesMField);
+        return notNull(texturesMField);
     }
 
     /**
@@ -391,7 +391,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getTexturesSField() {
-        return requireNonNull(texturesSField);
+        return notNull(texturesSField);
     }
 
     /**
@@ -399,7 +399,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getFrameBuffersFField() {
-        return requireNonNull(frameBuffersFField);
+        return notNull(frameBuffersFField);
     }
 
     /**
@@ -407,7 +407,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getFrameBuffersMField() {
-        return requireNonNull(frameBuffersMField);
+        return notNull(frameBuffersMField);
     }
 
     /**
@@ -415,7 +415,7 @@ public class StatsAppState extends AbstractAppState implements EditorAppState {
      */
     @NotNull
     private Label getFrameBuffersSField() {
-        return requireNonNull(frameBuffersSField);
+        return notNull(frameBuffersSField);
     }
 
     @Override

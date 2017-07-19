@@ -16,7 +16,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.manager.ResourceManager;
-import com.ss.editor.state.editor.impl.model.ModelEditorAppState;
+import com.ss.editor.state.editor.impl.model.ModelEditor3DState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditorAppState, ModelFileEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditor3DState, ModelFileEditorState> {
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -95,8 +95,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
     @NotNull
     @Override
-    protected ModelEditorAppState createEditorAppState() {
-        return new ModelEditorAppState(this);
+    protected ModelEditor3DState createEditorAppState() {
+        return new ModelEditor3DState(this);
     }
 
     /**
@@ -128,7 +128,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditorAppState editorAppState = getEditorAppState();
+        final ModelEditor3DState editorAppState = getEditorAppState();
         editorAppState.openModel(model);
 
         handleAddedObject(model);
@@ -172,7 +172,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     protected void handleAddedObject(@NotNull final Spatial model) {
         super.handleAddedObject(model);
 
-        final ModelEditorAppState editorState = getEditorAppState();
+        final ModelEditor3DState editorState = getEditorAppState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -229,7 +229,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     private void changeFastSky(@NotNull final String newSky) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorAppState editorAppState = getEditorAppState();
+        final ModelEditor3DState editorAppState = getEditorAppState();
 
         if (NO_FAST_SKY.equals(newSky)) {
             editorAppState.changeFastSky(null);
@@ -262,7 +262,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditorAppState editorAppState = getEditorAppState();
+        final ModelEditor3DState editorAppState = getEditorAppState();
         editorAppState.updateLightEnabled(newValue);
 
         if (editorState != null) editorState.setEnableLight(newValue);
@@ -272,7 +272,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         super.notifyAddedChild(parent, added, index);
 
-        final ModelEditorAppState editorAppState = getEditorAppState();
+        final ModelEditor3DState editorAppState = getEditorAppState();
 
         if (added instanceof Spatial) {
 
@@ -290,7 +290,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         super.notifyRemovedChild(parent, removed);
 
-        final ModelEditorAppState editorAppState = getEditorAppState();
+        final ModelEditor3DState editorAppState = getEditorAppState();
 
         if (removed instanceof Spatial) {
 

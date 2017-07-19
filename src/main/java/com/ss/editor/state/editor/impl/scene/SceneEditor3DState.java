@@ -16,11 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.util.array.Array;
 
 /**
- * The implementation of the {@link AbstractSceneEditorAppState} for the {@link SceneFileEditor}.
+ * The implementation of the {@link AbstractSceneEditor3DState} for the {@link SceneFileEditor}.
  *
  * @author JavaSaBr
  */
-public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEditor, SceneNode> {
+public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEditor, SceneNode> {
 
     /**
      * The flag of showing light models.
@@ -37,7 +37,7 @@ public class SceneEditorAppState extends AbstractSceneEditorAppState<SceneFileEd
      *
      * @param fileEditor the file editor
      */
-    public SceneEditorAppState(@NotNull final SceneFileEditor fileEditor) {
+    public SceneEditor3DState(@NotNull final SceneFileEditor fileEditor) {
         super(fileEditor);
 
         this.lightShowed = true;

@@ -7,7 +7,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.LightProbe;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
+import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +18,13 @@ import com.ss.rlib.util.array.ArrayFactory;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 
 /**
- * The implementation of the {@link AbstractSceneEditorAppState} for the {@link ModelFileEditor}.
+ * The implementation of the {@link AbstractSceneEditor3DState} for the {@link ModelFileEditor}.
  *
  * @author JavaSaBr
  */
-public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEditor, Spatial> {
+public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEditor, Spatial> {
 
+    @NotNull
     private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
 
         @Override
@@ -66,7 +67,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      *
      * @param fileEditor the file editor
      */
-    public ModelEditorAppState(final ModelFileEditor fileEditor) {
+    public ModelEditor3DState(final ModelFileEditor fileEditor) {
         super(fileEditor);
         this.customSkyNode = new Node("Custom Sky");
         this.customSky = ArrayFactory.newArray(Spatial.class);
@@ -212,14 +213,14 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
      *
      * @param fastSky the fast sky
      */
-    public void changeFastSky(final Spatial fastSky) {
+    public void changeFastSky(@Nullable final Spatial fastSky) {
         EXECUTOR_MANAGER.addJMETask(() -> changeFastSkyImpl(fastSky));
     }
 
     /**
      * The process of changing the fast sky.
      */
-    private void changeFastSkyImpl(final Spatial fastSky) {
+    private void changeFastSkyImpl(@Nullable final Spatial fastSky) {
 
         final Node stateNode = getStateNode();
         final Spatial currentFastSky = getCurrentFastSky();
@@ -290,7 +291,7 @@ public class ModelEditorAppState extends AbstractSceneEditorAppState<ModelFileEd
 
     @Override
     public String toString() {
-        return "ModelEditorAppState{" +
+        return "ModelEditor3DState{" +
                 ", lightEnabled=" + lightEnabled +
                 "} " + super.toString();
     }

@@ -39,8 +39,8 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
-import com.ss.editor.state.editor.impl.StatsAppState;
-import com.ss.editor.state.editor.impl.scene.AbstractSceneEditorAppState;
+import com.ss.editor.state.editor.impl.Stats3DState;
+import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
@@ -97,12 +97,12 @@ import java.util.function.Supplier;
  *
  * @param <IM> the type of {@link AbstractSceneFileEditor}
  * @param <M>  the type edited object.
- * @param <MA> the type of {@link AbstractSceneEditorAppState}
+ * @param <MA> the type of {@link AbstractSceneEditor3DState}
  * @param <ES> the type of an editor state.
  * @author JavaSaBr
  */
 public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
-        MA extends AbstractSceneEditorAppState<IM, M>, ES extends AbstractModelFileEditorState>
+        MA extends AbstractSceneEditor3DState<IM, M>, ES extends AbstractModelFileEditorState>
         extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
@@ -125,7 +125,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The stats app state.
      */
     @NotNull
-    private final StatsAppState statsAppState;
+    private final Stats3DState statsAppState;
 
     /**
      * The operation control.
@@ -276,7 +276,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.editorAppState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
-        this.statsAppState = new StatsAppState(statsContainer);
+        this.statsAppState = new Stats3DState(statsContainer);
         addEditorState(editorAppState);
         addEditorState(statsAppState);
         statsAppState.setEnabled(true);

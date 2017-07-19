@@ -106,6 +106,7 @@ public abstract class AbstractListCell<T> extends TextFieldListCell<T> {
     protected abstract String getName(@Nullable final T item);
 
     /**
+     * @param item the item which needs to check.
      * @return true if the item is enabled.
      */
     protected abstract boolean isEnabled(@Nullable final T item);

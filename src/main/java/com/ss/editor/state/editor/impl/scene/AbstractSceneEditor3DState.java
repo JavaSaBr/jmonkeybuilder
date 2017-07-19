@@ -45,7 +45,7 @@ import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditorAppState;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.util.EditingUtils;
@@ -67,12 +67,12 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The base implementation of the {@link AppState} for the editor.
  *
- * @param <T> the type parameter
- * @param <M> the type parameter
+ * @param <T> the type of file scene editor.
+ * @param <M> the type of edited spatial.
  * @author JavaSaBr
  */
-public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
-        extends AdvancedAbstractEditorAppState<T> implements SceneEditorControl {
+public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
+        extends AdvancedAbstractEditor3DState<T> implements SceneEditorControl {
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -289,7 +289,7 @@ public abstract class AbstractSceneEditorAppState<T extends AbstractSceneFileEdi
      *
      * @param fileEditor the file editor
      */
-    public AbstractSceneEditorAppState(@NotNull final T fileEditor) {
+    public AbstractSceneEditor3DState(@NotNull final T fileEditor) {
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
         this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
