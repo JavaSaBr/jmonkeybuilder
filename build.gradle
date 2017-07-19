@@ -7,8 +7,6 @@ version = '0.9.11'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-project.buildDir = 'build-gradle'
-
 ext.jmeVersion = "3.2_branch-SNAPSHOT"
 ext.jme3_xbuf_version = '213c6a499d'
 ext.lwjglVersion = "3.1.2"
@@ -105,6 +103,11 @@ dependencies {
 }
 
 task copyToLib(type: Copy) {
+
+    doFirst {
+        GFileUtils.deleteDirectory(new File("$buildDir/dependences"))
+    }
+
     into "$buildDir/dependences"
     from configurations.runtime
 }

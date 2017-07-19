@@ -1,7 +1,8 @@
 /bin/
 *.so
 *.log
-/build-gradle/
+/build/
+/native-build/
 /.gradle/
 /.idea/
 /out/

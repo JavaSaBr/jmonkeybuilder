@@ -2294,11 +2294,8 @@ public class Messages {
         final ResourceBundle overrideBundle = getBundle("com/sun/javafx/scene/control/skin/resources/controls",
                 PropertyLoader.getInstance());
 
-        final Map override = getUnsafeFieldValue(overrideBundle, "lookup");
-        final Map original = getUnsafeFieldValue(controlBundle, "lookup");
-
-        
-        //noinspection ConstantConditions,ConstantConditions,unchecked
+        final Map<String, String> override = getUnsafeFieldValue(overrideBundle, "lookup");
+        final Map<String, String> original = getUnsafeFieldValue(controlBundle, "lookup");
         original.putAll(override);
 
         final ResourceBundle bundle = getBundle(BUNDLE_NAME, PropertyLoader.getInstance());
