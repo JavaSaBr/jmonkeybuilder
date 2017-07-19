@@ -1,9 +1,0 @@
-Package: jme3-spaceshift-editor
-Version: @version@
-Section: graphics
-Maintainer: Java Developer <javasabr@gmail.com>
-Priority: optional
-Architecture: amd64
-Provides: jme3-spaceshift-editor
-Homepage: https://spaceshift.ru/
-Description: Asset Editor for jMonkeyEngine 3.2 by SpaceShift Team
