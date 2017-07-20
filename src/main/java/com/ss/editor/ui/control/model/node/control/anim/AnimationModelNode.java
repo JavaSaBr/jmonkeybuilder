@@ -11,7 +11,7 @@ import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.animation.*;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RenameAnimationNodeOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.util.AnimationUtils;
 import com.ss.rlib.util.ArrayUtils;
@@ -65,7 +65,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
         final Animation animation = getElement();
@@ -94,7 +94,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Animation element = getElement();
         final Track[] tracks = element.getTracks();
@@ -104,7 +104,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Animation element = getElement();
         final Track[] tracks = element.getTracks();
@@ -121,7 +121,7 @@ public class AnimationModelNode extends ModelNode<Animation> {
     }
 
     @Override
-    public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
+    public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         if (StringUtils.equals(getName(), newName)) return;
 
         super.changeName(nodeTree, newName);

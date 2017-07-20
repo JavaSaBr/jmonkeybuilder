@@ -5,17 +5,17 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTreeCell;
+import com.ss.editor.ui.control.tree.NodeTreeCell;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * THe implementation of {@link AbstractNodeTreeCell} to show model nodes.
+ * THe implementation of {@link NodeTreeCell} to show model nodes.
  *
  * @author JavaSaBr
  */
-public class ModelNodeTreeCell extends AbstractNodeTreeCell<ModelChangeConsumer, ModelNodeTree> {
+public class ModelNodeTreeCell extends NodeTreeCell<ModelChangeConsumer, ModelNodeTree> {
 
     /**
      * Instantiates a new Model node tree cell.

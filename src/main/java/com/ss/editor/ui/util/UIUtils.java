@@ -362,28 +362,41 @@ public class UIUtils {
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
         for (final TreeItem<T> child : children) {
-            getAllItems(container, child);
+            collectAllItems(container, child);
         }
 
         return container;
     }
 
     /**
-     * Collect all elements of a tree item.
+     * Collect all elements of tree items.
+     *
+     * @param <T>  the type parameter
+     * @param root the tree item.
+     */
+    @FXThread
+    public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeItem<T> root) {
+        final Array<TreeItem<T>> container = ArrayFactory.newArray(TreeItem.class);
+        collectAllItems(container, root);
+        return container;
+    }
+
+    /**
+     * Collect all elements of tree items.
      *
      * @param <T>       the type parameter
      * @param container the container.
      * @param root      the tree item.
      */
     @FXThread
-    public static <T> void getAllItems(final Array<TreeItem<T>> container, final TreeItem<T> root) {
+    public static <T> void collectAllItems(@NotNull final Array<TreeItem<T>> container, @NotNull final TreeItem<T> root) {
 
         container.add(root);
 
         final ObservableList<TreeItem<T>> children = root.getChildren();
 
         for (final TreeItem<T> child : children) {
-            getAllItems(container, child);
+            collectAllItems(container, child);
         }
     }
 

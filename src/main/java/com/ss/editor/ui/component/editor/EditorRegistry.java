@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor;
 
 import static com.ss.rlib.util.array.ArrayFactory.newArray;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.impl.*;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
@@ -32,6 +33,7 @@ public class EditorRegistry {
     /**
      * The constant ALL_FORMATS.
      */
+    @NotNull
     public static final String ALL_FORMATS = "*";
 
     @NotNull
@@ -103,6 +105,7 @@ public class EditorRegistry {
      *
      * @param description the description of an editor.
      */
+    @FromAnyThread
     public void addDescription(@NotNull final EditorDescription description) {
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();

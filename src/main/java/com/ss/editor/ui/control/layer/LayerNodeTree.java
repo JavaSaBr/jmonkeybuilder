@@ -4,8 +4,8 @@ import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
-import com.ss.editor.ui.control.tree.AbstractNodeTreeCell;
+import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.editor.ui.control.tree.NodeTreeCell;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.control.TreeItem;
@@ -15,11 +15,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
- * The implementation of {@link AbstractNodeTree} to present the structure of layers in an editor.
+ * The implementation of {@link NodeTree} to present the structure of layers in an editor.
  *
  * @author JavaSaBr
  */
-public class LayerNodeTree extends AbstractNodeTree<SceneChangeConsumer> {
+public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
 
     /**
      * Instantiates a new Layer node tree.
@@ -33,7 +33,7 @@ public class LayerNodeTree extends AbstractNodeTree<SceneChangeConsumer> {
 
     @NotNull
     @Override
-    protected AbstractNodeTreeCell<SceneChangeConsumer, ?> createNodeTreeCell() {
+    protected NodeTreeCell<SceneChangeConsumer, ?> createNodeTreeCell() {
         return new LayerNodeTreeCell(this);
     }
 

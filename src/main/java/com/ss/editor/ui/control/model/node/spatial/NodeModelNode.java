@@ -29,7 +29,7 @@ import com.ss.editor.ui.control.model.tree.action.light.CreatePointLightAction;
 import com.ss.editor.ui.control.model.tree.action.light.CreateSpotLightAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.action.terrain.CreateTerrainAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.GeomUtils;
@@ -70,7 +70,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
     @Nullable
     @Override
-    protected Menu createToolMenu(final @NotNull AbstractNodeTree<?> nodeTree) {
+    protected Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
         final Menu toolMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolMenu.getItems().addAll(new OptimizeGeometryAction(nodeTree, this));
         return toolMenu;
@@ -78,7 +78,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
 
     @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final Menu menu = super.createCreationMenu(nodeTree);
         if (menu == null) return null;
@@ -105,7 +105,7 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
@@ -120,13 +120,13 @@ public class NodeModelNode<T extends Node> extends SpatialModelNode<T> {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final List<Spatial> children = getSpatials();

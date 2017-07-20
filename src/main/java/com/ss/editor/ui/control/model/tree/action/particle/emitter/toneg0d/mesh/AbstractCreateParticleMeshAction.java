@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeParticleMeshOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
      * @param nodeTree the node tree
      * @param node     the node
      */
-    AbstractCreateParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    AbstractCreateParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -47,7 +47,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
     protected void process() {
         super.process();
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
 
         final ModelNode<?> modelNode = getNode();
         final ParticleEmitterNode emitterNode = (ParticleEmitterNode) modelNode.getElement();

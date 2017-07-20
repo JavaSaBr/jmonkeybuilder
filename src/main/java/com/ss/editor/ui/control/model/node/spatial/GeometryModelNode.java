@@ -7,7 +7,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.TangentGeneratorAction;
 import com.ss.editor.ui.control.model.tree.action.geometry.GenerateLoDAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.tree.node.ModelNodeFactory;
 import javafx.scene.control.Menu;
@@ -44,7 +44,7 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         if (!(nodeTree instanceof ModelNodeTree)) return ModelNode.EMPTY_ARRAY;
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
@@ -60,7 +60,7 @@ public class GeometryModelNode<T extends Geometry> extends SpatialModelNode<T> {
 
     @Nullable
     @Override
-    protected Menu createToolMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final Menu toolActions = new Menu(Messages.MODEL_NODE_TREE_ACTION_TOOLS, new ImageView(Icons.INFLUENCER_16));
         toolActions.getItems().addAll(new TangentGeneratorAction(nodeTree, this),

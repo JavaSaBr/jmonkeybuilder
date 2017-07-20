@@ -6,7 +6,7 @@ import com.jme3.cinematic.events.MotionEvent;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +45,7 @@ public class MotionEventModelNode extends ControlModelNode<MotionEvent> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final MotionPath path = getElement().getPath();
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
@@ -55,7 +55,7 @@ public class MotionEventModelNode extends ControlModelNode<MotionEvent> {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 }

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 
 /**
  * The manager to work with plugins.
@@ -120,5 +121,17 @@ public class PluginManager {
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
                 .forEach(editorPlugin -> editorPlugin.onFinishLoading(pluginSystem));
+    }
+
+    /**
+     * Handle each loaded plugin.
+     *
+     * @param consumer the consumer.
+     */
+    public void handlePlugins(@NotNull final Consumer<EditorPlugin> consumer) {
+        final Array<Plugin> plugins = pluginSystem.getPlugins();
+        plugins.stream().filter(EditorPlugin.class::isInstance)
+                .map(EditorPlugin.class::cast)
+                .forEach(consumer::accept);
     }
 }

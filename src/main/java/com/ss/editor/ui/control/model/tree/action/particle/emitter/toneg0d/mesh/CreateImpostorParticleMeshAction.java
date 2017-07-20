@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh
 
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import javafx.scene.image.Image;
@@ -26,7 +26,7 @@ public class CreateImpostorParticleMeshAction extends AbstractCreateParticleMesh
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateImpostorParticleMeshAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateImpostorParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

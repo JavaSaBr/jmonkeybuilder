@@ -6,7 +6,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Sphere;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
@@ -39,7 +39,7 @@ public class CreateSphereShapeEmitterAction extends AbstractCreateShapeEmitterAc
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateSphereShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public CreateSphereShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
                                           @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

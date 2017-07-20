@@ -5,7 +5,7 @@ import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
@@ -34,7 +34,7 @@ public class CreateCapsuleCollisionShapeAction extends AbstractCreateShapeAction
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateCapsuleCollisionShapeAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public CreateCapsuleCollisionShapeAction(@NotNull final NodeTree<?> nodeTree,
                                              @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

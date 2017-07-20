@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.tree.node;
 
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,12 +25,12 @@ public interface HideableNode<C extends ChangeConsumer> {
      *
      * @param nodeTree the node tree
      */
-    void show(@NotNull AbstractNodeTree<C> nodeTree);
+    void show(@NotNull NodeTree<C> nodeTree);
 
     /**
      * Hide the object.
      *
      * @param nodeTree the node tree
      */
-    void hide(@NotNull AbstractNodeTree<C> nodeTree);
+    void hide(@NotNull NodeTree<C> nodeTree);
 }

@@ -12,7 +12,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyCountOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
@@ -76,7 +76,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AddUserDataAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AddUserDataAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -143,7 +143,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
         }
 
         final ModelNode<?> node = getNode();
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final Spatial element = (Spatial) node.getElement();
 
         final ModelPropertyCountOperation<Spatial, Object> operation =

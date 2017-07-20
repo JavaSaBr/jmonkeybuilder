@@ -4,6 +4,7 @@ import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.BiFunction;
 
 /**
  * The class to manage file icons.
@@ -136,11 +138,29 @@ public class FileIconManager {
     @NotNull
     private final ObjectDictionary<String, String> extensionToUrl;
 
+    /**
+     * The list of icon finders.
+     */
+    @NotNull
+    private final Array<BiFunction<Path, String, String>> iconFinders;
+
     private FileIconManager() {
         InitializeManager.valid(getClass());
+        this.iconFinders = ArrayFactory.newArray(BiFunction.class);
         this.imageCache = DictionaryFactory.newIntegerDictionary();
         this.extensionToUrl = DictionaryFactory.newObjectDictionary();
         this.originalImageCache = DictionaryFactory.newObjectDictionary();
+    }
+
+    /**
+     * Register a new icon finder. It's a function which receives a file and
+     * its extension and should return an URL to load an image.
+     *
+     * @param iconFinder the icon finder.
+     */
+    @FromAnyThread
+    public void registerIconFinder(@NotNull final BiFunction<Path, String, String> iconFinder) {
+        this.iconFinders.add(iconFinder);
     }
 
     /**
@@ -155,6 +175,21 @@ public class FileIconManager {
     public Image getIcon(@NotNull final Path path, int size) {
 
         final String extension = FileUtils.getExtension(path);
+        final Array<BiFunction<Path, String, String>> iconFinders = getIconFinders();
+
+        if (!iconFinders.isEmpty()) {
+            for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
+
+                final String url = iconFinder.apply(path, extension);
+
+                if (url == null || !EditorUtil.checkExists(url, iconFinder.getClass().getClassLoader())) {
+                    continue;
+                }
+
+                return buildImage(url, size);
+            }
+        }
+
         String contentType = EXTENSION_TO_CONTENT_TYPE.get(extension);
 
         if (contentType == null) {
@@ -303,5 +338,13 @@ public class FileIconManager {
         }
 
         return notNull(originalImageCache.get(image), "not found original for " + image.impl_getUrl());
+    }
+
+    /**
+     * @return the list of icon finders.
+     */
+    @NotNull
+    private Array<BiFunction<Path, String, String>> getIconFinders() {
+        return iconFinders;
     }
 }

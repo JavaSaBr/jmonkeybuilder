@@ -5,7 +5,7 @@ import com.jme3.scene.VertexBuffer;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -45,13 +45,13 @@ public class VertexBufferModelNode extends ModelNode<VertexBuffer> {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final VertexBuffer vertexBuffer = getElement();
 

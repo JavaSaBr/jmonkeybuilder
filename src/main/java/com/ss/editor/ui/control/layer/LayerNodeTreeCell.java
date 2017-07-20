@@ -6,18 +6,18 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.layer.node.SceneLayerModelNode;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTreeCell;
+import com.ss.editor.ui.control.tree.NodeTreeCell;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The implementation of {@link AbstractNodeTreeCell} to show layer nodes.
+ * The implementation of {@link NodeTreeCell} to show layer nodes.
  *
  * @author JavaSaBr
  */
-public class LayerNodeTreeCell extends AbstractNodeTreeCell<SceneChangeConsumer, LayerNodeTree> {
+public class LayerNodeTreeCell extends NodeTreeCell<SceneChangeConsumer, LayerNodeTree> {
 
     /**
      * Instantiates a new Layer node tree cell.

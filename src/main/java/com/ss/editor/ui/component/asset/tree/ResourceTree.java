@@ -2,18 +2,17 @@ package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
+import static com.ss.editor.util.EditorUtil.hasFileInClipboard;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.file.converter.FileConverterDescription;
-import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
+import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
 import com.ss.editor.ui.component.asset.tree.resource.FileElement;
 import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.IntObjectConsumer;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
@@ -31,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -41,9 +39,6 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 public class ResourceTree extends TreeView<ResourceElement> {
-
-    @NotNull
-    private static final FileConverterRegistry FILE_CONVERTER_REGISTRY = FileConverterRegistry.getInstance();
     
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -81,6 +76,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         return NAME_COMPARATOR.compare(firstElement, secondElement);
     };
+    public static final @NotNull AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY = AssetTreeContextMenuFillerRegistry.getInstance();
 
     private static int getLevel(@Nullable final ResourceElement element) {
         if (element instanceof FolderElement) return 1;
@@ -88,7 +84,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     }
 
     @NotNull
-    private static final Consumer<ResourceElement> DEFAULT_FUNCTION = element -> {
+    private static final Consumer<ResourceElement> DEFAULT_OPEN_FUNCTION = element -> {
         final OpenFileAction action = new OpenFileAction(element);
         final EventHandler<ActionEvent> onAction = action.getOnAction();
         onAction.handle(null);
@@ -115,7 +111,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * The action tester.
      */
-    @Nullable
+    @NotNull
     private Predicate<Class<?>> actionTester;
 
     /**
@@ -152,8 +148,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * @param readOnly the read only
      */
     public ResourceTree(final boolean readOnly) {
-        this(DEFAULT_FUNCTION, readOnly);
-        this.extensionFilter = ArrayFactory.newArray(String.class, 0);
+        this(DEFAULT_OPEN_FUNCTION, readOnly);
     }
 
     /**
@@ -168,6 +163,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         this.expandedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
         this.selectedElements = ArrayFactory.newConcurrentAtomicARSWLockArray(ResourceElement.class);
         this.extensionFilter = ArrayFactory.newArray(String.class, 0);
+        this.actionTester = actionClass -> true;
 
         expandedItemCountProperty()
                 .addListener((observable, oldValue, newValue) -> processChangedExpands(newValue));
@@ -183,6 +179,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * Handle changed count of expanded elements.
      */
     private void processChangedExpands(@NotNull final Number newValue) {
+        final IntObjectConsumer<ResourceTree> expandHandler = getExpandHandler();
         if (expandHandler == null) return;
         expandHandler.accept(newValue.intValue(), this);
     }
@@ -201,7 +198,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      *
      * @param actionTester the action tester.
      */
-    public void setActionTester(@Nullable final Predicate<Class<?>> actionTester) {
+    public void setActionTester(@NotNull final Predicate<Class<?>> actionTester) {
         this.actionTester = actionTester;
     }
 
@@ -257,7 +254,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     /**
      * @return the action tester.
      */
-    @Nullable
+    @NotNull
     private Predicate<Class<?>> getActionTester() {
         return actionTester;
     }
@@ -271,63 +268,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
     protected ContextMenu getContextMenu(@NotNull final ResourceElement element) {
         if (isReadOnly()) return null;
 
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-
         final ContextMenu contextMenu = new ContextMenu();
         final ObservableList<MenuItem> items = contextMenu.getItems();
 
         final Predicate<Class<?>> actionTester = getActionTester();
 
-        final Path file = element.getFile();
-
-        if(actionTester == null || actionTester.test(NewFileAction.class)) {
-            items.add(new NewFileAction(element));
-        }
-
-        if (element instanceof FileElement) {
-
-            if(actionTester == null || actionTester.test(OpenFileAction.class)) {
-                items.add(new OpenFileAction(element));
-            }
-
-            if(actionTester == null || actionTester.test(OpenFileByExternalEditorAction.class)) {
-                items.add(new OpenFileByExternalEditorAction(element));
-            }
-
-            if(actionTester == null || actionTester.test(OpenWithFileAction.class)) {
-                items.add(new OpenWithFileAction(element));
-            }
-
-            if(actionTester == null || actionTester.test(ConvertFileAction.class)) {
-
-                final Array<FileConverterDescription> descriptions = FILE_CONVERTER_REGISTRY.getDescriptions(file);
-
-                if (!descriptions.isEmpty()) {
-                    items.add(new ConvertFileAction(element, descriptions));
-                }
-            }
-        }
-
-        if (EditorUtil.hasFileInClipboard()) items.add(new PasteFileAction(element));
-
-        if (!Objects.equals(currentAsset, file)) {
-
-            if(actionTester == null || actionTester.test(CopyFileAction.class)) {
-                items.add(new CopyFileAction(element));
-            }
-
-            if(actionTester == null || actionTester.test(CutFileAction.class)) {
-                items.add(new CutFileAction(element));
-            }
-
-            if(actionTester == null || actionTester.test(RenameFileAction.class)) {
-                items.add(new RenameFileAction(element));
-            }
-
-            if(actionTester == null || actionTester.test(DeleteFileAction.class)) {
-                items.add(new DeleteFileAction(element));
-            }
+        final Array<AssetTreeContextMenuFiller> fillers = CONTEXT_MENU_FILLER_REGISTRY.getFillers();
+        for (final AssetTreeContextMenuFiller filler : fillers) {
+            filler.fill(element, items, actionTester);
         }
 
         if (items.isEmpty()) return null;
@@ -621,12 +569,20 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         prevItem.setValue(createFor(newFile));
 
-        final Array<TreeItem<ResourceElement>> children = ArrayFactory.newArray(TreeItem.class);
-
-        UIUtils.getAllItems(children, prevItem);
-
+        final Array<TreeItem<ResourceElement>> children = UIUtils.getAllItems(prevItem);
         children.fastRemove(prevItem);
-        children.forEach(child -> {
+
+        fillChildren(prevFile, newFile, children);
+
+        final ObservableList<TreeItem<ResourceElement>> newParentChildren = newParentItem.getChildren();
+        newParentChildren.add(prevItem);
+
+        FXCollections.sort(newParentChildren, ITEM_COMPARATOR);
+    }
+
+    private void fillChildren(@NotNull final Path prevFile, @NotNull final Path newFile,
+                              @NotNull final Array<TreeItem<ResourceElement>> children) {
+        for (final TreeItem<ResourceElement> child : children) {
 
             final ResourceElement resourceElement = child.getValue();
             final Path file = resourceElement.getFile();
@@ -634,12 +590,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
             final Path resultFile = newFile.resolve(relativeFile);
 
             child.setValue(createFor(resultFile));
-        });
-
-        final ObservableList<TreeItem<ResourceElement>> newParentChildren = newParentItem.getChildren();
-        newParentChildren.add(prevItem);
-
-        FXCollections.sort(newParentChildren, ITEM_COMPARATOR);
+        }
     }
 
     /**
@@ -656,24 +607,14 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         prevItem.setValue(createFor(newFile));
 
-        final Array<TreeItem<ResourceElement>> children = ArrayFactory.newArray(TreeItem.class);
-
-        UIUtils.getAllItems(children, prevItem);
-
+        final Array<TreeItem<ResourceElement>> children = UIUtils.getAllItems(prevItem);
         children.fastRemove(prevItem);
-        children.forEach(child -> {
 
-            final ResourceElement resourceElement = child.getValue();
-            final Path file = resourceElement.getFile();
-            final Path relativeFile = file.subpath(prevFile.getNameCount(), file.getNameCount());
-            final Path resultFile = newFile.resolve(relativeFile);
-
-            child.setValue(createFor(resultFile));
-        });
+        fillChildren(prevFile, newFile, children);
     }
 
     /**
-     * Handle pressing on hotkey.
+     * Handle hotkeys.
      */
     private void processKey(@NotNull final KeyEvent event) {
         if (isReadOnly()) return;
@@ -689,29 +630,33 @@ public class ResourceTree extends TreeView<ResourceElement> {
         final Path currentAsset = editorConfig.getCurrentAsset();
         if (currentAsset == null) return;
 
+        final Predicate<Class<?>> actionTester = getActionTester();
         final KeyCode keyCode = event.getCode();
+        final boolean controlDown = event.isControlDown();
 
-        if (event.isControlDown() && keyCode == KeyCode.C && !currentAsset.equals(item.getFile())) {
+        if (!currentAsset.equals(item.getFile())) {
+            if (controlDown && keyCode == KeyCode.C && actionTester.test(CopyFileAction.class)) {
 
-            final CopyFileAction action = new CopyFileAction(item);
-            final EventHandler<ActionEvent> onAction = action.getOnAction();
-            onAction.handle(null);
+                final CopyFileAction action = new CopyFileAction(item);
+                final EventHandler<ActionEvent> onAction = action.getOnAction();
+                onAction.handle(null);
 
-        } else if (event.isControlDown() && keyCode == KeyCode.X && !currentAsset.equals(item.getFile())) {
+            } else if (controlDown && keyCode == KeyCode.X && actionTester.test(CutFileAction.class)) {
 
-            final CutFileAction action = new CutFileAction(item);
-            final EventHandler<ActionEvent> onAction = action.getOnAction();
-            onAction.handle(null);
+                final CutFileAction action = new CutFileAction(item);
+                final EventHandler<ActionEvent> onAction = action.getOnAction();
+                onAction.handle(null);
 
-        } else if (event.isControlDown() && keyCode == KeyCode.V && EditorUtil.hasFileInClipboard()) {
+            } else if (keyCode == KeyCode.DELETE && actionTester.test(DeleteFileAction.class)) {
 
+                final DeleteFileAction action = new DeleteFileAction(item);
+                final EventHandler<ActionEvent> onAction = action.getOnAction();
+                onAction.handle(null);
+            }
+        }
+
+        if (controlDown && keyCode == KeyCode.V && hasFileInClipboard() && actionTester.test(PasteFileAction.class)) {
             final PasteFileAction action = new PasteFileAction(item);
-            final EventHandler<ActionEvent> onAction = action.getOnAction();
-            onAction.handle(null);
-
-        } else if (keyCode == KeyCode.DELETE && !currentAsset.equals(item.getFile())) {
-
-            final DeleteFileAction action = new DeleteFileAction(item);
             final EventHandler<ActionEvent> onAction = action.getOnAction();
             onAction.handle(null);
         }

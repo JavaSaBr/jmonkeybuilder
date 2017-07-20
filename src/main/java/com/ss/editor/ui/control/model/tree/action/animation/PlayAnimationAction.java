@@ -8,7 +8,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.image.Image;
@@ -28,7 +28,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public PlayAnimationAction(final AbstractNodeTree<?> nodeTree, final ModelNode<?> node) {
+    public PlayAnimationAction(final NodeTree<?> nodeTree, final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -76,7 +76,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
             });
         }
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.update(modelNode);
     }
 

@@ -8,7 +8,7 @@ import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -48,7 +48,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * The component of the node tree.
      */
     @NotNull
-    private final AbstractNodeTree<C> nodeTree;
+    private final NodeTree<C> nodeTree;
 
     /**
      * The node.
@@ -62,7 +62,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractNodeAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
         setOnAction(event -> process());
@@ -107,7 +107,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * @return the component of the model three.
      */
     @NotNull
-    protected AbstractNodeTree<C> getNodeTree() {
+    protected NodeTree<C> getNodeTree() {
         return nodeTree;
     }
 

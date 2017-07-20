@@ -1,5 +1,6 @@
 package com.ss.editor.ui.css;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,7 @@ public class CSSRegistry {
      *
      * @param cssFile the CSS file.
      */
+    @FromAnyThread
     public void addCssFile(@NotNull String cssFile) {
         availableCssFiles.add(cssFile);
     }

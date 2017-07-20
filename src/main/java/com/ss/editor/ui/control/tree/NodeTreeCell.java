@@ -37,7 +37,7 @@ import java.util.Set;
  * @param <M> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends AbstractNodeTree<C>> extends TextFieldTreeCell<ModelNode<?>> {
+public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<ModelNode<?>> {
 
     @NotNull
     private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
@@ -49,7 +49,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
-    private static final DataFormat DATA_FORMAT = new DataFormat(AbstractNodeTreeCell.class.getName());
+    private static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
 
     @NotNull
     private final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
@@ -82,7 +82,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
 
         @Override
         public Object getBean() {
-            return AbstractNodeTreeCell.this;
+            return NodeTreeCell.this;
         }
 
         @Override
@@ -102,7 +102,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
 
         @Override
         public Object getBean() {
-            return AbstractNodeTreeCell.this;
+            return NodeTreeCell.this;
         }
 
         @Override
@@ -151,7 +151,7 @@ public abstract class AbstractNodeTreeCell<C extends ChangeConsumer, M extends A
      *
      * @param nodeTree the node tree
      */
-    public AbstractNodeTreeCell(@NotNull final M nodeTree) {
+    public NodeTreeCell(@NotNull final M nodeTree) {
         this.nodeTree = nodeTree;
         this.icon = new ImageView();
         this.content = new HBox();

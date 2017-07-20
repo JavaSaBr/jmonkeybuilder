@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeEmitterMeshOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
@@ -33,7 +33,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public AbstractCreateShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
                                             @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -74,7 +74,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
         final ParticleEmitterNode element = (ParticleEmitterNode) modelNode.getElement();
         final Mesh shape = createMesh(vars);
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeEmitterMeshOperation(shape, element));
     }

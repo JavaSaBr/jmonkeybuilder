@@ -5,7 +5,7 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.infos.ChildCollisionShape;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape>
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final ChildCollisionShape element = getElement();
         final CollisionShape shape = element.shape;
@@ -44,7 +44,7 @@ public class ChildCollisionShapeModelNode extends ModelNode<ChildCollisionShape>
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 

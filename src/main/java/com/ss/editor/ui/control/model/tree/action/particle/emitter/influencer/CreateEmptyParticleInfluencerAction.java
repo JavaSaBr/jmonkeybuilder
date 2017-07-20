@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer;
 import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public class CreateEmptyParticleInfluencerAction extends AbstractCreateParticleI
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateEmptyParticleInfluencerAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public CreateEmptyParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree,
                                                @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

@@ -18,7 +18,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileActio
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
@@ -55,7 +55,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public LoadModelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -85,7 +85,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
      */
     protected void processOpen(@NotNull final Path file) {
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         final SceneLayer defaultLayer = EditorUtil.getDefaultLayer(consumer);
 

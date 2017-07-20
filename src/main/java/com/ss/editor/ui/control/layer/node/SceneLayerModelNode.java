@@ -12,7 +12,7 @@ import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
 import com.ss.editor.ui.control.model.tree.action.scene.RemoveSceneLayerAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.HideableNode;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.tree.node.ModelNodeFactory;
@@ -43,7 +43,7 @@ public class SceneLayerModelNode extends ModelNode<SceneLayer> implements Hideab
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         super.fillContextMenu(nodeTree, items);
 
         final SceneLayer layer = getElement();
@@ -55,7 +55,7 @@ public class SceneLayerModelNode extends ModelNode<SceneLayer> implements Hideab
     }
 
     @Override
-    public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
+    public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
 
         final SceneLayer element = getElement();
 
@@ -64,13 +64,13 @@ public class SceneLayerModelNode extends ModelNode<SceneLayer> implements Hideab
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return true;
     }
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final SceneLayer element = getElement();
 
@@ -130,13 +130,13 @@ public class SceneLayerModelNode extends ModelNode<SceneLayer> implements Hideab
     }
 
     @Override
-    public void show(@NotNull final AbstractNodeTree<SceneChangeConsumer> nodeTree) {
+    public void show(@NotNull final NodeTree<SceneChangeConsumer> nodeTree) {
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), true));
     }
 
     @Override
-    public void hide(@NotNull final AbstractNodeTree<SceneChangeConsumer> nodeTree) {
+    public void hide(@NotNull final NodeTree<SceneChangeConsumer> nodeTree) {
         final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         consumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), false));
     }

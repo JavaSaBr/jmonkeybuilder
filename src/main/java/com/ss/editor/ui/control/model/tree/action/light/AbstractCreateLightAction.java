@@ -9,7 +9,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddLightOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateLightAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -36,7 +36,7 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
     protected void process() {
         super.process();
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
 
         final Light light = createLight();
         final ModelNode<?> modelNode = getNode();

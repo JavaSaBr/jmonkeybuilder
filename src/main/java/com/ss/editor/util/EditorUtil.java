@@ -62,7 +62,8 @@ public abstract class EditorUtil {
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
     @NotNull
-    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() -> new SimpleDateFormat("HH:mm:ss:SSS"));
+    private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
+            new SimpleDateFormat("HH:mm:ss:SSS"));
 
     /**
      * Check exists boolean.
@@ -72,7 +73,20 @@ public abstract class EditorUtil {
      */
     public static boolean checkExists(@NotNull final String path) {
         final Class<EditorUtil> cs = EditorUtil.class;
-        return cs.getResourceAsStream(path) != null || cs.getResourceAsStream("/" + path) != null;
+        return cs.getResourceAsStream(path) != null ||
+                cs.getResourceAsStream("/" + path) != null;
+    }
+
+    /**
+     * Check exists boolean.
+     *
+     * @param path the path to resource.
+     * @param classLoader the class loader.
+     * @return true if the resource is exists.
+     */
+    public static boolean checkExists(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+        return classLoader.getResourceAsStream(path) != null ||
+                classLoader.getResourceAsStream("/" + path) != null;
     }
 
     /**

@@ -15,7 +15,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public CreateParticleEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -49,7 +49,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
     protected void process() {
         super.process();
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         final Material material = new Material(assetManager,"Common/MatDefs/Misc/Particle.j3md");

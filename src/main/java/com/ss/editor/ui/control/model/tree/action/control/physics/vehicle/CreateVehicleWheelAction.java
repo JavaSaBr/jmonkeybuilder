@@ -12,7 +12,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddVehicleWheelOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
@@ -67,7 +67,7 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateVehicleWheelAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateVehicleWheelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -107,7 +107,7 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
 
         final boolean isFront = vars.getBoolean(PROPERTY_IS_FRONT);
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddVehicleWheelOperation(control, location, direction, axle, restLength, radius, isFront));
     }

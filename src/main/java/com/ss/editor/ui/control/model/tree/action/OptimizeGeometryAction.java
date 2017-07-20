@@ -9,7 +9,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.OptimizeGeometryOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsum
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public OptimizeGeometryAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public OptimizeGeometryAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -52,7 +52,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsum
     protected void process() {
         super.process();
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ModelNode<?> node = getNode();
         final Node oldElement = (Node) node.getElement();
         final Node newElement = (Node) oldElement.clone();

@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d;
 
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class CreateToneg0dSoftParticleEmitterAction extends CreateToneg0dParticl
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateToneg0dSoftParticleEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateToneg0dSoftParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

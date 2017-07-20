@@ -8,7 +8,7 @@ import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer.*;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -39,16 +39,16 @@ public class Toneg0dParticleInfluencersModelNode extends ModelNode<Toneg0dPartic
             DictionaryFactory.newObjectDictionary();
 
     static {
-        CONSTRUCTORS.put(AlphaInfluencer.class, getConstructor(CreateAlphaParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(ColorInfluencer.class, getConstructor(CreateColorParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(DestinationInfluencer.class, getConstructor(CreateDestinationParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(GravityInfluencer.class, getConstructor(CreateGravityParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(ImpulseInfluencer.class, getConstructor(CreateImpulseParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(PhysicsInfluencer.class, getConstructor(CreatePhysicsParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(RadialVelocityInfluencer.class, getConstructor(CreateRadialVelocityParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(RotationInfluencer.class, getConstructor(CreateRotationParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(SizeInfluencer.class, getConstructor(CreateSizeParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
-        CONSTRUCTORS.put(SpriteInfluencer.class, getConstructor(CreateSpriteParticleInfluencerAction.class, AbstractNodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(AlphaInfluencer.class, getConstructor(CreateAlphaParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(ColorInfluencer.class, getConstructor(CreateColorParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(DestinationInfluencer.class, getConstructor(CreateDestinationParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(GravityInfluencer.class, getConstructor(CreateGravityParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(ImpulseInfluencer.class, getConstructor(CreateImpulseParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(PhysicsInfluencer.class, getConstructor(CreatePhysicsParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(RadialVelocityInfluencer.class, getConstructor(CreateRadialVelocityParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(RotationInfluencer.class, getConstructor(CreateRotationParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(SizeInfluencer.class, getConstructor(CreateSizeParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
+        CONSTRUCTORS.put(SpriteInfluencer.class, getConstructor(CreateSpriteParticleInfluencerAction.class, NodeTree.class, ModelNode.class));
     }
 
     /**
@@ -74,7 +74,7 @@ public class Toneg0dParticleInfluencersModelNode extends ModelNode<Toneg0dPartic
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
 
         final Toneg0dParticleInfluencers element = getElement();
         final ParticleEmitterNode emitterNode = element.getEmitterNode();
@@ -94,7 +94,7 @@ public class Toneg0dParticleInfluencersModelNode extends ModelNode<Toneg0dPartic
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final Toneg0dParticleInfluencers element = getElement();
         final Array<ParticleInfluencer> influencers = element.getInfluencers();
@@ -103,7 +103,7 @@ public class Toneg0dParticleInfluencersModelNode extends ModelNode<Toneg0dPartic
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 }

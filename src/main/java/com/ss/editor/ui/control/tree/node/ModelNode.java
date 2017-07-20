@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.tree.node;
 import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -102,7 +102,7 @@ public abstract class ModelNode<T> implements UObject {
      * @param nodeTree the node tree
      * @return true of this node has any children.
      */
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return false;
     }
 
@@ -113,7 +113,7 @@ public abstract class ModelNode<T> implements UObject {
      * @return the array of children of this node.
      */
     @NotNull
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         return EMPTY_ARRAY;
     }
 
@@ -152,7 +152,7 @@ public abstract class ModelNode<T> implements UObject {
      * @param nodeTree the node tree
      * @param items    the items
      */
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
     }
 
     /**
@@ -177,7 +177,7 @@ public abstract class ModelNode<T> implements UObject {
      * @param nodeTree the node tree
      * @param newName  the new name
      */
-    public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
+    public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
     }
 
     /**

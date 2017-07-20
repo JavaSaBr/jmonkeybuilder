@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.control;
 import com.jme3.scene.control.Control;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.RemoveControlAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.extension.scene.control.EditableControl;
 
@@ -33,7 +33,7 @@ public class ControlModelNode<T extends Control> extends ModelNode<T> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveControlAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }

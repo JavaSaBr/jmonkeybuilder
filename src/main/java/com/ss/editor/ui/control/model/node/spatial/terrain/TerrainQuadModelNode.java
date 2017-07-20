@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.spatial.terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
@@ -35,13 +35,13 @@ public class TerrainQuadModelNode extends NodeModelNode<TerrainQuad> {
 
     @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
     @Nullable
     @Override
-    protected Menu createToolMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 }

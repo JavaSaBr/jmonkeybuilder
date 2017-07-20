@@ -5,7 +5,7 @@ import com.jme3.effect.shapes.EmitterMeshFaceShape;
 import com.jme3.effect.shapes.EmitterMeshVertexShape;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +24,7 @@ public class CreateMeshFaceShapeEmitterAction extends CreateMeshVertexShapeEmitt
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateMeshFaceShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public CreateMeshFaceShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
                                             @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

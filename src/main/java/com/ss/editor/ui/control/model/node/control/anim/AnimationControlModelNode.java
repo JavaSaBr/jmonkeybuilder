@@ -8,7 +8,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlModelNode;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.animation.PlaySettingsAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
@@ -51,7 +51,7 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         items.add(new PlaySettingsAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
@@ -100,13 +100,13 @@ public class AnimationControlModelNode extends ControlModelNode<AnimControl> {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
 

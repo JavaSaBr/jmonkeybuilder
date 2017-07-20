@@ -7,7 +7,7 @@ import com.jme3.effect.shapes.EmitterShape;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
@@ -36,7 +36,7 @@ public class CreateBoxShapeEmitterAction extends AbstractCreateShapeEmitterActio
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateBoxShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateBoxShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

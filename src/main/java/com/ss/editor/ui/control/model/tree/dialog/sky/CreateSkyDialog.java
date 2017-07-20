@@ -21,7 +21,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -111,7 +111,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * The node tree.
      */
     @NotNull
-    private final AbstractNodeTree<?> nodeTree;
+    private final NodeTree<?> nodeTree;
 
     /**
      * The settings root.
@@ -216,7 +216,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * @param nodeTree   the node tree
      */
     public CreateSkyDialog(@NotNull final ModelNode<?> parentNode,
-                           @NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree) {
+                           @NotNull final NodeTree<ModelChangeConsumer> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
         getSkyTypeComboBox().getSelectionModel().select(SkyType.SINGLE_TEXTURE);
@@ -605,7 +605,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * @return the node tree.
      */
     @NotNull
-    private AbstractNodeTree<?> getNodeTree() {
+    private NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -631,7 +631,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
         final FloatTextField normalScaleXSpinner = getNormalScaleXField();

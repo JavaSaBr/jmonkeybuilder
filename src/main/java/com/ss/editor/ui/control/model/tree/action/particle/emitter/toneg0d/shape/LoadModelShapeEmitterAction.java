@@ -16,7 +16,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeEmitterMeshOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.NodeUtils;
@@ -59,7 +59,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public LoadModelShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -82,7 +82,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
      */
     protected void processOpen(@NotNull final Path file) {
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
 
         final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);

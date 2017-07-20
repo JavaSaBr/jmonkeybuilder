@@ -8,7 +8,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 
@@ -30,7 +30,7 @@ public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public StopAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public StopAnimationAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -62,7 +62,7 @@ public class StopAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
 
         EXECUTOR_MANAGER.addJMETask(control::clearChannels);
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         nodeTree.update(modelNode);
     }
 }

@@ -8,7 +8,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeMeshOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -60,7 +60,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      * The node tree component.
      */
     @NotNull
-    private final AbstractNodeTree<?> nodeTree;
+    private final NodeTree<?> nodeTree;
 
     /**
      * The generated node.
@@ -86,7 +86,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public GenerateTangentsDialog(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public GenerateTangentsDialog(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         this.nodeTree = nodeTree;
         this.node = node;
     }
@@ -97,7 +97,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
      * @return the node tree component.
      */
     @NotNull
-    protected AbstractNodeTree<?> getNodeTree() {
+    protected NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -170,7 +170,7 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
     @Override
     protected void processOk() {
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
 
         final ModelNode<?> node = getNode();
         final Geometry geometry = (Geometry) node.getElement();

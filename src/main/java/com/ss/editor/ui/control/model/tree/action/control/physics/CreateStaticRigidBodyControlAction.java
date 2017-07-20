@@ -4,7 +4,7 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public class CreateStaticRigidBodyControlAction extends CreateRigidBodyControlAc
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateStaticRigidBodyControlAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public CreateStaticRigidBodyControlAction(@NotNull final NodeTree<?> nodeTree,
                                               @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

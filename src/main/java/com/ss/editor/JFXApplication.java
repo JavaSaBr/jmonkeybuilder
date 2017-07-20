@@ -14,10 +14,15 @@ import com.ss.editor.config.CommandLineConfig;
 import com.ss.editor.config.Config;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.executor.impl.JMEThreadExecutor;
+import com.ss.editor.file.converter.FileConverterRegistry;
 import com.ss.editor.manager.*;
 import com.ss.editor.task.CheckNewVersionTask;
 import com.ss.editor.ui.builder.EditorFXSceneBuilder;
+import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
+import com.ss.editor.ui.component.creator.FileCreatorRegistry;
+import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.log.LogView;
+import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
@@ -187,6 +192,7 @@ public class JFXApplication extends Application {
 
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.onBeforeCreateJavaFXContext();
+        pluginManager.handlePlugins(editorPlugin -> editorPlugin.registerCSS(CSSRegistry.getInstance()));
 
         LogView.getInstance();
         JFXApplication.instance = this;
@@ -266,6 +272,13 @@ public class JFXApplication extends Application {
 
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.onAfterCreateJavaFXContext();
+        pluginManager.handlePlugins(editorPlugin -> {
+            editorPlugin.registerFileCreators(FileCreatorRegistry.getInstance());
+            editorPlugin.registerFileEditors(EditorRegistry.getInstance());
+            editorPlugin.registerFileIconFinders(FileIconManager.getInstance());
+            editorPlugin.registerFileConverters(FileConverterRegistry.getInstance());
+            editorPlugin.registerContextMenuFillers(AssetTreeContextMenuFillerRegistry.getInstance());
+        });
 
         final EditorFXScene scene = getScene();
 

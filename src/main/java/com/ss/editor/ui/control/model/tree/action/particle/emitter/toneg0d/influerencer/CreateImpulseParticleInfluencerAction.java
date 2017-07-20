@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer;
 
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class CreateImpulseParticleInfluencerAction extends AbstractCreateParticl
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateImpulseParticleInfluencerAction(@NotNull final AbstractNodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateImpulseParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

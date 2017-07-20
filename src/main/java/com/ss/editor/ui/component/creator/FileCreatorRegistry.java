@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.creator;
 
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.impl.*;
 import com.ss.editor.ui.component.creator.impl.material.MaterialFileCreator;
 import com.ss.editor.ui.component.creator.impl.material.definition.MaterialDefinitionFileCreator;
@@ -21,6 +22,7 @@ import java.util.concurrent.Callable;
  */
 public class FileCreatorRegistry {
 
+    @NotNull
     private static final Logger LOGGER = LoggerManager.getLogger(FileCreatorRegistry.class);
 
     @NotNull
@@ -62,7 +64,8 @@ public class FileCreatorRegistry {
      *
      * @param description the new description.
      */
-    private void addDescription(@NotNull final FileCreatorDescription description) {
+    @FromAnyThread
+    public void addDescription(@NotNull final FileCreatorDescription description) {
         this.descriptions.add(description);
     }
 

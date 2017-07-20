@@ -13,7 +13,7 @@ import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.Cr
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateEmptyParticleInfluencerAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.influencer.CreateRadialParticleInfluencerAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.shape.*;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -50,7 +50,7 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final ParticleEmitter element = getElement();
         final ModelNode<ParticleInfluencer> influencerModelNode = createFor(element.getParticleInfluencer());
@@ -65,7 +65,7 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
         final Menu changeShapeMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_PARTICLE_EMITTER_CHANGE_SHAPE,
@@ -94,13 +94,13 @@ public class ParticleEmitterModelNode extends GeometryModelNode<ParticleEmitter>
 
     @Nullable
     @Override
-    protected Menu createToolMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
     @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 }

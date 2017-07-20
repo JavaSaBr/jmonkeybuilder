@@ -4,7 +4,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.Light;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class CreateDirectionLightAction extends AbstractCreateLightAction {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateDirectionLightAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateDirectionLightAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

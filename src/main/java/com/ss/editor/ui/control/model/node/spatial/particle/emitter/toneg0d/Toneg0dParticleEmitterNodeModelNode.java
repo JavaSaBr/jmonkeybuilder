@@ -11,7 +11,7 @@ import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh.
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh.CreateQuadParticleMeshAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh.LoadModelParticlesMeshAction;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.shape.*;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -50,18 +50,18 @@ public class Toneg0dParticleEmitterNodeModelNode extends NodeModelNode<ParticleE
 
     @Nullable
     @Override
-    protected Menu createToolMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createToolMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
     @Nullable
     @Override
-    protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
         return null;
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
@@ -94,7 +94,7 @@ public class Toneg0dParticleEmitterNodeModelNode extends NodeModelNode<ParticleE
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final ParticleEmitterNode element = getElement();
         final EmitterMesh emitterShape = element.getEmitterShape();

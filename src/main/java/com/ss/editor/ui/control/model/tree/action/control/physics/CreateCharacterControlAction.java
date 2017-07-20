@@ -7,7 +7,7 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public class CreateCharacterControlAction extends AbstractCreateControlAction {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateCharacterControlAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateCharacterControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

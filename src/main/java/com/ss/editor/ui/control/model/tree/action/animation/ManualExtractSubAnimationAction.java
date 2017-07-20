@@ -6,7 +6,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.animation.ExtractSubAnimationDialog;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -29,7 +29,7 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public ManualExtractSubAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public ManualExtractSubAnimationAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -51,7 +51,7 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
         super.process();
         
         final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
 
         final ExtractSubAnimationDialog dialog = new ExtractSubAnimationDialog(nodeTree, (AnimationModelNode) getNode());
         dialog.show(scene.getWindow());

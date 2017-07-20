@@ -9,7 +9,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.RemoveParticleInfluencerOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0dParticleInfluencerModelNode;
 import com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.influencer.Toneg0dParticleInfluencersModelNode;
@@ -35,7 +35,7 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public RemoveParticleInfluencerAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public RemoveParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -64,7 +64,7 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
         final Array<ParticleInfluencer> influencers = emitterNode.getInfluencers();
         final int childIndex = influencers.indexOf(influencer);
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RemoveParticleInfluencerOperation(influencer, emitterNode, childIndex));
     }

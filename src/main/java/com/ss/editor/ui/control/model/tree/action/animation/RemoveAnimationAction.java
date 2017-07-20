@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RemoveAnimationNodeOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +29,7 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public RemoveAnimationAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public RemoveAnimationAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -56,7 +56,7 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
         if (!(element instanceof Animation)) return;
         final Animation animation = (Animation) element;
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelNode<?> parentNode = nodeTree.findParent(node);
 
         if (parentNode == null) {

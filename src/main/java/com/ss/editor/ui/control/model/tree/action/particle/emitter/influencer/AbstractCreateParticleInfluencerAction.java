@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeParticleInfluencerOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateParticleInfluencerAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public AbstractCreateParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree,
                                                   @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
@@ -43,7 +43,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
     protected void process() {
         super.process();
 
-        final AbstractNodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
+        final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
         final ModelNode<?> modelNode = getNode();

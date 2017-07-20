@@ -27,7 +27,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
@@ -159,7 +159,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * The node tree.
      */
     @NotNull
-    private final AbstractNodeTree<?> nodeTree;
+    private final NodeTree<?> nodeTree;
 
     /**
      * The settings root.
@@ -269,7 +269,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * @param parentNode the parent node
      * @param nodeTree   the node tree
      */
-    public CreateTerrainDialog(@NotNull final ModelNode<?> parentNode, @NotNull final AbstractNodeTree<?> nodeTree) {
+    public CreateTerrainDialog(@NotNull final ModelNode<?> parentNode, @NotNull final NodeTree<?> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
 
@@ -807,7 +807,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         final ModelNode<?> parentNode = getParentNode();
         final com.jme3.scene.Node parent = (com.jme3.scene.Node) parentNode.getElement();
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddChildOperation(terrainNode, parent));
     }
@@ -822,7 +822,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * @return the node tree.
      */
     @NotNull
-    private AbstractNodeTree<?> getNodeTree() {
+    private NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 

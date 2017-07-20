@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.spatial.particle.emitter.toneg0d.inf
 
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer.RemoveParticleInfluencerAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class Toneg0dParticleInfluencerModelNode extends ModelNode<ParticleInflue
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         items.add(new RemoveParticleInfluencerAction(nodeTree, this));
         super.fillContextMenu(nodeTree, items);
     }

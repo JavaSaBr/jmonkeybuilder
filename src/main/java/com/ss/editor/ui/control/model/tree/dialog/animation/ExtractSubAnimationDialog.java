@@ -9,7 +9,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.AnimationUtils;
@@ -41,7 +41,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      * The node tree component.
      */
     @NotNull
-    private final AbstractNodeTree<?> nodeTree;
+    private final NodeTree<?> nodeTree;
 
     /**
      * The animation node.
@@ -73,7 +73,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public ExtractSubAnimationDialog(@NotNull final AbstractNodeTree<?> nodeTree,
+    public ExtractSubAnimationDialog(@NotNull final NodeTree<?> nodeTree,
                                      @NotNull final AnimationModelNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
@@ -100,7 +100,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      * @return the node tree component.
      */
     @NotNull
-    protected AbstractNodeTree<?> getNodeTree() {
+    protected NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -211,7 +211,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
         final Animation subAnimation = extractAnimation(animation, nameField.getText(), startFrame, endFrame);
 
-        final AbstractNodeTree<?> nodeTree = getNodeTree();
+        final NodeTree<?> nodeTree = getNodeTree();
         final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddAnimationNodeOperation(subAnimation, control));
 

@@ -3,7 +3,7 @@ package com.ss.editor.ui.control.model.node.spatial.scene;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.control.model.node.spatial.NodeModelNode;
 import com.ss.editor.extension.scene.SceneNode;
@@ -34,7 +34,7 @@ public class SceneNodeModelNode extends NodeModelNode<SceneNode> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree, @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
         final Menu createMenu = createCreationMenu(nodeTree);

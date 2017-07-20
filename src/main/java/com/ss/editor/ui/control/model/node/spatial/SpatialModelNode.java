@@ -30,7 +30,7 @@ import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBod
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateStaticRigidBodyControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.CreateVehicleControlAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
@@ -61,7 +61,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
         if (!(nodeTree instanceof ModelNodeTree)) return;
 
@@ -92,7 +92,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
      * @return the menu
      */
     @Nullable
-    protected Menu createCreationMenu(@NotNull final AbstractNodeTree<?> nodeTree) {
+    protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final T element = getElement();
         final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
@@ -136,7 +136,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
      * @return the menu
      */
     @Nullable
-    protected Menu createToolMenu(final @NotNull AbstractNodeTree<?> nodeTree) {
+    protected Menu createToolMenu(final @NotNull NodeTree<?> nodeTree) {
         return null;
     }
 
@@ -153,12 +153,12 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
     }
 
     @Override
-    public boolean hasChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public boolean hasChildren(@NotNull final NodeTree<?> nodeTree) {
         return nodeTree instanceof ModelNodeTree;
     }
 
     @Override
-    public void changeName(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final String newName) {
+    public void changeName(@NotNull final NodeTree<?> nodeTree, @NotNull final String newName) {
         if (StringUtils.equals(getName(), newName)) return;
 
         super.changeName(nodeTree, newName);
@@ -170,7 +170,7 @@ public class SpatialModelNode<T extends Spatial> extends ModelNode<T> {
 
     @NotNull
     @Override
-    public Array<ModelNode<?>> getChildren(@NotNull final AbstractNodeTree<?> nodeTree) {
+    public Array<ModelNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
 
         final Array<ModelNode<?>> result = ArrayFactory.newArray(ModelNode.class);
         final Spatial element = getElement();

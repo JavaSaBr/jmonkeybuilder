@@ -5,7 +5,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.physics.PhysicsObjectModelNode;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.CreateVehicleWheelAction;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -42,7 +42,7 @@ public class VehicleControlModelNode extends PhysicsObjectModelNode<VehicleContr
     }
 
     @Override
-    public void fillContextMenu(@NotNull final AbstractNodeTree<?> nodeTree,
+    public void fillContextMenu(@NotNull final NodeTree<?> nodeTree,
                                 @NotNull final ObservableList<MenuItem> items) {
 
         items.add(new CreateVehicleWheelAction(nodeTree, this));

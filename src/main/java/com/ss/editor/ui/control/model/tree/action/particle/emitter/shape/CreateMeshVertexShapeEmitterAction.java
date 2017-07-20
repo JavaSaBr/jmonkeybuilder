@@ -9,7 +9,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
@@ -37,7 +37,7 @@ public class CreateMeshVertexShapeEmitterAction extends AbstractCreateShapeEmitt
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateMeshVertexShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree,
+    public CreateMeshVertexShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
                                               @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }

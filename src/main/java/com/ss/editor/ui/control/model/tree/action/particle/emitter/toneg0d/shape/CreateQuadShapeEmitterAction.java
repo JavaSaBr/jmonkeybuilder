@@ -6,7 +6,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Quad;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.ModelNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
@@ -39,7 +39,7 @@ public class CreateQuadShapeEmitterAction extends AbstractCreateShapeEmitterActi
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateQuadShapeEmitterAction(@NotNull final AbstractNodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateQuadShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
         super(nodeTree, node);
     }
 

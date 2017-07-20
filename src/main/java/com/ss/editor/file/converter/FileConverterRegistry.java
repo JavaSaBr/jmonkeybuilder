@@ -1,23 +1,16 @@
 package com.ss.editor.file.converter;
 
 import com.ss.editor.annotation.FromAnyThread;
-import com.ss.editor.file.converter.impl.BlendToJ3oFileConverter;
-import com.ss.editor.file.converter.impl.FBXToJ3oFileConverter;
-import com.ss.editor.file.converter.impl.MeshXmlToJ3oFileConverter;
-import com.ss.editor.file.converter.impl.ObjToJ3oFileConverter;
-import com.ss.editor.file.converter.impl.SceneToJ3oFileConverter;
-import com.ss.editor.file.converter.impl.XBufToJ3oFileConverter;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Path;
-import java.util.function.Supplier;
-
+import com.ss.editor.file.converter.impl.*;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
+import java.util.function.Supplier;
 
 /**
  * The registry of file converters.
@@ -63,7 +56,8 @@ public class FileConverterRegistry {
      *
      * @param description the new descriptor.
      */
-    private void addDescription(@NotNull final FileConverterDescription description) {
+    @FromAnyThread
+    public void addDescription(@NotNull final FileConverterDescription description) {
         this.descriptions.add(description);
     }
 

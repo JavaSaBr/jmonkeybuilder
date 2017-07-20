@@ -12,7 +12,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.FXConstants;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import com.ss.editor.ui.control.tree.AbstractNodeTree;
+import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -75,7 +75,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      * The node tree component.
      */
     @NotNull
-    private final AbstractNodeTree<?> nodeTree;
+    private final NodeTree<?> nodeTree;
 
     /**
      * The geometry.
@@ -107,7 +107,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      * @param nodeTree the node tree
      * @param geometry the geometry
      */
-    public GenerateLodLevelsDialog(@NotNull final AbstractNodeTree<?> nodeTree, final @NotNull Geometry geometry) {
+    public GenerateLodLevelsDialog(@NotNull final NodeTree<?> nodeTree, final @NotNull Geometry geometry) {
         this.nodeTree = nodeTree;
         this.geometry = geometry;
         this.mesh = geometry.getMesh();
@@ -118,7 +118,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
      * @return the node tree component.
      */
     @NotNull
-    private AbstractNodeTree<?> getNodeTree() {
+    private NodeTree<?> getNodeTree() {
         return nodeTree;
     }
 
@@ -324,7 +324,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
         EXECUTOR_MANAGER.addFXTask(() -> {
 
-            final AbstractNodeTree<?> nodeTree = getNodeTree();
+            final NodeTree<?> nodeTree = getNodeTree();
             final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
 
             final ModelPropertyOperation<Geometry, VertexBuffer[]> operation =

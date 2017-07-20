@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
+public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -53,7 +53,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * @param selectionHandler the selection handler
      * @param consumer         the consumer
      */
-    public AbstractNodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final C consumer) {
+    public NodeTree(@NotNull final Consumer<Object> selectionHandler, @Nullable final C consumer) {
         this.selectionHandler = selectionHandler;
         this.changeConsumer = consumer;
         createComponents();
@@ -85,7 +85,7 @@ public abstract class AbstractNodeTree<C extends ChangeConsumer> extends VBox {
      * @return the abstract node tree cell
      */
     @NotNull
-    protected AbstractNodeTreeCell<C, ?> createNodeTreeCell() {
+    protected NodeTreeCell<C, ?> createNodeTreeCell() {
         throw new UnsupportedOperationException();
     }
 
