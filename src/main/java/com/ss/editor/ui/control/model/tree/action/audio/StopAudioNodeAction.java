@@ -5,10 +5,10 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.spatial.AudioTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.spatial.AudioModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ public class StopAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public StopAudioNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public StopAudioNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -49,7 +49,7 @@ public class StopAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
     protected void process() {
         super.process();
 
-        final AudioModelNode audioModelNode = (AudioModelNode) getNode();
+        final AudioTreeNode audioModelNode = (AudioTreeNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();
 
         EXECUTOR_MANAGER.addJMETask(audioNode::stop);

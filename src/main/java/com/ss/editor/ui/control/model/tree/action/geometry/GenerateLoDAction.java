@@ -8,8 +8,8 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.lod.GenerateLodLevelsDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.spatial.GeometryModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.ui.control.model.node.spatial.GeometryTreeNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public GenerateLoDAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public GenerateLoDAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -51,7 +51,7 @@ public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
     @Override
     protected void process() {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final GeometryModelNode<Geometry> modelNode = ClassUtils.unsafeCast(getNode());
+        final GeometryTreeNode<Geometry> modelNode = ClassUtils.unsafeCast(getNode());
         final Geometry geometry = modelNode.getElement();
         final GenerateLodLevelsDialog dialog = new GenerateLodLevelsDialog(getNodeTree(), geometry);
         dialog.show(scene.getWindow());

@@ -8,6 +8,7 @@ import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
+import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.rlib.plugin.PluginContainer;
 import com.ss.rlib.plugin.PluginSystem;
@@ -80,6 +81,15 @@ public class EditorPlugin extends BasePlugin {
      */
     @FromAnyThread
     public void registerContextMenuFillers(@NotNull final AssetTreeContextMenuFillerRegistry fillerRegistry) {
+    }
+
+    /**
+     * Register this plugin's own tree node factories.
+     *
+     * @param factoryRegistry the registry of tree node factories.
+     */
+    @FromAnyThread
+    public void registerTreeNodeFactories(@NotNull final TreeNodeFactoryRegistry factoryRegistry) {
     }
 
     /**

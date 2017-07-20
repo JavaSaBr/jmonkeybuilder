@@ -8,7 +8,7 @@ import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.node.HideableNode;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
@@ -37,7 +37,7 @@ import java.util.Set;
  * @param <M> the type parameter
  * @author JavaSaBr
  */
-public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<ModelNode<?>> {
+public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<C>> extends TextFieldTreeCell<TreeNode<?>> {
 
     @NotNull
     private static final PseudoClass DROP_AVAILABLE_PSEUDO_CLASS = PseudoClass.getPseudoClass("drop-available");
@@ -52,17 +52,17 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     private static final DataFormat DATA_FORMAT = new DataFormat(NodeTreeCell.class.getName());
 
     @NotNull
-    private final StringConverter<ModelNode<?>> stringConverter = new StringConverter<ModelNode<?>>() {
+    private final StringConverter<TreeNode<?>> stringConverter = new StringConverter<TreeNode<?>>() {
 
         @Override
-        public String toString(@NotNull final ModelNode<?> object) {
+        public String toString(@NotNull final TreeNode<?> object) {
             return object.getName();
         }
 
         @Override
-        public ModelNode<?> fromString(@NotNull final String string) {
+        public TreeNode<?> fromString(@NotNull final String string) {
 
-            final ModelNode<?> item = getItem();
+            final TreeNode<?> item = getItem();
             if (item == null) return null;
 
             item.changeName(getNodeTree(), string);
@@ -191,7 +191,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
             return;
         }
 
-        final ModelNode<?> item = getItem();
+        final TreeNode<?> item = getItem();
         if (!(item instanceof HideableNode)) return;
 
         final HideableNode<C> hideable = unsafeCast(item);
@@ -207,7 +207,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     public void startEdit() {
         if (!isEditable()) return;
 
-        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(null);
 
         setIgnoreUpdate(true);
@@ -237,15 +237,15 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
         setText(StringUtils.EMPTY);
     }
 
     @Override
-    public void commitEdit(@NotNull final ModelNode<?> newValue) {
+    public void commitEdit(@NotNull final TreeNode<?> newValue) {
         super.commitEdit(newValue);
-        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
         setText(StringUtils.EMPTY);
     }
@@ -259,14 +259,14 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     }
 
     @Override
-    public void updateItem(@Nullable final ModelNode<?> item, final boolean empty) {
+    public void updateItem(@Nullable final TreeNode<?> item, final boolean empty) {
         super.updateItem(item, empty);
         if (isIgnoreUpdate()) return;
 
         final ImageView icon = getIcon();
 
         if (item == null) {
-            final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+            final TreeItem<TreeNode<?>> treeItem = getTreeItem();
             if (treeItem != null) treeItem.setGraphic(null);
             setText(StringUtils.EMPTY);
             setEditable(false);
@@ -277,7 +277,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
 
         DynamicIconSupport.updateListener(this, icon, selectedProperty());
 
-        final TreeItem<ModelNode<?>> treeItem = getTreeItem();
+        final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
 
         HideableNode hideable = null;
@@ -318,7 +318,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      */
     private void processClick(@NotNull final MouseEvent event) {
 
-        final ModelNode<?> item = getItem();
+        final TreeNode<?> item = getItem();
         if (item == null) return;
 
         final MouseButton button = event.getButton();
@@ -345,11 +345,11 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      */
     private void startDrag(@NotNull final MouseEvent mouseEvent) {
 
-        final ModelNode<?> item = getItem();
+        final TreeNode<?> item = getItem();
         if (item == null) return;
 
-        final TreeView<ModelNode<?>> treeView = getTreeView();
-        final TreeItem<ModelNode<?>> treeItem = findItemForValue(treeView, item);
+        final TreeView<TreeNode<?>> treeView = getTreeView();
+        final TreeItem<TreeNode<?>> treeItem = findItemForValue(treeView, item);
         if (treeView.getRoot() == treeItem) return;
 
         TransferMode transferMode = item.canMove() ? TransferMode.MOVE : null;
@@ -373,7 +373,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      */
     private void dragDropped(@NotNull final DragEvent dragEvent) {
 
-        final ModelNode<?> item = getItem();
+        final TreeNode<?> item = getItem();
         if (item == null) return;
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -381,12 +381,12 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
 
         if (objectId != null) {
 
-            final TreeView<ModelNode<?>> treeView = getTreeView();
-            final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
-            final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
+            final TreeView<TreeNode<?>> treeView = getTreeView();
+            final TreeItem<TreeNode<?>> dragTreeItem = findItem(treeView, objectId);
+            final TreeNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
             if (dragItem == null || !item.canAccept(dragItem)) return;
 
-            final TreeItem<ModelNode<?>> newParentItem = findItemForValue(treeView, item);
+            final TreeItem<TreeNode<?>> newParentItem = findItemForValue(treeView, item);
             if (newParentItem == null) return;
 
             final Set<TransferMode> transferModes = dragboard.getTransferModes();
@@ -419,9 +419,9 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      * @param element       the element
      * @return the boolean
      */
-    protected boolean processDragDropped(@NotNull final TreeItem<ModelNode<?>> dragTreeItem, @NotNull final ModelNode<?> dragItem,
-                                         @NotNull final ModelNode<?> item, final boolean isCopy,
-                                         @NotNull final TreeItem<ModelNode<?>> newParentItem, @NotNull final Object element) {
+    protected boolean processDragDropped(@NotNull final TreeItem<TreeNode<?>> dragTreeItem, @NotNull final TreeNode<?> dragItem,
+                                         @NotNull final TreeNode<?> item, final boolean isCopy,
+                                         @NotNull final TreeItem<TreeNode<?>> newParentItem, @NotNull final Object element) {
         return true;
     }
 
@@ -430,7 +430,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
      */
     private void dragOver(@NotNull final DragEvent dragEvent) {
 
-        final ModelNode<?> item = getItem();
+        final TreeNode<?> item = getItem();
         if (item == null) return;
 
         final Dragboard dragboard = dragEvent.getDragboard();
@@ -438,9 +438,9 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
 
         if (objectId != null) {
 
-            final TreeView<ModelNode<?>> treeView = getTreeView();
-            final TreeItem<ModelNode<?>> dragTreeItem = findItem(treeView, objectId);
-            final ModelNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
+            final TreeView<TreeNode<?>> treeView = getTreeView();
+            final TreeItem<TreeNode<?>> dragTreeItem = findItem(treeView, objectId);
+            final TreeNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
             if (dragItem == null || !item.canAccept(dragItem)) return;
 
         } else if (!item.canAcceptExternal(dragboard)) {

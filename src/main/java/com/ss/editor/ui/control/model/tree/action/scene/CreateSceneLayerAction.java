@@ -6,11 +6,11 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.layer.LayersRoot;
-import com.ss.editor.ui.control.layer.node.LayersRootModelNode;
+import com.ss.editor.ui.control.layer.node.LayersRootTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.AddSceneLayerOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
 
@@ -32,7 +32,7 @@ public class CreateSceneLayerAction extends AbstractNodeAction<ModelChangeConsum
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateSceneLayerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateSceneLayerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -54,7 +54,7 @@ public class CreateSceneLayerAction extends AbstractNodeAction<ModelChangeConsum
         super.process();
 
         final SceneLayer layer = new SceneLayer("New Layer", false);
-        final LayersRootModelNode modelNode = (LayersRootModelNode) getNode();
+        final LayersRootTreeNode modelNode = (LayersRootTreeNode) getNode();
         final LayersRoot element = modelNode.getElement();
         final SceneChangeConsumer changeConsumer = element.getChangeConsumer();
         final SceneNode sceneNode = changeConsumer.getCurrentModel();

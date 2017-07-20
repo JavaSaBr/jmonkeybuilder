@@ -7,7 +7,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.control.AbstractCreateControlAction;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ public class CreateKinematicRagdollControlAction extends AbstractCreateControlAc
      * @param node     the node
      */
     public CreateKinematicRagdollControlAction(@NotNull final NodeTree<?> nodeTree,
-                                               @NotNull final ModelNode<?> node) {
+                                               @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

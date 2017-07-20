@@ -57,7 +57,7 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveChildOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveLightOperation;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
@@ -578,11 +578,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         } else if (keyCode == KeyCode.DELETE) {
 
             final ModelNodeTree modelNodeTree = getModelNodeTree();
-            final ModelNode<?> selected = modelNodeTree.getSelected();
+            final TreeNode<?> selected = modelNodeTree.getSelected();
             if (selected == null || !selected.canRemove()) return false;
 
             final Object element = selected.getElement();
-            final ModelNode<?> parent = selected.getParent();
+            final TreeNode<?> parent = selected.getParent();
             final Object parentElement = parent == null ? null : parent.getElement();
 
             if (element instanceof Spatial) {
@@ -806,11 +806,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         Object parent = null;
         Object element = null;
 
-        if (object instanceof ModelNode<?>) {
-            final ModelNode modelNode = (ModelNode) object;
-            final ModelNode parentNode = modelNode.getParent();
+        if (object instanceof TreeNode<?>) {
+            final TreeNode treeNode = (TreeNode) object;
+            final TreeNode parentNode = treeNode.getParent();
             parent = parentNode == null ? null : parentNode.getElement();
-            element = modelNode.getElement();
+            element = treeNode.getElement();
         } else {
             element = object;
         }

@@ -5,7 +5,7 @@ import com.jme3.light.SpotLight;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ public class CreateSpotLightAction extends AbstractCreateLightAction {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateSpotLightAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateSpotLightAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

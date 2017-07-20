@@ -7,7 +7,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.AddParticleInfluencerOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateParticleInfluencerAction(@NotNull final NodeTree<ModelChangeConsumer> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -47,8 +47,8 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
 
-        final ModelNode<?> modelNode = getNode();
-        final Toneg0dParticleInfluencers element = (Toneg0dParticleInfluencers) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Toneg0dParticleInfluencers element = (Toneg0dParticleInfluencers) treeNode.getElement();
         final ParticleEmitterNode emitterNode = element.getEmitterNode();
         final ParticleInfluencer influencer = createInfluencer();
 

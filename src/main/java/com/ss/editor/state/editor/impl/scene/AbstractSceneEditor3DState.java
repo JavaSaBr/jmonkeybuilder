@@ -293,7 +293,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         super(fileEditor);
         this.cachedLights = DictionaryFactory.newObjectDictionary();
         this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
-        this.modelNode = new Node("ModelNode");
+        this.modelNode = new Node("TreeNode");
         this.modelNode.setUserData(SceneEditorControl.class.getName(), true);
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();

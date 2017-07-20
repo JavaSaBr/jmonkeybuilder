@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,7 +24,7 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -33,8 +33,8 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
     protected void process() {
         super.process();
 
-        final ModelNode<?> modelNode = getNode();
-        final Spatial parent = (Spatial) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Spatial parent = (Spatial) treeNode.getElement();
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final Control control = createControl(parent);

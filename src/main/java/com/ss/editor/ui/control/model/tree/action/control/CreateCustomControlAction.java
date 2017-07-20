@@ -11,7 +11,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.CreateCustomControlDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.scene.EditorFXScene;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateCustomControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateCustomControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -56,8 +56,8 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
 
-        final ModelNode<?> modelNode = getNode();
-        final Spatial parent = (Spatial) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Spatial parent = (Spatial) treeNode.getElement();
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final CreateCustomControlDialog dialog = new CreateCustomControlDialog(consumer, parent);

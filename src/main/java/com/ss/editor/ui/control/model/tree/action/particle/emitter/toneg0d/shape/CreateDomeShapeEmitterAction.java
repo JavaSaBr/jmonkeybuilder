@@ -7,7 +7,7 @@ import com.jme3.scene.shape.Dome;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -39,7 +39,7 @@ public class CreateDomeShapeEmitterAction extends AbstractCreateShapeEmitterActi
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateDomeShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateDomeShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

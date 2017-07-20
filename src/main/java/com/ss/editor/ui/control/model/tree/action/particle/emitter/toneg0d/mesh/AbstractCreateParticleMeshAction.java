@@ -9,7 +9,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeParticleMeshOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +32,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
      * @param nodeTree the node tree
      * @param node     the node
      */
-    AbstractCreateParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    AbstractCreateParticleMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -49,8 +49,8 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
 
         final NodeTree<?> nodeTree = getNodeTree();
 
-        final ModelNode<?> modelNode = getNode();
-        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) treeNode.getElement();
         final ParticleGeometry geometry = emitterNode.getParticleGeometry();
         final ParticleDataMeshInfo meshInfo = createMeshInfo();
 

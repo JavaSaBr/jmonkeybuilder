@@ -7,7 +7,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationControlTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
@@ -38,7 +38,7 @@ public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> 
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public PlaySettingsAction(@NotNull final NodeTree<?> nodeTree, @NotNull final AnimationControlModelNode node) {
+    public PlaySettingsAction(@NotNull final NodeTree<?> nodeTree, @NotNull final AnimationControlTreeNode node) {
         super(nodeTree, node);
     }
 
@@ -59,7 +59,7 @@ public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> 
     protected void process() {
         super.process();
 
-        final AnimationControlModelNode node = (AnimationControlModelNode) getNode();
+        final AnimationControlTreeNode node = (AnimationControlTreeNode) getNode();
         final LoopMode loopMode = node.getLoopMode();
         final float speed = node.getSpeed();
 

@@ -7,11 +7,11 @@ import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.layer.LayersRoot;
-import com.ss.editor.ui.control.layer.node.SceneLayerModelNode;
+import com.ss.editor.ui.control.layer.node.SceneLayerTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.RemoveSceneLayerOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +31,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsum
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public RemoveSceneLayerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public RemoveSceneLayerAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -56,7 +56,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsum
         final SceneChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
 
-        final SceneLayerModelNode modelNode = (SceneLayerModelNode) getNode();
+        final SceneLayerTreeNode modelNode = (SceneLayerTreeNode) getNode();
         final SceneLayer layer = modelNode.getElement();
 
         changeConsumer.execute(new RemoveSceneLayerOperation(new LayersRoot(changeConsumer), layer, sceneNode));

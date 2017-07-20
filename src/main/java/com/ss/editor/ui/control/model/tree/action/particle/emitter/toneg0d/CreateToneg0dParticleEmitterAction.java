@@ -11,7 +11,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +35,7 @@ public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<Model
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateToneg0dParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateToneg0dParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -69,8 +69,8 @@ public class CreateToneg0dParticleEmitterAction extends AbstractNodeAction<Model
             sizeInfluencer.addSize(0f);
         }
 
-        final ModelNode<?> modelNode = getNode();
-        final Node parent = (Node) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Node parent = (Node) treeNode.getElement();
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddChildOperation(emitter, parent));

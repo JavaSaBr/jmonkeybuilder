@@ -13,7 +13,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddVehicleWheelOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -67,7 +67,7 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateVehicleWheelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateVehicleWheelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -95,7 +95,7 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
 
     private void handleResult(@NotNull final VarTable vars) {
 
-        final ModelNode<?> node = getNode();
+        final TreeNode<?> node = getNode();
         final VehicleControl control = (VehicleControl) node.getElement();
 
         final Vector3f location = vars.get(PROPERTY_LOCATION);

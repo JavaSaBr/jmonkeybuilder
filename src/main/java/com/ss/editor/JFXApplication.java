@@ -22,6 +22,7 @@ import com.ss.editor.ui.component.asset.tree.AssetTreeContextMenuFillerRegistry;
 import com.ss.editor.ui.component.creator.FileCreatorRegistry;
 import com.ss.editor.ui.component.editor.EditorRegistry;
 import com.ss.editor.ui.component.log.LogView;
+import com.ss.editor.ui.control.tree.node.TreeNodeFactoryRegistry;
 import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -90,23 +91,27 @@ public class JFXApplication extends Application {
         // use jemalloc
         Configuration.MEMORY_ALLOCATOR.set("jemalloc");
 
-        // fix of the fonts render
+        // JavaFX
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
+        System.setProperty("javafx.animation.fullspeed", "true");
+
+        // FIXME need to remove after jME upgrading
         System.setProperty(BufferAllocatorFactory.PROPERTY_BUFFER_ALLOCATOR_IMPLEMENTATION,
                 SynchronizedByteBufferAllocator.class.getName());
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OpenGLVersion openGLVersion = editorConfig.getOpenGLVersion();
 
-        System.setProperty("jfx.background.render", openGLVersion.getRender());
+        // set a render if it isn't override
+        if(System.getProperty("jfx.background.render") == null) {
+            System.setProperty("jfx.background.render", openGLVersion.getRender());
+        }
 
         // some settings for the render of JavaFX
         //System.setProperty("prism.cacheshapes", "true");
         //System.setProperty("prism.scrollcacheopt", "true");
         //System.setProperty("prism.allowhidpi", "true");
-
-        //Logging.getCSSLogger().setLevel(PlatformLogger.Level.ALL);
 
         //System.setProperty("prism.order", "sw");
         //System.setProperty("prism.showdirty", "true");
@@ -278,6 +283,7 @@ public class JFXApplication extends Application {
             editorPlugin.registerFileIconFinders(FileIconManager.getInstance());
             editorPlugin.registerFileConverters(FileConverterRegistry.getInstance());
             editorPlugin.registerContextMenuFillers(AssetTreeContextMenuFillerRegistry.getInstance());
+            editorPlugin.registerTreeNodeFactories(TreeNodeFactoryRegistry.getInstance());
         });
 
         final EditorFXScene scene = getScene();

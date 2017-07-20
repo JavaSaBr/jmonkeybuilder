@@ -10,7 +10,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ public class CreateNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public CreateNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -55,8 +55,8 @@ public class CreateNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final Node node = new Node("New Node");
 
-        final ModelNode<?> modelNode = getNode();
-        final Node parent = (Node) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Node parent = (Node) treeNode.getElement();
 
         final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
         consumer.execute(new AddChildOperation(node, parent));

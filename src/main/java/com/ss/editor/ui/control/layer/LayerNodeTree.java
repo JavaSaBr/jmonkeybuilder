@@ -1,12 +1,11 @@
 package com.ss.editor.ui.control.layer;
 
-import static com.ss.editor.ui.control.tree.node.ModelNodeFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.NodeTreeCell;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
@@ -47,8 +46,8 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
         final SceneLayer layer = SceneLayer.getLayer(spatial);
         if (layer == SceneLayer.NO_LAYER) return;
 
-        final ModelNode<?> objectNode = createFor(spatial);
-        final TreeItem<ModelNode<?>> newLayerItem = findItemForValue(getTreeView(), createFor(layer));
+        final TreeNode<?> objectNode = FACTORY_REGISTRY.createFor(spatial);
+        final TreeItem<TreeNode<?>> newLayerItem = findItemForValue(getTreeView(), FACTORY_REGISTRY.createFor(layer));
 
         if (newLayerItem != null) {
             newLayerItem.getChildren().add(new TreeItem<>(objectNode));
@@ -63,18 +62,18 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
      */
     public void notifyChangedLayer(@NotNull final Spatial object, @Nullable final SceneLayer newLayer) {
 
-        final ModelNode<?> objectNode = createFor(object);
-        TreeItem<ModelNode<?>> objectItem = findItemForValue(getTreeView(), objectNode);
+        final TreeNode<?> objectNode = FACTORY_REGISTRY.createFor(object);
+        TreeItem<TreeNode<?>> objectItem = findItemForValue(getTreeView(), objectNode);
 
         if (objectItem == null && newLayer != null) {
             objectItem = new TreeItem<>(objectNode);
         } else if (objectItem != null) {
-            final TreeItem<ModelNode<?>> parent = objectItem.getParent();
+            final TreeItem<TreeNode<?>> parent = objectItem.getParent();
             parent.getChildren().remove(objectItem);
         }
 
-        final TreeItem<ModelNode<?>> newLayerItem =
-                newLayer == null ? null : findItemForValue(getTreeView(), createFor(newLayer));
+        final TreeItem<TreeNode<?>> newLayerItem =
+                newLayer == null ? null : findItemForValue(getTreeView(), FACTORY_REGISTRY.createFor(newLayer));
 
         if (newLayerItem != null) {
             newLayerItem.getChildren().add(objectItem);

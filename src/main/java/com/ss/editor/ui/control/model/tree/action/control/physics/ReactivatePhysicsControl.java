@@ -7,7 +7,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ public class ReactivatePhysicsControl extends AbstractNodeAction<ModelChangeCons
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public ReactivatePhysicsControl(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public ReactivatePhysicsControl(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

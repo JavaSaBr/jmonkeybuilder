@@ -4,7 +4,7 @@ import com.jme3.effect.influencers.EmptyParticleInfluencer;
 import com.jme3.effect.influencers.ParticleInfluencer;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,7 +21,7 @@ public class CreateEmptyParticleInfluencerAction extends AbstractCreateParticleI
      * @param node     the node
      */
     public CreateEmptyParticleInfluencerAction(@NotNull final NodeTree<?> nodeTree,
-                                               @NotNull final ModelNode<?> node) {
+                                               @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

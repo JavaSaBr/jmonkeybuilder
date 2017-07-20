@@ -330,7 +330,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     @NotNull
     @Override
     protected Node getNodeForCamera() {
-        if (modelNode == null) modelNode = new Node("ModelNode");
+        if (modelNode == null) modelNode = new Node("TreeNode");
         return modelNode;
     }
 

@@ -7,7 +7,7 @@ import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationTreeNode;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.AddAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.css.CSSClasses;
@@ -47,7 +47,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      * The animation node.
      */
     @NotNull
-    private final AnimationModelNode node;
+    private final AnimationTreeNode node;
 
     /**
      * The field with a value of new animation name.
@@ -74,7 +74,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      * @param node     the node
      */
     public ExtractSubAnimationDialog(@NotNull final NodeTree<?> nodeTree,
-                                     @NotNull final AnimationModelNode node) {
+                                     @NotNull final AnimationTreeNode node) {
         this.nodeTree = nodeTree;
         this.node = node;
 
@@ -110,7 +110,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      * @return the animation node.
      */
     @NotNull
-    protected AnimationModelNode getNode() {
+    protected AnimationTreeNode getNode() {
         return node;
     }
 
@@ -194,7 +194,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
      */
     private void processExtract() {
 
-        final AnimationModelNode node = getNode();
+        final AnimationTreeNode node = getNode();
         final AnimControl control = notNull(node.getControl());
         final Animation animation = node.getElement();
 

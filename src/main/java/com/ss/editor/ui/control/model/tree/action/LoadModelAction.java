@@ -19,7 +19,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.extension.scene.SceneLayer;
@@ -55,7 +55,7 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public LoadModelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -102,8 +102,8 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
             SceneLayer.setLayer(defaultLayer, loadedModel);
         }
 
-        final ModelNode<?> modelNode = getNode();
-        final Node parent = (Node) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Node parent = (Node) treeNode.getElement();
         consumer.execute(new AddChildOperation(loadedModel, parent));
     }
 }

@@ -6,7 +6,7 @@ import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -32,7 +32,7 @@ public class CreateSphereCollisionShapeAction extends AbstractCreateShapeAction 
      * @param node     the node
      */
     public CreateSphereCollisionShapeAction(@NotNull final NodeTree<?> nodeTree,
-                                            @NotNull final ModelNode<?> node) {
+                                            @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 

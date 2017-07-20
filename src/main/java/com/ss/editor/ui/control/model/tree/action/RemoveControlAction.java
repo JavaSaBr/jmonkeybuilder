@@ -10,7 +10,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.RemoveControlOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ public class RemoveControlAction extends AbstractNodeAction<ModelChangeConsumer>
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public RemoveControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public RemoveControlAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -51,13 +51,13 @@ public class RemoveControlAction extends AbstractNodeAction<ModelChangeConsumer>
     protected void process() {
         super.process();
 
-        final ModelNode<?> node = getNode();
+        final TreeNode<?> node = getNode();
         final Object element = node.getElement();
 
         if (!(element instanceof Control)) return;
         final Control control = (Control) element;
 
-        final ModelNode<?> parentNode = node.getParent();
+        final TreeNode<?> parentNode = node.getParent();
 
         if (parentNode == null) {
             LOGGER.warning("not found parent node for " + node);

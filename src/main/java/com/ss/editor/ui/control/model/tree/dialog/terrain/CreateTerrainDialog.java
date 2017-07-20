@@ -28,7 +28,7 @@ import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
@@ -153,7 +153,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * The parent node.
      */
     @NotNull
-    private final ModelNode<?> parentNode;
+    private final TreeNode<?> parentNode;
 
     /**
      * The node tree.
@@ -269,7 +269,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * @param parentNode the parent node
      * @param nodeTree   the node tree
      */
-    public CreateTerrainDialog(@NotNull final ModelNode<?> parentNode, @NotNull final NodeTree<?> nodeTree) {
+    public CreateTerrainDialog(@NotNull final TreeNode<?> parentNode, @NotNull final NodeTree<?> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
 
@@ -804,7 +804,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
 
         terrainNode.addControl(control);
 
-        final ModelNode<?> parentNode = getParentNode();
+        final TreeNode<?> parentNode = getParentNode();
         final com.jme3.scene.Node parent = (com.jme3.scene.Node) parentNode.getElement();
 
         final NodeTree<?> nodeTree = getNodeTree();
@@ -830,7 +830,7 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
      * @return the parent node.
      */
     @NotNull
-    private ModelNode<?> getParentNode() {
+    private TreeNode<?> getParentNode() {
         return parentNode;
     }
 

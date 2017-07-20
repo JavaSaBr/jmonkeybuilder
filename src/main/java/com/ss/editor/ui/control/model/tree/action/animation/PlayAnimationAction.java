@@ -5,11 +5,11 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationControlModelNode;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationModelNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationControlTreeNode;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public PlayAnimationAction(final NodeTree<?> nodeTree, final ModelNode<?> node) {
+    public PlayAnimationAction(final NodeTree<?> nodeTree, final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -49,8 +49,8 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
     protected void process() {
         super.process();
 
-        final AnimationModelNode modelNode = (AnimationModelNode) getNode();
-        final AnimationControlModelNode controlModelNode = modelNode.getControlModelNode();
+        final AnimationTreeNode modelNode = (AnimationTreeNode) getNode();
+        final AnimationControlTreeNode controlModelNode = modelNode.getControlModelNode();
         if (controlModelNode == null) return;
 
         final Animation element = modelNode.getElement();
@@ -86,7 +86,7 @@ public class PlayAnimationAction extends AbstractNodeAction<ModelChangeConsumer>
 
         if (channel.getLoopMode() != LoopMode.DontLoop) return;
 
-        final AnimationModelNode modelNode = (AnimationModelNode) getNode();
+        final AnimationTreeNode modelNode = (AnimationTreeNode) getNode();
         final Animation element = modelNode.getElement();
         if (!StringUtils.equals(element.getName(), animName)) return;
 

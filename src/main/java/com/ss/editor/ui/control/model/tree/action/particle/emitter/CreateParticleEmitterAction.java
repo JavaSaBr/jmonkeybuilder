@@ -16,7 +16,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeConsumer> {
 
-    public CreateParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public CreateParticleEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -70,8 +70,8 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         emitter.getParticleInfluencer().setVelocityVariation(0.3f);
         emitter.setEnabled(true);
 
-        final ModelNode<?> modelNode = getNode();
-        final Node parent = (Node) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Node parent = (Node) treeNode.getElement();
 
         final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddChildOperation(emitter, parent));

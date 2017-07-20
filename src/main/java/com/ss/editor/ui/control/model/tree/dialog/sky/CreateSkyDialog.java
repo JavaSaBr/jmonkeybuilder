@@ -22,7 +22,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.util.EditorUtil;
@@ -105,7 +105,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * The parent node.
      */
     @NotNull
-    private final ModelNode<?> parentNode;
+    private final TreeNode<?> parentNode;
 
     /**
      * The node tree.
@@ -215,7 +215,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * @param parentNode the parent node
      * @param nodeTree   the node tree
      */
-    public CreateSkyDialog(@NotNull final ModelNode<?> parentNode,
+    public CreateSkyDialog(@NotNull final TreeNode<?> parentNode,
                            @NotNull final NodeTree<ModelChangeConsumer> nodeTree) {
         this.parentNode = parentNode;
         this.nodeTree = nodeTree;
@@ -613,7 +613,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
      * @return the parent node.
      */
     @NotNull
-    private ModelNode<?> getParentNode() {
+    private TreeNode<?> getParentNode() {
         return parentNode;
     }
 
@@ -701,7 +701,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
             skyModel.setUserData(SceneEditorControl.SKY_NODE_KEY, Boolean.TRUE);
 
-            final ModelNode<?> parentNode = getParentNode();
+            final TreeNode<?> parentNode = getParentNode();
             final Node parent = (Node) parentNode.getElement();
 
             changeConsumer.execute(new AddChildOperation(skyModel, parent));
@@ -739,7 +739,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
             sky.setUserData(SceneEditorControl.SKY_NODE_KEY, Boolean.TRUE);
 
-            final ModelNode<?> parentNode = getParentNode();
+            final TreeNode<?> parentNode = getParentNode();
             final Node parent = (Node) parentNode.getElement();
 
             changeConsumer.execute(new AddChildOperation(sky, parent));

@@ -10,7 +10,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -33,7 +33,7 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      * @param nodeTree the node tree
      * @param node     the node
      */
-    AbstractCreateShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    AbstractCreateShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -72,8 +72,8 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
      */
     private void handleResult(@NotNull final VarTable vars) {
 
-        final ModelNode<?> modelNode = getNode();
-        final PhysicsCollisionObject element = (PhysicsCollisionObject) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final PhysicsCollisionObject element = (PhysicsCollisionObject) treeNode.getElement();
         final CollisionShape shape = createShape(vars);
         final CollisionShape currentShape = element.getCollisionShape();
 

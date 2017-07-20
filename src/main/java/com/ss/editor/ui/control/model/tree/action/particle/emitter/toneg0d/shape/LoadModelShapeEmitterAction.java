@@ -17,7 +17,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeEmitterMeshOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.NodeUtils;
 import javafx.scene.image.Image;
@@ -59,7 +59,7 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public LoadModelShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelShapeEmitterAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -97,8 +97,8 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
             return;
         }
 
-        final ModelNode<?> modelNode = getNode();
-        final ParticleEmitterNode element = (ParticleEmitterNode) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final ParticleEmitterNode element = (ParticleEmitterNode) treeNode.getElement();
 
         changeConsumer.execute(new ChangeEmitterMeshOperation(geometry.getMesh(), element));
     }

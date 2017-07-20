@@ -17,7 +17,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeParticleMeshOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
@@ -57,7 +57,7 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public LoadModelParticlesMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public LoadModelParticlesMeshAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -103,8 +103,8 @@ public class LoadModelParticlesMeshAction extends AbstractNodeAction<ModelChange
             return;
         }
 
-        final ModelNode<?> modelNode = getNode();
-        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final ParticleEmitterNode emitterNode = (ParticleEmitterNode) treeNode.getElement();
         final ParticleGeometry particleGeometry = emitterNode.getParticleGeometry();
         final ParticleDataMeshInfo meshInfo = new ParticleDataMeshInfo(ParticleDataTemplateMesh.class, geometry.getMesh());
 

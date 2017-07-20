@@ -4,10 +4,10 @@ import static java.util.Objects.requireNonNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
-import com.ss.editor.ui.control.layer.node.SceneLayerModelNode;
+import com.ss.editor.ui.control.layer.node.SceneLayerTreeNode;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.tree.NodeTreeCell;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
@@ -29,20 +29,20 @@ public class LayerNodeTreeCell extends NodeTreeCell<SceneChangeConsumer, LayerNo
     }
 
     @Override
-    protected boolean processDragDropped(@NotNull final TreeItem<ModelNode<?>> dragTreeItem,
-                                         @NotNull final ModelNode<?> dragItem, @NotNull final ModelNode<?> item,
-                                         final boolean isCopy, @NotNull final TreeItem<ModelNode<?>> newParentItem,
+    protected boolean processDragDropped(@NotNull final TreeItem<TreeNode<?>> dragTreeItem,
+                                         @NotNull final TreeNode<?> dragItem, @NotNull final TreeNode<?> item,
+                                         final boolean isCopy, @NotNull final TreeItem<TreeNode<?>> newParentItem,
                                          @NotNull final Object element) {
 
-        final ModelNode<?> newParent = newParentItem.getValue();
+        final TreeNode<?> newParent = newParentItem.getValue();
 
-        if (element instanceof Spatial && newParent instanceof SceneLayerModelNode) {
+        if (element instanceof Spatial && newParent instanceof SceneLayerTreeNode) {
 
             final LayerNodeTree nodeTree = getNodeTree();
             final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
 
             final Spatial spatial = (Spatial) element;
-            final SceneLayer targetLayer = ((SceneLayerModelNode) newParent).getElement();
+            final SceneLayer targetLayer = ((SceneLayerTreeNode) newParent).getElement();
             final SceneLayer currentLayer = SceneLayer.getLayer(spatial);
 
             final ModelPropertyOperation<Spatial, SceneLayer> operation =

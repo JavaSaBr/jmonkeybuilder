@@ -9,7 +9,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.animation.RemoveAnimationNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +29,7 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public RemoveAnimationAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public RemoveAnimationAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -50,14 +50,14 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
     protected void process() {
         super.process();
 
-        final ModelNode<?> node = getNode();
+        final TreeNode<?> node = getNode();
         final Object element = node.getElement();
 
         if (!(element instanceof Animation)) return;
         final Animation animation = (Animation) element;
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelNode<?> parentNode = nodeTree.findParent(node);
+        final TreeNode<?> parentNode = nodeTree.findParent(node);
 
         if (parentNode == null) {
             LOGGER.warning("not found parent node for " + node);

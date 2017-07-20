@@ -6,7 +6,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.MoveChildOperation;
 import com.ss.editor.ui.control.tree.NodeTreeCell;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,19 +27,19 @@ public class ModelNodeTreeCell extends NodeTreeCell<ModelChangeConsumer, ModelNo
     }
 
     @Override
-    protected boolean processDragDropped(@NotNull final TreeItem<ModelNode<?>> dragTreeItem, @NotNull final ModelNode<?> dragItem,
-                                         @NotNull final ModelNode<?> item, final boolean isCopy,
-                                         @NotNull final TreeItem<ModelNode<?>> newParentItem, @NotNull final Object element) {
+    protected boolean processDragDropped(@NotNull final TreeItem<TreeNode<?>> dragTreeItem, @NotNull final TreeNode<?> dragItem,
+                                         @NotNull final TreeNode<?> item, final boolean isCopy,
+                                         @NotNull final TreeItem<TreeNode<?>> newParentItem, @NotNull final Object element) {
 
         if (element instanceof Spatial) {
 
             final ModelNodeTree nodeTree = getNodeTree();
             final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
-            final TreeItem<ModelNode<?>> parent = dragTreeItem.getParent();
+            final TreeItem<TreeNode<?>> parent = dragTreeItem.getParent();
 
-            final ModelNode<?> prevParent = parent.getValue();
-            final ModelNode<?> newParent = newParentItem.getValue();
+            final TreeNode<?> prevParent = parent.getValue();
+            final TreeNode<?> newParent = newParentItem.getValue();
             if (newParent == prevParent) return true;
 
             final Spatial spatial = (Spatial) element;

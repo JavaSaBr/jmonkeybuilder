@@ -20,7 +20,7 @@ import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -45,7 +45,7 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public GenerateCollisionShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public GenerateCollisionShapeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -60,10 +60,10 @@ public class GenerateCollisionShapeAction extends AbstractCreateShapeAction {
     protected void process() {
         super.process();
 
-        final ModelNode<?> modelNode = getNode();
-        final ModelNode<?> parentNode = notNull(modelNode.getParent());
+        final TreeNode<?> treeNode = getNode();
+        final TreeNode<?> parentNode = notNull(treeNode.getParent());
 
-        final PhysicsCollisionObject object = (PhysicsCollisionObject) modelNode.getElement();
+        final PhysicsCollisionObject object = (PhysicsCollisionObject) treeNode.getElement();
         final Spatial parentElement = (Spatial) notNull(parentNode.getElement());
 
         CollisionShape shape = null;

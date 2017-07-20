@@ -11,7 +11,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +28,7 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractCreateGeometryAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractCreateGeometryAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -44,8 +44,8 @@ public abstract class AbstractCreateGeometryAction extends AbstractNodeAction<Mo
         final Geometry geometry = createGeometry();
         geometry.setMaterial(new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md"));
 
-        final ModelNode<?> modelNode = getNode();
-        final Node parent = (Node) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final Node parent = (Node) treeNode.getElement();
 
         consumer.execute(new AddChildOperation(geometry, parent));
     }

@@ -4,7 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.control.model.tree.ModelNodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
@@ -135,7 +135,7 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
      * Handle a selected object.
      */
     private void processSelect(@Nullable final Object object) {
-        final Object result = object instanceof ModelNode ? ((ModelNode) object).getElement() : object;
+        final Object result = object instanceof TreeNode ? ((TreeNode) object).getElement() : object;
         final Class<T> type = getType();
         final Button okButton = getOkButton();
         okButton.setDisable(!type.isInstance(result));

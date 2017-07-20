@@ -10,8 +10,8 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
-import com.ss.editor.ui.control.model.node.spatial.AudioModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.editor.ui.control.model.node.spatial.AudioTreeNode;
 import com.ss.editor.util.AudioNodeUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +32,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public PlayAudioNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public PlayAudioNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -53,7 +53,7 @@ public class PlayAudioNodeAction extends AbstractNodeAction<ModelChangeConsumer>
     protected void process() {
         super.process();
 
-        final AudioModelNode audioModelNode = (AudioModelNode) getNode();
+        final AudioTreeNode audioModelNode = (AudioTreeNode) getNode();
         final AudioNode audioNode = audioModelNode.getElement();
 
         final AssetManager assetManager = EDITOR.getAssetManager();

@@ -9,7 +9,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.ChangeEmitterMeshOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
 import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -34,7 +34,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      * @param node     the node
      */
     public AbstractCreateShapeEmitterAction(@NotNull final NodeTree<?> nodeTree,
-                                            @NotNull final ModelNode<?> node) {
+                                            @NotNull final TreeNode<?> node) {
         super(nodeTree, node);
     }
 
@@ -70,8 +70,8 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
      */
     private void handleResult(@NotNull final VarTable vars) {
 
-        final ModelNode<?> modelNode = getNode();
-        final ParticleEmitterNode element = (ParticleEmitterNode) modelNode.getElement();
+        final TreeNode<?> treeNode = getNode();
+        final ParticleEmitterNode element = (ParticleEmitterNode) treeNode.getElement();
         final Mesh shape = createMesh(vars);
 
         final NodeTree<?> nodeTree = getNodeTree();

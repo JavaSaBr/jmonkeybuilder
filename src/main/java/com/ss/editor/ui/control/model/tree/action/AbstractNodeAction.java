@@ -9,7 +9,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.ui.control.tree.node.ModelNode;
+import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import javafx.scene.control.MenuItem;
@@ -54,7 +54,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * The node.
      */
     @NotNull
-    private final ModelNode<?> node;
+    private final TreeNode<?> node;
 
     /**
      * Instantiates a new Abstract node action.
@@ -62,7 +62,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * @param nodeTree the node tree
      * @param node     the node
      */
-    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final ModelNode<?> node) {
+    public AbstractNodeAction(@NotNull final NodeTree<?> nodeTree, @NotNull final TreeNode<?> node) {
         this.nodeTree = unsafeCast(nodeTree);
         this.node = node;
         setOnAction(event -> process());
@@ -117,7 +117,7 @@ public abstract class AbstractNodeAction<C extends ChangeConsumer> extends MenuI
      * @return the node of the model.
      */
     @NotNull
-    protected ModelNode<?> getNode() {
+    protected TreeNode<?> getNode() {
         return node;
     }
 
