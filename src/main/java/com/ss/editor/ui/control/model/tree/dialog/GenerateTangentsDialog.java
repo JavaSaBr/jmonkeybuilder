@@ -195,8 +195,8 @@ public class GenerateTangentsDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
-        return Messages.GENERATE_TANGENTS_DIALOG_BUTTON_OK;
+    protected String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_GENERATE;
     }
 
     @NotNull

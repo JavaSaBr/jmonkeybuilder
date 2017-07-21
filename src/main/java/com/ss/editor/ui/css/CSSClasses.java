@@ -420,6 +420,10 @@ public interface CSSClasses {
      * The constant GENERATE_LOD_DIALOG.
      */
     String GENERATE_LOD_DIALOG = "generate-lod-dialog";
+    /**
+     * The constant PLUGINS_DIALOG.
+     */
+    String PLUGINS_DIALOG = "plugins-dialog";
 
     /**
      * The constant CREATE_TERRAIN_DIALOG.
@@ -473,4 +477,9 @@ public interface CSSClasses {
      * The constant IMAGE_CHANNEL_PREVIEW.
      */
     String IMAGE_CHANNEL_PREVIEW = "image-channel-preview";
+
+    /**
+     * The constant PLUGIN_LIST_CELL.
+     */
+    String PLUGIN_LIST_CELL = "plugin-list-cell";
 }

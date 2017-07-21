@@ -4,13 +4,15 @@ import static com.ss.rlib.plugin.impl.PluginSystemFactory.newBasePluginSystem;
 import com.ss.editor.Editor;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.config.Config;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
 import com.ss.rlib.plugin.ConfigurablePluginSystem;
 import com.ss.rlib.plugin.Plugin;
-import com.ss.rlib.plugin.PluginSystem;
+import com.ss.rlib.plugin.exception.PreloadPluginException;
+import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
@@ -41,31 +43,67 @@ public class PluginManager {
     }
 
     @NotNull
-    private final PluginSystem pluginSystem;
+    private final ConfigurablePluginSystem pluginSystem;
 
     private PluginManager() {
         InitializeManager.valid(getClass());
 
-        final ConfigurablePluginSystem configurablePluginSystem = newBasePluginSystem(getClass().getClassLoader());
+        this.pluginSystem = newBasePluginSystem(getClass().getClassLoader());
+
+        final Path folderInUserHome = Config.getAppFolderInUserHome();
         final String embeddedPath = System.getProperty("editor.embedded.plugins.path");
 
         if (embeddedPath != null) {
             final Path embeddedPluginPath = Paths.get(embeddedPath);
-            configurablePluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
+            LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
+            pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
         } else {
             final Path rootFolder = Utils.getRootFolderFromClass(Editor.class);
             final Path embeddedPluginPath = rootFolder.resolve("embedded-plugins");
+            LOGGER.debug(this, "embedded plugin path: " + embeddedPluginPath);
             if (Files.exists(embeddedPluginPath)) {
-                configurablePluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
+                pluginSystem.configureEmbeddedPluginPath(embeddedPluginPath);
             } else {
                 LOGGER.warning(this, "The embedded plugin folder doesn't exists.");
             }
         }
 
-        configurablePluginSystem.preLoad();
-        configurablePluginSystem.initialize();
+        final Path userPluginsFolder = folderInUserHome.resolve("plugins");
 
-        this.pluginSystem = configurablePluginSystem;
+        LOGGER.debug(this, "installation plugin path: " + userPluginsFolder);
+
+        if (!Files.exists(userPluginsFolder)) {
+            Utils.run(() -> Files.createDirectories(userPluginsFolder));
+        }
+
+        pluginSystem.configureInstallationPluginsPath(userPluginsFolder);
+
+        try {
+            pluginSystem.preLoad();
+        } catch (final PreloadPluginException e) {
+            FileUtils.delete(e.getPath());
+            throw e;
+        }
+
+        pluginSystem.initialize();
+    }
+
+    /**
+     * Install a new plugin to the system.
+     *
+     * @param path the path to the plugin.
+     */
+    public void installPlugin(@NotNull final Path path) {
+        pluginSystem.installPlugin(path, false);
+    }
+
+    /**
+     * Remove a plugin from this editor.
+     *
+     * @param plugin the plugin.
+     */
+    public void removePlugin(@NotNull final EditorPlugin plugin) {
+        pluginSystem.removePlugin(plugin);
     }
 
     /**
@@ -132,6 +170,6 @@ public class PluginManager {
         final Array<Plugin> plugins = pluginSystem.getPlugins();
         plugins.stream().filter(EditorPlugin.class::isInstance)
                 .map(EditorPlugin.class::cast)
-                .forEach(consumer::accept);
+                .forEach(consumer);
     }
 }

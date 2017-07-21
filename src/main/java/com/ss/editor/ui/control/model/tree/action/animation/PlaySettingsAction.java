@@ -73,7 +73,7 @@ public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> 
                 node.updateSettings(vars.get(PROPERTY_LOOP_MODE), vars.get(PROPERTY_SPEED)));
 
         dialog.setTitle(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_TITLE);
-        dialog.setButtonOkLabel(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK);
+        dialog.setButtonOkText(Messages.SIMPLE_DIALOG_BUTTON_OK);
         dialog.show(scene.getWindow());
     }
 }

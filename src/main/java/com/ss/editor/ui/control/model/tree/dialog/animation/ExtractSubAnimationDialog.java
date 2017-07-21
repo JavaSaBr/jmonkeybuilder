@@ -220,7 +220,7 @@ public class ExtractSubAnimationDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
+    protected String getButtonOkText() {
         return Messages.MANUAL_EXTRACT_ANIMATION_DIALOG_BUTTON_OK;
     }
 

@@ -310,6 +310,10 @@ public interface Icons {
      * The constant STATISTICS_16.
      */
     Image DOR_IN_CIRCLE_16 = ICON_MANAGER.getImage("/ui/icons/svg/dot-and-circle.svg");
+    /**
+     * The constant PLUGIN_16.
+     */
+    Image PLUGIN_16 = ICON_MANAGER.getImage("/ui/icons/svg/plug-silhouette.svg");
 
     /**
      * The constant REFRESH_18.

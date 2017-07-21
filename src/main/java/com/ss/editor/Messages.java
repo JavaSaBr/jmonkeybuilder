@@ -45,6 +45,10 @@ public class Messages {
      */
     public static final String EDITOR_MENU_OTHER_SETTINGS;
     /**
+     * The constant EDITOR_MENU_OTHER_PLUGINS.
+     */
+    public static final String EDITOR_MENU_OTHER_PLUGINS;
+    /**
      * The constant EDITOR_MENU_HELP.
      */
     public static final String EDITOR_MENU_HELP;
@@ -166,14 +170,6 @@ public class Messages {
      * The constant ASSET_EDITOR_DIALOG_TITLE.
      */
     public static final String ASSET_EDITOR_DIALOG_TITLE;
-    /**
-     * The constant ASSET_EDITOR_DIALOG_BUTTON_OK.
-     */
-    public static final String ASSET_EDITOR_DIALOG_BUTTON_OK;
-    /**
-     * The constant ASSET_EDITOR_DIALOG_BUTTON_CANCEL.
-     */
-    public static final String ASSET_EDITOR_DIALOG_BUTTON_CANCEL;
 
     /**
      * The constant PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL.
@@ -279,10 +275,6 @@ public class Messages {
     public static final String MATERIAL_EDITOR_NAME;
 
     /**
-     * The constant FILE_CREATOR_BUTTON_OK.
-     */
-    public static final String FILE_CREATOR_BUTTON_OK;
-    /**
      * The constant FILE_CREATOR_FILE_NAME_LABEL.
      */
     public static final String FILE_CREATOR_FILE_NAME_LABEL;
@@ -365,14 +357,6 @@ public class Messages {
      * The constant SETTINGS_DIALOG_ANISOTROPY.
      */
     public static final String SETTINGS_DIALOG_ANISOTROPY;
-    /**
-     * The constant SETTINGS_DIALOG_BUTTON_OK.
-     */
-    public static final String SETTINGS_DIALOG_BUTTON_OK;
-    /**
-     * The constant SETTINGS_DIALOG_BUTTON_CANCEL.
-     */
-    public static final String SETTINGS_DIALOG_BUTTON_CANCEL;
     /**
      * The constant SETTINGS_DIALOG_MESSAGE.
      */
@@ -1665,19 +1649,11 @@ public class Messages {
      * The constant RENAME_DIALOG_BUTTON_OK.
      */
     public static final String RENAME_DIALOG_BUTTON_OK;
-    /**
-     * The constant RENAME_DIALOG_BUTTON_CANCEL.
-     */
-    public static final String RENAME_DIALOG_BUTTON_CANCEL;
 
     /**
      * The constant PLAY_ANIMATION_SETTINGS_DIALOG_TITLE.
      */
     public static final String PLAY_ANIMATION_SETTINGS_DIALOG_TITLE;
-    /**
-     * The constant PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK.
-     */
-    public static final String PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK;
 
     /**
      * The constant MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE.
@@ -1831,9 +1807,29 @@ public class Messages {
      */
     public static final String SIMPLE_DIALOG_BUTTON_OK;
     /**
+     * The constant SIMPLE_DIALOG_BUTTON_SELECT.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_SELECT;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_ADD.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_ADD;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_GENERATE.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_GENERATE;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_CREATE.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_CREATE;
+    /**
      * The constant SIMPLE_DIALOG_BUTTON_CANCEL.
      */
     public static final String SIMPLE_DIALOG_BUTTON_CANCEL;
+    /**
+     * The constant SIMPLE_DIALOG_BUTTON_CLOSE.
+     */
+    public static final String SIMPLE_DIALOG_BUTTON_CLOSE;
 
     /**
      * The constant EMPTY_MODEL_CREATOR_DESCRIPTION.
@@ -1882,10 +1878,6 @@ public class Messages {
      * The constant GENERATE_TANGENTS_DIALOG_TITLE.
      */
     public static final String GENERATE_TANGENTS_DIALOG_TITLE;
-    /**
-     * The constant GENERATE_TANGENTS_DIALOG_BUTTON_OK.
-     */
-    public static final String GENERATE_TANGENTS_DIALOG_BUTTON_OK;
 
     /**
      * The constant GENERATE_LOD_DIALOG_TITLE.
@@ -1895,10 +1887,6 @@ public class Messages {
      * The constant GENERATE_LOD_DIALOG_METHOD.
      */
     public static final String GENERATE_LOD_DIALOG_METHOD;
-    /**
-     * The constant GENERATE_LOD_DIALOG_BUTTON_GENERATE.
-     */
-    public static final String GENERATE_LOD_DIALOG_BUTTON_GENERATE;
 
     /**
      * The constant BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME.
@@ -1921,10 +1909,6 @@ public class Messages {
      * The constant NODE_SELECTOR_DIALOG_TITLE.
      */
     public static final String NODE_SELECTOR_DIALOG_TITLE;
-    /**
-     * The constant NODE_SELECTOR_DIALOG_BUTTON.
-     */
-    public static final String NODE_SELECTOR_DIALOG_BUTTON;
 
     /**
      * The constant GEOMETRY_SELECTOR_DIALOG_TITLE.
@@ -1978,10 +1962,6 @@ public class Messages {
      * The constant ADD_USER_DATA_DIALOG_TITLE.
      */
     public static final String ADD_USER_DATA_DIALOG_TITLE;
-    /**
-     * The constant ADD_USER_DATA_DIALOG_BUTTON_OK.
-     */
-    public static final String ADD_USER_DATA_DIALOG_BUTTON_OK;
 
     /**
      * The constant CREATE_CUSTOM_CONTROL_DIALOG_TITLE.
@@ -2254,10 +2234,6 @@ public class Messages {
      */
     public static final String ABOUT_DIALOG_TITLE;
     /**
-     * The constant ABOUT_DIALOG_BUTTON_OK.
-     */
-    public static final String ABOUT_DIALOG_BUTTON_OK;
-    /**
      * The constant ABOUT_DIALOG_VERSION.
      */
     public static final String ABOUT_DIALOG_VERSION;
@@ -2283,6 +2259,23 @@ public class Messages {
      */
     public static final String RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED;
 
+    /**
+     * The constant PLUGINS_DIALOG_TITLE.
+     */
+    public static final String PLUGINS_DIALOG_TITLE;
+    /**
+     * The constant PLUGINS_DIALOG_FILE_CHOOSER_TITLE.
+     */
+    public static final String PLUGINS_DIALOG_FILE_CHOOSER_TITLE;
+    /**
+     * The constant PLUGINS_DIALOG_FILE_CHOOSER_FILTER.
+     */
+    public static final String PLUGINS_DIALOG_FILE_CHOOSER_FILTER;
+    /**
+     * The constant PLUGINS_DIALOG_QUESTION.
+     */
+    public static final String PLUGINS_DIALOG_QUESTION;
+
     static {
 
         final Locale locale = Locale.getDefault();
@@ -2307,6 +2300,7 @@ public class Messages {
         EDITOR_MENU_FILE_EXIT = bundle.getString("EditorMenuFileExit");
         EDITOR_MENU_OTHER = bundle.getString("EditorMenuOther");
         EDITOR_MENU_OTHER_SETTINGS = bundle.getString("EditorMenuOtherSettings");
+        EDITOR_MENU_OTHER_PLUGINS = bundle.getString("EditorMenuOtherPlugins");
         EDITOR_MENU_HELP = bundle.getString("EditorMenuHelp");
         EDITOR_MENU_HELP_ABOUT = bundle.getString("EditorMenuHelpAbout");
 
@@ -2342,8 +2336,6 @@ public class Messages {
         MATERIAL_FILE_EDITOR_ACTION_LIGHT = bundle.getString("MaterialFileEditorActionLight");
 
         ASSET_EDITOR_DIALOG_TITLE = bundle.getString("AssetEditorDialogTitle");
-        ASSET_EDITOR_DIALOG_BUTTON_OK = bundle.getString("AssetEditorDialogButtonOk");
-        ASSET_EDITOR_DIALOG_BUTTON_CANCEL = bundle.getString("AssetEditorDialogButtonCancel");
 
         PARTICLE_ASSET_EDITOR_DIALOG_TEXTURE_PARAM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureParamLabel");
         PARTICLE_ASSET_EDITOR_DIALOG_LIGHTING_TRANSFORM_LABEL = bundle.getString("ParticlesAssetEditorDialogTextureLightingTransformLabel");
@@ -2376,7 +2368,6 @@ public class Messages {
         TEXT_FILE_EDITOR_NAME = bundle.getString("TextFileEditorName");
         MATERIAL_EDITOR_NAME = bundle.getString("MaterialFileEditorName");
 
-        FILE_CREATOR_BUTTON_OK = bundle.getString("FileCreatorButtonOk");
         FILE_CREATOR_FILE_NAME_LABEL = bundle.getString("FileCreatorFileNameLabel");
 
         MATERIAL_FILE_CREATOR_TITLE = bundle.getString("MaterialFileCreatorTitle");
@@ -2401,8 +2392,6 @@ public class Messages {
         SETTINGS_DIALOG_TONEMAP_FILTER = bundle.getString("SettingsDialogToneMapFilter");
         SETTINGS_DIALOG_TONEMAP_FILTER_WHITE_POINT = bundle.getString("SettingsDialogToneMapFilterWhitePoint");
         SETTINGS_DIALOG_ANISOTROPY = bundle.getString("SettingsDialogAnisotropy");
-        SETTINGS_DIALOG_BUTTON_OK = bundle.getString("SettingsDialogButtonOk");
-        SETTINGS_DIALOG_BUTTON_CANCEL = bundle.getString("SettingsDialogButtonCancel");
         SETTINGS_DIALOG_MESSAGE = bundle.getString("SettingsDialogMessage");
         SETTINGS_DIALOG_GOOGLE_ANALYTICS = bundle.getString("SettingsDialogAnalytics");
         SETTINGS_DIALOG_CAMERA_ANGLE = bundle.getString("SettingsDialogCameraAngle");
@@ -2731,10 +2720,8 @@ public class Messages {
         RENAME_DIALOG_TITLE = bundle.getString("RenameDialogTitle");
         RENAME_DIALOG_NEW_NAME_LABEL = bundle.getString("RenameDialogNewNameLabel");
         RENAME_DIALOG_BUTTON_OK = bundle.getString("RenameDialogButtonOk");
-        RENAME_DIALOG_BUTTON_CANCEL = bundle.getString("RenameDialogButtonCancel");
 
         PLAY_ANIMATION_SETTINGS_DIALOG_TITLE = bundle.getString("PlayAnimationSettingsDialogTitle");
-        PLAY_ANIMATION_SETTINGS_DIALOG_BUTTON_OK = bundle.getString("PlayAnimationSettingsDialogButtonOk");
 
         MANUAL_EXTRACT_ANIMATION_DIALOG_TITLE = bundle.getString("ManualExtractAnimationDialogTitle");
         MANUAL_EXTRACT_ANIMATION_DIALOG_NAME = bundle.getString("ManualExtractAnimationDialogName");
@@ -2779,7 +2766,12 @@ public class Messages {
         CREATE_SKY_DIALOG_BOTTOM_LABEL = bundle.getString("CreateSkyDialogBottomLabel");
 
         SIMPLE_DIALOG_BUTTON_OK = bundle.getString("SimpleDialogButtonOk");
+        SIMPLE_DIALOG_BUTTON_SELECT = bundle.getString("SimpleDialogButtonSelect");
+        SIMPLE_DIALOG_BUTTON_ADD = bundle.getString("SimpleDialogButtonAdd");
+        SIMPLE_DIALOG_BUTTON_GENERATE = bundle.getString("SimpleDialogButtonGenerate");
+        SIMPLE_DIALOG_BUTTON_CREATE = bundle.getString("SimpleDialogButtonCreate");
         SIMPLE_DIALOG_BUTTON_CANCEL = bundle.getString("SimpleDialogButtonCancel");
+        SIMPLE_DIALOG_BUTTON_CLOSE = bundle.getString("SimpleDialogButtonClose");
 
         EMPTY_MODEL_CREATOR_DESCRIPTION = bundle.getString("EmptyModelCreatorDescription");
         EMPTY_MODEL_CREATOR_TITLE = bundle.getString("EmptyModelCreatorTitle");
@@ -2795,11 +2787,9 @@ public class Messages {
         GENERATE_TANGENTS_DIALOG_TITLE = bundle.getString("GenerateTangentsDialogTitle");
         GENERATE_TANGENTS_DIALOG_ALGORITHM_LABEL = bundle.getString("GenerateTangentsDialogAlgorithmLabel");
         GENERATE_TANGENTS_DIALOG_SPLIT_MIRRORED = bundle.getString("GenerateTangentsDialogSplitMirrored");
-        GENERATE_TANGENTS_DIALOG_BUTTON_OK = bundle.getString("GenerateTangentsDialogButtonOk");
 
         GENERATE_LOD_DIALOG_TITLE = bundle.getString("GenerateLoDDialogTitle");
         GENERATE_LOD_DIALOG_METHOD = bundle.getString("GenerateLoDDialogMethod");
-        GENERATE_LOD_DIALOG_BUTTON_GENERATE = bundle.getString("GenerateLoDDialogButtonGenerate");
 
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_NAME = bundle.getString("BoundingVolumeModelPropertyControlName");
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_SPHERE = bundle.getString("BoundingVolumeModelPropertyControlSphere");
@@ -2807,7 +2797,6 @@ public class Messages {
         BOUNDING_VOLUME_MODEL_PROPERTY_CONTROL_BOX = bundle.getString("BoundingVolumeModelPropertyControlBox");
 
         NODE_SELECTOR_DIALOG_TITLE = bundle.getString("NodeSelectorDialogTitle");
-        NODE_SELECTOR_DIALOG_BUTTON = bundle.getString("NodeSelectorDialogButton");
 
         GEOMETRY_SELECTOR_DIALOG_TITLE = bundle.getString("GeometrySelectorDialogTitle");
         LIGHT_SELECTOR_DIALOG_TITLE = bundle.getString("LightSelectorDialogTitle");
@@ -2825,7 +2814,6 @@ public class Messages {
         CREATE_SCENE_FILTER_DIALOG_CUSTOM_FIELD = bundle.getString("CreateSceneFilterDialogCustomField");
 
         ADD_USER_DATA_DIALOG_TITLE = bundle.getString("AddUserDataDialogTitle");
-        ADD_USER_DATA_DIALOG_BUTTON_OK = bundle.getString("AddUserDataDialogButtonOk");
 
         CREATE_CUSTOM_CONTROL_DIALOG_TITLE = bundle.getString("CreateCustomControlDialogTitle");
         CREATE_CUSTOM_CONTROL_DIALOG_BUILT_IN = bundle.getString("CreateCustomControlDialogBuiltIn");
@@ -2908,8 +2896,12 @@ public class Messages {
         ABOUT_DIALOG_FORUM_THREAD = bundle.getString("AboutDialogForumThread");
         ABOUT_DIALOG_USED_LIBRARIES = bundle.getString("AboutDialogUsedLibraries");
         ABOUT_DIALOG_USED_ICONS = bundle.getString("AboutDialogUsedIcons");
-        ABOUT_DIALOG_BUTTON_OK = bundle.getString("AboutDialogButtonOk");
 
         RESOURCE_PROPERTY_EDIT_CONTROL_NOTHING_IS_SELECTED = bundle.getString("ResourcePropertyEditControlNothingIsSelected");
+
+        PLUGINS_DIALOG_TITLE = bundle.getString("PluginsDialogTitle");
+        PLUGINS_DIALOG_FILE_CHOOSER_TITLE = bundle.getString("PluginsDialogFileChooserTitle");
+        PLUGINS_DIALOG_FILE_CHOOSER_FILTER = bundle.getString("PluginsDialogFileChooserFilter");
+        PLUGINS_DIALOG_QUESTION = bundle.getString("PluginsDialogQuestion");
     }
 }

@@ -150,8 +150,8 @@ public class NodeSelectorDialog<T> extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
-        return Messages.NODE_SELECTOR_DIALOG_BUTTON;
+    protected String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_SELECT;
     }
 
     @NotNull

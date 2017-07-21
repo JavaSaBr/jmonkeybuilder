@@ -142,13 +142,13 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonCancelLabel() {
-        return Messages.RENAME_DIALOG_BUTTON_CANCEL;
+    protected String getButtonCloseText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_CANCEL;
     }
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
+    protected String getButtonOkText() {
         return Messages.RENAME_DIALOG_BUTTON_OK;
     }
 

@@ -28,6 +28,8 @@ import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.editor.util.SynchronizedByteBufferAllocator;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
@@ -51,6 +53,9 @@ import java.nio.file.Paths;
  * @author JavaSaBr
  */
 public class JFXApplication extends Application {
+
+    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(JFXApplication.class);
 
     @Nullable
     private static JFXApplication instance;

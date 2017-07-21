@@ -75,20 +75,20 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
+    protected String getButtonOkText() {
         return Messages.QUESTION_DIALOG_BUTTON_OK;
     }
 
     @NotNull
     @Override
-    protected String getButtonCancelLabel() {
+    protected String getButtonCloseText() {
         return Messages.QUESTION_DIALOG_BUTTON_CANCEL;
     }
 
     @Override
     protected void processKey(@NotNull final KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            processCancel();
+            processClose();
         }
     }
 
@@ -99,8 +99,8 @@ public class ConfirmDialog extends AbstractSimpleEditorDialog {
     }
 
     @Override
-    protected void processCancel() {
-        super.processCancel();
+    protected void processClose() {
+        super.processClose();
         handler.accept(Boolean.FALSE);
     }
 

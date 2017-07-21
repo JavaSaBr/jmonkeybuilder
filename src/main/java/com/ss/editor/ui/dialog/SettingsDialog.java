@@ -1125,10 +1125,10 @@ public class SettingsDialog extends EditorDialog {
 
         final HBox container = new HBox();
 
-        final Button okButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_OK);
+        final Button okButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_OK);
         okButton.setOnAction(event -> processOk());
 
-        final Button cancelButton = new Button(Messages.SETTINGS_DIALOG_BUTTON_CANCEL);
+        final Button cancelButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CLOSE);
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);

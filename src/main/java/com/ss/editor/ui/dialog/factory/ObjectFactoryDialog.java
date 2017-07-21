@@ -2,6 +2,7 @@ package com.ss.editor.ui.dialog.factory;
 
 import static com.ss.editor.ui.dialog.factory.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.factory.control.PropertyEditorControl;
 import com.ss.rlib.util.VarTable;
@@ -89,12 +90,18 @@ public class ObjectFactoryDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * Sets the label to the OK button.
+     * Sets the text to the OK button.
      *
-     * @param label the new label.
+     * @param text the new text.
      */
-    public void setButtonOkLabel(@NotNull final String label) {
-        getOkButton().setText(label);
+    public void setButtonOkText(@NotNull final String text) {
+        getOkButton().setText(text);
+    }
+
+    @NotNull
+    @Override
+    protected String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_CREATE;
     }
 
     @Override

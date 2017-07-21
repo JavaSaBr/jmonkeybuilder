@@ -279,7 +279,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
+    protected String getButtonOkText() {
         return Messages.MODEL_CONVERTER_DIALOG_BUTTON_OK;
     }
 

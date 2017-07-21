@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog.geometry.lod;
 
+import static com.ss.editor.ui.FXConstants.DIALOG_LIST_WIDTH_PERCENT;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -47,7 +48,6 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final Point DIALOG_SIZE = new Point(360, -1);
 
-    private static final double LIST_WIDTH_PERCENT = 0.94;
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -189,16 +189,16 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         levelsList = new ListView<>();
         levelsList.setCellFactory(param -> new LodValueCell(this));
         levelsList.setEditable(true);
-        levelsList.prefWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
-        levelsList.maxWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
+        levelsList.prefWidthProperty().bind(widthProperty().multiply(DIALOG_LIST_WIDTH_PERCENT));
+        levelsList.maxWidthProperty().bind(widthProperty().multiply(DIALOG_LIST_WIDTH_PERCENT));
         levelsList.getItems().addListener((ListChangeListener<? super Number>) c -> updateButtonOk());
         levelsList.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
 
         FXUtils.addToPane(levelsList, root);
 
         final HBox buttonContainer = new HBox();
-        buttonContainer.prefWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
-        buttonContainer.maxWidthProperty().bind(widthProperty().multiply(LIST_WIDTH_PERCENT));
+        buttonContainer.prefWidthProperty().bind(widthProperty().multiply(DIALOG_LIST_WIDTH_PERCENT));
+        buttonContainer.maxWidthProperty().bind(widthProperty().multiply(DIALOG_LIST_WIDTH_PERCENT));
 
         final Button addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
@@ -340,8 +340,8 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
-        return Messages.GENERATE_LOD_DIALOG_BUTTON_GENERATE;
+    protected String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_GENERATE;
     }
 
     @NotNull

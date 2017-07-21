@@ -486,11 +486,11 @@ public class AssetEditorDialog<C> extends EditorDialog {
         warningLabel.setGraphic(new ImageView(Icons.WARNING_24));
         warningLabel.setVisible(false);
 
-        okButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_OK);
+        okButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_SELECT);
         okButton.setOnAction(event -> processSelect());
         okButton.disableProperty().bind(buildDisableCondition());
 
-        final Button cancelButton = new Button(Messages.ASSET_EDITOR_DIALOG_BUTTON_CANCEL);
+        final Button cancelButton = new Button(Messages.SIMPLE_DIALOG_BUTTON_CANCEL);
         cancelButton.setOnAction(event -> hide());
 
         FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);

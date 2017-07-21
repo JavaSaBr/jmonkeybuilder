@@ -1,6 +1,5 @@
 package com.ss.editor.ui.dialog;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
@@ -70,6 +69,12 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     private Button okButton;
 
     /**
+     * The close button.
+     */
+    @Nullable
+    private Button closeButton;
+
+    /**
      * True if this dialog is ready.
      */
     private boolean ready;
@@ -94,7 +99,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     protected void processKey(@NotNull final KeyEvent event) {
         super.processKey(event);
         final Button okButton = getOkButton();
-        if (event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
+        if (okButton != null && event.getCode() == KeyCode.ENTER && !okButton.isDisable()) {
             processOk();
         }
     }
@@ -105,33 +110,73 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     /**
-     * Gets ok button.
+     * Gets the ok button.
      *
      * @return the ok button.
      */
-    @NotNull
+    @Nullable
     protected Button getOkButton() {
-        return notNull(okButton);
+        return okButton;
+    }
+
+    /**
+     * Gets the close button.
+     *
+     * @return the close button.
+     */
+    @Nullable
+    protected Button getCloseButton() {
+        return closeButton;
     }
 
     @Override
     protected void createActions(@NotNull final VBox root) {
         super.createActions(root);
 
-        final HBox container = new HBox();
+        HBox container = null;
 
-        okButton = new Button(getButtonOkLabel());
-        okButton.setOnAction(event -> safeProcessOk());
+        if (needCloseButton() || needOkButton()) {
+            container = new HBox();
+        }
 
-        final Button cancelButton = new Button(getButtonCancelLabel());
-        cancelButton.setOnAction(event -> processCancel());
+        if (needOkButton()) {
+            okButton = new Button(getButtonOkText());
+            okButton.setOnAction(event -> safeProcessOk());
+            FXUtils.addClassTo(okButton, CSSClasses.DIALOG_BUTTON);
+        }
 
-        FXUtils.addToPane(okButton, container);
-        FXUtils.addToPane(cancelButton, container);
-        FXUtils.addToPane(container, root);
+        if (needCloseButton()) {
+            closeButton = new Button(getButtonCloseText());
+            closeButton.setOnAction(event -> processClose());
+            FXUtils.addClassTo(closeButton, CSSClasses.DIALOG_BUTTON);
+        }
 
-        FXUtils.addClassTo(okButton, cancelButton, CSSClasses.DIALOG_BUTTON);
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        if (needOkButton()) {
+            FXUtils.addToPane(okButton, container);
+        }
+
+        if (needCloseButton()) {
+            FXUtils.addToPane(closeButton, container);
+        }
+
+        if (container != null) {
+            FXUtils.addToPane(container, root);
+            FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
+        }
+    }
+
+    /**
+     * @return true if need to add an ok button here.
+     */
+    protected boolean needOkButton() {
+        return true;
+    }
+
+    /**
+     * @return true if need to add a close button here.
+     */
+    protected boolean needCloseButton() {
+        return true;
     }
 
     private void safeProcessOk() {
@@ -143,22 +188,22 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     }
 
     /**
-     * Gets button cancel label.
+     * Gets the button's close text.
      *
-     * @return the button cancel label
+     * @return the the button's close text.
      */
     @NotNull
-    protected String getButtonCancelLabel() {
-        return Messages.SIMPLE_DIALOG_BUTTON_CANCEL;
+    protected String getButtonCloseText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_CLOSE;
     }
 
     /**
-     * Gets button ok label.
+     * Gets button's ok text.
      *
-     * @return the button ok label
+     * @return the button's ok text.
      */
     @NotNull
-    protected String getButtonOkLabel() {
+    protected String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_OK;
     }
 
@@ -172,7 +217,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle cancel button.
      */
-    protected void processCancel() {
+    protected void processClose() {
         hide();
     }
 }

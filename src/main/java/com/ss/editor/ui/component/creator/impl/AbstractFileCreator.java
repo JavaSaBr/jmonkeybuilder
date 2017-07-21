@@ -142,8 +142,8 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
-        return Messages.FILE_CREATOR_BUTTON_OK;
+    protected String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_CREATE;
     }
 
     /**

@@ -54,9 +54,10 @@ public class EditorMenuBarComponent extends MenuBar implements ScreenComponent {
     private Menu createOtherMenu() {
 
         final MenuItem settingsAction = new OpenSettingsAction();
+        final MenuItem pluginsAction = new OpenPluginsAction();
 
         final Menu menu = new Menu(Messages.EDITOR_MENU_OTHER);
-        menu.getItems().addAll(settingsAction);
+        menu.getItems().addAll(settingsAction, pluginsAction);
 
         return menu;
     }

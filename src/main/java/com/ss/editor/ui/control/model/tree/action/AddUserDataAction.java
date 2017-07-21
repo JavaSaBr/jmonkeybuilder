@@ -107,7 +107,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
                 vars -> !StringUtils.isEmpty(vars.getString(PROPERTY_NAME)));
 
         dialog.setTitle(Messages.ADD_USER_DATA_DIALOG_TITLE);
-        dialog.setButtonOkLabel(Messages.ADD_USER_DATA_DIALOG_BUTTON_OK);
+        dialog.setButtonOkText(Messages.SIMPLE_DIALOG_BUTTON_ADD);
         dialog.show(scene.getWindow());
     }
 

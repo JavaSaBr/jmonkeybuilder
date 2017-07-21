@@ -24,10 +24,11 @@ javadoc {
 dependencies {
 
     // base
-    compile 'com.github.JavaSaBr:RlibFX:4.1.2'
-    compile 'com.github.JavaSaBr:Rlib:6.2.2-SNAPSHOT'
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
-    compile 'com.github.JavaSaBr:JME3-JFX:1.5.2'
+
+    compile 'com.github.JavaSaBr:RlibFX:4.1.2'
+    compile 'com.github.JavaSaBr:RLib:6.3.0'
+    compile 'com.github.JavaSaBr:JME3-JFX:1.5.3'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
@@ -89,10 +90,10 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.1.0') {
+    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.1.1') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.2.3') {
+    compile ('com.github.JavaSaBr:tonegodemitter:2.2.4') {
         exclude group: 'org.jmonkeyengine'
     }
 
@@ -105,6 +106,7 @@ dependencies {
 task copyToLib(type: Copy) {
 
     doFirst {
+        println("delete " + "$buildDir/dependences");
         GFileUtils.deleteDirectory(new File("$buildDir/dependences"))
     }
 

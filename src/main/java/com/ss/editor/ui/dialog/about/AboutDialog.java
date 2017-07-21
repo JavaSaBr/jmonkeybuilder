@@ -124,8 +124,8 @@ public class AboutDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     @Override
-    protected String getButtonOkLabel() {
-        return Messages.ABOUT_DIALOG_BUTTON_OK;
+    protected String getButtonOkText() {
+        return Messages.SIMPLE_DIALOG_BUTTON_OK;
     }
 
     @NotNull

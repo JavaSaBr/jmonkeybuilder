@@ -1098,6 +1098,31 @@
 
 /*******************************************************************************
  *                                                                             *
+ * Plugins Dialog                                                         *
+ *                                                                             *
+ ******************************************************************************/
+
+.plugins-dialog {
+    -fx-alignment: center;
+    -fx-spacing: 2px;
+}
+
+.plugins-dialog > .hbox {
+    -fx-alignment: center;
+    -fx-padding: 4px 0px 0px 0px;
+}
+
+.plugins-dialog > .hbox > .button {
+    -fx-min-height: -var-default-toolbar-button-size;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-toolbar-button-size;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
+}
+
+/*******************************************************************************
+ *                                                                             *
  * Asset Editor Dialog                                                         *
  *                                                                             *
  ******************************************************************************/
@@ -1200,4 +1225,14 @@
     -fx-border-width: 1px;
     -fx-border-radius: 2px;
     -fx-effect: -fx-shadow-menu;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Plugin List Cell                                                            *
+ *                                                                             *
+ ******************************************************************************/
+
+.plugin-list-cell {
+    -fx-padding: 0px 0px 0px 6px;
 }

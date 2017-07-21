@@ -10,18 +10,22 @@ import com.ss.editor.ui.event.impl.ChangedCurrentAssetFolderEvent;
 import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.scene.control.MenuItem;
 import javafx.stage.DirectoryChooser;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
 
 /**
- * The action for opening a new asset folder.
+ * The action to open a new asset folder.
  *
  * @author JavaSaBr
  */
 public class OpenAssetAction extends MenuItem {
 
+    @NotNull
     private static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    @NotNull
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
