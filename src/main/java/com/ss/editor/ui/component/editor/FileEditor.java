@@ -7,21 +7,23 @@ import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Parent;
+import javafx.scene.layout.BorderPane;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
 /**
  * The interface for implementing file editor.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public interface FileEditor {
 
     /**
      * The Empty states.
      */
-    Array<Editor3DState> EMPTY_STATES = ArrayFactory.newArray(Editor3DState.class);
+    Array<Editor3DState> EMPTY_3D_STATES = ArrayFactory.newArray(Editor3DState.class);
 
     /**
      * Get the page for showing the editor.
@@ -31,6 +33,17 @@ public interface FileEditor {
     @NotNull
     @FXThread
     Parent getPage();
+
+    /**
+     * Gets an area to place 3D scene.
+     *
+     * @return the area to place 3D scene.
+     */
+    @Nullable
+    @FXThread
+    default BorderPane get3DArea() {
+        return null;
+    }
 
     /**
      * Gets file name.
@@ -72,11 +85,13 @@ public interface FileEditor {
      *
      * @return true if the current file was changed.
      */
+    @FXThread
     boolean isDirty();
 
     /**
      * Save new changes.
      */
+    @FXThread
     default void doSave() {
     }
 
@@ -87,8 +102,8 @@ public interface FileEditor {
      */
     @NotNull
     @FXThread
-    default Array<Editor3DState> getStates() {
-        return EMPTY_STATES;
+    default Array<Editor3DState> get3DStates() {
+        return EMPTY_3D_STATES;
     }
 
     /**
@@ -142,11 +157,11 @@ public interface FileEditor {
     }
 
     /**
-     * Is inside boolean.
+     * Check the coords that it's inside in the editing area of this editor.
      *
      * @param sceneX the scene x
      * @param sceneY the scene y
-     * @return true if the point is inside in this editor.
+     * @return true if the point is inside in the editing area.
      */
     @FXThread
     default boolean isInside(double sceneX, double sceneY) {

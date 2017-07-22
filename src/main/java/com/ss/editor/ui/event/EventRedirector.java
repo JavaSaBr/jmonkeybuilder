@@ -1,7 +1,10 @@
 package com.ss.editor.ui.event;
 
+import com.ss.editor.config.Config;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
@@ -16,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public class EventRedirector {
+
+    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(EventRedirector.class);
 
     /**
      * The editor area.
@@ -159,10 +165,19 @@ public class EventRedirector {
         if (target == destination) return;
 
         final EventType<? extends InputEvent> eventType = event.getEventType();
-
         final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
+
+        if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
+            LOGGER.debug("Key event " + event.getEventType() + " is inside " +
+                    currentEditor.isInside(getSceneX(), getSceneY()));
+        }
+
         if (currentEditor == null || eventType != KeyEvent.KEY_RELEASED && !currentEditor.isInside(getSceneX(), getSceneY())) {
             return;
+        }
+
+        if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
+            LOGGER.debug("Redirect event " + event);
         }
 
         Event.fireEvent(destination, event.copyFor(event.getSource(), destination));

@@ -117,6 +117,7 @@ public class EditorRegistry {
         editorIdToDescription.put(description.getEditorId(), description);
     }
 
+    @FromAnyThread
     private void register(@NotNull final EditorDescription description, @NotNull final String extension,
                           @NotNull final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions) {
         final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> newArray(EditorDescription.class));
@@ -131,6 +132,7 @@ public class EditorRegistry {
      * @return the description for the editor id or null.
      */
     @Nullable
+    @FromAnyThread
     public EditorDescription getDescription(@NotNull final String editorId) {
         final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
         return editorIdToDescription.get(editorId);
@@ -143,6 +145,7 @@ public class EditorRegistry {
      * @return the editor for this file or null.
      */
     @Nullable
+    @FromAnyThread
     public FileEditor createEditorFor(@NotNull final Path file) {
         if (Files.isDirectory(file)) return null;
 
@@ -179,6 +182,7 @@ public class EditorRegistry {
      * @return the editor or null.
      */
     @Nullable
+    @FromAnyThread
     public FileEditor createEditorFor(@NotNull final EditorDescription description, @NotNull final Path file) {
 
         final Callable<FileEditor> constructor = description.getConstructor();
@@ -197,6 +201,7 @@ public class EditorRegistry {
      * @return the list of available editors for the file.
      */
     @NotNull
+    @FromAnyThread
     public Array<EditorDescription> getAvailableEditorsFor(@NotNull final Path file) {
 
         final Array<EditorDescription> result = newArray(EditorDescription.class);

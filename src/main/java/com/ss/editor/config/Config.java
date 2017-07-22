@@ -74,7 +74,10 @@ public abstract class Config {
      * Flag is for showing debug of the JavaFX.
      */
     public static final boolean DEV_DEBUG_JFX;
-
+    /**
+     * The flag to enable debug of key input from javaFX to jME.
+     */
+    public static final boolean DEV_DEBUG_JFX_KEY_INPUT;
     /**
      * Flag is for activating the PBR.
      */
@@ -89,6 +92,7 @@ public abstract class Config {
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
         DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
+        DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
 

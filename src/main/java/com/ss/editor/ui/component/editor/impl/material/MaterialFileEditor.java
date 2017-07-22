@@ -48,9 +48,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -193,7 +191,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * The pane of editor area.
      */
     @Nullable
-    private Pane editorAreaPane;
+    private BorderPane editorAreaPane;
 
     /**
      * The change handler.
@@ -375,10 +373,16 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         operationControl.undo();
     }
 
+    @FXThread
+    @Override
+    public @Nullable BorderPane get3DArea() {
+        return editorAreaPane;
+    }
+
     @Override
     protected void createContent(@NotNull final StackPane root) {
         changeHandler = this::handleChanges;
-        editorAreaPane = new Pane();
+        editorAreaPane = new BorderPane();
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);

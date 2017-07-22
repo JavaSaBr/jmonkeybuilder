@@ -2,6 +2,7 @@ package com.ss.editor.ui.scene;
 
 import static com.ss.editor.ui.util.UIUtils.fillComponents;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import com.jme3x.jfx.injfx.input.JFXMouseInput;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.PluginManager;
 import com.ss.editor.ui.component.ScreenComponent;
@@ -10,7 +11,9 @@ import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ProgressIndicator;
@@ -79,7 +82,11 @@ public class EditorFXScene extends Scene {
     public EditorFXScene(@NotNull final Group root) {
         super(root);
 
-        this.canvas = new Canvas();
+        this.canvas = new EditorFXCanvas();
+        this.canvas.setMouseTransparent(true);
+        this.canvas.getProperties()
+                .put(JFXMouseInput.PROP_USE_LOCAL_COORDS, true);
+
         this.loadingCount = new AtomicInteger();
         this.components = ArrayFactory.newArraySet(ScreenComponent.class);
         this.container = new StackPane();
@@ -94,21 +101,19 @@ public class EditorFXScene extends Scene {
         final Pane background = new Pane();
         background.setId(CSSIds.ROOT);
 
-        root.getChildren().addAll(hideLayer, background, canvas, container, loadingLayer);
+        FXUtils.addDebugBorderTo(canvas);
 
-        canvas.setPickOnBounds(true);
-        canvas.heightProperty().bind(heightProperty());
-        canvas.widthProperty().bind(widthProperty());
-        canvas.setOpacity(0);
+        root.getChildren().addAll(hideLayer, background, container, loadingLayer);
 
         FXUtils.bindFixedWidth(background, widthProperty());
         FXUtils.bindFixedHeight(background, heightProperty());
-        FXUtils.bindFixedWidth(hideLayer, widthProperty());
-        FXUtils.bindFixedHeight(hideLayer, heightProperty());
         FXUtils.bindFixedWidth(container, widthProperty());
         FXUtils.bindFixedHeight(container, heightProperty());
         FXUtils.bindFixedWidth(loadingLayer, widthProperty());
         FXUtils.bindFixedHeight(loadingLayer, heightProperty());
+        FXUtils.setFixedSize(hideLayer, 300, 300);
+
+        hideCanvas();
     }
 
     /**
@@ -120,6 +125,21 @@ public class EditorFXScene extends Scene {
     @FXThread
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    /**
+     * Move the canvas component to hide layer.
+     */
+    @FXThread
+    public void hideCanvas() {
+
+        final ObservableList<Node> children = hideLayer.getChildren();
+        if (children.contains(canvas)) return;
+
+        canvas.heightProperty().unbind();
+        canvas.widthProperty().unbind();
+
+        children.add(canvas);
     }
 
     /**

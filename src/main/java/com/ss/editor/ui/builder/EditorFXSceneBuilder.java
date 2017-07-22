@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The scene builder for building a scene for the Editor.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class EditorFXSceneBuilder {
 

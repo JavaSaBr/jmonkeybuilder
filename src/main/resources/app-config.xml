@@ -3,5 +3,7 @@
     <set name="Graphics.enablePBR" value="true"/>
 
     <set name="Dev.debug" value="true"/>
+    <set name="Dev.cameraDebug" value="false"/>
+    <set name="Dev.jfxKeyInput" value="false"/>
     <set name="Dev.debugJFX" value="false"/>
 </list>

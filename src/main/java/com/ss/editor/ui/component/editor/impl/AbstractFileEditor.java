@@ -405,7 +405,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
     @NotNull
     @Override
-    public Array<Editor3DState> getStates() {
+    public Array<Editor3DState> get3DStates() {
         return editorStates;
     }
 

@@ -1,10 +1,12 @@
 package com.ss.editor.ui.component.editor.area;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppStateManager;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.file.converter.FileConverterDescription;
 import com.ss.editor.file.converter.FileConverterRegistry;
@@ -34,6 +36,7 @@ import com.ss.rlib.util.dictionary.ConcurrentObjectDictionary;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.DictionaryUtils;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -42,6 +45,7 @@ import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,7 +53,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * The component for containing editors.
@@ -115,41 +118,13 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
      * Instantiates a new Editor area component.
      */
     public EditorAreaComponent() {
-        setId(CSSIds.EDITOR_AREA_COMPONENT);
-        setPickOnBounds(true);
-
         this.openedEditors = DictionaryFactory.newConcurrentAtomicObjectDictionary();
 
-        final ObservableList<Tab> tabs = getTabs();
-        tabs.addListener(this::processChangeTabs);
-
-        final SingleSelectionModel<Tab> selectionModel = getSelectionModel();
-        selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
-            Path newCurrentFile = null;
-
-            if (newValue != null) {
-
-                final ObservableMap<Object, Object> properties = newValue.getProperties();
-                final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-                fileEditor.notifyShowed();
-
-                newCurrentFile = fileEditor.getEditFile();
-            }
-
-            if (oldValue != null) {
-                final ObservableMap<Object, Object> properties = oldValue.getProperties();
-                final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-                fileEditor.notifyHided();
-            }
-
-            final Workspace workspace = Objects.requireNonNull(WORKSPACE_MANAGER.getCurrentWorkspace(),
-                    "The current workspace can't be null.");
-
-            workspace.updateCurrentEditedFile(newCurrentFile);
-
-            EXECUTOR_MANAGER.addJMETask(() -> processShowEditor(oldValue, newValue));
-        });
+        setPickOnBounds(true);
+        setId(CSSIds.EDITOR_AREA_COMPONENT);
+        getTabs().addListener(this::processChangeTabs);
+        getSelectionModel().selectedItemProperty()
+                .addListener(this::switchEditor);
 
         FX_EVENT_MANAGER.addEventHandler(RequestedOpenFileEvent.EVENT_TYPE, event -> processOpenFile((RequestedOpenFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(RequestedCreateFileEvent.EVENT_TYPE, event -> processCreateFile((RequestedCreateFileEvent) event));
@@ -157,6 +132,50 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         FX_EVENT_MANAGER.addEventHandler(RenamedFileEvent.EVENT_TYPE, event -> processEvent((RenamedFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(MovedFileEvent.EVENT_TYPE, event -> processEvent((MovedFileEvent) event));
         FX_EVENT_MANAGER.addEventHandler(ChangedCurrentAssetFolderEvent.EVENT_TYPE, event -> processEvent((ChangedCurrentAssetFolderEvent) event));
+    }
+
+    @FXThread
+    private void switchEditor(@NotNull final ObservableValue<? extends Tab> observable, @Nullable final Tab oldValue,
+                              @Nullable final Tab newValue) {
+
+        BorderPane current3DArea = null;
+        BorderPane new3DArea = null;
+
+        Path newCurrentFile = null;
+
+        if (newValue != null) {
+
+            final ObservableMap<Object, Object> properties = newValue.getProperties();
+            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            fileEditor.notifyShowed();
+
+            newCurrentFile = fileEditor.getEditFile();
+            new3DArea = fileEditor.get3DArea();
+        }
+
+        if (oldValue != null) {
+            final ObservableMap<Object, Object> properties = oldValue.getProperties();
+            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+            fileEditor.notifyHided();
+            current3DArea = fileEditor.get3DArea();
+        }
+
+        final EditorFXScene scene = (EditorFXScene) getScene();
+        final Canvas canvas = scene.getCanvas();
+
+        if (new3DArea != null) {
+            new3DArea.setCenter(canvas);
+            //canvas.heightProperty().bind(new3DArea.heightProperty());
+            //canvas.widthProperty().bind(new3DArea.widthProperty());
+        } else if (current3DArea != null) {
+            current3DArea.setCenter(null);
+            scene.hideCanvas();
+        }
+
+        final Workspace workspace = notNull(WORKSPACE_MANAGER.getCurrentWorkspace());
+        workspace.updateCurrentEditedFile(newCurrentFile);
+
+        EXECUTOR_MANAGER.addJMETask(() -> processShowEditor(oldValue, newValue));
     }
 
     /**
@@ -347,7 +366,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = prevTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<Editor3DState> states = fileEditor.getStates();
+            final Array<Editor3DState> states = fileEditor.get3DStates();
             states.forEach(stateManager::detach);
         }
 
@@ -356,7 +375,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             final ObservableMap<Object, Object> properties = newTab.getProperties();
             final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
 
-            final Array<Editor3DState> states = fileEditor.getStates();
+            final Array<Editor3DState> states = fileEditor.get3DStates();
             states.forEach(stateManager::attach);
 
             enabled = states.size() > 0;

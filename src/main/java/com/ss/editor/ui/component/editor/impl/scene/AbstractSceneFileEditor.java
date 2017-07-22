@@ -28,6 +28,7 @@ import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.SceneEditorControl.TransformType;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.manager.WorkspaceManager;
@@ -76,10 +77,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
@@ -222,6 +220,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @Nullable
     private StackPane editorAreaPane;
+
+    /**
+     * The pane of 3D editor area.
+     */
+    @Nullable
+    private BorderPane editor3DArea;
 
     /**
      * The selection toggle.
@@ -894,9 +898,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     public boolean isInside(final double sceneX, final double sceneY) {
+
         final Pane editorAreaPane = getEditorAreaPane();
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
-        return editorAreaPane.contains(point2D);
+        final boolean result = editorAreaPane.contains(point2D);
+
+        if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
+            LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
+                    ", localY = " + point2D.getY() + " is inside " + result);
+        }
+
+        return result;
     }
 
     @Override
@@ -1062,6 +1074,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addToPane(scaleToolButton, container);
     }
 
+    @FXThread
+    @Override
+    public @Nullable BorderPane get3DArea() {
+        return editor3DArea;
+    }
+
     @Override
     protected void createContent(@NotNull final StackPane root) {
         this.selectionNodeHandler = this::selectNodeFromTree;
@@ -1069,6 +1087,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAreaPane = new StackPane();
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
+
+        editor3DArea = new BorderPane();
 
         statsContainer = new VBox();
         statsContainer.setMouseTransparent(true);
@@ -1109,6 +1129,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
+        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addToPane(statsContainer, editorAreaPane);
         FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
@@ -1216,13 +1237,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final Camera camera = EDITOR.getCamera();
 
-        final float sceneX = (float) dragEvent.getSceneX();
-        final float sceneY = camera.getHeight() - (float) dragEvent.getSceneY();
+        final BorderPane area = get3DArea();
+        final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
             final MA editor3DState = getEditor3DState();
-            final Geometry geometry = editor3DState.getGeometryByScreenPos(sceneX, sceneY);
+            final Geometry geometry = editor3DState.getGeometryByScreenPos((float) areaPoint.getX(),
+                    camera.getHeight() - (float) areaPoint.getY());
+
             if (geometry == null) return;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
@@ -1254,8 +1277,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final ModelKey modelKey = new ModelKey(assetPath);
         final Camera camera = EDITOR.getCamera();
 
-        final float sceneX = (float) dragEvent.getSceneX();
-        final float sceneY = camera.getHeight() - (float) dragEvent.getSceneY();
+        final BorderPane area = get3DArea();
+        final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
@@ -1273,7 +1296,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            assetLinkNode.setLocalTranslation(editor3DState.getScenePosByScreenPos(sceneX, sceneY));
+            final Vector3f screenPoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
+                    camera.getHeight() - (float) areaPoint.getY());
+
+            assetLinkNode.setLocalTranslation(screenPoint);
 
             execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
         });

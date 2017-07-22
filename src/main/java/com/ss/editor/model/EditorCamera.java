@@ -2,9 +2,7 @@ package com.ss.editor.model;
 
 import static com.ss.rlib.geom.util.AngleUtils.degreeToRadians;
 import static com.ss.rlib.geom.util.AngleUtils.radiansToDegree;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 import com.jme3.export.InputCapsule;
 import com.jme3.export.JmeExporter;
 import com.jme3.export.JmeImporter;
@@ -20,6 +18,10 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
+import com.ss.editor.config.Config;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -29,6 +31,9 @@ import java.io.IOException;
  * @author JavaSaBr
  */
 public class EditorCamera implements ActionListener, AnalogListener, Control {
+
+    @NotNull
+    private static final Logger LOGGER = LoggerManager.getLogger(EditorCamera.class);
 
     private static final String CHASECAM_TOGGLEROTATE = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_TOGGLEROTATE;
     private static final String CHASECAM_DOWN = EditorCamera.class.getSimpleName() + "_" + CameraInput.CHASECAM_DOWN;
@@ -278,6 +283,10 @@ public class EditorCamera implements ActionListener, AnalogListener, Control {
             return;
         } else if (!name.equals(CHASECAM_TOGGLEROTATE)) {
             return;
+        }
+
+        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
+            LOGGER.debug("Toggle camera " + keyPressed);
         }
 
         if (keyPressed) {
