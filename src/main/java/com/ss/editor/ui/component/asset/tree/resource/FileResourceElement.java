@@ -9,14 +9,14 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class FileElement extends ResourceElement {
+public class FileResourceElement extends ResourceElement {
 
     /**
      * Instantiates a new File element.
      *
      * @param file the file
      */
-    FileElement(@NotNull final Path file) {
+    FileResourceElement(@NotNull final Path file) {
         super(file);
     }
 }

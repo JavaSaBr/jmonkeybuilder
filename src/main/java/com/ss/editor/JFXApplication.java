@@ -199,51 +199,57 @@ public class JFXApplication extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
-
-        final PluginManager pluginManager = PluginManager.getInstance();
-        pluginManager.onBeforeCreateJavaFXContext();
-        pluginManager.handlePlugins(editorPlugin -> editorPlugin.registerCSS(CSSRegistry.getInstance()));
-
-        LogView.getInstance();
         JFXApplication.instance = this;
         this.stage = stage;
 
-        SvgImageLoaderFactory.install();
+        try {
 
-        ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
+            final PluginManager pluginManager = PluginManager.getInstance();
+            pluginManager.onBeforeCreateJavaFXContext();
+            pluginManager.handlePlugins(editorPlugin -> editorPlugin.registerCSS(CSSRegistry.getInstance()));
 
-        final ObservableList<Image> icons = stage.getIcons();
-        icons.add(new Image("/ui/icons/app/SSEd256.png"));
-        icons.add(new Image("/ui/icons/app/SSEd128.png"));
-        icons.add(new Image("/ui/icons/app/SSEd64.png"));
-        icons.add(new Image("/ui/icons/app/SSEd32.png"));
-        icons.add(new Image("/ui/icons/app/SSEd16.png"));
+            LogView.getInstance();
+            SvgImageLoaderFactory.install();
 
-        final EditorConfig config = EditorConfig.getInstance();
+            ImageIO.read(getClass().getResourceAsStream("/ui/icons/test/test.jpg"));
 
-        stage.initStyle(StageStyle.DECORATED);
-        stage.setMinHeight(600);
-        stage.setMinWidth(800);
-        stage.setWidth(config.getScreenWidth());
-        stage.setHeight(config.getScreenHeight());
-        stage.setMaximized(config.isMaximized());
-        stage.setTitle(Config.TITLE);
-        stage.show();
+            final ObservableList<Image> icons = stage.getIcons();
+            icons.add(new Image("/ui/icons/app/SSEd256.png"));
+            icons.add(new Image("/ui/icons/app/SSEd128.png"));
+            icons.add(new Image("/ui/icons/app/SSEd64.png"));
+            icons.add(new Image("/ui/icons/app/SSEd32.png"));
+            icons.add(new Image("/ui/icons/app/SSEd16.png"));
 
-        if (!stage.isMaximized()) stage.centerOnScreen();
+            final EditorConfig config = EditorConfig.getInstance();
 
-        stage.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (stage.isMaximized()) return;
-            config.setScreenWidth(newValue.intValue());
-        });
-        stage.heightProperty().addListener((observable, oldValue, newValue) -> {
-            if (stage.isMaximized()) return;
-            config.setScreenHeight(newValue.intValue());
-        });
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setMinHeight(600);
+            stage.setMinWidth(800);
+            stage.setWidth(config.getScreenWidth());
+            stage.setHeight(config.getScreenHeight());
+            stage.setMaximized(config.isMaximized());
+            stage.setTitle(Config.TITLE);
+            stage.show();
 
-        stage.maximizedProperty().addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
+            if (!stage.isMaximized()) stage.centerOnScreen();
 
-        buildScene();
+            stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+                if (stage.isMaximized()) return;
+                config.setScreenWidth(newValue.intValue());
+            });
+            stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+                if (stage.isMaximized()) return;
+                config.setScreenHeight(newValue.intValue());
+            });
+
+            stage.maximizedProperty().addListener((observable, oldValue, newValue) -> config.setMaximized(newValue));
+
+            buildScene();
+
+        } catch (final Exception e) {
+            LOGGER.error(this, e);
+            throw e;
+        }
     }
 
     @Override

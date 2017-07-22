@@ -43,12 +43,12 @@ public class FileConverterRegistry {
 
     private FileConverterRegistry() {
         this.descriptions = ArrayFactory.newArray(FileConverterDescription.class);
-        addDescription(BlendToJ3oFileConverter.DESCRIPTION);
-        addDescription(FBXToJ3oFileConverter.DESCRIPTION);
-        addDescription(ObjToJ3oFileConverter.DESCRIPTION);
-        addDescription(SceneToJ3oFileConverter.DESCRIPTION);
-        addDescription(MeshXmlToJ3oFileConverter.DESCRIPTION);
-        addDescription(XBufToJ3oFileConverter.DESCRIPTION);
+        register(BlendToJ3oFileConverter.DESCRIPTION);
+        register(FBXToJ3oFileConverter.DESCRIPTION);
+        register(ObjToJ3oFileConverter.DESCRIPTION);
+        register(SceneToJ3oFileConverter.DESCRIPTION);
+        register(MeshXmlToJ3oFileConverter.DESCRIPTION);
+        register(XBufToJ3oFileConverter.DESCRIPTION);
     }
 
     /**
@@ -57,7 +57,7 @@ public class FileConverterRegistry {
      * @param description the new descriptor.
      */
     @FromAnyThread
-    public void addDescription(@NotNull final FileConverterDescription description) {
+    public void register(@NotNull final FileConverterDescription description) {
         this.descriptions.add(description);
     }
 

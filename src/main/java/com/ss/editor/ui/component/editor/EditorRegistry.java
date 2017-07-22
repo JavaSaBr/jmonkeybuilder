@@ -74,14 +74,14 @@ public class EditorRegistry {
      * Load available descriptors.
      */
     private void loadDescriptions() {
-        addDescription(TextFileEditor.DESCRIPTION);
-        addDescription(MaterialFileEditor.DESCRIPTION);
-        addDescription(ModelFileEditor.DESCRIPTION);
-        addDescription(ImageViewerEditor.DESCRIPTION);
-        addDescription(GLSLFileEditor.DESCRIPTION);
-        addDescription(MaterialDefinitionFileEditor.DESCRIPTION);
-        addDescription(AudioViewerEditor.DESCRIPTION);
-        addDescription(SceneFileEditor.DESCRIPTION);
+        register(TextFileEditor.DESCRIPTION);
+        register(MaterialFileEditor.DESCRIPTION);
+        register(ModelFileEditor.DESCRIPTION);
+        register(ImageViewerEditor.DESCRIPTION);
+        register(GLSLFileEditor.DESCRIPTION);
+        register(MaterialDefinitionFileEditor.DESCRIPTION);
+        register(AudioViewerEditor.DESCRIPTION);
+        register(SceneFileEditor.DESCRIPTION);
     }
 
     /**
@@ -106,19 +106,19 @@ public class EditorRegistry {
      * @param description the description of an editor.
      */
     @FromAnyThread
-    public void addDescription(@NotNull final EditorDescription description) {
+    public void register(@NotNull final EditorDescription description) {
 
         final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions = getEditorDescriptions();
 
         final Array<String> extensions = description.getExtensions();
-        extensions.forEach(extension -> addDescription(description, extension, editorDescriptions));
+        extensions.forEach(extension -> register(description, extension, editorDescriptions));
 
         final ObjectDictionary<String, EditorDescription> editorIdToDescription = getEditorIdToDescription();
         editorIdToDescription.put(description.getEditorId(), description);
     }
 
-    private void addDescription(@NotNull final EditorDescription description, @NotNull final String extension,
-                                @NotNull final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions) {
+    private void register(@NotNull final EditorDescription description, @NotNull final String extension,
+                          @NotNull final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions) {
         final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> newArray(EditorDescription.class));
         Objects.requireNonNull(descriptions);
         descriptions.add(description);

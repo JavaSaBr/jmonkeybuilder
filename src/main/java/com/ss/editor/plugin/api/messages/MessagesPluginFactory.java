@@ -2,11 +2,11 @@ package com.ss.editor.plugin.api.messages;
 
 import static java.util.Collections.emptyEnumeration;
 import static java.util.ResourceBundle.getBundle;
+import com.ss.editor.Messages;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.EditorPlugin;
 import com.ss.rlib.util.PropertyLoader;
 import org.jetbrains.annotations.NotNull;
-import tonegod.emitter.Messages;
 
 import java.util.Enumeration;
 import java.util.Locale;

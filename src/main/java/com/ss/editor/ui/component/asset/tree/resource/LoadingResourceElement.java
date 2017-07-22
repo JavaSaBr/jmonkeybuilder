@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Paths;
 
 /**
@@ -7,20 +9,21 @@ import java.nio.file.Paths;
  *
  * @author JavaSaBr
  */
-public class ResourceLoadingElement extends ResourceElement {
+public class LoadingResourceElement extends ResourceElement {
 
-    private static final ResourceLoadingElement INSTANCE = new ResourceLoadingElement();
+    @NotNull
+    private static final LoadingResourceElement INSTANCE = new LoadingResourceElement();
 
     /**
      * Gets instance.
      *
      * @return the instance
      */
-    public static ResourceLoadingElement getInstance() {
+    public static LoadingResourceElement getInstance() {
         return INSTANCE;
     }
 
-    private ResourceLoadingElement() {
+    private LoadingResourceElement() {
         super(Paths.get("./"));
     }
 }

@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenFileByExternalEditorAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.OpenWithFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.resource.FileElement;
+import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.control.MenuItem;
@@ -31,7 +31,7 @@ public class FileAssetTreeContextMenuFiller implements AssetTreeContextMenuFille
     public void fill(@NotNull final ResourceElement element, @NotNull final List<MenuItem> items,
                      @NotNull final Predicate<Class<?>> actionTester) {
 
-        if (element instanceof FileElement) {
+        if (element instanceof FileResourceElement) {
 
             if (actionTester.test(OpenFileAction.class)) {
                 items.add(new OpenFileAction(element));

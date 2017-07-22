@@ -7,7 +7,7 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
-import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
+import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory;
 import com.ss.editor.ui.css.CSSClasses;
@@ -234,7 +234,7 @@ public class AssetComponent extends VBox implements ScreenComponent {
         allItems.stream().filter(TreeItem::isExpanded)
                 .filter(treeItem -> !treeItem.isLeaf())
                 .map(TreeItem::getValue)
-                .filter(FolderElement.class::isInstance)
+                .filter(FolderResourceElement.class::isInstance)
                 .map(ResourceElement::getFile)
                 .forEach(expanded::add);
 

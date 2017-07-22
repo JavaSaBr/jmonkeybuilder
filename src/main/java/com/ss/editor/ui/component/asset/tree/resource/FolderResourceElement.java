@@ -16,14 +16,14 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class FolderElement extends ResourceElement {
+public class FolderResourceElement extends ResourceElement {
 
     /**
      * Instantiates a new Folder element.
      *
      * @param file the file
      */
-    FolderElement(@NotNull final Path file) {
+    FolderResourceElement(@NotNull final Path file) {
         super(file);
     }
 

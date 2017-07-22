@@ -65,10 +65,10 @@ public class EditorFXSceneBuilder {
     public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
 
     static {
-        CSS_REGISTRY.addCssFile(CSS_FILE_BASE);
-        CSS_REGISTRY.addCssFile(CSS_FILE_EXTERNAL);
-        CSS_REGISTRY.addCssFile(CSS_FILE_CUSTOM_IDS);
-        CSS_REGISTRY.addCssFile(CSS_FILE_CUSTOM_CLASSES);
+        CSS_REGISTRY.register(CSS_FILE_BASE);
+        CSS_REGISTRY.register(CSS_FILE_EXTERNAL);
+        CSS_REGISTRY.register(CSS_FILE_CUSTOM_IDS);
+        CSS_REGISTRY.register(CSS_FILE_CUSTOM_CLASSES);
     }
 
     /**

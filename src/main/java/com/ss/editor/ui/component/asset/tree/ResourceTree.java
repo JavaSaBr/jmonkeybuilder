@@ -8,10 +8,10 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.*;
 import com.ss.editor.ui.component.asset.tree.context.menu.filler.AssetTreeContextMenuFiller;
-import com.ss.editor.ui.component.asset.tree.resource.FileElement;
-import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
+import com.ss.editor.ui.component.asset.tree.resource.FileResourceElement;
+import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
+import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.IntObjectConsumer;
 import com.ss.rlib.util.StringUtils;
@@ -79,7 +79,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     public static final @NotNull AssetTreeContextMenuFillerRegistry CONTEXT_MENU_FILLER_REGISTRY = AssetTreeContextMenuFillerRegistry.getInstance();
 
     private static int getLevel(@Nullable final ResourceElement element) {
-        if (element instanceof FolderElement) return 1;
+        if (element instanceof FolderResourceElement) return 1;
         return 2;
     }
 
@@ -388,7 +388,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
      * Show the process of loading.
      */
     private void showLoading() {
-        setRoot(new TreeItem<>(ResourceLoadingElement.getInstance()));
+        setRoot(new TreeItem<>(LoadingResourceElement.getInstance()));
     }
 
     /**
@@ -624,7 +624,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
         if (selectedItem == null) return;
 
         final ResourceElement item = selectedItem.getValue();
-        if (item == null || item instanceof ResourceLoadingElement) return;
+        if (item == null || item instanceof LoadingResourceElement) return;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -678,7 +678,7 @@ public class ResourceTree extends TreeView<ResourceElement> {
     private void cleanup(@NotNull final TreeItem<ResourceElement> treeItem) {
 
         final ResourceElement element = treeItem.getValue();
-        if (element instanceof FileElement) return;
+        if (element instanceof FileResourceElement) return;
 
         final ObservableList<TreeItem<ResourceElement>> children = treeItem.getChildren();
 

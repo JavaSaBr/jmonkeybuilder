@@ -159,7 +159,7 @@ public class FileIconManager {
      * @param iconFinder the icon finder.
      */
     @FromAnyThread
-    public void registerIconFinder(@NotNull final BiFunction<Path, String, String> iconFinder) {
+    public void register(@NotNull final BiFunction<Path, String, String> iconFinder) {
         this.iconFinders.add(iconFinder);
     }
 

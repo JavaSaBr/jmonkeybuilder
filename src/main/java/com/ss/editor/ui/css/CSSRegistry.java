@@ -36,7 +36,7 @@ public class CSSRegistry {
      * @param cssFile the CSS file.
      */
     @FromAnyThread
-    public void addCssFile(@NotNull String cssFile) {
+    public void register(@NotNull String cssFile) {
         availableCssFiles.add(cssFile);
     }
 

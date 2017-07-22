@@ -49,14 +49,14 @@ public class FileCreatorRegistry {
      */
     private FileCreatorRegistry() {
         this.descriptions = ArrayFactory.newArray(FileCreatorDescription.class);
-        addDescription(MaterialFileCreator.DESCRIPTION);
-        addDescription(MaterialDefinitionFileCreator.DESCRIPTION);
-        addDescription(EmptyFileCreator.DESCRIPTION);
-        addDescription(FolderCreator.DESCRIPTION);
-        addDescription(EmptyModelCreator.DESCRIPTION);
-        addDescription(SingleColorTextureFileCreator.DESCRIPTION);
-        addDescription(EmptySceneCreator.DESCRIPTION);
-        addDescription(DefaultSceneCreator.DESCRIPTION);
+        register(MaterialFileCreator.DESCRIPTION);
+        register(MaterialDefinitionFileCreator.DESCRIPTION);
+        register(EmptyFileCreator.DESCRIPTION);
+        register(FolderCreator.DESCRIPTION);
+        register(EmptyModelCreator.DESCRIPTION);
+        register(SingleColorTextureFileCreator.DESCRIPTION);
+        register(EmptySceneCreator.DESCRIPTION);
+        register(DefaultSceneCreator.DESCRIPTION);
     }
 
     /**
@@ -65,7 +65,7 @@ public class FileCreatorRegistry {
      * @param description the new description.
      */
     @FromAnyThread
-    public void addDescription(@NotNull final FileCreatorDescription description) {
+    public void register(@NotNull final FileCreatorDescription description) {
         this.descriptions.add(description);
     }
 

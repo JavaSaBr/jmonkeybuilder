@@ -4,9 +4,9 @@ import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
-import com.ss.editor.ui.component.asset.tree.resource.FolderElement;
+import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceLoadingElement;
+import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -89,7 +89,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         final ResourceElement item = getItem();
         if (item == null) return;
 
-        final boolean isFolder = item instanceof FolderElement;
+        final boolean isFolder = item instanceof FolderResourceElement;
         final ResourceTree treeView = (ResourceTree) getTreeView();
 
         if (event.getButton() == MouseButton.SECONDARY) {
@@ -118,7 +118,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
             updateTooltip(StringUtils.EMPTY);
             setGraphic(null);
             return;
-        } else if (item instanceof ResourceLoadingElement) {
+        } else if (item instanceof LoadingResourceElement) {
             setText(StringUtils.EMPTY);
             updateTooltip(StringUtils.EMPTY);
             setGraphic(new ProgressIndicator());

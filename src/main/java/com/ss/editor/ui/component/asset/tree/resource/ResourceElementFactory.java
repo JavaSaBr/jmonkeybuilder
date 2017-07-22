@@ -17,6 +17,6 @@ public class ResourceElementFactory {
      * @return the resource element
      */
     public static ResourceElement createFor(final Path file) {
-        return Files.isDirectory(file) ? new FolderElement(file) : new FileElement(file);
+        return Files.isDirectory(file) ? new FolderResourceElement(file) : new FileResourceElement(file);
     }
 }
