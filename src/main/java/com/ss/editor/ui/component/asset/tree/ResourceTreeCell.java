@@ -5,8 +5,8 @@ import static java.util.Collections.singletonList;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
-import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
+import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
@@ -39,6 +39,12 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     private final Tooltip tooltip;
 
     /**
+     * The icon.
+     */
+    @NotNull
+    private final ImageView icon;
+
+    /**
      * Instantiates a new Resource tree cell.
      */
     protected ResourceTreeCell() {
@@ -46,6 +52,7 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         setOnDragDetected(this::startDrag);
         setOnDragDone(this::stopDrag);
 
+        this.icon = new ImageView();
         this.tooltip = new Tooltip();
 
         FXUtils.addClassTo(this, CSSClasses.SPECIAL_FONT_13);
@@ -115,21 +122,23 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         if (item == null) {
             setText(StringUtils.EMPTY);
-            updateTooltip(StringUtils.EMPTY);
             setGraphic(null);
+            Tooltip.uninstall(this, tooltip);
             return;
         } else if (item instanceof LoadingResourceElement) {
             setText(StringUtils.EMPTY);
-            updateTooltip(StringUtils.EMPTY);
             setGraphic(new ProgressIndicator());
+            Tooltip.uninstall(this, tooltip);
             return;
         }
 
         final Path file = item.getFile();
         final Path fileName = file.getFileName();
 
+        icon.setImage(ICON_MANAGER.getIcon(file, DEFAULT_FILE_ICON_SIZE));
+
         setText(fileName.toString());
-        setGraphic(new ImageView(ICON_MANAGER.getIcon(file, DEFAULT_FILE_ICON_SIZE)));
+        setGraphic(icon);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = editorConfig.getCurrentAsset();
@@ -139,7 +148,6 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
             updateTooltip(file.toString());
         } else {
             Tooltip.uninstall(this, tooltip);
-            updateTooltip(StringUtils.EMPTY);
         }
     }
 

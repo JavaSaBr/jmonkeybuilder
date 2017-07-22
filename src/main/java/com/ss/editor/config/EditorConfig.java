@@ -854,7 +854,7 @@ public final class EditorConfig implements AssetEventListener {
         this.defaultUseFlippedTexture = prefs.getBoolean(PREF_EDITING_DEFAULT_USE_FLIPPED_TEXTURE, true);
         this.defaultEditorCameraEnabled = prefs.getBoolean(PREF_EDITING_CAMERA_LAMP_ENABLED, true);
         this.analyticsQuestion = prefs.getBoolean(PREF_OTHER_ANALYTICS_QUESTION, false);
-        this.theme = prefs.getInt(PREF_OTHER_THEME, CssColorTheme.DARK.ordinal());
+        this.theme = prefs.getInt(PREF_OTHER_THEME, CssColorTheme.SHADOW.ordinal());
         this.openGLVersion = OpenGLVersion.valueOf(prefs.getInt(PREF_GRAPHIC_OPEN_GL, GL_32.ordinal()));
 
         final String currentAssetURI = prefs.get(PREF_ASSET_CURRENT_ASSET, null);

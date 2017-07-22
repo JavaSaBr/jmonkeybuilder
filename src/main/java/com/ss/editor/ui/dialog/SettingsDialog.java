@@ -79,6 +79,7 @@ public class SettingsDialog extends EditorDialog {
         ANISOTROPYCS.add(8);
         ANISOTROPYCS.add(16);
         THEMES.add(CssColorTheme.LIGHT);
+        THEMES.add(CssColorTheme.SHADOW);
         THEMES.add(CssColorTheme.DARK);
         GL_VERSIONS.addAll(OpenGLVersion.values());
     }

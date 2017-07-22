@@ -15,7 +15,8 @@ public enum CssColorTheme {
         }
     },
 
-    DARK("/ui/css/dark-color.bss", "Shadow"),;
+    SHADOW("/ui/css/shadow-color.bss", "Shadow"),
+    DARK("/ui/css/dark-color.bss", "Dark"),;
 
     @NotNull
     public static final CssColorTheme[] VALUES = values();

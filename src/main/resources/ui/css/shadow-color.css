@@ -2,47 +2,47 @@
     -fx-focus-color: #5294e2;
     -fx-accent: -fx-focus-color;
 
-    -var-background-color: #3c3f41;
-    -var-border-color: #282828;
+    -var-background-color: #404552;
+    -var-border-color: #20222a;
 
     -var-arrow-color: derive(-var-background-color, 150%);
     -var-arrow-focused-color: derive(-var-background-color, 230%);
     -var-arrow-hover-color: derive(-var-background-color, 300%);
 
-    -var-menu-background-color: #3c3f41;
-    -var-menu-bar-background-color: #303234;
+    -var-menu-background-color: #383c4a;
+    -var-menu-bar-background-color: #2f343f;
     -var-menu-hover-color: -fx-focus-color;
     -var-menu-item-hover-color: derive(-var-menu-background-color, 50%);
     -var-menu-arrow-color: -var-arrow-color;
 
-    -var-font-color: #c8dae2;
+    -var-font-color: white;
     -var-font-focused-color: white;
-    -var-font-hover-color: #C8DAE2;
+    -var-font-hover-color: white;
     -var-font-focused-hover-color: white;
 
-    -var-split-line-color: #282828;
+    -var-split-line-color: #2b2e39;
 
-    -var-button-background-color: #494e50;
-    -var-button-hover-background-color: #494e50;
+    -var-button-background-color: #444a58;
+    -var-button-hover-background-color: #505666;
     -var-button-hover-border-color: -fx-focus-color;
 
     -var-tab-header-background-color: -var-menu-background-color;
-    -var-tab-background-color: #3c3e3f;
-    -var-tab-hover-background-color: #3c3e3f;
+    -var-tab-background-color: transparent;
+    -var-tab-hover-background-color: #3c404e;
 
     -var-disabled-opacity: 0.5;
 
-    -var-scroll-bar-thumb-color: #595b5d;
+    -var-scroll-bar-thumb-color: #676b78;
     -var-scroll-bar-background-color: transparent;
     -var-scroll-bar-hover-background-color: transparent;
 
     -var-tree-cell-selected-color: -fx-focus-color;
     -var-tree-cell-hover-color: derive(-var-background-color, 50%);
 
-    -var-slider-track-background-color: #4c5153;
+    -var-slider-track-background-color: #2d303b;
 
     -fx-shadow-panel: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 10, 0.01, 1, 1);
-    -fx-shadow-menu: dropshadow(two-pass-box, rgba(0, 0, 0, 0.5), 20, 0.01, 1, 1);
+    -fx-shadow-menu: dropshadow(two-pass-box, rgba(32, 34, 42, 0.5), 20, 0.01, 1, 1);
     -fx-shadow-control: dropshadow(three-pass-box, #1a1a1a, 4, 0.1, 0, 1);
 }
 
