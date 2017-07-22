@@ -67,6 +67,7 @@ public class EditorScriptingComponent extends GridPane {
         this.applyHandler = applyHandler;
 
         this.editorComponent = new GroovyEditorComponent(true);
+        this.editorComponent.setFocusTraversable(true);
         this.editorComponent.prefHeightProperty().bind(heightProperty().multiply(0.6));
         this.editorComponent.prefWidthProperty().bind(widthProperty());
         this.headerComponent = new GroovyEditorComponent(false);

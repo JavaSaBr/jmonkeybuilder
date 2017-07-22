@@ -482,4 +482,9 @@ public interface CSSClasses {
      * The constant PLUGIN_LIST_CELL.
      */
     String PLUGIN_LIST_CELL = "plugin-list-cell";
+
+    /**
+     * The constant STATS_3D_STATE.
+     */
+    String STATS_3D_STATE = "stats-3dstate";
 }

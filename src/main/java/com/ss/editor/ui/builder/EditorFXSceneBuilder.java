@@ -1,5 +1,6 @@
 package com.ss.editor.ui.builder;
 
+import static javafx.application.Platform.runLater;
 import static javafx.scene.paint.Color.TRANSPARENT;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -130,11 +131,13 @@ public class EditorFXSceneBuilder {
         leftSplitContainer.initFor(globalLeftToolComponent, bottomSplitContainer);
         bottomSplitContainer.initFor(globalBottomToolComponent, editorAreaComponent);
 
-        FXUtils.addToPane(new VBox(barComponent, leftSplitContainer), container);
+        // to fix with layout bottom panel
+        bottomSplitContainer.heightProperty()
+                .addListener((observable, oldValue, newValue) -> runLater(editorAreaComponent::requestLayout));
 
+        FXUtils.addToPane(new VBox(barComponent, leftSplitContainer), container);
         FXUtils.bindFixedWidth(leftSplitContainer, container.widthProperty());
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
-
         FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CSSClasses.MAIN_SPLIT_PANEL);
 
         UIUtils.overrideTooltipBehavior(100, 5000, 100);

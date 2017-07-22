@@ -3,10 +3,13 @@ package com.ss.editor.ui.component.tab;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
+import javafx.css.PseudoClass;
 import javafx.event.EventTarget;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -23,17 +26,35 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TabToolComponent extends TabPane implements ScreenComponent {
 
-    /**
-     * The split pane.
-     */
     @NotNull
-    protected final SplitPane pane;
+    private static final PseudoClass COLLAPSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("tool-collapsed");
 
     /**
      * The collapsed property.
      */
     @NotNull
-    protected final BooleanProperty collapsed;
+    protected final BooleanProperty collapsed = new BooleanPropertyBase(false) {
+
+        public void invalidated() {
+            pseudoClassStateChanged(COLLAPSED_PSEUDO_CLASS, get());
+        }
+
+        @Override
+        public Object getBean() {
+            return TabToolComponent.this;
+        }
+
+        @Override
+        public String getName() {
+            return "collapsed";
+        }
+    };
+
+    /**
+     * The split pane.
+     */
+    @NotNull
+    protected final SplitPane pane;
 
     /**
      * The last expand position.
@@ -51,7 +72,6 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
      * @param pane the pane
      */
     protected TabToolComponent(@NotNull final SplitPane pane) {
-        this.collapsed = new SimpleBooleanProperty(this, "collapsed", false);
         this.pane = pane;
         bindCollapsedProperty();
         addEventHandler(MouseEvent.MOUSE_CLICKED, this::processMouseClick);
@@ -135,8 +155,24 @@ public class TabToolComponent extends TabPane implements ScreenComponent {
     private void processMouseClick(@NotNull final MouseEvent event) {
         final EventTarget target = event.getTarget();
         if (!(target instanceof Node)) return;
+
         final Node node = (Node) target;
-        if (!(node instanceof Text || node.getStyleClass().contains("tab-container"))) return;
+
+        if (!(node instanceof Text) || node.getStyleClass().contains("tab-container")) {
+            return;
+        }
+
+        final Parent label = node.getParent();
+
+        if (!(label instanceof Label)) {
+            return;
+        }
+
+        final Parent tabContainer = label.getParent();
+
+        if (!tabContainer.getStyleClass().contains("tab-container")) {
+            return;
+        }
 
         if (isChangingTab()) {
             setChangingTab(false);

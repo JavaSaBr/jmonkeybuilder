@@ -149,7 +149,7 @@
     -fx-background-color: -fx-background;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-padding: 3px, 6px, 3px, 6px;
+    -fx-padding: 1px 3px 1px 3px;
     -fx-border-color: transparent;
 }
 
@@ -158,6 +158,7 @@
     -fx-font-size: 15px;
 }
 
+.tab-pane:tool-collapsed > .tab-header-area > .headers-region > .tab:selected:hover,
 .tab-pane > .tab-header-area > .headers-region > .tab:hover {
     -fx-background: -var-tab-hover-background-color;
     -fx-border-color: -var-border-color;
@@ -184,11 +185,35 @@
 .tab-pane > .tab-header-area > .headers-region > .tab:selected {
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-padding: 3px, 6px, 3px, 6px;
+    -fx-padding: 1px 3px 1px 3px;
     -fx-background-color: -var-background-color;
     -fx-border-color: -var-border-color;
     -fx-border-width: 1px 1px 0px 1px;
     -fx-border-radius: 1px;
+}
+
+.tab-pane:tool-collapsed > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: -var-tab-background-color;
+    -fx-border-color: transparent;
+}
+
+.tab-pane:bottom > .tab-header-area > .headers-region > .tab,
+.tab-pane:bottom > .tab-header-area > .headers-region > .tab:selected,
+.tab-pane:right > .tab-header-area > .headers-region > .tab,
+.tab-pane:right > .tab-header-area > .headers-region > .tab:selected,
+.tab-pane:left > .tab-header-area > .headers-region > .tab,
+.tab-pane:left > .tab-header-area > .headers-region > .tab:selected {
+    -fx-padding: -1px 3px 5px 3px;
+}
+
+.tab-pane:tool-collapsed:bottom > .tab-header-area > .headers-region > .tab,
+.tab-pane:tool-collapsed:bottom > .tab-header-area > .headers-region > .tab:selected,
+.tab-pane:tool-collapsed:right > .tab-header-area > .headers-region > .tab,
+.tab-pane:tool-collapsed:right > .tab-header-area > .headers-region > .tab:selected,
+.tab-pane:tool-collapsed:left > .tab-header-area > .headers-region > .tab,
+.tab-pane:tool-collapsed:left > .tab-header-area > .headers-region > .tab:selected {
+    -fx-border-width: 1px 1px 1px 1px;
+    -fx-border-radius: 1px 1px 0px 0px;
 }
 
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -425,6 +450,10 @@
     -fx-cell-size: -1;
     -fx-font-family: "Ubuntu Condensed";
     -fx-font-size: 14px;
+}
+
+.combo-box:showing > .list-cell {
+    -fx-text-fill: -var-font-focused-color;
 }
 
 .combo-box-popup > .list-view {

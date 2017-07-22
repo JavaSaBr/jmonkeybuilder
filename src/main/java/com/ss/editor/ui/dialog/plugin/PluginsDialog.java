@@ -12,6 +12,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.dialog.ConfirmDialog;
+import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -94,6 +95,8 @@ public class PluginsDialog extends AbstractSimpleEditorDialog {
         FXUtils.addToPane(addButton, buttonContainer);
         FXUtils.addToPane(removeButton, buttonContainer);
         FXUtils.addToPane(buttonContainer, root);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
 
         FXUtils.addClassTo(buttonContainer, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(addButton, CSSClasses.BUTTON_WITHOUT_RIGHT_BORDER);

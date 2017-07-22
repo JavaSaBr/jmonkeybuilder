@@ -339,7 +339,7 @@
 
 .file-editor-tool-component {
     -fx-background-color: -var-background-color;
-    -fx-min-width: 30px;
+    -fx-min-width: 24px;
 }
 
 /*******************************************************************************
@@ -1109,7 +1109,7 @@
 
 .plugins-dialog > .hbox {
     -fx-alignment: center;
-    -fx-padding: 4px 0px 0px 0px;
+    -fx-padding: 0px 0px 0px 0px;
 }
 
 .plugins-dialog > .hbox > .button {
@@ -1235,4 +1235,24 @@
 
 .plugin-list-cell {
     -fx-padding: 0px 0px 0px 6px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Stats 3D State                                                              *
+ *                                                                             *
+ ******************************************************************************/
+
+.stats-3dstate {
+    -fx-padding: 1px;
+    -fx-vgap: 1px;
+    -fx-hgap: 1px;
+}
+
+.stats-3dstate > .label {
+    -fx-text-fill: white;
+}
+
+.stats-3dstate > .text-field {
+    -fx-text-fill: white;
 }

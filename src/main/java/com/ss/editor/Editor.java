@@ -26,7 +26,6 @@ import com.jme3.renderer.RendererException;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
-import com.jme3.system.NativeLibraryLoader;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.util.os.OperatingSystem;
 import com.ss.editor.analytics.google.GAnalytics;
@@ -257,15 +256,6 @@ public class Editor extends JmeToJFXApplication {
     @NotNull
     public Camera getCamera() {
         return super.getCamera();
-    }
-
-    @Override
-    public void start() {
-
-        NativeLibraryLoader.loadNativeLibrary("jinput", true);
-        NativeLibraryLoader.loadNativeLibrary("jinput-dx8", true);
-
-        super.start();
     }
 
     @Override

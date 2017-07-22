@@ -3,6 +3,8 @@ package com.ss.editor;
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
+import com.jme3.renderer.Renderer;
+import com.jme3.system.JmeContext;
 import com.jme3.util.BufferAllocatorFactory;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
@@ -152,7 +154,18 @@ public class JFXApplication extends Application {
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.onBeforeCreateJMEContext();
         try {
+
             application.start();
+
+            final JmeContext context = application.getContext();
+            final Renderer renderer = context.getRenderer();
+
+            if (renderer == null) {
+                final EditorConfig editorConfig = EditorConfig.getInstance();
+                editorConfig.setOpenGLVersion(OpenGLVersion.GL_20);
+                editorConfig.save();
+            }
+
         } finally {
             pluginManager.onBeforeCreateJMEContext();
         }

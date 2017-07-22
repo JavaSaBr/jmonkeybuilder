@@ -45,7 +45,7 @@
  ******************************************************************************/
 
 #GlobalLeftToolComponent {
-    -fx-min-width: 28;
+    -fx-min-width: 24;
     -fx-tab-max-height: 18;
 }
 
@@ -56,7 +56,7 @@
  ******************************************************************************/
 
 #GlobalBottomToolComponent {
-    -fx-min-height: 28;
+    -fx-min-height: 24;
     -fx-tab-max-height: 18;
 }
 
@@ -110,16 +110,4 @@
     -fx-background-color: -var-background-color;
     -fx-alignment: top-center;
     -fx-min-width: 30px;
-}
-
-/*******************************************************************************
- *                                                                             *
- * Stats App State                                                             *
- *                                                                             *
- ******************************************************************************/
-
-#StatsAppStateStatsContainer {
-    -fx-padding: 5px;
-    -fx-vgap: 3px;
-    -fx-hgap: 3px;
 }

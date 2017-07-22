@@ -53,9 +53,4 @@ public interface CSSIds {
      * The constant ASSET_COMPONENT.
      */
     String ASSET_COMPONENT = "AssetComponent";
-
-    /**
-     * The constant STATS_APP_STATE_STATS_CONTAINER.
-     */
-    String STATS_APP_STATE_STATS_CONTAINER = "StatsAppStateStatsContainer";
 }

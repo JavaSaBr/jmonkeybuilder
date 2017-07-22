@@ -9,7 +9,6 @@ import com.jme3.system.Timer;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.state.editor.Editor3DState;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.css.CSSIds;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ArrayUtils;
 import javafx.scene.control.Label;
@@ -222,7 +221,6 @@ public class Stats3DState extends AbstractAppState implements Editor3DState {
         final Label fpsLabel = new Label("Fps");
         fpsField = new Label();
 
-        statsContainer.setId(CSSIds.STATS_APP_STATE_STATS_CONTAINER);
         statsContainer.add(frameBuffersMLabel, 0, 0);
         statsContainer.add(frameBuffersMField, 1, 0);
         statsContainer.add(frameBuffersFLabel, 0, 1);
@@ -252,7 +250,7 @@ public class Stats3DState extends AbstractAppState implements Editor3DState {
         statsContainer.add(fpsLabel, 0, 13);
         statsContainer.add(fpsField, 1, 13);
 
-        FXUtils.applyToChildren(statsContainer, node -> FXUtils.addClassTo(node, CSSClasses.SPECIAL_FONT_13));
+        FXUtils.addClassTo(statsContainer, CSSClasses.STATS_3D_STATE);
     }
 
     @Override
