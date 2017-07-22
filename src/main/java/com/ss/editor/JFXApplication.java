@@ -246,7 +246,7 @@ public class JFXApplication extends Application {
 
             buildScene();
 
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             LOGGER.error(this, e);
             throw e;
         }

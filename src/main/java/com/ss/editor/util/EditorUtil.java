@@ -1,10 +1,10 @@
 package com.ss.editor.util;
 
+import static com.ss.rlib.util.ClassUtils.cast;
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
-import static com.ss.rlib.util.ClassUtils.cast;
-import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -12,14 +12,19 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.manager.CustomClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.scene.EditorFXScene;
-import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
@@ -30,14 +35,10 @@ import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
 
 import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
@@ -48,7 +49,7 @@ import java.util.List;
 /**
  * The class with utility methods for the Editor.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public abstract class EditorUtil {
 
@@ -87,6 +88,21 @@ public abstract class EditorUtil {
     public static boolean checkExists(@NotNull final String path, @NotNull final ClassLoader classLoader) {
         return classLoader.getResourceAsStream(path) != null ||
                 classLoader.getResourceAsStream("/" + path) != null;
+    }
+
+    /**
+     * Convert classpath path to external path.
+     *
+     * @param path        the path to resource.
+     * @param classLoader the class loader.
+     * @return the external form or null.
+     */
+    @Nullable
+    public static String toExternal(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+        if (!checkExists(path, classLoader)) return null;
+        URL resource = classLoader.getResource(path);
+        if (resource == null) resource = classLoader.getResource("/" + path);
+        return resource == null ? null : resource.toExternalForm();
     }
 
     /**

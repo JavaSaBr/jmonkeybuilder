@@ -1,11 +1,12 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.10 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.11 #
 ## License: Apache Version 2.0 ##
 
+* [Wiki](https://bitbucket.org/JavaSabr/jme3-spaceshift-editor/wiki/Home)
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
 * [Official jMonkey thread](https://hub.jmonkeyengine.org/t/jme3-spaceshift-editor/35179)
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
-## [Video about this editor.](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
+## [Video about this editor](https://www.youtube.com/watch?v=I9ads0-I_LI&feature=youtu.be) ##
 
 ## ver. 0.9.10 ##
 * -Added supporting macOS.
