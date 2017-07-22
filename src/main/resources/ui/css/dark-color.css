@@ -27,7 +27,7 @@
     -var-button-hover-border-color: -fx-focus-color;
 
     -var-tab-header-background-color: -var-menu-background-color;
-    -var-tab-background-color: #3c3e3f;
+    -var-tab-background-color: transparent;
     -var-tab-hover-background-color: #3c3e3f;
 
     -var-disabled-opacity: 0.5;

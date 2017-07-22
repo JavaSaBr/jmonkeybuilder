@@ -128,8 +128,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final ModelEditor3DState editorAppState = getEditorAppState();
-        editorAppState.openModel(model);
+        final ModelEditor3DState editor3DState = getEditor3DState();
+        editor3DState.openModel(model);
 
         handleAddedObject(model);
 
@@ -172,7 +172,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     protected void handleAddedObject(@NotNull final Spatial model) {
         super.handleAddedObject(model);
 
-        final ModelEditor3DState editorState = getEditorAppState();
+        final ModelEditor3DState editor3DState = getEditor3DState();
         final Array<Geometry> geometries = ArrayFactory.newArray(Geometry.class);
 
         NodeUtils.addGeometry(model, geometries);
@@ -180,7 +180,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (!geometries.isEmpty()) {
             geometries.forEach(geometry -> {
                 if (geometry.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE) {
-                    editorState.addCustomSky(geometry);
+                    editor3DState.addCustomSky(geometry);
                 }
             });
         }
@@ -229,10 +229,10 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     private void changeFastSky(@NotNull final String newSky) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditor3DState editorAppState = getEditorAppState();
+        final ModelEditor3DState editor3DState = getEditor3DState();
 
         if (NO_FAST_SKY.equals(newSky)) {
-            editorAppState.changeFastSky(null);
+            editor3DState.changeFastSky(null);
             final ModelFileEditorState editorState = getEditorState();
             if (editorState != null) editorState.setSkyType(0);
             return;
@@ -246,7 +246,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final Texture texture = assetManager.loadTexture(key);
         final Spatial newFastSky = SkyFactory.createSky(assetManager, texture, EnvMapType.EquirectMap);
 
-        editorAppState.changeFastSky(newFastSky);
+        editor3DState.changeFastSky(newFastSky);
 
         final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
         final SingleSelectionModel<String> selectionModel = fastSkyComboBox.getSelectionModel();
@@ -262,8 +262,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final ModelEditor3DState editorAppState = getEditorAppState();
-        editorAppState.updateLightEnabled(newValue);
+        final ModelEditor3DState editor3DState = getEditor3DState();
+        editor3DState.updateLightEnabled(newValue);
 
         if (editorState != null) editorState.setEnableLight(newValue);
     }
@@ -272,7 +272,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
         super.notifyAddedChild(parent, added, index);
 
-        final ModelEditor3DState editorAppState = getEditorAppState();
+        final ModelEditor3DState editor3DState = getEditor3DState();
 
         if (added instanceof Spatial) {
 
@@ -280,8 +280,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
             final boolean isSky = spatial.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE;
 
             if (isSky) {
-                editorAppState.addCustomSky(spatial);
-                editorAppState.updateLightProbe();
+                editor3DState.addCustomSky(spatial);
+                editor3DState.updateLightProbe();
             }
         }
     }
@@ -290,7 +290,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
         super.notifyRemovedChild(parent, removed);
 
-        final ModelEditor3DState editorAppState = getEditorAppState();
+        final ModelEditor3DState editor3DState = getEditor3DState();
 
         if (removed instanceof Spatial) {
 
@@ -298,8 +298,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
             final boolean isSky = spatial.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE;
 
             if (isSky) {
-                editorAppState.removeCustomSky(spatial);
-                editorAppState.updateLightProbe();
+                editor3DState.removeCustomSky(spatial);
+                editor3DState.updateLightProbe();
             }
         }
     }

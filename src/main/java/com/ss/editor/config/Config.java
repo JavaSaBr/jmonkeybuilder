@@ -66,7 +66,10 @@ public abstract class Config {
      * Flag is for showing debug.
      */
     public static final boolean DEV_DEBUG;
-
+    /**
+     * The flag to enable debug of camera moving.
+     */
+    public static final boolean DEV_CAMERA_DEBUG;
     /**
      * Flag is for showing debug of the JavaFX.
      */
@@ -85,6 +88,7 @@ public abstract class Config {
         final VarTable vars = new DocumentConfig(EditorUtil.getInputStream(CONFIG_RESOURCE_PATH)).parse();
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
+        DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);
 

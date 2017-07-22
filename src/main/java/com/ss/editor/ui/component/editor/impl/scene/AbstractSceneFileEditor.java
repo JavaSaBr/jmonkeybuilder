@@ -119,7 +119,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * The 3D part of this editor.
      */
     @NotNull
-    private final MA editorAppState;
+    private final MA editor3DState;
 
     /**
      * The stats app state.
@@ -273,11 +273,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Instantiates a new Abstract scene file editor.
      */
     public AbstractSceneFileEditor() {
-        this.editorAppState = createEditorAppState();
+        this.editor3DState = createEditorAppState();
         this.operationControl = new EditorOperationControl(this);
         this.changeCounter = new AtomicInteger();
         this.statsAppState = new Stats3DState(statsContainer);
-        addEditorState(editorAppState);
+        addEditorState(editor3DState);
         addEditorState(statsAppState);
         statsAppState.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
@@ -303,8 +303,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * @return the 3D part of this editor.
      */
     @NotNull
-    protected MA getEditorAppState() {
-        return editorAppState;
+    protected MA getEditor3DState() {
+        return editor3DState;
     }
 
     /**
@@ -439,15 +439,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     protected void handleAddedObject(@NotNull final Spatial model) {
 
-        final MA editorState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editorState, (light, state) -> state.addLight(light));
-        audioNodes.forEach(editorState, (audioNode, state) -> state.addAudioNode(audioNode));
+        lights.forEach(editor3DState, (light, state) -> state.addLight(light));
+        audioNodes.forEach(editor3DState, (audioNode, state) -> state.addAudioNode(audioNode));
     }
 
     /**
@@ -457,15 +457,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     protected void handleRemovedObject(@NotNull final Spatial model) {
 
-        final MA editorState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final Array<Light> lights = ArrayFactory.newArray(Light.class);
         final Array<AudioNode> audioNodes = ArrayFactory.newArray(AudioNode.class);
 
         NodeUtils.addLight(model, lights);
         NodeUtils.addAudioNodes(model, audioNodes);
 
-        lights.forEach(editorState, (light, state) -> state.removeLight(light));
-        audioNodes.forEach(editorState, (audioNode, state) -> state.removeAudioNode(audioNode));
+        lights.forEach(editor3DState, (light, state) -> state.removeLight(light));
+        audioNodes.forEach(editor3DState, (audioNode, state) -> state.removeAudioNode(audioNode));
     }
 
     /**
@@ -518,14 +518,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             }
         }
 
-        final MA editorAppState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final Vector3f cameraLocation = editorState.getCameraLocation();
 
         final float hRotation = editorState.getCameraHRotation();
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
 
-        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
     }
 
     @Override
@@ -555,7 +555,16 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @Override
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
-        if (isPressed) return false;
+
+        if (isPressed) {
+            return false;
+        }
+
+        final MA editor3DState = getEditor3DState();
+
+        if (editor3DState.isCameraMoving()) {
+            return false;
+        }
 
         if (isControlDown && keyCode == KeyCode.Z) {
             undo();
@@ -690,14 +699,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @Override
     public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
 
-        final MA editorAppState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyAdded(parent, added, index);
 
         if (added instanceof Light) {
-            editorAppState.addLight((Light) added);
+            editor3DState.addLight((Light) added);
         } else if (added instanceof AudioNode) {
-            editorAppState.addAudioNode((AudioNode) added);
+            editor3DState.addAudioNode((AudioNode) added);
         } else if (added instanceof Spatial) {
             handleAddedObject((Spatial) added);
         }
@@ -706,14 +715,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @Override
     public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
-        final MA editorAppState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyRemoved(parent, removed);
 
         if (removed instanceof Light) {
-            editorAppState.removeLight((Light) removed);
+            editor3DState.removeLight((Light) removed);
         } else if (removed instanceof AudioNode) {
-            editorAppState.removeAudioNode((AudioNode) removed);
+            editor3DState.removeAudioNode((AudioNode) removed);
         } else if (removed instanceof Spatial) {
             handleRemovedObject((Spatial) removed);
         }
@@ -722,12 +731,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @Override
     public void notifyReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
 
-        final MA editorAppState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final Spatial currentModel = getCurrentModel();
 
         if (currentModel == oldChild) {
             setCurrentModel(unsafeCast(newChild));
-            editorAppState.openModel(unsafeCast(newChild));
+            editor3DState.openModel(unsafeCast(newChild));
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -801,7 +810,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @FXThread
     public void selectNodeFromTree(@Nullable final Object object) {
 
-        final MA editorAppState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
 
         Object parent = null;
         Object element = null;
@@ -822,13 +831,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         Spatial spatial = null;
 
         if (element instanceof AudioNode) {
-            final EditorAudioNode audioNode = editorAppState.getAudioNode((AudioNode) element);
+            final EditorAudioNode audioNode = editor3DState.getAudioNode((AudioNode) element);
             spatial = audioNode == null ? null : audioNode.getEditedNode();
         } else if (element instanceof Spatial) {
             spatial = (Spatial) element;
             parent = spatial.getParent();
         } else if (element instanceof Light) {
-            spatial = editorAppState.getLightNode((Light) element);
+            spatial = editor3DState.getLightNode((Light) element);
         }
 
         if (spatial != null && !spatial.isVisible()) {
@@ -838,7 +847,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         updateSelection(spatial);
 
         if (spatial != null && !isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
-            editorAppState.moveCameraTo(spatial.getWorldTranslation());
+            editor3DState.moveCameraTo(spatial.getWorldTranslation());
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
@@ -871,8 +880,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final Array<Spatial> selection = ArrayFactory.newArray(Spatial.class);
         if (spatial != null) selection.add(spatial);
 
-        final MA editorAppState = getEditorAppState();
-        editorAppState.updateSelection(selection);
+        final MA editor3DState = getEditor3DState();
+        editor3DState.updateSelection(selection);
     }
 
     /**
@@ -958,13 +967,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     private void updateTransformTool(@NotNull final TransformType transformType, @NotNull final Boolean newValue) {
 
-        final MA editorAppState = getEditorAppState();
+        final MA editor3DState = getEditor3DState();
         final ToggleButton scaleToolButton = getScaleToolButton();
         final ToggleButton moveToolButton = getMoveToolButton();
         final ToggleButton rotationToolButton = getRotationToolButton();
 
         if (newValue != Boolean.TRUE) {
-            if (editorAppState.getTransformType() == transformType) {
+            if (editor3DState.getTransformType() == transformType) {
                 if (transformType == TransformType.MOVE_TOOL) {
                     moveToolButton.setSelected(true);
                 } else if (transformType == TransformType.ROTATE_TOOL) {
@@ -977,7 +986,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
 
         final ES editorState = getEditorState();
-        editorAppState.setTransformType(transformType);
+        editor3DState.setTransformType(transformType);
 
         if (transformType == TransformType.MOVE_TOOL) {
             rotationToolButton.setSelected(false);
@@ -1173,8 +1182,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             editingComponentContainer.notifyHided();
         }
 
-        final MA editorAppState = getEditorAppState();
-        editorAppState.changeEditingMode(newIndex == EDITING_TOOL);
+        final MA editor3DState = getEditor3DState();
+        editor3DState.changeEditingMode(newIndex == EDITING_TOOL);
     }
 
     /**
@@ -1212,8 +1221,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final MA editorAppState = getEditorAppState();
-            final Geometry geometry = editorAppState.getGeometryByScreenPos(sceneX, sceneY);
+            final MA editor3DState = getEditor3DState();
+            final Geometry geometry = editor3DState.getGeometryByScreenPos(sceneX, sceneY);
             if (geometry == null) return;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
@@ -1250,7 +1259,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final MA editorAppState = getEditorAppState();
+            final MA editor3DState = getEditor3DState();
             final SceneLayer defaultLayer = getDefaultLayer(this);
 
             final AssetManager assetManager = EDITOR.getAssetManager();
@@ -1264,7 +1273,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            assetLinkNode.setLocalTranslation(editorAppState.getScenePosByScreenPos(sceneX, sceneY));
+            assetLinkNode.setLocalTranslation(editor3DState.getScenePosByScreenPos(sceneX, sceneY));
 
             execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
         });
@@ -1285,8 +1294,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private void changeSelectionVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final MA editorAppState = getEditorAppState();
-        editorAppState.updateShowSelection(newValue);
+        final MA editor3DState = getEditor3DState();
+        editor3DState.updateShowSelection(newValue);
 
         final ES editorState = getEditorState();
         if (editorState != null) editorState.setEnableSelection(newValue);
@@ -1298,8 +1307,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private void changeGridVisible(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final MA editorAppState = getEditorAppState();
-        editorAppState.updateShowGrid(newValue);
+        final MA editor3DState = getEditor3DState();
+        editor3DState.updateShowGrid(newValue);
 
         final ES editorState = getEditorState();
         if (editorState != null) editorState.setEnableGrid(newValue);
@@ -1348,13 +1357,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @NotNull
     @Override
     public Node getCursorNode() {
-        return getEditorAppState().getCursorNode();
+        return getEditor3DState().getCursorNode();
     }
 
     @NotNull
     @Override
     public Node getMarkersNode() {
-        return getEditorAppState().getMarkersNode();
+        return getEditor3DState().getMarkersNode();
     }
 }
 

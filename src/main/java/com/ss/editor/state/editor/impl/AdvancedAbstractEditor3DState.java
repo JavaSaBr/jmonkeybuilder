@@ -14,16 +14,19 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.JMEThread;
+import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.util.LocalObjects;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.function.FloatFloatConsumer;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The base implementation of the {@link com.ss.editor.state.editor.Editor3DState} for a file editor.
@@ -312,6 +315,12 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     private final boolean[] cameraKeysState;
 
     /**
+     * The flag of moving camera.
+     */
+    @NotNull
+    private AtomicInteger cameraMoving;
+
+    /**
      * The current state manager.
      */
     @Nullable
@@ -336,11 +345,6 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * The camera speed.
      */
     private float cameraSpeed;
-
-    /**
-     * The flag of moving camera.
-     */
-    private int cameraMoving;
 
     /**
      * Is control pressed.
@@ -379,6 +383,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      */
     public AdvancedAbstractEditor3DState(@NotNull final T fileEditor) {
         super(fileEditor);
+        this.cameraMoving = new AtomicInteger();
         this.editorCamera = needEditorCamera() ? createEditorCamera() : null;
         this.lightForCamera = needLightForCamera() ? createLightForCamera() : null;
         this.prevCameraLocation = new Vector3f();
@@ -505,8 +510,8 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     /**
      * @return true if the camera is moving now.
      */
-    private boolean isCameraMoving() {
-        return cameraMoving != 0;
+    public boolean isCameraMoving() {
+        return cameraMoving.get() != 0;
     }
 
     /**
@@ -522,7 +527,11 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      */
     private void startCameraMoving(final int key) {
 
-        if (cameraMoving == 0) {
+        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
+            LOGGER.debug(this, "start camera moving[" + cameraMoving + "] for key " + key);
+        }
+
+        if (cameraMoving.get() == 0) {
 
             final Camera camera = EDITOR.getCamera();
             final Node nodeForCamera = getNodeForCamera();
@@ -536,7 +545,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
 
         if (!cameraKeysState[key]) {
             cameraKeysState[key] = true;
-            cameraMoving++;
+            cameraMoving.incrementAndGet();
         }
     }
 
@@ -546,17 +555,22 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     private void finishCameraMoving(final int key, final boolean force) {
 
         final boolean[] cameraKeysState = getCameraKeysState();
+
+        if (Config.DEV_CAMERA_DEBUG && LOGGER.isEnabledDebug()) {
+            LOGGER.debug(this, "finish camera moving[" + cameraMoving + "] for key " + key + ", force = " + force);
+        }
+
         cameraKeysState[key] = false;
 
-        if (cameraMoving == 0) return;
+        if (cameraMoving.get() == 0) return;
 
         if (force) {
-            cameraMoving = 0;
+            cameraMoving.set(0);
             for (int i = 0; i < cameraKeysState.length; i++) {
                 cameraKeysState[i] = false;
             }
         } else {
-            cameraMoving--;
+            cameraMoving.decrementAndGet();
         }
     }
 

@@ -155,8 +155,8 @@ public class SceneFileEditor extends
 
         MaterialUtils.cleanUpMaterialParams(model);
 
-        final SceneEditor3DState editorState = getEditorAppState();
-        editorState.openModel(model);
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.openModel(model);
 
         handleAddedObject(model);
 
@@ -270,8 +270,8 @@ public class SceneFileEditor extends
     private void changeLight(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final SceneEditor3DState editorAppState = getEditorAppState();
-        editorAppState.updateLightShowed(newValue);
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.updateLightShowed(newValue);
 
         if (editorState != null) editorState.setShowedLight(newValue);
     }
@@ -282,8 +282,8 @@ public class SceneFileEditor extends
     private void changeAudio(@NotNull final Boolean newValue) {
         if (isIgnoreListeners()) return;
 
-        final SceneEditor3DState editorAppState = getEditorAppState();
-        editorAppState.updateAudioShowed(newValue);
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.updateAudioShowed(newValue);
 
         if (editorState != null) editorState.setShowedAudio(newValue);
     }
@@ -583,13 +583,13 @@ public class SceneFileEditor extends
 
     @Override
     public void notifyAddedAppState(@NotNull final SceneAppState appState) {
-        getEditorAppState().addAppState(appState);
+        getEditor3DState().addAppState(appState);
         getAppStateList().fill(getCurrentModel());
     }
 
     @Override
     public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
-        getEditorAppState().removeAppState(appState);
+        getEditor3DState().removeAppState(appState);
         getAppStateList().fill(getCurrentModel());
     }
 
@@ -601,13 +601,13 @@ public class SceneFileEditor extends
     @Override
     public void notifyAddedFilter(@NotNull final SceneFilter<?> sceneFilter) {
         getFilterList().fill(getCurrentModel());
-        getEditorAppState().addFilter(sceneFilter);
+        getEditor3DState().addFilter(sceneFilter);
     }
 
     @Override
     public void notifyRemovedFilter(@NotNull final SceneFilter<?> sceneFilter) {
         getFilterList().fill(getCurrentModel());
-        getEditorAppState().removeFilter(sceneFilter);
+        getEditor3DState().removeFilter(sceneFilter);
     }
 
     @Override
