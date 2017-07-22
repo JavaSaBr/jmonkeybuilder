@@ -9,6 +9,7 @@ import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
+import com.ss.rlib.plugin.annotation.PluginDescription;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +32,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     @NotNull
     public static final EditorDescription DESCRIPTION = new EditorDescription();
 
+    @PluginDescription
     private static final JavaFXImageManager JAVA_FX_IMAGE_MANAGER = JavaFXImageManager.getInstance();
 
     private static final int IMAGE_SIZE = 512;
@@ -39,15 +41,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
         DESCRIPTION.setConstructor(ImageViewerEditor::new);
         DESCRIPTION.setEditorName(Messages.IMAGE_VIEWER_EDITOR_NAME);
         DESCRIPTION.setEditorId(ImageViewerEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_BMP);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_GIF);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_JPEG);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_PNG);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_TGA);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_JPG);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_TIFF);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_DDS);
-        DESCRIPTION.addExtension(FileExtensions.IMAGE_HDR);
+        DESCRIPTION.setExtensions(FileExtensions.IMAGE_EXTENSIONS);
     }
 
     /**

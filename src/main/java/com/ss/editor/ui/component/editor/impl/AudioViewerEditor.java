@@ -47,9 +47,7 @@ public class AudioViewerEditor extends AbstractFileEditor<VBox> {
         DESCRIPTION.setConstructor(AudioViewerEditor::new);
         DESCRIPTION.setEditorName(Messages.AUDIO_VIEWER_EDITOR_NAME);
         DESCRIPTION.setEditorId(AudioViewerEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(FileExtensions.AUDIO_MP3);
-        DESCRIPTION.addExtension(FileExtensions.AUDIO_OGG);
-        DESCRIPTION.addExtension(FileExtensions.AUDIO_WAV);
+        DESCRIPTION.setExtensions(FileExtensions.AUDIO_EXTENSIONS);
     }
 
     /**

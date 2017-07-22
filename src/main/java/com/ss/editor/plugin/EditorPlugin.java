@@ -35,7 +35,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the CSS registry.
      */
     @FromAnyThread
-    public void registerCSS(@NotNull final CSSRegistry registry) {
+    public void register(@NotNull final CSSRegistry registry) {
     }
 
     /**
@@ -44,7 +44,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the file creator registry.
      */
     @FromAnyThread
-    public void registerFileCreators(@NotNull final FileCreatorRegistry registry) {
+    public void register(@NotNull final FileCreatorRegistry registry) {
     }
 
     /**
@@ -53,7 +53,7 @@ public class EditorPlugin extends BasePlugin {
      * @param registry the file creator registry.
      */
     @FromAnyThread
-    public void registerFileEditors(@NotNull final EditorRegistry registry) {
+    public void register(@NotNull final EditorRegistry registry) {
     }
 
     /**
@@ -62,34 +62,34 @@ public class EditorPlugin extends BasePlugin {
      * @param iconManager the icon manager.
      */
     @FromAnyThread
-    public void registerFileIconFinders(@NotNull final FileIconManager iconManager) {
+    public void register(@NotNull final FileIconManager iconManager) {
     }
 
     /**
      * Register this plugin's own file converters.
      *
-     * @param converterRegistry the converters registry.
+     * @param registry the converters registry.
      */
     @FromAnyThread
-    public void registerFileConverters(@NotNull final FileConverterRegistry converterRegistry) {
+    public void register(@NotNull final FileConverterRegistry registry) {
     }
 
     /**
      * Register this plugin's own asset tree context menu fillers.
      *
-     * @param fillerRegistry the menu fillers registry.
+     * @param registry the menu fillers registry.
      */
     @FromAnyThread
-    public void registerContextMenuFillers(@NotNull final AssetTreeContextMenuFillerRegistry fillerRegistry) {
+    public void register(@NotNull final AssetTreeContextMenuFillerRegistry registry) {
     }
 
     /**
      * Register this plugin's own tree node factories.
      *
-     * @param factoryRegistry the registry of tree node factories.
+     * @param registry the registry of tree node factories.
      */
     @FromAnyThread
-    public void registerTreeNodeFactories(@NotNull final TreeNodeFactoryRegistry factoryRegistry) {
+    public void register(@NotNull final TreeNodeFactoryRegistry registry) {
     }
 
     /**

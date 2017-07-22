@@ -29,12 +29,7 @@ public class GLSLFileEditor extends CodeAreaFileEditor {
         DESCRIPTION.setConstructor(GLSLFileEditor::new);
         DESCRIPTION.setEditorName(Messages.GLSL_FILE_EDITOR_NAME);
         DESCRIPTION.setEditorId(GLSLFileEditor.class.getSimpleName());
-        DESCRIPTION.addExtension(FileExtensions.GLSL_FRAGMENT);
-        DESCRIPTION.addExtension(FileExtensions.GLSL_VERTEX);
-        DESCRIPTION.addExtension(FileExtensions.GLSL_TESSELLATION_CONTROL);
-        DESCRIPTION.addExtension(FileExtensions.GLSL_TESSELLATION_EVALUATION);
-        DESCRIPTION.addExtension(FileExtensions.GLSL_GEOM);
-        DESCRIPTION.addExtension(FileExtensions.GLSL_LIB);
+        DESCRIPTION.setExtensions(FileExtensions.SHADER_EXTENSIONS);
     }
 
     @NotNull

@@ -206,7 +206,7 @@ public class JFXApplication extends Application {
 
             final PluginManager pluginManager = PluginManager.getInstance();
             pluginManager.onBeforeCreateJavaFXContext();
-            pluginManager.handlePlugins(editorPlugin -> editorPlugin.registerCSS(CSSRegistry.getInstance()));
+            pluginManager.handlePlugins(editorPlugin -> editorPlugin.register(CSSRegistry.getInstance()));
 
             LogView.getInstance();
             SvgImageLoaderFactory.install();
@@ -289,12 +289,12 @@ public class JFXApplication extends Application {
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.onAfterCreateJavaFXContext();
         pluginManager.handlePlugins(editorPlugin -> {
-            editorPlugin.registerFileCreators(FileCreatorRegistry.getInstance());
-            editorPlugin.registerFileEditors(EditorRegistry.getInstance());
-            editorPlugin.registerFileIconFinders(FileIconManager.getInstance());
-            editorPlugin.registerFileConverters(FileConverterRegistry.getInstance());
-            editorPlugin.registerContextMenuFillers(AssetTreeContextMenuFillerRegistry.getInstance());
-            editorPlugin.registerTreeNodeFactories(TreeNodeFactoryRegistry.getInstance());
+            editorPlugin.register(FileCreatorRegistry.getInstance());
+            editorPlugin.register(EditorRegistry.getInstance());
+            editorPlugin.register(FileIconManager.getInstance());
+            editorPlugin.register(FileConverterRegistry.getInstance());
+            editorPlugin.register(AssetTreeContextMenuFillerRegistry.getInstance());
+            editorPlugin.register(TreeNodeFactoryRegistry.getInstance());
         });
 
         final EditorFXScene scene = getScene();

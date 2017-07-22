@@ -1,13 +1,12 @@
 package com.ss.editor.ui.component.editor;
 
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Callable;
-
-import javafx.scene.image.Image;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The class to describe an editor.
@@ -76,6 +75,16 @@ public class EditorDescription {
      */
     public void addExtension(@NotNull final String extension) {
         this.extensions.add(extension);
+    }
+
+    /**
+     * Sets list of extensions.
+     *
+     * @param extensions the list of extensions.
+     */
+    public void setExtensions(@NotNull final Array<String> extensions) {
+        this.extensions.clear();
+        this.extensions.addAll(extensions);
     }
 
     /**

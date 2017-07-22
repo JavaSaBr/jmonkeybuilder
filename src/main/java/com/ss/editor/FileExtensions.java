@@ -139,18 +139,36 @@ public interface FileExtensions {
     String MODEL_XBUF = "xbuf";
 
     @NotNull
-    Array<String> TEXTURE_EXTENSIONS = ArrayFactory.asArray(
-            FileExtensions.IMAGE_PNG,
-            FileExtensions.IMAGE_JPG,
-            FileExtensions.IMAGE_JPEG,
-            FileExtensions.IMAGE_TGA,
-            FileExtensions.IMAGE_DDS,
-            FileExtensions.IMAGE_HDR);
+    Array<String> IMAGE_EXTENSIONS = ArrayFactory.asArray(
+            IMAGE_PNG,
+            IMAGE_JPG,
+            IMAGE_JPEG,
+            IMAGE_TGA,
+            IMAGE_DDS,
+            IMAGE_HDR,
+            IMAGE_BMP,
+            IMAGE_GIF,
+            IMAGE_TIFF);
 
+    @NotNull
+    Array<String> TEXTURE_EXTENSIONS = ArrayFactory.asArray(
+            IMAGE_PNG,
+            IMAGE_JPG,
+            IMAGE_JPEG,
+            IMAGE_TGA,
+            IMAGE_DDS,
+            IMAGE_HDR);
+
+    @NotNull Array<String> SHADER_EXTENSIONS = ArrayFactory.asArray(GLSL_FRAGMENT,
+            GLSL_VERTEX,
+            GLSL_TESSELLATION_CONTROL,
+            GLSL_TESSELLATION_EVALUATION,
+            GLSL_GEOM,
+            GLSL_LIB);
 
     @NotNull
     Array<String> AUDIO_EXTENSIONS = ArrayFactory.asArray(
-            FileExtensions.AUDIO_MP3,
-            FileExtensions.AUDIO_WAV,
-            FileExtensions.AUDIO_OGG);
+            AUDIO_MP3,
+            AUDIO_WAV,
+            AUDIO_OGG);
 }

@@ -136,9 +136,7 @@ public abstract class AbstractFileConverter implements FileConverter {
 
     @NotNull
     @Override
-    public String getTargetExtension() {
-        return "";
-    }
+    public abstract String getTargetExtension();
 
     /**
      * Notify the Editor about file changing.
