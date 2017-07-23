@@ -41,6 +41,10 @@ public class Messages {
      */
     public static final String EDITOR_MENU_OTHER;
     /**
+     * The constant EDITOR_MENU_OTHER_CLEAR_ASSET_CACHE.
+     */
+    public static final String EDITOR_MENU_OTHER_CLEAR_ASSET_CACHE;
+    /**
      * The constant EDITOR_MENU_OTHER_SETTINGS.
      */
     public static final String EDITOR_MENU_OTHER_SETTINGS;
@@ -2299,6 +2303,7 @@ public class Messages {
         EDITOR_MENU_FILE_REOPEN_ASSET_FOLDER = bundle.getString("EditorMenuFileReopenAssetFolder");
         EDITOR_MENU_FILE_EXIT = bundle.getString("EditorMenuFileExit");
         EDITOR_MENU_OTHER = bundle.getString("EditorMenuOther");
+        EDITOR_MENU_OTHER_CLEAR_ASSET_CACHE = bundle.getString("EditorMenuOtherClearAssetCache");
         EDITOR_MENU_OTHER_SETTINGS = bundle.getString("EditorMenuOtherSettings");
         EDITOR_MENU_OTHER_PLUGINS = bundle.getString("EditorMenuOtherPlugins");
         EDITOR_MENU_HELP = bundle.getString("EditorMenuHelp");

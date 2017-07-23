@@ -9,6 +9,7 @@ import com.jme3.scene.Node;
 import com.jme3.terrain.Terrain;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -17,6 +18,7 @@ import com.ss.editor.ui.component.editing.EditingComponent;
 import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.control.*;
 import com.ss.editor.ui.component.editing.terrain.paint.TextureLayerSettings;
+import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -49,8 +51,8 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer>
-        implements EditingComponent {
+public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer,
+        TerrainEditingState> implements EditingComponent {
 
     /**
      * The constant LABEL_PERCENT.
@@ -363,25 +365,29 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         buttonToSettings.put(getRoughButton(), roughControlSettings);
         buttonToSettings.put(getPaintButton(), paintControlSettings);
 
-        getLevelControlLevelField().setValue(1);
-        getLevelControlUseMarker().setSelected(false);
-        getLevelControlSmoothly().setSelected(true);
-        getSlopeControlLimited().setSelected(true);
-        getSlopeControlSmoothly().setSelected(true);
-        getRoughControlFrequencyField().setValue(0.2f);
-        getRoughControlLacunarityField().setValue(2.12f);
-        getRoughControlOctavesField().setValue(8);
-        getRoughControlRoughnessField().setValue(1.2f);
-        getRoughControlScaleField().setValue(1.0f);
-
         raiseLowerButton.setSelected(true);
-
-        getBrushSizeField().setValue(1);
-        getBrushPowerField().setValue(1);
 
         setToolControl(raiseLowerToolControl);
 
         FXUtils.addClassTo(this, CSSClasses.PROCESSING_COMPONENT_TERRAIN_EDITOR);
+    }
+
+    @FXThread
+    @Override
+    public void loadState(@NotNull final EditorState editorState) {
+        this.state = editorState.getOrCreateAdditionalState(TerrainEditingState.class, TerrainEditingState::new);
+        getLevelControlLevelField().setValue(state.getLevelValue());
+        getLevelControlUseMarker().setSelected(state.isLevelUseMarker());
+        getLevelControlSmoothly().setSelected(state.isLevelSmoothly());
+        getSlopeControlLimited().setSelected(state.isSlopeLimited());
+        getSlopeControlSmoothly().setSelected(state.isSlopeSmoothly());
+        getRoughControlFrequencyField().setValue(state.getRoughtFrequency());
+        getRoughControlLacunarityField().setValue(state.getRoughtLacunarity());
+        getRoughControlOctavesField().setValue(state.getRoughtOctaves());
+        getRoughControlRoughnessField().setValue(state.getRoughtRoughness());
+        getRoughControlScaleField().setValue(state.getRoughtScale());
+        getBrushSizeField().setValue(state.getBrushSize());
+        getBrushPowerField().setValue(state.getBrushPower());
     }
 
     /**
@@ -592,14 +598,16 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         slopeControlSmoothly = new CheckBox();
         slopeControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
+        slopeControlSmoothly.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeSlopeControlSmoothly(newValue));
 
         final Label limitedLabel = new Label(Messages.EDITING_COMPONENT_LIMITED + ":");
         limitedLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         slopeControlLimited = new CheckBox();
         slopeControlLimited.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        slopeControlLimited.selectedProperty().addListener((observable, oldValue, newValue) -> changeSlopeControlLimited(newValue));
+        slopeControlLimited.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeSlopeControlLimited(newValue));
 
         slopeControlSettings = new GridPane();
         slopeControlSettings.add(smoothlyLabel, 0, 0);
@@ -622,14 +630,16 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         levelControlSmoothly = new CheckBox();
         levelControlSmoothly.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlSmoothly.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
+        levelControlSmoothly.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeLevelControlSmoothly(newValue));
 
         final Label useMarkerLabel = new Label(Messages.EDITING_COMPONENT_USE_MARKER + ":");
         useMarkerLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
 
         levelControlUseMarker = new CheckBox();
         levelControlUseMarker.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        levelControlUseMarker.selectedProperty().addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
+        levelControlUseMarker.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeLevelControlUseMarker(newValue));
 
         final Label levelLabel = new Label(Messages.EDITING_COMPONENT_LEVEL + ":");
         levelLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
@@ -638,7 +648,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
         levelControlLevelField.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
         levelControlLevelField.setMinMax(0F, Integer.MAX_VALUE);
         levelControlLevelField.addChangeListener((observable, oldValue, newValue) -> changeLevelControlLevel(newValue));
-        levelControlLevelField.disableProperty().bind(levelControlUseMarker.selectedProperty());
+        levelControlLevelField.disableProperty()
+                .bind(levelControlUseMarker.selectedProperty());
 
         levelControlSettings = new GridPane();
         levelControlSettings.add(smoothlyLabel, 0, 0);
@@ -732,7 +743,8 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
 
         triPlanarCheckBox = new CheckBox();
         triPlanarCheckBox.prefWidthProperty().bind(widthProperty().multiply(FIELD_PERCENT));
-        triPlanarCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
+        triPlanarCheckBox.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changePaintControlTriPlanar(newValue));
 
         final Label shininessLabel = new Label(Messages.EDITING_COMPONENT_SHININESS + ":");
         shininessLabel.prefWidthProperty().bind(widthProperty().multiply(LABEL_PERCENT));
@@ -845,6 +857,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeLevelControlSmoothly(@NotNull final Boolean newValue) {
+        if (state != null) state.setLevelSmoothly(newValue);
         EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setPrecision(!newValue));
     }
 
@@ -853,6 +866,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeLevelControlUseMarker(@NotNull final Boolean newValue) {
+        if (state != null) state.setLevelUseMarker(newValue);
         EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setUseMarker(newValue));
     }
 
@@ -861,6 +875,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeLevelControlLevel(@NotNull final Float newLevel) {
+        if (state != null) state.setLevelValue(newLevel);
         EXECUTOR_MANAGER.addJMETask(() -> getLevelToolControl().setLevel(newLevel));
     }
 
@@ -869,6 +884,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeSlopeControlSmoothly(@NotNull final Boolean newValue) {
+        if (state != null) state.setSlopeSmoothly(newValue);
         EXECUTOR_MANAGER.addJMETask(() -> getSlopeToolControl().setPrecision(!newValue));
     }
 
@@ -877,6 +893,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeSlopeControlLimited(@NotNull final Boolean newValue) {
+        if (state != null) state.setSlopeLimited(newValue);
         EXECUTOR_MANAGER.addJMETask(() -> getSlopeToolControl().setLock(newValue));
     }
 
@@ -885,6 +902,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlScale(@NotNull final Float newScale) {
+        if (state != null) state.setRoughtScale(newScale);
         EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setScale(newScale));
     }
 
@@ -893,6 +911,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlFrequency(@NotNull final Float newFrequency) {
+        if (state != null) state.setRoughtFrequency(newFrequency);
         EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setFrequency(newFrequency));
     }
 
@@ -901,6 +920,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlLacunarity(@NotNull final Float newLacunarity) {
+        if (state != null) state.setRoughtLacunarity(newLacunarity);
         EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setLacunarity(newLacunarity));
     }
 
@@ -909,6 +929,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlOctaves(@NotNull final Float newOctaves) {
+        if (state != null) state.setRoughtOctaves(newOctaves);
         EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setOctaves(newOctaves));
     }
 
@@ -917,6 +938,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeRoughControlRoughness(@NotNull final Float newRoughness) {
+        if (state != null) state.setRoughtRoughness(newRoughness);
         EXECUTOR_MANAGER.addJMETask(() -> getRoughToolControl().setRoughness(newRoughness));
     }
 
@@ -925,6 +947,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeBrushSize(@NotNull final Float size) {
+        if (state != null) state.setBrushSize(size);
         EXECUTOR_MANAGER.addJMETask(() -> {
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(size, TerrainToolControl::setBrushSize);
@@ -936,6 +959,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
      */
     @FromAnyThread
     private void changeBrushPower(@NotNull final Float power) {
+        if (state != null) state.setBrushPower(power);
         EXECUTOR_MANAGER.addJMETask(() -> {
             final Array<TerrainToolControl> toolControls = getToolControls();
             toolControls.forEach(power, TerrainToolControl::setBrushPower);

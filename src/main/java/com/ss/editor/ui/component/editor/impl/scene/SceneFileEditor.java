@@ -342,14 +342,17 @@ public class SceneFileEditor extends
         switch (newIndex) {
             case LAYERS_TOOL: {
                 FXUtils.addToPane(modelPropertyEditor, layersContainer);
+                modelPropertyEditor.rebuild();
                 break;
             }
             case APP_STATES_TOOL: {
                 FXUtils.addToPane(modelPropertyEditor, appStateContainer);
+                modelPropertyEditor.rebuild();
                 break;
             }
             case FILTERS_TOOL: {
                 FXUtils.addToPane(modelPropertyEditor, filtersContainer);
+                modelPropertyEditor.rebuild();
                 break;
             }
         }

@@ -84,7 +84,7 @@ public class RenameDialog extends AbstractSimpleEditorDialog {
      *
      * @param initName the initial name.
      */
-    public void setInitName(final String initName) {
+    public void setInitName(@NotNull final String initName) {
         final TextField nameField = getNameField();
         nameField.setText(initName);
     }

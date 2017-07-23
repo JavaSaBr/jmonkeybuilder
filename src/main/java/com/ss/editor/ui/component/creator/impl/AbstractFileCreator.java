@@ -13,7 +13,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -100,8 +99,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = notNull(editorConfig.getCurrentAsset());
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        show(scene.getWindow());
+        show(JFX_APPLICATION.getLastWindow());
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.setOnLoadHandler(finished -> expand(file, resourceTree, finished));

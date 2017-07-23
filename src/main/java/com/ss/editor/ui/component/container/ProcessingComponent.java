@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.container;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.rlib.util.HasName;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +19,15 @@ public interface ProcessingComponent extends HasName {
      */
     @FXThread
     default void initFor(@NotNull Object container) {
+    }
+
+    /**
+     * Load state of this component form the editor state.
+     *
+     * @param editorState the editor state.
+     */
+    @FXThread
+    default void loadState(@NotNull EditorState editorState) {
     }
 
     /**

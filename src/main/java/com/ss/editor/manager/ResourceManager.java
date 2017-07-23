@@ -159,6 +159,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         this.materialDefinitions = ArrayFactory.newArray(String.class);
 
         classPathScanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
+        classPathScanner.setUseSystemClasspath(true);
         classPathScanner.scan(path -> {
 
             if (!(path.contains("jme3-core") || path.contains("jme3-effects") || path.contains("tonegod"))) {
@@ -191,7 +192,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         });
 
         updateAdditionalEnvs();
-        reload();
         start();
     }
 
@@ -251,7 +251,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     @Override
     @FromAnyThread
     public void assetDependencyNotFound(@NotNull final AssetKey parentKey, @NotNull final AssetKey dependentAssetKey) {
-
     }
 
     /**
@@ -415,7 +414,7 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
      * Reload available resources.
      */
     @FromAnyThread
-    private synchronized void reload() {
+    public synchronized void reload() {
 
         final ObjectDictionary<String, Reference> lastModifyTable = getAssetCacheTable();
         lastModifyTable.clear();
@@ -430,6 +429,8 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
         final Array<URLClassLoader> classLoaders = getClassLoaders();
         classLoaders.forEach(assetManager, (loader, manager) -> manager.removeClassLoader(loader));
         classLoaders.clear();
+
+        assetManager.clearCache();
 
         final Array<String> materialDefinitions = getMaterialDefinitions();
         materialDefinitions.clear();
@@ -578,7 +579,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         final Array<WatchKey> watchKeys = getWatchKeys();
         watchKeys.fastRemove(watchKey);
-
         watchKey.cancel();
     }
 

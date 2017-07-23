@@ -1,12 +1,12 @@
 package com.ss.editor.file.delete.handler.impl;
 
+import static com.ss.editor.FileExtensions.JME_OBJECT;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
-import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
@@ -17,7 +17,6 @@ import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,8 +28,15 @@ import java.nio.file.Path;
  */
 public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHandler {
 
-    @Nullable
-    private Spatial model;
+    /**
+     * The list of used materials.
+     */
+    @NotNull
+    private final Array<String> assetKeys;
+
+    public DeleteMaterialsModelFileDeleteHandler() {
+        this.assetKeys = ArrayFactory.newArray(String.class);
+    }
 
     @Override
     public void preDelete(@NotNull final Path file) {
@@ -40,20 +46,29 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         final Path assetFile = notNull(getAssetFile(file));
         final String assetPath = toAssetPath(assetFile);
 
-        this.model = assetManager.loadModel(assetPath);
+        final Spatial model = assetManager.loadModel(assetPath);
+
+        NodeUtils.visitGeometry(model, geometry -> {
+            final Material material = geometry.getMaterial();
+            final String assetName = material.getAssetName();
+            if (!StringUtils.isEmpty(assetName)) assetKeys.add(assetName);
+        });
     }
 
     /**
-     * @return removed model.
+     * @return the list of used materials.
      */
     @NotNull
-    private Spatial getModel() {
-        return notNull(model);
+    private Array<String> getAssetKeys() {
+        return assetKeys;
     }
 
     @Override
     public void postDelete(@NotNull final Path file) {
         super.postDelete(file);
+
+        final Array<String> assetKeys = getAssetKeys();
+        if (assetKeys.isEmpty()) return;
 
         String question = Messages.FILE_DELETE_HANDLER_DELETE_MATERIALS;
         question = question.replace("%file_name%", file.getFileName().toString());
@@ -65,17 +80,7 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
 
     private void handle(@NotNull final Boolean result) {
         if (!result) return;
-
-        final Array<String> assetKeys = ArrayFactory.newArray(String.class);
-
-        final Spatial model = getModel();
-        NodeUtils.visitGeometry(model, geometry -> {
-            final Material material = geometry.getMaterial();
-            final String assetName = material.getAssetName();
-            if (!StringUtils.isEmpty(assetName)) assetKeys.add(assetName);
-        });
-
-        assetKeys.stream().map(EditorUtil::getRealFile)
+        getAssetKeys().stream().map(EditorUtil::getRealFile)
                 .filter(Files::exists)
                 .forEach(FileUtils::delete);
     }
@@ -83,6 +88,6 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
     @Override
     public boolean isNeedHandle(@NotNull final Path file) {
         final String extension = FileUtils.getExtension(file);
-        return FileExtensions.JME_OBJECT.equals(extension);
+        return JME_OBJECT.equals(extension);
     }
 }

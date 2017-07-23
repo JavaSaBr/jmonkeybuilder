@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
  *
  * @author JavaSaBr
  */
-public class SceneFileEditorState extends AbstractModelFileEditorState {
+public class SceneFileEditorState extends AbstractSceneFileEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -40,10 +40,7 @@ public class SceneFileEditorState extends AbstractModelFileEditorState {
     public void setShowedLight(final boolean showedLight) {
         final boolean changed = isShowedLight() != showedLight;
         this.showedLight = showedLight;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -63,10 +60,7 @@ public class SceneFileEditorState extends AbstractModelFileEditorState {
     public void setShowedAudio(final boolean showedAudio) {
         final boolean changed = isShowedAudio() != showedAudio;
         this.showedAudio = showedAudio;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**

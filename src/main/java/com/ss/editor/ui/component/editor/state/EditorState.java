@@ -1,6 +1,10 @@
 package com.ss.editor.ui.component.editor.state;
 
+import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 /**
  * The interface for implementing a state container of Editor.
@@ -14,5 +18,16 @@ public interface EditorState extends Serializable {
      *
      * @param handle the change handler.
      */
-    void setChangeHandler(final Runnable handle);
+    void setChangeHandler(@NotNull Runnable handle);
+
+    /**
+     * Fet or create an additional editor state which will store state in this state.
+     *
+     * @param type    the type of additional state.
+     * @param factory the factory of the state if it will not be exists.
+     * @param <T>     the type of the state.
+     * @return the additional editor state.
+     */
+    @NotNull <T extends AbstractEditorState> T getOrCreateAdditionalState(@NotNull Class<T> type,
+                                                                          @NotNull Supplier<T> factory);
 }

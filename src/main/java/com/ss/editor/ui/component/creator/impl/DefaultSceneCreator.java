@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.creator.impl;
 
 import com.jme3.renderer.queue.RenderQueue;
+import com.jme3.shadow.EdgeFilteringMode;
 import com.ss.editor.Messages;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.impl.EditableLightingSceneAppState;
@@ -38,9 +39,14 @@ public class DefaultSceneCreator extends EmptySceneCreator {
     @Override
     protected SceneNode createScene() {
 
+        final EditableLightingStateShadowFilter shadowFilter = new EditableLightingStateShadowFilter();
+        shadowFilter.setRenderBackFacesShadows(true);
+        shadowFilter.setEdgesThickness(7);
+        shadowFilter.setEdgeFilteringMode(EdgeFilteringMode.PCF8);
+
         final SceneNode sceneNode = super.createScene();
         sceneNode.addFilter(new EditableFXAAFilter());
-        sceneNode.addFilter(new EditableLightingStateShadowFilter());
+        sceneNode.addFilter(shadowFilter);
         sceneNode.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
 
         final EditableLightingSceneAppState lightingState = new EditableLightingSceneAppState();
@@ -48,7 +54,7 @@ public class DefaultSceneCreator extends EmptySceneCreator {
 
         final EditableSkySceneAppState skyState = new EditableSkySceneAppState();
         skyState.setFlatShaded(false);
-       // skyState.init(lightingState.getLightDirRef(), EDITOR.getAssetManager());
+        skyState.init(lightingState.getLightDirRef(), EDITOR.getAssetManager());
 
         sceneNode.addAppState(lightingState);
         sceneNode.addAppState(skyState);

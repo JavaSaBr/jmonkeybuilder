@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -16,7 +18,7 @@ public class ResourceElementFactory {
      * @param file the file
      * @return the resource element
      */
-    public static ResourceElement createFor(final Path file) {
+    public static ResourceElement createFor(@NotNull final Path file) {
         return Files.isDirectory(file) ? new FolderResourceElement(file) : new FileResourceElement(file);
     }
 }

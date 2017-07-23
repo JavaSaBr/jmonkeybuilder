@@ -8,6 +8,7 @@ import com.ss.editor.model.editor.Editor3DProvider;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.container.ProcessingComponent;
 import com.ss.editor.ui.component.container.ProcessingComponentContainer;
+import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,8 +20,8 @@ import org.jetbrains.annotations.Nullable;
  * @param <C> the type parameter
  * @author JavaSaBr
  */
-public abstract class AbstractProcessingComponent<T, C extends ProcessingComponentContainer> extends VBox implements
-        ProcessingComponent {
+public abstract class AbstractProcessingComponent<T, C extends ProcessingComponentContainer,
+        S extends AdditionalEditorState> extends VBox implements ProcessingComponent {
 
     /**
      * The constant EXECUTOR_MANAGER.
@@ -39,6 +40,12 @@ public abstract class AbstractProcessingComponent<T, C extends ProcessingCompone
      */
     @Nullable
     protected T processedObject;
+
+    /**
+     * The state of this component.
+     */
+    @Nullable
+    protected S state;
 
     /**
      * The flag of showing this component.

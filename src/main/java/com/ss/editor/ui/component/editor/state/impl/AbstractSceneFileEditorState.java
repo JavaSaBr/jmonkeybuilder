@@ -7,12 +7,12 @@ import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractModelFileEditorState extends AbstractEditorState {
+public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
 
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 2;
+    public static final long serialVersionUID = 3;
 
     /**
      * The transformation type.
@@ -37,7 +37,7 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     /**
      * Instantiates a new Abstract model file editor state.
      */
-    public AbstractModelFileEditorState() {
+    public AbstractSceneFileEditorState() {
         this.enableGrid = true;
         this.enableSelection = true;
     }
@@ -50,10 +50,7 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     public void setEnableGrid(final boolean enableGrid) {
         final boolean changed = isEnableGrid() != enableGrid;
         this.enableGrid = enableGrid;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -73,10 +70,7 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     public void setEnableSelection(final boolean enableSelection) {
         final boolean changed = isEnableSelection() != enableSelection;
         this.enableSelection = enableSelection;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -105,10 +99,7 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     public void setTransformationType(final int transformationType) {
         final boolean changed = getTransformationType() != transformationType;
         this.transformationType = transformationType;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -119,10 +110,7 @@ public abstract class AbstractModelFileEditorState extends AbstractEditorState {
     public void setShowStatistics(final boolean showStatistics) {
         final boolean changed = isShowStatistics() != showStatistics;
         this.showStatistics = showStatistics;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**

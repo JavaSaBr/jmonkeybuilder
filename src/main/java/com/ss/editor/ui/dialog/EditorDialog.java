@@ -2,6 +2,7 @@ package com.ss.editor.ui.dialog;
 
 import static javafx.geometry.Pos.CENTER;
 import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.config.EditorConfig;
@@ -285,6 +286,9 @@ public class EditorDialog {
         GAnalytics.sendPageView(getDialogId(), null, "/dialog/" + getDialogId());
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_OPENED, getDialogId());
 
+        final JFXApplication application = JFXApplication.getInstance();
+        application.addWindow(dialog);
+
         Platform.runLater(dialog::sizeToScene);
     }
 
@@ -317,6 +321,9 @@ public class EditorDialog {
         }
 
         dialog.hide();
+
+        final JFXApplication application = JFXApplication.getInstance();
+        application.removeWindow(dialog);
 
         GAnalytics.sendEvent(GAEvent.Category.DIALOG, GAEvent.Action.DIALOG_CLOSED, getDialogId());
         GAnalytics.sendTiming(GAEvent.Category.DIALOG, GAEvent.Label.SHOWING_A_DIALOG, seconds, getDialogId());

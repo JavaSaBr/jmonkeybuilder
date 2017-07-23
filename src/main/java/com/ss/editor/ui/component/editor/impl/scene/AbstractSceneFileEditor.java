@@ -43,12 +43,14 @@ import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.Stats3DState;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.component.container.ProcessingComponent;
+import com.ss.editor.ui.component.editing.EditingComponent;
 import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.AbstractModelFileEditorState;
+import com.ss.editor.ui.component.editor.state.impl.AbstractSceneFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
@@ -100,7 +102,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
-        MA extends AbstractSceneEditor3DState<IM, M>, ES extends AbstractModelFileEditorState>
+        MA extends AbstractSceneEditor3DState<IM, M>, ES extends AbstractSceneFileEditorState>
         extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
@@ -501,6 +503,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         gridButton.setSelected(editorState.isEnableGrid());
         statisticsButton.setSelected(editorState.isShowStatistics());
         selectionButton.setSelected(editorState.isEnableSelection());
+
+        final Array<EditingComponent> components = editingComponentContainer.getComponents();
+        components.forEach(editorState, ProcessingComponent::loadState);
 
         final TransformType transformType = TransformType.valueOf(editorState.getTransformationType());
 

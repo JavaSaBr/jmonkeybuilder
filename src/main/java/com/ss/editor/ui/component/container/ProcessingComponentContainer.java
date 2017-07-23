@@ -110,7 +110,7 @@ public abstract class ProcessingComponentContainer<P extends Editor3DProvider, C
      * @return the list of processing components.
      */
     @NotNull
-    protected Array<C> getComponents() {
+    public Array<C> getComponents() {
         return components;
     }
 

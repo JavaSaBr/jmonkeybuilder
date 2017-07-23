@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditorState extends AbstractModelFileEditorState {
+public class ModelFileEditorState extends AbstractSceneFileEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -49,10 +49,7 @@ public class ModelFileEditorState extends AbstractModelFileEditorState {
     public void setSkyType(final int skyType) {
         final boolean changed = getSkyType() != skyType;
         this.skyType = skyType;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -63,10 +60,7 @@ public class ModelFileEditorState extends AbstractModelFileEditorState {
     public void setEnableLight(final boolean enableLight) {
         final boolean changed = isEnableLight() != enableLight;
         this.enableLight = enableLight;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**

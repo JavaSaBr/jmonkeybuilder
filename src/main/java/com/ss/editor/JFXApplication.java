@@ -5,7 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
 import com.jme3.renderer.Renderer;
 import com.jme3.system.JmeContext;
-import com.jme3.util.BufferAllocatorFactory;
+import com.jme3.util.LWJGLBufferAllocator;
 import com.jme3x.jfx.injfx.JmeToJFXApplication;
 import com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor;
 import com.ss.editor.analytics.google.GAEvent;
@@ -29,10 +29,13 @@ import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
-import com.ss.editor.util.SynchronizedByteBufferAllocator;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
+import com.ss.rlib.util.ArrayUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import com.ss.rlib.util.array.ConcurrentArray;
 import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -40,6 +43,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.Configuration;
@@ -103,10 +107,6 @@ public class JFXApplication extends Application {
         System.setProperty("prism.text", "t2k");
         System.setProperty("javafx.animation.fullspeed", "true");
 
-        // FIXME need to remove after jME upgrading
-        System.setProperty(BufferAllocatorFactory.PROPERTY_BUFFER_ALLOCATOR_IMPLEMENTATION,
-                SynchronizedByteBufferAllocator.class.getName());
-
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OpenGLVersion openGLVersion = editorConfig.getOpenGLVersion();
 
@@ -114,6 +114,8 @@ public class JFXApplication extends Application {
         if(System.getProperty("jfx.background.render") == null) {
             System.setProperty("jfx.background.render", openGLVersion.getRender());
         }
+
+        System.setProperty(LWJGLBufferAllocator.PROPERTY_CONCURRENT_BUFFER_ALLOCATOR, "true");
 
         // some settings for the render of JavaFX
         //System.setProperty("prism.cacheshapes", "true");
@@ -193,6 +195,12 @@ public class JFXApplication extends Application {
     }
 
     /**
+     * The list of opened windows.
+     */
+    @NotNull
+    private final ConcurrentArray<Window> openedWindows;
+
+    /**
      * The JavaFX scene.
      */
     @Nullable
@@ -210,12 +218,48 @@ public class JFXApplication extends Application {
     @Nullable
     private Stage stage;
 
+    public JFXApplication() {
+        this.openedWindows = ArrayFactory.newConcurrentStampedLockArray(Window.class);
+    }
+
+    /**
+     * Add the new opened window.
+     *
+     * @param window the new opened window.
+     */
+    public void addWindow(@NotNull final Window window) {
+        ArrayUtils.runInWriteLock(openedWindows, window, Array::add);
+    }
+
+    /**
+     * Remove the opened window.
+     *
+     * @param window the opened window.
+     */
+    public void removeWindow(@NotNull final Window window) {
+        ArrayUtils.runInWriteLock(openedWindows, window, Array::slowRemove);
+    }
+
+    /**
+     * Gets the last opened window.
+     *
+     * @return the last opened window.
+     */
+    @NotNull
+    public Window getLastWindow() {
+        return notNull(ArrayUtils.getInReadLock(openedWindows, Array::last));
+    }
+
     @Override
     public void start(final Stage stage) throws Exception {
         JFXApplication.instance = this;
         this.stage = stage;
 
+        addWindow(stage);
         try {
+
+            final ResourceManager resourceManager = ResourceManager.getInstance();
+            resourceManager.reload();
 
             final PluginManager pluginManager = PluginManager.getInstance();
             pluginManager.onBeforeCreateJavaFXContext();

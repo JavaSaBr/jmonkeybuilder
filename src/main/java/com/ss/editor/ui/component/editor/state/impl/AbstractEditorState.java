@@ -1,17 +1,18 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Math.abs;
-
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.EditorToolConfig;
-
+import com.ss.rlib.util.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * The base implementation of a state container for an editor.
@@ -23,18 +24,31 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 2;
+    public static final long serialVersionUID = 3;
 
     /**
      * The constant EDITOR_CONFIG.
      */
+    @NotNull
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
+
+    /**
+     * The constant EMPTY_ADDITIONAL_STATES.
+     */
+    @NotNull
+    protected static final AdditionalEditorState[] EMPTY_ADDITIONAL_STATES = new AdditionalEditorState[0];
 
     /**
      * The change handler.
      */
     @Nullable
     protected transient volatile Runnable changeHandler;
+
+    /**
+     * The list of additional states.
+     */
+    @NotNull
+    private volatile AdditionalEditorState[] additionalStates;
 
     /**
      * The camera location.
@@ -71,6 +85,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
      * Instantiates a new Abstract editor state.
      */
     public AbstractEditorState() {
+        this.additionalStates = EMPTY_ADDITIONAL_STATES;
         this.toolWidth = 250;
         this.toolCollapsed = false;
         this.cameraLocation = new Vector3f();
@@ -80,8 +95,31 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     @Override
-    public void setChangeHandler(@Nullable final Runnable changeHandler) {
+    public void setChangeHandler(@NotNull final Runnable changeHandler) {
         this.changeHandler = changeHandler;
+        for (final AdditionalEditorState additionalState : additionalStates) {
+            additionalState.setChangeHandler(changeHandler);
+        }
+    }
+
+    @NotNull
+    @Override
+    public <T extends AbstractEditorState> T getOrCreateAdditionalState(@NotNull final Class<T> type,
+                                                                        @NotNull final Supplier<T> factory) {
+
+        for (final AdditionalEditorState additionalState : additionalStates) {
+            if (type.isInstance(additionalState)) {
+                return type.cast(additionalState);
+            }
+        }
+
+        final AdditionalEditorState newAdditionalState = (AdditionalEditorState) factory.get();
+        newAdditionalState.setChangeHandler(notNull(changeHandler));
+
+        this.additionalStates = ArrayUtils.addToArray(additionalStates, newAdditionalState,
+                AdditionalEditorState.class);
+
+        return type.cast(newAdditionalState);
     }
 
     /**
@@ -103,10 +141,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setToolWidth(final int toolWidth) {
         final boolean changed = abs(getToolWidth() - toolWidth) > 3;
         this.toolWidth = toolWidth;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     @Override
@@ -118,10 +153,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setToolCollapsed(final boolean toolCollapsed) {
         final boolean changed = isToolCollapsed() != toolCollapsed;
         this.toolCollapsed = toolCollapsed;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -132,8 +164,11 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraHRotation(final float cameraHRotation) {
         final boolean changed = getCameraHRotation() != cameraHRotation;
         this.cameraHRotation = cameraHRotation;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
+        if (changed) notifyChange();
+    }
+
+    protected void notifyChange() {
+        if (changeHandler != null) {
             changeHandler.run();
         }
     }
@@ -155,10 +190,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraLocation(@NotNull final Vector3f cameraLocation) {
         final boolean changed = Objects.equals(getCameraLocation(), cameraLocation);
         getCameraLocation().set(cameraLocation);
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -169,7 +201,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     @NotNull
     public Vector3f getCameraLocation() {
         if (cameraLocation == null) cameraLocation = new Vector3f();
-        return Objects.requireNonNull(cameraLocation);
+        return notNull(cameraLocation);
     }
 
     /**
@@ -180,10 +212,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraTDistance(final float cameraTDistance) {
         final boolean changed = getCameraTDistance() != cameraTDistance;
         this.cameraTDistance = cameraTDistance;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
@@ -203,10 +232,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     public void setCameraVRotation(final float cameraVRotation) {
         final boolean changed = getCameraVRotation() != cameraVRotation;
         this.cameraVRotation = cameraVRotation;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
+        if (changed) notifyChange();
     }
 
     /**
