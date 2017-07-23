@@ -708,6 +708,7 @@
     -fx-alignment: top-center;
     -fx-padding: 2px 6px 4px 4px;
 }
+
 .abstract-param-control-container-split-line {
     -fx-padding: 6px 0px 6px 0px;
 }
@@ -775,6 +776,7 @@
 }
 
 .abstract-param-control-number-label {
+    -fx-min-height: -var-default-field-height;
     -fx-min-width: 16px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
@@ -783,7 +785,8 @@
 }
 
 .abstract-param-control-number-label-2 {
-    -fx-min-width: 30px;
+    -fx-min-height: -var-default-field-height;
+    -fx-min-width: 28px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;
@@ -791,7 +794,8 @@
 }
 
 .abstract-param-control-number-label-3 {
-    -fx-min-width: 60px;
+    -fx-min-height: -var-default-field-height;
+    -fx-min-width: 38px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;

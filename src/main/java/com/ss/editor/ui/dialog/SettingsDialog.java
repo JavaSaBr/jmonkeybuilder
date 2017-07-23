@@ -17,6 +17,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.OpenGLVersion;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -563,6 +564,9 @@ public class SettingsDialog extends EditorDialog {
                 toneMapFilterWhitePointZ, CSSClasses.TRANSPARENT_SPINNER);
 
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
+
+        UIUtils.addFocusBinding(fieldContainer, toneMapFilterWhitePointX, toneMapFilterWhitePointY,
+                toneMapFilterWhitePointZ);
     }
 
     /**
