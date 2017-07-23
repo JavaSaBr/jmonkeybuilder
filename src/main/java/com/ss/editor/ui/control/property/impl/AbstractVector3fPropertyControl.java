@@ -100,6 +100,8 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
                 CSSClasses.ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER);
         FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
                 CSSClasses.TRANSPARENT_TEXT_FIELD);
+
+        UIUtils.addFocusBinding(container, xField, yField, zField);
     }
 
     /**

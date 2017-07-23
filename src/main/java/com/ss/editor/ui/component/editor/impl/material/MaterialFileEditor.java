@@ -383,6 +383,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     protected void createContent(@NotNull final StackPane root) {
         changeHandler = this::handleChanges;
         editorAreaPane = new BorderPane();
+        editorAreaPane.setOnMousePressed(event -> editorAreaPane.requestFocus());
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);

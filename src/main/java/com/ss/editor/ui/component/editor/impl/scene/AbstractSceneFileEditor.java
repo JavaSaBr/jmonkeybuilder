@@ -1094,6 +1094,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorAreaPane.setOnDragDropped(this::dragDropped);
 
         editor3DArea = new BorderPane();
+        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
 
         statsContainer = new VBox();
         statsContainer.setMouseTransparent(true);

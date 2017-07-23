@@ -13,7 +13,11 @@ import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.BooleanPropertyBase;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
+import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -44,6 +48,54 @@ import java.util.function.Predicate;
  * @author JavaSaBr
  */
 public class UIUtils {
+
+    @NotNull
+    private static final PseudoClass FOCUSED_PSEUDO_CLASS = PseudoClass.getPseudoClass("focused");
+
+    /**
+     * Add binding pseudo focus of the pane to focus state of the controls.
+     *
+     * @param pane   the pane.
+     * @param controls  the controls.
+     */
+    public static void addFocusBinding(@NotNull final Pane pane, @NotNull final Control... controls) {
+
+        final BooleanProperty focused = new BooleanPropertyBase(false) {
+
+            @Override
+            public void invalidated() {
+                pane.pseudoClassStateChanged(FOCUSED_PSEUDO_CLASS, get());
+            }
+
+            @Override
+            public Object getBean() {
+                return pane;
+            }
+
+            @Override
+            public String getName() {
+                return "focused";
+            }
+        };
+
+        final ChangeListener<Boolean> listener = (observable, oldValue, newValue) -> {
+
+            boolean result = newValue;
+
+            if (!result) {
+                for (final Control control : controls) {
+                    result = control.isFocused();
+                    if (result) break;
+                }
+            }
+
+            focused.setValue(result);
+        };
+
+        for (final Control control : controls) {
+            control.focusedProperty().addListener(listener);
+        }
+    }
 
     /**
      * Clear children of a pane.
