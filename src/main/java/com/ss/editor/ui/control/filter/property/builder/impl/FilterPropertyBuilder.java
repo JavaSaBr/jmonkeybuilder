@@ -1,25 +1,24 @@
 package com.ss.editor.ui.control.filter.property.builder.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.filter.property.control.*;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.editor.extension.scene.filter.EditableSceneFilter;
-import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.array.Array;
-
-import java.util.Objects;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The iproperty builder to build property controls of editable scene app states.
@@ -67,7 +66,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case BOOLEAN: {
 
                     final EditableProperty<Boolean, ?> property = cast(editableProperty);
-                    final Boolean value = Objects.requireNonNull(property.getValue(), "Boolean value can't be null.");
+                    final Boolean value = notNull(property.getValue(), "Boolean value can't be null.");
 
                     final BooleanFilterPropertyControl<EditableProperty<Boolean, ?>> propertyControl =
                             new BooleanFilterPropertyControl<>(value, property.getName(), changeConsumer);
@@ -78,7 +77,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case FLOAT: {
 
                     final EditableProperty<Float, ?> property = cast(editableProperty);
-                    final Float value = Objects.requireNonNull(property.getValue(), "Float value can't be null.");
+                    final Float value = notNull(property.getValue(), "Float value can't be null.");
 
                     final FloatFilterPropertyControl<EditableProperty<Float, ?>> propertyControl =
                             new FloatFilterPropertyControl<>(value, property.getName(), changeConsumer);
@@ -106,7 +105,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case INTEGER: {
 
                     final EditableProperty<Integer, ?> property = cast(editableProperty);
-                    final Integer value = Objects.requireNonNull(property.getValue(), "Integer value can't be null.");
+                    final Integer value = notNull(property.getValue(), "Integer value can't be null.");
 
                     final IntegerFilterPropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerFilterPropertyControl<>(value, property.getName(), changeConsumer);
@@ -128,7 +127,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case VECTOR_2F: {
 
                     final EditableProperty<Vector2f, ?> property = cast(editableProperty);
-                    final Vector2f value = Objects.requireNonNull(property.getValue(), "Vector2f value can't be null.");
+                    final Vector2f value = notNull(property.getValue(), "Vector2f value can't be null.");
 
                     final Vector2fFilterPropertyControl<EditableProperty<Vector2f, ?>> propertyControl =
                             new Vector2fFilterPropertyControl<>(value, property.getName(), changeConsumer);
@@ -139,7 +138,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case VECTOR_3F: {
 
                     final EditableProperty<Vector3f, ?> property = cast(editableProperty);
-                    final Vector3f value = Objects.requireNonNull(property.getValue(), "Vector3f value can't be null.");
+                    final Vector3f value = notNull(property.getValue(), "Vector3f value can't be null.");
 
                     final Vector3fFilterPropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
                             new Vector3fFilterPropertyControl<>(value, property.getName(), changeConsumer);
@@ -150,7 +149,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                 case ENUM: {
 
                     final EditableProperty<Enum<?>, ?> property = cast(editableProperty);
-                    final Enum<?> value = Objects.requireNonNull(property.getValue(), "Enum value can't be null.");
+                    final Enum<?> value = notNull(property.getValue(), "Enum value can't be null.");
 
                     final EnumFilterPropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
                             new EnumFilterPropertyControl<>(value, property.getName(), changeConsumer);
@@ -195,7 +194,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
      * @param property        the property
      * @param propertyControl the property control
      */
-    protected <T> void addControl(final @NotNull VBox container, @NotNull final EditableProperty<T, ?> property,
+    protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
                                   @NotNull final AbstractPropertyControl<SceneChangeConsumer, EditableProperty<T, ?>, T> propertyControl) {
 
         propertyControl.setApplyHandler(EditableProperty::setValue);

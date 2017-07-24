@@ -1,23 +1,22 @@
 package com.ss.editor.ui.control.app.state.property.builder.impl;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.ss.editor.extension.property.EditableProperty;
+import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.property.control.*;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.editor.extension.property.EditableProperty;
-import com.ss.editor.extension.property.EditablePropertyType;
-import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
-import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
 import com.ss.rlib.util.array.Array;
-
-import java.util.Objects;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The property builder to build property controls of editable scene app states.
@@ -65,7 +64,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case BOOLEAN: {
 
                     final EditableProperty<Boolean, ?> property = cast(editableProperty);
-                    final Boolean value = Objects.requireNonNull(property.getValue(), "Boolean value can't be null.");
+                    final Boolean value = notNull(property.getValue(), "Boolean value can't be null.");
 
                     final BooleanAppStatePropertyControl<EditableProperty<Boolean, ?>> propertyControl =
                             new BooleanAppStatePropertyControl<>(value, property.getName(), changeConsumer);
@@ -76,7 +75,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case FLOAT: {
 
                     final EditableProperty<Float, ?> property = cast(editableProperty);
-                    final Float value = Objects.requireNonNull(property.getValue(), "Float value can't be null.");
+                    final Float value = notNull(property.getValue(), "Float value can't be null.");
 
                     final FloatAppStatePropertyControl<EditableProperty<Float, ?>> propertyControl =
                             new FloatAppStatePropertyControl<>(value, property.getName(), changeConsumer);
@@ -104,7 +103,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case INTEGER: {
 
                     final EditableProperty<Integer, ?> property = cast(editableProperty);
-                    final Integer value = Objects.requireNonNull(property.getValue(), "Integer value can't be null.");
+                    final Integer value = notNull(property.getValue(), "Integer value can't be null.");
 
                     final IntegerAppStatePropertyControl<EditableProperty<Integer, ?>> propertyControl =
                             new IntegerAppStatePropertyControl<>(value, property.getName(), changeConsumer);
@@ -126,7 +125,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case VECTOR_2F: {
 
                     final EditableProperty<Vector2f, ?> property = cast(editableProperty);
-                    final Vector2f value = Objects.requireNonNull(property.getValue(), "Vector2f value can't be null.");
+                    final Vector2f value = notNull(property.getValue(), "Vector2f value can't be null.");
 
                     final Vector2fAppStatePropertyControl<EditableProperty<Vector2f, ?>> propertyControl =
                             new Vector2fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
@@ -137,7 +136,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case VECTOR_3F: {
 
                     final EditableProperty<Vector3f, ?> property = cast(editableProperty);
-                    final Vector3f value = Objects.requireNonNull(property.getValue(), "Vector3f value can't be null.");
+                    final Vector3f value = notNull(property.getValue(), "Vector3f value can't be null.");
 
                     final Vector3fAppStatePropertyControl<EditableProperty<Vector3f, ?>> propertyControl =
                             new Vector3fAppStatePropertyControl<>(value, property.getName(), changeConsumer);
@@ -148,7 +147,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
                 case ENUM: {
 
                     final EditableProperty<Enum<?>, ?> property = cast(editableProperty);
-                    final Enum<?> value = Objects.requireNonNull(property.getValue(), "Enum value can't be null.");
+                    final Enum<?> value = notNull(property.getValue(), "Enum value can't be null.");
 
                     final EnumAppStatePropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
                             new EnumAppStatePropertyControl<>(value, property.getName(), changeConsumer);
@@ -171,7 +170,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
      * @param property        the property
      * @param propertyControl the property control
      */
-    protected <T> void addControl(final @NotNull VBox container, @NotNull final EditableProperty<T, ?> property,
+    protected <T> void addControl(@NotNull final VBox container, @NotNull final EditableProperty<T, ?> property,
                                   @NotNull final AbstractPropertyControl<SceneChangeConsumer, EditableProperty<T, ?>, T> propertyControl) {
 
         propertyControl.setApplyHandler(EditableProperty::setValue);

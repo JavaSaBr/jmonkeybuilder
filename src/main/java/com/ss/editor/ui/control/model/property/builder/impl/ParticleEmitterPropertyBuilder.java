@@ -32,7 +32,7 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class Toneg0dParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
+public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<ModelChangeConsumer> {
 
     @NotNull
     private static final DirectionType[] DIRECTION_TYPES = DirectionType.values();
@@ -149,7 +149,7 @@ public class Toneg0dParticleEmitterPropertyBuilder extends AbstractPropertyBuild
     };
 
     @NotNull
-    private static final PropertyBuilder INSTANCE = new Toneg0dParticleEmitterPropertyBuilder();
+    private static final PropertyBuilder INSTANCE = new ParticleEmitterPropertyBuilder();
 
     /**
      * Gets instance.
@@ -161,7 +161,7 @@ public class Toneg0dParticleEmitterPropertyBuilder extends AbstractPropertyBuild
         return INSTANCE;
     }
 
-    private Toneg0dParticleEmitterPropertyBuilder() {
+    private ParticleEmitterPropertyBuilder() {
         super(ModelChangeConsumer.class);
     }
 
@@ -355,12 +355,11 @@ public class Toneg0dParticleEmitterPropertyBuilder extends AbstractPropertyBuild
         FXUtils.addToPane(emitterLifeControl, container);
         FXUtils.addToPane(emitterDelayControl, container);
         FXUtils.addToPane(magnitudeControl, container);
-        buildSplitLine(container);
-        FXUtils.addToPane(materialControl, container);
-        buildSplitLine(container);
         FXUtils.addToPane(spriteCountControl, container);
         FXUtils.addToPane(forceMinMaxControl, container);
         FXUtils.addToPane(lifeMinMaxControl, container);
+        buildSplitLine(container);
+        FXUtils.addToPane(materialControl, container);
     }
 
     private void buildFor(@NotNull final VBox container, @NotNull final ModelChangeConsumer changeConsumer,
@@ -495,6 +494,7 @@ public class Toneg0dParticleEmitterPropertyBuilder extends AbstractPropertyBuild
         FXUtils.addToPane(sizeControl, container);
         FXUtils.addToPane(lifeControl, container);
         FXUtils.addToPane(imagesControl, container);
+        buildSplitLine(container);
         FXUtils.addToPane(gravityControl, container);
         FXUtils.addToPane(faceNormalControl, container);
     }

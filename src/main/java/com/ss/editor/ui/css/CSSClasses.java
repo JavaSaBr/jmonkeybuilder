@@ -272,10 +272,6 @@ public interface CSSClasses {
      */
     String ABSTRACT_PARAM_EDITOR_CONTROL = "abstract-param-editor-control";
     /**
-     * The constant ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER.
-     */
-    String ABSTRACT_PARAM_CONTROL_MULTI_VALUE_CONTAINER = "abstract-abstract-param-control-multi-value-container-control";
-    /**
      * The constant ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW.
      */
     String ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW = "abstract-param-control-param-name-single-row";
@@ -291,6 +287,10 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER.
      */
     String ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER = "abstract-param-control-input-container";
+    /**
+     * The constant ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER.
+     */
+    String ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER = "abstract-param-control-short-input-container";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_CHECK_BOX.
      */
@@ -319,14 +319,6 @@ public interface CSSClasses {
      * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL.
      */
     String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL = "abstract-param-control-number-label";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_2.
-     */
-    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_2 = "abstract-param-control-number-label-2";
-    /**
-     * The constant ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_3.
-     */
-    String ABSTRACT_PARAM_CONTROL_NUMBER_LABEL_3 = "abstract-param-control-number-label-3";
     /**
      * The constant ABSTRACT_PARAM_CONTROL_INFLUENCER.
      */

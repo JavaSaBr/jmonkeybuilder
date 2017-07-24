@@ -28,6 +28,7 @@
 
     -var-default-label-height: 22px;
     -var-default-field-height: 26px;
+    -var-default-inner-field-height: 22px;
     -var-default-cell-height: 22px;
     -var-default-toolbar-button-size: 24px;
 }

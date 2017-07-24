@@ -750,7 +750,24 @@
 }
 
 .abstract-param-control-input-container {
+    -fx-alignment: center;
+    -fx-max-height: -var-default-field-height;
     -fx-padding: 0px 0px 0px 6px;
+}
+
+.abstract-param-control-short-input-container {
+    -fx-alignment: center;
+    -fx-max-height: -var-default-field-height;
+    -fx-padding: 0px 0px 0px 0px;
+}
+
+.abstract-param-control-short-input-container:focused {
+    -fx-padding: -1px -1px -1px -1px;
+}
+
+.abstract-param-control-short-input-container > .text-field {
+    -fx-min-height: -var-default-inner-field-height;
+    -fx-max-height: -var-default-inner-field-height;
 }
 
 .abstract-param-control-param-color-picker {
@@ -778,24 +795,6 @@
 .abstract-param-control-number-label {
     -fx-min-height: -var-default-field-height;
     -fx-min-width: 16px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-    -fx-text-alignment: right;
-}
-
-.abstract-param-control-number-label-2 {
-    -fx-min-height: -var-default-field-height;
-    -fx-min-width: 28px;
-    -fx-pref-width: -fx-min-width;
-    -fx-max-width: -fx-min-width;
-    -fx-alignment: center-right;
-    -fx-text-alignment: right;
-}
-
-.abstract-param-control-number-label-3 {
-    -fx-min-height: -var-default-field-height;
-    -fx-min-width: 38px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;

@@ -70,8 +70,9 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         FXUtils.addClassesTo(gridPane, CSSClasses.DEF_GRID_PANE, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
                 CSSClasses.TRANSPARENT_TEXT_FIELD);
-
         FXUtils.addToPane(gridPane, this);
+
+        UIUtils.addFocusBinding(gridPane, xField, yField, zField);
     }
 
     /**
