@@ -7,7 +7,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,40 +53,40 @@ public class Vector3fInterpolationElement<P extends InterpolatedParticleInfluenc
     @Override
     protected Parent createEditableControl() {
 
-        final Label xLabel = new Label("x:");
-        final Label yLabel = new Label("y:");
-        final Label zLabel = new Label("z:");
+        final HBox container = new HBox();
+        container.prefWidthProperty().bind(widthProperty().multiply(0.4));
 
         xField = new FloatTextField();
         xField.setMinMax(getMinValue(), getMaxValue());
+        xField.prefWidthProperty().bind(container.widthProperty().multiply(0.33));
         xField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
         yField = new FloatTextField();
         yField.setMinMax(getMinValue(), getMaxValue());
+        yField.prefWidthProperty().bind(container.widthProperty().multiply(0.33));
         yField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
         zField = new FloatTextField();
         zField.setMinMax(getMinValue(), getMaxValue());
+        zField.prefWidthProperty().bind(container.widthProperty().multiply(0.33));
         zField.addChangeListener((observable, oldValue, newValue) -> processChange());
 
-        final HBox container = new HBox(xLabel, xField, yLabel, yField, zLabel, zField);
+        FXUtils.addToPane(xField, container);
+        FXUtils.addToPane(yField, container);
+        FXUtils.addToPane(zField, container);
 
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
-
-        xField.prefWidthProperty().bind(container.widthProperty().divide(4));
-        yField.prefWidthProperty().bind(container.widthProperty().divide(4));
-        zField.prefWidthProperty().bind(container.widthProperty().divide(4));
-
-        container.prefWidthProperty().bind(widthProperty().multiply(0.5));
+        FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
 
         return container;
     }
 
+    @NotNull
     @Override
-    public boolean isNeedEditableLabel() {
-        return false;
+    protected String getEditableTitle() {
+        return "xyz";
     }
 
     /**

@@ -7,7 +7,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,42 +56,42 @@ public class DestinationWeightInterpolationElement extends InterpolationElement<
     @Override
     protected Parent createEditableControl() {
 
-        final Label xLabel = new Label("x:");
-        final Label yLabel = new Label("y:");
-        final Label zLabel = new Label("z:");
-        final Label weightLabel = new Label("w:");
+        final HBox container = new HBox();
+        container.prefWidthProperty().bind(widthProperty().multiply(0.5));
 
         xField = new FloatTextField();
+        xField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
         xField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
 
         yField = new FloatTextField();
+        yField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
         yField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
 
         zField = new FloatTextField();
+        zField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
         zField.addChangeListener((observable, oldValue, newValue) -> processDestinationChange());
 
         weightField = new FloatTextField();
+        weightField.prefWidthProperty().bind(container.widthProperty().divide(0.25));
         weightField.addChangeListener((observable, oldValue, newValue) -> processWeightChange());
 
-        final HBox container = new HBox(xLabel, xField, yLabel, yField, zLabel, zField, weightLabel, weightField);
+        FXUtils.addToPane(xField, container);
+        FXUtils.addToPane(yField, container);
+        FXUtils.addToPane(zField, container);
+        FXUtils.addToPane(weightField, container);
 
-        xField.prefWidthProperty().bind(container.widthProperty().divide(6));
-        yField.prefWidthProperty().bind(container.widthProperty().divide(6));
-        zField.prefWidthProperty().bind(container.widthProperty().divide(6));
-        weightField.prefWidthProperty().bind(container.widthProperty().divide(6));
-
-        FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
-        FXUtils.addClassTo(xLabel, yLabel, zLabel, weightLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassTo(xField, yField, zField, weightField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD);
-
-        container.prefWidthProperty().bind(widthProperty().multiply(0.6));
+        FXUtils.addClassesTo(xField, yField, zField, weightField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
+                CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_SHORT_INPUT_CONTAINER);
 
         return container;
     }
 
+    @NotNull
     @Override
-    public boolean isNeedEditableLabel() {
-        return false;
+    protected String getEditableTitle() {
+        return "xyzw";
     }
 
     /**

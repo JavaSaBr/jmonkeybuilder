@@ -4,10 +4,13 @@ import static org.apache.http.impl.client.HttpClients.createMinimal;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.Config;
-import com.ss.editor.util.AppVersion;
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.plugin.Version;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Hyperlink;
 import org.apache.commons.io.IOUtils;
@@ -17,8 +20,6 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class CheckNewVersionTask implements Runnable {
                     .trim()
                     .replace("v.", "");
 
-            if (Config.APP_VERSION.compareTo(new AppVersion(targetVersion)) <= 0) {
+            if (Config.APP_VERSION.compareTo(new Version(targetVersion)) <= 0) {
                 return;
             }
 
@@ -89,7 +90,7 @@ public class CheckNewVersionTask implements Runnable {
                 final Hyperlink hyperlink = new Hyperlink(Messages.CHECK_NEW_VERSION_DIALOG_HYPERLINK + targetLink);
                 hyperlink.setOnAction(event -> hostServices.showDocument(targetLink));
 
-                final Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                final Alert alert = new Alert(AlertType.INFORMATION);
                 alert.setTitle(Messages.CHECK_NEW_VERSION_DIALOG_TITLE);
                 alert.setHeaderText(Messages.CHECK_NEW_VERSION_DIALOG_HEADER_TEXT + targetVersion);
 

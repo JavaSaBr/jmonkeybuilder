@@ -2,12 +2,12 @@ package com.ss.editor.config;
 
 import com.ss.editor.Editor;
 import com.ss.editor.document.DocumentConfig;
-import com.ss.editor.util.AppVersion;
 import com.ss.editor.util.EditorUtil;
-import org.jetbrains.annotations.NotNull;
+import com.ss.rlib.plugin.Version;
 import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.os.OperatingSystem;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -36,7 +36,7 @@ public abstract class Config {
      * The constant APP_VERSION.
      */
     @NotNull
-    public static final AppVersion APP_VERSION = new AppVersion("0.9.10");
+    public static final Version APP_VERSION = new Version("0.9.11");
 
     /**
      * The constant STRING_VERSION.
