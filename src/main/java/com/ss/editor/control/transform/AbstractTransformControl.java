@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.collision.CollisionResult;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
-import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.AbstractControl;
@@ -134,15 +133,6 @@ public abstract class AbstractTransformControl extends AbstractControl implement
         } else if (geometryName.contains(getNodeZ())) {
             editorControl.setPickedAxis(PickedAxis.Z);
         }
-    }
-
-    @NotNull
-    protected Vector3f getPickedVector(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis) {
-        if (pickedAxis == PickedAxis.Y) {
-            return Vector3f.UNIT_Y;
-        } else if (pickedAxis == PickedAxis.Z) {
-            return Vector3f.UNIT_Z;
-        } else return Vector3f.UNIT_X;
     }
 
     @NotNull

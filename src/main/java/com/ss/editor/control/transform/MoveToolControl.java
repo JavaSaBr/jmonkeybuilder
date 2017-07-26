@@ -15,7 +15,6 @@ import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.util.LocalObjects;
-import com.ss.rlib.geom.util.AngleUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -198,27 +197,18 @@ public class MoveToolControl extends AbstractTransformControl {
         final Vector3f contactPoint = result.getContactPoint(); // get a point of collisionPlane
 
         //set new deltaVector if it's not set
-        if (editorControl.getDeltaVector() == null) {
-            editorControl.setDeltaVector(translation.subtract(contactPoint));
-        }
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("contactPoint " + contactPoint);
+        if (Float.isNaN(editorControl.getTransformDeltaX())) {
+            editorControl.setTransformDeltaX(translation.getX() - contactPoint.getX());
+            editorControl.setTransformDeltaY(translation.getY() - contactPoint.getY());
+            editorControl.setTransformDeltaZ(translation.getZ() - contactPoint.getZ());
         }
 
         // add delta of the picked place
-        contactPoint.addLocal(editorControl.getDeltaVector());
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("contactPoint with delta " + contactPoint);
-        }
+        contactPoint.addLocal(editorControl.getTransformDeltaX(), editorControl.getTransformDeltaY(),
+                editorControl.getTransformDeltaZ());
 
         final Vector3f difference = contactPoint.subtract(translation, local.nextVector());
         float distanceToContactPoint = translation.distance(contactPoint);
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("distanceToContactPoint " + distanceToContactPoint);
-        }
 
         // Picked vector
         final PickedAxis pickedAxis = editorControl.getPickedAxis();
@@ -226,46 +216,22 @@ public class MoveToolControl extends AbstractTransformControl {
         final Vector3f pickedVector = transformationMode.getPickedVector(transform, pickedAxis, camera);
         final Quaternion rotation = parentNode.getLocalRotation();
 
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("pickedVector " + pickedVector + ", rotation " + rotation);
-        }
-
         // the main formula for constraint axis
         final Vector3f normalizedDifference = local.nextVector(difference).normalizeLocal();
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("normalizedDifference " + normalizedDifference);
-        }
 
         float angle = normalizedDifference.angleBetween(rotation.mult(pickedVector, local.nextVector())
                 .normalizeLocal());
 
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("angle " + angle + ", degree " + AngleUtils.radiansToDegree(angle));
-        }
-
         float distanceVec2 = distanceToContactPoint * FastMath.sin(angle);
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("distanceVec2 " + distanceVec2);
-        }
 
         // fix if angle>90 degrees
         Vector3f perpendicularVec = collisionPlane.getLocalRotation()
                 .mult(Vector3f.UNIT_X, local.nextVector())
                 .multLocal(distanceVec2);
 
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("perpendicularVec " + perpendicularVec);
-        }
-
         Vector3f checkVec = contactPoint.add(perpendicularVec, local.nextVector())
                 .subtractLocal(contactPoint)
                 .normalizeLocal();
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("checkVec " + checkVec);
-        }
 
         float angleCheck = checkVec.angleBetween(normalizedDifference);
 
@@ -273,16 +239,8 @@ public class MoveToolControl extends AbstractTransformControl {
             perpendicularVec.negateLocal();
         }
 
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("perpendicularVec2 " + perpendicularVec);
-        }
-
         // find distance to move
         float distanceToMove = contactPoint.addLocal(perpendicularVec).distance(translation);
-
-        if (Config.DEV_TRANSFORMS_DEBUG) {
-            System.out.println("distanceToMove " + distanceToMove);
-        }
 
         // invert value if it's needed for negative movement
         if (angle > FastMath.HALF_PI) {

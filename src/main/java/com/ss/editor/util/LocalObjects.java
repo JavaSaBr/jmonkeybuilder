@@ -170,6 +170,19 @@ public class LocalObjects {
     }
 
     /**
+     * Gets the next free vector.
+     *
+     * @param x the X value.
+     * @param y the Y value.
+     * @param z the Z value.
+     * @return the next free vector.
+     */
+    @NotNull
+    public Vector3f nextVector(final float x, final float y, final float z) {
+        return vectorBuffer.next().set(x, y, z);
+    }
+
+    /**
      * Next vector 2 f vector 2 f.
      *
      * @return the next free vector.

@@ -1,12 +1,12 @@
 package com.ss.editor.control.transform;
 
+import static com.ss.editor.util.GeomUtils.*;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.ss.editor.util.GeomUtils;
 import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,6 +98,20 @@ public interface EditorTransformSupport {
                 child.setLocalRotation(transform.getRotation());
             }
 
+            @NotNull
+            @Override
+            protected Vector3f getScaleAxis(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
+                                               @NotNull final Camera camera) {
+
+                final LocalObjects local = LocalObjects.get();
+
+                if (pickedAxis == PickedAxis.Y) {
+                    return getUp(transform.getRotation(), local.nextVector());
+                } else if (pickedAxis == PickedAxis.Z) {
+                    return getDirection(transform.getRotation(), local.nextVector());
+                } else return getLeft(transform.getRotation(), local.nextVector());
+            }
+
             @Override
             public void prepareToMove(@NotNull final Node parent, @NotNull final Node child,
                                       @NotNull final Transform transform, @NotNull final Camera camera) {
@@ -125,13 +139,18 @@ public interface EditorTransformSupport {
                 child.setLocalRotation(transform.getRotation());
             }
 
+            @NotNull
             @Override
-            public void prepareToMove(@NotNull final Node parent, @NotNull final Node child,
-                                      @NotNull final Transform transform, @NotNull final Camera camera) {
-                parent.setLocalRotation(camera.getRotation());
-                parent.setLocalTranslation(transform.getTranslation());
-                child.setLocalTranslation(Vector3f.ZERO);
-                child.setLocalRotation(Quaternion.IDENTITY);
+            protected Vector3f getScaleAxis(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
+                                               @NotNull final Camera camera) {
+
+                final LocalObjects local = LocalObjects.get();
+
+                if (pickedAxis == PickedAxis.Y) {
+                    return getUp(camera.getRotation(), local.nextVector());
+                } else if (pickedAxis == PickedAxis.Z) {
+                    return getDirection(camera.getRotation(), local.nextVector());
+                } else return getLeft(camera.getRotation(), local.nextVector());
             }
 
             @NotNull
@@ -142,12 +161,19 @@ public interface EditorTransformSupport {
                 final LocalObjects local = LocalObjects.get();
 
                 if (pickedAxis == PickedAxis.Y) {
-                    return GeomUtils.getUp(camera.getRotation(), local.nextVector());
+                    return getUp(camera.getRotation(), local.nextVector());
                 } else if (pickedAxis == PickedAxis.Z) {
-                    return GeomUtils.getDirection(camera.getRotation(), local.nextVector());
-                } else {
-                    return GeomUtils.getLeft(camera.getRotation(), local.nextVector());
-                }
+                    return getDirection(camera.getRotation(), local.nextVector());
+                } else return getLeft(camera.getRotation(), local.nextVector());
+            }
+
+            @Override
+            public void prepareToMove(@NotNull final Node parent, @NotNull final Node child,
+                                      @NotNull final Transform transform, @NotNull final Camera camera) {
+                parent.setLocalRotation(camera.getRotation());
+                parent.setLocalTranslation(transform.getTranslation());
+                child.setLocalTranslation(Vector3f.ZERO);
+                child.setLocalRotation(Quaternion.IDENTITY);
             }
 
             @NotNull
@@ -178,7 +204,7 @@ public interface EditorTransformSupport {
         }
 
         /**
-         * Apply rotations to nodes to calculate transformations.
+         * Prepare nodes to rotate.
          *
          * @param parent    the parent node.
          * @param child     the child node.
@@ -192,7 +218,21 @@ public interface EditorTransformSupport {
         }
 
         /**
-         * Apply positions to nodes to calculate transformations.
+         * Prepare nodes to scale.
+         *
+         * @param parent    the parent node.
+         * @param child     the child node.
+         * @param transform the base transform.
+         * @param camera    the camera.
+         */
+        public void prepareToScale(@NotNull final Node parent, @NotNull final Node child,
+                                   @NotNull final Transform transform, @NotNull final Camera camera) {
+            parent.setLocalScale(transform.getScale());
+            child.setLocalScale(Vector3f.UNIT_XYZ);
+        }
+
+        /**
+         * Prepare nodes to move.
          *
          * @param parent    the parent node.
          * @param child     the child node.
@@ -227,15 +267,22 @@ public interface EditorTransformSupport {
         }
 
         /**
-         * Gets the rotation to calculate scale transformations.
+         * Get a vector to calculate scaling by the axis.
          *
-         * @param spatial the spatial.
-         * @param camera  the camera.
-         * @return the target rotation.
+         * @param transform  the base transform.
+         * @param pickedAxis the picked Axis.
+         * @param camera     the camera.
+         * @return the axis vector.
          */
         @NotNull
-        public Quaternion getScaleRotation(@NotNull final Spatial spatial, @NotNull final Camera camera) {
-            return spatial.getWorldRotation();
+        protected Vector3f getScaleAxis(@NotNull final Transform transform, @NotNull final PickedAxis pickedAxis,
+                                        @NotNull final Camera camera) {
+
+            if (pickedAxis == PickedAxis.Y) {
+                return Vector3f.UNIT_Y;
+            } else if (pickedAxis == PickedAxis.Z) {
+                return Vector3f.UNIT_Z;
+            } else return Vector3f.UNIT_X;
         }
     }
 
@@ -278,19 +325,46 @@ public interface EditorTransformSupport {
     Node getCollisionPlane();
 
     /**
-     * Sets delta vector.
+     * Set delta of transformation.
      *
-     * @param deltaVector the delta vector.
+     * @param transformDeltaX the x delta.
      */
-    void setDeltaVector(@Nullable final Vector3f deltaVector);
+    void setTransformDeltaX(float transformDeltaX);
 
     /**
-     * Gets delta vector.
+     * Set delta of transformation.
      *
-     * @return the delta vector.
+     * @param transformDeltaY the y delta.
      */
-    @Nullable
-    Vector3f getDeltaVector();
+    void setTransformDeltaY(float transformDeltaY);
+
+    /**
+     * Set delta of transformation.
+     *
+     * @param transformDeltaZ the z delta.
+     */
+    void setTransformDeltaZ(float transformDeltaZ);
+
+    /**
+     * Get delta of transformation.
+     *
+     * @return the delta x.
+     */
+    float getTransformDeltaX();
+
+    /**
+     * Get delta of transformation.
+     *
+     * @return the delta y.
+     */
+    float getTransformDeltaY();
+
+    /**
+     * Get delta of transformation.
+     *
+     * @return the delta z.
+     */
+    float getTransformDeltaZ();
 
     /**
      * Gets to transform.

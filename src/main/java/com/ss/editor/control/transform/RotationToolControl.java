@@ -75,16 +75,15 @@ public class RotationToolControl extends AbstractTransformControl {
         final Vector2f selectedCoords = local.nextVector(transformOnScreen.getX(), transformOnScreen.getY());
 
         //set new deltaVector if it's not set
-        if (editorControl.getDeltaVector() == null) {
-            final Vector3f delta = new Vector3f(selectedCoords.getX(), selectedCoords.getY(), 0);
-            delta.subtractLocal(cursorPos.getX(), cursorPos.getY(), 0);
-            editorControl.setDeltaVector(delta);
+        if (Float.isNaN(editorControl.getTransformDeltaX())) {
+            editorControl.setTransformDeltaX(selectedCoords.getX() - cursorPos.getX());
+            editorControl.setTransformDeltaY(selectedCoords.getY() - cursorPos.getY());
         }
 
         // Picked vector
         final TransformationMode transformationMode = editorControl.getTransformationMode();
         final Vector3f pickedVector = transformationMode.getPickedVector(transform, editorControl.getPickedAxis(), camera);
-        final Vector3f deltaVector = notNull(editorControl.getDeltaVector());
+        final Vector3f deltaVector = local.nextVector(editorControl.getTransformDeltaX(), editorControl.getTransformDeltaY(), 0F);
 
         // rotate according to angle
         final Vector2f cursorDirection = selectedCoords.subtractLocal(cursorPos).normalizeLocal();

@@ -253,8 +253,9 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     /**
      * The difference between the previous point of transformation and new.
      */
-    @Nullable
-    private Vector3f deltaVector;
+    private float transformDeltaX;
+    private float transformDeltaY;
+    private float transformDeltaZ;
 
     /**
      * The plane for calculation transforms.
@@ -338,6 +339,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         setShowGrid(true);
         setTransformMode(TransformationMode.GLOBAL);
         setTransformType(TransformType.MOVE_TOOL);
+        setTransformDeltaX(Float.NaN);
     }
 
     @Override
@@ -642,14 +644,33 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    public void setDeltaVector(@Nullable final Vector3f deltaVector) {
-        this.deltaVector = deltaVector;
+    public void setTransformDeltaX(final float transformDeltaX) {
+        this.transformDeltaX = transformDeltaX;
     }
 
-    @Nullable
     @Override
-    public Vector3f getDeltaVector() {
-        return deltaVector;
+    public void setTransformDeltaY(final float transformDeltaY) {
+        this.transformDeltaY = transformDeltaY;
+    }
+
+    @Override
+    public void setTransformDeltaZ(final float transformDeltaZ) {
+        this.transformDeltaZ = transformDeltaZ;
+    }
+
+    @Override
+    public float getTransformDeltaX() {
+        return transformDeltaX;
+    }
+
+    @Override
+    public float getTransformDeltaY() {
+        return transformDeltaY;
+    }
+
+    @Override
+    public float getTransformDeltaZ() {
+        return transformDeltaZ;
     }
 
     @Override
@@ -1337,7 +1358,9 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         final Transform oldValue = originalTransform.clone();
         final Transform newValue = toTransform.getLocalTransform().clone();
 
-        final ModelPropertyOperation<Spatial, Transform> operation = new ModelPropertyOperation<>(toTransform, "transform", newValue, oldValue);
+        final ModelPropertyOperation<Spatial, Transform> operation =
+                new ModelPropertyOperation<>(toTransform, "transform", newValue, oldValue);
+
         operation.setApplyHandler(Spatial::setLocalTransform);
 
         final T fileEditor = getFileEditor();
@@ -1345,7 +1368,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         setPickedAxis(PickedAxis.NONE);
         setActiveTransform(false);
-        setDeltaVector(null);
+        setTransformDeltaX(Float.NaN);
         updateTransformCenter();
     }
 
