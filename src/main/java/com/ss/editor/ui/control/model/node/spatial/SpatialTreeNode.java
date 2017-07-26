@@ -13,7 +13,7 @@ import com.jme3.light.LightList;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
-import com.ss.editor.control.transform.SceneEditorControl;
+import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
@@ -81,7 +81,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     @Override
     public boolean canRemove() {
         final Node parent = getElement().getParent();
-        return parent != null && parent.getUserData(SceneEditorControl.class.getName()) != Boolean.TRUE;
+        return parent != null && parent.getUserData(EditorTransformSupport.class.getName()) != Boolean.TRUE;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog.terrain;
 
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;

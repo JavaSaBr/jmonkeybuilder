@@ -417,7 +417,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
 
-        FileEditor editor = null;
+        FileEditor editor;
         try {
 
             final EditorDescription description = event.getDescription();

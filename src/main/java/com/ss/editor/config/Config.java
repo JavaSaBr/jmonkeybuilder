@@ -71,6 +71,10 @@ public abstract class Config {
      */
     public static final boolean DEV_CAMERA_DEBUG;
     /**
+     * The flag to enable debug of transforms controls.
+     */
+    public static final boolean DEV_TRANSFORMS_DEBUG;
+    /**
      * Flag is for showing debug of the JavaFX.
      */
     public static final boolean DEV_DEBUG_JFX;
@@ -92,6 +96,7 @@ public abstract class Config {
 
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
         DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
+        DEV_TRANSFORMS_DEBUG = vars.getBoolean("Dev.transformsDebug", false);
         DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);

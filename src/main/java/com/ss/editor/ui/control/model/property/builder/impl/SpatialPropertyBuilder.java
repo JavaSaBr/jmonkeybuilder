@@ -1,5 +1,7 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.SKY_NODE_KEY;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -9,20 +11,19 @@ import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
 import com.ss.editor.Messages;
-import com.ss.editor.control.transform.SceneEditorControl;
+import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
-import com.ss.editor.extension.scene.SceneLayer;
-import com.ss.editor.extension.scene.SceneNode;
-import javafx.scene.layout.VBox;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -238,8 +239,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
 
     private boolean isNeedSkip(@NotNull final String key) {
         if (SceneLayer.KEY.equals(key)) return true;
-        if (SceneEditorControl.LOADED_MODEL_KEY.equals(key)) return true;
-        if (SceneEditorControl.SKY_NODE_KEY.equals(key)) return true;
+        if (LOADED_MODEL_KEY.equals(key)) return true;
+        if (SKY_NODE_KEY.equals(key)) return true;
         return false;
     }
 

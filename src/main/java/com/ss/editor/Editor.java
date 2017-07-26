@@ -138,7 +138,9 @@ public class Editor extends JmeToJFXApplication {
             run(() -> createDirectories(logFolder));
         }
 
-        LoggerManager.addListener(new FolderFileListener(logFolder));
+        if (!LoggerLevel.DEBUG.isEnabled()) {
+            LoggerManager.addListener(new FolderFileListener(logFolder));
+        }
     }
 
     /**

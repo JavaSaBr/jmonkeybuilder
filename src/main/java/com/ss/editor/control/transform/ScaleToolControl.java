@@ -1,9 +1,7 @@
 package com.ss.editor.control.transform;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.Objects.requireNonNull;
-
-import com.jme3.collision.CollisionResult;
+import static java.lang.Math.abs;
 import com.jme3.input.InputManager;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Transform;
@@ -12,165 +10,132 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.AbstractControl;
 import com.ss.editor.Editor;
-import com.ss.editor.control.transform.SceneEditorControl.PickedAxis;
-
+import com.ss.editor.config.Config;
+import com.ss.editor.control.transform.EditorTransformSupport.PickedAxis;
+import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
+import com.ss.editor.util.GeomUtils;
+import com.ss.editor.util.LocalObjects;
 import org.jetbrains.annotations.NotNull;
-
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
 
 /**
  * The implementation of the scaling control.
  *
  * @author JavaSaBr
  */
-public class ScaleToolControl extends AbstractControl implements TransformControl {
+public class ScaleToolControl extends AbstractTransformControl {
 
-    /**
-     * The constant LOGGER.
-     */
     @NotNull
-    protected static final Logger LOGGER = LoggerManager.getLogger(MoveToolControl.class);
-
     private static final String NODE_SCALE_X = "scale_x";
+
+    @NotNull
     private static final String NODE_SCALE_Y = "scale_y";
+
+    @NotNull
     private static final String NODE_SCALE_Z = "scale_z";
 
     @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
-     * The scene editor controller.
-     */
-    @NotNull
-    private final SceneEditorControl editorControl;
-
-    /**
-     * The collision plane.
-     */
-    @NotNull
-    private final Node collisionPlane;
-
-    /**
      * Instantiates a new Scale tool control.
      *
      * @param editorControl the editor control
      */
-    public ScaleToolControl(@NotNull final SceneEditorControl editorControl) {
-        this.editorControl = editorControl;
-        this.collisionPlane = notNull(editorControl.getCollisionPlane());
+    public ScaleToolControl(@NotNull final EditorTransformSupport editorControl) {
+        super(editorControl);
     }
 
-    /**
-     * @return the collision plane.
-     */
     @NotNull
-    private Node getCollisionPlane() {
-        return collisionPlane;
-    }
-
-    /**
-     * @return the scene editor controller.
-     */
-    @NotNull
-    private SceneEditorControl getEditorControl() {
-        return editorControl;
-    }
-
     @Override
-    public void setCollisionPlane(@NotNull final CollisionResult colResult) {
+    protected String getNodeY() {
+        return NODE_SCALE_Y;
+    }
 
-        final Camera camera = EDITOR.getCamera();
+    @NotNull
+    @Override
+    protected String getNodeX() {
+        return NODE_SCALE_X;
+    }
 
-        final SceneEditorControl editorControl = getEditorControl();
-        final Transform transformCenter = editorControl.getTransformCenter();
-
-        if (transformCenter == null) {
-            LOGGER.warning(this, "not found transform center for the " + editorControl);
-            return;
-        }
-
-        // Set PickedAxis
-        final Geometry geometry = colResult.getGeometry();
-        final String geometryName = geometry.getName();
-
-        if (geometryName.contains(NODE_SCALE_X)) {
-            editorControl.setPickedAxis(PickedAxis.X);
-        } else if (geometryName.contains(NODE_SCALE_Y)) {
-            editorControl.setPickedAxis(PickedAxis.Y);
-        } else if (geometryName.contains(NODE_SCALE_Z)) {
-            editorControl.setPickedAxis(PickedAxis.Z);
-        }
-
-        // set the collision Plane location and rotation
-        final Node collisionPlane = getCollisionPlane();
-        collisionPlane.setLocalTranslation(transformCenter.getTranslation());
-
-        final Quaternion rotation = collisionPlane.getLocalRotation();
-        rotation.lookAt(camera.getDirection(), Vector3f.UNIT_Y); //equals to angleZ
-
-        collisionPlane.setLocalRotation(rotation);
+    @NotNull
+    @Override
+    protected String getNodeZ() {
+        return NODE_SCALE_Z;
     }
 
     @Override
     public void processTransform() {
 
-        final SceneEditorControl editorControl = getEditorControl();
+        final EditorTransformSupport editorControl = getEditorControl();
 
-        final Camera camera = EDITOR.getCamera();
+        final LocalObjects local = LocalObjects.get();
+        final Camera camera = editorControl.getCamera();
         final InputManager inputManager = EDITOR.getInputManager();
-        final Transform transformCenter = requireNonNull(editorControl.getTransformCenter());
+        final Transform transform = notNull(editorControl.getTransformCenter());
 
         // cursor position and selected position vectors
-        final Vector2f cursorPos = new Vector2f(inputManager.getCursorPosition());
-        final Vector3f vectorScreenSelected = camera.getScreenCoordinates(transformCenter.getTranslation());
-        final Vector2f selectedCoords = new Vector2f(vectorScreenSelected.getX(), vectorScreenSelected.getY());
+        final Vector2f cursorPos = inputManager.getCursorPosition();
+        final Vector3f transformOnScreen = camera.getScreenCoordinates(transform.getTranslation(), local.nextVector());
+        final Vector2f selectedCoords = local.nextVector2f().set(transformOnScreen.getX(), transformOnScreen.getY());
 
         //set new deltaVector if it's not set (scale tool stores position of a cursor)
         if (editorControl.getDeltaVector() == null) {
-            final Vector2f deltaVecPos = new Vector2f(cursorPos.getX(), cursorPos.getY());
-            editorControl.setDeltaVector(new Vector3f(deltaVecPos.getX(), deltaVecPos.getY(), 0));
+            editorControl.setDeltaVector(new Vector3f(cursorPos.getX(), cursorPos.getY(), 0));
         }
 
         // Picked vector
-        PickedAxis pickedAxis = editorControl.getPickedAxis();
-        Vector3f pickedVec = Vector3f.UNIT_X;
-
-        if (pickedAxis == PickedAxis.Y) {
-            pickedVec = Vector3f.UNIT_Y;
-        } else if (pickedAxis == PickedAxis.Z) {
-            pickedVec = Vector3f.UNIT_Z;
-        }
+        final Spatial toTransform = notNull(editorControl.getToTransform());
+        final PickedAxis pickedAxis = editorControl.getPickedAxis();
+        final Vector3f pickedVec = getPickedVector(toTransform, pickedAxis);
 
         // scale according to distance
         final Vector3f deltaVector = editorControl.getDeltaVector();
-        final Vector2f delta2d = new Vector2f(deltaVector.getX(), deltaVector.getY());
-        final Vector3f baseScale = transformCenter.getScale().clone(); // default scale
+        final Vector2f delta2d = local.nextVector2f().set(deltaVector.getX(), deltaVector.getY());
+        final Vector3f baseScale = local.nextVector().set(transform.getScale()); // default scale
 
         // scale object
         float disCursor = cursorPos.distance(selectedCoords);
         float disDelta = delta2d.distance(selectedCoords);
-        float scaleValue = cursorPos.distance(delta2d);
-        scaleValue = TransformConstraint.constraintValue(scaleValue * 0.007f, TransformConstraint.getScaleConstraint());
-
-        Vector3f scaleVector = null;
+        float scaleValue = cursorPos.distance(delta2d) * 0.007f;
 
         if (disCursor > disDelta) {
-            scaleVector = baseScale.add(pickedVec.mult(scaleValue));
+             baseScale.addLocal(pickedVec.mult(scaleValue));
         } else {
             scaleValue = Math.min(scaleValue, 0.999f); // remove negateve values
-            scaleVector = baseScale.subtract(pickedVec.mult((scaleValue)));
+            baseScale.subtractLocal(pickedVec.mult((scaleValue)));
         }
 
-        final Spatial toTransform = requireNonNull(editorControl.getToTransform());
-        toTransform.setLocalScale(scaleVector);
-
+        toTransform.setLocalScale(baseScale);
         editorControl.notifyTransformed(toTransform);
+    }
+
+    @NotNull
+    private Vector3f getPickedVector(@NotNull final Spatial spatial, @NotNull final PickedAxis pickedAxis) {
+
+        final LocalObjects local = LocalObjects.get();
+        final EditorTransformSupport editorControl = getEditorControl();
+        final TransformationMode transformationMode = editorControl.getTransformationMode();
+        final Quaternion rotation = transformationMode.getScaleRotation(spatial, editorControl.getCamera());
+
+        final Vector3f result = local.nextVector();
+
+        if (pickedAxis == PickedAxis.Y) {
+            GeomUtils.getUp(rotation, result);
+        } else if (pickedAxis == PickedAxis.Z) {
+            GeomUtils.getDirection(rotation, result);
+        } else {
+            GeomUtils.getLeft(rotation, result);
+        }
+
+        result.set(abs(result.getX()), abs(result.getY()), abs(result.getZ()));
+
+        if (Config.DEV_TRANSFORMS_DEBUG) {
+            System.out.println("target scale rotation " + rotation + ", result vector " + result);
+        }
+
+        return result;
     }
 
     @Override

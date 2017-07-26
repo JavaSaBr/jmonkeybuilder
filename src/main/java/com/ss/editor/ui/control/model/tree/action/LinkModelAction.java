@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static java.util.Objects.requireNonNull;
@@ -12,6 +12,7 @@ import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -23,12 +24,11 @@ import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
-import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 import java.nio.file.Path;
 import java.util.function.Predicate;

@@ -1,11 +1,12 @@
 package com.ss.editor.ui.component.editor.impl.scene;
 
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
 import com.jme3.asset.ModelKey;
@@ -29,7 +30,8 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
-import com.ss.editor.control.transform.SceneEditorControl.TransformType;
+import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
+import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.editor.ModelEditingProvider;
@@ -71,10 +73,9 @@ import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
@@ -115,6 +116,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         ACCEPTED_FILES.add(FileExtensions.JME_OBJECT);
     }
 
+    @NotNull
+    private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
+
     /**
      * The 3D part of this editor.
      */
@@ -150,6 +154,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @Nullable
     private Consumer<Object> selectionNodeHandler;
+
+    /**
+     * The list of transform modes.
+     */
+    @Nullable
+    private ComboBox<TransformationMode> transformModeComboBox;
 
     /**
      * The model tree.
@@ -503,6 +513,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         gridButton.setSelected(editorState.isEnableGrid());
         statisticsButton.setSelected(editorState.isShowStatistics());
         selectionButton.setSelected(editorState.isEnableSelection());
+        transformModeComboBox.getSelectionModel()
+                .select(TransformationMode.valueOf(editorState.getTransformationMode()));
 
         final Array<EditingComponent> components = editingComponentContainer.getComponents();
         components.forEach(editorState, ProcessingComponent::loadState);
@@ -982,6 +994,21 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     /**
      * Switch transformation mode.
      */
+    private void changeTransformMode(@NotNull final TransformationMode transformationMode) {
+
+        final MA editor3DState = getEditor3DState();
+        editor3DState.setTransformMode(transformationMode);
+
+        final ES editorState = getEditorState();
+
+        if (editorState != null) {
+            editorState.setTransformationMode(transformationMode.ordinal());
+        }
+    }
+
+    /**
+     * Switch transformation type.
+     */
     private void updateTransformTool(@NotNull final TransformType transformType, @NotNull final Boolean newValue) {
 
         final MA editor3DState = getEditor3DState();
@@ -1023,6 +1050,20 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     protected void createToolbar(@NotNull final HBox container) {
+        createActions(container);
+
+        final Label transformModeLabel = new Label(Messages.MODEL_FILE_EDITOR_TRANSFORM_MODE + ":");
+
+        transformModeComboBox = new ComboBox<>(TRANSFORMATION_MODES);
+        transformModeComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> changeTransformMode(newValue));
+
+        FXUtils.addToPane(transformModeLabel, container);
+        FXUtils.addToPane(transformModeComboBox, container);
+    }
+
+    protected void createActions(@NotNull final HBox container) {
         FXUtils.addToPane(createSaveAction(), container);
 
         selectionButton = new ToggleButton();

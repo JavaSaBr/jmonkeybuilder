@@ -48,7 +48,7 @@ public class SizeInterpolationElement extends Vector3fInterpolationElement<SizeI
     }
 
     @Override
-    protected Vector3f getValue(final SizeInfluencer influencer) {
+    protected Vector3f getValue(@NotNull final SizeInfluencer influencer) {
         return influencer.getSize(getIndex());
     }
 }

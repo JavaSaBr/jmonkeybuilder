@@ -1,10 +1,12 @@
 package com.ss.editor.util;
 
 import static java.lang.Thread.currentThread;
+import com.jme3.collision.CollisionResults;
 import com.jme3.math.*;
 import com.ss.editor.EditorThread;
-import org.jetbrains.annotations.NotNull;
 import com.ss.rlib.util.CycleBuffer;
+import com.ss.rlib.util.pools.Reusable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The container with local objects.
@@ -62,6 +64,12 @@ public class LocalObjects {
     private final CycleBuffer<Ray> rayBuffer;
 
     /**
+     * The buffer of collision results.
+     */
+    @NotNull
+    private final CycleBuffer<ReusableCollisionResults> collisionResultsBuffer;
+
+    /**
      * The buffer of matrixes.
      */
     @NotNull
@@ -86,6 +94,8 @@ public class LocalObjects {
         this.matrix3fBuffer = new CycleBuffer<>(Matrix3f.class, SIZE, Matrix3f::new);
         this.matrixFloatBuffer = new CycleBuffer<>(float[].class, SIZE, () -> new float[16]);
         this.colorBuffer = new CycleBuffer<>(ColorRGBA.class, SIZE, ColorRGBA::new);
+        this.collisionResultsBuffer = new CycleBuffer<>(ReusableCollisionResults.class, SIZE,
+                ReusableCollisionResults::new, Reusable::free);
     }
 
     /**
@@ -109,13 +119,23 @@ public class LocalObjects {
     }
 
     /**
-     * Next ray ray.
+     * Next free ray.
      *
      * @return the next free ray.
      */
     @NotNull
     public Ray nextRay() {
         return rayBuffer.next();
+    }
+
+    /**
+     * Next free collision results.
+     *
+     * @return the next free collision results.
+     */
+    @NotNull
+    public CollisionResults nextCollisionResults() {
+        return collisionResultsBuffer.next();
     }
 
     /**
@@ -129,13 +149,24 @@ public class LocalObjects {
     }
 
     /**
-     * Next vector vector 3 f.
+     * Gets the next free vector.
      *
      * @return the next free vector.
      */
     @NotNull
     public Vector3f nextVector() {
         return vectorBuffer.next();
+    }
+
+    /**
+     * Gets the next free vector.
+     *
+     * @param vector3f to copy vector.
+     * @return the next free vector.
+     */
+    @NotNull
+    public Vector3f nextVector(@NotNull final Vector3f vector3f) {
+        return vectorBuffer.next().set(vector3f);
     }
 
     /**
@@ -146,6 +177,18 @@ public class LocalObjects {
     @NotNull
     public Vector2f nextVector2f() {
         return vector2fBuffer.next();
+    }
+
+    /**
+     * Gets the next free vector.
+     *
+     * @param x the X value.
+     * @param y the Y value.
+     * @return the next free vector.
+     */
+    @NotNull
+    public Vector2f nextVector(final float x, final float y) {
+        return vector2fBuffer.next().set(x, y);
     }
 
     /**

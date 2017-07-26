@@ -367,24 +367,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * Indicate that the bounding of this spatial has changed and that
-     * a refresh is required.
-     */
-    protected void setBoundRefresh() {
-        refreshFlags |= RF_BOUND;
-
-        Spatial p = parent;
-        while (p != null) {
-            if ((p.refreshFlags & RF_BOUND) != 0) {
-                return;
-            }
-
-            p.refreshFlags |= RF_BOUND;
-            p = p.parent;
-        }
-    }
-
-    /**
      * (Internal use only) Forces a refresh of the given types of data.
      *
      * @param transforms Refresh world transform based on parents'
@@ -449,6 +431,24 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
 
         return frustrumIntersects != Camera.FrustumIntersect.Outside;
+    }
+
+    /**
+     * Indicate that the bounding of this spatial has changed and that
+     * a refresh is required.
+     */
+    protected void setBoundRefresh() {
+        refreshFlags |= RF_BOUND;
+
+        Spatial p = parent;
+        while (p != null) {
+            if ((p.refreshFlags & RF_BOUND) != 0) {
+                return;
+            }
+
+            p.refreshFlags |= RF_BOUND;
+            p = p.parent;
+        }
     }
 
     /**

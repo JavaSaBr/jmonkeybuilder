@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.dialog.sky;
 
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.SKY_NODE_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -15,7 +16,6 @@ import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
-import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -699,7 +699,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
             final Spatial skyModel = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture,
                     southTexture, topTexture, bottomTexture, scale);
 
-            skyModel.setUserData(SceneEditorControl.SKY_NODE_KEY, Boolean.TRUE);
+            skyModel.setUserData(SKY_NODE_KEY, Boolean.TRUE);
 
             final TreeNode<?> parentNode = getParentNode();
             final Node parent = (Node) parentNode.getElement();
@@ -737,7 +737,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         EXECUTOR_MANAGER.addJMETask(() -> {
 
             final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
-            sky.setUserData(SceneEditorControl.SKY_NODE_KEY, Boolean.TRUE);
+            sky.setUserData(SKY_NODE_KEY, Boolean.TRUE);
 
             final TreeNode<?> parentNode = getParentNode();
             final Node parent = (Node) parentNode.getElement();

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.SKY_NODE_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
@@ -14,7 +15,6 @@ import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
-import com.ss.editor.control.transform.SceneEditorControl;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.state.editor.impl.model.ModelEditor3DState;
 import com.ss.editor.ui.Icons;
@@ -179,7 +179,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         if (!geometries.isEmpty()) {
             geometries.forEach(geometry -> {
-                if (geometry.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE) {
+                if (geometry.getUserData(SKY_NODE_KEY) == Boolean.TRUE) {
                     editor3DState.addCustomSky(geometry);
                 }
             });
@@ -196,16 +196,12 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     protected void createToolbar(@NotNull final HBox container) {
         super.createToolbar(container);
 
-        lightButton = new ToggleButton();
-        lightButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
-        lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
-        lightButton.setSelected(true);
-        lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
-
         final Label fastSkyLabel = new Label(Messages.MODEL_FILE_EDITOR_FAST_SKY + ":");
 
         fastSkyComboBox = new ComboBox<>();
-        fastSkyComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> changeFastSky(newValue));
+        fastSkyComboBox.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> changeFastSky(newValue));
 
         final ObservableList<String> skyItems = fastSkyComboBox.getItems();
         skyItems.addAll(FAST_SKY_LIST);
@@ -214,13 +210,25 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final Array<Path> additionalEnvs = resourceManager.getAdditionalEnvs();
         additionalEnvs.forEach(path -> skyItems.add(path.toString()));
 
+        FXUtils.addToPane(fastSkyLabel, container);
+        FXUtils.addToPane(fastSkyComboBox, container);
+    }
+
+    @Override
+    protected void createActions(@NotNull final HBox container) {
+        super.createActions(container);
+
+        lightButton = new ToggleButton();
+        lightButton.setTooltip(new Tooltip(Messages.SCENE_FILE_EDITOR_ACTION_CAMERA_LIGHT));
+        lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
+        lightButton.setSelected(true);
+        lightButton.selectedProperty()
+                .addListener((observable, oldValue, newValue) -> changeLight(newValue));
+
         DynamicIconSupport.addSupport(lightButton);
 
         FXUtils.addClassTo(lightButton, CSSClasses.FILE_EDITOR_TOOLBAR_BUTTON);
-
         FXUtils.addToPane(lightButton, container);
-        FXUtils.addToPane(fastSkyLabel, container);
-        FXUtils.addToPane(fastSkyComboBox, container);
     }
 
     /**
@@ -277,7 +285,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (added instanceof Spatial) {
 
             final Spatial spatial = (Spatial) added;
-            final boolean isSky = spatial.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE;
+            final boolean isSky = spatial.getUserData(SKY_NODE_KEY) == Boolean.TRUE;
 
             if (isSky) {
                 editor3DState.addCustomSky(spatial);
@@ -295,7 +303,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (removed instanceof Spatial) {
 
             final Spatial spatial = (Spatial) removed;
-            final boolean isSky = spatial.getUserData(SceneEditorControl.SKY_NODE_KEY) == Boolean.TRUE;
+            final boolean isSky = spatial.getUserData(SKY_NODE_KEY) == Boolean.TRUE;
 
             if (isSky) {
                 editor3DState.removeCustomSky(spatial);

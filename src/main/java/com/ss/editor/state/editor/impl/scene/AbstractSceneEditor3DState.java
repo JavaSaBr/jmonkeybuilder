@@ -2,7 +2,6 @@ package com.ss.editor.state.editor.impl.scene;
 
 import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.Objects.requireNonNull;
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
@@ -36,8 +35,8 @@ import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Quad;
-import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.control.editing.EditingControl;
 import com.ss.editor.control.editing.EditingInput;
 import com.ss.editor.control.transform.*;
@@ -48,10 +47,7 @@ import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import com.ss.editor.util.EditingUtils;
-import com.ss.editor.util.EditorUtil;
-import com.ss.editor.util.GeomUtils;
-import com.ss.editor.util.NodeUtils;
+import com.ss.editor.util.*;
 import com.ss.rlib.function.BooleanFloatConsumer;
 import com.ss.rlib.geom.util.AngleUtils;
 import com.ss.rlib.util.array.Array;
@@ -72,7 +68,20 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEditor & ModelChangeConsumer, M extends Spatial>
-        extends AdvancedAbstractEditor3DState<T> implements SceneEditorControl {
+        extends AdvancedAbstractEditor3DState<T> implements EditorTransformSupport {
+
+    /**
+     * The constant LOADED_MODEL_KEY.
+     */
+    @NotNull
+    public static String LOADED_MODEL_KEY = EditorTransformSupport.class.getName() + ".loadedModel";
+
+    /**
+     * The constant SKY_NODE_KEY.
+     */
+    @NotNull
+    public static String SKY_NODE_KEY = EditorTransformSupport.class.getName() + ".isSkyNode";
+
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -194,6 +203,12 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private Node moveTool, rotateTool, scaleTool;
 
     /**
+     * The transformation mode.
+     */
+    @NotNull
+    private TransformationMode transformMode;
+
+    /**
      * Center of transformation.
      */
     @Nullable
@@ -294,7 +309,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         this.cachedLights = DictionaryFactory.newObjectDictionary();
         this.cachedAudioNodes = DictionaryFactory.newObjectDictionary();
         this.modelNode = new Node("TreeNode");
-        this.modelNode.setUserData(SceneEditorControl.class.getName(), true);
+        this.modelNode.setUserData(EditorTransformSupport.class.getName(), true);
         this.selected = ArrayFactory.newArray(Spatial.class);
         this.selectionShape = DictionaryFactory.newObjectDictionary();
         this.toolNode = new Node("ToolNode");
@@ -306,7 +321,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         this.cursorNode = new Node("Cursor node");
         this.markersNode = new Node("Markers node");
 
-        final EditorCamera editorCamera = requireNonNull(getEditorCamera());
+        final EditorCamera editorCamera = notNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
 
@@ -321,6 +336,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         createManipulators();
         setShowSelection(true);
         setShowGrid(true);
+        setTransformMode(TransformationMode.GLOBAL);
         setTransformType(TransformType.MOVE_TOOL);
     }
 
@@ -561,6 +577,16 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     /**
+     * Sets transform mode.
+     *
+     * @param transformMode the current mode of the transform.
+     */
+    @FromAnyThread
+    public void setTransformMode(@NotNull final TransformationMode transformMode) {
+        this.transformMode = transformMode;
+    }
+
+    /**
      * @return the node for the placement of transform controls.
      */
     @NotNull
@@ -577,6 +603,18 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     @FromAnyThread
     public TransformType getTransformType() {
         return transformType;
+    }
+
+    /**
+     * Gets transform mode.
+     *
+     * @return the current mode of transformation.
+     */
+    @NotNull
+    @Override
+    @FromAnyThread
+    public TransformationMode getTransformationMode() {
+        return transformMode;
     }
 
     @Override
@@ -726,6 +764,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final Array<Spatial> selected = getSelected();
         selected.forEach(this, (spatial, state) -> {
+            if (spatial == null) return;
 
             final ObjectDictionary<Spatial, Spatial> selectionShape = state.getSelectionShape();
             final Spatial shape = selectionShape.get(spatial);
@@ -736,8 +775,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
             } else if (spatial instanceof EditorAudioNode) {
                 spatial = ((EditorAudioNode) spatial).getModel();
             }
-
-            requireNonNull(spatial);
 
             state.updateTransformNode(spatial.getWorldTransform());
             shape.setLocalTranslation(spatial.getWorldTranslation());
@@ -794,20 +831,29 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private void updateTransformNode(@Nullable final Transform transform) {
         if (transform == null) return;
 
+        final TransformationMode transformationMode = getTransformationMode();
         final Vector3f location = transform.getTranslation();
         final Vector3f positionOnCamera = getPositionOnCamera(location);
 
         final Node transformToolNode = getTransformToolNode();
         transformToolNode.setLocalTranslation(positionOnCamera);
-        transformToolNode.setLocalRotation(transform.getRotation());
+        transformToolNode.setLocalScale(1.5F);
+        transformToolNode.setLocalRotation(transformationMode.getToolRotation(transform, getCamera()));
     }
 
     @NotNull
     @JMEThread
     private Vector3f getPositionOnCamera(@NotNull final Vector3f location) {
+
+        final LocalObjects local = LocalObjects.get();
         final Camera camera = EDITOR.getCamera();
-        final Vector3f resultPosition = location.subtract(camera.getLocation()).normalize().multLocal(camera.getFrustumNear() + 0.4f);
-        return camera.getLocation().add(resultPosition);
+
+        final Vector3f cameraLocation = camera.getLocation();
+        final Vector3f resultPosition = location.subtract(cameraLocation, local.nextVector())
+                .normalizeLocal()
+                .multLocal(camera.getFrustumNear() + 0.5f);
+
+        return cameraLocation.add(resultPosition, local.nextVector());
     }
 
     /**
@@ -1196,7 +1242,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final CollisionResults results = new CollisionResults();
 
-        final M currentModel = requireNonNull(getCurrentModel());
+        final M currentModel = notNull(getCurrentModel());
         currentModel.updateModelBound();
         currentModel.collideWith(ray, results);
 
@@ -1486,7 +1532,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         final ObjectDictionary<Light, EditorLightNode> cachedLights = getCachedLights();
 
         final Camera camera = EDITOR.getCamera();
-        final EditorLightNode lightModel = requireNonNull(cachedLights.get(light, () -> {
+        final EditorLightNode lightModel = notNull(cachedLights.get(light, () -> {
 
             final Node model = (Node) node.clone();
             model.setLocalScale(0.01F);
@@ -1574,7 +1620,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final Node lightNode = getLightNode();
         lightNode.detachChild(lightModel);
-        lightNode.detachChild(requireNonNull(lightModel.getModel()));
+        lightNode.detachChild(notNull(lightModel.getModel()));
 
         getLightNodes().fastRemove(lightModel);
     }
@@ -1598,7 +1644,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         final ObjectDictionary<AudioNode, EditorAudioNode> cachedAudioNodes = getCachedAudioNodes();
 
         final Camera camera = EDITOR.getCamera();
-        final EditorAudioNode audioModel = requireNonNull(cachedAudioNodes.get(audio, () -> {
+        final EditorAudioNode audioModel = notNull(cachedAudioNodes.get(audio, () -> {
 
             final Node model = (Node) AUDIO_NODE_MODEL.clone();
             model.setLocalScale(0.005F);
@@ -1649,7 +1695,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final Node audioNode = getAudioNode();
         audioNode.detachChild(audioModel);
-        audioNode.detachChild(requireNonNull(audioModel.getModel()));
+        audioNode.detachChild(notNull(audioModel.getModel()));
 
         getAudioNodes().fastRemove(audioModel);
     }
@@ -1778,5 +1824,11 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     @JMEThread
     public Node getMarkersNode() {
         return markersNode;
+    }
+
+    @NotNull
+    @Override
+    public Camera getCamera() {
+        return EDITOR.getCamera();
     }
 }

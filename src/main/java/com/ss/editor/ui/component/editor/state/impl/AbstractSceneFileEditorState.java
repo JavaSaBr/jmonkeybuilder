@@ -1,5 +1,7 @@
 package com.ss.editor.ui.component.editor.state.impl;
 
+import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
+import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 
 /**
@@ -18,6 +20,11 @@ public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
      * The transformation type.
      */
     private volatile int transformationType;
+
+    /**
+     * The transformation mode.
+     */
+    private volatile int transformationMode;
 
     /**
      * Is enabled grid.
@@ -40,6 +47,8 @@ public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
     public AbstractSceneFileEditorState() {
         this.enableGrid = true;
         this.enableSelection = true;
+        this.transformationMode = TransformationMode.GLOBAL.ordinal();
+        this.transformationType = TransformType.MOVE_TOOL.ordinal();
     }
 
     /**
@@ -99,6 +108,26 @@ public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
     public void setTransformationType(final int transformationType) {
         final boolean changed = getTransformationType() != transformationType;
         this.transformationType = transformationType;
+        if (changed) notifyChange();
+    }
+
+    /**
+     * Gets transformation mode.
+     *
+     * @return the transformation mode.
+     */
+    public int getTransformationMode() {
+        return transformationMode;
+    }
+
+    /**
+     * Sets transformation mode.
+     *
+     * @param transformationMode the transformation mode.
+     */
+    public void setTransformationMode(final int transformationMode) {
+        final boolean changed = getTransformationMode() != transformationMode;
+        this.transformationMode = transformationMode;
         if (changed) notifyChange();
     }
 

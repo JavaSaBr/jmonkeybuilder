@@ -1,6 +1,6 @@
 package com.ss.editor.state.editor.impl.model;
 
-import static com.ss.editor.control.transform.SceneEditorControl.LOADED_MODEL_KEY;
+import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
 import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
