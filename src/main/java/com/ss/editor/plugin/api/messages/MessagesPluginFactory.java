@@ -37,8 +37,8 @@ public class MessagesPluginFactory {
     };
 
     /**
-     * Create a resource bundle of messages for the plugin. You need to put a <B>messages.properties</B>
-     * file to your resources folder by path <B>/resources/messages/<B> .
+     * Create a resource bundle of messages for the plugin. You need to put a 'messages.properties'
+     * file to your resources folder by path '/resources/messages/'.
      *
      * @param pluginClass the plugin class.
      * @return the resource bundle.

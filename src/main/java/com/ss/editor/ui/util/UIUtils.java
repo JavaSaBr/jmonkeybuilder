@@ -425,6 +425,7 @@ public class UIUtils {
      *
      * @param <T>  the type parameter
      * @param root the tree item.
+     * @return the list with all items.
      */
     @FXThread
     public static <T> Array<TreeItem<T>> getAllItems(@NotNull final TreeItem<T> root) {

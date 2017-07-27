@@ -118,6 +118,8 @@ public class JFXApplication extends Application {
         System.setProperty(LWJGLBufferAllocator.PROPERTY_CONCURRENT_BUFFER_ALLOCATOR, "true");
 
         // some settings for the render of JavaFX
+        System.setProperty("prism.printrendergraph", "false");
+
         //System.setProperty("prism.cacheshapes", "true");
         //System.setProperty("prism.scrollcacheopt", "true");
         //System.setProperty("prism.allowhidpi", "true");
@@ -125,7 +127,6 @@ public class JFXApplication extends Application {
         //System.setProperty("prism.order", "sw");
         //System.setProperty("prism.showdirty", "true");
         //System.setProperty("prism.showoverdraw", "true");
-        //System.setProperty("prism.printrendergraph", "true");
         //System.setProperty("prism.debug", "true");
         //System.setProperty("prism.verbose", "true");
 
