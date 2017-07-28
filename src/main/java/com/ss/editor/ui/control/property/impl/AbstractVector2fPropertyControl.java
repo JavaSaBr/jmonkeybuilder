@@ -86,6 +86,11 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
     }
 
     @Override
+    protected void setPropertyValue(@Nullable final Vector2f vector) {
+        super.setPropertyValue(vector == null ? null : vector.clone());
+    }
+
+    @Override
     protected boolean isSingleRow() {
         return true;
     }
@@ -135,14 +140,14 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
     @Override
     protected void reload() {
 
-        final Vector2f element = notNull(getPropertyValue(), "The property value can't be null.");
+        final Vector2f vector = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
 
         final FloatTextField xField = getXField();
-        xField.setValue(element.getX());
+        xField.setValue(vector.getX());
         xField.positionCaret(xField.getText().length());
 
         final FloatTextField yField = getYField();
-        yField.setValue(element.getY());
+        yField.setValue(vector.getY());
         yField.positionCaret(xField.getText().length());
     }
 
@@ -162,10 +167,10 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
         final FloatTextField yField = getYField();
         final float y = yField.getValue();
 
-        final Vector2f oldValue = notNull(getPropertyValue(), "The property value can't be null.");
+        final Vector2f oldValue = getPropertyValue() == null ? Vector2f.ZERO : getPropertyValue();
         final Vector2f newValue = new Vector2f();
         newValue.set(checkResultXValue(x, y), checkResultYValue(x, y));
 
-        changed(newValue, oldValue == null ? null : oldValue.clone());
+        changed(newValue, oldValue.clone());
     }
 }

@@ -106,6 +106,11 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
         UIUtils.addFocusBinding(container, xField, yField, zField);
     }
 
+    @Override
+    protected void setPropertyValue(@Nullable final Quaternion quaternion) {
+        super.setPropertyValue(quaternion == null ? null : quaternion.clone());
+    }
+
     /**
      * @return the field X.
      */

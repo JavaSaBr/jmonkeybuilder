@@ -104,6 +104,11 @@ public abstract class AbstractVector3fPropertyControl<C extends ChangeConsumer, 
         UIUtils.addFocusBinding(container, xField, yField, zField);
     }
 
+    @Override
+    protected void setPropertyValue(@Nullable final Vector3f vector) {
+        super.setPropertyValue(vector == null ? null : vector.clone());
+    }
+
     /**
      * Gets scroll power.
      *

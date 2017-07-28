@@ -35,7 +35,8 @@ public class FilterPropertyOperation<D, T> extends AbstractPropertyOperation<Sce
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
+            editor.notifyJMEChangeProperty(target, propertyName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 
@@ -43,7 +44,8 @@ public class FilterPropertyOperation<D, T> extends AbstractPropertyOperation<Sce
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
+            editor.notifyJMEChangeProperty(target, propertyName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 }

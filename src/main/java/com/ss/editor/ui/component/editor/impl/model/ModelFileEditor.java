@@ -277,8 +277,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
-        super.notifyAddedChild(parent, added, index);
+    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+        super.notifyFXAddedChild(parent, added, index);
 
         final ModelEditor3DState editor3DState = getEditor3DState();
 
@@ -295,8 +295,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
-        super.notifyRemovedChild(parent, removed);
+    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+        super.notifyFXRemovedChild(parent, removed);
 
         final ModelEditor3DState editor3DState = getEditor3DState();
 

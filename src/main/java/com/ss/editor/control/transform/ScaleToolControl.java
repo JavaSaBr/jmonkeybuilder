@@ -104,7 +104,7 @@ public class ScaleToolControl extends AbstractTransformControl {
         // scale object
         float disCursor = cursorPos.distance(selectedCoords);
         float disDelta = delta2d.distance(selectedCoords);
-        float scaleValue = cursorPos.distance(delta2d) * 0.007f;
+        float scaleValue = (float) (cursorPos.distance(delta2d) * 0.01f * Math.sqrt(baseScale.length()));
 
         if (disCursor > disDelta) {
             baseScale.addLocal(pickedVector.mult(scaleValue, local.nextVector()));

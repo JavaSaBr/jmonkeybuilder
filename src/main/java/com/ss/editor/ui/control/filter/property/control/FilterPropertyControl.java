@@ -27,7 +27,8 @@ public class FilterPropertyControl<D, T> extends AbstractPropertyControl<SceneCh
      * @return the six object consumer
      */
     @NotNull
-    public static <D, T> SixObjectConsumer<SceneChangeConsumer, D, String, T, T, BiConsumer<D, T>> newChangeHandler() {
+    public static <D, T> SixObjectConsumer<@NotNull SceneChangeConsumer, @NotNull D, @NotNull String, T, T,
+            @NotNull BiConsumer<D, T>> newChangeHandler() {
         return (changeConsumer, object, propName, newValue, oldValue, handler) -> {
 
             final FilterPropertyOperation<D, T> operation = new FilterPropertyOperation<>(object, propName, newValue, oldValue);

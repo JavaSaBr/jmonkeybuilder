@@ -12,6 +12,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
+import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
@@ -520,8 +521,42 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
-        super.notifyAddedChild(parent, added, index);
+    protected void handleAddedObject(@NotNull final Spatial model) {
+        super.handleAddedObject(model);
+
+        if (!(model instanceof SceneNode)) {
+            return;
+        }
+
+        final SceneNode sceneNode = (SceneNode) model;
+        final SceneEditor3DState editor3DState = getEditor3DState();
+
+        sceneNode.getFilters().forEach(ScenePresentable.class::isInstance,
+                filter -> editor3DState.addPresentable((ScenePresentable) filter));
+        sceneNode.getAppStates().forEach(ScenePresentable.class::isInstance,
+                state -> editor3DState.addPresentable((ScenePresentable) state));
+    }
+
+    @Override
+    protected void handleRemovedObject(@NotNull final Spatial model) {
+        super.handleRemovedObject(model);
+
+        if (!(model instanceof SceneNode)) {
+            return;
+        }
+
+        final SceneNode sceneNode = (SceneNode) model;
+        final SceneEditor3DState editor3DState = getEditor3DState();
+
+        sceneNode.getFilters().forEach(ScenePresentable.class::isInstance,
+                filter -> editor3DState.removePresentable((ScenePresentable) filter));
+        sceneNode.getAppStates().forEach(ScenePresentable.class::isInstance,
+                state -> editor3DState.removePresentable((ScenePresentable) state));
+    }
+
+    @Override
+    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+        super.notifyFXAddedChild(parent, added, index);
 
         final LayerNodeTree layerNodeTree = getLayerNodeTree();
 
@@ -535,8 +570,8 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
-        super.notifyRemovedChild(parent, removed);
+    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+        super.notifyFXRemovedChild(parent, removed);
 
         final LayerNodeTree layerNodeTree = getLayerNodeTree();
 
@@ -550,9 +585,9 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
-                                     @NotNull final String propertyName) {
-        super.notifyChangeProperty(parent, object, propertyName);
+    public void notifyFXChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+                                       @NotNull final String propertyName) {
+        super.notifyFXChangeProperty(parent, object, propertyName);
 
         if (object instanceof Spatial && Objects.equals(propertyName, SceneLayer.KEY)) {
 
@@ -585,13 +620,27 @@ public class SceneFileEditor extends
 
     @Override
     public void notifyAddedAppState(@NotNull final SceneAppState appState) {
-        getEditor3DState().addAppState(appState);
+
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.addAppState(appState);
+
+        if (appState instanceof ScenePresentable) {
+            editor3DState.addPresentable((ScenePresentable) appState);
+        }
+
         getAppStateList().fill(getCurrentModel());
     }
 
     @Override
     public void notifyRemovedAppState(@NotNull final SceneAppState appState) {
-        getEditor3DState().removeAppState(appState);
+
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.removeAppState(appState);
+
+        if (appState instanceof ScenePresentable) {
+            editor3DState.removePresentable((ScenePresentable) appState);
+        }
+
         getAppStateList().fill(getCurrentModel());
     }
 
@@ -602,14 +651,28 @@ public class SceneFileEditor extends
 
     @Override
     public void notifyAddedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.addFilter(sceneFilter);
+
+        if (sceneFilter instanceof ScenePresentable) {
+            editor3DState.addPresentable((ScenePresentable) sceneFilter);
+        }
+
         getFilterList().fill(getCurrentModel());
-        getEditor3DState().addFilter(sceneFilter);
     }
 
     @Override
     public void notifyRemovedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+
+        final SceneEditor3DState editor3DState = getEditor3DState();
+        editor3DState.removeFilter(sceneFilter);
+
+        if (sceneFilter instanceof ScenePresentable) {
+            editor3DState.removePresentable((ScenePresentable) sceneFilter);
+        }
+
         getFilterList().fill(getCurrentModel());
-        getEditor3DState().removeFilter(sceneFilter);
     }
 
     @Override

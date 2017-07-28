@@ -54,7 +54,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
             parent.detachChildAt(index);
             parent.attachChildAt(newSpatial, index);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(parent, oldSpatial, newSpatial));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(parent, oldSpatial, newSpatial));
         });
     }
 
@@ -66,7 +66,7 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
             parent.detachChildAt(index);
             parent.attachChildAt(oldSpatial, index);
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(parent, newSpatial, oldSpatial));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(parent, newSpatial, oldSpatial));
         });
     }
 }

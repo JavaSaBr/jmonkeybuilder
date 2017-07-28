@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -160,11 +161,11 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     public AbstractPropertyControl(@Nullable final T propertyValue, @NotNull final String propertyName,
                                    @NotNull final C changeConsumer,
                                    @NotNull final SixObjectConsumer<C, D, String, T, T, BiConsumer<D, T>> changeHandler) {
-        this.propertyValue = propertyValue;
         this.propertyName = propertyName;
         this.changeConsumer = changeConsumer;
         this.changeHandler = changeHandler;
-
+        ;
+        setPropertyValue(propertyValue);
         createComponents();
         setIgnoreListener(true);
         try {
@@ -269,9 +270,15 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
         try {
 
             final Function<D, T> syncHandler = getSyncHandler();
-            if (syncHandler != null) setPropertyValue(syncHandler.apply(getEditObject()));
+            final T currentValue = getPropertyValue();
 
-            reload();
+            if (syncHandler != null) {
+                setPropertyValue(syncHandler.apply(getEditObject()));
+            }
+
+            if (!Objects.equals(currentValue, getPropertyValue())) {
+                reload();
+            }
 
         } finally {
             setIgnoreListener(false);

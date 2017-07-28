@@ -10,7 +10,6 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.ss.editor.Editor;
 import com.ss.editor.util.LocalObjects;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,10 +20,13 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class EditorLightNode extends Node {
+public class EditorLightNode extends Node implements NoSelection, WrapperNode {
 
+    /**
+     * The camera.
+     */
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private final Camera camera;
 
     /**
      * The light.
@@ -37,6 +39,10 @@ public class EditorLightNode extends Node {
      */
     @Nullable
     private Node model;
+
+    public EditorLightNode(@NotNull final Camera camera) {
+        this.camera = camera;
+    }
 
     /**
      * Set a light.
@@ -76,6 +82,12 @@ public class EditorLightNode extends Node {
         this.model = model;
     }
 
+    @NotNull
+    @Override
+    public Object getWrappedObject() {
+        return light;
+    }
+
     @Override
     public void updateGeometricState() {
 
@@ -100,6 +112,36 @@ public class EditorLightNode extends Node {
     }
 
     /**
+     * Synchronize this node with presented object.
+     */
+    public void sync() {
+
+        final Light light = getLight();
+        final LocalObjects local = LocalObjects.get();
+
+        if (light instanceof SpotLight) {
+
+            final SpotLight spotLight = (SpotLight) light;
+
+            final Quaternion rotation = local.nextRotation();
+            rotation.lookAt(spotLight.getDirection(), camera.getUp(local.nextVector()));
+
+            setLocalTranslation(spotLight.getPosition());
+            setLocalRotation(rotation);
+
+        } else if (light instanceof PointLight) {
+            setLocalTranslation(((PointLight) light).getPosition());
+        } else if (light instanceof DirectionalLight) {
+
+            final DirectionalLight directionalLight = (DirectionalLight) light;
+            final Quaternion rotation = local.nextRotation();
+            rotation.lookAt(directionalLight.getDirection(), camera.getUp(local.nextVector()));
+
+            setLocalRotation(rotation);
+        }
+    }
+
+    /**
      * Update position and rotation of a model.
      */
     public void updateModel() {
@@ -107,7 +149,6 @@ public class EditorLightNode extends Node {
         final Node model = getModel();
         if (model == null) return;
 
-        final Camera camera = EDITOR.getCamera();
         final LocalObjects local = LocalObjects.get();
         final Vector3f positionOnCamera = local.nextVector();
         positionOnCamera.set(getLocalTranslation()).subtractLocal(camera.getLocation());

@@ -47,7 +47,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
             final TonegodTranslucentBucketFilter filter = EDITOR.getTranslucentBucketFilter();
             filter.refresh();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyAddedChild(parent, newChild, 0));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, newChild, 0));
         });
     }
 
@@ -55,7 +55,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             parent.detachChild(newChild);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyRemovedChild(parent, newChild));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(parent, newChild));
         });
     }
 }

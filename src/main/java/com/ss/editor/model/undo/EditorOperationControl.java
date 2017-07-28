@@ -65,7 +65,7 @@ public class EditorOperationControl {
     }
 
     /**
-     * @return the editor with supporting endo/redo.
+     * @return the editor with supporting undo/redo.
      */
     @NotNull
     private UndoableEditor getEditor() {

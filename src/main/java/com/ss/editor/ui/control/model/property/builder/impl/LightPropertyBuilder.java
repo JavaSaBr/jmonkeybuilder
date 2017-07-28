@@ -9,10 +9,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.ui.control.model.property.control.ColorLightPropertyControl;
-import com.ss.editor.ui.control.model.property.control.DirectionLightPropertyControl;
-import com.ss.editor.ui.control.model.property.control.FloatLightPropertyControl;
-import com.ss.editor.ui.control.model.property.control.PositionLightPropertyControl;
+import com.ss.editor.ui.control.model.property.control.*;
 import com.ss.editor.ui.control.property.builder.PropertyBuilder;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.rlib.ui.util.FXUtils;
@@ -83,8 +80,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         final Vector3f position = light.getPosition().clone();
         final float radius = light.getRadius();
 
-        final PositionLightPropertyControl<PointLight> positionControl =
-                new PositionLightPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final Vector3fModelPropertyControl<PointLight> positionControl =
+                new Vector3fModelPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         positionControl.setApplyHandler(PointLight::setPosition);
         positionControl.setSyncHandler(PointLight::getPosition);
         positionControl.setEditObject(light);
@@ -117,8 +114,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
         directionControl.setSyncHandler(SpotLight::getDirection);
         directionControl.setEditObject(light);
 
-        final PositionLightPropertyControl<SpotLight> positionControl =
-                new PositionLightPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
+        final Vector3fModelPropertyControl<SpotLight> positionControl =
+                new Vector3fModelPropertyControl<>(position, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
         positionControl.setApplyHandler(SpotLight::setPosition);
         positionControl.setSyncHandler(SpotLight::getPosition);
         positionControl.setEditObject(light);
@@ -159,8 +156,8 @@ public class LightPropertyBuilder extends AbstractPropertyBuilder<ModelChangeCon
 
         final ColorRGBA color = object.getColor();
 
-        final ColorLightPropertyControl<Light> radiusControl =
-                new ColorLightPropertyControl<>(color, Messages.MODEL_PROPERTY_COLOR, changeConsumer);
+        final ColorModelPropertyControl<Light> radiusControl =
+                new ColorModelPropertyControl<>(color, Messages.MODEL_PROPERTY_COLOR, changeConsumer);
         radiusControl.setApplyHandler(Light::setColor);
         radiusControl.setSyncHandler(Light::getColor);
         radiusControl.setEditObject(object);

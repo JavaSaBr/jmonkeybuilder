@@ -1,15 +1,13 @@
 package com.ss.editor.scene;
 
 import static com.ss.editor.util.GeomUtils.getDirection;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioNode;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
-import com.ss.editor.Editor;
 import com.ss.editor.util.LocalObjects;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +18,24 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EditorAudioNode extends Node {
 
+    private class EditedNode extends Node implements NoSelection, WrapperNode {
+
+        private EditedNode(@NotNull final String name) {
+            super(name);
+        }
+
+        @NotNull
+        @Override
+        public Object getWrappedObject() {
+            return notNull(getAudioNode());
+        }
+    }
+
+    /**
+     * The camera.
+     */
     @NotNull
-    private static final Editor EDITOR = Editor.getInstance();
+    private final Camera camera;
 
     /**
      * The node to edit.
@@ -43,9 +57,12 @@ public class EditorAudioNode extends Node {
 
     /**
      * Instantiates a new Editor audio node.
+     *
+     * @param camera the camera.
      */
-    public EditorAudioNode() {
-        this.editedNode = new Node("EditedNode");
+    public EditorAudioNode(@NotNull final Camera camera) {
+        this.camera = camera;
+        this.editedNode = new EditedNode("EditedNode");
         attachChild(editedNode);
     }
 
@@ -113,6 +130,23 @@ public class EditorAudioNode extends Node {
     }
 
     /**
+     * Synchronize this node with audio node.
+     */
+    public void sync() {
+
+        final AudioNode audioNode = getAudioNode();
+        if (audioNode == null) return;
+
+        final LocalObjects local = LocalObjects.get();
+        final Quaternion rotation = local.nextRotation();
+        rotation.lookAt(audioNode.getDirection(), camera.getUp(local.nextVector()));
+
+        final Node editedNode = getEditedNode();
+        editedNode.setLocalRotation(rotation);
+        editedNode.setLocalTranslation(audioNode.getLocalTranslation());
+    }
+
+    /**
      * Update position and rotation of a model.
      */
     public void updateModel() {
@@ -122,12 +156,14 @@ public class EditorAudioNode extends Node {
         if (model == null || audioNode == null) return;
 
         final Node parent = audioNode.getParent();
+
         if (parent != null) {
             setLocalTranslation(parent.getWorldTranslation());
+            setLocalRotation(parent.getWorldRotation());
+            setLocalScale(parent.getWorldScale());
         }
 
         final Node editedNode = getEditedNode();
-        final Camera camera = EDITOR.getCamera();
         final LocalObjects local = LocalObjects.get();
         final Vector3f positionOnCamera = local.nextVector();
         positionOnCamera.set(editedNode.getWorldTranslation()).subtractLocal(camera.getLocation());

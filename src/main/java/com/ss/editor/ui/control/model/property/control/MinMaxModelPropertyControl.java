@@ -27,7 +27,5 @@ public class MinMaxModelPropertyControl<T extends Spatial> extends AbstractMinMa
     public MinMaxModelPropertyControl(@NotNull final Vector2f element, @NotNull final String paramName,
                                       @NotNull final ModelChangeConsumer modelChangeConsumer) {
         super(element, paramName, modelChangeConsumer, newChangeHandler());
-        getXField().setMinMax(0, Integer.MAX_VALUE);
-        getYField().setMinMax(0, Integer.MAX_VALUE);
     }
 }

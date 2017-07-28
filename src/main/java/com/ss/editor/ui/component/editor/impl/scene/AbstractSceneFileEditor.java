@@ -33,6 +33,7 @@ import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.extension.scene.SceneLayer;
+import com.ss.editor.extension.scene.ScenePresentable;
 import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.editor.ModelEditingProvider;
 import com.ss.editor.model.undo.EditorOperation;
@@ -42,6 +43,8 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
+import com.ss.editor.scene.EditorPresentableNode;
+import com.ss.editor.scene.WrapperNode;
 import com.ss.editor.state.editor.impl.Stats3DState;
 import com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState;
 import com.ss.editor.ui.Icons;
@@ -467,7 +470,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
-     * Handle a removed model.
+     * Handle a removed model.T
      *
      * @param model the model
      */
@@ -698,8 +701,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyChangeProperty(@Nullable final Object parent, @NotNull final Object object,
-                                     @NotNull final String propertyName) {
+    public void notifyFXChangeProperty(@Nullable final Object parent, @NotNull final Object object,
+                                       @NotNull final String propertyName) {
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.syncFor(object);
@@ -712,13 +715,18 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyChangePropertyCount(@Nullable final Object parent, @NotNull final Object object) {
+    public void notifyJMEChangeProperty(@NotNull final Object object, @NotNull final String propertyName) {
+        getEditor3DState().notifyPropertyChanged(object);
+    }
+
+    @Override
+    public void notifyFXChangePropertyCount(@Nullable final Object parent, @NotNull final Object object) {
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
         modelPropertyEditor.rebuildFor(object, parent);
     }
 
     @Override
-    public void notifyAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
 
         final MA editor3DState = getEditor3DState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -734,7 +742,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
+    public void notifyFXRemovedChild(@NotNull final Object parent, @NotNull final Object removed) {
 
         final MA editor3DState = getEditor3DState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -750,7 +758,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
+    public void notifyFXReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
 
         final MA editor3DState = getEditor3DState();
         final Spatial currentModel = getCurrentModel();
@@ -765,13 +773,13 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyReplaced(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
+    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyReplace(parent, oldChild, newChild);
     }
 
     @Override
-    public void notifyMoved(@NotNull final Node prevParent, @NotNull final Node newParent, @NotNull final Spatial child, int index) {
+    public void notifyFXMoved(@NotNull final Node prevParent, @NotNull final Node newParent, @NotNull final Spatial child, int index) {
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);
     }
@@ -834,7 +842,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final MA editor3DState = getEditor3DState();
 
         Object parent = null;
-        Object element = null;
+        Object element;
 
         if (object instanceof TreeNode<?>) {
             final TreeNode treeNode = (TreeNode) object;
@@ -859,6 +867,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             parent = spatial.getParent();
         } else if (element instanceof Light) {
             spatial = editor3DState.getLightNode((Light) element);
+        } else if(object instanceof ScenePresentable) {
+            final EditorPresentableNode presentableNode = editor3DState.getPresentableNode((ScenePresentable) object);
+            spatial = presentableNode == null? null : presentableNode.getEditedNode();
         }
 
         if (spatial != null && !spatial.isVisible()) {
@@ -1399,7 +1410,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         if (editorState != null) editorState.setShowStatistics(newValue);
     }
 
-
     /**
      * Notify about transformed the object.
      *
@@ -1417,10 +1427,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         Object toUpdate = spatial;
 
-        if (spatial instanceof EditorLightNode) {
-            toUpdate = ((EditorLightNode) spatial).getLight();
-        } else if (spatial.getParent() instanceof EditorAudioNode) {
-            toUpdate = ((EditorAudioNode) spatial.getParent()).getAudioNode();
+        if(spatial instanceof WrapperNode) {
+            toUpdate = ((WrapperNode) spatial).getWrappedObject();
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();

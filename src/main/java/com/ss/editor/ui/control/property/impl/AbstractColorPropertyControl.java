@@ -57,6 +57,11 @@ public abstract class AbstractColorPropertyControl<C extends ChangeConsumer, T> 
     }
 
     @Override
+    protected void setPropertyValue(@Nullable final ColorRGBA color) {
+        super.setPropertyValue(color == null ? null : color.clone());
+    }
+
+    @Override
     protected boolean isSingleRow() {
         return true;
     }

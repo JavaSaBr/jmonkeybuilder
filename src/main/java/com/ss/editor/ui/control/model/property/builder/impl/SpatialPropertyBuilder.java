@@ -113,7 +113,8 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
             final Vector3fModelPropertyControl<Spatial> locationControl =
                     new Vector3fModelPropertyControl<>(location, Messages.MODEL_PROPERTY_LOCATION, changeConsumer);
             locationControl.setApplyHandler(Spatial::setLocalTranslation);
-            locationControl.setSyncHandler(Spatial::getLocalTranslation);
+            locationControl.setSyncHandler(spatial1 -> spatial1.getLocalTranslation());
+
             locationControl.setEditObject(spatial);
 
             final Vector3fModelPropertyControl<Spatial> scaleControl =

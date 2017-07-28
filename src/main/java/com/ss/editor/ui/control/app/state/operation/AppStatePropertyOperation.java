@@ -35,7 +35,8 @@ public class AppStatePropertyOperation<D, T> extends AbstractPropertyOperation<S
     protected void redoImpl(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
+            editor.notifyJMEChangeProperty(target, propertyName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(null, target, propertyName));
         });
     }
 
@@ -43,7 +44,8 @@ public class AppStatePropertyOperation<D, T> extends AbstractPropertyOperation<S
     protected void undoImpl(@NotNull final SceneChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeProperty(null, target, propertyName));
+            editor.notifyJMEChangeProperty(target, propertyName);
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(null, target, propertyName));
         });
     }
 }

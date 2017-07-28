@@ -6,16 +6,10 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
-import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
@@ -32,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Predicate;
 
 /**
  * The implementation of the {@link ModelPropertyControl} to edit the {@link AudioData}.
@@ -42,30 +35,7 @@ import java.util.function.Predicate;
 public class AudioKeyModelPropertyControl extends ModelPropertyControl<AudioNode, AudioKey> {
 
     @NotNull
-    private static final Predicate<Class<?>> ACTION_TESTER = type -> type == NewFileAction.class ||
-            type == DeleteFileAction.class ||
-            type == RenameFileAction.class;
-
-    @NotNull
     private static final String NO_AUDIO = Messages.AUDIO_KEY_PROPERTY_CONTROL_NO_AUDIO;
-
-    /**
-     * The constant FX_EVENT_MANAGER.
-     */
-    @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The constant JFX_APPLICATION.
-     */
-    @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The label with name of the audio key.
@@ -145,7 +115,7 @@ public class AudioKeyModelPropertyControl extends ModelPropertyControl<AudioNode
      * Show dialog for choosing another audio key.
      */
     protected void processChange() {
-        UIUtils.openAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, ACTION_TESTER);
+        UIUtils.openAssetDialog(this::addAudioData, AUDIO_EXTENSIONS, DEFAULT_ACTION_TESTER);
     }
 
     private void addAudioData(@NotNull final Path file) {

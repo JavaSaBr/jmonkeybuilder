@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.property.control;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.scene.Spatial;
@@ -35,7 +35,7 @@ public class WheelElementModelPropertyControl extends SpatialElementModelPropert
         final ModelChangeConsumer changeConsumer = getChangeConsumer();
         final Spatial currentModel = changeConsumer.getCurrentModel();
         final Spatial root = NodeUtils.findSpatial(currentModel, this::checkSpatial);
-        return new NodeSelectorDialog<>(requireNonNull(root), type, this::processAdd);
+        return new NodeSelectorDialog<>(notNull(root), type, this::processAdd);
     }
 
     /**

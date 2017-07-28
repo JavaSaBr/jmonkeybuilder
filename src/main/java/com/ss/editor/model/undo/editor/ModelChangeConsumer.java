@@ -3,7 +3,7 @@ package com.ss.editor.model.undo.editor;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FXThread;
-
+import com.ss.editor.annotation.JMEThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +24,26 @@ public interface ModelChangeConsumer extends ChangeConsumer {
     Spatial getCurrentModel();
 
     /**
+     * Notify about changed property from JME thread.
+     *
+     * @param object       the object
+     * @param propertyName the property name
+     */
+    @JMEThread
+    void notifyJMEChangeProperty(@NotNull Object object, @NotNull String propertyName);
+
+    /**
+     * Notify about changed property from JME thread.
+     *
+     * @param object       the object
+     * @param propertyName the property name
+     */
+    @FXThread
+    default void notifyFXChangeProperty(@NotNull Object object, @NotNull String propertyName) {
+        notifyFXChangeProperty(null, object, propertyName);
+    }
+
+    /**
      * Notify about changed property.
      *
      * @param parent       the parent
@@ -31,58 +51,58 @@ public interface ModelChangeConsumer extends ChangeConsumer {
      * @param propertyName the property name
      */
     @FXThread
-    void notifyChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName);
+    void notifyFXChangeProperty(@Nullable Object parent, @NotNull Object object, @NotNull String propertyName);
 
     /**
-     * Notify about changed property count.
+     * Notify about changed property count from FX thread.
      *
      * @param parent the parent
      * @param object the object
      */
     @FXThread
-    void notifyChangePropertyCount(@Nullable Object parent, @NotNull Object object);
+    void notifyFXChangePropertyCount(@Nullable Object parent, @NotNull Object object);
 
     /**
-     * Notify about added child.
+     * Notify about added child from FX thread.
      *
      * @param parent the parent
      * @param added  the added
      * @param index  the index
      */
     @FXThread
-    void notifyAddedChild(@NotNull Object parent, @NotNull Object added, int index);
+    void notifyFXAddedChild(@NotNull Object parent, @NotNull Object added, int index);
 
     /**
-     * Notify about removed child.
+     * Notify about removed child from FX thread.
      *
      * @param parent  the parent
      * @param removed the removed
      */
     @FXThread
-    void notifyRemovedChild(@NotNull Object parent, @NotNull Object removed);
+    void notifyFXRemovedChild(@NotNull Object parent, @NotNull Object removed);
 
     /**
-     * Notify about replaced child.
+     * Notify about replaced child from FX thread.
      *
      * @param parent   the parent
      * @param oldChild the old child
      * @param newChild the new child
      */
     @FXThread
-    void notifyReplaced(@NotNull Node parent, @NotNull Spatial oldChild, @NotNull Spatial newChild);
+    void notifyFXReplaced(@NotNull Node parent, @NotNull Spatial oldChild, @NotNull Spatial newChild);
 
     /**
-     * Notify about replaced child.
+     * Notify about replaced child from FX thread.
      *
      * @param parent   the parent
      * @param oldChild the old child
      * @param newChild the new child
      */
     @FXThread
-    void notifyReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild);
+    void notifyFXReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild);
 
     /**
-     * Notify about moved child.
+     * Notify about moved child from FX thread.
      *
      * @param prevParent the prev parent
      * @param newParent  the new parent
@@ -90,5 +110,5 @@ public interface ModelChangeConsumer extends ChangeConsumer {
      * @param index      the index
      */
     @FXThread
-    void notifyMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index);
+    void notifyFXMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index);
 }

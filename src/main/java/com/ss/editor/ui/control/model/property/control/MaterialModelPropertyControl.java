@@ -4,14 +4,11 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
-import com.ss.editor.Editor;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.array.Array;
@@ -46,24 +43,6 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
      */
     @NotNull
     protected static final String NO_MATERIAL = Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_MATERIAL;
-
-    /**
-     * The constant FX_EVENT_MANAGER.
-     */
-    @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The constant JFX_APPLICATION.
-     */
-    @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The constant MATERIAL_EXTENSIONS.

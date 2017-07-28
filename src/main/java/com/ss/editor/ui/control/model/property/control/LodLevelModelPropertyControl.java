@@ -53,6 +53,7 @@ public class LodLevelModelPropertyControl extends ModelPropertyControl<Geometry,
     /**
      * The lod level combobox.
      */
+    @Nullable
     private ComboBox<Integer> levelComboBox;
 
     /**

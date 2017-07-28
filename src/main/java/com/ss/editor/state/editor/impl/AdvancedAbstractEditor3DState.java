@@ -13,6 +13,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
 import com.ss.editor.config.Config;
 import com.ss.editor.model.EditorCamera;
@@ -409,6 +410,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      *
      * @param actionHandlers the action handlers
      */
+    @JMEThread
     protected void registerActionHandlers(@NotNull final ObjectDictionary<String, BooleanFloatConsumer> actionHandlers) {
         actionHandlers.put(KEY_ALT, (isPressed, tpf) -> setAltDown(isPressed));
         actionHandlers.put(MOUSE_LEFT_CLICK, (isPressed, tpf) -> setButtonLeftDown(isPressed));
@@ -1027,6 +1029,7 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      * @return the prev camera location
      */
     @NotNull
+    @FromAnyThread
     public Vector3f getPrevCameraLocation() {
         return prevCameraLocation;
     }

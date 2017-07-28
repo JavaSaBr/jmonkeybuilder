@@ -6,6 +6,7 @@ import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture2D;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
@@ -187,6 +188,17 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
 
                     final Texture2DFilterPropertyControl<EditableProperty<Texture2D, ?>> propertyControl =
                             new Texture2DFilterPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case SPATIAL_FROM_SCENE: {
+
+                    final EditableProperty<Spatial, ?> property = cast(editableProperty);
+                    final Spatial value = property.getValue();
+
+                    final SpatialElementFilterPropertyControl<EditableProperty<Spatial, ?>> propertyControl =
+                            new SpatialElementFilterPropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

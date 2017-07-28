@@ -42,7 +42,7 @@ public class ChangeEmitterShapeOperation extends AbstractEditorOperation<ModelCh
         prevShape = shape;
         emitter.setShape(newShape);
 
-        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyReplaced(emitter, prevShape, newShape));
+        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(emitter, prevShape, newShape));
     }
 
     @Override

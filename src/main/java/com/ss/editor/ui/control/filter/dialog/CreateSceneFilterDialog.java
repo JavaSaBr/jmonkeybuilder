@@ -57,6 +57,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableSceneAndObjectsBloomFilter());
         register(new EditableLightingStateShadowFilter());
         register(new EditableWaterFilter());
+        register(new EditableLocalWaterFilter());
     }
 
     private static void register(@NotNull final SceneFilter<?> sceneFilter) {
