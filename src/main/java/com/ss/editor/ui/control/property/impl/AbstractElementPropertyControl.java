@@ -1,14 +1,11 @@
 package com.ss.editor.ui.control.property.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.Editor;
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
@@ -36,24 +33,6 @@ public abstract class AbstractElementPropertyControl<C extends ChangeConsumer, D
      */
     @NotNull
     protected static final String NO_ELEMENT = Messages.ABSTRACT_ELEMENT_PROPERTY_CONTROL_NO_ELEMENT;
-
-    /**
-     * The constant FX_EVENT_MANAGER.
-     */
-    @NotNull
-    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
-
-    /**
-     * The constant JFX_APPLICATION.
-     */
-    @NotNull
-    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
-
-    /**
-     * The constant EDITOR.
-     */
-    @NotNull
-    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The type of an element.

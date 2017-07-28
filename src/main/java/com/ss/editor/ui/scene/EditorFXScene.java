@@ -15,8 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -42,7 +42,7 @@ public class EditorFXScene extends Scene {
      * The view for drawing JME.
      */
     @NotNull
-    private final Canvas canvas;
+    private final ImageView canvas;
 
     /**
      * The container of this scene.
@@ -82,7 +82,7 @@ public class EditorFXScene extends Scene {
     public EditorFXScene(@NotNull final Group root) {
         super(root);
 
-        this.canvas = new EditorFXCanvas();
+        this.canvas = new EditorFXImageView();
         this.canvas.setMouseTransparent(true);
         this.canvas.getProperties()
                 .put(JFXMouseInput.PROP_USE_LOCAL_COORDS, true);
@@ -123,7 +123,7 @@ public class EditorFXScene extends Scene {
      */
     @NotNull
     @FXThread
-    public Canvas getCanvas() {
+    public ImageView getCanvas() {
         return canvas;
     }
 
@@ -135,9 +135,6 @@ public class EditorFXScene extends Scene {
 
         final ObservableList<Node> children = hideLayer.getChildren();
         if (children.contains(canvas)) return;
-
-        canvas.heightProperty().unbind();
-        canvas.widthProperty().unbind();
 
         children.add(canvas);
     }

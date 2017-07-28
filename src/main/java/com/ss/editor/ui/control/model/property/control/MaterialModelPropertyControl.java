@@ -69,11 +69,7 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
      * The constant MATERIAL_EXTENSIONS.
      */
     @NotNull
-    protected static final Array<String> MATERIAL_EXTENSIONS = ArrayFactory.newArray(String.class);
-
-    static {
-        MATERIAL_EXTENSIONS.add(FileExtensions.JME_MATERIAL);
-    }
+    protected static final Array<String> MATERIAL_EXTENSIONS = ArrayFactory.asArray(FileExtensions.JME_MATERIAL);
 
     /**
      * The label with name of the material.
@@ -155,9 +151,7 @@ public class MaterialModelPropertyControl<T extends Spatial, V> extends ModelPro
      * @param file the file
      */
     protected void addMaterial(@NotNull final Path file) {
-
     }
-
 
     @Override
     protected void createComponents(@NotNull final HBox container) {

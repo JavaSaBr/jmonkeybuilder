@@ -755,6 +755,10 @@
     -fx-padding: 0px 0px 0px 6px;
 }
 
+.abstract-param-control-input-container:focused {
+    -fx-padding: -1px -1px -1px 5px;
+}
+
 .abstract-param-control-short-input-container {
     -fx-alignment: center;
     -fx-max-height: -var-default-field-height;
@@ -799,6 +803,15 @@
     -fx-max-width: -fx-min-width;
     -fx-alignment: center-right;
     -fx-text-alignment: right;
+}
+
+.abstract-param-control-preview-container {
+    -fx-min-height: -var-default-field-preview-height;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: -var-default-field-preview-height;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 .abstract-param-control-influencer-element {

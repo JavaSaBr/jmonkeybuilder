@@ -8,15 +8,15 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public enum CssColorTheme {
-    LIGHT("/ui/css/light-color.bss", "White") {
+    LIGHT("/ui/css/light-color.css", "White") {
         @Override
         public boolean isDark() {
             return false;
         }
     },
 
-    SHADOW("/ui/css/shadow-color.bss", "Shadow"),
-    DARK("/ui/css/dark-color.bss", "Dark"),;
+    SHADOW("/ui/css/shadow-color.css", "Shadow"),
+    DARK("/ui/css/dark-color.css", "Dark"),;
 
     @NotNull
     public static final CssColorTheme[] VALUES = values();

@@ -119,6 +119,7 @@ public class JFXApplication extends Application {
 
         // some settings for the render of JavaFX
         System.setProperty("prism.printrendergraph", "false");
+        System.setProperty("javafx.pulseLogger", "false");
 
         //System.setProperty("prism.cacheshapes", "true");
         //System.setProperty("prism.scrollcacheopt", "true");

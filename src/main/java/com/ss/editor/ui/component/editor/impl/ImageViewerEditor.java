@@ -81,7 +81,7 @@ public class ImageViewerEditor extends AbstractFileEditor<VBox> {
     }
 
     private void showImage(@NotNull final Path file) {
-        final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, IMAGE_SIZE, IMAGE_SIZE);
+        final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(file, IMAGE_SIZE, IMAGE_SIZE);
         final ImageView imageView = getImageView();
         imageView.setImage(preview);
     }

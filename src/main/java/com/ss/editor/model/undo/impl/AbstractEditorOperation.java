@@ -27,13 +27,13 @@ public abstract class AbstractEditorOperation<E> implements EditorOperation {
     protected static final Logger LOGGER = LoggerManager.getLogger(EditorOperation.class);
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The executor manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
-     * The constant EDITOR.
+     * The editor.
      */
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();

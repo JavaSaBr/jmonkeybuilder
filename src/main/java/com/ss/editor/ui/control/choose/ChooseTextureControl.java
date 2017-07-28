@@ -251,14 +251,14 @@ public class ChooseTextureControl extends HBox {
         if (textureFile == null) {
             textureLabel.setText(Messages.MATERIAL_MODEL_PROPERTY_CONTROL_NO_TEXTURE);
             preview.setImage(null);
-            textureTooltip.showImage(null);
+            textureTooltip.clean();
             return;
         }
 
         final Path assetFile = notNull(getAssetFile(textureFile));
 
         textureLabel.setText(assetFile.toString());
-        preview.setImage(IMAGE_MANAGER.getTexturePreview(textureFile, 28, 28));
+        preview.setImage(IMAGE_MANAGER.getImagePreview(textureFile, 28, 28));
         textureTooltip.showImage(textureFile);
     }
 }

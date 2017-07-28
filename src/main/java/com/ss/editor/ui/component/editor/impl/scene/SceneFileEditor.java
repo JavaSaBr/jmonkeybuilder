@@ -149,7 +149,6 @@ public class SceneFileEditor extends
 
         Spatial loadedScene = assetManager.loadAsset(modelKey);
 
-
         final SceneNode model = (SceneNode) loadedScene;
         model.depthFirstTraversal(this::updateVisibility);
 

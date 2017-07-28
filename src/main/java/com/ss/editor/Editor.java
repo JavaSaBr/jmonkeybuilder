@@ -265,8 +265,6 @@ public class Editor extends JmeToJFXApplication {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(5);
 
-        SceneLoader.install(this);
-
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
@@ -320,6 +318,8 @@ public class Editor extends JmeToJFXApplication {
         postProcessor.addFilter(fxaaFilter);
         postProcessor.addFilter(toneMapFilter);
         postProcessor.addFilter(translucentBucketFilter);
+
+        SceneLoader.install(this, postProcessor);
 
         viewPort.addProcessor(postProcessor);
 

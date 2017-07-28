@@ -22,7 +22,7 @@ import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -45,25 +45,25 @@ public class EditorFXSceneBuilder {
      * The path to the base CSS styles.
      */
     @NotNull
-    public static final String CSS_FILE_BASE = "/ui/css/base.bss";
+    public static final String CSS_FILE_BASE = "/ui/css/base.css";
 
     /**
      * The path to the external CSS styles.
      */
     @NotNull
-    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.bss";
+    public static final String CSS_FILE_EXTERNAL = "/ui/css/external.css";
 
     /**
      * The path to the custom ids CSS styles.
      */
     @NotNull
-    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.bss";
+    public static final String CSS_FILE_CUSTOM_IDS = "/ui/css/custom_ids.css";
 
     /**
      * The path to the custom classes CSS styles.
      */
     @NotNull
-    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.bss";
+    public static final String CSS_FILE_CUSTOM_CLASSES = "/ui/css/custom_classes.css";
 
     static {
         CSS_REGISTRY.register(CSS_FILE_BASE);
@@ -112,7 +112,7 @@ public class EditorFXSceneBuilder {
                               @NotNull final StackPane container,
                               @NotNull final Stage stage) {
 
-        final Canvas canvas = scene.getCanvas();
+        final ImageView canvas = scene.getCanvas();
         final EditorMenuBarComponent barComponent = new EditorMenuBarComponent();
         final EditorAreaComponent editorAreaComponent = new EditorAreaComponent();
 

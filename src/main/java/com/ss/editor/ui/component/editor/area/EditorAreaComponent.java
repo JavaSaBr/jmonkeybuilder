@@ -40,7 +40,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -161,12 +160,10 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         }
 
         final EditorFXScene scene = (EditorFXScene) getScene();
-        final Canvas canvas = scene.getCanvas();
+        final ImageView canvas = scene.getCanvas();
 
         if (new3DArea != null) {
             new3DArea.setCenter(canvas);
-            //canvas.heightProperty().bind(new3DArea.heightProperty());
-            //canvas.widthProperty().bind(new3DArea.widthProperty());
         } else if (current3DArea != null) {
             current3DArea.setCenter(null);
             scene.hideCanvas();
@@ -356,7 +353,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     private void processShowEditor(@Nullable final Tab prevTab, @Nullable final Tab newTab) {
 
         final AppStateManager stateManager = EDITOR.getStateManager();
-        final Canvas canvas = JFX_APPLICATION.getScene().getCanvas();
+        final ImageView canvas = JFX_APPLICATION.getScene().getCanvas();
         final FrameTransferSceneProcessor sceneProcessor = JFX_APPLICATION.getSceneProcessor();
 
         boolean enabled = false;

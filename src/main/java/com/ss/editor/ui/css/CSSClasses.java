@@ -284,6 +284,10 @@ public interface CSSClasses {
      */
     String ABSTRACT_PARAM_CONTROL_ELEMENT_LABEL = "abstract-param-control-element-label";
     /**
+     * The constant ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER.
+     */
+    String ABSTRACT_PARAM_CONTROL_PREVIEW_CONTAINER = "abstract-param-control-preview-container";
+    /**
      * The constant ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER.
      */
     String ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER = "abstract-param-control-input-container";

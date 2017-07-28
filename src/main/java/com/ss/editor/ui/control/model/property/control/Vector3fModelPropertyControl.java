@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The implementation of the {@link AbstractVector3fPropertyControl} to edot vector3f values.
+ * The implementation of the {@link AbstractVector3fPropertyControl} to edit vector3f values.
  *
  * @param <T> the type parameter
  * @author JavaSaBr

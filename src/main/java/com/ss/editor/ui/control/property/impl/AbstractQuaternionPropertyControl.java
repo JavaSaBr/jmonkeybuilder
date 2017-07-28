@@ -98,7 +98,8 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
         FXUtils.addToPane(zField, container);
 
         FXUtils.addClassTo(xLabel, yLabel, zLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_NUMBER_LABEL);
-        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(container, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassesTo(xField, yField, zField, CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD,
                 CSSClasses.TRANSPARENT_TEXT_FIELD);
 

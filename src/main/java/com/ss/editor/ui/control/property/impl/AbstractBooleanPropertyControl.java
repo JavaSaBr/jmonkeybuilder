@@ -48,10 +48,8 @@ public abstract class AbstractBooleanPropertyControl<C extends ChangeConsumer, T
         super.createComponents(container);
 
         checkBox = new CheckBox();
-        checkBox.selectedProperty()
-                .addListener((observable, oldValue, newValue) -> updateValue());
-        checkBox.prefWidthProperty()
-                .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> updateValue());
+        checkBox.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 
         FXUtils.addToPane(checkBox, container);
         FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);

@@ -436,7 +436,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
 
         } else if (JavaFXImageManager.isImage(file)) {
 
-            final Image preview = JAVA_FX_IMAGE_MANAGER.getTexturePreview(file, width, height);
+            final Image preview = JAVA_FX_IMAGE_MANAGER.getImagePreview(file, width, height);
             imageView.setImage(preview);
             imageView.setVisible(true);
 

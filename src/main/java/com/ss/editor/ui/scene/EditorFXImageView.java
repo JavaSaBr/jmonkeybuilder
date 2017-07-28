@@ -1,10 +1,10 @@
 package com.ss.editor.ui.scene;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.image.ImageView;
 
 /**
  */
-public class EditorFXCanvas extends Canvas {
+public class EditorFXImageView extends ImageView {
 
     @Override
     public double minHeight(double width) {
@@ -38,7 +38,8 @@ public class EditorFXCanvas extends Canvas {
 
     @Override
     public void resize(double width, double height) {
-        super.setWidth(width);
-        super.setHeight(height);
+        super.resize(width, height);
+        super.setFitWidth(width);
+        super.setFitHeight(height);
     }
 }

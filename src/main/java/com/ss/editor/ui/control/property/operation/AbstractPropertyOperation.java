@@ -1,10 +1,8 @@
 package com.ss.editor.ui.control.property.operation;
 
-import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
 import com.ss.editor.util.EditorUtil;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,11 +17,6 @@ import java.util.function.BiConsumer;
  * @author JavaSaBr
  */
 public abstract class AbstractPropertyOperation<C extends ChangeConsumer, D, T> extends AbstractEditorOperation<C> {
-
-    /**
-     * The constant EXECUTOR_MANAGER.
-     */
-    protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The property name.

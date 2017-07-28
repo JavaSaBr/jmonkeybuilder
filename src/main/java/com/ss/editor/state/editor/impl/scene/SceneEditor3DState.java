@@ -8,12 +8,12 @@ import com.jme3.post.filters.ToneMapFilter;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
+import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.array.Array;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The implementation of the {@link AbstractSceneEditor3DState} for the {@link SceneFileEditor}.
@@ -66,18 +66,21 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     }
 
     @Override
+    protected void attachModel(final @NotNull SceneNode model, @NotNull final Node modelNode) {
+    }
+
+    @Override
+    protected void detachPrevModel(@NotNull final Node modelNode, @Nullable final SceneNode currentModel) {
+    }
+
+    @Override
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
 
-        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         final SceneNode currentModel = getCurrentModel();
 
         if (currentModel != null) {
-            final Array<SceneAppState> appStates = currentModel.getAppStates();
-            appStates.forEach(stateManager, (state, manager) -> manager.attach(state));
-
-            final Array<SceneFilter<?>> filters = currentModel.getFilters();
-            filters.forEach(sceneFilter -> postProcessor.addFilter(sceneFilter.get()));
+            getModelNode().attachChild(currentModel);
         }
 
         final FXAAFilter fxaaFilter = EDITOR.getFXAAFilter();
@@ -91,16 +94,10 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     public void cleanup() {
         super.cleanup();
 
-        final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         final SceneNode currentModel = getCurrentModel();
 
         if (currentModel != null) {
-
-            final Array<SceneAppState> appStates = currentModel.getAppStates();
-            appStates.forEach(stateManager, (state, manager) -> manager.detach(state));
-
-            final Array<SceneFilter<?>> filters = currentModel.getFilters();
-            filters.forEach(sceneFilter -> postProcessor.removeFilter(sceneFilter.get()));
+            getModelNode().detachChild(currentModel);
         }
 
         final EditorConfig editorConfig = EditorConfig.getInstance();

@@ -339,7 +339,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
             final CheckBox repeatButton = getRepeatButton();
             repeatButton.setSelected(false);
 
-            textureTooltip.showImage(null);
+            textureTooltip.clean();
             return;
         }
 
@@ -361,7 +361,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
         final Path realFile = EditorUtil.getRealFile(textureKey.getName());
 
         final ImageView preview = getTexturePreview();
-        preview.setImage(IMAGE_MANAGER.getTexturePreview(realFile, 28, 28));
+        preview.setImage(IMAGE_MANAGER.getImagePreview(realFile, 28, 28));
 
         textureTooltip.showImage(realFile);
     }

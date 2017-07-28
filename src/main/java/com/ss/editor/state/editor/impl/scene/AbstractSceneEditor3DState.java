@@ -1493,7 +1493,10 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
 
         final Node modelNode = getModelNode();
         final M currentModel = getCurrentModel();
-        if (currentModel != null) modelNode.detachChild(currentModel);
+
+        if (currentModel != null) {
+            detachPrevModel(modelNode, currentModel);
+        }
 
         NodeUtils.visitGeometry(model, geometry -> {
 
@@ -1510,9 +1513,16 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
             }
         });
 
-        modelNode.attachChild(model);
-
+        attachModel(model, modelNode);
         setCurrentModel(model);
+    }
+
+    protected void detachPrevModel(@NotNull final Node modelNode, @Nullable final M currentModel) {
+        modelNode.detachChild(currentModel);
+    }
+
+    protected void attachModel(@NotNull final M model, @NotNull final Node modelNode) {
+        modelNode.attachChild(model);
     }
 
     /**

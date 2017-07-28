@@ -107,7 +107,6 @@
             </fileset>
             <fileset dir="project/resources">
                 <include name="**/*"/>
-                <exclude name="**/*.css"/>
             </fileset>
         </copy>
     </target>
@@ -180,8 +179,6 @@
                 updatemode="background" verbose="true">
 
             <fx:platform>
-                <fx:jvmarg value="-Xms1024m"/>
-                <fx:jvmarg value="-Xmx2048m"/>
                 <fx:jvmarg value="-XX:+AggressiveOpts"/>
                 <fx:jvmarg value="-XX:+UseParallelGC"/>
                 <fx:jvmarg value="-XX:+UseTLAB"/>

@@ -1,8 +1,6 @@
 package com.ss.editor.manager;
 
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.util.array.ArrayFactory.asArray;
 import static java.awt.Image.SCALE_DEFAULT;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
@@ -24,26 +22,22 @@ import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
-import com.ss.rlib.util.dictionary.DictionaryFactory;
-import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import jme3tools.converters.ImageToAwt;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
-import java.util.Iterator;
 
 /**
  * The class to manage previews of images to JavaFX
@@ -62,28 +56,24 @@ public class JavaFXImageManager {
     private static final String PREVIEW_CACHE_FOLDER = "preview-cache";
 
     @NotNull
-    private static final Array<String> FX_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> FX_FORMATS = asArray(
+            FileExtensions.IMAGE_PNG,
+            FileExtensions.IMAGE_JPG,
+            FileExtensions.IMAGE_JPEG,
+            FileExtensions.IMAGE_GIF);
 
     @NotNull
-    private static final Array<String> JME_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> JME_FORMATS = asArray(FileExtensions.IMAGE_BMP);
 
     @NotNull
-    private static final Array<String> IMAGE_IO_FORMATS = ArrayFactory.newArray(String.class);
+    private static final Array<String> IMAGE_IO_FORMATS = asArray(
+            FileExtensions.IMAGE_HDR,
+            FileExtensions.IMAGE_TIFF);
 
     @NotNull
     private static final Array<String> IMAGE_FORMATS = ArrayFactory.newArray(String.class);
 
     static {
-        FX_FORMATS.add(FileExtensions.IMAGE_PNG);
-        FX_FORMATS.add(FileExtensions.IMAGE_JPG);
-        FX_FORMATS.add(FileExtensions.IMAGE_JPEG);
-        FX_FORMATS.add(FileExtensions.IMAGE_GIF);
-
-        JME_FORMATS.add(FileExtensions.IMAGE_BMP);
-
-        IMAGE_IO_FORMATS.add(FileExtensions.IMAGE_HDR);
-        IMAGE_IO_FORMATS.add(FileExtensions.IMAGE_TIFF);
-
         IMAGE_FORMATS.addAll(FX_FORMATS);
         IMAGE_FORMATS.addAll(JME_FORMATS);
         IMAGE_FORMATS.addAll(IMAGE_IO_FORMATS);
@@ -118,12 +108,6 @@ public class JavaFXImageManager {
     }
 
     /**
-     * The metadatas cache.
-     */
-    @NotNull
-    private final ObjectDictionary<Path, IIOMetadata> iioMetadatas;
-
-    /**
      * The cache folder.
      */
     @NotNull
@@ -135,7 +119,6 @@ public class JavaFXImageManager {
         final Path appFolder = Config.getAppFolderInUserHome();
 
         this.cacheFolder = appFolder.resolve(PREVIEW_CACHE_FOLDER);
-        this.iioMetadatas = DictionaryFactory.newObjectDictionary();
 
         if (Files.exists(cacheFolder)) {
             FileUtils.delete(cacheFolder);
@@ -164,11 +147,46 @@ public class JavaFXImageManager {
      */
     @NotNull
     @FXThread
-    public Image getTexturePreview(@Nullable final Path file, final int width, final int height) {
+    public Image getImagePreview(@Nullable final Path file, final int width, final int height) {
         if (file == null || !Files.exists(file)) return Icons.IMAGE_512;
 
-        final String absolutePath = file.toAbsolutePath().toString();
-        final String fileHash = StringUtils.toMD5(absolutePath) + ".png";
+        final FileTime lastModFile = Utils.get(file, first -> Files.getLastModifiedTime(first));
+        final URL url = Utils.get(file, first -> first.toUri().toURL());
+
+        return getImagePreview(url, lastModFile, width, height);
+    }
+
+    /**
+     * Get image preview.
+     *
+     * @param resourcePath the resource path to an image.
+     * @param width        the required width.
+     * @param height       the required height.
+     * @return the image.
+     */
+    @NotNull
+    @FXThread
+    public Image getImagePreview(@Nullable final String resourcePath, final int width, final int height) {
+
+        URL url = getClass().getResource(resourcePath);
+
+        if (url == null) {
+            url = getClass().getResource("/" + resourcePath);
+        }
+
+        if (url == null) {
+            return Icons.IMAGE_512;
+        }
+
+        return getImagePreview(url, null, width, height);
+    }
+
+    @NotNull
+    private Image getImagePreview(@NotNull URL url, @Nullable final FileTime lastModFile,
+                                  final int width, final int height) {
+
+        final String externalForm = url.toExternalForm();
+        final String fileHash = StringUtils.toMD5(externalForm) + ".png";
 
         final Path cacheFolder = getCacheFolder();
         final Path imageFolder = cacheFolder.resolve(String.valueOf(width)).resolve(String.valueOf(height));
@@ -176,134 +194,27 @@ public class JavaFXImageManager {
 
         if (Files.exists(cacheFile)) {
 
-            try {
+            final FileTime lastModCacheFile = Utils.get(cacheFile, file -> Files.getLastModifiedTime(file));
 
-                final FileTime lastModCacheFile = Files.getLastModifiedTime(cacheFile);
-                final FileTime lastModFile = Files.getLastModifiedTime(file);
-
-                if (lastModCacheFile.compareTo(lastModFile) >= 0) {
-                    return new Image(cacheFile.toUri().toString(), width, height, false, false);
-                }
-
-            } catch (final IOException e) {
-                LOGGER.warning(e);
+            if (lastModFile == null || lastModCacheFile.compareTo(lastModFile) >= 0) {
+                final String pathToCache = Utils.get(cacheFile, first -> first.toUri().toURL().toExternalForm());
+                return new Image(pathToCache, width, height, false, false);
             }
         }
 
-        final Path parent = cacheFile.getParent();
-        try {
-            Files.createDirectories(parent);
-        } catch (final IOException e) {
-            LOGGER.warning(e);
-        }
+        Utils.run(cacheFile, first -> Files.createDirectories(first.getParent()));
 
-        final String extension = FileUtils.getExtension(file);
+        final String extension = FileUtils.getExtension(externalForm);
 
         if (FX_FORMATS.contains(extension)) {
-
-            final String url = file.toUri().toString();
-
-            Image image = new Image(url);
-
-            final int imageWidth = (int) image.getWidth();
-            final int imageHeight = (int) image.getHeight();
-
-            if (imageWidth > width || imageHeight > height) {
-                if (imageWidth == imageHeight) {
-                    image = new Image(url, width, height, false, false);
-                } else if (imageWidth > imageHeight) {
-                    float mod = imageHeight * 1F / imageWidth;
-                    image = new Image(url, width, height * mod, false, false);
-                } else if (imageHeight > imageWidth) {
-                    float mod = imageWidth * 1F / imageHeight;
-                    image = new Image(url, width * mod, height, false, false);
-                }
-            }
-
-            final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
-
-            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
-                ImageIO.write(bufferedImage, "png", out);
-            } catch (final IOException e) {
-                LOGGER.warning(e);
-            }
-
-            return image;
-
+            return readFXImage(width, height, externalForm, cacheFile);
         } else if (JME_FORMATS.contains(extension)) {
-
-            final Path assetFile = notNull(getAssetFile(file));
-            final String assetPath = toAssetPath(assetFile);
-
-            final Editor editor = Editor.getInstance();
-            final AssetManager assetManager = editor.getAssetManager();
-            final Texture texture = assetManager.loadTexture(assetPath);
-            final BufferedImage textureImage;
-
-            try {
-                textureImage = ImageToAwt.convert(texture.getImage(), false, true, 0);
-            } catch (final UnsupportedOperationException e) {
-                EditorUtil.handleException(LOGGER, this, e);
-                return Icons.IMAGE_512;
-            }
-
-            final int imageWidth = textureImage.getWidth();
-            final int imageHeight = textureImage.getHeight();
-
-            final java.awt.Image newImage = scaleImage(width, height, textureImage, imageWidth, imageHeight);
-            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-            final Graphics2D g2d = bufferedImage.createGraphics();
-            g2d.drawImage(newImage, 0, 0, null);
-            g2d.dispose();
-
-            Image javaFXImage;
-
-            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
-                ImageIO.write(bufferedImage, "png", out);
-                javaFXImage = new Image(cacheFile.toUri().toString());
-            } catch (final IOException e) {
-                LOGGER.warning(e);
-                javaFXImage = Icons.IMAGE_512;
-            }
-
-            return javaFXImage;
-
+            return readJMETexture(width, height, externalForm, cacheFile);
         } else if (IMAGE_IO_FORMATS.contains(extension)) {
-
-            final BufferedImage read;
-            try {
-                read = ImageIO.read(file.toFile());
-            } catch (final IOException e) {
-                EditorUtil.handleException(LOGGER, this, e);
-                return Icons.IMAGE_512;
-            }
-
-            final int imageWidth = read.getWidth();
-            final int imageHeight = read.getHeight();
-
-            final java.awt.Image newImage = scaleImage(width, height, read, imageWidth, imageHeight);
-            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-            final Graphics2D g2d = bufferedImage.createGraphics();
-            g2d.drawImage(newImage, 0, 0, null);
-            g2d.dispose();
-
-            Image javaFXImage;
-
-            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
-                ImageIO.write(bufferedImage, "png", out);
-                javaFXImage = new Image(cacheFile.toUri().toString());
-            } catch (final IOException e) {
-                LOGGER.warning(e);
-                javaFXImage = Icons.IMAGE_512;
-            }
-
-            return javaFXImage;
-
+            return readIOImage(url, width, height, cacheFile);
         } else if (FileExtensions.IMAGE_DDS.equals(extension)) {
 
-            final byte[] content = notNull(Utils.get(file, Files::readAllBytes));
+            final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
             final int[] pixels = DDSReader.read(content, DDSReader.ARGB, 0);
             final int currentWidth = DDSReader.getWidth(content);
             final int currentHeight = DDSReader.getHeight(content);
@@ -311,28 +222,11 @@ public class JavaFXImageManager {
             final BufferedImage read = new BufferedImage(currentWidth, currentHeight, BufferedImage.TYPE_INT_ARGB);
             read.setRGB(0, 0, currentWidth, currentHeight, pixels, 0, currentWidth);
 
-            final java.awt.Image newImage = scaleImage(width, height, read, currentWidth, currentHeight);
-            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-            final Graphics2D g2d = bufferedImage.createGraphics();
-            g2d.drawImage(newImage, 0, 0, null);
-            g2d.dispose();
-
-            Image javaFXImage;
-
-            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
-                ImageIO.write(bufferedImage, "png", out);
-                javaFXImage = new Image(cacheFile.toUri().toString());
-            } catch (final IOException e) {
-                LOGGER.warning(e);
-                javaFXImage = Icons.IMAGE_512;
-            }
-
-            return javaFXImage;
+            return scaleAndWrite(width, height, cacheFile, read, currentWidth, currentHeight);
 
         } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
 
-            final byte[] content = notNull(Utils.get(file, Files::readAllBytes));
+            final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
 
             final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
             if (awtImage == null) return Icons.IMAGE_512;
@@ -340,32 +234,99 @@ public class JavaFXImageManager {
             final int imageWidth = awtImage.getWidth();
             final int imageHeight = awtImage.getHeight();
 
-            final java.awt.Image newImage = scaleImage(width, height, awtImage, imageWidth, imageHeight);
-            final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-            final Graphics2D g2d = bufferedImage.createGraphics();
-            g2d.drawImage(newImage, 0, 0, null);
-            g2d.dispose();
-
-            Image javaFXImage;
-
-            try (final OutputStream out = Files.newOutputStream(cacheFile)) {
-                ImageIO.write(bufferedImage, "png", out);
-                javaFXImage = new Image(cacheFile.toUri().toString());
-            } catch (final IOException e) {
-                LOGGER.warning(e);
-                javaFXImage = Icons.IMAGE_512;
-            }
-
-            return javaFXImage;
+            return scaleAndWrite(width, height, cacheFile, awtImage, imageWidth, imageHeight);
         }
 
         return Icons.IMAGE_512;
     }
 
     @NotNull
-    private java.awt.Image scaleImage(final int width, final int height, @NotNull final BufferedImage read,
-                                      final int imageWidth, final int imageHeight) {
+    private Image readIOImage(@NotNull final URL url, final int width, final int height, @NotNull final Path cacheFile) {
+
+        final BufferedImage read;
+        try {
+            read = ImageIO.read(url);
+        } catch (final IOException e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            return Icons.IMAGE_512;
+        }
+
+        return scaleAndWrite(width, height, cacheFile, read, read.getWidth(), read.getHeight());
+    }
+
+    @NotNull
+    private Image readJMETexture(final int width, final int height, @NotNull final String externalForm,
+                                 @NotNull final Path cacheFile) {
+
+        final Editor editor = Editor.getInstance();
+        final AssetManager assetManager = editor.getAssetManager();
+        final Texture texture = assetManager.loadTexture(externalForm);
+
+        final BufferedImage textureImage;
+        try {
+            textureImage = ImageToAwt.convert(texture.getImage(), false, true, 0);
+        } catch (final UnsupportedOperationException e) {
+            EditorUtil.handleException(LOGGER, this, e);
+            return Icons.IMAGE_512;
+        }
+
+        final int imageWidth = textureImage.getWidth();
+        final int imageHeight = textureImage.getHeight();
+
+        return scaleAndWrite(width, height, cacheFile, textureImage, imageWidth, imageHeight);
+    }
+
+    @NotNull
+    private Image readFXImage(final int width, final int height, @NotNull final String externalForm,
+                              @NotNull final Path cacheFile) {
+
+        Image image = new Image(externalForm);
+
+        final int imageWidth = (int) image.getWidth();
+        final int imageHeight = (int) image.getHeight();
+
+        if (imageWidth > width || imageHeight > height) {
+            if (imageWidth == imageHeight) {
+                image = new Image(externalForm, width, height, false, false);
+            } else if (imageWidth > imageHeight) {
+                float mod = imageHeight * 1F / imageWidth;
+                image = new Image(externalForm, width, height * mod, false, false);
+            } else if (imageHeight > imageWidth) {
+                float mod = imageWidth * 1F / imageHeight;
+                image = new Image(externalForm, width * mod, height, false, false);
+            }
+        }
+
+        final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+            ImageIO.write(bufferedImage, "png", out);
+        } catch (final IOException e) {
+            LOGGER.warning(e);
+        }
+
+        return image;
+    }
+
+    @NotNull
+    private Image scaleAndWrite(final int targetWidth, final int targetHeight, @NotNull final Path cacheFile,
+                                @NotNull final BufferedImage textureImage, final int currentWidth,
+                                final int currentHeight) {
+
+        final BufferedImage newImage = scaleImage(targetWidth, targetHeight, textureImage, currentWidth, currentHeight);
+
+        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+            ImageIO.write(newImage, "png", out);
+            return new Image(cacheFile.toUri().toString());
+        } catch (final IOException e) {
+            LOGGER.warning(e);
+            return Icons.IMAGE_512;
+        }
+    }
+
+    @NotNull
+    private BufferedImage scaleImage(final int width, final int height, @NotNull final BufferedImage read,
+                                     final int imageWidth, final int imageHeight) {
 
         java.awt.Image newImage = read;
 
@@ -381,44 +342,16 @@ public class JavaFXImageManager {
             }
         }
 
-        return newImage;
+        final BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        final Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(newImage, 0, 0, null);
+        g2d.dispose();
+
+        return bufferedImage;
     }
 
     private void processEvent(@NotNull final DeletedFileEvent event) {
         //TODO need to add remove from cache
-    }
-
-    /**
-     * Gets metadata.
-     *
-     * @param file the file
-     * @return the metadata
-     */
-    @Nullable
-    public synchronized IIOMetadata getMetadata(@NotNull final Path file) {
-
-        if (iioMetadatas.containsKey(file)) {
-            return iioMetadatas.get(file);
-        }
-
-        try (final ImageInputStream iis = ImageIO.createImageInputStream(file.toFile())) {
-
-            final Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
-
-            if (readers.hasNext()) {
-
-                final ImageReader reader = readers.next();
-                reader.setInput(iis, true);
-
-                final IIOMetadata imageMetadata = reader.getImageMetadata(0);
-                iioMetadatas.put(file, imageMetadata);
-                return imageMetadata;
-            }
-
-        } catch (final Exception e) {
-            iioMetadatas.put(file, null);
-        }
-
-        return null;
     }
 }

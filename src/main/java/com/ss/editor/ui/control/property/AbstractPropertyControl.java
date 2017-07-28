@@ -1,11 +1,18 @@
 package com.ss.editor.ui.control.property;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.Editor;
+import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
+import com.ss.editor.manager.JavaFXImageManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
+import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileAction;
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.event.FXEventManager;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -19,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * The base implementation of the property control.
@@ -37,6 +45,13 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
     protected static final Logger LOGGER = LoggerManager.getLogger(AbstractPropertyControl.class);
 
     /**
+     * Default action tester.
+     */
+    @NotNull
+    protected static final Predicate<Class<?>> DEFAULT_ACTION_TESTER = type -> type == NewFileAction.class ||
+            type == DeleteFileAction.class || type == RenameFileAction.class;
+
+    /**
      * The constant CONTROL_WIDTH_PERCENT.
      */
     public static final double CONTROL_WIDTH_PERCENT = 0.4;
@@ -45,16 +60,41 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
      * The constant CONTROL_WIDTH_PERCENT_2.
      */
     public static final double CONTROL_WIDTH_PERCENT_2 = 0.6;
+
     /**
      * The constant CONTROL_WIDTH_PERCENT_3.
      */
     public static final double CONTROL_WIDTH_PERCENT_3 = 0.7;
 
     /**
-     * The constant EXECUTOR_MANAGER.
+     * The FX event manager.
+     */
+    @NotNull
+    protected static final FXEventManager FX_EVENT_MANAGER = FXEventManager.getInstance();
+
+    /**
+     * The javaFX part of this editor.
+     */
+    @NotNull
+    protected static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
+
+    /**
+     * The executor manager.
      */
     @NotNull
     protected static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    /**
+     * The image preview manager.
+     */
+    @NotNull
+    protected static final JavaFXImageManager IMAGE_MANAGER = JavaFXImageManager.getInstance();
+
+    /**
+     * The editor.
+     */
+    @NotNull
+    protected static final Editor EDITOR = Editor.getInstance();
 
     /**
      * The change handler.

@@ -182,10 +182,30 @@ public class ImageChannelPreview extends CustomTooltip<GridPane> {
      */
     @FXThread
     public void showImage(@Nullable final Path file) {
+        buildPreview(file == null ? null : IMAGE_MANAGER.getImagePreview(file, 120, 120));
+    }
 
-        final Image image = file == null ? null : IMAGE_MANAGER.getTexturePreview(file, 120, 120);
+    /**
+     * Clean.
+     */
+    @FXThread
+    public void clean() {
+        buildPreview(null);
+    }
 
-        if (file == null || image.getWidth() != 120) {
+    /**
+     * Show the resource.
+     *
+     * @param resourcePath the resource path.
+     */
+    @FXThread
+    public void showImage(@Nullable final String resourcePath) {
+        buildPreview(IMAGE_MANAGER.getImagePreview(resourcePath, 120, 120));
+    }
+
+    private void buildPreview(@Nullable final Image image) {
+
+        if (image == null || image.getWidth() != 120) {
 
             final ImageView redView = getRedView();
             redView.setImage(null);

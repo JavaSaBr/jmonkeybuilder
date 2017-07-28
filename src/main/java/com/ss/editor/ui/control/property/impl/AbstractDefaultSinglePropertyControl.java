@@ -36,8 +36,7 @@ public abstract class AbstractDefaultSinglePropertyControl<C extends ChangeConsu
     @Override
     protected void createComponents(@NotNull final HBox container) {
         super.createComponents(container);
-        getPropertyValueLabel()
-                .prefWidthProperty()
+        getPropertyValueLabel().prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
     }
 

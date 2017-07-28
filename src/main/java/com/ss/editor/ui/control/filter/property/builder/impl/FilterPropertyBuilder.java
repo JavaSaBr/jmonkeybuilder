@@ -6,6 +6,7 @@ import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.texture.Texture2D;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
@@ -179,6 +180,17 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
                     addControl(container, property, propertyControl);
                     break;
                 }
+                case TEXTURE_2D: {
+
+                    final EditableProperty<Texture2D, ?> property = cast(editableProperty);
+                    final Texture2D value = property.getValue();
+
+                    final Texture2DFilterPropertyControl<EditableProperty<Texture2D, ?>> propertyControl =
+                            new Texture2DFilterPropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -187,7 +199,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
     }
 
     /**
-     * Add control.
+     * Add the control.
      *
      * @param <T>             the type parameter
      * @param container       the container
@@ -204,6 +216,7 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
         FXUtils.addToPane(propertyControl, container);
     }
 
+    @NotNull
     private <T> EditableProperty<T, ?> cast(@NotNull final EditableProperty<?, ?> property) {
         return ClassUtils.unsafeCast(property);
     }
