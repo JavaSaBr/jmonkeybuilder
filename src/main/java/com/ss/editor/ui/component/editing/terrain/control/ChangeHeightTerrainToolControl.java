@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editing.terrain.control;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
@@ -9,10 +9,10 @@ import com.jme3.terrain.Terrain;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +32,8 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
         private final int xIndex;
         private final int yIndex;
 
+        private final int hash;
+
         /**
          * Instantiates a new Height point.
          *
@@ -45,6 +47,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
             this.y = y;
             this.xIndex = xIndex;
             this.yIndex = yIndex;
+            this.hash = xIndex | (yIndex << 15);
         }
 
         @Override
@@ -58,9 +61,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
 
         @Override
         public int hashCode() {
-            int result = xIndex;
-            result = 31 * result + yIndex;
-            return result;
+            return hash;
         }
     }
 
@@ -83,7 +84,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     public ChangeHeightTerrainToolControl(@NotNull final TerrainEditingComponent component) {
         super(component);
-        this.originalHeight = DictionaryFactory.newObjectDictionary();
+        this.originalHeight = DictionaryFactory.newObjectDictionary(0.2F, 1000);
     }
 
     /**
@@ -102,7 +103,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
         final ObjectDictionary<HeightPoint, Float> originalHeight = getOriginalHeight();
         originalHeight.clear();
 
-        copiedTerrain = requireNonNull(getEditedModel()).clone();
+        copiedTerrain = notNull(getEditedModel()).clone();
     }
 
     /**
@@ -112,8 +113,8 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void change(@NotNull final Vector2f point) {
 
-        final Terrain terrain = (Terrain) requireNonNull(copiedTerrain);
-        final Node terrainNode = (Node) requireNonNull(getEditedModel());
+        final Terrain terrain = (Terrain) notNull(copiedTerrain);
+        final Node terrainNode = (Node) notNull(getEditedModel());
         final Vector3f scale = terrainNode.getWorldScale();
 
         final int halfSize = terrain.getTerrainSize() / 2;
@@ -135,7 +136,7 @@ public class ChangeHeightTerrainToolControl extends TerrainToolControl {
      */
     protected void commitChanges() {
 
-        final Terrain terrain = (Terrain) requireNonNull(getEditedModel());
+        final Terrain terrain = (Terrain) notNull(getEditedModel());
         final ObjectDictionary<Vector2f, Float> oldValues = DictionaryFactory.newObjectDictionary();
         final ObjectDictionary<Vector2f, Float> newValues = DictionaryFactory.newObjectDictionary();
 
