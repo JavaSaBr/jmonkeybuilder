@@ -27,6 +27,7 @@ import com.jme3.scene.control.Control;
 import com.jme3.texture.Texture;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.Config;
@@ -940,22 +941,27 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void doSave() {
-        super.doSave();
+    @BackgroundThread
+    public void doSave(@NotNull final Path toStore) {
+        super.doSave(toStore);
 
-        final Path editFile = getEditFile();
         final M currentModel = getCurrentModel();
 
         NodeUtils.visitGeometry(currentModel, geometry -> saveIfNeedTextures(geometry.getMaterial()));
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
 
-        try (final OutputStream out = Files.newOutputStream(editFile)) {
+        try (final OutputStream out = Files.newOutputStream(toStore)) {
             exporter.save(currentModel, out);
         } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
+    }
 
+    @FXThread
+    @Override
+    protected void postSave() {
+        super.postSave();
         setDirty(false);
     }
 

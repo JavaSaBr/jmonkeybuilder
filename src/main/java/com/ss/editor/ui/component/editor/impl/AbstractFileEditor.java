@@ -7,6 +7,7 @@ import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ExecutorManager;
@@ -22,6 +23,8 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.Utils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
@@ -41,7 +44,10 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -237,7 +243,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         final KeyCode code = event.getCode();
 
         if (code == KeyCode.S && event.isControlDown() && isDirty()) {
-            processSave();
+            save();
         }
     }
 
@@ -297,7 +303,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final Button action = new Button();
         action.setTooltip(new Tooltip(Messages.FILE_EDITOR_ACTION_SAVE + " (Ctrl + S)"));
-        action.setOnAction(event -> processSave());
+        action.setOnAction(event -> save());
         action.setGraphic(new ImageView(Icons.SAVE_16));
         action.disableProperty().bind(dirtyProperty().not());
 
@@ -309,17 +315,49 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return action;
     }
 
+    @FXThread
+    @Override
+    public void save() {
+        if(isSaving()) return;
+        notifyStartSaving();
+
+        EXECUTOR_MANAGER.addBackgroundTask(() -> {
+
+            final EditorDescription description = getDescription();
+            final String editorId = description.getEditorId();
+
+            final Path tempFile = Utils.get(editorId, prefix -> Files.createTempFile(prefix, "toSave.tmp"));
+
+            final long stamp = EDITOR.asyncLock();
+            try {
+                doSave(tempFile);
+                Files.copy(tempFile, getEditFile(), StandardCopyOption.REPLACE_EXISTING);
+            } catch (final IOException e) {
+                LOGGER.warning(this, e);
+                EXECUTOR_MANAGER.addFXTask(this::notifyFinishSaving);
+            } finally {
+                EDITOR.asyncUnlock(stamp);
+                FileUtils.delete(tempFile);
+            }
+
+            EXECUTOR_MANAGER.addFXTask(this::postSave);
+        });
+    }
+
     /**
-     * The process of saving this file.
+     * Save new changes.
+     *
+     * @param toStore the file to store.
+     */
+    @BackgroundThread
+    protected void doSave(@NotNull final Path toStore) {
+    }
+
+    /**
+     * Do some actions after saving.
      */
     @FXThread
-    protected void processSave() {
-        final long stamp = EDITOR.asyncLock();
-        try {
-            doSave();
-        } finally {
-            EDITOR.asyncUnlock(stamp);
-        }
+    protected void postSave() {
     }
 
     /**
@@ -607,11 +645,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     protected void setSaving(final boolean saving) {
         this.saving = saving;
-    }
-
-    @Override
-    public void doSave() {
-        notifyStartSaving();
     }
 
     /**

@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.EditorRegistry;
@@ -122,17 +123,27 @@ public class TextFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    public void doSave() {
-        super.doSave();
+    @BackgroundThread
+    public void doSave(@NotNull final Path toStore) {
+        super.doSave(toStore);
 
         final TextArea textArea = getTextArea();
         final String newContent = textArea.getText();
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(newContent);
         } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
+    }
+
+    @FXThread
+    @Override
+    protected void postSave() {
+        super.postSave();
+
+        final TextArea textArea = getTextArea();
+        final String newContent = textArea.getText();
 
         setOriginalContent(newContent);
         updateDirty(newContent);

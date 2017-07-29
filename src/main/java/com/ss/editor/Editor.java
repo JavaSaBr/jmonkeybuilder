@@ -338,14 +338,14 @@ public class Editor extends JmeToJFXApplication {
     /**
      * Lock the render thread for doing actions with game scene.
      */
-    private long syncLock() {
+    public long syncLock() {
         return lock.writeLock();
     }
 
     /**
      * Unlock the render thread.
      */
-    private void syncUnlock(final long stamp) {
+    public void syncUnlock(final long stamp) {
         lock.unlockWrite(stamp);
     }
 

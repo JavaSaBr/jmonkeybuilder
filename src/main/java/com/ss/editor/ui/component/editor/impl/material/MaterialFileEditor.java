@@ -16,6 +16,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
@@ -272,18 +273,24 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
-    public void doSave() {
-        super.doSave();
+    @BackgroundThread
+    public void doSave(@NotNull final Path toStore) {
+        super.doSave(toStore);
 
         final Material currentMaterial = getCurrentMaterial();
         final String content = MaterialSerializer.serializeToString(currentMaterial);
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(content);
         } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
+    }
 
+    @FXThread
+    @Override
+    protected void postSave() {
+        super.postSave();
         setDirty(false);
     }
 

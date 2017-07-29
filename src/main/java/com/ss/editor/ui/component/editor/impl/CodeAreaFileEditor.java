@@ -1,6 +1,7 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -129,17 +130,27 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     }
 
     @Override
-    public void doSave() {
-        super.doSave();
+    @BackgroundThread
+    public void doSave(@NotNull final Path toStore) {
+        super.doSave(toStore);
 
         final CodeArea codeArea = getCodeArea();
         final String newContent = codeArea.getText();
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(getEditFile()))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(toStore))) {
             out.print(newContent);
         } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
+    }
+
+    @FXThread
+    @Override
+    protected void postSave() {
+        super.postSave();
+
+        final CodeArea codeArea = getCodeArea();
+        final String newContent = codeArea.getText();
 
         setOriginalContent(newContent);
         updateDirty(newContent);

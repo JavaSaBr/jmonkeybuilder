@@ -92,7 +92,7 @@ public interface FileEditor {
      * Save new changes.
      */
     @FXThread
-    default void doSave() {
+    default void save() {
     }
 
     /**

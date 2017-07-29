@@ -65,7 +65,7 @@ import java.util.logging.Logger;
  *
  * @author Mark Powell
  * @author Joshua Slack
- * @version $Revision : 4075 $, $Data$
+ * @version $Revision: 4075 $, $Data$
  */
 public abstract class Spatial implements Savable, Cloneable, Collidable, CloneableSmartAsset, JmeCloneable {
 
@@ -117,34 +117,16 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
          */
         Never;
     }
-
     /**
      * Refresh flag types
      */
     protected static final int RF_TRANSFORM = 0x01, // need light resort + combine transforms
-    /**
-     * The Rf bound.
-     */
-    RF_BOUND = 0x02, /**
-     * The Rf lightlist.
-     */
-    RF_LIGHTLIST = 0x04, // changes in light lists
-    /**
-     * The Rf child lightlist.
-     */
-    RF_CHILD_LIGHTLIST = 0x08, // some child need geometry update
-    /**
-     * The Rf matparam override.
-     */
-    RF_MATPARAM_OVERRIDE = 0x10;
+            RF_BOUND = 0x02,
+            RF_LIGHTLIST = 0x04, // changes in light lists
+            RF_CHILD_LIGHTLIST = 0x08, // some child need geometry update
+            RF_MATPARAM_OVERRIDE = 0x10;
 
-    /**
-     * The Cull hint.
-     */
     protected CullHint cullHint = CullHint.Inherit;
-    /**
-     * The Batch hint.
-     */
     protected BatchHint batchHint = BatchHint.Inherit;
     /**
      * Spatial's bounding volume relative to the world.
@@ -154,61 +136,28 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * LightList
      */
     protected LightList localLights;
-    /**
-     * The World lights.
-     */
     protected transient LightList worldLights;
 
-    /**
-     * The Local overrides.
-     */
     protected SafeArrayList<MatParamOverride> localOverrides;
-    /**
-     * The World overrides.
-     */
     protected SafeArrayList<MatParamOverride> worldOverrides;
 
     /**
      * This spatial's name.
      */
     protected String name;
-    /**
-     * The Frustrum intersects.
-     */
     // scale values
     protected transient Camera.FrustumIntersect frustrumIntersects = Camera.FrustumIntersect.Intersects;
-    /**
-     * The Queue bucket.
-     */
     protected RenderQueue.Bucket queueBucket = RenderQueue.Bucket.Inherit;
-    /**
-     * The Shadow mode.
-     */
     protected ShadowMode shadowMode = RenderQueue.ShadowMode.Inherit;
-    /**
-     * The Queue distance.
-     */
     public transient float queueDistance = Float.NEGATIVE_INFINITY;
-    /**
-     * The Local transform.
-     */
     protected Transform localTransform;
-    /**
-     * The World transform.
-     */
     protected Transform worldTransform;
-    /**
-     * The Controls.
-     */
     protected SafeArrayList<Control> controls = new SafeArrayList<Control>(Control.class);
-    /**
-     * The User data.
-     */
     protected HashMap<String, Savable> userData = null;
     /**
      * Used for smart asset caching
      *
-     * @see AssetKey#useSmartCache() AssetKey#useSmartCache()
+     * @see AssetKey#useSmartCache()
      */
     protected AssetKey key;
     /**
@@ -246,10 +195,13 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Constructor instantiates a new <code>Spatial</code> object setting the
      * rotation, translation and scale value to defaults.
      *
-     * @param name the name of the scene element. This is required for            identification and comparison purposes.
+     * @param name
+     *            the name of the scene element. This is required for
+     *            identification and comparison purposes.
      */
     protected Spatial(String name) {
         this.name = name;
+        visible = true;
         localTransform = new Transform();
         worldTransform = new Transform();
 
@@ -259,7 +211,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         localOverrides = new SafeArrayList<>(MatParamOverride.class);
         worldOverrides = new SafeArrayList<>(MatParamOverride.class);
         refreshFlags |= RF_BOUND;
-        visible = true;
     }
 
     public void setKey(AssetKey key) {
@@ -275,13 +226,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * be called, either because setRequiresUpdate(true) has been called
      * or because the spatial has controls.  This is package private to
      * avoid exposing it to the public API since it is only used by Node.
-     *
-     * @return the updates
      */
     boolean requiresUpdates() {
         return requiresUpdates | !controls.isEmpty();
     }
-
     /**
      * Subclasses can call this with true to denote that they require
      * updateLogicalState() to be called even if they contain no controls.
@@ -296,8 +244,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * call setRequiresUpdate(false) in their constructors to receive
      * optimal behavior if they don't require updateLogicalState() to be
      * called even if there are no controls.
-     *
-     * @param f the f
      */
     protected void setRequiresUpdates( boolean f ) {
         // Note to explorers, the reason this was done as a protected setter
@@ -331,9 +277,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         setBoundRefresh();
     }
 
-    /**
-     * Sets light list refresh.
-     */
     protected void setLightListRefresh() {
         refreshFlags |= RF_LIGHTLIST;
         // Make sure next updateGeometricState() visits this branch
@@ -350,9 +293,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Sets mat param override refresh.
-     */
     protected void setMatParamOverrideRefresh() {
         refreshFlags |= RF_MATPARAM_OVERRIDE;
         Spatial p = parent;
@@ -367,11 +307,28 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
+     * Indicate that the bounding of this spatial has changed and that
+     * a refresh is required.
+     */
+    protected void setBoundRefresh() {
+        refreshFlags |= RF_BOUND;
+
+        Spatial p = parent;
+        while (p != null) {
+            if ((p.refreshFlags & RF_BOUND) != 0) {
+                return;
+            }
+
+            p.refreshFlags |= RF_BOUND;
+            p = p.parent;
+        }
+    }
+    /**
      * (Internal use only) Forces a refresh of the given types of data.
      *
      * @param transforms Refresh world transform based on parents'
-     * @param bounds     Refresh bounding volume data based on child nodes
-     * @param lights     Refresh light list based on parents'
+     * @param bounds Refresh bounding volume data based on child nodes
+     * @param lights Refresh light list based on parents'
      */
     public void forceRefresh(boolean transforms, boolean bounds, boolean lights) {
         if (transforms) {
@@ -393,7 +350,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * directly.
      *
      * @param cam The camera to check against.
-     * @return true if inside or intersecting camera frustum (should be rendered), false if outside.
+     * @return true if inside or intersecting camera frustum
+     * (should be rendered), false if outside.
      */
     public boolean checkCulling(Camera cam) {
         if (refreshFlags != 0) {
@@ -434,27 +392,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * Indicate that the bounding of this spatial has changed and that
-     * a refresh is required.
-     */
-    protected void setBoundRefresh() {
-        refreshFlags |= RF_BOUND;
-
-        Spatial p = parent;
-        while (p != null) {
-            if ((p.refreshFlags & RF_BOUND) != 0) {
-                return;
-            }
-
-            p.refreshFlags |= RF_BOUND;
-            p = p.parent;
-        }
-    }
-
-    /**
      * Sets the name of this spatial.
      *
-     * @param name The spatial's new name.
+     * @param name
+     *            The spatial's new name.
      */
     public void setName(String name) {
         this.name = name;
@@ -503,7 +444,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
     /**
      * Get the world material parameter overrides.
-     * <p>
+     *
      * Note that this list is only updated on a call to
      * {@link #updateGeometricState()}. After update, the world overrides list
      * will contain the {@link #getParent() parent's} world overrides combined
@@ -563,7 +504,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * <code>rotateUpTo</code> is a utility function that alters the
      * local rotation to point the Y axis in the direction given by newUp.
      *
-     * @param newUp the up vector to use - assumed to be a unit vector.
+     * @param newUp
+     *            the up vector to use - assumed to be a unit vector.
      */
     public void rotateUpTo(Vector3f newUp) {
         TempVars vars = TempVars.get();
@@ -597,14 +539,17 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * to transform the z-axis to point onto 'position' and the y-axis to 'up'.
      * Unlike {@link Quaternion#lookAt(com.jme3.math.Vector3f, com.jme3.math.Vector3f) }
      * this method takes a world position to look at and not a relative direction.
-     * <p>
+     *
      * Note : 28/01/2013 this method has been fixed as it was not taking into account the parent rotation.
      * This was resulting in improper rotation when the spatial had rotated parent nodes.
      * This method is intended to work in world space, so no matter what parent graph the
      * spatial has, it will look at the given position in world space.
      *
-     * @param position where to look at in terms of world coordinates
-     * @param upVector a vector indicating the (local) up direction. (typically {0,            1, 0} in jME.)
+     * @param position
+     *            where to look at in terms of world coordinates
+     * @param upVector
+     *            a vector indicating the (local) up direction. (typically {0,
+     *            1, 0} in jME.)
      */
     public void lookAt(Vector3f position, Vector3f upVector) {
         Vector3f worldTranslation = getWorldTranslation();
@@ -635,9 +580,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         refreshFlags &= ~RF_BOUND;
     }
 
-    /**
-     * Update world light list.
-     */
     protected void updateWorldLightList() {
         if (parent == null) {
             worldLights.update(localLights, null);
@@ -649,9 +591,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Update mat param overrides.
-     */
     protected void updateMatParamOverrides() {
         refreshFlags &= ~RF_MATPARAM_OVERRIDE;
 
@@ -694,7 +633,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Remove all local material parameter overrides.
      *
-     * @see #addMatParamOverride(com.jme3.material.MatParamOverride) #addMatParamOverride(com.jme3.material.MatParamOverride)
+     * @see #addMatParamOverride(com.jme3.material.MatParamOverride)
      */
     public void clearMatParamOverrides() {
         if (!localOverrides.isEmpty()) {
@@ -810,8 +749,9 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      *
      * @param rm The RenderManager rendering the Spatial.
      * @param vp The ViewPort to which the Spatial is being rendered to.
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
-     * @see Spatial#getControl(java.lang.Class) Spatial#getControl(java.lang.Class)
+     *
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
+     * @see Spatial#getControl(java.lang.Class)
      */
     public void runControlRender(RenderManager rm, ViewPort vp) {
         if (controls.isEmpty()) {
@@ -825,9 +765,9 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
     /**
      * Add a control to the list of controls.
-     *
      * @param control The control to add.
-     * @see Spatial#removeControl(java.lang.Class) Spatial#removeControl(java.lang.Class)
+     *
+     * @see Spatial#removeControl(java.lang.Class)
      */
     public void addControl(Control control) {
         boolean before = requiresUpdates();
@@ -845,8 +785,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Removes the first control that is an instance of the given class.
      *
-     * @param controlType the control type
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
      */
     public void removeControl(Class<? extends Control> controlType) {
         boolean before = requiresUpdates();
@@ -870,8 +809,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Removes the given control from this spatial's controls.
      *
      * @param control The control to remove
-     * @return True if the control was successfully removed. False if the control is not assigned to this spatial.
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
+     * @return True if the control was successfully removed. False if the
+     * control is not assigned to this spatial.
+     *
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
      */
     public boolean removeControl(Control control) {
         boolean before = requiresUpdates();
@@ -894,10 +835,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Returns the first control that is an instance of the given class,
      * or null if no such control exists.
      *
-     * @param <T>         the type parameter
      * @param controlType The superclass of the control to look for.
      * @return The first instance in the list of the controlType class, or null.
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
+     *
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
      */
     public <T extends Control> T getControl(Class<T> controlType) {
         for (Control c : controls.getArray()) {
@@ -913,19 +854,20 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      *
      * @param index The index of the control in the list to find.
      * @return The control at the given index.
-     * @throws IndexOutOfBoundsException If the index is outside the range [0, getNumControls()-1]
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
+     *
+     * @throws IndexOutOfBoundsException
+     *      If the index is outside the range [0, getNumControls()-1]
+     *
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
      */
     public Control getControl(int index) {
         return controls.get(index);
     }
 
     /**
-     * Gets num controls.
-     *
      * @return The number of controls attached to this Spatial.
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
-     * @see Spatial#removeControl(java.lang.Class) Spatial#removeControl(java.lang.Class)
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
+     * @see Spatial#removeControl(java.lang.Class)
      */
     public int getNumControls() {
         return controls.size();
@@ -936,7 +878,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * for all controls attached to this Spatial.
      *
      * @param tpf Time per frame.
-     * @see Spatial#addControl(com.jme3.scene.control.Control) Spatial#addControl(com.jme3.scene.control.Control)
+     *
+     * @see Spatial#addControl(com.jme3.scene.control.Control)
      */
     public void updateLogicalState(float tpf) {
         runControlUpdate(tpf);
@@ -950,9 +893,9 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * will cause undefined results. User code should only call this
      * method on Spatials having no parent.
      *
-     * @see Spatial#getWorldLightList() Spatial#getWorldLightList()
-     * @see Spatial#getWorldTransform() Spatial#getWorldTransform()
-     * @see Spatial#getWorldBound() Spatial#getWorldBound()
+     * @see Spatial#getWorldLightList()
+     * @see Spatial#getWorldTransform()
+     * @see Spatial#getWorldBound()
      */
     public void updateGeometricState() {
         // assume that this Spatial is a leaf, a proper implementation
@@ -979,8 +922,11 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Convert a vector (in) from this spatial's local coordinate space to world
      * coordinate space.
      *
-     * @param in    vector to read from
-     * @param store where to write the result (null to create a new vector, may be            same as in)
+     * @param in
+     *            vector to read from
+     * @param store
+     *            where to write the result (null to create a new vector, may be
+     *            same as in)
      * @return the result (store)
      */
     public Vector3f localToWorld(final Vector3f in, Vector3f store) {
@@ -992,8 +938,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Convert a vector (in) from world coordinate space to this spatial's local
      * coordinate space.
      *
-     * @param in    vector to read from
-     * @param store where to write the result
+     * @param in
+     *            vector to read from
+     * @param store
+     *            where to write the result
      * @return the result (store)
      */
     public Vector3f worldToLocal(final Vector3f in, final Vector3f store) {
@@ -1016,7 +964,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * {@link Node#detachChild(Spatial)} - don't call directly.
      * <code>setParent</code> sets the parent of this node.
      *
-     * @param parent the parent of this node.
+     * @param parent
+     *            the parent of this node.
      */
     protected void setParent(Node parent) {
         this.parent = parent;
@@ -1038,7 +987,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * determines if the provided Node is the parent, or parent's parent, etc. of this Spatial.
      *
-     * @param ancestor the ancestor object to look for.
+     * @param ancestor
+     *            the ancestor object to look for.
      * @return true if the ancestor is found, false otherwise.
      */
     public boolean hasAncestor(Node ancestor) {
@@ -1065,7 +1015,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * <code>setLocalRotation</code> sets the local rotation of this node
      * by using a {@link Matrix3f}.
      *
-     * @param rotation the new local rotation.
+     * @param rotation
+     *            the new local rotation.
      */
     public void setLocalRotation(Matrix3f rotation) {
         localTransform.getRotation().fromRotationMatrix(rotation);
@@ -1075,7 +1026,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setLocalRotation</code> sets the local rotation of this node.
      *
-     * @param quaternion the new local rotation.
+     * @param quaternion
+     *            the new local rotation.
      */
     public void setLocalRotation(Quaternion quaternion) {
         localTransform.setRotation(quaternion);
@@ -1094,7 +1046,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setLocalScale</code> sets the local scale of this node.
      *
-     * @param localScale the new local scale, applied to x, y and z
+     * @param localScale
+     *            the new local scale, applied to x, y and z
      */
     public void setLocalScale(float localScale) {
         localTransform.setScale(localScale);
@@ -1103,10 +1056,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
     /**
      * <code>setLocalScale</code> sets the local scale of this node.
-     *
-     * @param x the x
-     * @param y the y
-     * @param z the z
      */
     public void setLocalScale(float x, float y, float z) {
         localTransform.setScale(x, y, z);
@@ -1116,7 +1065,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setLocalScale</code> sets the local scale of this node.
      *
-     * @param localScale the new local scale.
+     * @param localScale
+     *            the new local scale.
      */
     public void setLocalScale(Vector3f localScale) {
         localTransform.setScale(localScale);
@@ -1137,7 +1087,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * <code>setLocalTranslation</code> sets the local translation of this
      * spatial.
      *
-     * @param localTranslation the local translation of this spatial.
+     * @param localTranslation
+     *            the local translation of this spatial.
      */
     public void setLocalTranslation(Vector3f localTranslation) {
         this.localTransform.setTranslation(localTranslation);
@@ -1147,10 +1098,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setLocalTranslation</code> sets the local translation of this
      * spatial.
-     *
-     * @param x the x
-     * @param y the y
-     * @param z the z
      */
     public void setLocalTranslation(float x, float y, float z) {
         this.localTransform.setTranslation(x, y, z);
@@ -1160,8 +1107,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setLocalTransform</code> sets the local transform of this
      * spatial.
-     *
-     * @param t the t
      */
     public void setLocalTransform(Transform t) {
         this.localTransform.set(t);
@@ -1202,7 +1147,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * <code>removeLight</code> removes the given light from the Spatial.
      *
      * @param light The light to remove.
-     * @see Spatial#addLight(com.jme3.light.Light) Spatial#addLight(com.jme3.light.Light)
+     * @see Spatial#addLight(com.jme3.light.Light)
      */
     public void removeLight(Light light) {
         localLights.remove(light);
@@ -1212,9 +1157,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Translates the spatial by the given translation vector.
      *
-     * @param x the x
-     * @param y the y
-     * @param z the z
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial move(float x, float y, float z) {
@@ -1227,7 +1169,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Translates the spatial by the given translation vector.
      *
-     * @param offset the offset
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial move(Vector3f offset) {
@@ -1240,7 +1181,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Scales the spatial by the given value
      *
-     * @param s the s
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial scale(float s) {
@@ -1250,9 +1190,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Scales the spatial by the given scale vector.
      *
-     * @param x the x
-     * @param y the y
-     * @param z the z
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial scale(float x, float y, float z) {
@@ -1265,7 +1202,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Rotates the spatial by the given rotation.
      *
-     * @param rot the rot
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial rotate(Quaternion rot) {
@@ -1279,9 +1215,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * Rotates the spatial by the xAngle, yAngle and zAngle angles (in radians),
      * (aka pitch, yaw, roll) in the local coordinate space.
      *
-     * @param xAngle the x angle
-     * @param yAngle the y angle
-     * @param zAngle the z angle
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial rotate(float xAngle, float yAngle, float zAngle) {
@@ -1296,7 +1229,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
     /**
      * Centers the spatial in the origin of the world bound.
-     *
      * @return The spatial on which this method is called, e.g <code>this</code>.
      */
     public Spatial center() {
@@ -1310,10 +1242,9 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * Gets cull hint.
-     *
-     * @return the cull mode of this spatial, or if set to CullHint.Inherit, the cull mode of its parent.
-     * @see #setCullHint(CullHint) #setCullHint(CullHint)
+     * @see #setCullHint(CullHint)
+     * @return the cull mode of this spatial, or if set to CullHint.Inherit, the
+     * cull mode of its parent.
      */
     public CullHint getCullHint() {
         if (cullHint != CullHint.Inherit) {
@@ -1325,11 +1256,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Gets batch hint.
-     *
-     * @return the batch hint
-     */
     public BatchHint getBatchHint() {
         if (batchHint != BatchHint.Inherit) {
             return batchHint;
@@ -1357,10 +1283,10 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * Gets shadow mode.
+     * @return The shadow mode of this spatial, if the local shadow
+     * mode is set to inherit, then the parent's shadow mode is returned.
      *
-     * @return The shadow mode of this spatial, if the local shadow mode is set to inherit, then the parent's shadow mode is returned.
-     * @see Spatial#setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode) Spatial#setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode)
+     * @see Spatial#setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode)
      * @see ShadowMode
      */
     public RenderQueue.ShadowMode getShadowMode() {
@@ -1391,30 +1317,29 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setModelBound</code> sets the bounding object for this Spatial.
      *
-     * @param modelBound the bounding object for this spatial.
+     * @param modelBound
+     *            the bounding object for this spatial.
      */
     public abstract void setModelBound(BoundingVolume modelBound);
 
     /**
-     * Gets vertex count.
-     *
      * @return The sum of all vertices under this Spatial.
      */
     public abstract int getVertexCount();
 
     /**
-     * Gets triangle count.
-     *
      * @return The sum of all triangles under this Spatial.
      */
     public abstract int getTriangleCount();
 
     /**
-     * Clone spatial.
+     * @return A clone of this Spatial, the scene graph in its entirety
+     * is cloned and can be altered independently of the original scene graph.
      *
-     * @param cloneMaterial the clone material
-     * @return A clone of this Spatial, the scene graph in its entirety is cloned and can be altered independently of the original scene graph. Note that meshes of geometries are not cloned explicitly, they are shared if static, or specially cloned if animated.
-     * @see Mesh#cloneForAnim() Mesh#cloneForAnim()
+     * Note that meshes of geometries are not cloned explicitly, they
+     * are shared if static, or specially cloned if animated.
+     *
+     * @see Mesh#cloneForAnim()
      */
     public Spatial clone( boolean cloneMaterial ) {
 
@@ -1448,10 +1373,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * The old clone() method that did not use the new Cloner utility.
-     *
-     * @param cloneMaterial the clone material
-     * @return the spatial
+     *  The old clone() method that did not use the new Cloner utility.
      */
     public Spatial oldClone(boolean cloneMaterial) {
         try {
@@ -1531,10 +1453,11 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * Deep clone spatial.
+     * @return Similar to Spatial.clone() except will create a deep clone of all
+     * geometries' meshes. Normally this method shouldn't be used. Instead, use
+     * Spatial.clone()
      *
-     * @return Similar to Spatial.clone() except will create a deep clone of all geometries' meshes. Normally this method shouldn't be used. Instead, use Spatial.clone()
-     * @see Spatial#clone() Spatial#clone()
+     * @see Spatial#clone()
      */
     public Spatial deepClone() {
         // Setup the cloner for the type of cloning we want to do.
@@ -1604,12 +1527,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Sets user data.
-     *
-     * @param key  the key
-     * @param data the data
-     */
     public void setUserData(String key, Object data) {
         if (data == null) {
             if (userData != null) {
@@ -1630,13 +1547,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Gets user data.
-     *
-     * @param <T> the type parameter
-     * @param key the key
-     * @return the user data
-     */
     @SuppressWarnings("unchecked")
     public <T> T getUserData(String key) {
         if (userData == null) {
@@ -1651,11 +1561,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Gets user data keys.
-     *
-     * @return the user data keys
-     */
     public Collection<String> getUserDataKeys() {
         if (userData != null) {
             return userData.keySet();
@@ -1671,9 +1576,13 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * You can set regex modes, like case insensitivity, by using the (?X)
      * or (?X:Y) constructs.
      *
-     * @param spatialSubclass Subclass which this must implement.                        Null causes all Spatials to qualify.
-     * @param nameRegex       Regular expression to match this name against.                        Null causes all Names to qualify.
-     * @return true if this implements the specified class and this's name         matches the specified pattern.
+     * @param spatialSubclass Subclass which this must implement.
+     *                        Null causes all Spatials to qualify.
+     * @param nameRegex  Regular expression to match this name against.
+     *                        Null causes all Names to qualify.
+     * @return true if this implements the specified class and this's name
+     *         matches the specified pattern.
+     *
      * @see java.util.regex.Pattern
      */
     public boolean matches(Class<? extends Spatial> spatialSubclass,
@@ -1756,7 +1665,12 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * <code>setCullHint</code> alters how view frustum culling will treat this
      * spatial.
      *
-     * @param hint one of: <code>CullHint.Dynamic</code>, <code>CullHint.Always</code>, <code>CullHint.Inherit</code>, or <code>CullHint.Never</code> <p> The effect of the default value (CullHint.Inherit) may change if the spatial gets re-parented.
+     * @param hint one of: <code>CullHint.Dynamic</code>,
+     * <code>CullHint.Always</code>, <code>CullHint.Inherit</code>, or
+     * <code>CullHint.Never</code>
+     * <p>
+     * The effect of the default value (CullHint.Inherit) may change if the
+     * spatial gets re-parented.
      */
     public void setCullHint(CullHint hint) {
         cullHint = hint;
@@ -1765,15 +1679,17 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * <code>setBatchHint</code> alters how batching will treat this spatial.
      *
-     * @param hint one of: <code>BatchHint.Never</code>, <code>BatchHint.Always</code>, or <code>BatchHint.Inherit</code> <p> The effect of the default value (BatchHint.Inherit) may change if the spatial gets re-parented.
+     * @param hint one of: <code>BatchHint.Never</code>,
+     * <code>BatchHint.Always</code>, or <code>BatchHint.Inherit</code>
+     * <p>
+     * The effect of the default value (BatchHint.Inherit) may change if the
+     * spatial gets re-parented.
      */
     public void setBatchHint(BatchHint hint) {
         batchHint = hint;
     }
 
     /**
-     * Gets local cull hint.
-     *
      * @return the cullmode set on this Spatial
      */
     public CullHint getLocalCullHint() {
@@ -1781,8 +1697,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     }
 
     /**
-     * Gets local batch hint.
-     *
      * @return the batchHint set on this Spatial
      */
     public BatchHint getLocalBatchHint() {
@@ -1795,7 +1709,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * {@link Bucket} enum for an explanation of the various
      * render queue buckets.
      *
-     * @param queueBucket The bucket to use for this Spatial.
+     * @param queueBucket
+     *            The bucket to use for this Spatial.
      */
     public void setQueueBucket(RenderQueue.Bucket queueBucket) {
         this.queueBucket = queueBucket;
@@ -1807,28 +1722,27 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * when a shadowing technique is used. See the
      * documentation for the class {@link ShadowMode} for more information.
      *
-     * @param shadowMode The local shadow mode to set.
      * @see ShadowMode
+     *
+     * @param shadowMode The local shadow mode to set.
      */
     public void setShadowMode(RenderQueue.ShadowMode shadowMode) {
         this.shadowMode = shadowMode;
     }
 
     /**
-     * Gets local queue bucket.
-     *
      * @return The locally set queue bucket mode
-     * @see Spatial#setQueueBucket(com.jme3.renderer.queue.RenderQueue.Bucket) Spatial#setQueueBucket(com.jme3.renderer.queue.RenderQueue.Bucket)
+     *
+     * @see Spatial#setQueueBucket(com.jme3.renderer.queue.RenderQueue.Bucket)
      */
     public RenderQueue.Bucket getLocalQueueBucket() {
         return queueBucket;
     }
 
     /**
-     * Gets local shadow mode.
-     *
      * @return The locally set shadow mode
-     * @see Spatial#setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode) Spatial#setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode)
+     *
+     * @see Spatial#setShadowMode(com.jme3.renderer.queue.RenderQueue.ShadowMode)
      */
     public RenderQueue.ShadowMode getLocalShadowMode() {
         return shadowMode;
@@ -1851,7 +1765,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * that want to start rendering at the middle of a scene tree and don't want
      * the parent of that node to influence culling.
      *
-     * @param intersects the new value
+     * @param intersects
+     *            the new value
      */
     public void setLastFrustumIntersection(Camera.FrustumIntersect intersects) {
         frustrumIntersects = intersects;
@@ -1873,9 +1788,12 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * local coordinate space to the world coordinate space
      * based on the world transform.
      *
-     * @param store Matrix where to store the result, if null, a new one will be created and returned.
+     * @param store Matrix where to store the result, if null, a new one
+     * will be created and returned.
+     *
      * @return store if not null, otherwise, a new matrix containing the result.
-     * @see Spatial#getWorldTransform() Spatial#getWorldTransform()
+     *
+     * @see Spatial#getWorldTransform()
      */
     public Matrix4f getLocalToWorldMatrix(Matrix4f store) {
         if (store == null) {
@@ -1893,9 +1811,8 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
 
     /**
      * Visit each scene graph element ordered by DFS with the default post order mode.
-     *
-     * @param visitor the visitor
-     * @see #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.scene.Spatial.DFSMode) #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.scene.Spatial.DFSMode)
+     * @param visitor
+     * @see #depthFirstTraversal(com.jme3.scene.SceneGraphVisitor, com.jme3.scene.Spatial.DFSMode)
      */
     public void depthFirstTraversal(SceneGraphVisitor visitor) {
         depthFirstTraversal(visitor, DFSMode.POST_ORDER);
@@ -1918,16 +1835,14 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
     /**
      * Visit each scene graph element ordered by DFS.
      * There are two modes: pre order and post order.
-     *
-     * @param visitor the visitor
-     * @param mode    the traversal mode: pre order or post order
+     * @param visitor
+     * @param mode the traversal mode: pre order or post order
      */
     public abstract void depthFirstTraversal(SceneGraphVisitor visitor, DFSMode mode);
 
     /**
      * Visit each scene graph element ordered by BFS
-     *
-     * @param visitor the visitor
+     * @param visitor
      */
     public void breadthFirstTraversal(SceneGraphVisitor visitor) {
         Queue<Spatial> queue = new LinkedList<Spatial>();
@@ -1940,12 +1855,6 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
         }
     }
 
-    /**
-     * Breadth first traversal.
-     *
-     * @param visitor the visitor
-     * @param queue   the queue
-     */
     protected abstract void breadthFirstTraversal(SceneGraphVisitor visitor, Queue<Spatial> queue);
 
     /**
