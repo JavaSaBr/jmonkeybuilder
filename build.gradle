@@ -91,7 +91,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:master-SNAPSHOT') {
+    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.3.0') {
         exclude group: 'org.jmonkeyengine'
     }
     compile ('com.github.JavaSaBr:tonegodemitter:2.2.4') {
@@ -107,7 +107,7 @@ dependencies {
 task copyToLib(type: Copy) {
 
     doFirst {
-        println("delete " + "$buildDir/dependences");
+        println("delete " + "$buildDir/dependences")
         GFileUtils.deleteDirectory(new File("$buildDir/dependences"))
     }
 

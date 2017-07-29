@@ -1,10 +1,10 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import static java.util.Collections.singletonList;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -46,8 +46,8 @@ public class CopyFileAction extends MenuItem {
         final Path file = element.getFile();
 
         final ClipboardContent content = new ClipboardContent();
-        content.putFiles(singletonList(file.toFile()));
-        content.put(EditorUtil.JAVA_PARAM, "copy");
+
+        EditorUtil.addCopiedFile(ArrayFactory.asArray(file), content);
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         clipboard.setContent(content);

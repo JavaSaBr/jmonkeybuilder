@@ -5,9 +5,12 @@ import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static java.lang.Math.acos;
 import static java.lang.Math.toDegrees;
 import static java.lang.ThreadLocal.withInitial;
+import static java.util.stream.Collectors.toList;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.system.JmeSystem;
+import com.jme3.system.Platform;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAnalytics;
 import com.ss.editor.annotation.FXThread;
@@ -30,6 +33,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.SystemUtils;
@@ -40,6 +44,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,9 +67,52 @@ public abstract class EditorUtil {
     @NotNull
     public static final DataFormat JAVA_PARAM = new DataFormat("SSEditor.javaParam");
 
+    /**
+     * Represents a List of Files.
+     */
+    public static final DataFormat GNOME_FILES = new DataFormat("x-special/gnome-copied-files");
+
     @NotNull
     private static final ThreadLocal<SimpleDateFormat> LOCATE_DATE_FORMAT = withInitial(() ->
             new SimpleDateFormat("HH:mm:ss:SSS"));
+
+    /**
+     * Added files like files to copy to clipboard content.
+     *
+     * @param paths   the list of files.
+     * @param content the content to store.
+     */
+    public static void addCopiedFile(@NotNull final Array<Path> paths, @NotNull final ClipboardContent content) {
+
+        final List<File> files = paths.stream()
+                .map(Path::toFile)
+                .collect(toList());
+
+        content.putFiles(files);
+        content.put(EditorUtil.JAVA_PARAM, "copy");
+
+        final Platform platform = JmeSystem.getPlatform();
+
+        if (platform == Platform.Linux64 || platform == Platform.Linux32) {
+
+            final StringBuilder builder = new StringBuilder("copy\n");
+
+            paths.forEach(builder, (path, b) ->
+                    b.append(path.toUri().toASCIIString()).append('\n'));
+
+            builder.delete(builder.length() - 1, builder.length());
+
+            final ByteBuffer buffer = ByteBuffer.allocate(builder.length());
+
+            for (int i = 0, length = builder.length(); i < length; i++) {
+                buffer.put((byte) builder.charAt(i));
+            }
+
+            buffer.flip();
+
+            content.put(GNOME_FILES, buffer);
+        }
+    }
 
     /**
      * Check exists boolean.

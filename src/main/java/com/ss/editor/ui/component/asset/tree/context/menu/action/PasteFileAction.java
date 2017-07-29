@@ -1,7 +1,6 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
-
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
@@ -9,7 +8,15 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.MovedFileEvent;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
 import com.ss.editor.util.EditorUtil;
-
+import com.ss.rlib.logging.Logger;
+import com.ss.rlib.logging.LoggerManager;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.DataFormat;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -17,16 +24,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.DataFormat;
-import com.ss.rlib.logging.Logger;
-import com.ss.rlib.logging.LoggerManager;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The action to paste a file.
