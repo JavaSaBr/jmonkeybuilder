@@ -207,66 +207,73 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
     }
 
     /**
-     * Handle renaming a file.
+     * Handle renaming of a file.
      */
     private void processEvent(@NotNull final RenamedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final Path newFile = event.getNewFile();
 
-        final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
-        final Tab tab = DictionaryUtils.getInReadLock(openedEditors, prevFile, ObjectDictionary::get);
-        if (tab == null) return;
-
-        final ObservableMap<Object, Object> properties = tab.getProperties();
-        final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-        fileEditor.notifyRenamed(prevFile, newFile);
-
-        final Path editFile = fileEditor.getEditFile();
-        if (!editFile.equals(newFile)) return;
-
-        if (fileEditor.isDirty()) {
-            tab.setText("*" + fileEditor.getFileName());
-        } else {
-            tab.setText(fileEditor.getFileName());
-        }
-
-        final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
-
-        if (workspace != null) {
-            workspace.removeOpenedFile(prevFile);
-            workspace.addOpenedFile(newFile, fileEditor);
-        }
-
-        DictionaryUtils.runInWriteLock(openedEditors, prevFile, ObjectDictionary::remove);
-        DictionaryUtils.runInWriteLock(openedEditors, newFile, tab, ObjectDictionary::put);
+        handleMovingFiles(prevFile, newFile);
     }
 
     /**
-     * Handle moving a file.
+     * Handle moving of a file.
      */
     private void processEvent(@NotNull final MovedFileEvent event) {
 
         final Path prevFile = event.getPrevFile();
         final Path newFile = event.getNewFile();
 
-        final ObservableList<Tab> tabs = getTabs();
-        tabs.forEach(tab -> {
+        handleMovingFiles(prevFile, newFile);
+    }
 
-            final ObservableMap<Object, Object> properties = tab.getProperties();
-            final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
-            fileEditor.notifyMoved(prevFile, newFile);
+    /**
+     * Handle moving/renaming of a file.
+     *
+     * @param prevFile the prev version of the file.
+     * @param newFile  the new version of the file.
+     */
+    private void handleMovingFiles(@NotNull final Path prevFile, @NotNull final Path newFile) {
 
-            final Path editFile = fileEditor.getEditFile();
-            if (!editFile.equals(newFile)) return;
+        final ConcurrentObjectDictionary<Path, Tab> openedEditors = getOpenedEditors();
+        final long stamp = openedEditors.writeLock();
+        try {
 
-            final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+            final Array<Path> files = openedEditors.keyArray(Path.class);
+            for (final Path file : files) {
 
-            if (workspace != null) {
-                workspace.removeOpenedFile(prevFile);
-                workspace.addOpenedFile(newFile, fileEditor);
+                if (!file.startsWith(prevFile)) {
+                    continue;
+                }
+
+                final Tab tab = openedEditors.get(file);
+                final ObservableMap<Object, Object> properties = tab.getProperties();
+                final FileEditor fileEditor = (FileEditor) properties.get(KEY_EDITOR);
+                fileEditor.notifyRenamed(prevFile, newFile);
+
+                if (fileEditor.isDirty()) {
+                    tab.setText("*" + fileEditor.getFileName());
+                } else {
+                    tab.setText(fileEditor.getFileName());
+                }
+
+                final Path editFile = fileEditor.getEditFile();
+
+                openedEditors.remove(file);
+                openedEditors.put(editFile, tab);
+
+                final Workspace workspace = WORKSPACE_MANAGER.getCurrentWorkspace();
+
+                if (workspace != null) {
+                    workspace.removeOpenedFile(file);
+                    workspace.addOpenedFile(editFile, fileEditor);
+                }
             }
-        });
+
+        } finally {
+            openedEditors.writeUnlock(stamp);
+        }
     }
 
     /**
