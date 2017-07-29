@@ -134,7 +134,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
         this.testSphere = new Geometry("Sphere", new Sphere(30, 30, 2));
         this.testQuad = new Geometry("Quad", new Quad(4, 4));
         this.testQuad.setLocalTranslation(QUAD_OFFSET);
-        this.lightEnabled = true;
+        this.lightEnabled = MaterialFileEditor.DEFAULT_LIGHT_ENABLED;
 
         TangentGenerator.useMikktspaceGenerator(testBox);
         TangentGenerator.useMikktspaceGenerator(testSphere);

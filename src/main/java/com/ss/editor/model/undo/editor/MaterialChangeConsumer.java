@@ -3,6 +3,7 @@ package com.ss.editor.model.undo.editor;
 import com.jme3.material.Material;
 import com.ss.editor.annotation.FXThread;
 
+import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +19,7 @@ public interface MaterialChangeConsumer {
      * @return the current material.
      */
     @NotNull
-    @FXThread
+    @FromAnyThread
     Material getCurrentMaterial();
 
     /**

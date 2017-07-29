@@ -238,6 +238,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @param event the event
      */
+    @FXThread
     protected void processKeyReleased(@NotNull final KeyEvent event) {
 
         final KeyCode code = event.getCode();
@@ -290,6 +291,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @param container the container
      */
+    @FXThread
     protected void createToolbar(@NotNull final HBox container) {
     }
 
@@ -365,6 +367,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @return true if this editor needs a toolbar.
      */
+    @FXThread
     protected boolean needToolbar() {
         return false;
     }
@@ -375,6 +378,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      * @return the new root.
      */
     @NotNull
+    @FXThread
     protected abstract R createRoot();
 
     /**
@@ -382,6 +386,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @param root the root
      */
+    @FXThread
     protected abstract void createContent(@NotNull final R root);
 
     @NotNull
@@ -405,8 +410,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         return fileName.toString();
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void openFile(@NotNull final Path file) {
         FX_EVENT_MANAGER.addEventHandler(FileChangedEvent.EVENT_TYPE, getFileChangedHandler());
 
@@ -535,6 +540,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      *
      * @param event the event
      */
+    @FXThread
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
 
         final Path file = event.getFile();
@@ -555,6 +561,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     /**
      * Handle external changes of the edited file.
      */
+    @FXThread
     protected void handleExternalChanges() {
 
     }

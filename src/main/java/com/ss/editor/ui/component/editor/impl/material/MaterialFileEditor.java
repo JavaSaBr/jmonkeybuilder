@@ -80,6 +80,12 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         DESCRIPTION.addExtension(FileExtensions.JME_MATERIAL);
     }
 
+    /**
+     * THe default flag of enabling light.
+     */
+    public static final boolean DEFAULT_LIGHT_ENABLED = true;
+
+
     @NotNull
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
@@ -213,17 +219,21 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
+    @FXThread
     public void incrementChange() {
         final int result = changeCounter.incrementAndGet();
         setDirty(result != 0);
     }
 
     @Override
+    @FXThread
     public void decrementChange() {
         final int result = changeCounter.decrementAndGet();
         setDirty(result != 0);
     }
 
+    @FXThread
+    @Override
     protected void processChangedFile(@NotNull final FileChangedEvent event) {
         super.processChangedFile(event);
 
@@ -245,6 +255,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @param ignoreListeners the flag for ignoring listeners.
      */
+    @FromAnyThread
     private void setIgnoreListeners(final boolean ignoreListeners) {
         this.ignoreListeners = ignoreListeners;
     }
@@ -252,6 +263,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @return the flag for ignoring listeners.
      */
+    @FromAnyThread
     private boolean isIgnoreListeners() {
         return ignoreListeners;
     }
@@ -260,6 +272,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the operation control.
      */
     @NotNull
+    @FromAnyThread
     private EditorOperationControl getOperationControl() {
         return operationControl;
     }
@@ -267,6 +280,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Execute the operation.
      */
+    @FromAnyThread
     private void handleChanges(@NotNull final EditorOperation operation) {
         final EditorOperationControl operationControl = getOperationControl();
         operationControl.execute(operation);
@@ -287,21 +301,19 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         }
     }
 
-    @FXThread
     @Override
+    @FXThread
     protected void postSave() {
         super.postSave();
         setDirty(false);
     }
 
     @Override
+    @FXThread
     protected void handleExternalChanges() {
         super.handleExternalChanges();
 
-        final Path assetFile = getAssetFile(getEditFile());
-
-        notNull(assetFile, "Asset file can't be null.");
-
+        final Path assetFile = notNull(getAssetFile(getEditFile()));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -315,11 +327,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @NotNull
     @Override
+    @FXThread
     protected StackPane createRoot() {
         return new StackPane();
     }
 
     @Override
+    @FXThread
     protected void processKeyReleased(@NotNull final KeyEvent event) {
         super.processKeyReleased(event);
 
@@ -331,6 +345,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
+    @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
         if (isPressed) return false;
@@ -380,13 +395,15 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         operationControl.undo();
     }
 
-    @FXThread
+    @Nullable
     @Override
-    public @Nullable BorderPane get3DArea() {
+    @FXThread
+    public BorderPane get3DArea() {
         return editorAreaPane;
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final StackPane root) {
         changeHandler = this::handleChanges;
         editorAreaPane = new BorderPane();
@@ -420,11 +437,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the pane of editor area.
      */
     @NotNull
+    @FXThread
     private Pane getEditorAreaPane() {
         return notNull(editorAreaPane);
     }
 
     @Override
+    @FXThread
     public boolean isInside(final double sceneX, final double sceneY) {
         final Pane editorAreaPane = getEditorAreaPane();
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
@@ -435,6 +454,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the textures editor.
      */
     @NotNull
+    @FromAnyThread
     private MaterialTexturesComponent getMaterialTexturesComponent() {
         return notNull(materialTexturesComponent);
     }
@@ -443,6 +463,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the colors editor.
      */
     @NotNull
+    @FromAnyThread
     private MaterialColorsComponent getMaterialColorsComponent() {
         return notNull(materialColorsComponent);
     }
@@ -451,6 +472,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the other parameters editor.
      */
     @NotNull
+    @FromAnyThread
     private MaterialOtherParamsComponent getMaterialOtherParamsComponent() {
         return notNull(materialOtherParamsComponent);
     }
@@ -459,19 +481,17 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the render settings editor.
      */
     @NotNull
+    @FromAnyThread
     private MaterialRenderParamsComponent getMaterialRenderParamsComponent() {
         return notNull(materialRenderParamsComponent);
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void openFile(@NotNull final Path file) {
         super.openFile(file);
 
-        final Path assetFile = getAssetFile(file);
-
-        notNull(assetFile, "Asset file can't be null.");
-
+        final Path assetFile = notNull(getAssetFile(file));
         final MaterialKey materialKey = new MaterialKey(toAssetPath(assetFile));
 
         final AssetManager assetManager = EDITOR.getAssetManager();
@@ -489,11 +509,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the state of this editor.
      */
     @Nullable
+    @FromAnyThread
     private MaterialFileEditorState getEditorState() {
         return editorState;
     }
 
     @Override
+    @FXThread
     public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
                                     final float vRotation, final float targetDistance) {
 
@@ -509,12 +531,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Loading a state of this editor.
      */
-    @SuppressWarnings("ConstantConditions")
+    @FXThread
     private void loadState() {
 
         final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = notNull(workspaceManager.getCurrentWorkspace(),
-                "Current workspace can't be null.");
+        final Workspace currentWorkspace = notNull(workspaceManager.getCurrentWorkspace());
 
         editorState = currentWorkspace.getEditorState(getEditFile(), MaterialFileEditorState::new);
 
@@ -548,6 +569,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Reload the material.
      */
+    @FXThread
     private void reload(@NotNull final Material material) {
         setCurrentMaterial(material);
 
@@ -586,16 +608,19 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the list of material definitions.
      */
     @NotNull
+    @FromAnyThread
     private ComboBox<String> getMaterialDefinitionBox() {
         return notNull(materialDefinitionBox);
     }
 
     @Override
+    @FXThread
     protected boolean needToolbar() {
         return true;
     }
 
     @Override
+    @FXThread
     protected void createToolbar(@NotNull final HBox container) {
 
         cubeButton = new ToggleButton();
@@ -619,6 +644,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         lightButton = new ToggleButton();
         lightButton.setTooltip(new Tooltip(Messages.MATERIAL_FILE_EDITOR_ACTION_LIGHT + " (L)"));
         lightButton.setGraphic(new ImageView(Icons.LIGHT_16));
+        lightButton.setSelected(DEFAULT_LIGHT_ENABLED);
         lightButton.selectedProperty().addListener((observable, oldValue, newValue) -> changeLight(newValue));
 
         final Label materialDefinitionLabel = new Label(Messages.MATERIAL_EDITOR_MATERIAL_TYPE_LABEL + ":");
@@ -656,6 +682,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the bucket type.
      */
+    @FXThread
     private void changeBucketType(@NotNull final RenderQueue.Bucket newValue) {
 
         final MaterialEditor3DState editorAppState = getEditorAppState();
@@ -668,6 +695,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the type.
      */
+    @FXThread
     private void changeType(@Nullable final String newType) {
         if (isIgnoreListeners()) return;
         processChangeTypeImpl(newType);
@@ -676,6 +704,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the type.
      */
+    @FXThread
     private void processChangeTypeImpl(@Nullable final String newType) {
         if (newType == null) return;
 
@@ -694,6 +723,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * Handle changing the light enabling.
      */
+    @FXThread
     private void changeLight(@NotNull final Boolean newValue) {
 
         final MaterialEditor3DState editorAppState = getEditorAppState();
@@ -707,6 +737,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the button to use a cube.
      */
     @NotNull
+    @FromAnyThread
     private ToggleButton getCubeButton() {
         return notNull(cubeButton);
     }
@@ -715,6 +746,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the button to use a plane.
      */
     @NotNull
+    @FromAnyThread
     private ToggleButton getPlaneButton() {
         return notNull(planeButton);
     }
@@ -723,6 +755,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the button to use a sphere.
      */
     @NotNull
+    @FromAnyThread
     private ToggleButton getSphereButton() {
         return notNull(sphereButton);
     }
@@ -731,13 +764,15 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return the button to use a light.
      */
     @NotNull
+    @FromAnyThread
     private ToggleButton getLightButton() {
         return notNull(lightButton);
     }
 
     /**
-     * Handle changing model type.
+     * Handle the changed model type.
      */
+    @FXThread
     private void changeModelType(@NotNull final ModelType modelType, @NotNull final Boolean newValue) {
         if (newValue == Boolean.FALSE) return;
 
@@ -779,11 +814,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @NotNull
     @Override
+    @FromAnyThread
     public Material getCurrentMaterial() {
         return notNull(currentMaterial);
     }
 
     @Override
+    @FXThread
     public void notifyChangeParam(@NotNull final String paramName) {
 
         final MaterialOtherParamsComponent otherParamsComponent = getMaterialOtherParamsComponent();
@@ -797,6 +834,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
+    @FXThread
     public void notifyChangedRenderState() {
         final MaterialRenderParamsComponent renderParamsComponent = getMaterialRenderParamsComponent();
         renderParamsComponent.buildFor(getCurrentMaterial());
@@ -805,6 +843,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     /**
      * @param currentMaterial the current editing material.
      */
+    @FXThread
     private void setCurrentMaterial(@NotNull final Material currentMaterial) {
         this.currentMaterial = currentMaterial;
     }
@@ -813,12 +852,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * @return 3D part of this editor.
      */
     @NotNull
+    @FromAnyThread
     private MaterialEditor3DState getEditorAppState() {
         return editorAppState;
     }
 
     @NotNull
     @Override
+    @FromAnyThread
     public EditorDescription getDescription() {
         return DESCRIPTION;
     }
