@@ -9,6 +9,22 @@
 
 ## [Video about this editor](https://youtu.be/h6azH-D28qk) ##
 
+## ver. 0.9.11 ##
+* -The project was migrated to gradle.
+* -Implemented a plugin system. Now you can develop your own plugin for the Editor.
+* -Added new UI theme.
+* -Fixed bugs with flying camera.
+* -Optimized the mechanism of resizing render window.
+* -Updated settings of default j3s scene.
+* -Fixed bugs with focus in scene editor.
+* -Updated some property controls.
+* -Implemented local/global/view transformation tools.
+* -Optimized performance of terrain editing controls.
+* -Fixed some problems with saving files.
+* -Fixed copying files from the Editor to Nautilus(file explorer in Ubuntu).
+* -Integrated global/local water filters to scene editor.
+* -Fixed some bugs.
+
 ## ver. 0.9.10 ##
 * -Added supporting macOS.
 * -Updated icon-set to use only SVG icons and removed icons which were under GPLv2 license.
