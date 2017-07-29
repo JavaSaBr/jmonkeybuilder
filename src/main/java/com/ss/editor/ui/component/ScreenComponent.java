@@ -1,24 +1,31 @@
 package com.ss.editor.ui.component;
 
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
+import org.jetbrains.annotations.Nullable;
+
 /**
- * Интерфейс для реализации компонента сцены экрана.
+ * The interface to implement a scene component.
  *
- * @author Ronn
+ * @author JavaSaBr
  */
 public interface ScreenComponent {
 
     /**
-     * Gets component id.
+     * Gets the component id.
      *
-     * @return индентификатор компонента.
+     * @return the component id.
      */
-    public default String getComponentId() {
+    @Nullable
+    @FromAnyThread
+    default String getComponentId() {
         return null;
     }
 
     /**
-     * Уведомление о завершении построения сцены.
+     * Notify about finishing building the result scene.
      */
-    public default void notifyFinishBuild() {
+    @FXThread
+    default void notifyFinishBuild() {
     }
 }
