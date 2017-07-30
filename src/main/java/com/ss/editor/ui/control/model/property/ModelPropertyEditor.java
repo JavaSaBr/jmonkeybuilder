@@ -3,6 +3,7 @@ package com.ss.editor.ui.control.model.property;
 import static com.ss.editor.util.NodeUtils.findParent;
 import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Spatial;
+import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyEditor;
 import org.jetbrains.annotations.NotNull;
@@ -39,13 +40,20 @@ public class ModelPropertyEditor extends AbstractPropertyEditor<ModelChangeConsu
     }
 
     @Override
-    protected boolean canEdit(@NotNull final Object object) {
+    protected boolean canEdit(@NotNull final Object object, @Nullable final Object parent) {
 
         if (object instanceof Spatial) {
-            final Object parent = findParent((Spatial) object, AssetLinkNode.class::isInstance);
-            return parent == null || parent == object;
+            final Object linkNode = findParent((Spatial) object, AssetLinkNode.class::isInstance);
+            return linkNode == null || linkNode == object;
+        } else if (parent instanceof Spatial) {
+            final Object linkNode = findParent((Spatial) parent, AssetLinkNode.class::isInstance);
+            return linkNode == null;
+        } else if (parent instanceof Toneg0dParticleInfluencers) {
+            final ParticleEmitterNode emitterNode = ((Toneg0dParticleInfluencers) parent).getEmitterNode();
+            final Object linkNode = findParent(emitterNode, AssetLinkNode.class::isInstance);
+            return linkNode == null;
         }
 
-        return super.canEdit(object);
+        return super.canEdit(object, parent);
     }
 }

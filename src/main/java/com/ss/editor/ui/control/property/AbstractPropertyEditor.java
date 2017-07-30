@@ -110,7 +110,7 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
             PropertyBuilderFactory.buildFor(object, parent, container, changeConsumer);
         }
 
-        container.setDisable(object == null || !canEdit(object));
+        container.setDisable(object == null || !canEdit(object, parent));
 
         setCurrentObject(object);
     }
@@ -119,9 +119,10 @@ public abstract class AbstractPropertyEditor<C extends ChangeConsumer> extends S
      * Can edit boolean.
      *
      * @param object the object to edit.
+     * @param parent the parent.
      * @return true if we can edit properties of the object.
      */
-    protected boolean canEdit(@NotNull final Object object) {
+    protected boolean canEdit(@NotNull final Object object, @Nullable final Object parent) {
         return true;
     }
 

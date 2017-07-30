@@ -134,7 +134,7 @@ public class SceneFileEditor extends
 
     @NotNull
     @Override
-    protected SceneEditor3DState createEditorAppState() {
+    protected SceneEditor3DState createEditor3DState() {
         return new SceneEditor3DState(this);
     }
 

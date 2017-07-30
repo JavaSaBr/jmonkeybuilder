@@ -57,7 +57,9 @@ dependencies {
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-blender:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-jogg:$jmeVersion"
-    compile "com.github.JavaSaBr.jmonkeyengine:jme3-testdata:$jmeVersion"
+    compile ("com.github.JavaSaBr.jmonkeyengine:jme3-testdata:$jmeVersion") {
+        exclude group: 'lessvoid'
+    }
 
     // LWJGL
     compile "org.lwjgl:lwjgl:${lwjglVersion}"

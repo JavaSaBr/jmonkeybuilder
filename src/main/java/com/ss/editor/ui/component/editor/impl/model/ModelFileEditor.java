@@ -95,7 +95,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
     @NotNull
     @Override
-    protected ModelEditor3DState createEditorAppState() {
+    protected ModelEditor3DState createEditor3DState() {
         return new ModelEditor3DState(this);
     }
 
