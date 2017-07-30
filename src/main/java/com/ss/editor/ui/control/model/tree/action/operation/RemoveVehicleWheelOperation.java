@@ -107,7 +107,7 @@ public class RemoveVehicleWheelOperation extends AbstractEditorOperation<ModelCh
 
             this.createdWheel = vehicleWheel;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1, false));
         });
     }
 }

@@ -40,7 +40,7 @@ public class AddAnimationNodeOperation extends AbstractEditorOperation<ModelChan
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             control.addAnim(animation);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, animation, 0));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, animation, -1, true));
         });
     }
 

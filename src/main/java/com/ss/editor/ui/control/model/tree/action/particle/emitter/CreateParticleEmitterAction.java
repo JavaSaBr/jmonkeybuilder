@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
@@ -73,7 +73,7 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         final TreeNode<?> treeNode = getNode();
         final Node parent = (Node) treeNode.getElement();
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddChildOperation(emitter, parent));
     }
 

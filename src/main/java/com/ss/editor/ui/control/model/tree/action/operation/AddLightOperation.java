@@ -41,7 +41,7 @@ public class AddLightOperation extends AbstractEditorOperation<ModelChangeConsum
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             parent.addLight(light);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, light, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, light, -1, true));
         });
     }
 

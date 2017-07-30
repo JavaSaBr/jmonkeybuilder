@@ -93,7 +93,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
 
             this.createdWheel = vehicleWheel;
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(control, vehicleWheel, -1, true));
         });
     }
 

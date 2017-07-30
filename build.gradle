@@ -57,6 +57,7 @@ dependencies {
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-effects:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-blender:$jmeVersion"
     compile "com.github.JavaSaBr.jmonkeyengine:jme3-jogg:$jmeVersion"
+    compile "com.github.JavaSaBr.jmonkeyengine:jme3-testdata:$jmeVersion"
 
     // LWJGL
     compile "org.lwjgl:lwjgl:${lwjglVersion}"

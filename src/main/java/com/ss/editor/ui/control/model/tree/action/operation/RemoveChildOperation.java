@@ -55,7 +55,7 @@ public class RemoveChildOperation extends AbstractEditorOperation<ModelChangeCon
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             parent.attachChildAt(child, childIndex);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, child, childIndex));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, child, childIndex, false));
         });
     }
 }

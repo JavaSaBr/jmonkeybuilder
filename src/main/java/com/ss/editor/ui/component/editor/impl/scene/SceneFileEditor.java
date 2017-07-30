@@ -555,8 +555,9 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
-        super.notifyFXAddedChild(parent, added, index);
+    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+                                   final boolean needSelect) {
+        super.notifyFXAddedChild(parent, added, index, needSelect);
 
         final LayerNodeTree layerNodeTree = getLayerNodeTree();
 

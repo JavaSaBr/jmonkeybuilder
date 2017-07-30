@@ -36,7 +36,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.VBox;
-import org.apache.commons.lang3.SystemUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -433,15 +432,16 @@ public abstract class EditorUtil {
      */
     public static void openFileInExternalEditor(@NotNull final Path path) {
 
+        final Platform platform = JmeSystem.getPlatform();
         final List<String> commands = new ArrayList<>();
 
-        if (SystemUtils.IS_OS_MAC) {
+        if (platform == Platform.MacOSX64 || platform == Platform.MacOSX_PPC64) {
             commands.add("open");
-        } else if (SystemUtils.IS_OS_WINDOWS) {
+        } else if (platform == Platform.Windows32 || platform == Platform.Windows64) {
             commands.add("cmd");
             commands.add("/c");
             commands.add("start");
-        } else if (SystemUtils.IS_OS_LINUX) {
+        } else if (platform == Platform.Linux32|| platform == Platform.Linux64) {
             commands.add("xdg-open");
         }
 

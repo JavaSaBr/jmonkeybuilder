@@ -277,8 +277,9 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     }
 
     @Override
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
-        super.notifyFXAddedChild(parent, added, index);
+    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+                                   final boolean needSelect) {
+        super.notifyFXAddedChild(parent, added, index, needSelect);
 
         final ModelEditor3DState editor3DState = getEditor3DState();
 

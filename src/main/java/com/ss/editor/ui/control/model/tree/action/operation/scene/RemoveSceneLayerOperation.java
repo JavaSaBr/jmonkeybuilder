@@ -84,7 +84,7 @@ public class RemoveSceneLayerOperation extends AbstractEditorOperation<ModelChan
             toRevert.forEach(spatial -> SceneLayer.setLayer(layer, spatial));
             toRevert.forEach(spatial -> spatial.setVisible(layer.isShowed()));
             toRevert.clear();
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(layersRoot, layer, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(layersRoot, layer, -1, false));
         });
     }
 }

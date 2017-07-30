@@ -727,7 +727,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index) {
+    public void notifyFXAddedChild(@NotNull final Object parent, @NotNull final Object added, final int index,
+                                   final boolean needSelect) {
 
         final MA editor3DState = getEditor3DState();
         final ModelNodeTree modelNodeTree = getModelNodeTree();
@@ -739,6 +740,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             editor3DState.addAudioNode((AudioNode) added);
         } else if (added instanceof Spatial) {
             handleAddedObject((Spatial) added);
+        }
+
+        if (needSelect) {
+            EXECUTOR_MANAGER.addJMETask(() -> EXECUTOR_MANAGER.addFXTask(() -> modelNodeTree.select(added)));
         }
     }
 
@@ -780,9 +785,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     @Override
-    public void notifyFXMoved(@NotNull final Node prevParent, @NotNull final Node newParent, @NotNull final Spatial child, int index) {
+    public void notifyFXMoved(@NotNull final Node prevParent, @NotNull final Node newParent,
+                              @NotNull final Spatial child, final int index, final boolean needSelect) {
+
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);
+
+        if (needSelect) {
+            EXECUTOR_MANAGER.addJMETask(() -> EXECUTOR_MANAGER.addFXTask(() -> modelNodeTree.select(child)));
+        }
     }
 
     @Override

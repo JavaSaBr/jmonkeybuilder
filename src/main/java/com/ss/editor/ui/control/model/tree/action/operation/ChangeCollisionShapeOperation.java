@@ -50,7 +50,7 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
         EXECUTOR_MANAGER.addJMETask(() -> {
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(collisionObject, oldShape));
             collisionObject.setCollisionShape(newShape);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(collisionObject, newShape, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(collisionObject, newShape, -1, true));
         });
     }
 
@@ -59,7 +59,7 @@ public class ChangeCollisionShapeOperation extends AbstractEditorOperation<Model
         EXECUTOR_MANAGER.addJMETask(() -> {
             EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXRemovedChild(collisionObject, newShape));
             collisionObject.setCollisionShape(oldShape);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(collisionObject, oldShape, -1));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(collisionObject, oldShape, -1, false));
         });
     }
 }

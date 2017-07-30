@@ -446,7 +446,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             editor = description == null ? EDITOR_REGISTRY.createEditorFor(file) :
                     EDITOR_REGISTRY.createEditorFor(description, file);
 
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
             EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
             return;
@@ -462,7 +462,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         final long stamp = EDITOR.asyncLock();
         try {
             editor.openFile(file);
-        } catch (final NoClassDefFoundError | Exception e) {
+        } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
             EXECUTOR_MANAGER.addFXTask(() -> {
                 scene.decrementLoading();

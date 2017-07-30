@@ -68,7 +68,7 @@ public class RemoveParticleInfluencerOperation extends AbstractEditorOperation<M
             emitterNode.addInfluencer(influencer, childIndex);
             emitterNode.emitAllParticles();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(new Toneg0dParticleInfluencers(emitterNode), influencer, childIndex));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(new Toneg0dParticleInfluencers(emitterNode), influencer, childIndex, false));
         });
     }
 }

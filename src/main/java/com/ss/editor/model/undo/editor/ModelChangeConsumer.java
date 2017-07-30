@@ -65,12 +65,13 @@ public interface ModelChangeConsumer extends ChangeConsumer {
     /**
      * Notify about added child from FX thread.
      *
-     * @param parent the parent
-     * @param added  the added
-     * @param index  the index
+     * @param parent     the parent.
+     * @param added      the added.
+     * @param index      the index of position.
+     * @param needSelect true if need to select the child.
      */
     @FXThread
-    void notifyFXAddedChild(@NotNull Object parent, @NotNull Object added, int index);
+    void notifyFXAddedChild(@NotNull Object parent, @NotNull Object added, int index, boolean needSelect);
 
     /**
      * Notify about removed child from FX thread.
@@ -104,11 +105,13 @@ public interface ModelChangeConsumer extends ChangeConsumer {
     /**
      * Notify about moved child from FX thread.
      *
-     * @param prevParent the prev parent
-     * @param newParent  the new parent
-     * @param child      the child
-     * @param index      the index
+     * @param prevParent the prev parent.
+     * @param newParent  the new parent.
+     * @param child      the child.
+     * @param index      the index of position.
+     * @param needSelect true if need select this object.
      */
     @FXThread
-    void notifyFXMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index);
+    void notifyFXMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index,
+                       boolean needSelect);
 }
