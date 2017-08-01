@@ -1,25 +1,13 @@
 @font-face {
-    src: url("/ui/fonts/ubuntu/Ubuntu-R.ttf");
-}
-
-@font-face {
-    src: url("/ui/fonts/ubuntu/Ubuntu-C.ttf");
-}
-
-@font-face {
-    src: url("/ui/fonts/ubuntu/Ubuntu-M.ttf");
-}
-
-@font-face {
     src: url("/ui/fonts/ubuntu/UbuntuMono-B.ttf");
 }
 
 @font-face {
-    src: url("/ui/fonts/Open_Sans/OpenSans-Regular.ttf");
+    src: url("/ui/fonts/opensans/OpenSans-Regular.ttf");
 }
 
 @font-face {
-    src: url("/ui/fonts/Open_Sans/OpenSans-SemiBold.ttf");
+    src: url("/ui/fonts/opensans/OpenSans-SemiBold.ttf");
 }
 
 .root {
@@ -54,7 +42,7 @@
  ******************************************************************************/
 
 .label {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
     -fx-text-fill: -var-font-color;
     -fx-max-height: -var-default-label-height;
@@ -164,7 +152,7 @@
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 
@@ -296,7 +284,7 @@
     -fx-padding: 0px 0px 0px 0px;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
     -fx-text-fill: -var-font-color;
 }
@@ -458,7 +446,7 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0 0 0 4px;
     -fx-cell-size: -1;
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 
@@ -486,7 +474,7 @@
     -fx-padding: 0px 0px 0px 4px;
     -fx-background-color: -fx-background;
     -fx-cell-size: 26;
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 
@@ -842,7 +830,7 @@
 .hyperlink {
     -fx-padding: 1px;
     -fx-text-fill: -fx-focus-color;
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 
@@ -853,7 +841,7 @@
  ******************************************************************************/
 
 .tooltip {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
     -fx-padding: 6px;
     -fx-background-color: -var-menu-background-color;
@@ -1118,7 +1106,7 @@
     -fx-text-fill: -var-font-color;
     -fx-cursor: text;
     -fx-min-height: -var-default-field-height;
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 
@@ -1185,7 +1173,7 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0px;
     -fx-indent: 1em;
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 

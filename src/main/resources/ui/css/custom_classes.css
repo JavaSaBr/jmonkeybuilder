@@ -5,17 +5,17 @@
  ******************************************************************************/
 
 .special-font-13 {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 12px;
 }
 
 .special-font-14 {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13px;
 }
 
 .special-font-16 {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 15;
 }
 
@@ -228,14 +228,14 @@
     -fx-border-color: transparent;
     -fx-border-width: 0px;
     -fx-border-radius: 0px;
-    -fx-padding: 0px 0px 0px 4px;
+    -fx-padding: 0px 0px 0px 0px;
 }
 
 .transparent-text-field:focused {
     -fx-border-color: transparent;
     -fx-border-width: 0px;
     -fx-border-insets: 0;
-    -fx-padding: 0px 0px 0px 4px;
+    -fx-padding: 0px 0px 0px 0px;
     -fx-prompt-text-fill: transparent;
 }
 
@@ -762,11 +762,9 @@
 .abstract-param-control-short-input-container {
     -fx-alignment: center;
     -fx-max-height: -var-default-field-height;
-    -fx-padding: 0px 0px 0px 0px;
 }
 
 .abstract-param-control-short-input-container:focused {
-    -fx-padding: -1px -1px -1px -1px;
 }
 
 .abstract-param-control-short-input-container > .text-field {
@@ -1231,7 +1229,7 @@
  ******************************************************************************/
 
 .custom-tooltip {
-    -fx-font-family: "Open Sans Regular";
+    -fx-font-family: "Open Sans SemiBold";
     -fx-font-size: 13;
     -fx-padding: 6px;
     -fx-background-insets: 0;

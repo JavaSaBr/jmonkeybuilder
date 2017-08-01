@@ -116,14 +116,9 @@ public class Editor extends JmeToJFXApplication {
 
     private static void configureLogger() {
 
-        //final PlatformLogger cssLogger = Logging.getCSSLogger();
-
         // disable the standard logger
         if (!Config.DEV_DEBUG) {
             java.util.logging.Logger.getLogger("").setLevel(Level.WARNING);
-            //cssLogger.setLevel(PlatformLogger.Level.OFF);
-        } else {
-            //cssLogger.setLevel(PlatformLogger.Level.ALL);
         }
 
         // configure our logger

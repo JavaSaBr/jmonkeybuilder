@@ -23,6 +23,9 @@
 * -Fixed some problems with saving files.
 * -Fixed copying files from the Editor to Nautilus(file explorer in Ubuntu).
 * -Integrated global/local water filters to scene editor.
+* -Added an action to menu "Clear Asset Cache" to clear native memory.
+* -Downgraded the library spaceshift-extension to java 7, now we can use j3s in android projects.
+* -Added some water filters to scene editor.
 * -Fixed some bugs.
 
 ## ver. 0.9.10 ##
