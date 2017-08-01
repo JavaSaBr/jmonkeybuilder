@@ -1,6 +1,8 @@
 # jMonkeyEngine 3 SpaceShift Editor 0.9.11 #
 ## License: Apache Version 2.0 ##
 
+[![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 * [Wiki](https://bitbucket.org/JavaSabr/jme3-spaceshift-editor/wiki/Home)
 * [Download](https://yadi.sk/d/UuKcJBNgqbV3a)
 * [Gitter](https://gitter.im/jME3-SpaceShift-Editor/Lobby?source=orgpage)
