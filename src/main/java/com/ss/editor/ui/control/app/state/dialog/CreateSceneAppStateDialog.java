@@ -29,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * The dialog to create a scene app state.
@@ -167,8 +168,8 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
 
         final CheckBox customCheckBox = getCustomCheckBox();
         final SceneNode currentModel = changeConsumer.getCurrentModel();
-        final Array<SceneAppState> appStates = currentModel.getAppStates();
-        final Array<SceneFilter<?>> filters = currentModel.getFilters();
+        final List<SceneAppState> appStates = currentModel.getAppStates();
+        final List<SceneFilter> filters = currentModel.getFilters();
 
         if (customCheckBox.isSelected()) {
 
@@ -200,7 +201,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         super.processOk();
     }
 
-    private void check(@NotNull final Array<SceneAppState> appStates, @NotNull final Array<SceneFilter<?>> filters,
+    private void check(@NotNull final List<SceneAppState> appStates, @NotNull final List<SceneFilter> filters,
                        @NotNull final SceneAppState newExample) {
 
         if (!(newExample instanceof EditableSceneAppState)) return;

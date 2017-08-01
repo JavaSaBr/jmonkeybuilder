@@ -13,7 +13,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -23,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -38,7 +38,7 @@ public class FilterList extends VBox {
      * The selection handler.
      */
     @NotNull
-    private final Consumer<EditableSceneFilter<?>> selectHandler;
+    private final Consumer<EditableSceneFilter> selectHandler;
 
     /**
      * The changes consumer.
@@ -49,7 +49,7 @@ public class FilterList extends VBox {
     /**
      * The list view with filters.
      */
-    private ListView<EditableSceneFilter<?>> listView;
+    private ListView<EditableSceneFilter> listView;
 
     /**
      * Instantiates a new Filter list.
@@ -57,7 +57,7 @@ public class FilterList extends VBox {
      * @param selectHandler  the select handler
      * @param changeConsumer the change consumer
      */
-    public FilterList(@NotNull final Consumer<EditableSceneFilter<?>> selectHandler,
+    public FilterList(@NotNull final Consumer<EditableSceneFilter> selectHandler,
                       @NotNull final SceneChangeConsumer changeConsumer) {
         this.changeConsumer = changeConsumer;
         this.selectHandler = selectHandler;
@@ -78,7 +78,7 @@ public class FilterList extends VBox {
         listView.prefWidthProperty().bind(widthProperty());
         listView.setFixedCellSize(FXConstants.LIST_CELL_HEIGHT);
 
-        final MultipleSelectionModel<EditableSceneFilter<?>> selectionModel = listView.getSelectionModel();
+        final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
         selectionModel.selectedItemProperty().addListener((observable, oldValue, newValue) ->
                 selectHandler.accept(newValue));
 
@@ -111,13 +111,13 @@ public class FilterList extends VBox {
      */
     public void fill(@NotNull final SceneNode sceneNode) {
 
-        final MultipleSelectionModel<EditableSceneFilter<?>> selectionModel = listView.getSelectionModel();
-        final EditableSceneFilter<?> selected = selectionModel.getSelectedItem();
+        final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
+        final EditableSceneFilter selected = selectionModel.getSelectedItem();
 
-        final ObservableList<EditableSceneFilter<?>> items = listView.getItems();
+        final ObservableList<EditableSceneFilter> items = listView.getItems();
         items.clear();
 
-        final Array<SceneFilter<?>> filters = sceneNode.getFilters();
+        final List<SceneFilter> filters = sceneNode.getFilters();
         filters.stream().filter(EditableSceneFilter.class::isInstance)
                 .map(EditableSceneFilter.class::cast)
                 .forEach(items::add);
@@ -131,7 +131,7 @@ public class FilterList extends VBox {
      * Clear selection.
      */
     public void clearSelection() {
-        final MultipleSelectionModel<EditableSceneFilter<?>> selectionModel = listView.getSelectionModel();
+        final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
         selectionModel.select(null);
     }
 
@@ -149,8 +149,8 @@ public class FilterList extends VBox {
      */
     private void removeFilter() {
 
-        final MultipleSelectionModel<EditableSceneFilter<?>> selectionModel = listView.getSelectionModel();
-        final EditableSceneFilter<?> filter = selectionModel.getSelectedItem();
+        final MultipleSelectionModel<EditableSceneFilter> selectionModel = listView.getSelectionModel();
+        final EditableSceneFilter filter = selectionModel.getSelectedItem();
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
 
         changeConsumer.execute(new RemoveSceneFilterOperation(filter, sceneNode));

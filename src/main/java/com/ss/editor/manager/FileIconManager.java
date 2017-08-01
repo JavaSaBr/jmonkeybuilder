@@ -99,12 +99,16 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_XBUF, "image-svg+xml-compressed");
     }
 
+    @NotNull
     private static final Array<Path> MIME_TYPES_FOLDERS = ArrayFactory.newArray(Path.class);
 
     static {
         MIME_TYPES_FOLDERS.add(Paths.get("/ui/icons/filetypes/emerald/mimetypes"));
         MIME_TYPES_FOLDERS.add(Paths.get("/ui/icons/filetypes/"));
     }
+
+    private static boolean supportedRepaint = true;
+
 
     @Nullable
     private static FileIconManager instance;
@@ -299,24 +303,35 @@ public class FileIconManager {
         final EditorConfig config = EditorConfig.getInstance();
         final CssColorTheme theme = config.getTheme();
 
-        if (!theme.isDark()) {
+        if (theme.needRepaintIcons() && supportedRepaint) {
+            try {
 
-            final WritableImage wimage = new WritableImage(size, size);
-            final PixelWriter pixelWriter = wimage.getPixelWriter();
-            final PixelReader pixelReader = image.getPixelReader();
+                final Color iconColor = theme.getIconColor();
 
-            for (int i = 0; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    final Color color = pixelReader.getColor(i, j);
-                    if (color.getOpacity() > 0.1) {
-                        pixelWriter.setColor(i, j, color.invert());
+                final int width = (int) image.getWidth();
+                final int height = (int) image.getHeight();
+
+                final WritableImage wimage = new WritableImage(width, height);
+
+                final PixelWriter pixelWriter = wimage.getPixelWriter();
+                final PixelReader pixelReader = image.getPixelReader();
+
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        final Color color = pixelReader.getColor(i, j);
+                        if (color.getOpacity() > 0.1) {
+                            pixelWriter.setColor(i, j, new Color(iconColor.getRed(), iconColor.getGreen(), iconColor.getBlue(), color.getOpacity()));
+                        }
                     }
                 }
+
+                originalImageCache.put(wimage, image);
+
+                return wimage;
+
+            } catch (final Throwable e) {
+                supportedRepaint = false;
             }
-
-            originalImageCache.put(wimage, image);
-
-            return wimage;
         }
 
         originalImageCache.put(image, image);
@@ -332,11 +347,6 @@ public class FileIconManager {
      */
     @NotNull
     public Image getOriginal(@NotNull final Image image) {
-
-        if (!(image instanceof WritableImage)) {
-            throw new IllegalArgumentException("The image " + image.impl_getUrl() + " wasn't edited");
-        }
-
         return notNull(originalImageCache.get(image), "not found original for " + image.impl_getUrl());
     }
 

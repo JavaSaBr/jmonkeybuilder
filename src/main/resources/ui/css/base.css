@@ -14,6 +14,14 @@
     src: url("/ui/fonts/ubuntu/UbuntuMono-B.ttf");
 }
 
+@font-face {
+    src: url("/ui/fonts/Open_Sans/OpenSans-Regular.ttf");
+}
+
+@font-face {
+    src: url("/ui/fonts/Open_Sans/OpenSans-SemiBold.ttf");
+}
+
 .root {
     -fx-control-width: 180;
     -fx-control-medium-width: 200;
@@ -46,8 +54,8 @@
  ******************************************************************************/
 
 .label {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
     -fx-text-fill: -var-font-color;
     -fx-max-height: -var-default-label-height;
 }
@@ -156,8 +164,8 @@
 }
 
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 15px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 .tab-pane:tool-collapsed > .tab-header-area > .headers-region > .tab:selected:hover,
@@ -288,8 +296,8 @@
     -fx-padding: 0px 0px 0px 0px;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
     -fx-text-fill: -var-font-color;
 }
 
@@ -450,8 +458,8 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0 0 0 4px;
     -fx-cell-size: -1;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 .combo-box:showing > .list-cell {
@@ -478,8 +486,8 @@
     -fx-padding: 0px 0px 0px 4px;
     -fx-background-color: -fx-background;
     -fx-cell-size: 26;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 .combo-box-popup > .list-view > .virtual-flow > .clipped-container > .sheet > .list-cell:filled:selected {
@@ -834,8 +842,8 @@
 .hyperlink {
     -fx-padding: 1px;
     -fx-text-fill: -fx-focus-color;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 /*******************************************************************************
@@ -845,8 +853,8 @@
  ******************************************************************************/
 
 .tooltip {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
     -fx-padding: 6px;
     -fx-background-color: -var-menu-background-color;
     -fx-background-insets: 0;
@@ -866,7 +874,7 @@
 
 .text-area {
     -fx-font-family: "Ubuntu Mono";
-    -fx-font-size: 14;
+    -fx-font-size: 14px;
     -fx-font-weight: normal;
     -fx-background-color: transparent;
     -fx-background-insets: 0;
@@ -1110,8 +1118,8 @@
     -fx-text-fill: -var-font-color;
     -fx-cursor: text;
     -fx-min-height: -var-default-field-height;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 .text-field:focused {
@@ -1177,8 +1185,8 @@
     -fx-text-fill: -var-font-color;
     -fx-padding: 0px;
     -fx-indent: 1em;
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 .text-field-list-cell,
@@ -1878,7 +1886,7 @@
     -fx-min-height: -var-dialog-button-height;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
 }
 
 

@@ -18,7 +18,7 @@ public class AddSceneFilterOperation extends AbstractEditorOperation<SceneChange
      * The new filter.
      */
     @NotNull
-    private final SceneFilter<?> sceneFilter;
+    private final SceneFilter sceneFilter;
 
     /**
      * The scene node.
@@ -32,7 +32,7 @@ public class AddSceneFilterOperation extends AbstractEditorOperation<SceneChange
      * @param sceneFilter the scene filter
      * @param sceneNode   the scene node
      */
-    public AddSceneFilterOperation(@NotNull final SceneFilter<?> sceneFilter, @NotNull final SceneNode sceneNode) {
+    public AddSceneFilterOperation(@NotNull final SceneFilter sceneFilter, @NotNull final SceneNode sceneNode) {
         this.sceneFilter = sceneFilter;
         this.sceneNode = sceneNode;
     }

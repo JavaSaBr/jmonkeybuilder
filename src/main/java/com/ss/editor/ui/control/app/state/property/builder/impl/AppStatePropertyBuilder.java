@@ -13,10 +13,11 @@ import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * The property builder to build property controls of editable scene app states.
@@ -53,7 +54,7 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
 
         final EditableSceneAppState appState = (EditableSceneAppState) object;
 
-        final Array<EditableProperty<?, ?>> editableProperties = appState.getEditableProperties();
+        final List<EditableProperty<?, ?>> editableProperties = appState.getEditableProperties();
         if (editableProperties.isEmpty()) return;
 
         for (final EditableProperty<?, ?> editableProperty : editableProperties) {

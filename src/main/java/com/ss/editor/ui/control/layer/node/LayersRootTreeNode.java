@@ -19,6 +19,8 @@ import javafx.scene.image.Image;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 
+import java.util.List;
+
 /**
  * The implementation of {@link TreeNode} to present {@link LayersRoot}.
  *
@@ -63,7 +65,7 @@ public class LayersRootTreeNode extends TreeNode<LayersRoot> {
         final LayersRoot element = getElement();
         final SceneChangeConsumer changeConsumer = element.getChangeConsumer();
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
-        final Array<SceneLayer> layers = sceneNode.getLayers();
+        final List<SceneLayer> layers = sceneNode.getLayers();
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         layers.forEach(layer -> result.add(FACTORY_REGISTRY.createFor(layer)));

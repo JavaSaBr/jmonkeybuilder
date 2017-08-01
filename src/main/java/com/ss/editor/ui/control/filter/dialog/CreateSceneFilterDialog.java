@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * The dialog to create a {@link SceneFilter}.
@@ -38,7 +39,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     @NotNull
     private static final Point DIALOG_SIZE = new Point(415, 0);
 
-    private static final ObjectDictionary<String, SceneFilter<?>> BUILT_IN = newObjectDictionary();
+    private static final ObjectDictionary<String, SceneFilter> BUILT_IN = newObjectDictionary();
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
 
     static {
@@ -57,10 +58,14 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         register(new EditableSceneAndObjectsBloomFilter());
         register(new EditableLightingStateShadowFilter());
         register(new EditableWaterFilter());
+        register(new EditableWaterWithDirectionLightFilter());
+        register(new EditableWaterWithLightingStateFilter());
         register(new EditableLocalWaterFilter());
+        register(new EditableLocalWaterWithDirectionLightFilter());
+        register(new EditableLocalWaterWithLightingStateFilter());
     }
 
-    private static void register(@NotNull final SceneFilter<?> sceneFilter) {
+    private static void register(@NotNull final SceneFilter sceneFilter) {
         BUILT_IN.put(sceneFilter.getName(), sceneFilter);
         BUILT_IN_NAMES.add(sceneFilter.getName());
     }
@@ -174,8 +179,8 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
     protected void processOk() {
 
         final SceneNode currentModel = changeConsumer.getCurrentModel();
-        final Array<SceneAppState> appStates = currentModel.getAppStates();
-        final Array<SceneFilter<?>> filters = currentModel.getFilters();
+        final List<SceneAppState> appStates = currentModel.getAppStates();
+        final List<SceneFilter> filters = currentModel.getFilters();
 
         final CheckBox customCheckBox = getCustomCheckBox();
         final TextField filterNameField = getFilterNameField();
@@ -183,7 +188,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
 
         if (customCheckBox.isSelected()) {
 
-            final SceneFilter<?> newExample = tryToCreateUserObject(this, filterNameField.getText(), SceneFilter.class);
+            final SceneFilter newExample = tryToCreateUserObject(this, filterNameField.getText(), SceneFilter.class);
 
             if (newExample == null) {
                 throw new RuntimeException("Can't create a state of the class " + filterNameField.getText());
@@ -198,8 +203,8 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
             final SingleSelectionModel<String> selectionModel = builtInBox.getSelectionModel();
             final String name = selectionModel.getSelectedItem();
 
-            final SceneFilter<?> example = requireNonNull(BUILT_IN.get(name));
-            final SceneFilter<?> newExample = ClassUtils.newInstance(example.getClass());
+            final SceneFilter example = requireNonNull(BUILT_IN.get(name));
+            final SceneFilter newExample = ClassUtils.newInstance(example.getClass());
 
             check(appStates, filters, newExample);
 
@@ -209,12 +214,12 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
         super.processOk();
     }
 
-    private void check(@NotNull final Array<SceneAppState> appStates, @NotNull final Array<SceneFilter<?>> filters,
-                       @NotNull final SceneFilter<?> newExample) {
+    private void check(@NotNull final List<SceneAppState> appStates, @NotNull final List<SceneFilter> filters,
+                       @NotNull final SceneFilter newExample) {
 
-        if (!(newExample instanceof EditableSceneFilter<?>)) return;
+        if (!(newExample instanceof EditableSceneFilter)) return;
 
-        final EditableSceneFilter<?> editableSceneFilter = (EditableSceneFilter<?>) newExample;
+        final EditableSceneFilter editableSceneFilter = (EditableSceneFilter) newExample;
 
         String message = editableSceneFilter.checkStates(appStates);
 

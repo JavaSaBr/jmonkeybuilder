@@ -145,11 +145,11 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      * @param sceneFilter the scene filter.
      */
     @FromAnyThread
-    public void addFilter(@NotNull final SceneFilter<?> sceneFilter) {
+    public void addFilter(@NotNull final SceneFilter sceneFilter) {
         EXECUTOR_MANAGER.addJMETask(() -> addFilterImpl(sceneFilter));
     }
 
-    private void addFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
+    private void addFilterImpl(@NotNull final SceneFilter sceneFilter) {
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         postProcessor.addFilter(sceneFilter.get());
     }
@@ -160,11 +160,11 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
      * @param sceneFilter the scene filter.
      */
     @FromAnyThread
-    public void removeFilter(@NotNull final SceneFilter<?> sceneFilter) {
+    public void removeFilter(@NotNull final SceneFilter sceneFilter) {
         EXECUTOR_MANAGER.addJMETask(() -> removeFilterImpl(sceneFilter));
     }
 
-    private void removeFilterImpl(@NotNull final SceneFilter<?> sceneFilter) {
+    private void removeFilterImpl(@NotNull final SceneFilter sceneFilter) {
         final FilterPostProcessor postProcessor = EDITOR.getPostProcessor();
         postProcessor.removeFilter(sceneFilter.get());
     }

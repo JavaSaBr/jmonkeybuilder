@@ -5,18 +5,18 @@
  ******************************************************************************/
 
 .special-font-13 {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 13px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 12px;
 }
 
 .special-font-14 {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14px;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13px;
 }
 
 .special-font-16 {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 16;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 15;
 }
 
 /*******************************************************************************
@@ -68,7 +68,7 @@
     -fx-min-width: -var-dialog-button-width;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-focus-traversable: true;
 }
 
@@ -570,7 +570,7 @@
 .settings-dialog > .dialog-content-root > .tab-pane > .tab-content-area > .vbox {
     -fx-spacing: 2px;
     -fx-padding: 6px 0px 0px 0px;
-    -fx-max-width: 585px;
+    -fx-max-width: 645px;
     -fx-min-height: 300px;
 }
 
@@ -1231,8 +1231,8 @@
  ******************************************************************************/
 
 .custom-tooltip {
-    -fx-font-family: "Ubuntu Condensed";
-    -fx-font-size: 14;
+    -fx-font-family: "Open Sans Regular";
+    -fx-font-size: 13;
     -fx-padding: 6px;
     -fx-background-insets: 0;
     -fx-background-radius: 3px;

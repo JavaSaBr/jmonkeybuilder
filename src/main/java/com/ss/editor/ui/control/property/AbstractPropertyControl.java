@@ -164,7 +164,7 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
         this.propertyName = propertyName;
         this.changeConsumer = changeConsumer;
         this.changeHandler = changeHandler;
-        ;
+
         setPropertyValue(propertyValue);
         createComponents();
         setIgnoreListener(true);

@@ -105,7 +105,7 @@ public class JFXApplication extends Application {
         // JavaFX
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
-        System.setProperty("javafx.animation.fullspeed", "true");
+        System.setProperty("javafx.animation.fullspeed", "false");
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final OpenGLVersion openGLVersion = editorConfig.getOpenGLVersion();

@@ -14,7 +14,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -25,6 +24,7 @@ import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -122,7 +122,7 @@ public class AppStateList extends VBox {
         final ObservableList<EditableSceneAppState> items = listView.getItems();
         items.clear();
 
-        final Array<SceneAppState> appStates = sceneNode.getAppStates();
+        final List<SceneAppState> appStates = sceneNode.getAppStates();
         appStates.stream().filter(EditableSceneAppState.class::isInstance)
                 .map(EditableSceneAppState.class::cast)
                 .forEach(items::add);

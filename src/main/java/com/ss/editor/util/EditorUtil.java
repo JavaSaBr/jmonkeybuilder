@@ -613,6 +613,12 @@ public abstract class EditorUtil {
         }
 
         final SceneNode sceneNode = ((SceneChangeConsumer) consumer).getCurrentModel();
-        return sceneNode.getLayers().first();
+        final List<SceneLayer> layers = sceneNode.getLayers();
+
+        if (layers.isEmpty()) {
+            return null;
+        }
+
+        return layers.get(0);
     }
 }

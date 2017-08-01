@@ -44,7 +44,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      * @param sceneFilter the scene filter
      */
     @FXThread
-    void notifyAddedFilter(@NotNull SceneFilter<?> sceneFilter);
+    void notifyAddedFilter(@NotNull SceneFilter sceneFilter);
 
     /**
      * Notify about removed a filter.
@@ -52,7 +52,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      * @param sceneFilter the scene filter
      */
     @FXThread
-    void notifyRemovedFilter(@NotNull SceneFilter<?> sceneFilter);
+    void notifyRemovedFilter(@NotNull SceneFilter sceneFilter);
 
     /**
      * Notify about changed a filter.
@@ -60,7 +60,7 @@ public interface SceneChangeConsumer extends ModelChangeConsumer {
      * @param sceneFilter the scene filter
      */
     @FXThread
-    void notifyChangedFilter(@NotNull SceneFilter<?> sceneFilter);
+    void notifyChangedFilter(@NotNull SceneFilter sceneFilter);
 
     @NotNull
     @Override

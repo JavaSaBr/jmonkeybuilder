@@ -413,7 +413,7 @@ public class SceneFileEditor extends
      * Handle the selected filter from the list.
      */
     @FXThread
-    private void selectFilterFromList(@Nullable final EditableSceneFilter<?> sceneFilter) {
+    private void selectFilterFromList(@Nullable final EditableSceneFilter sceneFilter) {
         if (!isNeedSyncSelection()) return;
 
         setNeedSyncSelection(false);
@@ -531,10 +531,12 @@ public class SceneFileEditor extends
         final SceneNode sceneNode = (SceneNode) model;
         final SceneEditor3DState editor3DState = getEditor3DState();
 
-        sceneNode.getFilters().forEach(ScenePresentable.class::isInstance,
-                filter -> editor3DState.addPresentable((ScenePresentable) filter));
-        sceneNode.getAppStates().forEach(ScenePresentable.class::isInstance,
-                state -> editor3DState.addPresentable((ScenePresentable) state));
+        sceneNode.getFilters().stream()
+                .filter(ScenePresentable.class::isInstance)
+                .forEach(filter -> editor3DState.addPresentable((ScenePresentable) filter));
+        sceneNode.getAppStates().stream()
+                .filter(ScenePresentable.class::isInstance)
+                .forEach(state -> editor3DState.addPresentable((ScenePresentable) state));
     }
 
     @Override
@@ -548,10 +550,12 @@ public class SceneFileEditor extends
         final SceneNode sceneNode = (SceneNode) model;
         final SceneEditor3DState editor3DState = getEditor3DState();
 
-        sceneNode.getFilters().forEach(ScenePresentable.class::isInstance,
-                filter -> editor3DState.removePresentable((ScenePresentable) filter));
-        sceneNode.getAppStates().forEach(ScenePresentable.class::isInstance,
-                state -> editor3DState.removePresentable((ScenePresentable) state));
+        sceneNode.getFilters().stream()
+                .filter(ScenePresentable.class::isInstance)
+                .forEach(filter -> editor3DState.removePresentable((ScenePresentable) filter));
+        sceneNode.getAppStates().stream()
+                .filter(ScenePresentable.class::isInstance)
+                .forEach(state -> editor3DState.removePresentable((ScenePresentable) state));
     }
 
     @Override
@@ -651,7 +655,7 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyAddedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+    public void notifyAddedFilter(@NotNull final SceneFilter sceneFilter) {
 
         final SceneEditor3DState editor3DState = getEditor3DState();
         editor3DState.addFilter(sceneFilter);
@@ -664,7 +668,7 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyRemovedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+    public void notifyRemovedFilter(@NotNull final SceneFilter sceneFilter) {
 
         final SceneEditor3DState editor3DState = getEditor3DState();
         editor3DState.removeFilter(sceneFilter);
@@ -677,7 +681,7 @@ public class SceneFileEditor extends
     }
 
     @Override
-    public void notifyChangedFilter(@NotNull final SceneFilter<?> sceneFilter) {
+    public void notifyChangedFilter(@NotNull final SceneFilter sceneFilter) {
         getFilterList().fill(getCurrentModel());
     }
 

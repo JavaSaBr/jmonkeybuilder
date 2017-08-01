@@ -1,5 +1,6 @@
 package com.ss.editor.ui.css;
 
+import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -8,15 +9,9 @@ import org.jetbrains.annotations.NotNull;
  * @author JavaSaBr
  */
 public enum CssColorTheme {
-    LIGHT("/ui/css/light-color.css", "White") {
-        @Override
-        public boolean isDark() {
-            return false;
-        }
-    },
-
-    SHADOW("/ui/css/shadow-color.css", "Shadow"),
-    DARK("/ui/css/dark-color.css", "Dark"),;
+    LIGHT("/ui/css/light-color.css", "White", Color.BLACK),
+    SHADOW("/ui/css/shadow-color.css", "Shadow", Color.web("#c8d2e1")),
+    DARK("/ui/css/dark-color.css", "Dark", Color.web("#c8dae2")),;
 
     @NotNull
     public static final CssColorTheme[] VALUES = values();
@@ -27,20 +22,27 @@ public enum CssColorTheme {
     }
 
     /**
+     * The icon color.
+     */
+    @NotNull
+    private final Color iconColor;
+
+    /**
      * The css file.
      */
     @NotNull
-    private String cssFile;
+    private final String cssFile;
 
     /**
      * The name of this theme.
      */
     @NotNull
-    private String name;
+    private final String name;
 
-    CssColorTheme(@NotNull final String cssFile, @NotNull final String name) {
+    CssColorTheme(@NotNull final String cssFile, @NotNull final String name, @NotNull final Color iconColor) {
         this.cssFile = cssFile;
         this.name = name;
+        this.iconColor = iconColor;
     }
 
     /**
@@ -60,9 +62,17 @@ public enum CssColorTheme {
     }
 
     /**
+     * @return the icon color.
+     */
+    @NotNull
+    public Color getIconColor() {
+        return iconColor;
+    }
+
+    /**
      * @return true if this theme is dark.
      */
-    public boolean isDark() {
+    public boolean needRepaintIcons() {
         return true;
     }
 

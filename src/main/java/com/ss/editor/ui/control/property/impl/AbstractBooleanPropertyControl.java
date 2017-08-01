@@ -72,7 +72,7 @@ public abstract class AbstractBooleanPropertyControl<C extends ChangeConsumer, T
     protected void reload() {
         final Boolean value = getPropertyValue();
         final CheckBox checkBox = getCheckBox();
-        checkBox.setSelected(value == Boolean.TRUE);
+        checkBox.setSelected(Boolean.TRUE.equals(value));
     }
 
     /**

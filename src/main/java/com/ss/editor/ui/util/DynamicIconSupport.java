@@ -79,7 +79,7 @@ public class DynamicIconSupport {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final CssColorTheme theme = editorConfig.getTheme();
 
-        if (theme.isDark()) {
+        if (!theme.needRepaintIcons()) {
             return;
         }
 
@@ -116,7 +116,7 @@ public class DynamicIconSupport {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final CssColorTheme theme = editorConfig.getTheme();
 
-        if (theme.isDark()) {
+        if (!theme.needRepaintIcons()) {
             return;
         }
 
@@ -175,7 +175,7 @@ public class DynamicIconSupport {
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final CssColorTheme theme = editorConfig.getTheme();
 
-        if (theme.isDark()) {
+        if (!theme.needRepaintIcons()) {
             return;
         }
 

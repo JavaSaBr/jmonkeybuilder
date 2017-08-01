@@ -17,14 +17,14 @@ public class DisableSceneFilterOperation extends AbstractEditorOperation<SceneCh
      * The scene filter.
      */
     @NotNull
-    private final SceneFilter<?> sceneFilter;
+    private final SceneFilter sceneFilter;
 
     /**
      * Instantiates a new Disable scene filter operation.
      *
      * @param sceneFilter the scene filter
      */
-    public DisableSceneFilterOperation(@NotNull final SceneFilter<?> sceneFilter) {
+    public DisableSceneFilterOperation(@NotNull final SceneFilter sceneFilter) {
         this.sceneFilter = sceneFilter;
     }
 

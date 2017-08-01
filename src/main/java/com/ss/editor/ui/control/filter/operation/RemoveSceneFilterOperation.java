@@ -18,7 +18,7 @@ public class RemoveSceneFilterOperation extends AbstractEditorOperation<SceneCha
      * The new scene filter.
      */
     @NotNull
-    private final SceneFilter<?> sceneFilter;
+    private final SceneFilter sceneFilter;
 
     /**
      * The scene node.
@@ -32,7 +32,7 @@ public class RemoveSceneFilterOperation extends AbstractEditorOperation<SceneCha
      * @param sceneFilter the scene filter
      * @param sceneNode   the scene node
      */
-    public RemoveSceneFilterOperation(@NotNull final SceneFilter<?> sceneFilter, @NotNull final SceneNode sceneNode) {
+    public RemoveSceneFilterOperation(@NotNull final SceneFilter sceneFilter, @NotNull final SceneNode sceneNode) {
         this.sceneFilter = sceneFilter;
         this.sceneNode = sceneNode;
     }

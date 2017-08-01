@@ -53,7 +53,7 @@ import java.nio.file.Path;
 public class SettingsDialog extends EditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(600, -1);
+    private static final Point DIALOG_SIZE = new Point(660, -1);
 
     @NotNull
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
@@ -472,7 +472,6 @@ public class SettingsDialog extends EditorDialog {
         FXUtils.addToPane(gammaCorrectionCheckBox, container);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(gammaCorrectionLabel, gammaCorrectionCheckBox, CSSClasses.SPECIAL_FONT_14);
         FXUtils.addClassTo(gammaCorrectionLabel, CSSClasses.SETTINGS_DIALOG_LABEL);
         FXUtils.addClassTo(gammaCorrectionCheckBox, CSSClasses.SETTINGS_DIALOG_FIELD);
     }

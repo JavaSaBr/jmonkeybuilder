@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class FilterListCell extends AbstractListCell<EditableSceneFilter<?>> {
+public class FilterListCell extends AbstractListCell<EditableSceneFilter> {
 
     /**
      * The list of filters.
@@ -44,7 +44,7 @@ public class FilterListCell extends AbstractListCell<EditableSceneFilter<?>> {
     @Override
     protected void processHideImpl() {
 
-        final EditableSceneFilter<?> item = getItem();
+        final EditableSceneFilter item = getItem();
         final FilterList stateList = getStateList();
         final SceneChangeConsumer changeConsumer = stateList.getChangeConsumer();
 
@@ -56,13 +56,13 @@ public class FilterListCell extends AbstractListCell<EditableSceneFilter<?>> {
     }
 
     @Override
-    protected boolean isEnabled(@Nullable final EditableSceneFilter<?> item) {
+    protected boolean isEnabled(@Nullable final EditableSceneFilter item) {
         return item != null && item.isEnabled();
     }
 
     @NotNull
     @Override
-    protected String getName(@Nullable final EditableSceneFilter<?> item) {
+    protected String getName(@Nullable final EditableSceneFilter item) {
         return item == null ? "" : item.getName();
     }
 }

@@ -17,10 +17,11 @@ import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * The iproperty builder to build property controls of editable scene app states.
@@ -55,9 +56,9 @@ public class FilterPropertyBuilder extends AbstractPropertyBuilder<SceneChangeCo
 
         if (!(object instanceof EditableSceneFilter)) return;
 
-        final EditableSceneFilter<?> sceneFilter = (EditableSceneFilter) object;
+        final EditableSceneFilter sceneFilter = (EditableSceneFilter) object;
 
-        final Array<EditableProperty<?, ?>> editableProperties = sceneFilter.getEditableProperties();
+        final List<EditableProperty<?, ?>> editableProperties = sceneFilter.getEditableProperties();
         if (editableProperties.isEmpty()) return;
 
         for (final EditableProperty<?, ?> editableProperty : editableProperties) {

@@ -13,10 +13,11 @@ import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.control.property.builder.impl.AbstractPropertyBuilder;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
-import com.ss.rlib.util.array.Array;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * The property builder to build property controls of editable controls.
@@ -50,7 +51,7 @@ public class EditableControlPropertyBuilder extends AbstractPropertyBuilder<Mode
 
         final EditableControl control = (EditableControl) object;
 
-        final Array<EditableProperty<?, ?>> editableProperties = control.getEditableProperties();
+        final List<EditableProperty<?, ?>> editableProperties = control.getEditableProperties();
         if (editableProperties.isEmpty()) return;
 
         for (final EditableProperty<?, ?> editableProperty : editableProperties) {

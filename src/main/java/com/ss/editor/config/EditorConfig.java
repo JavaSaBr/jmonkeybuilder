@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -863,6 +864,10 @@ public final class EditorConfig implements AssetEventListener {
             this.currentAsset = get(currentAssetURI, uri -> Paths.get(new URI(uri)));
         }
 
+        if (currentAsset != null && !Files.exists(currentAsset)) {
+            this.currentAsset = null;
+        }
+
         final String classpathURI = prefs.get(PREF_OTHER_ADDITIONAL_CLASSPATH, null);
 
         if (classpathURI != null) {
@@ -895,7 +900,19 @@ public final class EditorConfig implements AssetEventListener {
 
         final List<String> lastOpenedAssets = getLastOpenedAssets();
         try {
+
             lastOpenedAssets.addAll(EditorUtil.deserialize(byteArray));
+
+            for (Iterator<String> iterator = lastOpenedAssets.iterator(); iterator.hasNext(); ) {
+
+                final String assetUrl = iterator.next();
+                final Path assetPath = get(assetUrl, uri -> Paths.get(new URI(uri)));
+
+                if (!Files.exists(assetPath)) {
+                    iterator.remove();
+                }
+            }
+
         } catch (final RuntimeException e) {
             LOGGER.warning(e);
         }
