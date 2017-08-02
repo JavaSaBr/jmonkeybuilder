@@ -4,14 +4,13 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.RotationInterpolationElement;
-
-import org.jetbrains.annotations.NotNull;
-
-import javafx.scene.layout.VBox;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.RotationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
+
+import java.util.List;
 
 /**
  * The control for editing sizes in the {@link RotationInfluencer}.
@@ -60,7 +59,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     @Override
     protected void fillControl(@NotNull final RotationInfluencer influencer, @NotNull final VBox root) {
 
-        final Array<Vector3f> speeds = influencer.getRotationSpeeds();
+        final List<Vector3f> speeds = influencer.getRotationSpeeds();
 
         for (int i = 0, length = speeds.size(); i < length; i++) {
 
@@ -86,7 +85,7 @@ public class RotationInfluencerControl extends AbstractInterpolationInfluencerCo
     protected void processRemove() {
 
         final RotationInfluencer influencer = getInfluencer();
-        final Array<Vector3f> speeds = influencer.getRotationSpeeds();
+        final List<Vector3f> speeds = influencer.getRotationSpeeds();
 
         final Vector3f speed = influencer.getRotationSpeed(speeds.size() - 1);
         final Interpolation interpolation = influencer.getInterpolation(speeds.size() - 1);

@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer;
 
 import static java.util.Objects.requireNonNull;
-
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.node.Toneg0dParticleInfluencers;
@@ -13,14 +12,13 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.toneg0d.RemoveParticleInfluencerOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
-import com.ss.rlib.util.array.Array;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
+
+import java.util.List;
 
 /**
  * The action for to remove the {@link ParticleInfluencer} from the {@link ParticleEmitterNode}.
@@ -61,7 +59,7 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
 
         final ParticleInfluencer influencer = node.getElement();
         final ParticleEmitterNode emitterNode = toneg0dParticleInfluencers.getEmitterNode();
-        final Array<ParticleInfluencer> influencers = emitterNode.getInfluencers();
+        final List<ParticleInfluencer> influencers = emitterNode.getInfluencers();
         final int childIndex = influencers.indexOf(influencer);
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
