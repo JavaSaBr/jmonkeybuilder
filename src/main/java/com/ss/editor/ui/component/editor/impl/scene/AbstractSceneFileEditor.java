@@ -1508,7 +1508,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         Object toUpdate = spatial;
 
-        if(spatial instanceof WrapperNode) {
+        if (spatial instanceof WrapperNode) {
             toUpdate = ((WrapperNode) spatial).getWrappedObject();
         }
 

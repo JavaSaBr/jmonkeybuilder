@@ -165,7 +165,7 @@ public class ModelEditor3DState extends AbstractSceneEditor3DState<ModelFileEdit
             final Array<Spatial> customSky = getCustomSky();
             customSky.forEach(spatial -> customSkyNode.attachChild(spatial.clone(false)));
 
-            EDITOR.updateProbe(probeHandler);
+            EDITOR.updateLightProbe(probeHandler);
         }
 
         frame++;

@@ -66,7 +66,7 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     }
 
     @Override
-    protected void attachModel(final @NotNull SceneNode model, @NotNull final Node modelNode) {
+    protected void attachModel(@NotNull final SceneNode model, @NotNull final Node modelNode) {
     }
 
     @Override

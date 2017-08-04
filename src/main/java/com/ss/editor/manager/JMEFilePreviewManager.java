@@ -191,7 +191,7 @@ public class JMEFilePreviewManager extends AbstractControl {
 
         if (frame == 2) {
             final Editor editor = Editor.getInstance();
-            editor.updatePreviewProbe(probeHandler);
+            editor.updatePreviewLightProbe(probeHandler);
         }
 
         frame++;

@@ -13,6 +13,7 @@ import com.jme3.environment.EnvironmentCamera;
 import com.jme3.environment.LightProbeFactory;
 import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.font.BitmapFont;
+import com.jme3.light.LightList;
 import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.material.TechniqueDef;
@@ -258,7 +259,7 @@ public class Editor extends JmeToJFXApplication {
     @Override
     public void simpleInitApp() {
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
-        renderManager.setSinglePassLightBatchSize(5);
+        renderManager.setSinglePassLightBatchSize(15);
 
         assetManager.registerLoader(XbufLoader.class, FileExtensions.MODEL_XBUF);
 
@@ -325,7 +326,7 @@ public class Editor extends JmeToJFXApplication {
             stateManager.attach(previewEnvironmentCamera);
         }
 
-        createProbe();
+        createLightProbes();
 
         new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
     }
@@ -430,9 +431,9 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
-     * Create the light probe for the PBR render.
+     * Create the light probes for the PBR render.
      */
-    private void createProbe() {
+    private void createLightProbes() {
 
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
         final EnvironmentCamera previewEnvironmentCamera = getPreviewEnvironmentCamera();
@@ -443,7 +444,7 @@ public class Editor extends JmeToJFXApplication {
 
         if (environmentCamera.getApplication() == null) {
             final JMEThreadExecutor gameThreadExecutor = JMEThreadExecutor.getInstance();
-            gameThreadExecutor.addToExecute(this::createProbe);
+            gameThreadExecutor.addToExecute(this::createLightProbes);
             return;
         }
 
@@ -465,7 +466,7 @@ public class Editor extends JmeToJFXApplication {
      *
      * @param progressAdapter the progress adapter
      */
-    public void updateProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+    public void updateLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
         final LightProbe lightProbe = getLightProbe();
         final EnvironmentCamera environmentCamera = getEnvironmentCamera();
@@ -479,11 +480,45 @@ public class Editor extends JmeToJFXApplication {
     }
 
     /**
+     * Disable PBR Light probe.
+     */
+    public void disableLightProbe() {
+
+        final LightProbe lightProbe = getLightProbe();
+
+        if (lightProbe != null) {
+            rootNode.removeLight(lightProbe);
+        }
+    }
+
+    /**
+     * Enable PBR Light probe.
+     */
+    public void enableLightProbe() {
+
+        final LightProbe lightProbe = getLightProbe();
+
+        if (lightProbe == null) {
+            return;
+        }
+
+        final LightList lightList = rootNode.getLocalLightList();
+
+        for (int i = 0; i < lightList.size(); i++) {
+            if (lightList.get(i) == lightProbe) {
+                return;
+            }
+        }
+
+        rootNode.addLight(lightProbe);
+    }
+
+    /**
      * Update the light probe.
      *
      * @param progressAdapter the progress adapter
      */
-    public void updatePreviewProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
+    public void updatePreviewLightProbe(@NotNull final JobProgressAdapter<LightProbe> progressAdapter) {
 
         final LightProbe lightProbe = getPreviewLightProbe();
         final EnvironmentCamera environmentCamera = getPreviewEnvironmentCamera();
