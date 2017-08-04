@@ -4,14 +4,13 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.DestinationWeightInterpolationElement;
-
-import org.jetbrains.annotations.NotNull;
-
-import javafx.scene.layout.VBox;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.DestinationInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
+
+import java.util.List;
 
 /**
  * The control for editing sizes in the {@link DestinationInfluencer}.
@@ -74,7 +73,7 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
     @Override
     protected void fillControl(@NotNull final DestinationInfluencer influencer, @NotNull final VBox root) {
 
-        final Array<Vector3f> speeds = influencer.getDestinations();
+        final List<Vector3f> speeds = influencer.getDestinations();
 
         for (int i = 0, length = speeds.size(); i < length; i++) {
 
@@ -100,7 +99,7 @@ public class DestinationInfluencerControl extends AbstractInterpolationInfluence
     protected void processRemove() {
 
         final DestinationInfluencer influencer = getInfluencer();
-        final Array<Vector3f> destinations = influencer.getDestinations();
+        final List<Vector3f> destinations = influencer.getDestinations();
 
         final Vector3f destination = influencer.getDestination(destinations.size() - 1);
         final Interpolation interpolation = influencer.getInterpolation(destinations.size() - 1);

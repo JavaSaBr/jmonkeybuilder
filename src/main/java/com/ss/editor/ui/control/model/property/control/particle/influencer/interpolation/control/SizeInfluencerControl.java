@@ -4,14 +4,13 @@ import com.jme3.math.Vector3f;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.SizeInterpolationElement;
-
-import org.jetbrains.annotations.NotNull;
-
-import javafx.scene.layout.VBox;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.SizeInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
+
+import java.util.List;
 
 /**
  * The control for editing sizes in the {@link SizeInfluencer}.
@@ -54,7 +53,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     @Override
     protected void fillControl(@NotNull final SizeInfluencer influencer, @NotNull final VBox root) {
 
-        final Array<Vector3f> sizes = influencer.getSizes();
+        final List<Vector3f> sizes = influencer.getSizes();
 
         for (int i = 0, length = sizes.size(); i < length; i++) {
 
@@ -80,7 +79,7 @@ public class SizeInfluencerControl extends AbstractInterpolationInfluencerContro
     protected void processRemove() {
 
         final SizeInfluencer influencer = getInfluencer();
-        final Array<Vector3f> sizes = influencer.getSizes();
+        final List<Vector3f> sizes = influencer.getSizes();
 
         final Vector3f size = influencer.getSize(sizes.size() - 1);
         final Interpolation interpolation = influencer.getInterpolation(sizes.size() - 1);

@@ -1,10 +1,10 @@
 package com.ss.editor.model.node;
 
 import org.jetbrains.annotations.NotNull;
-
-import com.ss.rlib.util.array.Array;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
+
+import java.util.List;
 
 /**
  * The type Particle influencers.
@@ -44,7 +44,7 @@ public class Toneg0dParticleInfluencers {
      * @return the array of influencers.
      */
     @NotNull
-    public Array<ParticleInfluencer> getInfluencers() {
+    public List<ParticleInfluencer> getInfluencers() {
         return emitterNode.getInfluencers();
     }
 

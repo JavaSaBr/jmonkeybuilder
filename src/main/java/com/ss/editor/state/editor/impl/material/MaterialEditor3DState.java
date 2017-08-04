@@ -409,7 +409,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     public void update(float tpf) {
         super.update(tpf);
 
-        if (frame == 2) EDITOR.updateProbe(probeHandler);
+        if (frame == 2) EDITOR.updateLightProbe(probeHandler);
 
         final Geometry testQuad = getTestQuad();
 

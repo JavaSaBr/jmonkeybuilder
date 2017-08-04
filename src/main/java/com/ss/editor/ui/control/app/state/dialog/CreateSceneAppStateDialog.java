@@ -11,6 +11,7 @@ import com.ss.editor.extension.scene.app.state.SceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.EditableLightingSceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.EditableSkySceneAppState;
 import com.ss.editor.extension.scene.app.state.impl.bullet.EditableBulletSceneAppState;
+import com.ss.editor.extension.scene.app.state.impl.pbr.StaticLightProbeSceneAppState;
 import com.ss.editor.extension.scene.filter.SceneFilter;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.app.state.operation.AddAppStateOperation;
@@ -48,6 +49,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
         register(new EditableLightingSceneAppState());
         register(new EditableSkySceneAppState());
         register(new EditableBulletSceneAppState());
+        register(new StaticLightProbeSceneAppState());
     }
 
     private static void register(@NotNull final EditableSceneAppState appState) {

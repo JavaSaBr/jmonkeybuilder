@@ -25,6 +25,7 @@ import tonegod.emitter.influencers.ParticleInfluencer;
 import tonegod.emitter.influencers.impl.*;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 /**
  * The implementation of the {@link TreeNode} for representing the {@link Toneg0dParticleInfluencers} in the editor.
@@ -96,8 +97,8 @@ public class Toneg0DParticleInfluencersTreeNode extends TreeNode<Toneg0dParticle
     public Array<TreeNode<?>> getChildren(@NotNull final NodeTree<?> nodeTree) {
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
         final Toneg0dParticleInfluencers element = getElement();
-        final Array<ParticleInfluencer> influencers = element.getInfluencers();
-        influencers.forEach(result, (influencer, toStore) -> toStore.add(FACTORY_REGISTRY.createFor(influencer)));
+        final List<ParticleInfluencer> influencers = element.getInfluencers();
+        influencers.forEach(influencer -> result.add(FACTORY_REGISTRY.createFor(influencer)));
         return result;
     }
 

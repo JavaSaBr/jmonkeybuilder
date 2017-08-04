@@ -685,6 +685,20 @@ public class SceneFileEditor extends
         getFilterList().fill(getCurrentModel());
     }
 
+    @FXThread
+    @Override
+    public void notifyHided() {
+        super.notifyHided();
+        EXECUTOR_MANAGER.addJMETask(EDITOR::enableLightProbe);
+    }
+
+    @FXThread
+    @Override
+    public void notifyShowed() {
+        super.notifyShowed();
+        EXECUTOR_MANAGER.addJMETask(EDITOR::disableLightProbe);
+    }
+
     @Override
     public String toString() {
         return "SceneFileEditor{} " + super.toString();

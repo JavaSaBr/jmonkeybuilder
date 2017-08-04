@@ -14,6 +14,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.control.transform.EditorTransformSupport;
+import com.ss.editor.extension.scene.InvisibleObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.ControlTreeNode;
@@ -31,15 +32,15 @@ import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.Create
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.StringUtils;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
 
 /**
  * The implementation of the {@link TreeNode} to represent a {@link Spatial} in an editor.
@@ -175,7 +176,11 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         final Spatial element = getElement();
 
         final LightList lightList = element.getLocalLightList();
-        lightList.forEach(light -> result.add(FACTORY_REGISTRY.createFor(light)));
+        lightList.forEach(light -> {
+            if (!(light instanceof InvisibleObject)) {
+                result.add(FACTORY_REGISTRY.createFor(light));
+            }
+        });
 
         final int numControls = element.getNumControls();
 

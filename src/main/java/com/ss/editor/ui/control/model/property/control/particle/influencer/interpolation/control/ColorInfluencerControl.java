@@ -4,14 +4,13 @@ import com.jme3.math.ColorRGBA;
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.ColorInterpolationElement;
-
-import org.jetbrains.annotations.NotNull;
-
-import javafx.scene.layout.VBox;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.ColorInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
+
+import java.util.List;
 
 /**
  * The control for editing colors in the {@link ColorInfluencer}.
@@ -40,7 +39,7 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     @Override
     protected void fillControl(@NotNull final ColorInfluencer influencer, @NotNull final VBox root) {
 
-        final Array<ColorRGBA> colors = influencer.getColors();
+        final List<ColorRGBA> colors = influencer.getColors();
 
         for (int i = 0, length = colors.size(); i < length; i++) {
 
@@ -80,7 +79,7 @@ public class ColorInfluencerControl extends AbstractInterpolationInfluencerContr
     protected void processRemove() {
 
         final ColorInfluencer influencer = getInfluencer();
-        final Array<ColorRGBA> colors = influencer.getColors();
+        final List<ColorRGBA> colors = influencer.getColors();
 
         final ColorRGBA color = influencer.getColor(colors.size() - 1);
         final Interpolation interpolation = influencer.getInterpolation(colors.size() - 1);

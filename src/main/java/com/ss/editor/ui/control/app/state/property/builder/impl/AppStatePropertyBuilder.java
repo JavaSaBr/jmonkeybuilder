@@ -4,6 +4,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 import com.ss.editor.extension.property.EditableProperty;
 import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
@@ -152,6 +153,17 @@ public class AppStatePropertyBuilder extends AbstractPropertyBuilder<SceneChange
 
                     final EnumAppStatePropertyControl<Enum<?>, EditableProperty<Enum<?>, ?>> propertyControl =
                             new EnumAppStatePropertyControl<>(value, property.getName(), changeConsumer);
+
+                    addControl(container, property, propertyControl);
+                    break;
+                }
+                case NODE_FROM_SCENE: {
+
+                    final EditableProperty<Node, ?> property = cast(editableProperty);
+                    final Node value = property.getValue();
+
+                    final NodeElementAppStatePropertyControl<EditableProperty<Node, ?>> propertyControl =
+                            new NodeElementAppStatePropertyControl<>(value, property.getName(), changeConsumer);
 
                     addControl(container, property, propertyControl);
                     break;

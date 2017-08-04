@@ -1,15 +1,46 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC2'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'idea'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '0.9.11'
+version = '0.9.12'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.compilerArgs += '-parameters'
+}
+
 ext.jmeVersion = "3.2_branch-SNAPSHOT"
 ext.jme3_xbuf_version = '0.9.1'
 ext.lwjglVersion = "3.1.2"
+ext.junitPlatformVersion = "1.0.0-M5"
+ext.junitJupiterVersion = "5.0.0-M5"
+ext.log4jVersion = '2.6.2'
+
+junitPlatform {
+    filters {
+        engines {
+        }
+        tags {
+        }
+    }
+    logManager 'org.apache.logging.log4j.jul.LogManager'
+}
+
 
 repositories {
     mavenCentral()
@@ -94,10 +125,10 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
 
     // extensions
-    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.4.2') {
+    compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.5.0') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.2.4') {
+    compile ('com.github.JavaSaBr:tonegodemitter:2.3.0') {
         exclude group: 'org.jmonkeyengine'
     }
 
@@ -105,6 +136,19 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all
     compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.0-beta-1'
+
+    // TESTS
+    testCompile "org.junit.platform:junit-platform-commons:$junitPlatformVersion"
+    testRuntime "org.junit.platform:junit-platform-engine:$junitPlatformVersion"
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+
+    testRuntime "org.apache.logging.log4j:log4j-core:$log4jVersion"
+    testRuntime "org.apache.logging.log4j:log4j-jul:$log4jVersion"
+
+    // Only needed to run tests in an (IntelliJ) IDE(A) that bundles an older version
+    testCompile "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 }
 
 task copyToLib(type: Copy) {

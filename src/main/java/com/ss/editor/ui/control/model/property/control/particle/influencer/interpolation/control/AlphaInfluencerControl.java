@@ -3,14 +3,13 @@ package com.ss.editor.ui.control.model.property.control.particle.influencer.inte
 import com.ss.editor.Messages;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.property.control.particle.influencer.interpolation.element.AlphaInterpolationElement;
-
-import org.jetbrains.annotations.NotNull;
-
-import javafx.scene.layout.VBox;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.array.Array;
+import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 import tonegod.emitter.influencers.impl.AlphaInfluencer;
 import tonegod.emitter.interpolation.Interpolation;
+
+import java.util.List;
 
 /**
  * The control for editing alphas in the {@link AlphaInfluencer}.
@@ -54,7 +53,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     @Override
     protected void fillControl(@NotNull final AlphaInfluencer influencer, @NotNull final VBox root) {
 
-        final Array<Float> alphas = influencer.getAlphas();
+        final List<Float> alphas = influencer.getAlphas();
 
         for (int i = 0, length = alphas.size(); i < length; i++) {
 
@@ -80,7 +79,7 @@ public class AlphaInfluencerControl extends AbstractInterpolationInfluencerContr
     protected void processRemove() {
 
         final AlphaInfluencer influencer = getInfluencer();
-        final Array<Float> alphas = influencer.getAlphas();
+        final List<Float> alphas = influencer.getAlphas();
 
         final Float alpha = influencer.getAlpha(alphas.size() - 1);
         final Interpolation interpolation = influencer.getInterpolation(alphas.size() - 1);
