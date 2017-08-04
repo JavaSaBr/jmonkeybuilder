@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.11 #
+# jMonkeyEngine 3 SpaceShift Editor 0.9.12 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -10,6 +10,11 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/h6azH-D28qk) ##
+
+## ver. 0.9.12 ##
+* -Downgraded tonegod.emitter to java 7
+* -Added possibility to work with light probes in the Scene Editor.
+* -Fixed major problems with saving/loading app states/filters in a scene node.
 
 ## ver. 0.9.11 ##
 * -The project was migrated to gradle.
