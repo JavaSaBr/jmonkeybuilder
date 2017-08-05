@@ -4,7 +4,6 @@ import static com.ss.editor.Messages.ASSET_EDITOR_DIALOG_TITLE;
 import static com.ss.editor.ui.component.asset.tree.resource.ResourceElementFactory.createFor;
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.Objects.requireNonNull;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
@@ -113,12 +112,6 @@ public class AssetEditorDialog<C> extends EditorDialog {
     protected final Consumer<C> consumer;
 
     /**
-     * The action tester.
-     */
-    @Nullable
-    protected Predicate<Class<?>> actionTester;
-
-    /**
      * The function for validating the choose.
      */
     @Nullable
@@ -199,7 +192,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
      * @param onlyFolders true if need to show only folders.
      */
     void setOnlyFolders(final boolean onlyFolders) {
-        getResourceTree().setOnlyFolders(true);
+        getResourceTree().setOnlyFolders(onlyFolders);
     }
 
     @Override
@@ -290,7 +283,7 @@ public class AssetEditorDialog<C> extends EditorDialog {
         final EditorConfig editorConfig = EditorConfig.getInstance();
 
         final ResourceTree resourceTree = getResourceTree();
-        final Path currentAsset = requireNonNull(editorConfig.getCurrentAsset());
+        final Path currentAsset = notNull(editorConfig.getCurrentAsset());
 
         resourceTree.fill(currentAsset);
 

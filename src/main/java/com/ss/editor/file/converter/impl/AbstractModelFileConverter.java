@@ -77,7 +77,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
 
         final String filename = dialog.getFilename();
         final Path destinationFolder = dialog.getDestinationFolder();
-        final Path destination = destinationFolder.resolve(filename);
+        final Path destination = destinationFolder.resolve(filename + "." + FileExtensions.JME_OBJECT);
         final boolean isOverwrite = Files.exists(destination);
 
         final Path assetFile = notNull(getAssetFile(source), "Not found asset file for " + source);

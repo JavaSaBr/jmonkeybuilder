@@ -3,13 +3,13 @@ package com.ss.editor.manager;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.executor.EditorTaskExecutor;
 import com.ss.editor.executor.impl.BackgroundEditorTaskExecutor;
-import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.editor.executor.impl.FXEditorTaskExecutor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.ss.editor.executor.impl.JMEThreadExecutor;
 import com.ss.rlib.concurrent.atomic.AtomicInteger;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -175,5 +175,16 @@ public class ExecutorManager {
     @FromAnyThread
     public void schedule(@NotNull final Runnable runnable, final long timeout) {
         scheduledExecutorService.schedule(runnable, timeout, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Add a scheduled task.
+     *
+     * @param runnable the scheduled task.
+     * @param delay    the delay.
+     */
+    @FromAnyThread
+    public void scheduleAtFixedRate(@NotNull final Runnable runnable, final long delay) {
+        scheduledExecutorService.scheduleAtFixedRate(runnable, delay, delay, TimeUnit.MILLISECONDS);
     }
 }

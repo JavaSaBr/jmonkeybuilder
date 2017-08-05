@@ -1,12 +1,12 @@
 package com.ss.editor.ui.component.log;
 
-import static com.jme3x.jfx.util.JFXPlatform.runInFXThread;
 import static java.util.Collections.singleton;
 import com.jme3.material.Material;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
 import com.jme3.texture.TextureCubeMap;
 import com.jme3.texture.image.ColorSpace;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSIds;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -28,6 +28,8 @@ public class LogView extends CodeArea {
 
     @NotNull
     private static final LogView INSTANCE = new LogView();
+
+    private static final int MAX_LENGTH = 8000;
 
     /**
      * Gets instance.
@@ -122,21 +124,76 @@ public class LogView extends CodeArea {
         return spansBuilder.create();
     }
 
+    @NotNull
+    private final StringBuilder currentLog;
+
+    @NotNull
+    private String lastLog;
+
     /**
      * Instantiates a new Log view.
      */
     public LogView() {
+        this.currentLog = new StringBuilder();
+        this.lastLog = "";
+
         setId(CSSIds.LOG_VIEW);
         setWrapText(true);
         setEditable(false);
-        richChanges()
-                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
+        richChanges().filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
                 .subscribe(change -> setStyleSpans(0, computeHighlighting(getText())));
+
         System.setErr(new OutputStreamWrapper(System.err, externalAppendText()));
+
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.scheduleAtFixedRate(this::update, 1000);
+    }
+
+    /**
+     * Update log content.
+     */
+    private synchronized void update() {
+
+        if (lastLog.contentEquals(currentLog)) {
+            return;
+        }
+
+        final String newLog = currentLog.toString();
+        lastLog = newLog;
+
+        final ExecutorManager executorManager = ExecutorManager.getInstance();
+        executorManager.addFXTask(() -> {
+            final String text = getText();
+            replaceText(0, text.length(), newLog);
+            try {
+                setEstimatedScrollY(getTotalHeightEstimate());
+            } catch (final NullPointerException e) {
+            }
+        });
+    }
+
+    /**
+     * Update log content.
+     *
+     * @param text the new information.
+     */
+    private synchronized void appendLog(@NotNull final String text) {
+
+        final int resultLength = currentLog.length() + text.length();
+
+        if (resultLength <= MAX_LENGTH) {
+            currentLog.append(text);
+        } else {
+
+            final int toRemove = resultLength - MAX_LENGTH;
+
+            currentLog.delete(0, toRemove);
+            currentLog.append(text);
+        }
     }
 
     @NotNull
     private Consumer<String> externalAppendText() {
-        return stringConsumer -> runInFXThread(() -> appendText(stringConsumer));
+        return this::appendLog;
     }
 }

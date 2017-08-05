@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,5 +97,18 @@ public abstract class AbstractMaterialPropertiesComponent extends VBox {
                 control.setIgnoreListeners(false);
             }
         });
+    }
+
+    @Nullable
+    public <T extends MaterialParamControl> T findControl(@NotNull final String name, @NotNull Class<T> type) {
+
+        final ObservableList<Node> children = getChildren();
+        final MaterialParamControl result = children.stream()
+                .filter(type::isInstance)
+                .map(MaterialParamControl.class::cast)
+                .filter(control -> control.getParameterName().equals(name))
+                .findAny().orElse(null);
+
+        return type.cast(result);
     }
 }

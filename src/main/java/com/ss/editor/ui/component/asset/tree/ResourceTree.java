@@ -402,9 +402,6 @@ public class ResourceTree extends TreeView<ResourceElement> {
 
         fill(newRoot);
 
-        final Array<String> extensionFilter = getExtensionFilter();
-        if (!extensionFilter.isEmpty() && !isOnlyFolders()) cleanup(newRoot);
-
         EXECUTOR_MANAGER.addFXTask(() -> {
             setRoot(newRoot);
 

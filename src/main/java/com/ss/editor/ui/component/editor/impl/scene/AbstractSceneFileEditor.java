@@ -117,12 +117,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private static final int EDITING_TOOL = 1;
 
     @NotNull
-    private static final Array<String> ACCEPTED_FILES = ArrayFactory.newArray(String.class);
-
-    static {
-        ACCEPTED_FILES.add(FileExtensions.JME_MATERIAL);
-        ACCEPTED_FILES.add(FileExtensions.JME_OBJECT);
-    }
+    private static final Array<String> ACCEPTED_FILES = ArrayFactory.asArray(
+            FileExtensions.JME_MATERIAL,
+            FileExtensions.JME_OBJECT);
 
     @NotNull
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());

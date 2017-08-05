@@ -241,7 +241,7 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
      *
      * @param path the path to texture.
      */
-    private void addTexture(@NotNull final Path path) {
+    public void addTexture(@NotNull final Path path) {
 
         final String parameterName = getParameterName();
         final Material material = getMaterial();

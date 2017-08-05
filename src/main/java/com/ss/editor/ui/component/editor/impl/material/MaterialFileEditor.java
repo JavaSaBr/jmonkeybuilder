@@ -35,11 +35,14 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.impl.MaterialFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
+import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
@@ -47,9 +50,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,7 +91,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * THe default flag of enabling light.
      */
     public static final boolean DEFAULT_LIGHT_ENABLED = true;
-
 
     @NotNull
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
@@ -408,6 +414,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         changeHandler = this::handleChanges;
         editorAreaPane = new BorderPane();
         editorAreaPane.setOnMousePressed(event -> editorAreaPane.requestFocus());
+        editorAreaPane.setOnDragOver(this::dragOver);
+        editorAreaPane.setOnDragDropped(this::dragDropped);
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);
@@ -431,6 +439,52 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
         FXUtils.addToPane(mainSplitContainer, root);
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+    }
+
+    /**
+     * Handle dropped texture.
+     */
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
+                dragEvent, this::applyTexture);
+    }
+
+    /**
+     * Try to apply dropped texture.
+     *
+     * @param editor    the editor.
+     * @param dragEvent the drag event.
+     * @param path      the path to the texture.
+     */
+    private void applyTexture(@NotNull final MaterialFileEditor editor, @NotNull final DragEvent dragEvent,
+                              @NotNull final Path path) {
+
+        final String textureName = FileUtils.getNameWithoutExtension(path);
+        final int textureType = MaterialUtils.getPossibleTextureType(textureName);
+
+        if (textureType == 0) {
+            return;
+        }
+
+        final String[] paramNames = MaterialUtils.getPossibleParamNames(textureType);
+        final MaterialTexturesComponent component = editor.materialTexturesComponent;
+
+        for (final String paramName : paramNames) {
+            final Texture2DMaterialParamControl control = component.findControl(paramName, Texture2DMaterialParamControl.class);
+            if (control == null) {
+                continue;
+            }
+
+            control.addTexture(path);
+            break;
+        }
+    }
+
+    /**
+     * Handle drag objects.
+     */
+    private void dragOver(@NotNull final DragEvent dragEvent) {
+        UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
     }
 
     /**

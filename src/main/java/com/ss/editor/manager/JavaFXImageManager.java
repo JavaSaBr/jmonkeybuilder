@@ -227,9 +227,18 @@ public class JavaFXImageManager {
         } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
 
             final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
+            final BufferedImage awtImage;
 
-            final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
-            if (awtImage == null) return Icons.IMAGE_512;
+            try {
+                awtImage = (BufferedImage) TGAReader.getImage(content);
+            } catch (final Exception e) {
+                LOGGER.warning(e);
+                return Icons.IMAGE_512;
+            }
+
+            if (awtImage == null) {
+                return Icons.IMAGE_512;
+            }
 
             final int imageWidth = awtImage.getWidth();
             final int imageHeight = awtImage.getHeight();
