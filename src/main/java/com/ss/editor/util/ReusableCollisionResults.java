@@ -43,6 +43,11 @@ public class ReusableCollisionResults extends CollisionResults implements Reusab
         return original.get(index);
     }
 
+    @Override
+    public int size() {
+        return original.size();
+    }
+
     @Nullable
     @Override
     public CollisionResult getClosestCollision() {

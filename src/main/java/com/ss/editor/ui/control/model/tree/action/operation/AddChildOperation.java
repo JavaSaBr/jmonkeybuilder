@@ -12,7 +12,7 @@ import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
 /**
  * The implementation of the {@link AbstractEditorOperation} to add a new {@link Spatial} to a {@link Node}.
  *
- * @author JavaSaBr.
+ * @author JavaSaBr
  */
 public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsumer> {
 
@@ -29,14 +29,30 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
     private final Node parent;
 
     /**
+     * The flag to select added child.
+     */
+    private final boolean needSelect;
+
+    /**
      * Instantiates a new Add child operation.
      *
      * @param newChild the new child
      * @param parent   the parent
      */
     public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent) {
+        this(newChild, parent, true);
+    }
+
+    /**
+     * Instantiates a new Add child operation.
+     *
+     * @param newChild the new child
+     * @param parent   the parent
+     */
+    public AddChildOperation(@NotNull final Spatial newChild, @NotNull final Node parent, boolean needSelect) {
         this.newChild = newChild;
         this.parent = parent;
+        this.needSelect = needSelect;
     }
 
     @Override
@@ -47,7 +63,7 @@ public class AddChildOperation extends AbstractEditorOperation<ModelChangeConsum
             final TonegodTranslucentBucketFilter filter = EDITOR.getTranslucentBucketFilter();
             filter.refresh();
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, newChild, -1, true));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXAddedChild(parent, newChild, -1, needSelect));
         });
     }
 

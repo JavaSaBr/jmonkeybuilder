@@ -4,6 +4,7 @@ import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.L
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -72,6 +73,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -1342,8 +1344,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @FXThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this, dragEvent, AbstractSceneFileEditor::addNewModel);
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this, dragEvent, AbstractSceneFileEditor::applyMaterial);
+
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
+                dragEvent, AbstractSceneFileEditor::addNewModel);
+
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
+                dragEvent, AbstractSceneFileEditor::applyMaterial);
     }
 
     /**
@@ -1366,20 +1372,21 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
+        final MA editor3DState = getEditor3DState();
         final MaterialKey materialKey = new MaterialKey(assetPath);
-
-        final Camera camera = EDITOR.getCamera();
+        final Camera camera = editor3DState.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final MA editor3DState = getEditor3DState();
             final Geometry geometry = editor3DState.getGeometryByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
 
             if (geometry == null) return;
+            final Object linkNode = findParent(geometry, AssetLinkNode.class::isInstance);
+            if (linkNode != null) return;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Material material = assetManager.loadAsset(materialKey);
@@ -1405,19 +1412,31 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final M currentModel = getCurrentModel();
         if (!(currentModel instanceof Node)) return;
 
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        final Object selected = modelNodeTree.getSelectedObject();
+
+        final Node parent;
+
+        if (selected instanceof Node && findParent((Spatial) selected, AssetLinkNode.class::isInstance) == null) {
+            parent = (Node) selected;
+        } else {
+            parent = (Node) currentModel;
+        }
+
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
+        final MA editor3DState = getEditor3DState();
         final ModelKey modelKey = new ModelKey(assetPath);
-        final Camera camera = EDITOR.getCamera();
+        final Camera camera = editor3DState.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final MA editor3DState = getEditor3DState();
             final SceneLayer defaultLayer = getDefaultLayer(this);
+            final LocalObjects local = LocalObjects.get();
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
@@ -1430,12 +1449,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            final Vector3f screenPoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
+            final Vector3f scenePoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
+            final Vector3f result = local.nextVector(scenePoint)
+                    .subtractLocal(parent.getWorldTranslation());
 
-            assetLinkNode.setLocalTranslation(screenPoint);
+            assetLinkNode.setLocalTranslation(result);
 
-            execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
+            execute(new AddChildOperation(assetLinkNode, parent, false));
         });
     }
 
