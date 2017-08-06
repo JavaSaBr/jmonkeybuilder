@@ -799,8 +799,9 @@ public class CreateTerrainDialog extends AbstractSimpleEditorDialog {
         terrainNode.setLocalScale(1f, 1f, 1f);
 
         // add the lod control
-        final TerrainLodControl control = new TerrainLodControl(terrain, EDITOR.getCamera());
+        final TerrainLodControl control = new TerrainLodControl(terrain);
         control.setLodCalculator(new DistanceLodCalculator(patchSize, 2.7f));
+        control.setUseRenderCamera(true);
 
         terrainNode.addControl(control);
 
