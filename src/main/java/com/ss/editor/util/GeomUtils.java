@@ -8,6 +8,7 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -190,18 +191,21 @@ public class GeomUtils {
      *
      * @param node    the node
      * @param spatial the spatial
+     * @param isCopy  true if the spatial need to copy.
      * @return true if the spatial can be attached to the node.
      */
-    public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial) {
+    public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial, final boolean isCopy) {
 
-        Spatial parent = node;
-
-        while (parent != null) {
-            if (parent == spatial) return false;
-            parent = parent.getParent();
+        if (spatial.getParent() == node && !isCopy) {
+            return false;
+        } else if (node instanceof AssetLinkNode) {
+            return false;
         }
 
-        return true;
+        final AssetLinkNode linkNode =
+                isCopy ? null : NodeUtils.findParent(spatial.getParent(), AssetLinkNode.class::isInstance);
+
+        return linkNode == null;
     }
 
     /**

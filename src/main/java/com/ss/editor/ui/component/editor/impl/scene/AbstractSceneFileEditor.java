@@ -819,8 +819,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     @FXThread
-    public void notifyFXMoved(@NotNull final Node prevParent, @NotNull final Node newParent,
-                              @NotNull final Spatial child, final int index, final boolean needSelect) {
+    public void notifyFXMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
+                              @NotNull final Object child, final int index, final boolean needSelect) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);

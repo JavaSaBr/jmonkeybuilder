@@ -260,7 +260,13 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
 
         final TreeNode<?> newParentTreeNode = newParentItem.getValue();
         newParentTreeNode.notifyChildAdded(node);
-        newParentItem.getChildren().add(index, nodeItem);
+
+        if (index >= 0) {
+            newParentItem.getChildren().add(index, nodeItem);
+        } else {
+            newParentItem.getChildren().add(nodeItem);
+        }
+
         newParentTreeNode.notifyChildAdded(node);
 
         EXECUTOR_MANAGER.addFXTask(() -> select(node.getElement()));

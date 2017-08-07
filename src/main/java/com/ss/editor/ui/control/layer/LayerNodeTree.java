@@ -2,11 +2,11 @@ package com.ss.editor.ui.control.layer;
 
 import static com.ss.editor.ui.util.UIUtils.findItemForValue;
 import com.jme3.scene.Spatial;
+import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.NodeTreeCell;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.extension.scene.SceneLayer;
 import javafx.scene.control.TreeItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,16 +42,41 @@ public class LayerNodeTree extends NodeTree<SceneChangeConsumer> {
      * @param spatial the spatial.
      */
     public void notifyAdded(@NotNull final Spatial spatial) {
+        spatial.depthFirstTraversal(child -> {
 
-        final SceneLayer layer = SceneLayer.getLayer(spatial);
-        if (layer == SceneLayer.NO_LAYER) return;
+            final SceneLayer layer = SceneLayer.getLayer(child);
+            if (layer == SceneLayer.NO_LAYER) return;
 
-        final TreeNode<?> objectNode = FACTORY_REGISTRY.createFor(spatial);
-        final TreeItem<TreeNode<?>> newLayerItem = findItemForValue(getTreeView(), FACTORY_REGISTRY.createFor(layer));
+            final TreeItem<TreeNode<?>> newLayerItem = findItemForValue(getTreeView(), layer);
+            final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), child);
 
-        if (newLayerItem != null) {
-            newLayerItem.getChildren().add(new TreeItem<>(objectNode));
-        }
+            if (newLayerItem != null && treeItem == null) {
+                final TreeNode<?> objectNode = FACTORY_REGISTRY.createFor(child);
+                newLayerItem.getChildren().add(new TreeItem<>(objectNode));
+            }
+
+        }, Spatial.DFSMode.POST_ORDER);
+    }
+
+    /**
+     * Notify about removed a spatial.
+     *
+     * @param spatial the spatial.
+     */
+    public void notifyRemoved(@NotNull final Spatial spatial) {
+        spatial.depthFirstTraversal(child -> {
+
+            final SceneLayer layer = SceneLayer.getLayer(child);
+            if (layer == SceneLayer.NO_LAYER) return;
+
+            final TreeItem<TreeNode<?>> newLayerItem = findItemForValue(getTreeView(), layer);
+            final TreeItem<TreeNode<?>> treeItem = findItemForValue(getTreeView(), child);
+
+            if (newLayerItem != null && treeItem != null) {
+                newLayerItem.getChildren().remove(treeItem);
+            }
+
+        }, Spatial.DFSMode.POST_ORDER);
     }
 
     /**

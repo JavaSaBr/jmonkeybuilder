@@ -112,6 +112,6 @@ public interface ModelChangeConsumer extends ChangeConsumer {
      * @param needSelect true if need select this object.
      */
     @FXThread
-    void notifyFXMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index,
+    void notifyFXMoved(@NotNull Object prevParent, @NotNull Object newParent, @NotNull Object child, int index,
                        boolean needSelect);
 }

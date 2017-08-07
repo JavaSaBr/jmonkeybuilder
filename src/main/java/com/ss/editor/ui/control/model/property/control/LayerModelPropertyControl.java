@@ -33,8 +33,13 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
         @Override
         protected void updateItem(@Nullable final SceneLayer layer, final boolean empty) {
             super.updateItem(layer, empty);
-            if (layer == null) return;
-            setText(layer == SceneLayer.NO_LAYER ? Messages.LAYER_PROPERTY_CONTROL_NO_LAYER : layer.getName());
+
+            if (layer == null || layer == SceneLayer.NO_LAYER) {
+                setText(Messages.LAYER_PROPERTY_CONTROL_NO_LAYER);
+                return;
+            }
+
+            setText(layer.getName());
         }
     }
 
@@ -132,6 +137,6 @@ public class LayerModelPropertyControl extends ModelPropertyControl<Spatial, Sce
         items.add(SceneLayer.NO_LAYER);
         items.addAll(currentModel.getLayers());
 
-        levelComboBox.getSelectionModel().select(sceneLayer);
+        levelComboBox.getSelectionModel().select(sceneLayer == null ? SceneLayer.NO_LAYER : sceneLayer);
     }
 }

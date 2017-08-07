@@ -4,14 +4,16 @@ import com.ss.editor.Editor;
 import com.ss.editor.model.UObject;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.tree.NodeTree;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.Dragboard;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.ss.rlib.util.array.Array;
-import com.ss.rlib.util.array.ArrayFactory;
+
+import java.util.Objects;
 
 /**
  * The base implementation of a tree node.
@@ -191,11 +193,23 @@ public abstract class TreeNode<T> implements UObject {
     /**
      * Can accept boolean.
      *
-     * @param child the child
+     * @param child  the child
+     * @param isCopy true if need to copy the object.
      * @return true of this node can accept the child.
      */
-    public boolean canAccept(@NotNull final TreeNode<?> child) {
+    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
         return false;
+    }
+
+    /**
+     * Accept the object to this node.
+     *
+     * @param changeConsumer the change consumer.
+     * @param object         the object.
+     * @param isCopy         true if need to copy the object.
+     */
+    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
+                       final boolean isCopy) {
     }
 
     /**
@@ -223,7 +237,7 @@ public abstract class TreeNode<T> implements UObject {
      * @return true if this node supports moving.
      */
     public boolean canMove() {
-        return true;
+        return false;
     }
 
     /**
@@ -274,13 +288,17 @@ public abstract class TreeNode<T> implements UObject {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable final Object other) {
 
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == other) return true;
+        if (other == null) return false;
 
-        TreeNode<?> treeNode = (TreeNode<?>) o;
-        return element.equals(treeNode.element);
+        if (other instanceof TreeNode) {
+            TreeNode<?> treeNode = (TreeNode<?>) other;
+            return element.equals(treeNode.element);
+        }
+
+        return Objects.equals(element, other);
     }
 
     @Override

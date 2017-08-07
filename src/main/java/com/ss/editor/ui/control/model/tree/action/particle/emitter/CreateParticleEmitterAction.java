@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter;
 
+import static com.ss.editor.util.EditorUtil.getDefaultLayer;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.effect.ParticleEmitter;
@@ -10,6 +11,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
@@ -50,6 +52,9 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         super.process();
 
         final NodeTree<?> nodeTree = getNodeTree();
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
+        final SceneLayer defaultLayer = getDefaultLayer(changeConsumer);
+
         final AssetManager assetManager = EDITOR.getAssetManager();
 
         final Material material = new Material(assetManager,"Common/MatDefs/Misc/Particle.j3md");
@@ -70,10 +75,13 @@ public class CreateParticleEmitterAction extends AbstractNodeAction<ModelChangeC
         emitter.getParticleInfluencer().setVelocityVariation(0.3f);
         emitter.setEnabled(true);
 
+        if (defaultLayer != null) {
+            SceneLayer.setLayer(defaultLayer, emitter);
+        }
+
         final TreeNode<?> treeNode = getNode();
         final Node parent = (Node) treeNode.getElement();
 
-        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddChildOperation(emitter, parent));
     }
 

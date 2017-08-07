@@ -1,21 +1,20 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.editor.util.EditorUtil.getDefaultLayer;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to create a node.
@@ -52,13 +51,18 @@ public class CreateNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
         super.process();
 
         final NodeTree<?> nodeTree = getNodeTree();
-
         final Node node = new Node("New Node");
 
         final TreeNode<?> treeNode = getNode();
         final Node parent = (Node) treeNode.getElement();
 
-        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
+        final SceneLayer defaultLayer = getDefaultLayer(consumer);
+
+        if (defaultLayer != null) {
+            SceneLayer.setLayer(defaultLayer, node);
+        }
+
         consumer.execute(new AddChildOperation(node, parent));
     }
 }

@@ -44,6 +44,16 @@ public class ControlTreeNode<T extends Control> extends TreeNode<T> {
         return Icons.GEAR_16;
     }
 
+    @Override
+    public boolean canCopy() {
+        return true;
+    }
+
+    @Override
+    public boolean canMove() {
+        return true;
+    }
+
     @NotNull
     @Override
     public String getName() {
