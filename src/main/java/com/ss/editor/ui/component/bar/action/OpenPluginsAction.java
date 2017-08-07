@@ -23,7 +23,7 @@ public class OpenPluginsAction extends MenuItem {
     }
 
     /**
-     * The process of opening.
+     * Open the plugin dialog.
      */
     private void process() {
 

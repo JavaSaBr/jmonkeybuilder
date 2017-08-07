@@ -585,7 +585,7 @@ public abstract class EditorUtil {
                 }
             }
 
-            final URLClassLoader additionalCL = customClasspathManager.getAdditionalCL();
+            final URLClassLoader additionalCL = customClasspathManager.getLibrariesLoader();
             if (additionalCL != null) {
                 try {
                     final Class<?> targetClass = additionalCL.loadClass(className);

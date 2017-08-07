@@ -46,6 +46,9 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     private static final PseudoClass DRAGGED_PSEUDO_CLASS = PseudoClass.getPseudoClass("dragged");
 
     @NotNull
+    private static final PseudoClass EDITING_PSEUDO_CLASS = PseudoClass.getPseudoClass("editing");
+
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
@@ -108,6 +111,26 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         @Override
         public String getName() {
             return "drop available";
+        }
+    };
+
+    /**
+     * The editing state.
+     */
+    @NotNull
+    private final BooleanProperty editing = new BooleanPropertyBase(false) {
+        public void invalidated() {
+            pseudoClassStateChanged(EDITING_PSEUDO_CLASS, get());
+        }
+
+        @Override
+        public Object getBean() {
+            return NodeTreeCell.this;
+        }
+
+        @Override
+        public String getName() {
+            return "editing";
         }
     };
 
@@ -218,6 +241,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         }
 
         UIUtils.updateEditedCell(this);
+        editing.setValue(true);
     }
 
     /**
@@ -237,6 +261,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     @Override
     public void cancelEdit() {
         super.cancelEdit();
+        editing.setValue(false);
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
         setText(StringUtils.EMPTY);
@@ -245,6 +270,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     @Override
     public void commitEdit(@NotNull final TreeNode<?> newValue) {
         super.commitEdit(newValue);
+        editing.setValue(false);
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
         setText(StringUtils.EMPTY);

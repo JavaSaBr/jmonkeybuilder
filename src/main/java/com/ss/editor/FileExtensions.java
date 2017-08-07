@@ -32,6 +32,10 @@ public interface FileExtensions {
      * The constant JAVA_LIBRARY.
      */
     String JAVA_LIBRARY = "jar";
+    /**
+     * The constant JAVA_CLASS.
+     */
+    String JAVA_CLASS = "class";
 
     /**
      * The constant POST_FILTER_VIEW.

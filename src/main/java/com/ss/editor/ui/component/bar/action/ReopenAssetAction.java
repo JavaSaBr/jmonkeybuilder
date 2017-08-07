@@ -43,7 +43,7 @@ public class ReopenAssetAction extends MenuItem {
     }
 
     /**
-     * The process of opening the asset folder.
+     * Open the selected asset folder.
      */
     private void process() {
 

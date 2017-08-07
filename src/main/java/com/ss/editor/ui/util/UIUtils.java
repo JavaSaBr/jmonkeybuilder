@@ -494,7 +494,6 @@ public class UIUtils {
             hbox.setAlignment(Pos.CENTER_LEFT);
             hbox.setMinHeight(cell.getMinHeight());
         } else if (graphic instanceof Control) {
-            ((Control) graphic).setMinHeight(cell.getMinHeight());
         }
     }
 

@@ -434,6 +434,10 @@
     -fx-background-color: -var-tree-cell-selected-color;
 }
 
+.abstract-node-tree-cell:editing {
+    -fx-padding: 4px;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Transparent Tree View                                                       *
@@ -570,13 +574,13 @@
 .settings-dialog > .dialog-content-root > .tab-pane > .tab-content-area > .vbox {
     -fx-spacing: 2px;
     -fx-padding: 6px 0px 0px 0px;
-    -fx-max-width: 645px;
+    -fx-max-width: 685px;
     -fx-min-height: 300px;
 }
 
 .settings-dialog-label {
     -fx-alignment: center-right;
-    -fx-min-width: 250px;
+    -fx-min-width: 290px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-min-height: 26px;

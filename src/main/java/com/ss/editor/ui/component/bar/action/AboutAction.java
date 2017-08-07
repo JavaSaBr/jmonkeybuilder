@@ -7,7 +7,7 @@ import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.scene.control.MenuItem;
 
 /**
- * The action for opening the dialog with settings.
+ * The action to open the About dialog.
  *
  * @author JavaSaBr
  */
@@ -16,7 +16,7 @@ public class AboutAction extends MenuItem {
     private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
-     * Instantiates a new Open settings action.
+     * Instantiates a new AboutAction.
      */
     public AboutAction() {
         super(Messages.EDITOR_MENU_HELP_ABOUT);
@@ -24,7 +24,7 @@ public class AboutAction extends MenuItem {
     }
 
     /**
-     * The process of opening.
+     * Open the dialog.
      */
     private void process() {
 
