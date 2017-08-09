@@ -90,7 +90,7 @@
     -fx-text-alignment: right;
     -fx-min-width: 150;
     -fx-pref-width: -fx-min-width;
-    -fx-padding: 0px 6px 0px 0px;
+    -fx-padding: 0px 0px 0px 0px;
 }
 
 .dialog-field {
@@ -216,7 +216,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Transparent Text Field                                                        *
+ * Transparent Text Field                                                      *
  *                                                                             *
  ******************************************************************************/
 
@@ -237,6 +237,20 @@
     -fx-border-insets: 0;
     -fx-padding: 0px 0px 0px 0px;
     -fx-prompt-text-fill: transparent;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Text Filed in Combo Box                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.text-field-in-combo-box {
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+.text-field-in-combo-box:focused {
+    -fx-padding: 0px 0px 0px 4px;
 }
 
 /*******************************************************************************
@@ -1082,12 +1096,11 @@
     -fx-alignment: center-left;
 }
 
-
 .file-creator-dialog > .hbox > .vbox > .grid-pane,
 .file-creator-dialog > .hbox > .grid-pane {
     -fx-alignment: top-left;
-    -fx-vgap: 2;
-    -fx-hgap: 2;
+    -fx-vgap: 2px;
+    -fx-hgap: 2px;
 }
 
 .file-creator-dialog > .hbox > .vbox > .border-pane {

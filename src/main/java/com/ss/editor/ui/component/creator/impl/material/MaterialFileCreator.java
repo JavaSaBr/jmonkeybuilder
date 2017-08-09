@@ -6,18 +6,19 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.extension.property.EditablePropertyType;
 import com.ss.editor.manager.ResourceManager;
+import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
-import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.editor.util.EditorUtil;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
-import javafx.collections.ObservableList;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,17 +32,25 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class MaterialFileCreator extends AbstractFileCreator {
+public class MaterialFileCreator extends GenericFileCreator {
 
     /**
      * The constant DESCRIPTION.
      */
+    @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
+    @NotNull
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
 
+    @NotNull
     private static final String PBR_MAT_DEF = "Common/MatDefs/Light/PBRLighting.j3md";
+
+    @NotNull
     private static final String LIGHTING_MAT_DEF = "Common/MatDefs/Light/Lighting.j3md";
+
+    @NotNull
+    private static final String PROP_MAT_DEF = "matDef";
 
     static {
         DESCRIPTION.setFileDescription(Messages.MATERIAL_FILE_CREATOR_FILE_DESCRIPTION);
@@ -54,13 +63,8 @@ public class MaterialFileCreator extends AbstractFileCreator {
     @Nullable
     private Array<String> definitions;
 
-    /**
-     * The combo box.
-     */
-    @Nullable
-    private ComboBox<String> materialTypeComboBox;
-
     private MaterialFileCreator() {
+        super();
     }
 
     @NotNull
@@ -75,87 +79,61 @@ public class MaterialFileCreator extends AbstractFileCreator {
         return JME_MATERIAL;
     }
 
-    /**
-     * @return the combo box.
-     */
     @NotNull
-    private ComboBox<String> getMaterialTypeComboBox() {
-        return notNull(materialTypeComboBox);
-    }
-
     @Override
-    protected void createSettings(@NotNull final GridPane root) {
-        super.createSettings(root);
-
-        final Label materialTypeLabel = new Label(Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL + ":");
-        materialTypeLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
-
-        materialTypeComboBox = new ComboBox<>();
-        materialTypeComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
-
-        final TextField editor = materialTypeComboBox.getEditor();
-
-        FXUtils.addClassTo(editor, CSSClasses.TRANSPARENT_TEXT_FIELD);
-
-        AutoCompleteComboBoxListener.install(materialTypeComboBox);
+    protected Array<PropertyDefinition> getPropertyDefinitions() {
 
         definitions = RESOURCE_MANAGER.getAvailableMaterialDefinitions();
 
-        final ObservableList<String> items = materialTypeComboBox.getItems();
-        items.clear();
-        items.addAll(definitions);
-
-        final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
+        final String def;
 
         if (definitions.contains(PBR_MAT_DEF)) {
-            selectionModel.select(PBR_MAT_DEF);
+            def = PBR_MAT_DEF;
         } else if (definitions.contains(LIGHTING_MAT_DEF)) {
-            selectionModel.select(LIGHTING_MAT_DEF);
+            def = LIGHTING_MAT_DEF;
         } else {
-            selectionModel.select(definitions.first());
+            def = definitions.first();
         }
 
-        selectionModel.selectedItemProperty()
-                .addListener((observable, oldValue, newValue) -> validateFileName());
+        final Array<PropertyDefinition> result = ArrayFactory.newArray(PropertyDefinition.class);
+        result.add(new PropertyDefinition(EditablePropertyType.STRING_FROM_LIST,
+                Messages.MATERIAL_FILE_CREATOR_MATERIAL_TYPE_LABEL, PROP_MAT_DEF, def, definitions));
 
-        root.add(materialTypeLabel, 0, 1);
-        root.add(materialTypeComboBox, 1, 1);
+        return result;
+    }
 
-        FXUtils.addClassTo(materialTypeLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(materialTypeComboBox, editor, CSSClasses.DIALOG_FIELD);
+    /**
+     * @return the list of available definitions.
+     */
+    @NotNull
+
+    @FromAnyThread
+    private Array<String> getDefinitions() {
+        return notNull(definitions);
     }
 
     @Override
-    protected void validateFileName() {
-        super.validateFileName();
+    @FXThread
+    protected boolean validate(@NotNull final VarTable vars) {
 
-        final Button okButton = getOkButton();
-        if (okButton.isDisable()) return;
+        final String matDef = vars.get(PROP_MAT_DEF, String.class, StringUtils.EMPTY);
 
-        final ComboBox<String> materialTypeComboBox = getMaterialTypeComboBox();
-        final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
-
-        final String selectedItem = selectionModel.getSelectedItem();
-
-        if (selectedItem == null) {
-            okButton.setDisable(true);
-            return;
+        if (matDef.isEmpty() || !getDefinitions().contains(matDef)) {
+            return false;
         }
 
-        okButton.setDisable(!notNull(definitions).contains(selectedItem));
+        return super.validate(vars);
     }
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) {
-        super.writeData(resultFile);
+    protected void writeData(@NotNull final VarTable vars, @NotNull final Path resultFile) {
+        super.writeData(vars, resultFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
+        final String matDef = vars.get(PROP_MAT_DEF);
 
-        final ComboBox<String> materialTypeComboBox = getMaterialTypeComboBox();
-        final SingleSelectionModel<String> selectionModel = materialTypeComboBox.getSelectionModel();
-
-        final Material material = new Material(assetManager, selectionModel.getSelectedItem());
+        final Material material = new Material(assetManager, matDef);
         material.getAdditionalRenderState();
 
         final String materialContent = MaterialSerializer.serializeToString(material);

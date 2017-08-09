@@ -111,11 +111,13 @@ public class SingleColorTextureFileCreator extends GenericFileCreator {
 
     @NotNull
     @Override
+    @FromAnyThread
     protected Array<PropertyDefinition> getPropertyDefinitions() {
         return DEFINITIONS;
     }
 
     @Override
+    @FXThread
     protected boolean validate(@NotNull final VarTable vars) {
 
         final Color color = UIUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));

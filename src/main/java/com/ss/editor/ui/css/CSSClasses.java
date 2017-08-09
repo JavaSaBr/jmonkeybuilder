@@ -98,6 +98,10 @@ public interface CSSClasses {
     String CHOOSE_RESOURCE_CONTROL = "choose-resource-control";
 
     /**
+     * The constant TEXT_FIELD_IN_COMBO_BOX.
+     */
+    String TEXT_FIELD_IN_COMBO_BOX = "text-field-in-combo-box";
+    /**
      * The constant TRANSPARENT_SPINNER.
      */
     String TRANSPARENT_SPINNER = "transparent-spinner";

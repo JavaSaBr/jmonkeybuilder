@@ -4,6 +4,7 @@ import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFac
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
@@ -47,9 +48,16 @@ public class GenericFileCreator extends AbstractFileCreator {
 
         final Array<PropertyDefinition> definitions = getPropertyDefinitions();
         for (final PropertyDefinition definition : definitions) {
-            final PropertyEditorControl<?> control = build(vars, definition, this::validate);
+
+            final PropertyEditorControl<?> control = build(vars, definition, this::validateFileName);
             control.prefWidthProperty().bind(widthProperty());
             root.add(control, 0, rowIndex++, 2, 1);
+
+            final Object defaultValue = definition.getDefaultValue();
+
+            if (defaultValue != null) {
+                vars.set(definition.getId(), defaultValue);
+            }
         }
     }
 
@@ -57,7 +65,7 @@ public class GenericFileCreator extends AbstractFileCreator {
     @FXThread
     public void show(final @NotNull Window owner) {
         super.show(owner);
-        validate();
+        validateFileName();
     }
 
     /**
@@ -68,11 +76,10 @@ public class GenericFileCreator extends AbstractFileCreator {
         return notNull(vars);
     }
 
-    /**
-     * Validate this creator.
-     */
-    private void validate() {
-        validateFileName();
+    @FXThread
+    @Override
+    protected void validateFileName() {
+        super.validateFileName();
 
         final Button okButton = getOkButton();
         if (okButton == null) return;
@@ -80,7 +87,7 @@ public class GenericFileCreator extends AbstractFileCreator {
         final boolean result = validate(getVars());
 
         if (!okButton.isDisabled()) {
-            okButton.setDisable(result);
+            okButton.setDisable(!result);
         }
     }
 
@@ -89,6 +96,7 @@ public class GenericFileCreator extends AbstractFileCreator {
      *
      * @param vars the variables.
      */
+    @FXThread
     protected boolean validate(@NotNull final VarTable vars) {
         return true;
     }
@@ -110,6 +118,7 @@ public class GenericFileCreator extends AbstractFileCreator {
     }
 
     @NotNull
+    @FromAnyThread
     protected Array<PropertyDefinition> getPropertyDefinitions() {
         return EMPTY_ARRAY;
     }

@@ -1,6 +1,8 @@
 package com.ss.editor.plugin.api.property;
 
 import com.ss.editor.extension.property.EditablePropertyType;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public final class PropertyDefinition {
+
+    @NotNull
+    private static final Array<Object> EMPTY_OPTIONS = ArrayFactory.asArray();
 
     /**
      * The type of the property.
@@ -36,6 +41,12 @@ public final class PropertyDefinition {
     private final Object defaultValue;
 
     /**
+     * The list of available options of this property.
+     */
+    @NotNull
+    private final Array<?> options;
+
+    /**
      * The min value.
      */
     private final float min;
@@ -53,17 +64,31 @@ public final class PropertyDefinition {
         this.defaultValue = defaultValue;
         this.max = Float.NaN;
         this.min = Float.NaN;
+        this.options = EMPTY_OPTIONS;
     }
 
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                               @NotNull final String id, @Nullable final Object defaultValue, final float min,
-                               final float max) {
+                               @NotNull final String id, @Nullable final Object defaultValue,
+                               @NotNull final Array<?> options) {
+        this.propertyType = propertyType;
+        this.name = name;
+        this.id = id;
+        this.defaultValue = defaultValue;
+        this.options = options;
+        this.max = Float.NaN;
+        this.min = Float.NaN;
+    }
+
+    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
+                              @NotNull final String id, @Nullable final Object defaultValue, final float min,
+                              final float max) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
         this.defaultValue = defaultValue;
         this.min = min;
         this.max = max;
+        this.options = EMPTY_OPTIONS;
     }
 
     /**
@@ -112,9 +137,18 @@ public final class PropertyDefinition {
         return min;
     }
 
+    /**
+     * @return the options.
+     */
+    @NotNull
+    public Array<?> getOptions() {
+        return options;
+    }
+
     @Override
     public String toString() {
         return "PropertyDefinition{" + "propertyType=" + propertyType + ", name='" + name + '\'' + ", id='" + id +
-                '\'' + ", defaultValue=" + defaultValue + '}';
+                '\'' + ", defaultValue=" + defaultValue + ", options=" + options + ", min=" + min + ", max=" + max +
+                '}';
     }
 }
