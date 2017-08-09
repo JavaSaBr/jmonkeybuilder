@@ -194,6 +194,18 @@ public abstract class EditorUtil {
     }
 
     /**
+     * Gets input stream.
+     *
+     * @param path        the path to resource.
+     * @param classLoader the class loader.
+     * @return the input stream of the resource or null.
+     */
+    @NotNull
+    public static InputStream getInputStream(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+        return classLoader.getResourceAsStream(path);
+    }
+
+    /**
      * Get the user name of the computer user.
      *
      * @return the user name.

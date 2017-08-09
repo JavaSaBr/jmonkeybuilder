@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -185,12 +186,13 @@ public class FileIconManager {
             for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
 
                 final String url = iconFinder.apply(path, extension);
+                final ClassLoader classLoader = iconFinder.getClass().getClassLoader();
 
-                if (url == null || !EditorUtil.checkExists(url, iconFinder.getClass().getClassLoader())) {
+                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
                     continue;
                 }
 
-                return buildImage(url, size);
+                return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
             }
         }
 
@@ -292,8 +294,19 @@ public class FileIconManager {
 
     @NotNull
     private Image buildImage(@NotNull final String url, final int size) {
+        return buildImage(url, null, size);
+    }
 
-        final Image image = new Image(url, size, size, false, true);
+    @NotNull
+    private Image buildImage(@NotNull final String url, @Nullable final InputStream in, final int size) {
+
+        final Image image;
+
+        if (in != null) {
+            image = new Image(in, size, size, false, true);
+        } else {
+            image = new Image(url, size, size, false, true);
+        }
 
         if (!url.contains("icons/svg/")) {
             originalImageCache.put(image, image);

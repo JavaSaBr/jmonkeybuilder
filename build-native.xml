@@ -37,6 +37,7 @@
         <delete dir="projectRefs"/>
         <delete dir="deploy"/>
         <delete dir="dist"/>
+        <delete dir="embedded-plugins"/>
 
         <mkdir dir="externalLibs"/>
 
@@ -63,6 +64,11 @@
             <fileset dir="../libraries-licenses">
                 <include name="*"/>
             </fileset>
+        </copy>
+
+        <mkdir dir="embedded-plugins"/>
+        <copy todir="embedded-plugins">
+            <fileset dir="../embedded-plugins" />
         </copy>
 
         <mkdir dir="projectRefs"/>
@@ -118,6 +124,7 @@
         <mkdir dir="dist"/>
         <mkdir dir="dist/libs"/>
         <mkdir dir="dist/licenses"/>
+        <mkdir dir="dist/embedded-plugins"/>
 
         <copy todir="dist/licenses">
             <fileset dir="licenses">
@@ -131,17 +138,22 @@
             </fileset>
         </copy>
 
+        <copy todir="dist/embedded-plugins">
+            <fileset dir="embedded-plugins" />
+        </copy>
+
         <copy todir="dist/libs">
             <fileset dir="externalLibs">
                 <include name="*"/>
             </fileset>
         </copy>
 
-        <fx:resources id="appRes">
+        <fx:resources id="appRes" >
             <fx:fileset dir="dist" includes="jme3-spaceshift-editor.jar"/>
             <fx:fileset dir="dist" includes="licenses/*"/>
             <fx:fileset dir="dist" includes="licenses/libraries-licenses/*"/>
             <fx:fileset dir="dist" includes="libs/*"/>
+            <fx:fileset dir="dist" includes="embedded-plugins/*/*"/>
             <fx:fileset dir="package"/>
         </fx:resources>
 

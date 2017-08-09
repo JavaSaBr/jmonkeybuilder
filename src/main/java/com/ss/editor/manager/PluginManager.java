@@ -49,6 +49,7 @@ public class PluginManager {
         InitializeManager.valid(getClass());
 
         this.pluginSystem = newBasePluginSystem(getClass().getClassLoader());
+        this.pluginSystem.setAppVersion(Config.APP_VERSION);
 
         final Path folderInUserHome = Config.getAppFolderInUserHome();
         final String embeddedPath = System.getProperty("editor.embedded.plugins.path");
