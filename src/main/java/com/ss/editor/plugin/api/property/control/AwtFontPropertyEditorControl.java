@@ -3,50 +3,64 @@ package com.ss.editor.plugin.api.property.control;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.AutoCompleteComboBoxListener;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
-import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
 
 /**
  * The control to choose string value from list.
  *
  * @author JavaSaBr
  */
-public class StringFromListPropertyEditorControl extends PropertyEditorControl<String> {
+public class AwtFontPropertyEditorControl extends PropertyEditorControl<Font> {
+
+    @NotNull
+    private class FontCell extends ListCell<Font> {
+
+        @Override
+        protected void updateItem(@Nullable final Font font, final boolean empty) {
+            super.updateItem(font, empty);
+
+            if (font == null) {
+                setText(StringUtils.EMPTY);
+                return;
+            }
+
+            setText(font.getFontName());
+        }
+    }
 
     /**
      * The list of available options of the string value.
      */
     @Nullable
-    private ComboBox<String> comboBox;
+    private ComboBox<Font> comboBox;
 
-    protected StringFromListPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                                  @NotNull final Runnable validationCallback, @NotNull final Array<?> options) {
+    protected AwtFontPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
+                                           @NotNull final Runnable validationCallback) {
         super(vars, definition, validationCallback);
-
-        final ComboBox<String> comboBox = getComboBox();
-        options.forEach(comboBox.getItems(), (option, items) -> items.add(option.toString()));
     }
 
     @Override
     protected void createComponents() {
         super.createComponents();
 
+        final GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
         comboBox = new ComboBox<>();
+        comboBox.setCellFactory(param -> new FontCell());
+        comboBox.setButtonCell(new FontCell());
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> change());
         comboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        comboBox.getItems().addAll(environment.getAllFonts());
 
-        final TextField editor = comboBox.getEditor();
-
-        AutoCompleteComboBoxListener.install(comboBox);
-
-        FXUtils.addClassesTo(editor, CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
         FXUtils.addClassTo(comboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(comboBox, this);
     }
@@ -55,22 +69,22 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
      * @return The list of available options of the string value.
      */
     @NotNull
-    private ComboBox<String> getComboBox() {
+    private ComboBox<Font> getComboBox() {
         return notNull(comboBox);
     }
 
     @Override
     protected void reload() {
         super.reload();
-        final String value = getPropertyValue();
-        final ComboBox<String> comboBox = getComboBox();
-        comboBox.getSelectionModel().select(value);
+        final Font value = getPropertyValue();
+        final ComboBox<Font> enumComboBox = getComboBox();
+        enumComboBox.getSelectionModel().select(value);
     }
 
     @Override
     protected void change() {
-        final ComboBox<String> comboBox = getComboBox();
-        final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
+        final ComboBox<Font> comboBox = getComboBox();
+        final SingleSelectionModel<Font> selectionModel = comboBox.getSelectionModel();
         setPropertyValue(selectionModel.getSelectedItem());
         super.change();
     }

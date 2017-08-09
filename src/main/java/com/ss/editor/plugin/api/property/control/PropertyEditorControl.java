@@ -92,7 +92,6 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     protected void reload() {
-
     }
 
     protected void change() {
