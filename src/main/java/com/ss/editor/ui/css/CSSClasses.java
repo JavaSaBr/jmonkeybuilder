@@ -40,6 +40,10 @@ public interface CSSClasses {
      * The constant DEF_STACK_PANE.
      */
     String DEF_STACK_PANE = "stack-pane";
+    /**
+     * The constant DEF_BORDER_PANE.
+     */
+    String DEF_BORDER_PANE = "border-pane";
 
     /**
      * The constant DIALOG_ROOT.

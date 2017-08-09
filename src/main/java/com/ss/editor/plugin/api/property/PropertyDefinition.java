@@ -35,12 +35,35 @@ public final class PropertyDefinition {
     @Nullable
     private final Object defaultValue;
 
+    /**
+     * The min value.
+     */
+    private final float min;
+
+    /**
+     * The max value.
+     */
+    private final float max;
+
     public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
-                              @NotNull final String id, final @Nullable Object defaultValue) {
+                              @NotNull final String id, @Nullable final Object defaultValue) {
         this.propertyType = propertyType;
         this.name = name;
         this.id = id;
         this.defaultValue = defaultValue;
+        this.max = Float.NaN;
+        this.min = Float.NaN;
+    }
+
+    public PropertyDefinition(@NotNull final EditablePropertyType propertyType, @NotNull final String name,
+                               @NotNull final String id, @Nullable final Object defaultValue, final float min,
+                               final float max) {
+        this.propertyType = propertyType;
+        this.name = name;
+        this.id = id;
+        this.defaultValue = defaultValue;
+        this.min = min;
+        this.max = max;
     }
 
     /**
@@ -73,6 +96,20 @@ public final class PropertyDefinition {
     @NotNull
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return the max value.
+     */
+    public float getMax() {
+        return max;
+    }
+
+    /**
+     * @return the min value.
+     */
+    public float getMin() {
+        return min;
     }
 
     @Override

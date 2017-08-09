@@ -3,6 +3,7 @@ package com.ss.editor.plugin.api.property.control;
 import com.ss.editor.Editor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.geometry.Pos;
@@ -17,6 +18,16 @@ import org.jetbrains.annotations.Nullable;
  * @author JavaSaBr
  */
 public class PropertyEditorControl<T> extends HBox {
+
+    /**
+     * The constant DEFAULT_LABEL_W_PERCENT.
+     */
+    public static final double DEFAULT_LABEL_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_LABEL_W_PERCENT;
+
+    /**
+     * The constant DEFAULT_FIELD_W_PERCENT.
+     */
+    public static final double DEFAULT_FIELD_W_PERCENT = AbstractSimpleEditorDialog.DEFAULT_FIELD_W_PERCENT;
 
     @NotNull
     protected static final Editor EDITOR = Editor.getInstance();
@@ -92,7 +103,7 @@ public class PropertyEditorControl<T> extends HBox {
         setAlignment(Pos.CENTER_RIGHT);
 
         propertyNameLabel = new Label(getName() + ":");
-        propertyNameLabel.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        propertyNameLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         FXUtils.addClassTo(propertyNameLabel, CSSClasses.ABSTRACT_PARAM_CONTROL_PARAM_NAME_SINGLE_ROW);
         FXUtils.addToPane(propertyNameLabel, this);

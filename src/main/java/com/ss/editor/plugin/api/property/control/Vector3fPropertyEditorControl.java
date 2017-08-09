@@ -46,7 +46,7 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         super.createComponents();
 
         final GridPane gridPane = new GridPane();
-        gridPane.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        gridPane.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         xField = new FloatTextField();
         xField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);

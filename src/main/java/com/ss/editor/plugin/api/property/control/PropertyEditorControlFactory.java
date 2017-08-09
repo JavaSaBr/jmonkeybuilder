@@ -17,9 +17,18 @@ public class PropertyEditorControlFactory {
                                                  @NotNull final Runnable validation) {
 
         switch (definition.getPropertyType()) {
-            case FLOAT: return new FloatPropertyEditorControl(vars, definition, validation);
+            case FLOAT: {
+                final FloatPropertyEditorControl control = new FloatPropertyEditorControl(vars, definition, validation);
+                control.setMinMax(definition.getMin(), definition.getMax());
+                return control;
+            }
+            case COLOR: return new ColorPropertyEditorControl(vars, definition, validation);
             case BOOLEAN: return new BooleanPropertyEditorControl(vars, definition, validation);
-            case INTEGER: return new IntegerPropertyEditorControl(vars, definition, validation);
+            case INTEGER: {
+                final IntegerPropertyEditorControl control = new IntegerPropertyEditorControl(vars, definition, validation);
+                control.setMinMax(definition.getMin(), definition.getMax());
+                return control;
+            }
             case VECTOR_3F: return new Vector3fPropertyEditorControl(vars, definition, validation);
             case ENUM: return new EnumPropertyEditorControl<>(vars, definition, validation);
             case STRING: return new StringPropertyEditorControl(vars, definition, validation);

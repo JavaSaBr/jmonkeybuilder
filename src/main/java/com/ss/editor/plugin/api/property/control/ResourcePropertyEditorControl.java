@@ -62,7 +62,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processSelect());
 
-        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
+        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final HBox container = new HBox(resourceLabel, changeButton);
 

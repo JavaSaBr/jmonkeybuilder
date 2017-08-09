@@ -52,7 +52,7 @@ public class ColorInterpolationElement extends InterpolationElement<ColorInfluen
      */
     private void processChange(@NotNull final Color newValue) {
         if (isIgnoreListeners()) return;
-        final ColorRGBA newColor = UIUtils.convertColor(newValue);
+        final ColorRGBA newColor = UIUtils.from(newValue);
         final ColorInfluencerControl control = getControl();
         control.requestToChange(newColor, getIndex());
     }

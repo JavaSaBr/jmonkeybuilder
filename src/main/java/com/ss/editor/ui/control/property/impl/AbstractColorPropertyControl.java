@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.property.impl;
 
-import static java.lang.Math.min;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
@@ -10,7 +10,6 @@ import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,6 +27,7 @@ public abstract class AbstractColorPropertyControl<C extends ChangeConsumer, T> 
     /**
      * The color picker.
      */
+    @Nullable
     private ColorPicker colorPicker;
 
     /**
@@ -69,27 +69,15 @@ public abstract class AbstractColorPropertyControl<C extends ChangeConsumer, T> 
     /**
      * @return the color picker.
      */
+    @NotNull
     private ColorPicker getColorPicker() {
-        return colorPicker;
+        return notNull(colorPicker);
     }
 
     @Override
     protected void reload() {
-
-        final ColorRGBA element = getPropertyValue();
         final ColorPicker colorPicker = getColorPicker();
-
-        if (element == null) {
-            colorPicker.setValue(null);
-        } else {
-
-            final float red = min(element.getRed(), 1F);
-            final float green = min(element.getGreen(), 1F);
-            final float blue = min(element.getBlue(), 1F);
-            final float alpha = min(element.getAlpha(), 1F);
-
-            colorPicker.setValue(new Color(red, green, blue, alpha));
-        }
+        colorPicker.setValue(UIUtils.from(getPropertyValue()));
     }
 
     /**
@@ -99,7 +87,7 @@ public abstract class AbstractColorPropertyControl<C extends ChangeConsumer, T> 
         if (isIgnoreListener()) return;
 
         final ColorPicker colorPicker = getColorPicker();
-        final ColorRGBA newColor = UIUtils.convertColor(colorPicker.getValue());
+        final ColorRGBA newColor = UIUtils.from(colorPicker.getValue());
         final ColorRGBA oldValue = getPropertyValue();
 
         changed(newColor, oldValue == null ? null : oldValue.clone());

@@ -2,6 +2,7 @@ package com.ss.editor.ui.component.creator.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.util.EditorUtil;
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +47,7 @@ public class FolderCreator extends AbstractFileCreator {
 
     @NotNull
     @Override
+    @FromAnyThread
     protected String getFileNameLabelText() {
         return Messages.FOLDER_CREATOR_FILE_NAME_LABEL;
     }

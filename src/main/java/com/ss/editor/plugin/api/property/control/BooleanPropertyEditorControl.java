@@ -33,7 +33,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
 
         checkBox = new CheckBox();
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> change());
-        checkBox.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        checkBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FXUtils.addToPane(checkBox, this);
         FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);

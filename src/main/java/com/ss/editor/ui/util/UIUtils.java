@@ -1,6 +1,7 @@
 package com.ss.editor.ui.util;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
@@ -456,14 +457,34 @@ public class UIUtils {
     /**
      * Convert a color from {@link Color} to {@link ColorRGBA}.
      *
-     * @param newValue the new value
-     * @return the color rgba
+     * @param color the color
+     * @return the jme color
      */
-    @NotNull
+    @Nullable
     @FXThread
-    public static ColorRGBA convertColor(@NotNull final Color newValue) {
-        return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(),
-                (float) newValue.getBlue(), (float) newValue.getOpacity());
+    public static ColorRGBA from(@Nullable final Color color) {
+        if (color == null) return null;
+        return new ColorRGBA((float) color.getRed(), (float) color.getGreen(),
+                (float) color.getBlue(), (float) color.getOpacity());
+    }
+
+    /**
+     * Convert a color from {@link ColorRGBA} to {@link Color}.
+     *
+     * @param color the color
+     * @return the FX color
+     */
+    @Nullable
+    @FXThread
+    public static Color from(@Nullable final ColorRGBA color) {
+        if (color == null) return null;
+
+        final float red = min(color.getRed(), 1F);
+        final float green = min(color.getGreen(), 1F);
+        final float blue = min(color.getBlue(), 1F);
+        final float alpha = min(color.getAlpha(), 1F);
+
+        return new Color(red, green, blue, alpha);
     }
 
     /**

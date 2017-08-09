@@ -41,7 +41,7 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
 
         enumComboBox = new ComboBox<>();
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> change());
-        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(enumComboBox, this);

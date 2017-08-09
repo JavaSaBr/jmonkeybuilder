@@ -1,20 +1,26 @@
 package com.ss.editor.ui.component.creator.impl.texture;
 
+import static com.ss.editor.extension.property.EditablePropertyType.COLOR;
+import static com.ss.editor.extension.property.EditablePropertyType.INTEGER;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.jme3.math.ColorRGBA;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
+import com.ss.editor.plugin.api.file.creator.GenericFileCreator;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
-import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
-import com.ss.editor.ui.css.CSSClasses;
-import com.ss.rlib.ui.control.input.IntegerTextField;
-import com.ss.rlib.ui.util.FXUtils;
+import com.ss.editor.ui.util.UIUtils;
+import com.ss.rlib.util.VarTable;
+import com.ss.rlib.util.array.Array;
+import com.ss.rlib.util.array.ArrayFactory;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +37,16 @@ import java.nio.file.Path;
  *
  * @author JavaSaBr
  */
-public class SingleColorTextureFileCreator extends AbstractFileCreator {
+public class SingleColorTextureFileCreator extends GenericFileCreator {
+
+    @NotNull
+    private static final String PROP_COLOR = "color";
+
+    @NotNull
+    private static final String PROP_HEIGHT = "height";
+
+    @NotNull
+    private static final String PROP_WIDTH = "width";
 
     /**
      * The constant DESCRIPTION.
@@ -39,28 +54,48 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
     @NotNull
     public static final FileCreatorDescription DESCRIPTION = new FileCreatorDescription();
 
+    @NotNull
+    private static final Array<PropertyDefinition> DEFINITIONS = ArrayFactory.newArray(PropertyDefinition.class);
+
     static {
         DESCRIPTION.setFileDescription(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_DESCRIPTION);
         DESCRIPTION.setConstructor(SingleColorTextureFileCreator::new);
+        DEFINITIONS.add(new PropertyDefinition(COLOR, Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR, PROP_COLOR, ColorRGBA.Gray));
+        DEFINITIONS.add(new PropertyDefinition(INTEGER, Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT, PROP_HEIGHT, 2, 1, 256));
+        DEFINITIONS.add(new PropertyDefinition(INTEGER, Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH, PROP_WIDTH, 2, 1, 256));
     }
 
     /**
-     * The width field.
+     * The image view to show preview of texture.
      */
     @Nullable
-    private IntegerTextField widthField;
+    private ImageView imageView;
+
+    public SingleColorTextureFileCreator() {
+        super();
+    }
+
+    @Override
+    @FXThread
+    protected void createPreview(@NotNull final BorderPane container) {
+        super.createPreview(container);
+        imageView = new ImageView();
+        container.setCenter(imageView);
+    }
 
     /**
-     * The height field.
+     * @return the image view to show preview of texture.
      */
-    @Nullable
-    private IntegerTextField heightField;
+    @NotNull
+    private ImageView getImageView() {
+        return notNull(imageView);
+    }
 
-    /**
-     * The color picker.
-     */
-    @Nullable
-    private ColorPicker colorPicker;
+    @Override
+    @FromAnyThread
+    protected boolean needPreview() {
+        return true;
+    }
 
     @NotNull
     @Override
@@ -74,80 +109,42 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
         return FileExtensions.IMAGE_PNG;
     }
 
+    @NotNull
     @Override
-    protected void createSettings(@NotNull final GridPane root) {
-        super.createSettings(root);
-
-        final Label widthLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_WIDTH + ":");
-        widthLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
-
-        widthField = new IntegerTextField();
-        widthField.setMinMax(2, 1024);
-        widthField.setValue(2);
-        widthField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
-
-        final Label heightLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_HEIGHT + ":");
-        heightLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
-
-        heightField = new IntegerTextField();
-        heightField.setMinMax(2, 1024);
-        heightField.setValue(2);
-        heightField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
-
-        final Label colorLabel = new Label(Messages.SINGLE_COLOR_TEXTURE_FILE_CREATOR_COLOR + ":");
-        colorLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
-
-        colorPicker = new ColorPicker(Color.GRAY);
-        colorPicker.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
-
-        root.add(widthLabel, 0, 1);
-        root.add(widthField, 1, 1);
-        root.add(heightLabel, 0, 2);
-        root.add(heightField, 1, 2);
-        root.add(colorLabel, 0, 3);
-        root.add(colorPicker, 1, 3);
-
-        FXUtils.addClassTo(widthLabel, heightLabel, colorLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(widthField, heightField, colorPicker, CSSClasses.DIALOG_FIELD);
+    protected Array<PropertyDefinition> getPropertyDefinitions() {
+        return DEFINITIONS;
     }
 
-    /**
-     * @return the width field.
-     */
-    @NotNull
-    private IntegerTextField getWidthField() {
-        return notNull(widthField);
-    }
+    @Override
+    protected boolean validate(@NotNull final VarTable vars) {
 
-    /**
-     * @return the height field.
-     */
-    @NotNull
-    private IntegerTextField getHeightField() {
-        return notNull(heightField);
-    }
+        final Color color = UIUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
 
-    /**
-     * @return the color picker.
-     */
-    @NotNull
-    private ColorPicker getColorPicker() {
-        return notNull(colorPicker);
+        final int width = vars.getInteger(PROP_WIDTH);
+        final int height = vars.getInteger(PROP_HEIGHT);
+
+        final WritableImage writableImage = new WritableImage(width, height);
+        final PixelWriter pixelWriter = writableImage.getPixelWriter();
+
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                pixelWriter.setColor(i, j, color);
+            }
+        }
+
+        getImageView().setImage(writableImage);
+        return true;
     }
 
     @Override
     @BackgroundThread
-    protected void writeData(@NotNull final Path resultFile) {
-        super.writeData(resultFile);
+    protected void writeData(@NotNull final VarTable vars, final @NotNull Path resultFile) {
+        super.writeData(vars, resultFile);
 
-        final IntegerTextField widthField = getWidthField();
-        final IntegerTextField heightField = getHeightField();
-        final ColorPicker colorPicker = getColorPicker();
+        final Color color = UIUtils.from(vars.get(PROP_COLOR, ColorRGBA.class));
 
-        final Color color = colorPicker.getValue();
-
-        final int width = widthField.getValue();
-        final int height = heightField.getValue();
+        final int width = vars.getInteger(PROP_WIDTH);
+        final int height = vars.getInteger(PROP_HEIGHT);
 
         final WritableImage writableImage = new WritableImage(width, height);
         final PixelWriter pixelWriter = writableImage.getPixelWriter();

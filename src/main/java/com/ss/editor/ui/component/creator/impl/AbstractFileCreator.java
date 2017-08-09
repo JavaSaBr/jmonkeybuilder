@@ -127,6 +127,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         validateFileName();
     }
 
+    @FXThread
     private void expand(@NotNull final Path file, @NotNull final ResourceTree resourceTree,
                         @NotNull final Boolean finished) {
         if (finished) resourceTree.expandTo(file, true);
@@ -136,6 +137,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the resources tree.
      */
     @NotNull
+    @FromAnyThread
     private ResourceTree getResourceTree() {
         return notNull(resourceTree);
     }
@@ -143,6 +145,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * @param initFile the init file.
      */
+    @FromAnyThread
     private void setInitFile(@NotNull final Path initFile) {
         this.initFile = initFile;
     }
@@ -151,12 +154,14 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the init file.
      */
     @NotNull
+    @FromAnyThread
     private Path getInitFile() {
         return notNull(initFile);
     }
 
     @NotNull
     @Override
+    @FromAnyThread
     protected String getButtonOkText() {
         return Messages.SIMPLE_DIALOG_BUTTON_CREATE;
     }
@@ -165,6 +170,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the selected file in the resources tree.
      */
     @NotNull
+    @FromAnyThread
     private Path getSelectedFile() {
 
         final ResourceTree resourceTree = getResourceTree();
@@ -182,6 +188,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the file to creating.
      */
     @Nullable
+    @FromAnyThread
     protected Path getFileToCreate() {
 
         final TextField fileNameField = getFileNameField();
@@ -203,6 +210,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the file extension.
      */
     @NotNull
+    @FromAnyThread
     protected String getFileExtension() {
         return StringUtils.EMPTY;
     }
@@ -274,6 +282,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     }
 
     @Override
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
         super.createContent(root);
 
@@ -281,7 +290,6 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         container.prefWidthProperty().bind(widthProperty());
 
         final GridPane settingsContainer = new GridPane();
-        settingsContainer.prefHeightProperty().bind(container.heightProperty());
         settingsContainer.prefWidthProperty().bind(container.widthProperty().multiply(0.5));
 
         resourceTree = new ResourceTree(null, true);
@@ -299,18 +307,24 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
             final VBox wrapper = new VBox();
 
             previewContainer = new BorderPane();
-            previewContainer.prefWidthProperty().bind(wrapper.widthProperty());
-            previewContainer.prefHeightProperty().bind(wrapper.widthProperty());
+
+            settingsContainer.prefHeightProperty().bind(container.heightProperty()
+                    .subtract(previewContainer.heightProperty()));
 
             createPreview(previewContainer);
+
+            FXUtils.bindFixedWidth(previewContainer, wrapper.widthProperty());
+            FXUtils.bindFixedHeight(previewContainer, wrapper.widthProperty());
 
             FXUtils.addToPane(settingsContainer, wrapper);
             FXUtils.addToPane(previewContainer, wrapper);
             FXUtils.addToPane(wrapper, container);
 
             FXUtils.addClassTo(wrapper, CSSClasses.DEF_VBOX);
+            FXUtils.addClassTo(previewContainer, CSSClasses.DEF_BORDER_PANE);
 
         } else {
+            settingsContainer.prefHeightProperty().bind(container.heightProperty());
             FXUtils.addToPane(settingsContainer, container);
         }
 
@@ -326,6 +340,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @return true if need to create preview container.
      */
+    @FromAnyThread
     protected boolean needPreview() {
         return false;
     }
@@ -334,6 +349,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the preview container.
      */
     @Nullable
+    @FromAnyThread
     protected BorderPane getPreviewContainer() {
         return previewContainer;
     }
@@ -343,6 +359,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @param container the preview container.
      */
+    @FXThread
     protected void createPreview(@NotNull final BorderPane container) {
     }
 
@@ -350,6 +367,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the filed with new file name.
      */
     @NotNull
+    @FromAnyThread
     protected TextField getFileNameField() {
         return notNull(fileNameField);
     }
@@ -359,6 +377,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      *
      * @param root the root
      */
+    @FXThread
     protected void createSettings(@NotNull final GridPane root) {
 
         final Label fileNameLabel = new Label(getFileNameLabelText() + ":");
@@ -382,6 +401,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      * @return the label text "file name".
      */
     @NotNull
+    @FromAnyThread
     protected String getFileNameLabelText() {
         return Messages.FILE_CREATOR_FILE_NAME_LABEL;
     }
@@ -389,10 +409,13 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     /**
      * Validate the inputted name.
      */
+    @FXThread
     protected void validateFileName() {
 
-        final Path fileToCreate = getFileToCreate();
         final Button okButton = getOkButton();
+        if (okButton == null) return;
+
+        final Path fileToCreate = getFileToCreate();
 
         if (fileToCreate == null || Files.exists(fileToCreate)) {
             okButton.setDisable(true);
@@ -404,6 +427,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
 
     @NotNull
     @Override
+    @FromAnyThread
     protected Point getSize() {
         return DIALOG_SIZE;
     }

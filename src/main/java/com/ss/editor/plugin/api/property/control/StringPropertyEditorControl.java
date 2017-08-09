@@ -35,7 +35,7 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
         valueField = new TextField();
         valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.textProperty().addListener((observable, oldValue, newValue) -> change());
-        valueField.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
