@@ -52,7 +52,7 @@ public class FolderCreator extends AbstractFileCreator {
 
     @Override
     protected void processOk() {
-        super.processOk();
+        super.hide();
 
         final Path fileToCreate = notNull(getFileToCreate());
         try {

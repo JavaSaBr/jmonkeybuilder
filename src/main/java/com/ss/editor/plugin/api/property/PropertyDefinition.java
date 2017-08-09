@@ -1,4 +1,4 @@
-package com.ss.editor.ui.dialog.factory;
+package com.ss.editor.plugin.api.property;
 
 import com.ss.editor.extension.property.EditablePropertyType;
 import org.jetbrains.annotations.NotNull;

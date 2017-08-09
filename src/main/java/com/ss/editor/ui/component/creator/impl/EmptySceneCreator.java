@@ -1,13 +1,12 @@
 package com.ss.editor.ui.component.creator.impl;
 
-import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
-import com.ss.editor.ui.component.creator.FileCreatorDescription;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
-
+import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -46,21 +45,18 @@ public class EmptySceneCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processOk() {
-        super.processOk();
-
-        final Path fileToCreate = notNull(getFileToCreate());
+    @BackgroundThread
+    protected void writeData(@NotNull final Path resultFile) {
+        super.writeData(resultFile);
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
         final SceneNode newNode = createScene();
 
-        try (final OutputStream out = Files.newOutputStream(fileToCreate)) {
+        try (final OutputStream out = Files.newOutputStream(resultFile)) {
             exporter.save(newNode, out);
         } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
-
-        notifyFileCreated(fileToCreate, true);
     }
 
     /**

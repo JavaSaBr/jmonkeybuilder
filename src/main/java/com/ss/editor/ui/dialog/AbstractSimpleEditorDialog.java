@@ -1,6 +1,7 @@
 package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.util.EditorUtil;
@@ -210,6 +211,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle ok button.
      */
+    @FXThread
     protected void processOk() {
         hide();
     }
@@ -217,6 +219,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle cancel button.
      */
+    @FXThread
     protected void processClose() {
         hide();
     }

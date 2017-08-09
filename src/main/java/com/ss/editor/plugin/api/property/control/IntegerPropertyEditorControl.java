@@ -1,30 +1,30 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.rlib.ui.control.input.FloatTextField;
+import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The control to edit float values.
+ * The control to edit integer values.
  *
  * @author JavaSaBr
  */
-public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
+public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer> {
 
     /**
      * The value field.
      */
     @Nullable
-    private FloatTextField valueField;
+    private IntegerTextField valueField;
 
-    protected FloatPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
-                                         @NotNull final Runnable validationCallback) {
+    protected IntegerPropertyEditorControl(@NotNull final VarTable vars, @NotNull final PropertyDefinition definition,
+                                           @NotNull final Runnable validationCallback) {
         super(vars, definition, validationCallback);
     }
 
@@ -32,7 +32,7 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
     protected void createComponents() {
         super.createComponents();
 
-        valueField = new FloatTextField();
+        valueField = new IntegerTextField();
         valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(0.5F));
@@ -42,14 +42,14 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
     }
 
     @NotNull
-    private FloatTextField getValueField() {
+    private IntegerTextField getValueField() {
         return notNull(valueField);
     }
 
     @Override
     protected void reload() {
         super.reload();
-        final Float value = getPropertyValue();
+        final Integer value = getPropertyValue();
         getValueField().setValue(value == null ? 0 : value);
     }
 

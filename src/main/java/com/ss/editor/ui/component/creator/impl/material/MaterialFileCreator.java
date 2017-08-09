@@ -5,6 +5,7 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
@@ -145,8 +146,9 @@ public class MaterialFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processOk() {
-        super.processOk();
+    @BackgroundThread
+    protected void writeData(@NotNull final Path resultFile) {
+        super.writeData(resultFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
@@ -157,15 +159,11 @@ public class MaterialFileCreator extends AbstractFileCreator {
         material.getAdditionalRenderState();
 
         final String materialContent = MaterialSerializer.serializeToString(material);
-        final Path fileToCreate = notNull(getFileToCreate());
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fileToCreate))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(resultFile))) {
             out.print(materialContent);
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
-            return;
         }
-
-        notifyFileCreated(fileToCreate, true);
     }
 }

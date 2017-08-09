@@ -3,10 +3,10 @@ package com.ss.editor.ui.component.creator.impl.texture;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.ui.component.creator.FileCreatorDescription;
 import com.ss.editor.ui.component.creator.impl.AbstractFileCreator;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.embed.swing.SwingFXUtils;
@@ -136,16 +136,9 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
     }
 
     @Override
-    protected void processOk() {
-        super.processOk();
-
-        final Path fileToCreate = notNull(getFileToCreate());
-        try {
-            Files.createFile(fileToCreate);
-        } catch (final IOException e) {
-            EditorUtil.handleException(LOGGER, this, e);
-            return;
-        }
+    @BackgroundThread
+    protected void writeData(@NotNull final Path resultFile) {
+        super.writeData(resultFile);
 
         final IntegerTextField widthField = getWidthField();
         final IntegerTextField heightField = getHeightField();
@@ -167,12 +160,10 @@ public class SingleColorTextureFileCreator extends AbstractFileCreator {
 
         final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
 
-        try (final OutputStream out = Files.newOutputStream(fileToCreate)) {
+        try (final OutputStream out = Files.newOutputStream(resultFile)) {
             ImageIO.write(bufferedImage, "png", out);
         } catch (final IOException e) {
             throw new RuntimeException(e);
         }
-
-        notifyFileCreated(fileToCreate, true);
     }
 }

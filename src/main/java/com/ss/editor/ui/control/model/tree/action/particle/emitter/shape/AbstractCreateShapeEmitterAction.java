@@ -11,8 +11,8 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeEmitterShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -54,7 +54,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         final Point dialogSize = getDialogSize();
 
-        final ObjectFactoryDialog dialog = new ObjectFactoryDialog(getPropertyDefinitions(), this::handleResult);
+        final GenericFactoryDialog dialog = new GenericFactoryDialog(getPropertyDefinitions(), this::handleResult);
         dialog.setTitle(getDialogTitle());
 
         if (dialogSize != null) {

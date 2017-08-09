@@ -1,10 +1,10 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.VarTable;
 import org.jetbrains.annotations.NotNull;

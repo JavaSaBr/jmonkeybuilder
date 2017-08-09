@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
@@ -45,9 +47,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -334,17 +336,23 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             final String editorId = description.getEditorId();
 
             final Path tempFile = Utils.get(editorId, prefix -> Files.createTempFile(prefix, "toSave.tmp"));
-
             final long stamp = EDITOR.asyncLock();
             try {
+
                 doSave(tempFile);
-                Files.copy(tempFile, getEditFile(), StandardCopyOption.REPLACE_EXISTING);
+
+                try {
+                    Files.move(tempFile, getEditFile(), REPLACE_EXISTING, ATOMIC_MOVE);
+                } catch (final AtomicMoveNotSupportedException e) {
+                    Files.move(tempFile, getEditFile(), REPLACE_EXISTING);
+                }
+
             } catch (final IOException e) {
+                FileUtils.delete(tempFile);
                 LOGGER.warning(this, e);
                 EXECUTOR_MANAGER.addFXTask(this::notifyFinishSaving);
             } finally {
                 EDITOR.asyncUnlock(stamp);
-                FileUtils.delete(tempFile);
             }
 
             EXECUTOR_MANAGER.addFXTask(this::postSave);

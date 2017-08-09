@@ -1,10 +1,11 @@
-package com.ss.editor.ui.dialog.factory;
+package com.ss.editor.plugin.api.dialog;
 
-import static com.ss.editor.ui.dialog.factory.control.PropertyEditorControlFactory.build;
+import static com.ss.editor.plugin.api.property.control.PropertyEditorControlFactory.build;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
-import com.ss.editor.ui.dialog.factory.control.PropertyEditorControl;
+import com.ss.editor.plugin.api.property.control.PropertyEditorControl;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.collections.ObservableList;
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
  *
  * @author JavaSaBr
  */
-public class ObjectFactoryDialog extends AbstractSimpleEditorDialog {
+public class GenericFactoryDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Point DIALOG_SIZE = new Point(400, 0);
@@ -63,14 +64,14 @@ public class ObjectFactoryDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private VBox root;
 
-    public ObjectFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
-                               @NotNull final Consumer<VarTable> handler) {
+    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
+                                @NotNull final Consumer<VarTable> handler) {
         this(definitions, handler, varTable -> true);
     }
 
-    public ObjectFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
-                               @NotNull final Consumer<VarTable> handler,
-                               @NotNull final Predicate<VarTable> validator) {
+    public GenericFactoryDialog(@NotNull final Array<PropertyDefinition> definitions,
+                                @NotNull final Consumer<VarTable> handler,
+                                @NotNull final Predicate<VarTable> validator) {
         this.definitions = definitions;
         this.handler = handler;
         this.validator = validator;

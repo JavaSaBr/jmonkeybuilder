@@ -143,7 +143,7 @@ public class MaterialDefinitionFileCreator extends AbstractFileCreator {
 
     @Override
     protected void processOk() {
-        super.processOk();
+        super.hide();
 
         final Path matDefFile = notNull(getFileToCreate());
         final String filename = FileUtils.getNameWithoutExtension(matDefFile);

@@ -1,9 +1,14 @@
 package com.ss.editor.ui.component.creator.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.component.asset.tree.ResourceTree;
@@ -13,14 +18,18 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
+import com.ss.editor.ui.scene.EditorFXScene;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.StringUtils;
+import com.ss.rlib.util.Utils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,6 +37,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -79,6 +90,12 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
      */
     @Nullable
     private ResourceTree resourceTree;
+
+    /**
+     * The preview container.
+     */
+    @Nullable
+    private BorderPane previewContainer;
 
     /**
      * The filed with new file name.
@@ -190,12 +207,63 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         return StringUtils.EMPTY;
     }
 
+    @Override
+    @FXThread
+    protected void processOk() {
+        super.processOk();
+
+        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        scene.incrementLoading();
+
+        EXECUTOR_MANAGER.addBackgroundTask(() -> {
+
+            final Path tempFile;
+            try {
+                tempFile = Files.createTempFile("SSEditor", "fileCreator");
+            } catch (final IOException e) {
+                EditorUtil.handleException(LOGGER, this, e);
+                EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+                return;
+            }
+
+            final Path fileToCreate = notNull(getFileToCreate());
+            try {
+
+                writeData(tempFile);
+
+                try {
+                    Files.move(tempFile, fileToCreate, REPLACE_EXISTING, ATOMIC_MOVE);
+                } catch (final AtomicMoveNotSupportedException ex) {
+                    Files.move(tempFile, fileToCreate, REPLACE_EXISTING);
+                }
+
+                notifyFileCreated(fileToCreate, true);
+
+            } catch (final IOException e) {
+                Utils.run(tempFile, Files::delete);
+                EditorUtil.handleException(LOGGER, this, e);
+            }
+
+            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+        });
+    }
+
+    /**
+     * Write created data to the created file.
+     *
+     * @param resultFile the result file.
+     */
+    @BackgroundThread
+    protected void writeData(@NotNull final Path resultFile) {
+    }
+
     /**
      * Notify about the file created.
      *
      * @param createdFile the created file
      * @param needSelect  the need select
      */
+    @FromAnyThread
     protected void notifyFileCreated(@NotNull final Path createdFile, final boolean needSelect) {
         if (!needSelect) return;
 
@@ -225,12 +293,57 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         createSettings(settingsContainer);
 
         FXUtils.addToPane(resourceTree, container);
-        FXUtils.addToPane(settingsContainer, container);
+
+        if (needPreview()) {
+
+            final VBox wrapper = new VBox();
+
+            previewContainer = new BorderPane();
+            previewContainer.prefWidthProperty().bind(wrapper.widthProperty());
+            previewContainer.prefHeightProperty().bind(wrapper.widthProperty());
+
+            createPreview(previewContainer);
+
+            FXUtils.addToPane(settingsContainer, wrapper);
+            FXUtils.addToPane(previewContainer, wrapper);
+            FXUtils.addToPane(wrapper, container);
+
+            FXUtils.addClassTo(wrapper, CSSClasses.DEF_VBOX);
+
+        } else {
+            FXUtils.addToPane(settingsContainer, container);
+        }
+
         FXUtils.addToPane(container, root);
 
         FXUtils.addClassTo(root, CSSClasses.FILE_CREATOR_DIALOG);
         FXUtils.addClassTo(container, CSSClasses.DEF_HBOX);
         FXUtils.addClassTo(settingsContainer, CSSClasses.DEF_GRID_PANE);
+    }
+
+    /**
+     * If return true the creator will create {@link #previewContainer}.
+     *
+     * @return true if need to create preview container.
+     */
+    protected boolean needPreview() {
+        return false;
+    }
+
+    /**
+     * @return the preview container.
+     */
+    @Nullable
+    protected BorderPane getPreviewContainer() {
+        return previewContainer;
+    }
+
+    /**
+     * Create preview.
+     *
+     * @param container the preview container.
+     */
+    protected void createPreview(@NotNull final BorderPane container) {
     }
 
     /**

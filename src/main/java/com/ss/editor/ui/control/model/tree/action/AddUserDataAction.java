@@ -14,8 +14,8 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyCountOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.dialog.factory.ObjectFactoryDialog;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.VarTable;
@@ -103,7 +103,7 @@ public class AddUserDataAction extends AbstractNodeAction<ModelChangeConsumer> {
 
         final EditorFXScene scene = JFX_APPLICATION.getScene();
 
-        final ObjectFactoryDialog dialog = new ObjectFactoryDialog(definitions, this::addUserData,
+        final GenericFactoryDialog dialog = new GenericFactoryDialog(definitions, this::addUserData,
                 vars -> !StringUtils.isEmpty(vars.getString(PROPERTY_NAME)));
 
         dialog.setTitle(Messages.ADD_USER_DATA_DIALOG_TITLE);

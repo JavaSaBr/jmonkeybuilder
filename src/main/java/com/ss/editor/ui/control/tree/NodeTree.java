@@ -209,7 +209,7 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
      * @return the context menu
      */
     @FXThread
-    ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
+    public ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
 
         final C changeConsumer = getChangeConsumer();
         if (changeConsumer == null) return null;

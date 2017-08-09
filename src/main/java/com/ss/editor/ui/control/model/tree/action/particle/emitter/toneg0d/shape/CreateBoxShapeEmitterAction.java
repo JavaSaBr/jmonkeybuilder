@@ -8,7 +8,7 @@ import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
