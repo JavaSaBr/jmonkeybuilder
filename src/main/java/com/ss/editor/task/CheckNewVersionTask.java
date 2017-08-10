@@ -64,7 +64,7 @@ public class CheckNewVersionTask implements Runnable {
                     .trim()
                     .replace("v.", "");
 
-            if (Config.APP_VERSION.compareTo(new Version(targetVersion)) <= 0) {
+            if (Config.APP_VERSION.compareTo(new Version(targetVersion)) >= 0) {
                 return;
             }
 

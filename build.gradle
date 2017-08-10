@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '0.9.12'
+version = '0.9.13'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -58,7 +58,7 @@ dependencies {
     compile group: 'org.fxmisc.richtext', name: 'richtextfx', version: '0.7-M5'
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.2'
-    compile 'com.github.JavaSaBr:RLib:6.3.1'
+    compile 'com.github.JavaSaBr:RLib:6.3.2'
     compile 'com.github.JavaSaBr:JME3-JFX:1.5.5'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
