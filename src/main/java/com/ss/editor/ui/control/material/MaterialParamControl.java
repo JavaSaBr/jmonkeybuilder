@@ -5,6 +5,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.ui.css.CSSClasses;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -91,6 +92,8 @@ public class MaterialParamControl extends HBox {
         this.material = material;
         this.parameterName = parameterName;
 
+        setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
+        setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
         setIgnoreListeners(true);
         try {
             createComponents();
