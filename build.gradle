@@ -172,6 +172,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}
+
 artifacts {
     archives sourcesJar
     archives javadocJar
