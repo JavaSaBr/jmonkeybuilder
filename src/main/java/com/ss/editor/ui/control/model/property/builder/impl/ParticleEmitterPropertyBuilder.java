@@ -288,6 +288,8 @@ public class ParticleEmitterPropertyBuilder extends AbstractPropertyBuilder<Mode
                 new FloatModelPropertyControl<>(emissionsPerSecond, Messages.MODEL_PROPERTY_EMISSION_PER_SECOND, changeConsumer);
         emissionPerSecControl.setApplyHandler(EMISSIONS_PER_SECOND_HANDLER);
         emissionPerSecControl.setSyncHandler(ParticleEmitterNode::getEmissionsPerSecond);
+        emissionPerSecControl.setMinMax(0.1F, Integer.MAX_VALUE);
+        emissionPerSecControl.setScrollPower(3F);
         emissionPerSecControl.setEditObject(emitterNode);
 
         final IntegerModelPropertyControl<ParticleEmitterNode> particlesPerEmissionControl =

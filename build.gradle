@@ -128,7 +128,7 @@ dependencies {
     compile ('com.github.JavaSaBr:jme3-spaceshift-extension:1.5.1') {
         exclude group: 'org.jmonkeyengine'
     }
-    compile ('com.github.JavaSaBr:tonegodemitter:2.3.0') {
+    compile ('com.github.JavaSaBr:tonegodemitter:2.3.1') {
         exclude group: 'org.jmonkeyengine'
     }
 

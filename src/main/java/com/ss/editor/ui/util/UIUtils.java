@@ -500,7 +500,7 @@ public class UIUtils {
 
             final KeyCode code = event.getCode();
 
-            if (!(code == KeyCode.Z || code == KeyCode.Y || code == KeyCode.S)) {
+            if (!(code == KeyCode.Z || code == KeyCode.Y)) {
                 return;
             }
 
