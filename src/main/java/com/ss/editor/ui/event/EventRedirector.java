@@ -9,6 +9,7 @@ import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
 import javafx.scene.Node;
+import javafx.scene.control.Control;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -142,8 +143,8 @@ public class EventRedirector {
         });
 
         stage.addEventHandler(ScrollEvent.ANY, this::redirect);
-        stage.addEventHandler(KeyEvent.KEY_PRESSED, this::redirect);
-        stage.addEventHandler(KeyEvent.KEY_RELEASED, this::redirect);
+        stage.addEventFilter(KeyEvent.KEY_PRESSED, this::redirect);
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, this::redirect);
     }
 
     private void redirect(@NotNull final GestureEvent event) {
@@ -162,7 +163,7 @@ public class EventRedirector {
     private void redirect(@NotNull final InputEvent event) {
 
         final EventTarget target = event.getTarget();
-        if (target == destination) return;
+        if (target == destination || target instanceof Control) return;
 
         final EventType<? extends InputEvent> eventType = event.getEventType();
         final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();

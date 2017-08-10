@@ -1,9 +1,8 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.TextField;
@@ -33,7 +32,6 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
         super.createComponents();
 
         valueField = new TextField();
-        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.textProperty().addListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 

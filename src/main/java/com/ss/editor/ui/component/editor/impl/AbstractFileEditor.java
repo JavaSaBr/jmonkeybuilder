@@ -250,8 +250,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final KeyCode code = event.getCode();
 
-        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
-            save();
+        if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+            event.consume();
         }
     }
 
@@ -291,6 +291,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FXThread
     protected void processKeyPressed(@NotNull final KeyEvent event) {
+
+        final KeyCode code = event.getCode();
+
+        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
+            save();
+        } else if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+            event.consume();
+        }
     }
 
     /**

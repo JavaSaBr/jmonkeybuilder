@@ -494,9 +494,20 @@ public class UIUtils {
      */
     @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
-        if (event == null || event.isControlDown() || event.isShiftDown()) {
+        if (event == null) {
+            return;
+        } else if (event.isControlDown()) {
+
+            final KeyCode code = event.getCode();
+
+            if (!(code == KeyCode.Z || code == KeyCode.Y || code == KeyCode.S)) {
+                return;
+            }
+
+        } else if (event.isShiftDown()) {
             return;
         }
+
         event.consume();
     }
 

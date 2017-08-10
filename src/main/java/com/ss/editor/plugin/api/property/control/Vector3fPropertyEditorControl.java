@@ -49,17 +49,14 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         gridPane.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         xField = new FloatTextField();
-        xField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         xField.addChangeListener((observable, oldValue, newValue) -> change());
         xField.prefWidthProperty().bind(gridPane.widthProperty().divide(3));
 
         yField = new FloatTextField();
-        yField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         yField.addChangeListener((observable, oldValue, newValue) -> change());
         yField.prefWidthProperty().bind(gridPane.widthProperty().divide(3));
 
         zField = new FloatTextField();
-        zField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         zField.addChangeListener((observable, oldValue, newValue) -> change());
         zField.prefWidthProperty().bind(gridPane.widthProperty().divide(3));
 

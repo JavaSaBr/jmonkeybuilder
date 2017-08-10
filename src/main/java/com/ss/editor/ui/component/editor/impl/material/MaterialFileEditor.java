@@ -44,6 +44,7 @@ import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.FileUtils;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -52,7 +53,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -340,41 +340,28 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     @FXThread
-    protected void processKeyReleased(@NotNull final KeyEvent event) {
-        super.processKeyReleased(event);
-
-        final KeyCode code = event.getCode();
-
-        if (handleKeyActionImpl(code, false, event.isControlDown(), false)) {
-            event.consume();
-        }
-    }
-
-    @Override
-    @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
-        if (isPressed) return false;
 
-        if (isControlDown && keyCode == KeyCode.Z) {
+        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
             undo();
             return true;
-        } else if (isControlDown && keyCode == KeyCode.Y) {
+        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
             redo();
             return true;
-        } else if (keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton cubeButton = getCubeButton();
             cubeButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton sphereButton = getSphereButton();
             sphereButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.P && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.P && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton planeButton = getPlaneButton();
             planeButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.L && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.L && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton lightButton = getLightButton();
             lightButton.setSelected(!lightButton.isSelected());
             return true;
@@ -416,6 +403,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         editorAreaPane.setOnMousePressed(event -> editorAreaPane.requestFocus());
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
+        editorAreaPane.setOnKeyReleased(Event::consume);
+        editorAreaPane.setOnKeyPressed(Event::consume);
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);

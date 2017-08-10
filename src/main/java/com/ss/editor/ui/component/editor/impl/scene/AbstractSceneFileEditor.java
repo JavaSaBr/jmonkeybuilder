@@ -81,12 +81,12 @@ import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -586,24 +586,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     @FXThread
-    protected void processKeyReleased(@NotNull final KeyEvent event) {
-        super.processKeyReleased(event);
-
-        final KeyCode code = event.getCode();
-
-        if (handleKeyActionImpl(code, false, event.isControlDown(), isButtonMiddleDown())) {
-            event.consume();
-        }
-    }
-
-    @Override
-    @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
-
-        if (isPressed) {
-            return false;
-        }
 
         final MA editor3DState = getEditor3DState();
 
@@ -611,25 +595,25 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return false;
         }
 
-        if (isControlDown && keyCode == KeyCode.Z) {
+        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
             undo();
             return true;
-        } else if (isControlDown && keyCode == KeyCode.Y) {
+        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
             redo();
             return true;
-        } else if (keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton moveToolButton = getMoveToolButton();
             moveToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.R && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.R && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton rotationToolButton = getRotationToolButton();
             rotationToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton scaleToolButton = getScaleToolButton();
             scaleToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.DELETE) {
+        } else if (isPressed && keyCode == KeyCode.DELETE) {
 
             final ModelNodeTree modelNodeTree = getModelNodeTree();
             final TreeNode<?> selected = modelNodeTree.getSelected();
@@ -653,7 +637,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, false, isControlDown, isButtonMiddleDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
     }
 
     /**
@@ -1215,6 +1199,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         editor3DArea = new BorderPane();
         editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
+        editor3DArea.setOnKeyReleased(Event::consume);
+        editor3DArea.setOnKeyPressed(Event::consume);
 
         statsContainer = new VBox();
         statsContainer.setMouseTransparent(true);

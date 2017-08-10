@@ -157,8 +157,6 @@ public abstract class AbstractVector2fPropertyControl<C extends ChangeConsumer, 
      * @param event the event
      */
     private void updateVector(@Nullable final KeyEvent event) {
-        UIUtils.consumeIfIsNotHotKey(event);
-
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final FloatTextField xField = getXField();

@@ -162,8 +162,6 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
      * Updating rotation.
      */
     private void updateRotation(@Nullable final KeyEvent event) {
-        UIUtils.consumeIfIsNotHotKey(event);
-
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final Quaternion oldValue = getPropertyValue();

@@ -4,6 +4,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.geometry.Pos;
@@ -80,6 +81,8 @@ public class PropertyEditorControl<T> extends HBox {
             vars.set(id, defaultValue);
         }
 
+        setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
+        setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
         createComponents();
         setIgnoreListener(true);
         try {

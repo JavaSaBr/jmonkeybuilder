@@ -1,9 +1,8 @@
 package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -33,7 +32,6 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
         super.createComponents();
 
         valueField = new IntegerTextField();
-        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
         valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
