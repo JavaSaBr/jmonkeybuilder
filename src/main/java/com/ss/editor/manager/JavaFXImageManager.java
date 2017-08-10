@@ -228,11 +228,11 @@ public class JavaFXImageManager {
 
             final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
             final BufferedImage awtImage;
-
             try {
                 awtImage = (BufferedImage) TGAReader.getImage(content);
             } catch (final Exception e) {
                 LOGGER.warning(e);
+                writeDefaultToCache(cacheFile);
                 return Icons.IMAGE_512;
             }
 
@@ -247,6 +247,15 @@ public class JavaFXImageManager {
         }
 
         return Icons.IMAGE_512;
+    }
+
+    private void writeDefaultToCache(@NotNull final Path cacheFile) {
+        final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(Icons.IMAGE_512, null);
+        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+            ImageIO.write(bufferedImage, "png", out);
+        } catch (final IOException ex) {
+            LOGGER.warning(ex);
+        }
     }
 
     @NotNull

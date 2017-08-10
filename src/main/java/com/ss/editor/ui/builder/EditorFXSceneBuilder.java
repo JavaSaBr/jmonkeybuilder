@@ -140,6 +140,6 @@ public class EditorFXSceneBuilder {
         FXUtils.bindFixedWidth(barComponent, container.widthProperty());
         FXUtils.addClassTo(leftSplitContainer, bottomSplitContainer, CSSClasses.MAIN_SPLIT_PANEL);
 
-        UIUtils.overrideTooltipBehavior(100, 5000, 100);
+        UIUtils.overrideTooltipBehavior(1000, 5000, 100);
     }
 }

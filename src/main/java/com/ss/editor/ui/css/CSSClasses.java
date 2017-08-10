@@ -483,6 +483,11 @@ public interface CSSClasses {
     String IMAGE_CHANNEL_PREVIEW = "image-channel-preview";
 
     /**
+     * The constant IMAGE_PREVIEW.
+     */
+    String IMAGE_PREVIEW = "image-preview";
+
+    /**
      * The constant PLUGIN_LIST_CELL.
      */
     String PLUGIN_LIST_CELL = "plugin-list-cell";

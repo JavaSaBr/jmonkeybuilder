@@ -1,6 +1,7 @@
 package com.ss.editor.ui.util;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ReflectionUtils.getStaticField;
 import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.JFXApplication;
@@ -36,6 +37,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -265,44 +267,34 @@ public class UIUtils {
      */
     public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis,
                                                int closeDelayInMillis) {
-
         try {
 
-            Class<?> tooltipBehaviourClass = null;
-            Class<?>[] declaredClasses = Tooltip.class.getDeclaredClasses();
+            // fix auto hiding tooltips
+            final Field xOffsetField = getStaticField(Tooltip.class, "TOOLTIP_XOFFSET");
+            xOffsetField.setAccessible(true);
+            xOffsetField.set(null, 14);
 
-            for (Class<?> declaredClass : declaredClasses) {
-                if (declaredClass.getCanonicalName().equals("javafx.scene.control.Tooltip.TooltipBehavior")) {
-                    tooltipBehaviourClass = declaredClass;
-                    break;
-                }
-            }
+            final Field yOffsetField = getStaticField(Tooltip.class, "TOOLTIP_YOFFSET");
+            yOffsetField.setAccessible(true);
+            yOffsetField.set(null, 14);
+
+            final Class<?> tooltipBehaviourClass = Arrays.stream(Tooltip.class.getDeclaredClasses())
+                    .filter(type -> type.getCanonicalName().equals(Tooltip.class.getName() + ".TooltipBehavior"))
+                    .findAny().orElse(null);
 
             if (tooltipBehaviourClass == null) {
                 return;
             }
 
-            Constructor<?> constructor = tooltipBehaviourClass.
+            final Constructor<?> constructor = tooltipBehaviourClass.
                     getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
-
-            if (constructor == null) {
-                return;
-            }
-
             constructor.setAccessible(true);
 
-            Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis),
+            final Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis),
                     new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
 
-            Field field = Tooltip.class.getDeclaredField("BEHAVIOR");
-
-            if (field == null) {
-                return;
-            }
-
+            final Field field = getStaticField(Tooltip.class, "BEHAVIOR");
             field.setAccessible(true);
-
-            // Cache the default behavior if needed.
             field.get(Tooltip.class);
             field.set(Tooltip.class, tooltipBehaviour);
 

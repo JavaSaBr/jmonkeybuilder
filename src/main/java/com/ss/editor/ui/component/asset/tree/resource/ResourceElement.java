@@ -1,10 +1,11 @@
 package com.ss.editor.ui.component.asset.tree.resource;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.array.Array;
+import javafx.scene.control.Tooltip;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 
@@ -34,6 +35,16 @@ public abstract class ResourceElement implements Comparable<ResourceElement> {
      */
     public ResourceElement(@NotNull final Path file) {
         this.file = file;
+    }
+
+    /**
+     * Create tooltip to preview this element.
+     *
+     * @return the tooltip.
+     */
+    @Nullable
+    public Tooltip createToolTip() {
+        return null;
     }
 
     /**
