@@ -10,4 +10,6 @@ pipelines:
   default:
     - step:
         script:
+          - apt-get update
+          - apt-get install -y openjfx
           - bash ./gradlew install
