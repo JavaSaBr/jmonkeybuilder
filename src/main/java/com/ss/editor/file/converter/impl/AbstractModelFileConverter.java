@@ -66,7 +66,14 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final EditorFXScene scene = JFX_APPLICATION.getScene();
         scene.incrementLoading();
 
-        EXECUTOR_MANAGER.addBackgroundTask(() -> convertImpl(source, dialog));
+        EXECUTOR_MANAGER.addBackgroundTask(() -> {
+            try {
+                convertImpl(source, dialog);
+            } catch (final Exception e) {
+                EditorUtil.handleException(LOGGER, this, e);
+                EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            }
+        });
     }
 
     /**

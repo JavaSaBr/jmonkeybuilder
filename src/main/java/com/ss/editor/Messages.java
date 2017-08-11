@@ -431,6 +431,10 @@ public class Messages {
      */
     public static final String BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION;
     /**
+     * The constant GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION.
+     */
+    public static final String GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION;
+    /**
      * The constant FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION.
      */
     public static final String FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION;
@@ -2427,6 +2431,7 @@ public class Messages {
         SETTINGS_DIALOG_ENVS_FOLDER_CHOOSER_TITLE = bundle.getString("SettingsDialogEnvsFolderChooserTitle");
 
         BLEND_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("BlendToJ3oFileConverterDescription");
+        GLTF_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("GLTFToJ3oFileConverterDescription");
         FBX_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("FBXToJ3oFileConverterDescription");
         OBJ_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("ObjToJ3oFileConverterDescription");
         SCENE_TO_J3O_FILE_CONVERTER_DESCRIPTION = bundle.getString("SceneToJ3oFileConverterDescription");

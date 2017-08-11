@@ -80,6 +80,7 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "sse");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "text");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "text");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_GLTF, "cube");
 
         EXTENSION_TO_CONTENT_TYPE.put("obj", "x-office-drawing");
         EXTENSION_TO_CONTENT_TYPE.put("blend", "application-x-blender");

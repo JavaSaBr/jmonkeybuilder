@@ -73,3 +73,4 @@ ui/icons/svg/brightness.svg icon made by http://www.flaticon.com/authors/those-i
 ui/icons/svg/picture.svg icon made by http://www.flaticon.com/authors/madebyoliver from www.flaticon.com
 ui/icons/svg/document.svg icon made by http://www.flaticon.com/authors/madebyoliver from www.flaticon.com
 ui/icons/svg/plug-silhouette.svg icon made by http://www.flaticon.com/authors/freepik from www.flaticon.com
+ui/icons/filetypes/cube.svg icon made by https://www.flaticon.com/authors/madebyoliver from www.flaticon.com
