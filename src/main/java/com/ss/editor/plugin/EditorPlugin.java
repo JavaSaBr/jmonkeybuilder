@@ -136,4 +136,10 @@ public class EditorPlugin extends BasePlugin {
     @FXThread
     public void onFinishLoading(@NotNull final PluginSystem pluginSystem) {
     }
+
+    @NotNull
+    @Override
+    public PluginContainer getContainer() {
+        return super.getContainer();
+    }
 }

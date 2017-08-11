@@ -10,7 +10,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.CustomClasspathManager;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
@@ -1378,9 +1378,8 @@ public class SettingsDialog extends EditorDialog {
 
         if (needUpdateClasspath > 0) {
 
-            final CustomClasspathManager customClasspathManager = CustomClasspathManager.getInstance();
-            customClasspathManager.updateLibraries();
-            customClasspathManager.updateClasses();
+            final ClasspathManager classpathManager = ClasspathManager.getInstance();
+            classpathManager.reload();
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             assetManager.clearCache();

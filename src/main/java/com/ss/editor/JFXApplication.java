@@ -143,11 +143,11 @@ public class JFXApplication extends Application {
             return;
         }
 
+        InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
-        InitializeManager.register(CustomClasspathManager.class);
         InitializeManager.register(PluginManager.class);
         InitializeManager.initialize();
 

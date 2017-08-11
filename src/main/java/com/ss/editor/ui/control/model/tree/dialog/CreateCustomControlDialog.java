@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.model.tree.dialog;
 
-import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
 import com.jme3.scene.Spatial;
@@ -8,18 +7,20 @@ import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
 import com.ss.editor.extension.scene.control.EditableControl;
 import com.ss.editor.extension.scene.control.impl.EditableBillboardControl;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ClassUtils;
+import com.ss.rlib.util.StringUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,20 @@ import java.awt.*;
  */
 public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
+    private static class ClassCell extends ListCell<Class<? extends Control>> {
+
+        @Override
+        protected void updateItem(@Nullable final Class<? extends Control> item, final boolean empty) {
+            super.updateItem(item, empty);
+
+            if (item == null) {
+                setText(StringUtils.EMPTY);
+            } else {
+                setText(item.getSimpleName());
+            }
+        }
+    }
+
     @NotNull
     private static final Point DIALOG_SIZE = new Point(415, -1);
 
@@ -41,6 +56,9 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
     @NotNull
     private static final Array<String> BUILT_IN_NAMES = ArrayFactory.newArray(String.class);
+
+    @NotNull
+    private static final ClasspathManager CLASSPATH_MANAGER = ClasspathManager.getInstance();
 
     static {
         register(new EditableBillboardControl());
@@ -64,10 +82,10 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     private CheckBox customCheckBox;
 
     /**
-     * The full class name of creating control.
+     * The list of available custom controls.
      */
     @Nullable
-    private TextField controlNameField;
+    private ComboBox<Class<? extends Control>> customComboBox;
 
     /**
      * The changes consumer.
@@ -116,11 +134,11 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * @return the full class name of creating control.
+     * @return the list of available custom controls..
      */
     @NotNull
-    private TextField getControlNameField() {
-        return notNull(controlNameField);
+    private ComboBox<Class<? extends Control>> getCustomComboBox() {
+        return notNull(customComboBox);
     }
 
     @Override
@@ -142,25 +160,32 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
         builtInBox.getSelectionModel().select(BUILT_IN_NAMES.first());
         builtInBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
 
-        final Label customNameLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD + ":");
-        customNameLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
+        final Label customLabel = new Label(Messages.CREATE_CUSTOM_CONTROL_DIALOG_CUSTOM_FIELD + ":");
+        customLabel.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_LABEL_W_PERCENT2));
 
-        controlNameField = new TextField();
-        controlNameField.disableProperty().bind(customCheckBox.selectedProperty().not());
-        controlNameField.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
+        customComboBox = new ComboBox<>();
+        customComboBox.setButtonCell(new ClassCell());
+        customComboBox.setCellFactory(param -> new ClassCell());
+        customComboBox.disableProperty().bind(customCheckBox.selectedProperty().not());
+        customComboBox.prefWidthProperty().bind(root.widthProperty().multiply(DEFAULT_FIELD_W_PERCENT2));
+
+        final ObservableList<Class<? extends Control>> items = customComboBox.getItems();
+
+        final Array<Class<Control>> implementations = CLASSPATH_MANAGER.findImplements(Control.class);
+        implementations.forEach(items, (cs, classes) -> ClassUtils.hasConstructor(cs),
+                (controlClass, classes) -> classes.add(controlClass));
 
         final GridPane settingsContainer = new GridPane();
         root.add(builtInLabel, 0, 0);
         root.add(builtInBox, 1, 0);
         root.add(customBoxLabel, 0, 1);
         root.add(customCheckBox, 1, 1);
-        root.add(customNameLabel, 0, 2);
-        root.add(controlNameField, 1, 2);
+        root.add(customLabel, 0, 2);
+        root.add(customComboBox, 1, 2);
 
         FXUtils.addToPane(settingsContainer, root);
-
-        FXUtils.addClassTo(builtInLabel, customBoxLabel, customNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(builtInBox, customCheckBox, controlNameField, CSSClasses.DIALOG_FIELD);
+        FXUtils.addClassTo(builtInLabel, customBoxLabel, customLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+        FXUtils.addClassTo(builtInBox, customCheckBox, customComboBox, CSSClasses.DIALOG_FIELD);
     }
 
     @Override
@@ -175,12 +200,9 @@ public class CreateCustomControlDialog extends AbstractSimpleEditorDialog {
 
         if (customCheckBox.isSelected()) {
 
-            final TextField controlNameField = getControlNameField();
-            final Control newExample = tryToCreateUserObject(this, controlNameField.getText(), Control.class);
-
-            if (newExample == null) {
-                throw new RuntimeException("Can't create a control of the class " + controlNameField.getText());
-            }
+            final ComboBox<Class<? extends Control>> customComboBox = getCustomComboBox();
+            final Class<? extends Control> selectedClass = customComboBox.getSelectionModel().getSelectedItem();
+            final Control newExample = ClassUtils.newInstance(selectedClass);
 
             changeConsumer.execute(new AddControlOperation(newExample, spatial));
 

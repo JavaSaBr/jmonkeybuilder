@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.bar.action;
 import com.jme3.asset.AssetManager;
 import com.ss.editor.Editor;
 import com.ss.editor.Messages;
-import com.ss.editor.manager.CustomClasspathManager;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import javafx.scene.control.MenuItem;
 
@@ -27,13 +27,13 @@ public class UpdateClasspathAndAssetCacheAction extends MenuItem {
      */
     private void process() {
         ExecutorManager.getInstance().addJMETask(() -> {
+
+            final ClasspathManager classpathManager = ClasspathManager.getInstance();
+            classpathManager.reload();
+
             final Editor editor = Editor.getInstance();
             final AssetManager assetManager = editor.getAssetManager();
             assetManager.clearCache();
-
-            final CustomClasspathManager classpathManager = CustomClasspathManager.getInstance();
-            classpathManager.updateLibraries();
-            classpathManager.updateClasses();
         });
     }
 }
