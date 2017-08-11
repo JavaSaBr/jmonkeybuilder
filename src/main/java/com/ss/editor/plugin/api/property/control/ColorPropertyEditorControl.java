@@ -57,9 +57,9 @@ public class ColorPropertyEditorControl extends PropertyEditorControl<ColorRGBA>
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         final ColorPicker colorPicker = getColorPicker();
         setPropertyValue(UIUtils.from(colorPicker.getValue()));
-        super.change();
+        super.changeImpl();
     }
 }

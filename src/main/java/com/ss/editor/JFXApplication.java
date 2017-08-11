@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
+import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
 import com.jme3.renderer.Renderer;
@@ -395,6 +396,7 @@ public class JFXApplication extends Application {
 
         final FrameTransferSceneProcessor sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
         sceneProcessor.setEnabled(false);
+        sceneProcessor.setTransferMode(ON_CHANGES);
 
         this.sceneProcessor = sceneProcessor;
 

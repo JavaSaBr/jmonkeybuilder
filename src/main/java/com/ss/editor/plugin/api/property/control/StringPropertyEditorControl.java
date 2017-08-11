@@ -52,8 +52,8 @@ public class StringPropertyEditorControl extends PropertyEditorControl<String> {
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         setPropertyValue(getValueField().getText());
-        super.change();
+        super.changeImpl();
     }
 }

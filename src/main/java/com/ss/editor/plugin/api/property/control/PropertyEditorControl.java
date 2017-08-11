@@ -1,8 +1,8 @@
 package com.ss.editor.plugin.api.property.control;
 
 import com.ss.editor.Editor;
-import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.plugin.api.property.PropertyDefinition;
+import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -98,6 +98,11 @@ public class PropertyEditorControl<T> extends HBox {
     }
 
     protected void change() {
+        if (isIgnoreListener()) return;
+        changeImpl();
+    }
+
+    protected void changeImpl() {
         validationCallback.run();
     }
 

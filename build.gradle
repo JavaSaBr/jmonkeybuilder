@@ -59,7 +59,7 @@ dependencies {
 
     compile 'com.github.JavaSaBr:RlibFX:4.1.2'
     compile 'com.github.JavaSaBr:RLib:6.3.2'
-    compile 'com.github.JavaSaBr:JME3-JFX:1.5.5'
+    compile 'com.github.JavaSaBr:JME3-JFX:1.6.0'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'

@@ -48,16 +48,9 @@ public class GenericFileCreator extends AbstractFileCreator {
 
         final Array<PropertyDefinition> definitions = getPropertyDefinitions();
         for (final PropertyDefinition definition : definitions) {
-
             final PropertyEditorControl<?> control = build(vars, definition, this::validateFileName);
             control.prefWidthProperty().bind(widthProperty());
             root.add(control, 0, rowIndex++, 2, 1);
-
-            final Object defaultValue = definition.getDefaultValue();
-
-            if (defaultValue != null) {
-                vars.set(definition.getId(), defaultValue);
-            }
         }
     }
 

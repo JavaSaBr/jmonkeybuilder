@@ -9,7 +9,6 @@ import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +31,17 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
 
         final ComboBox<String> comboBox = getComboBox();
         options.forEach(comboBox.getItems(), (option, items) -> items.add(option.toString()));
+
+        if (options.size() > comboBox.getVisibleRowCount()) {
+            setIgnoreListener(true);
+            try {
+                AutoCompleteComboBoxListener.install(comboBox);
+                FXUtils.addClassesTo(comboBox.getEditor(), CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
+                reload();
+            } finally {
+                setIgnoreListener(false);
+            }
+        }
     }
 
     @Override
@@ -41,12 +51,8 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
         comboBox = new ComboBox<>();
         comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> change());
         comboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        comboBox.setVisibleRowCount(20);
 
-        final TextField editor = comboBox.getEditor();
-
-        AutoCompleteComboBoxListener.install(comboBox);
-
-        FXUtils.addClassesTo(editor, CSSClasses.TRANSPARENT_TEXT_FIELD, CSSClasses.TEXT_FIELD_IN_COMBO_BOX);
         FXUtils.addClassTo(comboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(comboBox, this);
     }
@@ -68,10 +74,10 @@ public class StringFromListPropertyEditorControl extends PropertyEditorControl<S
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         final ComboBox<String> comboBox = getComboBox();
         final SingleSelectionModel<String> selectionModel = comboBox.getSelectionModel();
         setPropertyValue(selectionModel.getSelectedItem());
-        super.change();
+        super.changeImpl();
     }
 }

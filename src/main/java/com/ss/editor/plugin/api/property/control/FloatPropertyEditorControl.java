@@ -63,8 +63,8 @@ public class FloatPropertyEditorControl extends PropertyEditorControl<Float> {
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         setPropertyValue(getValueField().getValue());
-        super.change();
+        super.changeImpl();
     }
 }

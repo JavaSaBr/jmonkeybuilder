@@ -113,14 +113,11 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     }
 
     @Override
-    protected void change() {
-
+    protected void changeImpl() {
         final FloatTextField xField = getXField();
         final FloatTextField yField = getYField();
         final FloatTextField zField = getZField();
-
         setPropertyValue(new Vector3f(xField.getValue(), yField.getValue(), zField.getValue()));
-
-        super.change();
+        super.changeImpl();
     }
 }

@@ -52,8 +52,8 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         setPropertyValue(getCheckBox().isSelected());
-        super.change();
+        super.changeImpl();
     }
 }
