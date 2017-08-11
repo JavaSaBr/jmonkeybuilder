@@ -1,6 +1,7 @@
 package com.ss.editor.ui.dialog;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
@@ -1376,9 +1377,13 @@ public class SettingsDialog extends EditorDialog {
         });
 
         if (needUpdateClasspath > 0) {
+
             final CustomClasspathManager customClasspathManager = CustomClasspathManager.getInstance();
             customClasspathManager.updateLibraries();
             customClasspathManager.updateClasses();
+
+            final AssetManager assetManager = EDITOR.getAssetManager();
+            assetManager.clearCache();
         }
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
