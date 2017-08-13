@@ -439,6 +439,16 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         return presentableNode;
     }
 
+    @Override
+    protected void redo() {
+        getFileEditor().redo();
+    }
+
+    @Override
+    protected void undo() {
+        getFileEditor().undo();
+    }
+
     /**
      * Create collision plane.
      */

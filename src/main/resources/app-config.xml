@@ -5,6 +5,7 @@
     <set name="Dev.debug" value="false"/>
     <set name="Dev.cameraDebug" value="false"/>
     <set name="Dev.transformsDebug" value="false"/>
+    <set name="Dev.jfxMouseInput" value="false"/>
     <set name="Dev.jfxKeyInput" value="false"/>
     <set name="Dev.debugJFX" value="false"/>
 </list>

@@ -42,7 +42,6 @@ import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
-import com.ss.rlib.util.FileUtils;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
@@ -448,7 +447,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     private void applyTexture(@NotNull final MaterialFileEditor editor, @NotNull final DragEvent dragEvent,
                               @NotNull final Path path) {
 
-        final String textureName = FileUtils.getNameWithoutExtension(path);
+        final String textureName = path.getFileName().toString();
         final int textureType = MaterialUtils.getPossibleTextureType(textureName);
 
         if (textureType == 0) {
@@ -487,7 +486,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     @FXThread
-    public boolean isInside(final double sceneX, final double sceneY) {
+    public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
         final Pane editorAreaPane = getEditorAreaPane();
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
         return editorAreaPane.contains(point2D);

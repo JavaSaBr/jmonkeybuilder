@@ -87,6 +87,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -920,13 +922,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @FXThread
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
 
-        final Camera camera = EDITOR.getCamera();
+        final MA editor3DState = getEditor3DState();
+        final Camera camera = editor3DState.getCamera();
 
         final Vector3f position = spatial.getWorldTranslation();
         final Vector3f coordinates = camera.getScreenCoordinates(position, new Vector3f());
 
         boolean invisible = coordinates.getZ() < 0;
-        invisible = invisible || !isInside(coordinates.getX(), camera.getHeight() - coordinates.getY());
+        invisible = invisible || !isInside(coordinates.getX(), camera.getHeight() - coordinates.getY(), Event.class);
 
         return !invisible;
     }
@@ -957,15 +960,20 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     @FXThread
-    public boolean isInside(final double sceneX, final double sceneY) {
+    public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
 
         final Pane editorAreaPane = getEditorAreaPane();
         final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
         final boolean result = editorAreaPane.contains(point2D);
 
-        if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
-            LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
-                    ", localY = " + point2D.getY() + " is inside " + result);
+        if (LOGGER.isEnabledDebug()) {
+            if (Config.DEV_DEBUG_JFX_KEY_INPUT && eventType.isAssignableFrom(KeyEvent.class)) {
+                LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
+                        ", localY = " + point2D.getY() + " is inside " + result);
+            } else if (Config.DEV_DEBUG_JFX_MOUSE_INPUT && eventType.isAssignableFrom(MouseEvent.class)) {
+                LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
+                        ", localY = " + point2D.getY() + " is inside " + result);
+            }
         }
 
         return result;

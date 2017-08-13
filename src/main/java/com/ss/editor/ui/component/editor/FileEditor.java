@@ -6,6 +6,7 @@ import com.ss.editor.state.editor.Editor3DState;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.beans.property.BooleanProperty;
+import javafx.event.Event;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import org.jetbrains.annotations.NotNull;
@@ -159,12 +160,13 @@ public interface FileEditor {
     /**
      * Check the coords that it's inside in the editing area of this editor.
      *
-     * @param sceneX the scene x
-     * @param sceneY the scene y
+     * @param sceneX    the scene x
+     * @param sceneY    the scene y
+     * @param eventType the event type.
      * @return true if the point is inside in the editing area.
      */
     @FXThread
-    default boolean isInside(double sceneX, double sceneY) {
+    default boolean isInside(double sceneX, double sceneY, @NotNull Class<? extends Event> eventType) {
         return false;
     }
 }

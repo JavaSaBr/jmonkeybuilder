@@ -68,15 +68,25 @@ public class MaterialUtils {
      */
     public static int getPossibleTextureType(@NotNull final String textureName) {
 
-        if (textureName.contains("NORMAL") || textureName.contains("normal")) {
+        if (textureName.contains("NORMAL") || textureName.contains("Normal") || textureName.contains("normal")) {
             return TEXTURE_NORMAL;
         } else if (textureName.contains("_NRM") || textureName.contains("_nrm")) {
+            return TEXTURE_NORMAL;
+        } else if (textureName.contains("_NM") || textureName.contains("_nm")) {
+            return TEXTURE_NORMAL;
+        } else if (textureName.contains("_N.") || textureName.contains("_n.")) {
             return TEXTURE_NORMAL;
         } else if (textureName.contains("ALBEDO") || textureName.contains("albedo")) {
             return TEXTURE_DIFFUSE;
         } else if (textureName.contains("_CLR") || textureName.contains("_clr")) {
             return TEXTURE_DIFFUSE;
         } else if (textureName.contains("DIFFUSE") || textureName.contains("diffuse")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("_DIFF") || textureName.contains("_diff")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("_D.") || textureName.contains("_d.")) {
+            return TEXTURE_DIFFUSE;
+        }  else if (textureName.contains("_C.") || textureName.contains("_c.")) {
             return TEXTURE_DIFFUSE;
         } else if (textureName.contains("EMISSION") || textureName.contains("emission")) {
             return TEXTURE_EMISSIVE;
@@ -87,6 +97,8 @@ public class MaterialUtils {
         } else if (textureName.contains("SPECULAR") || textureName.contains("specular")) {
             return TEXTURE_SPECULAR;
         } else if (textureName.contains("_SPC") || textureName.contains("_spc")) {
+            return TEXTURE_SPECULAR;
+        } else if (textureName.contains("_S.") || textureName.contains("_s.")) {
             return TEXTURE_SPECULAR;
         }
 
