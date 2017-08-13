@@ -20,6 +20,7 @@ import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
+import javafx.event.EventTarget;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -486,16 +487,20 @@ public class UIUtils {
      */
     @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
-        if (event == null) {
+        if (event == null) return;
+
+        final String text = event.getText();
+        if (text.isEmpty()) return;
+
+        final KeyCode code = event.getCode();
+        final EventTarget target = event.getTarget();
+
+        if (code == KeyCode.TAB && !(target instanceof TextInputControl)) {
             return;
-        } else if (event.isControlDown()) {
+        }
 
-            final KeyCode code = event.getCode();
-
-            if (!(code == KeyCode.Z || code == KeyCode.Y)) {
-                return;
-            }
-
+        if (event.isControlDown()) {
+            return;
         } else if (event.isShiftDown()) {
             return;
         }

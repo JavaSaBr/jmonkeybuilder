@@ -4,6 +4,7 @@ import static com.ss.editor.ui.util.UIUtils.fillComponents;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.jme3x.jfx.injfx.input.JFXMouseInput;
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.PluginManager;
 import com.ss.editor.ui.component.ScreenComponent;
 import com.ss.editor.ui.css.CSSIds;
@@ -31,6 +32,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author JavaSaBr
  */
 public class EditorFXScene extends Scene {
+
+    @NotNull
+    private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     /**
      * The list of components.
@@ -73,6 +77,12 @@ public class EditorFXScene extends Scene {
      */
     @Nullable
     private ProgressIndicator progressIndicator;
+
+    /**
+     * Focused node.
+     */
+    @Nullable
+    private Node focused;
 
     /**
      * Instantiates a new Editor fx scene.
@@ -221,6 +231,7 @@ public class EditorFXScene extends Scene {
      */
     @FXThread
     private void showLoading() {
+        focused = getFocusOwner();
 
         final VBox loadingLayer = getLoadingLayer();
         loadingLayer.setVisible(true);
@@ -249,6 +260,13 @@ public class EditorFXScene extends Scene {
 
         final StackPane container = getContainer();
         container.setDisable(false);
+
+        if (focused != null) {
+            EXECUTOR_MANAGER.addFXTask(() -> {
+                focused.requestFocus();
+                focused = null;
+            });
+        }
     }
 
     /**

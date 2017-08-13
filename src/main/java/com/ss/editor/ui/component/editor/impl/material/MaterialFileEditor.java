@@ -52,6 +52,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -246,12 +248,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final Path file = event.getFile();
 
         EXECUTOR_MANAGER.addJMETask(() -> {
-
             final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
-
-            if (newMaterial == null) {
-                EXECUTOR_MANAGER.addFXTask(() -> reload(currentMaterial));
-            } else {
+            if (newMaterial != null) {
                 EXECUTOR_MANAGER.addFXTask(() -> reload(newMaterial));
             }
         });
@@ -487,9 +485,13 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     @Override
     @FXThread
     public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
-        final Pane editorAreaPane = getEditorAreaPane();
-        final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
-        return editorAreaPane.contains(point2D);
+
+        final Pane page = eventType.isAssignableFrom(MouseEvent.class) ||
+                eventType.isAssignableFrom(ScrollEvent.class) ?
+                getEditorAreaPane() : getPage();
+
+        final Point2D point2D = page.sceneToLocal(sceneX, sceneY);
+        return page.contains(point2D);
     }
 
     /**

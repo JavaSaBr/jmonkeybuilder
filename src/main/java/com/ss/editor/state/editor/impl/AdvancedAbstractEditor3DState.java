@@ -744,7 +744,6 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
      */
     protected void setShiftDown(final boolean shiftDown) {
         this.shiftDown = shiftDown;
-        new Exception("Shift down" + shiftDown).printStackTrace();
     }
 
     /**

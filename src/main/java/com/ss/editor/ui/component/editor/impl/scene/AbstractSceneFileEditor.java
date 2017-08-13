@@ -85,10 +85,7 @@ import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -962,9 +959,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @FXThread
     public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
 
-        final Pane editorAreaPane = getEditorAreaPane();
-        final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
-        final boolean result = editorAreaPane.contains(point2D);
+        final Pane page = eventType.isAssignableFrom(MouseEvent.class) ||
+                eventType.isAssignableFrom(ScrollEvent.class) ?
+                getEditorAreaPane() : getPage();
+
+        final Point2D point2D = page.sceneToLocal(sceneX, sceneY);
+        final boolean result = page.contains(point2D);
 
         if (LOGGER.isEnabledDebug()) {
             if (Config.DEV_DEBUG_JFX_KEY_INPUT && eventType.isAssignableFrom(KeyEvent.class)) {

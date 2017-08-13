@@ -4,6 +4,7 @@ import static com.jme3.environment.LightProbeFactory.makeProbe;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
+import com.jme3.app.DebugKeysAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -327,6 +328,7 @@ public class Editor extends JmeToJFXApplication {
         }
 
         createLightProbes();
+        stateManager.detach(stateManager.getState(DebugKeysAppState.class));
 
         new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
     }
