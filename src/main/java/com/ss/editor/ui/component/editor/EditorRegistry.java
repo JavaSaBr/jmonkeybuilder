@@ -1,5 +1,6 @@
 package com.ss.editor.ui.component.editor;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.newArray;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.ui.component.editor.impl.*;
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /**
@@ -121,7 +121,7 @@ public class EditorRegistry {
     private void register(@NotNull final EditorDescription description, @NotNull final String extension,
                           @NotNull final ObjectDictionary<String, Array<EditorDescription>> editorDescriptions) {
         final Array<EditorDescription> descriptions = editorDescriptions.get(extension, () -> newArray(EditorDescription.class));
-        Objects.requireNonNull(descriptions);
+        notNull(descriptions);
         descriptions.add(description);
     }
 

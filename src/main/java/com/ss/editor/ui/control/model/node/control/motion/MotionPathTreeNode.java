@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.node.control.motion;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.cinematic.MotionPath;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
@@ -53,7 +53,7 @@ public class MotionPathTreeNode extends TreeNode<MotionPath> {
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
 
         for (int i = 0; i < wayPoints; i++) {
-            final PositionTreeNode modelNode = requireNonNull(FACTORY_REGISTRY.createFor(element.getWayPoint(i)));
+            final PositionTreeNode modelNode = notNull(FACTORY_REGISTRY.createFor(element.getWayPoint(i)));
             modelNode.setName(Messages.MODEL_FILE_EDITOR_NODE_WAY_POINT + " #" + (i + 1));
             result.add(modelNode);
         }

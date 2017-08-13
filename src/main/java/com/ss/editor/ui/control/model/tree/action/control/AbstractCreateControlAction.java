@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.control;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.annotation.FXThread;
@@ -39,7 +39,7 @@ public abstract class AbstractCreateControlAction extends AbstractNodeAction<Mod
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
         final Control control = createControl(parent);
 
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new AddControlOperation(control, parent));
     }
 

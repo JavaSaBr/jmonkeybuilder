@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.light;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.ss.editor.annotation.FXThread;
@@ -42,7 +41,7 @@ public abstract class AbstractCreateLightAction extends AbstractNodeAction<Model
         final TreeNode<?> treeNode = getNode();
         final Node element = (Node) treeNode.getElement();
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddLightOperation(light, element));
     }
 

@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.creator;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +57,7 @@ public class FileCreatorDescription {
      */
     @NotNull
     public Callable<FileCreator> getConstructor() {
-        return requireNonNull(constructor);
+        return notNull(constructor);
     }
 
     /**
@@ -67,7 +67,7 @@ public class FileCreatorDescription {
      */
     @NotNull
     public String getFileDescription() {
-        return requireNonNull(fileDescription);
+        return notNull(fileDescription);
     }
 
     /**

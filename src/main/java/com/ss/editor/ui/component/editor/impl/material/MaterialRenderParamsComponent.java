@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.impl.material;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import static javafx.geometry.Pos.CENTER_LEFT;
 import com.jme3.material.Material;
@@ -363,7 +363,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private CheckBox getColorWriteCheckBox() {
-        return requireNonNull(colorWriteCheckBox);
+        return notNull(colorWriteCheckBox);
     }
 
     /**
@@ -371,7 +371,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private CheckBox getDepthTestCheckBox() {
-        return requireNonNull(depthTestCheckBox);
+        return notNull(depthTestCheckBox);
     }
 
     /**
@@ -379,7 +379,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private CheckBox getDepthWriteCheckBox() {
-        return requireNonNull(depthWriteCheckBox);
+        return notNull(depthWriteCheckBox);
     }
 
     /**
@@ -387,7 +387,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private CheckBox getWireframeCheckBox() {
-        return requireNonNull(wireframeCheckBox);
+        return notNull(wireframeCheckBox);
     }
 
     /**
@@ -395,7 +395,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private ComboBox<BlendMode> getBlendModeComboBox() {
-        return requireNonNull(blendModeComboBox);
+        return notNull(blendModeComboBox);
     }
 
     /**
@@ -403,7 +403,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private ComboBox<FaceCullMode> getFaceCullModeComboBox() {
-        return requireNonNull(faceCullModeComboBox);
+        return notNull(faceCullModeComboBox);
     }
 
     /**
@@ -411,7 +411,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private FloatTextField getPolyOffsetFactorField() {
-        return requireNonNull(polyOffsetFactorField);
+        return notNull(polyOffsetFactorField);
     }
 
     /**
@@ -419,7 +419,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private FloatTextField getPolyOffsetUnitsField() {
-        return requireNonNull(polyOffsetUnitsField);
+        return notNull(polyOffsetUnitsField);
     }
 
     /**
@@ -469,7 +469,7 @@ public class MaterialRenderParamsComponent extends VBox {
      */
     @NotNull
     private Material getCurrentMaterial() {
-        return requireNonNull(currentMaterial);
+        return notNull(currentMaterial);
     }
 
     /**

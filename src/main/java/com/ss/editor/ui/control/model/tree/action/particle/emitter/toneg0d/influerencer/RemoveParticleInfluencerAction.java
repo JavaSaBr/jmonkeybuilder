@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.node.Toneg0dParticleInfluencers;
@@ -54,8 +54,8 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
     protected void process() {
 
         final Toneg0DParticleInfluencerTreeNode node = (Toneg0DParticleInfluencerTreeNode) getNode();
-        final Toneg0DParticleInfluencersTreeNode parent = (Toneg0DParticleInfluencersTreeNode) requireNonNull(node.getParent());
-        final Toneg0dParticleInfluencers toneg0dParticleInfluencers = requireNonNull(parent.getElement());
+        final Toneg0DParticleInfluencersTreeNode parent = (Toneg0DParticleInfluencersTreeNode) notNull(node.getParent());
+        final Toneg0dParticleInfluencers toneg0dParticleInfluencers = notNull(parent.getElement());
 
         final ParticleInfluencer influencer = node.getElement();
         final ParticleEmitterNode emitterNode = toneg0dParticleInfluencers.getEmitterNode();
@@ -63,7 +63,7 @@ public class RemoveParticleInfluencerAction extends AbstractNodeAction<ModelChan
         final int childIndex = influencers.indexOf(influencer);
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RemoveParticleInfluencerOperation(influencer, emitterNode, childIndex));
     }
 }

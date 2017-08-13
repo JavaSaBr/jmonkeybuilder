@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.control;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.Control;
 import com.ss.editor.Messages;
@@ -54,7 +53,7 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
         super.process();
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
 
         final TreeNode<?> treeNode = getNode();
         final Spatial parent = (Spatial) treeNode.getElement();

@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.node.spatial;
 
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
@@ -211,7 +211,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         super.changeName(nodeTree, newName);
 
         final Spatial spatial = getElement();
-        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new RenameNodeOperation(spatial.getName(), newName, spatial));
     }
 

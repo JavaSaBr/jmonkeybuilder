@@ -1,5 +1,6 @@
 package com.ss.editor.state.editor.impl.audio;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioData;
 import com.jme3.audio.AudioKey;
 import com.jme3.audio.AudioNode;
@@ -8,11 +9,8 @@ import com.jme3.scene.Node;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.state.editor.impl.AbstractEditor3DState;
 import com.ss.editor.ui.component.editor.impl.AudioViewerEditor;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * The implementation of an editor app state for the {@link AudioViewerEditor}.
@@ -212,7 +210,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      */
     @NotNull
     private AudioData getAudioData() {
-        return Objects.requireNonNull(audioData);
+        return notNull(audioData);
     }
 
     /**
@@ -227,7 +225,7 @@ public class AudioViewer3DState extends AbstractEditor3DState<AudioViewerEditor>
      */
     @NotNull
     private AudioKey getAudioKey() {
-        return Objects.requireNonNull(audioKey);
+        return notNull(audioKey);
     }
 
     /**

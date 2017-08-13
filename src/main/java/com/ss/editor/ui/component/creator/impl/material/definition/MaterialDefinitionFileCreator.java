@@ -3,7 +3,6 @@ package com.ss.editor.ui.component.creator.impl.material.definition;
 import static com.ss.editor.FileExtensions.JME_MATERIAL_DEFINITION;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
-import static java.util.Objects.requireNonNull;
 import com.jme3.material.TechniqueDef;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.Renderer;
@@ -135,7 +134,7 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         final Path vertexFile = parent.resolve(filename + "." + FileExtensions.GLSL_VERTEX);
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path assetFolder = requireNonNull(editorConfig.getCurrentAsset());
+        final Path assetFolder = notNull(editorConfig.getCurrentAsset());
 
         final Path pathToFragment = assetFolder.relativize(fragmentFile);
         final Path pathToVertex = assetFolder.relativize(vertexFile);

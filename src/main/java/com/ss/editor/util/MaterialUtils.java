@@ -1,8 +1,8 @@
 package com.ss.editor.util;
 
 import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
-import static java.util.Objects.requireNonNull;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -165,7 +165,7 @@ public class MaterialUtils {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Can't get an asset file.");
+        final Path assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
 
         return containsShader(materialDef, assetPath);
@@ -181,7 +181,7 @@ public class MaterialUtils {
     @Nullable
     private static String containsTexture(@NotNull final Material material, @NotNull final Path file) {
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Can't get an asset file.");
+        final Path assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
 
         return containsTexture(material, assetPath) ? assetPath : null;
@@ -390,7 +390,7 @@ public class MaterialUtils {
         if (!image.isChanged()) return;
 
         final AssetKey key = texture.getKey();
-        final Path file = requireNonNull(getRealFile(key.getName()));
+        final Path file = notNull(getRealFile(key.getName()));
         final BufferedImage bufferedImage = ImageToAwt.convert(image, false, true, 0);
 
         try (final OutputStream out = Files.newOutputStream(file)) {

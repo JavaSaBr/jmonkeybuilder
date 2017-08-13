@@ -1,7 +1,7 @@
 package com.ss.editor.ui.control.model.tree.action.control.physics.vehicle;
 
 import static com.ss.editor.extension.property.EditablePropertyType.*;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
@@ -9,13 +9,13 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddVehicleWheelOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
@@ -108,7 +108,7 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
         final boolean isFront = vars.getBoolean(PROPERTY_IS_FRONT);
 
         final NodeTree<?> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddVehicleWheelOperation(control, location, direction, axle, restLength, radius, isFront));
     }
 }

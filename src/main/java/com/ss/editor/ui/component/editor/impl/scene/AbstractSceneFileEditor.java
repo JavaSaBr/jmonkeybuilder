@@ -778,27 +778,22 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
     }
 
-    @Override
     @FXThread
-    public void notifyFXReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
+    @Override
+    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
+                                 @Nullable final Object newChild, final boolean needExpand,
+                                 final boolean needDeepExpand) {
 
         final MA editor3DState = getEditor3DState();
         final Spatial currentModel = getCurrentModel();
 
-        if (currentModel == oldChild) {
+        if (currentModel == oldChild && newChild != null) {
             setCurrentModel(unsafeCast(newChild));
             editor3DState.openModel(unsafeCast(newChild));
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyReplace(parent, oldChild, newChild);
-    }
-
-    @Override
-    @FXThread
-    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyReplace(parent, oldChild, newChild);
+        modelNodeTree.notifyReplace(parent, oldChild, newChild, needExpand, needDeepExpand);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.influerencer;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.node.Toneg0dParticleInfluencers;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -13,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.ParticleEmitterNode;
 import tonegod.emitter.influencers.ParticleInfluencer;
-
-import java.util.Objects;
 
 /**
  * The action to create a {@link ParticleInfluencer} for a {@link ParticleEmitterNode}.
@@ -45,7 +44,7 @@ public abstract class AbstractCreateParticleInfluencerAction extends AbstractNod
         super.process();
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
         final TreeNode<?> treeNode = getNode();
         final Toneg0dParticleInfluencers element = (Toneg0dParticleInfluencers) treeNode.getElement();

@@ -141,7 +141,7 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
         final float[] angles = new float[3];
 
         final Quaternion element = getPropertyValue();
-        Objects.requireNonNull(element, "The property value can't be null.");
+        notNull(element, "The property value can't be null.");
 
         element.toAngles(angles);
 
@@ -165,7 +165,7 @@ public abstract class AbstractQuaternionPropertyControl<C extends ChangeConsumer
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final Quaternion oldValue = getPropertyValue();
-        Objects.requireNonNull(oldValue, "The old value can't be null.");
+        notNull(oldValue, "The old value can't be null.");
 
         final FloatTextField xField = getXField();
         final float x = degreeToRadians(xField.getValue());
