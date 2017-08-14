@@ -202,10 +202,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root = createRoot();
-        root.setOnKeyPressed(this::processKeyPressed);
-        root.setOnKeyReleased(this::processKeyReleased);
-        root.setOnMouseReleased(this::processMouseReleased);
-        root.setOnMousePressed(this::processMousePressed);
+
+        if (needListenEventsFromPage()) {
+            root.setOnKeyPressed(this::processKeyPressed);
+            root.setOnKeyReleased(this::processKeyReleased);
+            root.setOnMouseReleased(this::processMouseReleased);
+            root.setOnMousePressed(this::processMousePressed);
+        }
 
         createContent(root);
 
@@ -218,6 +221,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root.prefWidthProperty().bind(container.widthProperty());
+    }
+
+    /**
+     * @return true if need to listen to events from root page of this editor.
+     */
+    protected boolean needListenEventsFromPage() {
+        return true;
     }
 
     /**

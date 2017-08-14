@@ -319,6 +319,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         return new StackPane();
     }
 
+    @Override
+    protected boolean needListenEventsFromPage() {
+        return false;
+    }
+
     /**
      * Gets editor app state.
      *
@@ -906,7 +911,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         updateSelection(spatial);
 
         if (spatial != null && !isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
-            editor3DState.moveCameraTo(spatial.getWorldTranslation());
+            editor3DState.cameraLookAt(spatial.getWorldTranslation());
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
@@ -925,7 +930,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final Vector3f position = spatial.getWorldTranslation();
         final Vector3f coordinates = camera.getScreenCoordinates(position, new Vector3f());
 
-        boolean invisible = coordinates.getZ() < 0;
+        boolean invisible = coordinates.getZ() < 0F || coordinates.getZ() > 1F;
         invisible = invisible || !isInside(coordinates.getX(), camera.getHeight() - coordinates.getY(), Event.class);
 
         return !invisible;

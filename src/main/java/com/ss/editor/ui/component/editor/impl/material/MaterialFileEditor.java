@@ -664,6 +664,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     @Override
+    protected boolean needListenEventsFromPage() {
+        return false;
+    }
+
+    @Override
     @FXThread
     protected void createToolbar(@NotNull final HBox container) {
 

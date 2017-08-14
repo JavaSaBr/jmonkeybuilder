@@ -481,31 +481,42 @@ public class UIUtils {
     }
 
     /**
+     * @param event the event.
+     * @return true if the event is not hotkey.
+     */
+    @FXThread
+    public static boolean isNotHotKey(@Nullable final KeyEvent event) {
+        if (event == null) return false;
+
+        final String text = event.getText();
+        if (text.isEmpty()) return false;
+
+        final KeyCode code = event.getCode();
+        final EventTarget target = event.getTarget();
+
+        if (code == KeyCode.TAB && !(target instanceof TextInputControl)) {
+            return false;
+        }
+
+        if (event.isControlDown()) {
+            return false;
+        } else if (event.isShiftDown()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Consume an event if the event is not hotkey.
      *
      * @param event the event.
      */
     @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
-        if (event == null) return;
-
-        final String text = event.getText();
-        if (text.isEmpty()) return;
-
-        final KeyCode code = event.getCode();
-        final EventTarget target = event.getTarget();
-
-        if (code == KeyCode.TAB && !(target instanceof TextInputControl)) {
-            return;
+        if (isNotHotKey(event)) {
+            event.consume();
         }
-
-        if (event.isControlDown()) {
-            return;
-        } else if (event.isShiftDown()) {
-            return;
-        }
-
-        event.consume();
     }
 
     /**

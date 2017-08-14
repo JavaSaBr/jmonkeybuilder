@@ -3,6 +3,7 @@ package com.ss.editor.ui.event;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import javafx.event.Event;
@@ -170,10 +171,12 @@ public class EventRedirector {
         if (target == destination) {
             return;
         } else if (target instanceof TextInputControl) {
-            if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
-                LOGGER.debug("Key event was skipped because it was from " + target);
+            if (event instanceof KeyEvent && UIUtils.isNotHotKey((KeyEvent) event)) {
+                if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
+                    LOGGER.debug("Key event was skipped because it was from " + target);
+                }
+                return;
             }
-            return;
         }
 
         final EventType<? extends InputEvent> eventType = event.getEventType();

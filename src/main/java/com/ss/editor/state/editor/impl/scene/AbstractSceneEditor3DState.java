@@ -1786,6 +1786,20 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     /**
+     * Look at the position from the camera.
+     *
+     * @param location the location.
+     */
+    @FromAnyThread
+    public void cameraLookAt(@NotNull final Vector3f location) {
+        EXECUTOR_MANAGER.addJMETask(() -> {
+            final EditorCamera editorCamera = notNull(getEditorCamera());
+            editorCamera.setTargetDistance(location.distance(getCamera().getLocation()));
+            getNodeForCamera().setLocalTranslation(location);
+        });
+    }
+
+    /**
      * Remove a light.
      *
      * @param light the light.
