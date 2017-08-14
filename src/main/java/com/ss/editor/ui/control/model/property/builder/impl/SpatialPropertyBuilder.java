@@ -234,6 +234,14 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
                 control.setEditObject(spatial);
 
                 FXUtils.addToPane(control, container);
+
+            } else {
+
+                final DefaultModelSinglePropertyControl<Spatial, Object> control = new DefaultModelSinglePropertyControl<>(data, key, changeConsumer);
+                control.setSyncHandler(sp -> sp.getUserData(key));
+                control.setEditObject(spatial);
+
+                FXUtils.addToPane(control, container);
             }
         }
     }
