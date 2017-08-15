@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 group = 'com.spaceshift'
-version = '0.9.13'
+version = '1.0.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
