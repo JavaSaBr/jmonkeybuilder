@@ -2055,10 +2055,13 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @FromAnyThread
-    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                       final float vRotation, final float targetDistance) {
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    @JMEThread
+    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                               final float vRotation, final float targetDistance,
+                                               final float cameraSpeed) {
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
+                        vRotation, targetDistance, cameraSpeed));
     }
 
     /**

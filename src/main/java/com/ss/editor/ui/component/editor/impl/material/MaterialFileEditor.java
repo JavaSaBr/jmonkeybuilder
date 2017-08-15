@@ -560,8 +560,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     @FXThread
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                    final float vRotation, final float targetDistance) {
+    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                            final float vRotation, final float targetDistance,
+                                            final float cameraSpeed) {
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
 
         final MaterialFileEditorState editorState = getEditorState();
         if (editorState == null) return;
@@ -570,6 +572,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         editorState.setCameraVRotation(vRotation);
         editorState.setCameraTDistance(targetDistance);
         editorState.setCameraLocation(cameraLocation);
+        editorState.setCameraSpeed(cameraSpeed);
     }
 
     /**
@@ -606,8 +609,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final float hRotation = editorState.getCameraHRotation();
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
+        final float cameraSpeed = editorState.getCameraSpeed();
 
-        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCameraSettings(cameraLocation,
+                hRotation, vRotation, tDistance, cameraSpeed));
     }
 
     /**

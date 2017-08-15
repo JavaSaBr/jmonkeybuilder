@@ -570,14 +570,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final float hRotation = editorState.getCameraHRotation();
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
+        final float cameraSpeed = editorState.getCameraSpeed();
 
-        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCameraSettings(cameraLocation, hRotation,
+                vRotation, tDistance, cameraSpeed));
     }
 
     @Override
     @FXThread
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                    final float vRotation, final float targetDistance) {
+    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                            final float vRotation, final float targetDistance,
+                                            final float cameraSpeed) {
 
         final ES editorState = getEditorState();
         if (editorState == null) return;
@@ -586,6 +589,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorState.setCameraVRotation(vRotation);
         editorState.setCameraTDistance(targetDistance);
         editorState.setCameraLocation(cameraLocation);
+        editorState.setCameraSpeed(cameraSpeed);
     }
 
     @Override

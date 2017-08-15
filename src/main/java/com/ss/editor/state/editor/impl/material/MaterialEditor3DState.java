@@ -442,9 +442,12 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     }
 
     @Override
-    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                       final float vRotation, final float targetDistance) {
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                               final float vRotation, final float targetDistance,
+                                               final float cameraSpeed) {
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
+                vRotation, targetDistance, cameraSpeed));
     }
 
     /**

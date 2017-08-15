@@ -12,7 +12,7 @@ public class SceneFileEditorState extends AbstractSceneFileEditorState {
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 2;
+    public static final long serialVersionUID = 3;
 
     /**
      * Is showed light.

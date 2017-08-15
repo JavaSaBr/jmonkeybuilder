@@ -526,16 +526,18 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Notify about changing editor camera.
+     * Notify about changed editor camera settings.
      *
-     * @param cameraLocation the camera location
-     * @param hRotation      the h rotation
-     * @param vRotation      the v rotation
-     * @param targetDistance the target distance
+     * @param cameraLocation the camera location.
+     * @param hRotation      the h rotation.
+     * @param vRotation      the v rotation.
+     * @param targetDistance the target distance.
+     * @param cameraSpeed    the camera speed.
      */
     @FXThread
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                    final float vRotation, final float targetDistance) {
+    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                            final float vRotation, final float targetDistance,
+                                            final float cameraSpeed) {
     }
 
     @Override

@@ -16,8 +16,9 @@ public class MaterialFileEditorState extends AbstractEditorState {
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 3;
+    public static final long serialVersionUID = 4;
 
+    @NotNull
     private static transient final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();
 
     /**
