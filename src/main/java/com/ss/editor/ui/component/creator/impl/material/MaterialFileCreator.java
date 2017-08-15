@@ -2,6 +2,9 @@ package com.ss.editor.ui.component.creator.impl.material;
 
 import static com.ss.editor.FileExtensions.JME_MATERIAL;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.ss.editor.Messages;
@@ -138,7 +141,7 @@ public class MaterialFileCreator extends GenericFileCreator {
 
         final String materialContent = MaterialSerializer.serializeToString(material);
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(resultFile))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(materialContent);
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);

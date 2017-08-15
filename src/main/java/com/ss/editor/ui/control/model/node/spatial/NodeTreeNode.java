@@ -85,19 +85,27 @@ public class NodeTreeNode<T extends Node> extends SpatialTreeNode<T> {
         final Menu createPrimitiveMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE,
                 new ImageView(Icons.ADD_12));
         createPrimitiveMenu.getItems()
-                .addAll(new CreateBoxAction(nodeTree, this), new CreateSphereAction(nodeTree, this),
+                .addAll(new CreateBoxAction(nodeTree, this),
+                        new CreateSphereAction(nodeTree, this),
                         new CreateQuadAction(nodeTree, this));
 
         final Menu addLightMenu = new Menu(Messages.MODEL_NODE_TREE_ACTION_LIGHT, new ImageView(Icons.ADD_12));
         addLightMenu.getItems()
-                .addAll(new CreateSpotLightAction(nodeTree, this), new CreatePointLightAction(nodeTree, this),
-                        new CreateAmbientLightAction(nodeTree, this), new CreateDirectionLightAction(nodeTree, this));
+                .addAll(new CreateSpotLightAction(nodeTree, this),
+                        new CreatePointLightAction(nodeTree, this),
+                        new CreateAmbientLightAction(nodeTree, this),
+                        new CreateDirectionLightAction(nodeTree, this));
 
-        menu.getItems().addAll(new CreateNodeAction(nodeTree, this), new LoadModelAction(nodeTree, this),
-                new LinkModelAction(nodeTree, this), new CreateSkyAction(nodeTree, this),
-                new CreateToneg0dParticleEmitterAction(nodeTree, this), new CreateToneg0dSoftParticleEmitterAction(nodeTree, this),
+        menu.getItems().addAll(new CreateNodeAction(nodeTree, this),
+                new LoadModelAction(nodeTree, this),
+                new LinkModelAction(nodeTree, this),
+                new CreateSkyAction(nodeTree, this),
+                new CreateEditableSkyAction(nodeTree, this),
+                new CreateToneg0dParticleEmitterAction(nodeTree, this),
+                new CreateToneg0dSoftParticleEmitterAction(nodeTree, this),
                 new CreateParticleEmitterAction(nodeTree, this),
-                new CreateAudioNodeAction(nodeTree, this), new CreateTerrainAction(nodeTree, this),
+                new CreateAudioNodeAction(nodeTree, this),
+                new CreateTerrainAction(nodeTree, this),
                 createPrimitiveMenu, addLightMenu);
 
         return menu;

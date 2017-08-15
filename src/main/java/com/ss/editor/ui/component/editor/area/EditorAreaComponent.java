@@ -427,8 +427,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
             return;
         }
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
+        EditorUtil.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> processOpenFileImpl(event, file));
     }
@@ -465,7 +464,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
         } catch (final Throwable e) {
             EditorUtil.handleException(null, this, new Exception(e));
             EXECUTOR_MANAGER.addFXTask(() -> {
-                scene.decrementLoading();
+                EditorUtil.decrementLoading();
                 resultEditor.notifyClosed();
             });
             return;
@@ -508,8 +507,7 @@ public class EditorAreaComponent extends TabPane implements ScreenComponent {
 
         DictionaryUtils.runInWriteLock(getOpenedEditors(), editFile, tab, ObjectDictionary::put);
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.decrementLoading();
+        EditorUtil.decrementLoading();
 
         if (isIgnoreOpenedFiles()) {
             return;

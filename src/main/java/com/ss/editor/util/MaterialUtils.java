@@ -3,6 +3,9 @@ package com.ss.editor.util;
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.array.ArrayFactory.toArray;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -387,7 +390,7 @@ public class MaterialUtils {
         final Collection<MatParam> params = material.getParams();
         params.stream().filter(matParam -> matParam.getVarType() == VarType.Texture2D)
                 .map(MatParam::getValue)
-                .map(value -> (Texture) value)
+                .map(Texture.class::cast)
                 .forEach(MaterialUtils::saveIfNeedTexture);
     }
 
@@ -405,7 +408,7 @@ public class MaterialUtils {
         final Path file = notNull(getRealFile(key.getName()));
         final BufferedImage bufferedImage = ImageToAwt.convert(image, false, true, 0);
 
-        try (final OutputStream out = Files.newOutputStream(file)) {
+        try (final OutputStream out = Files.newOutputStream(file, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(bufferedImage, "png", out);
         } catch (final IOException e) {
             e.printStackTrace();

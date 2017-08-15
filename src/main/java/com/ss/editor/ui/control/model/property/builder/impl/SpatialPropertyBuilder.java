@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.property.builder.impl;
 
 import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
-import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.SKY_NODE_KEY;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector2f;
@@ -249,7 +248,6 @@ public class SpatialPropertyBuilder extends AbstractPropertyBuilder<ModelChangeC
     private boolean isNeedSkip(@NotNull final String key) {
         if (SceneLayer.KEY.equals(key)) return true;
         if (LOADED_MODEL_KEY.equals(key)) return true;
-        if (SKY_NODE_KEY.equals(key)) return true;
         return false;
     }
 

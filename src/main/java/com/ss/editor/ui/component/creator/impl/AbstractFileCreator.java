@@ -18,7 +18,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RequestSelectFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -116,7 +115,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
         final EditorConfig editorConfig = EditorConfig.getInstance();
         final Path currentAsset = notNull(editorConfig.getCurrentAsset());
 
-        show(JFX_APPLICATION.getLastWindow());
+        show();
 
         final ResourceTree resourceTree = getResourceTree();
         resourceTree.setOnLoadHandler(finished -> expand(file, resourceTree, finished));
@@ -220,8 +219,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
     protected void processOk() {
         super.processOk();
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
+        EditorUtil.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
 
@@ -230,7 +228,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
                 tempFile = Files.createTempFile("SSEditor", "fileCreator");
             } catch (final IOException e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
                 return;
             }
 
@@ -252,7 +250,7 @@ public abstract class AbstractFileCreator extends AbstractSimpleEditorDialog imp
                 EditorUtil.handleException(LOGGER, this, e);
             }
 
-            EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+            EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
         });
     }
 

@@ -1,9 +1,7 @@
 package com.ss.editor.ui.component.bar.action;
 
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.about.AboutDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.scene.control.MenuItem;
 
 /**
@@ -12,8 +10,6 @@ import javafx.scene.control.MenuItem;
  * @author JavaSaBr
  */
 public class AboutAction extends MenuItem {
-
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * Instantiates a new AboutAction.
@@ -27,10 +23,7 @@ public class AboutAction extends MenuItem {
      * Open the dialog.
      */
     private void process() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
         final AboutDialog dialog = new AboutDialog();
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }

@@ -8,7 +8,6 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.terrain.CreateTerrainDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,10 +45,7 @@ public class CreateTerrainAction extends AbstractNodeAction<ModelChangeConsumer>
     @Override
     protected void process() {
         super.process();
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
         final CreateTerrainDialog dialog = new CreateTerrainDialog(getNode(), getNodeTree());
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }

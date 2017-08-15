@@ -8,7 +8,6 @@ import com.ss.editor.ui.control.model.property.control.MaterialModelPropertyCont
 import com.ss.editor.ui.control.model.property.control.ModelPropertyControl;
 import com.ss.editor.ui.dialog.asset.ParticlesAssetEditorDialog;
 import com.ss.editor.ui.event.impl.RequestedOpenFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Label;
 import org.jetbrains.annotations.NotNull;
@@ -44,12 +43,9 @@ public class MaterialEmitterPropertyControl extends
      * Show dialog for choosing another material.
      */
     protected void processChange() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
         final ParticlesAssetEditorDialog dialog = new ParticlesAssetEditorDialog(this::addMaterial);
         dialog.setExtensionFilter(MATERIAL_EXTENSIONS);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**

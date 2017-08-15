@@ -4,6 +4,7 @@ import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.FileUtils.containsExtensions;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.nio.file.StandardOpenOption.*;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
@@ -17,7 +18,6 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.tool.TangentGenerator;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.ui.dialog.converter.ModelConverterDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.StringUtils;
@@ -52,9 +52,8 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
             throw new IllegalArgumentException("incorrect extension of file " + source);
         }
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final ModelConverterDialog dialog = new ModelConverterDialog(source, destination, settings -> convert(source, settings));
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**
@@ -62,16 +61,13 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
      */
     @FXThread
     private void convert(@NotNull final Path source, @NotNull final ModelConverterDialog dialog) {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
-
+        EditorUtil.incrementLoading();
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
                 convertImpl(source, dialog);
             } catch (final Exception e) {
                 EditorUtil.handleException(LOGGER, this, e);
-                EXECUTOR_MANAGER.addFXTask(scene::decrementLoading);
+                EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
             }
         });
     }
@@ -112,7 +108,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
 
         final BinaryExporter exporter = BinaryExporter.getInstance();
 
-        try (final OutputStream out = Files.newOutputStream(destination)) {
+        try (final OutputStream out = Files.newOutputStream(destination, WRITE, TRUNCATE_EXISTING, CREATE)) {
             exporter.save(model, out);
         } catch (final IOException e) {
             LOGGER.warning(this, e);
@@ -140,7 +136,7 @@ public abstract class AbstractModelFileConverter extends AbstractFileConverter {
         final Material currentMaterial = geometry.getMaterial();
 
         if (!Files.exists(resultFile) || canOverwrite) {
-            try (PrintWriter pout = new PrintWriter(Files.newOutputStream(resultFile))) {
+            try (PrintWriter pout = new PrintWriter(Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
                 pout.println(MaterialSerializer.serializeToString(currentMaterial));
             } catch (final IOException e) {
                 EditorUtil.handleException(LOGGER, this, e);

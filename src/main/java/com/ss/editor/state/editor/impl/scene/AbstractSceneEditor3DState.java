@@ -75,13 +75,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     @NotNull
     public static String LOADED_MODEL_KEY = EditorTransformSupport.class.getName() + ".loadedModel";
 
-    /**
-     * The constant SKY_NODE_KEY.
-     */
-    @NotNull
-    public static String SKY_NODE_KEY = EditorTransformSupport.class.getName() + ".isSkyNode";
-
-
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
     private static final String KEY_R = "SSEditor.sceneEditorState.R";

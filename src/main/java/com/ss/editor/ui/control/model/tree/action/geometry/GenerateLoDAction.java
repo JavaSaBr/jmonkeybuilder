@@ -5,18 +5,15 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.spatial.GeometryTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.lod.GenerateLodLevelsDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.model.node.spatial.GeometryTreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
-
+import com.ss.rlib.util.ClassUtils;
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
-import com.ss.rlib.util.ClassUtils;
 
 /**
  * The action to generate levels of details for the geometry.
@@ -50,10 +47,9 @@ public class GenerateLoDAction extends AbstractNodeAction<ModelChangeConsumer> {
     @FXThread
     @Override
     protected void process() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final GeometryTreeNode<Geometry> modelNode = ClassUtils.unsafeCast(getNode());
         final Geometry geometry = modelNode.getElement();
         final GenerateLodLevelsDialog dialog = new GenerateLodLevelsDialog(getNodeTree(), geometry);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }

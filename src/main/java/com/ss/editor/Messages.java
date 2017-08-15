@@ -691,6 +691,10 @@ public class Messages {
      */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_SKY;
     /**
+     * The constant MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY.
+     */
+    public static final String MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY;
+    /**
      * The constant MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE.
      */
     public static final String MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE;
@@ -1778,49 +1782,57 @@ public class Messages {
      */
     public static final String CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE;
     /**
-     * The constant CREATE_SKY_DIALOG_SKY_TYPE_LABEL.
+     * The constant CREATE_SKY_DIALOG_SKY_TYPE.
      */
-    public static final String CREATE_SKY_DIALOG_SKY_TYPE_LABEL;
+    public static final String CREATE_SKY_DIALOG_SKY_TYPE;
     /**
-     * The constant CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL.
+     * The constant CREATE_SKY_DIALOG_NORMAL_SCALE.
      */
-    public static final String CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL;
+    public static final String CREATE_SKY_DIALOG_NORMAL_SCALE;
     /**
-     * The constant CREATE_SKY_DIALOG_TEXTURE_LABEL.
+     * The constant CREATE_SKY_DIALOG_MATERIAL_FOLDER.
      */
-    public static final String CREATE_SKY_DIALOG_TEXTURE_LABEL;
+    public static final String CREATE_SKY_DIALOG_MATERIAL_FOLDER;
     /**
-     * The constant CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL.
+     * The constant CREATE_SKY_DIALOG_MATERIAL_NAME.
      */
-    public static final String CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL;
+    public static final String CREATE_SKY_DIALOG_MATERIAL_NAME;
     /**
-     * The constant CREATE_SKY_DIALOG_FLIP_Y_LABEL.
+     * The constant CREATE_SKY_DIALOG_TEXTURE.
      */
-    public static final String CREATE_SKY_DIALOG_FLIP_Y_LABEL;
+    public static final String CREATE_SKY_DIALOG_TEXTURE;
     /**
-     * The constant CREATE_SKY_DIALOG_NORTH_LABEL.
+     * The constant CREATE_SKY_DIALOG_TEXTURE_TYPE.
      */
-    public static final String CREATE_SKY_DIALOG_NORTH_LABEL;
+    public static final String CREATE_SKY_DIALOG_TEXTURE_TYPE;
     /**
-     * The constant CREATE_SKY_DIALOG_SOUTH_LABEL.
+     * The constant CREATE_SKY_DIALOG_FLIP_Y.
      */
-    public static final String CREATE_SKY_DIALOG_SOUTH_LABEL;
+    public static final String CREATE_SKY_DIALOG_FLIP_Y;
     /**
-     * The constant CREATE_SKY_DIALOG_EAST_LABEL.
+     * The constant CREATE_SKY_DIALOG_NORTH.
      */
-    public static final String CREATE_SKY_DIALOG_EAST_LABEL;
+    public static final String CREATE_SKY_DIALOG_NORTH;
     /**
-     * The constant CREATE_SKY_DIALOG_WEST_LABEL.
+     * The constant CREATE_SKY_DIALOG_SOUTH.
      */
-    public static final String CREATE_SKY_DIALOG_WEST_LABEL;
+    public static final String CREATE_SKY_DIALOG_SOUTH;
     /**
-     * The constant CREATE_SKY_DIALOG_TOP_LABEL.
+     * The constant CREATE_SKY_DIALOG_EAST.
      */
-    public static final String CREATE_SKY_DIALOG_TOP_LABEL;
+    public static final String CREATE_SKY_DIALOG_EAST;
     /**
-     * The constant CREATE_SKY_DIALOG_BOTTOM_LABEL.
+     * The constant CREATE_SKY_DIALOG_WEST.
      */
-    public static final String CREATE_SKY_DIALOG_BOTTOM_LABEL;
+    public static final String CREATE_SKY_DIALOG_WEST;
+    /**
+     * The constant CREATE_SKY_DIALOG_TOP.
+     */
+    public static final String CREATE_SKY_DIALOG_TOP;
+    /**
+     * The constant CREATE_SKY_DIALOG_BOTTOM.
+     */
+    public static final String CREATE_SKY_DIALOG_BOTTOM;
 
     /**
      * The constant SIMPLE_DIALOG_BUTTON_OK.
@@ -2498,6 +2510,7 @@ public class Messages {
         MODEL_NODE_TREE_ACTION_CREATE = bundle.getString("ModelNodeTreeActionCreate");
         MODEL_NODE_TREE_ACTION_CREATE_NODE = bundle.getString("ModelNodeTreeActionCreateNode");
         MODEL_NODE_TREE_ACTION_CREATE_SKY = bundle.getString("ModelNodeTreeActionCreateSky");
+        MODEL_NODE_TREE_ACTION_CREATE_EDITABLE_SKY = bundle.getString("ModelNodeTreeActionCreateEditableSky");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE = bundle.getString("ModelNodeTreeActionCreatePrimitive");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_BOX = bundle.getString("ModelNodeTreeActionCreatePrimitiveBox");
         MODEL_NODE_TREE_ACTION_CREATE_PRIMITIVE_SPHERE = bundle.getString("ModelNodeTreeActionCreatePrimitiveSphere");
@@ -2778,17 +2791,19 @@ public class Messages {
         CREATE_SKY_DIALOG_TITLE = bundle.getString("CreateSkyDialogTitle");
         CREATE_SKY_DIALOG_SKY_TYPE_SINGLE = bundle.getString("CreateSkyDialogSkyTypeSingle");
         CREATE_SKY_DIALOG_SKY_TYPE_MULTIPLE = bundle.getString("CreateSkyDialogSkyTypeMultiple");
-        CREATE_SKY_DIALOG_SKY_TYPE_LABEL = bundle.getString("CreateSkyDialogSkyTypeLabel");
-        CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL = bundle.getString("CreateSkyDialogNormalScaleLabel");
-        CREATE_SKY_DIALOG_TEXTURE_LABEL = bundle.getString("CreateSkyDialogTextureLabel");
-        CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL = bundle.getString("CreateSkyDialogTextureTypeLabel");
-        CREATE_SKY_DIALOG_FLIP_Y_LABEL = bundle.getString("CreateSkyDialogFlipYLabel");
-        CREATE_SKY_DIALOG_NORTH_LABEL = bundle.getString("CreateSkyDialogNorthLabel");
-        CREATE_SKY_DIALOG_SOUTH_LABEL = bundle.getString("CreateSkyDialogSouthLabel");
-        CREATE_SKY_DIALOG_EAST_LABEL = bundle.getString("CreateSkyDialogEastLabel");
-        CREATE_SKY_DIALOG_WEST_LABEL = bundle.getString("CreateSkyDialogWestLabel");
-        CREATE_SKY_DIALOG_TOP_LABEL = bundle.getString("CreateSkyDialogTopLabel");
-        CREATE_SKY_DIALOG_BOTTOM_LABEL = bundle.getString("CreateSkyDialogBottomLabel");
+        CREATE_SKY_DIALOG_SKY_TYPE = bundle.getString("CreateSkyDialogSkyType");
+        CREATE_SKY_DIALOG_NORMAL_SCALE = bundle.getString("CreateSkyDialogNormalScale");
+        CREATE_SKY_DIALOG_MATERIAL_FOLDER = bundle.getString("CreateSkyDialogMaterialFolder");
+        CREATE_SKY_DIALOG_MATERIAL_NAME = bundle.getString("CreateSkyDialogMaterialName");
+        CREATE_SKY_DIALOG_TEXTURE = bundle.getString("CreateSkyDialogTexture");
+        CREATE_SKY_DIALOG_TEXTURE_TYPE = bundle.getString("CreateSkyDialogTextureType");
+        CREATE_SKY_DIALOG_FLIP_Y = bundle.getString("CreateSkyDialogFlipY");
+        CREATE_SKY_DIALOG_NORTH = bundle.getString("CreateSkyDialogNorth");
+        CREATE_SKY_DIALOG_SOUTH = bundle.getString("CreateSkyDialogSouth");
+        CREATE_SKY_DIALOG_EAST = bundle.getString("CreateSkyDialogEast");
+        CREATE_SKY_DIALOG_WEST = bundle.getString("CreateSkyDialogWest");
+        CREATE_SKY_DIALOG_TOP = bundle.getString("CreateSkyDialogTop");
+        CREATE_SKY_DIALOG_BOTTOM = bundle.getString("CreateSkyDialogBottom");
 
         SIMPLE_DIALOG_BUTTON_OK = bundle.getString("SimpleDialogButtonOk");
         SIMPLE_DIALOG_BUTTON_SELECT = bundle.getString("SimpleDialogButtonSelect");

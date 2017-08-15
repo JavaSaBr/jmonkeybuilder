@@ -1,6 +1,5 @@
 package com.ss.editor.ui.control.filter.list;
 
-import com.ss.editor.JFXApplication;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.filter.EditableSceneFilter;
 import com.ss.editor.extension.scene.filter.SceneFilter;
@@ -10,7 +9,6 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.filter.dialog.CreateSceneFilterDialog;
 import com.ss.editor.ui.control.filter.operation.RemoveSceneFilterOperation;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
@@ -31,8 +29,6 @@ import java.util.function.Consumer;
  * @author JavaSaBr
  */
 public class FilterList extends VBox {
-
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * The selection handler.
@@ -139,9 +135,8 @@ public class FilterList extends VBox {
      * Handle adding a new filter.
      */
     private void addFilter() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final CreateSceneFilterDialog dialog = new CreateSceneFilterDialog(changeConsumer);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**

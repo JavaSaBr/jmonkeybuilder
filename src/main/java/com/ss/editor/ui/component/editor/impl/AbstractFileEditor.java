@@ -20,8 +20,8 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -358,7 +358,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             try {
 
                 doSave(tempFile);
-
                 try {
                     Files.move(tempFile, getEditFile(), REPLACE_EXISTING, ATOMIC_MOVE);
                 } catch (final AtomicMoveNotSupportedException e) {
@@ -711,8 +710,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FXThread
     protected void notifyStartSaving() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
+        EditorUtil.incrementLoading();
         setSaving(true);
     }
 
@@ -722,7 +720,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FXThread
     protected void notifyFinishSaving() {
         setSaving(false);
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.decrementLoading();
+        EditorUtil.decrementLoading();
     }
 }

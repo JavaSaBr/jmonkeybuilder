@@ -7,12 +7,9 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.GenerateTangentsDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action for generating tangents.
@@ -47,9 +44,7 @@ public class TangentGeneratorAction extends AbstractNodeAction<ModelChangeConsum
     @Override
     protected void process() {
         super.process();
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final GenerateTangentsDialog dialog = new GenerateTangentsDialog(getNodeTree(), getNode());
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }

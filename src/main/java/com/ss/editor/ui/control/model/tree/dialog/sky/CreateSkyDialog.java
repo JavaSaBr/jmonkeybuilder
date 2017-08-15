@@ -1,37 +1,46 @@
 package com.ss.editor.ui.control.model.tree.dialog.sky;
 
-import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.SKY_NODE_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.nio.file.StandardOpenOption.*;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
+import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import com.jme3.util.SkyFactory.EnvMapType;
 import com.ss.editor.Editor;
+import com.ss.editor.FileExtensions;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.BackgroundThread;
+import com.ss.editor.extension.util.SSSkyFactory;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.serializer.MaterialSerializer;
+import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.control.choose.ChooseTextureControl;
 import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.StringUtils;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -39,6 +48,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -55,7 +66,8 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     private static final ObservableList<SkyType> SKY_TYPES_LIST = observableArrayList(SkyType.VALUES);
 
     @NotNull
-    private static final ObservableList<EnvMapType> ENV_MAP_TYPE_LIST = observableArrayList(EnvMapType.values());
+    private static final ObservableList<EnvMapType> ENV_MAP_TYPE_LIST = observableArrayList(EnvMapType.EquirectMap,
+            EnvMapType.SphereMap);
 
     @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
@@ -156,13 +168,25 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     private ChooseTextureControl singleTextureControl;
 
     /**
+     * The material folder control.
+     */
+    @Nullable
+    private ChooseFolderControl materialFolderControl;
+
+    /**
+     * The material name field.
+     */
+    @Nullable
+    private TextField materialNameField;
+
+    /**
      * The list of env types.
      */
     @Nullable
     private ComboBox<EnvMapType> envMapTypeComboBox;
 
     /**
-     * The check box for fliping.
+     * The check box for flipping.
      */
     @Nullable
     private CheckBox flipYCheckBox;
@@ -209,12 +233,6 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @Nullable
     private ChooseTextureControl bottomTextureControl;
 
-    /**
-     * Instantiates a new Create sky dialog.
-     *
-     * @param parentNode the parent node
-     * @param nodeTree   the node tree
-     */
     public CreateSkyDialog(@NotNull final TreeNode<?> parentNode,
                            @NotNull final NodeTree<ModelChangeConsumer> nodeTree) {
         this.parentNode = parentNode;
@@ -250,16 +268,17 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         createSingleTextureSettings();
         createMultipleTextureSettings();
 
-        final Label skyTypeLabel = new Label(Messages.CREATE_SKY_DIALOG_SKY_TYPE_LABEL + ":");
+        final Label skyTypeLabel = new Label(Messages.CREATE_SKY_DIALOG_SKY_TYPE + ":");
         skyTypeLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         skyTypeComboBox = new ComboBox<>(SKY_TYPES_LIST);
+        skyTypeComboBox.setDisable(isEditableSky());
         skyTypeComboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
         skyTypeComboBox.getSelectionModel()
                 .selectedItemProperty().
                 addListener((observable, oldValue, newValue) -> processChange(newValue));
 
-        final Label normalScaleLabel = new Label(Messages.CREATE_SKY_DIALOG_NORMAL_SCALE_LABEL + ":");
+        final Label normalScaleLabel = new Label(Messages.CREATE_SKY_DIALOG_NORMAL_SCALE + ":");
         normalScaleLabel.prefWidthProperty().bind(skyTypeLabel.widthProperty());
 
         normalScaleXField = new FloatTextField();
@@ -275,6 +294,31 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         baseSettings.add(normalScaleLabel, 0, 1);
         baseSettings.add(normalScaleContainer, 1, 1);
 
+        if (isEditableSky()) {
+
+            final Label materialFolderLabel = new Label(Messages.CREATE_SKY_DIALOG_MATERIAL_FOLDER + ":");
+            materialFolderLabel.prefWidthProperty().bind(skyTypeLabel.widthProperty());
+
+            materialFolderControl = new ChooseFolderControl();
+            materialFolderControl.prefWidthProperty().bind(skyTypeComboBox.widthProperty());
+            materialFolderControl.setChangeHandler(this::validate);
+
+            final Label materialNameLabel = new Label(Messages.CREATE_SKY_DIALOG_MATERIAL_NAME + ":");
+            materialNameLabel.prefWidthProperty().bind(skyTypeLabel.widthProperty());
+
+            materialNameField = new TextField();
+            materialNameField.prefWidthProperty().bind(skyTypeComboBox.widthProperty());
+            materialNameField.textProperty().addListener((observable, oldValue, newValue) -> validate());
+
+            baseSettings.add(materialFolderLabel, 0, 2);
+            baseSettings.add(materialFolderControl, 1, 2);
+            baseSettings.add(materialNameLabel, 0, 3);
+            baseSettings.add(materialNameField, 1, 3);
+
+            FXUtils.addClassTo(materialFolderLabel, materialNameLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
+            FXUtils.addClassTo(materialFolderControl, materialNameField, CSSClasses.DIALOG_FIELD);
+        }
+
         FXUtils.addToPane(baseSettings, settingsRoot);
         FXUtils.addToPane(settingsRoot, root);
 
@@ -283,15 +327,17 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         singleTextureSettings.prefWidthProperty().bind(settingsRoot.widthProperty());
         multipleTextureSettings.prefWidthProperty().bind(settingsRoot.widthProperty());
 
-        FXUtils.addClassesTo(normalScaleContainer, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassesTo(normalScaleContainer, CSSClasses.DEF_HBOX, CSSClasses.TEXT_INPUT_CONTAINER,
+                CSSClasses.DIALOG_FIELD, CSSClasses.ABSTRACT_PARAM_CONTROL_INPUT_CONTAINER);
         FXUtils.addClassTo(settingsRoot, CSSClasses.DEF_VBOX);
         FXUtils.addClassTo(root, CSSClasses.CREATE_SKY_DIALOG);
         FXUtils.addClassTo(singleTextureSettings, multipleTextureSettings, baseSettings, CSSClasses.DEF_GRID_PANE);
         FXUtils.addClassTo(skyTypeLabel, normalScaleLabel, CSSClasses.DIALOG_DYNAMIC_LABEL);
-        FXUtils.addClassTo(skyTypeComboBox, normalScaleXField, normalScaleYField, normalScaleZField,
-                CSSClasses.DIALOG_FIELD);
-        FXUtils.addClassTo(normalScaleXField, normalScaleYField, normalScaleZField,
-                CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(skyTypeComboBox,CSSClasses.DIALOG_FIELD);
+        FXUtils.addClassesTo(normalScaleXField, normalScaleYField, normalScaleZField,
+                CSSClasses.ABSTRACT_PARAM_CONTROL_VECTOR3F_FIELD, CSSClasses.TRANSPARENT_TEXT_FIELD);
+
+        UIUtils.addFocusBinding(normalScaleContainer, normalScaleXField, normalScaleYField, normalScaleZField);
     }
 
     /**
@@ -301,42 +347,42 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
 
         multipleTextureSettings = new GridPane();
 
-        final Label northTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_NORTH_LABEL + ":");
+        final Label northTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_NORTH + ":");
         northTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         northTextureControl = new ChooseTextureControl();
         northTextureControl.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
         northTextureControl.setChangeHandler(this::validate);
 
-        final Label southTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_SOUTH_LABEL + ":");
+        final Label southTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_SOUTH + ":");
         southTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         southTextureControl = new ChooseTextureControl();
         southTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         southTextureControl.setChangeHandler(this::validate);
 
-        final Label eastTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_EAST_LABEL + ":");
+        final Label eastTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_EAST + ":");
         eastTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         eastTextureControl = new ChooseTextureControl();
         eastTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         eastTextureControl.setChangeHandler(this::validate);
 
-        final Label westTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_WEST_LABEL + ":");
+        final Label westTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_WEST + ":");
         westTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         westTextureControl = new ChooseTextureControl();
         westTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         westTextureControl.setChangeHandler(this::validate);
 
-        final Label topTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TOP_LABEL + ":");
+        final Label topTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TOP + ":");
         topTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         topTextureControl = new ChooseTextureControl();
         topTextureControl.prefWidthProperty().bind(northTextureControl.widthProperty());
         topTextureControl.setChangeHandler(this::validate);
 
-        final Label bottomTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_BOTTOM_LABEL + ":");
+        final Label bottomTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_BOTTOM + ":");
         bottomTextureLabel.prefWidthProperty().bind(northTextureLabel.widthProperty());
 
         bottomTextureControl = new ChooseTextureControl();
@@ -361,20 +407,27 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * @return true id need to use SS factory.
+     */
+    protected boolean isEditableSky() {
+        return false;
+    }
+
+    /**
      * Create single texture settings.
      */
     private void createSingleTextureSettings() {
 
         singleTextureSettings = new GridPane();
 
-        final Label singleTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE_LABEL + ":");
+        final Label singleTextureLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE + ":");
         singleTextureLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_LABEL_W_PERCENT));
 
         singleTextureControl = new ChooseTextureControl();
         singleTextureControl.setChangeHandler(this::validate);
         singleTextureControl.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
-        final Label envMapTypeLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE_TYPE_LABEL + ":");
+        final Label envMapTypeLabel = new Label(Messages.CREATE_SKY_DIALOG_TEXTURE_TYPE + ":");
         envMapTypeLabel.prefWidthProperty().bind(singleTextureLabel.widthProperty());
 
         envMapTypeComboBox = new ComboBox<>(ENV_MAP_TYPE_LIST);
@@ -383,7 +436,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
                 .selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> validate());
 
-        final Label flipYLabel = new Label(Messages.CREATE_SKY_DIALOG_FLIP_Y_LABEL + ":");
+        final Label flipYLabel = new Label(Messages.CREATE_SKY_DIALOG_FLIP_Y + ":");
         flipYLabel.prefWidthProperty().bind(singleTextureLabel.widthProperty());
 
         flipYCheckBox = new CheckBox();
@@ -467,6 +520,22 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
+     * @return the material folder control.
+     */
+    @NotNull
+    private ChooseFolderControl getMaterialFolderControl() {
+        return notNull(materialFolderControl);
+    }
+
+    /**
+     * @return the material name field.
+     */
+    @NotNull
+    private TextField getMaterialNameField() {
+        return notNull(materialNameField);
+    }
+
+    /**
      * @return the top texture control.
      */
     @NotNull
@@ -527,6 +596,20 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final Button okButton = getOkButton();
         okButton.setDisable(true);
 
+        if (isEditableSky()) {
+
+            final ChooseFolderControl materialFolderControl = getMaterialFolderControl();
+            final TextField materialNameField = getMaterialNameField();
+
+            final boolean valid = materialFolderControl.getFolder() != null &&
+                    !StringUtils.isEmpty(materialNameField.getText());
+
+            if (!valid) {
+                okButton.setDisable(true);
+                return;
+            }
+        }
+
         if (selectedItem == SkyType.SINGLE_TEXTURE) {
 
             final ComboBox<EnvMapType> envMapTypeComboBox = getEnvMapTypeComboBox();
@@ -570,7 +653,7 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     }
 
     /**
-     * @return the check box for fliping.
+     * @return the check box for flipping.
      */
     @NotNull
     private CheckBox getFlipYCheckBox() {
@@ -620,7 +703,18 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
     @Override
     protected void processOk() {
         EditorUtil.incrementLoading();
-        EXECUTOR_MANAGER.addBackgroundTask(this::createSkyInBackground);
+
+        EXECUTOR_MANAGER.addBackgroundTask(() -> {
+
+            try {
+                createSkyInBackground();
+            } catch (final Exception e) {
+                EditorUtil.handleException(LOGGER, this, e);
+            }
+
+            EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
+        });
+
         super.processOk();
     }
 
@@ -652,8 +746,6 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         } else if (selectedItem == SkyType.MULTIPLE_TEXTURE) {
             createMultipleTexture(assetManager, changeConsumer, scale);
         }
-
-        EXECUTOR_MANAGER.addFXTask(EditorUtil::decrementLoading);
     }
 
     /**
@@ -694,18 +786,20 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         final Texture topTexture = assetManager.loadTexture(toAssetPath(topTextureAssetFile));
         final Texture bottomTexture = assetManager.loadTexture(toAssetPath(bottomTextureAssetFile));
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        final Geometry sky;
 
-            final Spatial skyModel = SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture,
-                    southTexture, topTexture, bottomTexture, scale);
+        if (isEditableSky()) {
+            sky = (Geometry) SSSkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture,
+                    topTexture, bottomTexture, scale);
+        } else {
+            sky = (Geometry) SkyFactory.createSky(assetManager, westTexture, eastTexture, northTexture, southTexture,
+                    topTexture, bottomTexture, scale);
+        }
 
-            skyModel.setUserData(SKY_NODE_KEY, Boolean.TRUE);
+        final TreeNode<?> parentNode = getParentNode();
+        final Node parent = (Node) parentNode.getElement();
 
-            final TreeNode<?> parentNode = getParentNode();
-            final Node parent = (Node) parentNode.getElement();
-
-            changeConsumer.execute(new AddChildOperation(skyModel, parent));
-        });
+        changeConsumer.execute(new AddChildOperation(sky, parent));
     }
 
     /**
@@ -729,21 +823,49 @@ public class CreateSkyDialog extends AbstractSimpleEditorDialog {
         textureKey.setGenerateMips(true);
 
         final Texture texture = assetManager.loadAsset(textureKey);
+        final Geometry sky;
 
-        if (envMapType == EnvMapType.CubeMap) {
-            textureKey.setTextureTypeHint(Texture.Type.CubeMap);
+        if (isEditableSky()) {
+            sky = (Geometry) SSSkyFactory.createSky(assetManager, texture, scale, envMapType);
+            sky.setMaterial(createMaterialFileIfNeed(sky));
+        } else {
+            sky = (Geometry) SkyFactory.createSky(assetManager, texture, scale, envMapType);
         }
 
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        final TreeNode<?> parentNode = getParentNode();
+        final Node parent = (Node) parentNode.getElement();
 
-            final Spatial sky = SkyFactory.createSky(assetManager, texture, scale, envMapType);
-            sky.setUserData(SKY_NODE_KEY, Boolean.TRUE);
+        changeConsumer.execute(new AddChildOperation(sky, parent));
+    }
 
-            final TreeNode<?> parentNode = getParentNode();
-            final Node parent = (Node) parentNode.getElement();
+    /**
+     * Create a material of the geometry as a file if need.
+     *
+     * @param geometry the sky geometry.
+     */
+    @BackgroundThread
+    private Material createMaterialFileIfNeed(@NotNull final Geometry geometry) {
 
-            changeConsumer.execute(new AddChildOperation(sky, parent));
-        });
+        final TextField materialNameField = getMaterialNameField();
+        final ChooseFolderControl materialFolderControl = getMaterialFolderControl();
+
+        final Material material = geometry.getMaterial();
+        final String content = MaterialSerializer.serializeToString(material);
+
+        final Path folder = materialFolderControl.getFolder();
+        final Path materialFile = folder.resolve(materialNameField.getText() + "." + FileExtensions.JME_MATERIAL);
+
+        try {
+            Files.write(materialFile, content.getBytes("UTF-8"), WRITE, TRUNCATE_EXISTING, CREATE);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        final Path assetFile = EditorUtil.getAssetFile(materialFile);
+        final String assetPath = EditorUtil.toAssetPath(assetFile);
+        final AssetManager assetManager = EDITOR.getAssetManager();
+
+        return assetManager.loadMaterial(assetPath);
     }
 
     @NotNull

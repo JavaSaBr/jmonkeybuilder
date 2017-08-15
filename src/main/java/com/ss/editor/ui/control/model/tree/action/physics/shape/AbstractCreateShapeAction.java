@@ -6,14 +6,13 @@ import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.ChangeCollisionShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.image.Image;
@@ -51,10 +50,9 @@ public abstract class AbstractCreateShapeAction extends AbstractNodeAction<Model
         final Array<PropertyDefinition> definitions = getPropertyDefinitions();
         if (definitions.isEmpty()) return;
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final GenericFactoryDialog dialog = new GenericFactoryDialog(definitions, this::handleResult);
         dialog.setTitle(getDialogTitle());
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**

@@ -12,7 +12,6 @@ import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.control.model.property.operation.ParticleInfluencerPropertyOperation;
 import com.ss.editor.ui.control.model.tree.dialog.geometry.GeometrySelectorDialog;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -240,12 +239,11 @@ public class PhysicsNodeListControl extends VBox implements UpdatableControl {
      */
     protected void processAdd() {
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final ModelChangeConsumer modelChangeConsumer = getModelChangeConsumer();
         final Spatial model = modelChangeConsumer.getCurrentModel();
 
         final GeometrySelectorDialog dialog = new GeometrySelectorDialog(model, this::processAdd);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**

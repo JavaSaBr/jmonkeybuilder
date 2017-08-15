@@ -4,7 +4,6 @@ import static com.ss.editor.ui.control.filter.property.control.FilterPropertyCon
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.control.model.tree.dialog.NodeSelectorDialog;
 import com.ss.editor.ui.control.property.impl.AbstractElementPropertyControl;
-import com.ss.editor.ui.scene.EditorFXScene;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,10 +32,8 @@ public abstract class AbstractElementAppStatePropertyControl<D, T> extends Abstr
 
     @Override
     protected void processAdd() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final NodeSelectorDialog<T> dialog = createNodeSelectorDialog();
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**

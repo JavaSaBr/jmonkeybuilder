@@ -2,6 +2,9 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.util.array.ArrayFactory.asArray;
 import static java.awt.Image.SCALE_DEFAULT;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
@@ -251,7 +254,7 @@ public class JavaFXImageManager {
 
     private void writeDefaultToCache(@NotNull final Path cacheFile) {
         final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(Icons.IMAGE_512, null);
-        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+        try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(bufferedImage, "png", out);
         } catch (final IOException ex) {
             LOGGER.warning(ex);
@@ -317,7 +320,7 @@ public class JavaFXImageManager {
 
         final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
-        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+        try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(bufferedImage, "png", out);
         } catch (final IOException e) {
             LOGGER.warning(e);
@@ -333,7 +336,7 @@ public class JavaFXImageManager {
 
         final BufferedImage newImage = scaleImage(targetWidth, targetHeight, textureImage, currentWidth, currentHeight);
 
-        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+        try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(newImage, "png", out);
             return new Image(cacheFile.toUri().toString());
         } catch (final IOException e) {

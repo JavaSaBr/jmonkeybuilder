@@ -276,6 +276,14 @@ public class EditorDialog {
     }
 
     /**
+     * Show this dialog.
+     */
+    @FXThread
+    public void show() {
+        show(JFXApplication.getInstance().getLastWindow());
+    }
+
+    /**
      * Shows this dialog.
      *
      * @param owner the owner.

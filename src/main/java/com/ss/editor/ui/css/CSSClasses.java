@@ -72,7 +72,7 @@ public interface CSSClasses {
     /**
      * The constant DIALOG_FIELD.
      */
-    String DIALOG_FIELD = "EditorDialogField";
+    String DIALOG_FIELD = "dialog-field";
 
     /**
      * The constant TEXT_INPUT_CONTAINER.

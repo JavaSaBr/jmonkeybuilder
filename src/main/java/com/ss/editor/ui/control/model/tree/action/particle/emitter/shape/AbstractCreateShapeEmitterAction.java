@@ -6,14 +6,13 @@ import com.jme3.effect.shapes.EmitterShape;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.particle.emitter.ChangeEmitterShapeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import javafx.scene.image.Image;
@@ -51,7 +50,6 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
     protected void process() {
         super.process();
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final Point dialogSize = getDialogSize();
 
         final GenericFactoryDialog dialog = new GenericFactoryDialog(getPropertyDefinitions(), this::handleResult);
@@ -61,7 +59,7 @@ public abstract class AbstractCreateShapeEmitterAction extends AbstractNodeActio
             dialog.updateSize(dialogSize);
         }
 
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     /**

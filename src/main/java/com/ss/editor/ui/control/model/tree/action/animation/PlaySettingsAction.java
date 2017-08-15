@@ -6,13 +6,12 @@ import com.jme3.animation.LoopMode;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
+import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.control.anim.AnimationControlTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.tree.NodeTree;
-import com.ss.editor.plugin.api.dialog.GenericFactoryDialog;
-import com.ss.editor.plugin.api.property.PropertyDefinition;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -67,13 +66,11 @@ public class PlaySettingsAction extends AbstractNodeAction<ModelChangeConsumer> 
         definitions.add(new PropertyDefinition(ENUM, Messages.MODEL_PROPERTY_LOOP_MODE, PROPERTY_LOOP_MODE, loopMode));
         definitions.add(new PropertyDefinition(FLOAT, Messages.MODEL_PROPERTY_SPEED, PROPERTY_SPEED, speed));
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
         final GenericFactoryDialog dialog = new GenericFactoryDialog(definitions, vars ->
                 node.updateSettings(vars.get(PROPERTY_LOOP_MODE), vars.get(PROPERTY_SPEED)));
 
         dialog.setTitle(Messages.PLAY_ANIMATION_SETTINGS_DIALOG_TITLE);
         dialog.setButtonOkText(Messages.SIMPLE_DIALOG_BUTTON_OK);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }

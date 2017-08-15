@@ -1,5 +1,8 @@
 package com.ss.editor.ui.component.creator.impl;
 
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.export.binary.BinaryExporter;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -52,7 +55,7 @@ public class EmptySceneCreator extends AbstractFileCreator {
         final BinaryExporter exporter = BinaryExporter.getInstance();
         final SceneNode newNode = createScene();
 
-        try (final OutputStream out = Files.newOutputStream(resultFile)) {
+        try (final OutputStream out = Files.newOutputStream(resultFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             exporter.save(newNode, out);
         } catch (final IOException e) {
             LOGGER.warning(this, e);

@@ -75,7 +75,7 @@
 .dialog-label-warning {
     -fx-alignment: center;
     -fx-text-alignment: center;
-    -fx-min-height: 28px;
+    -fx-min-height: -var-default-field-height;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 800px;
@@ -95,6 +95,7 @@
 
 .dialog-field {
     -fx-pref-height: -fx-min-height;
+    -fx-min-height: -var-default-field-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20;
 }
@@ -487,11 +488,6 @@
     -fx-padding: 0px 0px 0px 4px;
 }
 
-.choose-texture-control > .label {
-    -fx-alignment: center-right;
-    -fx-padding: 0px 0px 0px 0px;
-}
-
 .choose-texture-control-texture-label {
     -fx-alignment: center-left;
 }
@@ -513,6 +509,7 @@
 
 .choose-resource-control {
     -fx-padding: 0px 0px 0px 4px;
+    -fx-alignment: center-left;
 }
 
 /*******************************************************************************

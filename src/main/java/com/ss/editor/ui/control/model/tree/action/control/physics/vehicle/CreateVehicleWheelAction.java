@@ -16,7 +16,6 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.AddVehicleWheelOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -86,11 +85,9 @@ public class CreateVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
     @FXThread
     @Override
     protected void process() {
-
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final GenericFactoryDialog dialog = new GenericFactoryDialog(DEFINITIONS, this::handleResult);
         dialog.setTitle(Messages.ADD_VEHICLE_WHEEL_DIALOG_TITLE);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 
     private void handleResult(@NotNull final VarTable vars) {

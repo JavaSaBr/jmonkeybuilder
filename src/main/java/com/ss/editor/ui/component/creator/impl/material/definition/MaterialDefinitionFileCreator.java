@@ -3,6 +3,9 @@ package com.ss.editor.ui.component.creator.impl.material.definition;
 import static com.ss.editor.FileExtensions.JME_MATERIAL_DEFINITION;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.lang.Character.toUpperCase;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.material.TechniqueDef;
 import com.jme3.renderer.Caps;
 import com.jme3.renderer.Renderer;
@@ -151,21 +154,21 @@ public class MaterialDefinitionFileCreator extends GenericFileCreator {
         mdContent = mdContent.replace("${vertex-path}", pathToVertex.toString());
         mdContent = mdContent.replace("${fragment-path}", pathToFragment.toString());
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(matDefFile))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(matDefFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(mdContent);
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fragmentFile))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(fragmentFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(FRAG_TEMPLATE);
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);
             return;
         }
 
-        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(vertexFile))) {
+        try (final PrintWriter out = new PrintWriter(Files.newOutputStream(vertexFile, WRITE, TRUNCATE_EXISTING, CREATE))) {
             out.print(VERT_TEMPLATE);
         } catch (final IOException e) {
             EditorUtil.handleException(LOGGER, this, e);

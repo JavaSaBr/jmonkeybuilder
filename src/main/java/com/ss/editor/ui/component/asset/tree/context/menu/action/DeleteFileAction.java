@@ -1,6 +1,5 @@
 package com.ss.editor.ui.component.asset.tree.context.menu.action;
 
-import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.delete.handler.FileDeleteHandler;
@@ -22,9 +21,6 @@ import java.nio.file.Path;
  * @author JavaSaBr
  */
 public class DeleteFileAction extends MenuItem {
-
-    @NotNull
-    private static final JFXApplication JFX_APPLICATION = JFXApplication.getInstance();
 
     /**
      * The node in the tree.
@@ -64,7 +60,7 @@ public class DeleteFileAction extends MenuItem {
         question = question.replace("%file_name%", file.getFileName().toString());
 
         final ConfirmDialog confirmDialog = new ConfirmDialog(result -> handle(file, result), question);
-        confirmDialog.show(JFX_APPLICATION.getLastWindow());
+        confirmDialog.show();
     }
 
     /**

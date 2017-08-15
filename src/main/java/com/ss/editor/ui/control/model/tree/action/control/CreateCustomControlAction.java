@@ -11,12 +11,9 @@ import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.CreateCustomControlDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to create a {@link Control}.
@@ -58,8 +55,7 @@ public class CreateCustomControlAction extends AbstractNodeAction<ModelChangeCon
         final TreeNode<?> treeNode = getNode();
         final Spatial parent = (Spatial) treeNode.getElement();
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final CreateCustomControlDialog dialog = new CreateCustomControlDialog(consumer, parent);
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }
