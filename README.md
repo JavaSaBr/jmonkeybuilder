@@ -13,13 +13,13 @@
 
 ## ver. 1.0.1 ##
 * -Implemented D&D of controls in a model tree.
-* -Implemented to load compiled classes from any IDE to improve integration with IDE's.
+* -Implemented a setting to load compiled classes from any IDE to improve integration with IDE's.
 * -Updated toneg0d.emitter library.
-* -Added glTF loader.
-* -Implemented auto-finding all available controls to create it in model tree.
-* -Added to show custom objects from user data of Spatial.
+* -Added glTF converter.
+* -Implemented auto-finding all available controls for the action to create a custom control.
+* -Added to show custom objects from user data of Spatial on the property panel.
 * -Included jME font creator plugin.
-* -Added to create editable sky nodes.
+* -Added an action to create editable sky nodes in Model Editor.
 * -Added image preview tooltips to Asset tree.
 * -Improved usability and fixed a lot of little bugs with UI.
 
