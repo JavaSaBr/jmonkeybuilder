@@ -144,7 +144,7 @@ public class SvgImageLoader extends de.codecentric.centerdevice.javafxsvg.SvgIma
             int green = (argb >> 8) & 0xff;
             int blue = (argb) & 0xff;
 
-            if (overrideColor != null && alpha < 255) {
+            if (overrideColor != null) {
                 red = (int) (overrideColor.getRed() * 255);
                 green = (int) (overrideColor.getGreen() * 255);
                 blue = (int) (overrideColor.getBlue() * 255);
