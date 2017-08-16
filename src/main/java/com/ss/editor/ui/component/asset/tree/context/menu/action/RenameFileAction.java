@@ -7,17 +7,15 @@ import com.ss.editor.ui.component.asset.tree.resource.ResourceElement;
 import com.ss.editor.ui.dialog.RenameDialog;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.RenamedFileEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
+import com.ss.rlib.util.FileUtils;
+import com.ss.rlib.util.StringUtils;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
-import com.ss.rlib.util.FileUtils;
-import com.ss.rlib.util.StringUtils;
 
 /**
  * The action to rename a file.
@@ -51,15 +49,13 @@ public class RenameFileAction extends MenuItem {
      */
     private void processRename() {
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-
         final Path file = element.getFile();
 
         final RenameDialog renameDialog = new RenameDialog();
         renameDialog.setValidator(this::checkName);
         renameDialog.setHandler(this::processRename);
         renameDialog.setInitName(FileUtils.getNameWithoutExtension(file));
-        renameDialog.show(scene.getWindow());
+        renameDialog.show(JFX_APPLICATION.getLastWindow());
     }
 
     /**

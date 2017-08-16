@@ -1,8 +1,8 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import com.jme3.math.Vector3f;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -46,20 +46,17 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
         super.createComponents();
 
         final GridPane gridPane = new GridPane();
-        gridPane.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        gridPane.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         xField = new FloatTextField();
-        xField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         xField.addChangeListener((observable, oldValue, newValue) -> change());
         xField.prefWidthProperty().bind(gridPane.widthProperty().divide(3));
 
         yField = new FloatTextField();
-        yField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         yField.addChangeListener((observable, oldValue, newValue) -> change());
         yField.prefWidthProperty().bind(gridPane.widthProperty().divide(3));
 
         zField = new FloatTextField();
-        zField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         zField.addChangeListener((observable, oldValue, newValue) -> change());
         zField.prefWidthProperty().bind(gridPane.widthProperty().divide(3));
 
@@ -116,14 +113,11 @@ public class Vector3fPropertyEditorControl extends PropertyEditorControl<Vector3
     }
 
     @Override
-    protected void change() {
-
+    protected void changeImpl() {
         final FloatTextField xField = getXField();
         final FloatTextField yField = getYField();
         final FloatTextField zField = getZField();
-
         setPropertyValue(new Vector3f(xField.getValue(), yField.getValue(), zField.getValue()));
-
-        super.change();
+        super.changeImpl();
     }
 }

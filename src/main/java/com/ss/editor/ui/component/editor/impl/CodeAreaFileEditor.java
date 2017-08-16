@@ -49,8 +49,7 @@ public abstract class CodeAreaFileEditor extends AbstractFileEditor<VBox> {
     protected void createContent(@NotNull final VBox root) {
 
         codeArea = new CodeArea();
-        codeArea.richChanges()
-                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
+        codeArea.richChanges().filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
                 .subscribe(change -> codeArea.setStyleSpans(0, getStyleSpans(codeArea.getText())));
         codeArea.textProperty().addListener((observable, oldValue, newValue) -> updateDirty(newValue));
         codeArea.prefHeightProperty().bind(root.heightProperty());

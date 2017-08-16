@@ -67,7 +67,8 @@ public final class EditorConfig implements AssetEventListener {
     private static final String PREF_ASSET_CURRENT_ASSET = ASSET_ALIAS + "." + "currentAsset";
     private static final String PREF_ASSET_LAST_OPENED_ASSETS = ASSET_ALIAS + "." + "lastOpenedAssets";
 
-    private static final String PREF_OTHER_ADDITIONAL_CLASSPATH = OTHER_ALIAS + "." + "additionalClasspath";
+    private static final String PREF_OTHER_LIBRARIES_FOLDER = OTHER_ALIAS + "." + "librariesFolder";
+    private static final String PREF_OTHER_CLASSES_FOLDER = OTHER_ALIAS + "." + "classesFolder";
     private static final String PREF_OTHER_ADDITIONAL_ENVS = OTHER_ALIAS + "." + "additionalEnvs";
     private static final String PREF_OTHER_THEME = OTHER_ALIAS + "." + "theme";
     private static final String PREF_OTHER_ANALYTICS = OTHER_ALIAS + "." + "analytics";
@@ -130,10 +131,16 @@ public final class EditorConfig implements AssetEventListener {
     private volatile OpenGLVersion openGLVersion;
 
     /**
-     * The path to the folder with additional classpath.
+     * The path to the folder with libraries.
      */
     @Nullable
-    private volatile Path additionalClasspath;
+    private volatile Path librariesPath;
+
+    /**
+     * The path to the folder with compiled classes.
+     */
+    @Nullable
+    private volatile Path classesPath;
 
     /**
      * The path to the folder with additional envs.
@@ -353,24 +360,44 @@ public final class EditorConfig implements AssetEventListener {
     }
 
     /**
-     * Gets additional classpath.
+     * Get the path to the folder with libraries.
      *
-     * @return путь к папке с дополнительным classpath.
+     * @return the path to the folder with libraries.
      */
     @Nullable
     @FromAnyThread
-    public Path getAdditionalClasspath() {
-        return additionalClasspath;
+    public Path getLibrariesPath() {
+        return librariesPath;
     }
 
     /**
-     * Sets additional classpath.
+     * Set the path to the folder with libraries.
      *
-     * @param additionalClasspath путь к папке с дополнительным classpath.
+     * @param librariesPath the path to the folder with libraries.
      */
     @FromAnyThread
-    public void setAdditionalClasspath(@Nullable final Path additionalClasspath) {
-        this.additionalClasspath = additionalClasspath;
+    public void setLibrariesPath(@Nullable final Path librariesPath) {
+        this.librariesPath = librariesPath;
+    }
+
+    /**
+     * Get the path to the folder with compiled classes.
+     *
+     * @return the path to the folder with compiled classes.
+     */
+    @Nullable
+    @FromAnyThread
+    public Path getClassesPath() {
+        return classesPath;
+    }
+
+    /**
+     * Set the path to the folder with compiled classes.
+     *
+     * @param classesPath  the path to the folder with compiled classes.
+     */
+    public void setClassesPath(@Nullable final Path classesPath) {
+        this.classesPath = classesPath;
     }
 
     /**
@@ -868,10 +895,16 @@ public final class EditorConfig implements AssetEventListener {
             this.currentAsset = null;
         }
 
-        final String classpathURI = prefs.get(PREF_OTHER_ADDITIONAL_CLASSPATH, null);
+        final String librariesFolderPath = prefs.get(PREF_OTHER_LIBRARIES_FOLDER, null);
 
-        if (classpathURI != null) {
-            this.additionalClasspath = get(classpathURI, uri -> Paths.get(new URI(uri)));
+        if (librariesFolderPath != null) {
+            this.librariesPath = get(librariesFolderPath, uri -> Paths.get(new URI(uri)));
+        }
+
+        final String classesFolderPath = prefs.get(PREF_OTHER_CLASSES_FOLDER, null);
+
+        if (classesFolderPath != null) {
+            this.classesPath = get(classesFolderPath, uri -> Paths.get(new URI(uri)));
         }
 
         final String envsURI = prefs.get(PREF_OTHER_ADDITIONAL_ENVS, null);
@@ -957,8 +990,8 @@ public final class EditorConfig implements AssetEventListener {
             currentAsset = null;
         }
 
-        if (additionalClasspath != null && !Files.exists(additionalClasspath)) {
-            additionalClasspath = null;
+        if (librariesPath != null && !Files.exists(librariesPath)) {
+            librariesPath = null;
         }
 
         if (currentAsset != null) {
@@ -967,10 +1000,16 @@ public final class EditorConfig implements AssetEventListener {
             prefs.remove(PREF_ASSET_CURRENT_ASSET);
         }
 
-        if (additionalClasspath != null) {
-            prefs.put(PREF_OTHER_ADDITIONAL_CLASSPATH, additionalClasspath.toUri().toString());
+        if (librariesPath != null) {
+            prefs.put(PREF_OTHER_LIBRARIES_FOLDER, librariesPath.toUri().toString());
         } else {
-            prefs.remove(PREF_OTHER_ADDITIONAL_CLASSPATH);
+            prefs.remove(PREF_OTHER_LIBRARIES_FOLDER);
+        }
+
+        if (classesPath != null) {
+            prefs.put(PREF_OTHER_CLASSES_FOLDER, classesPath.toUri().toString());
+        } else {
+            prefs.remove(PREF_OTHER_CLASSES_FOLDER);
         }
 
         if (additionalEnvs != null) {

@@ -2,8 +2,7 @@ package com.ss.editor.ui.control.model.node.spatial;
 
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_ADD_CONTROL;
 import static com.ss.editor.Messages.MODEL_NODE_TREE_ACTION_CREATE;
-import static java.util.Objects.requireNonNull;
-import com.jme3.animation.SkeletonControl;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.control.VehicleControl;
@@ -12,6 +11,7 @@ import com.jme3.light.Light;
 import com.jme3.light.LightList;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import com.ss.editor.control.transform.EditorTransformSupport;
 import com.ss.editor.extension.scene.InvisibleObject;
@@ -29,6 +29,8 @@ import com.ss.editor.ui.control.model.tree.action.control.physics.CreateCharacte
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateRigidBodyControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.CreateStaticRigidBodyControlAction;
 import com.ss.editor.ui.control.model.tree.action.control.physics.vehicle.CreateVehicleControlAction;
+import com.ss.editor.ui.control.model.tree.action.operation.AddControlOperation;
+import com.ss.editor.ui.control.model.tree.action.operation.MoveControlOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
@@ -45,7 +47,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * The implementation of the {@link TreeNode} to represent a {@link Spatial} in an editor.
  *
- * @param <T> the type parameter
+ * @param <T> the type of {@link Spatial}.
  * @author JavaSaBr
  */
 public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
@@ -80,6 +82,51 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     }
 
     @Override
+    public boolean canMove() {
+        return true;
+    }
+
+    @Override
+    public boolean canCopy() {
+        return true;
+    }
+
+    @Override
+    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
+
+        final Object element = child.getElement();
+
+        if (element instanceof AbstractControl) {
+            return true;
+        }
+
+        return super.canAccept(child, isCopy);
+    }
+
+    @Override
+    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
+                       final boolean isCopy) {
+
+        final T spatial = getElement();
+
+        if (object instanceof AbstractControl) {
+
+            final AbstractControl control = (AbstractControl) object;
+            final Spatial prevParent = control.getSpatial();
+
+            if (isCopy) {
+                final AbstractControl clone = (AbstractControl) control.jmeClone();
+                clone.setSpatial(null);
+                changeConsumer.execute(new AddControlOperation(clone, spatial));
+            } else {
+                changeConsumer.execute(new MoveControlOperation(control, prevParent, spatial));
+            }
+        }
+
+        super.accept(changeConsumer, object, isCopy);
+    }
+
+    @Override
     public boolean canRemove() {
         final Node parent = getElement().getParent();
         return parent != null && parent.getUserData(EditorTransformSupport.class.getName()) != Boolean.TRUE;
@@ -95,7 +142,6 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
     protected Menu createCreationMenu(@NotNull final NodeTree<?> nodeTree) {
 
         final T element = getElement();
-        final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
 
         final Menu menu = new Menu(MODEL_NODE_TREE_ACTION_CREATE, new ImageView(Icons.ADD_12));
         final Menu createControlsMenu = new Menu(MODEL_NODE_TREE_ACTION_ADD_CONTROL, new ImageView(Icons.ADD_12));
@@ -120,6 +166,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
             items.add(new CreateMotionControlAction(nodeTree, this));
         }
 
+        //final SkeletonControl skeletonControl = element.getControl(SkeletonControl.class);
         //if (skeletonControl != null) {
             //FIXME items.add(new CreateKinematicRagdollControlAction(nodeTree, this));
         //}
@@ -164,7 +211,7 @@ public class SpatialTreeNode<T extends Spatial> extends TreeNode<T> {
         super.changeName(nodeTree, newName);
 
         final Spatial spatial = getElement();
-        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new RenameNodeOperation(spatial.getName(), newName, spatial));
     }
 

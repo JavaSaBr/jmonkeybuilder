@@ -3,12 +3,14 @@ package com.ss.editor.ui.event;
 import com.ss.editor.config.Config;
 import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.component.editor.area.EditorAreaComponent;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;
 import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
@@ -100,7 +102,7 @@ public class EventRedirector {
             if (target == destination) return;
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY(), event.getClass())) {
                 return;
             }
 
@@ -117,7 +119,7 @@ public class EventRedirector {
             updateCoords(event);
 
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
+            if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY(), event.getClass())) {
                 return;
             }
 
@@ -125,6 +127,10 @@ public class EventRedirector {
         });
 
         stage.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+
+            if (Config.DEV_DEBUG_JFX_MOUSE_INPUT) {
+                LOGGER.debug("Mouse dragged " + event);
+            }
 
             final EventTarget target = event.getTarget();
             if (target == destination) return;
@@ -134,7 +140,7 @@ public class EventRedirector {
             final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
             if (currentEditor == null) return;
 
-            if (!isMousePressed(event.getButton()) && !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
+            if (!isMousePressed(event.getButton()) && !currentEditor.isInside(event.getSceneX(), event.getSceneY(), event.getClass())) {
                 return;
             }
 
@@ -142,8 +148,8 @@ public class EventRedirector {
         });
 
         stage.addEventHandler(ScrollEvent.ANY, this::redirect);
-        stage.addEventHandler(KeyEvent.KEY_PRESSED, this::redirect);
-        stage.addEventHandler(KeyEvent.KEY_RELEASED, this::redirect);
+        stage.addEventFilter(KeyEvent.KEY_PRESSED, this::redirect);
+        stage.addEventFilter(KeyEvent.KEY_RELEASED, this::redirect);
     }
 
     private void redirect(@NotNull final GestureEvent event) {
@@ -152,7 +158,7 @@ public class EventRedirector {
         if (target == destination) return;
 
         final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
-        if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY())) {
+        if (currentEditor == null || !currentEditor.isInside(event.getSceneX(), event.getSceneY(), event.getClass())) {
             return;
         }
 
@@ -162,17 +168,26 @@ public class EventRedirector {
     private void redirect(@NotNull final InputEvent event) {
 
         final EventTarget target = event.getTarget();
-        if (target == destination) return;
+        if (target == destination) {
+            return;
+        } else if (target instanceof TextInputControl) {
+            if (event instanceof KeyEvent && UIUtils.isNotHotKey((KeyEvent) event)) {
+                if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
+                    LOGGER.debug("Key event was skipped because it was from " + target);
+                }
+                return;
+            }
+        }
 
         final EventType<? extends InputEvent> eventType = event.getEventType();
         final FileEditor currentEditor = editorAreaComponent.getCurrentEditor();
 
         if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
             LOGGER.debug("Key event " + event.getEventType() + " is inside " +
-                    currentEditor.isInside(getSceneX(), getSceneY()));
+                    currentEditor.isInside(getSceneX(), getSceneY(), event.getClass()));
         }
 
-        if (currentEditor == null || eventType != KeyEvent.KEY_RELEASED && !currentEditor.isInside(getSceneX(), getSceneY())) {
+        if (currentEditor == null || eventType != KeyEvent.KEY_RELEASED && !currentEditor.isInside(getSceneX(), getSceneY(), event.getClass())) {
             return;
         }
 

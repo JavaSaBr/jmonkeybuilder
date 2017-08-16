@@ -24,8 +24,6 @@ import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.*;
 import com.ss.editor.util.SimpleFileVisitor;
 import com.ss.editor.util.SimpleFolderVisitor;
-import com.ss.rlib.classpath.ClassPathScanner;
-import com.ss.rlib.classpath.ClassPathScannerFactory;
 import com.ss.rlib.concurrent.util.ThreadUtils;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -139,41 +137,21 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
     private final Array<WatchKey> watchKeys;
 
     /**
-     * The classpath scanner.
-     */
-    @NotNull
-    private final ClassPathScanner classPathScanner;
-
-    /**
      * Instantiates a new Resource manager.
      */
     private ResourceManager() {
         InitializeManager.valid(getClass());
 
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
+
         this.assetCacheTable = DictionaryFactory.newObjectDictionary();
         this.additionalEnvs = ArrayFactory.newArray(Path.class);
         this.watchKeys = ArrayFactory.newArray(WatchKey.class);
         this.classLoaders = ArrayFactory.newArray(URLClassLoader.class);
-        this.resourcesInClasspath = ArrayFactory.newArray(String.class);
+        this.resourcesInClasspath = classpathManager.getAllResources();
         this.materialDefinitionsInClasspath = ArrayFactory.newArray(String.class);
         this.materialDefinitions = ArrayFactory.newArray(String.class);
 
-        classPathScanner = ClassPathScannerFactory.newManifestScanner(Editor.class, "Class-Path");
-        classPathScanner.setUseSystemClasspath(true);
-        classPathScanner.scan(path -> {
-
-            if (!(path.contains("jme3-core") || path.contains("jme3-effects") || path.contains("tonegod"))) {
-                return false;
-            } else if (path.contains("natives")) {
-                return false;
-            } else if (path.contains("sources") || path.contains("javadoc")) {
-                return false;
-            }
-
-            return true;
-        });
-
-        classPathScanner.getAllResources(resourcesInClasspath);
         prepareClasspathResources();
 
         final ExecutorManager executorManager = ExecutorManager.getInstance();
@@ -193,17 +171,6 @@ public class ResourceManager extends EditorThread implements AssetEventListener 
 
         updateAdditionalEnvs();
         start();
-    }
-
-    /**
-     * Get a classpath scanner.
-     *
-     * @return the classpath scanner.
-     */
-    @NotNull
-    @FromAnyThread
-    public ClassPathScanner getClassPathScanner() {
-        return classPathScanner;
     }
 
     @Override

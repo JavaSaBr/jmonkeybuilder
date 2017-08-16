@@ -61,11 +61,6 @@ public class MeshTreeNode extends TreeNode<Mesh> {
     }
 
     @Override
-    public boolean canMove() {
-        return false;
-    }
-
-    @Override
     public boolean canCopy() {
         return true;
     }

@@ -9,7 +9,6 @@ import com.jme3.material.Material;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.dialog.ConfirmDialog;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.util.FileUtils;
@@ -73,9 +72,8 @@ public class DeleteMaterialsModelFileDeleteHandler extends AbstractFileDeleteHan
         String question = Messages.FILE_DELETE_HANDLER_DELETE_MATERIALS;
         question = question.replace("%file_name%", file.getFileName().toString());
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final ConfirmDialog confirmDialog = new ConfirmDialog(this::handle, question);
-        confirmDialog.show(scene.getWindow());
+        confirmDialog.show();
     }
 
     private void handle(@NotNull final Boolean result) {

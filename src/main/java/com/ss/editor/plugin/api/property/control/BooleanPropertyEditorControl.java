@@ -1,8 +1,8 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.CheckBox;
@@ -33,7 +33,7 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
 
         checkBox = new CheckBox();
         checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> change());
-        checkBox.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        checkBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FXUtils.addToPane(checkBox, this);
         FXUtils.addClassTo(checkBox, CSSClasses.ABSTRACT_PARAM_CONTROL_CHECK_BOX);
@@ -52,8 +52,8 @@ public class BooleanPropertyEditorControl extends PropertyEditorControl<Boolean>
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         setPropertyValue(getCheckBox().isSelected());
-        super.change();
+        super.changeImpl();
     }
 }

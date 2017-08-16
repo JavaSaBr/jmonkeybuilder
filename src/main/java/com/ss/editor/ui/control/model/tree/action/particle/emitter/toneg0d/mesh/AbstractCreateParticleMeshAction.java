@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.mesh;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
@@ -54,7 +53,7 @@ public abstract class AbstractCreateParticleMeshAction extends AbstractNodeActio
         final ParticleGeometry geometry = emitterNode.getParticleGeometry();
         final ParticleDataMeshInfo meshInfo = createMeshInfo();
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeParticleMeshOperation(meshInfo, geometry));
     }
 

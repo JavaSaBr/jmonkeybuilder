@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -49,7 +48,6 @@ public abstract class AbstractIntegerPropertyControl<C extends ChangeConsumer, T
         super.createComponents(container);
 
         valueField = new IntegerTextField();
-        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty().bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));
 

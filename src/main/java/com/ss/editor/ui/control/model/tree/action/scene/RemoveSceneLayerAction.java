@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.scene;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.extension.scene.SceneLayer;
@@ -15,8 +16,6 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * The action to remove a scene layer.
@@ -53,7 +52,7 @@ public class RemoveSceneLayerAction extends AbstractNodeAction<SceneChangeConsum
         super.process();
 
         final NodeTree<SceneChangeConsumer> nodeTree = getNodeTree();
-        final SceneChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+        final SceneChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         final SceneNode sceneNode = changeConsumer.getCurrentModel();
 
         final SceneLayerTreeNode modelNode = (SceneLayerTreeNode) getNode();

@@ -9,15 +9,14 @@ import com.ss.editor.config.EditorConfig;
 import com.ss.editor.file.converter.FileConverter;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.event.FXEventManager;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.EditorUtil;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -91,8 +90,7 @@ public abstract class AbstractFileConverter implements FileConverter {
             throw new IllegalArgumentException("incorrect extension of file " + source);
         }
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
+        EditorUtil.incrementLoading();
 
         EXECUTOR_MANAGER.addBackgroundTask(() -> {
             try {
@@ -150,8 +148,7 @@ public abstract class AbstractFileConverter implements FileConverter {
 
     @FXThread
     private void notifyFileChangedImpl(@NotNull final Path file) {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.decrementLoading();
+        EditorUtil.decrementLoading();
     }
 
     /**
@@ -166,7 +163,6 @@ public abstract class AbstractFileConverter implements FileConverter {
 
     @FXThread
     private void notifyFileCreatedImpl(@Nullable final Path file) {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.decrementLoading();
+        EditorUtil.decrementLoading();
     }
 }

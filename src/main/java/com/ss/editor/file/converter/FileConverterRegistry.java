@@ -49,6 +49,7 @@ public class FileConverterRegistry {
         register(SceneToJ3oFileConverter.DESCRIPTION);
         register(MeshXmlToJ3oFileConverter.DESCRIPTION);
         register(XBufToJ3oFileConverter.DESCRIPTION);
+        register(GLTFToJ3oFileConverter.DESCRIPTION);
     }
 
     /**

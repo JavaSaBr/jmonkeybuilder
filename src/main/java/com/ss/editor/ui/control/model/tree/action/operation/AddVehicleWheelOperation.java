@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.operation;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.jme3.math.Vector3f;
@@ -109,7 +109,7 @@ public class AddVehicleWheelOperation extends AbstractEditorOperation<ModelChang
                 }
             }
 
-            final VehicleWheel toRemove = requireNonNull(createdWheel);
+            final VehicleWheel toRemove = notNull(createdWheel);
 
             this.createdWheel = null;
 

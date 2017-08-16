@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.TextField;
@@ -84,8 +83,6 @@ public abstract class AbstractStringPropertyControl<C extends ChangeConsumer, T>
      * Update the value.
      */
     private void updateValue(@NotNull final KeyEvent event) {
-        UIUtils.consumeIfIsNotHotKey(event);
-
         if (isIgnoreListener() || event.getCode() != KeyCode.ENTER) return;
 
         final TextField valueField = getValueField();

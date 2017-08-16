@@ -69,16 +69,6 @@ public class GeometryTreeNode<T extends Geometry> extends SpatialTreeNode<T> {
     }
 
     @Override
-    public boolean canAccept(@NotNull final TreeNode<?> child) {
-
-        final Geometry geometry = getElement();
-        if (geometry.getMesh() != null) return false;
-
-        final Object element = child.getElement();
-        return element instanceof Mesh;
-    }
-
-    @Override
     public void add(@NotNull final TreeNode<?> child) {
         super.add(child);
 

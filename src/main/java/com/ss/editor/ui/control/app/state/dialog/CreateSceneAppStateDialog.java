@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.app.state.dialog;
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
-import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.EditableSceneAppState;
@@ -192,7 +191,7 @@ public class CreateSceneAppStateDialog extends AbstractSimpleEditorDialog {
             final SingleSelectionModel<String> selectionModel = builtInBox.getSelectionModel();
             final String name = selectionModel.getSelectedItem();
 
-            final EditableSceneAppState example = requireNonNull(BUILT_IN.get(name));
+            final EditableSceneAppState example = notNull(BUILT_IN.get(name));
             final SceneAppState newExample = ClassUtils.newInstance(example.getClass());
 
             check(appStates, filters, newExample);

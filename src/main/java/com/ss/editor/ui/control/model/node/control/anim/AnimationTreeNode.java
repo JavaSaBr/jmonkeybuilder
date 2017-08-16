@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.node.control.anim;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.jme3.animation.Track;
@@ -68,7 +68,7 @@ public class AnimationTreeNode extends TreeNode<Animation> {
                                 @NotNull final ObservableList<MenuItem> items) {
 
         final Animation animation = getElement();
-        final AnimationControlTreeNode controlModelNode = requireNonNull(getControlModelNode());
+        final AnimationControlTreeNode controlModelNode = notNull(getControlModelNode());
         final AnimControl control = controlModelNode.getElement();
 
         final int frameCount = AnimationUtils.getFrameCount(animation);
@@ -125,11 +125,11 @@ public class AnimationTreeNode extends TreeNode<Animation> {
 
         super.changeName(nodeTree, newName);
 
-        final AnimationControlTreeNode controlModelNode = requireNonNull(getControlModelNode());
+        final AnimationControlTreeNode controlModelNode = notNull(getControlModelNode());
         final AnimControl control = controlModelNode.getElement();
         final RenameAnimationNodeOperation operation = new RenameAnimationNodeOperation(getName(), newName, control);
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(operation);
     }
 

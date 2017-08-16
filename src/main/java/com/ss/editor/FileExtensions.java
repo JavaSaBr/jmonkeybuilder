@@ -32,11 +32,11 @@ public interface FileExtensions {
      * The constant JAVA_LIBRARY.
      */
     String JAVA_LIBRARY = "jar";
-
     /**
-     * The constant POST_FILTER_VIEW.
+     * The constant JAVA_CLASS.
      */
-    String POST_FILTER_VIEW = "pfv";
+    String JAVA_CLASS = "class";
+
 
     /**
      * The constant IMAGE_PNG.
@@ -121,6 +121,10 @@ public interface FileExtensions {
      * The constant MODEL_FBX.
      */
     String MODEL_FBX = "fbx";
+    /**
+     * The constant MODEL_GLTF.
+     */
+    String MODEL_GLTF = "gltf";
     /**
      * The constant MODEL_OBJ.
      */

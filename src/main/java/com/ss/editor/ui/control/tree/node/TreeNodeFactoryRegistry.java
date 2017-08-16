@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.tree.node;
 
+import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import com.ss.editor.ui.control.tree.node.impl.*;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
@@ -77,6 +78,10 @@ public class TreeNodeFactoryRegistry {
      */
     @Nullable
     public <T, V extends TreeNode<T>> V createFor(@Nullable final T element) {
+
+        if (element instanceof TreeNode) {
+            return unsafeCast(element);
+        }
 
         final long objectId = ID_GENERATOR.incrementAndGet();
 

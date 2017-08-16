@@ -1,12 +1,12 @@
 package com.ss.editor.ui.component.editor.impl.model;
 
-import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.SKY_NODE_KEY;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.asset.TextureKey;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
@@ -179,7 +179,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         if (!geometries.isEmpty()) {
             geometries.forEach(geometry -> {
-                if (geometry.getUserData(SKY_NODE_KEY) == Boolean.TRUE) {
+                if (geometry.getQueueBucket() == RenderQueue.Bucket.Sky) {
                     editor3DState.addCustomSky(geometry);
                 }
             });
@@ -286,7 +286,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (added instanceof Spatial) {
 
             final Spatial spatial = (Spatial) added;
-            final boolean isSky = spatial.getUserData(SKY_NODE_KEY) == Boolean.TRUE;
+            final boolean isSky = spatial.getQueueBucket() == RenderQueue.Bucket.Sky;
 
             if (isSky) {
                 editor3DState.addCustomSky(spatial);
@@ -304,7 +304,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         if (removed instanceof Spatial) {
 
             final Spatial spatial = (Spatial) removed;
-            final boolean isSky = spatial.getUserData(SKY_NODE_KEY) == Boolean.TRUE;
+            final boolean isSky = spatial.getQueueBucket() == RenderQueue.Bucket.Sky;
 
             if (isSky) {
                 editor3DState.removeCustomSky(spatial);

@@ -4,17 +4,14 @@ import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.ui.Icons;
+import com.ss.editor.ui.control.model.node.control.anim.AnimationTreeNode;
 import com.ss.editor.ui.control.model.tree.action.AbstractNodeAction;
 import com.ss.editor.ui.control.model.tree.dialog.animation.ExtractSubAnimationDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.control.model.node.control.anim.AnimationTreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to manual extract a sub-animation from an animation.
@@ -49,11 +46,8 @@ public class ManualExtractSubAnimationAction extends AbstractNodeAction<ModelCha
     @Override
     protected void process() {
         super.process();
-        
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-
         final ExtractSubAnimationDialog dialog = new ExtractSubAnimationDialog(nodeTree, (AnimationTreeNode) getNode());
-        dialog.show(scene.getWindow());
+        dialog.show();
     }
 }

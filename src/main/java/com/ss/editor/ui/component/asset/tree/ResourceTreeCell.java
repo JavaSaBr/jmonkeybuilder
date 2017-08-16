@@ -2,7 +2,6 @@ package com.ss.editor.ui.component.asset.tree;
 
 import static com.ss.editor.manager.FileIconManager.DEFAULT_FILE_ICON_SIZE;
 import static java.util.Collections.singletonList;
-import com.ss.editor.config.EditorConfig;
 import com.ss.editor.manager.FileIconManager;
 import com.ss.editor.ui.component.asset.tree.resource.FolderResourceElement;
 import com.ss.editor.ui.component.asset.tree.resource.LoadingResourceElement;
@@ -23,7 +22,7 @@ import java.nio.file.Path;
 import java.util.function.Consumer;
 
 /**
- * The implementation of the cell for {@link TreeView} for showing a resource.
+ * The implementation of the cell for {@link TreeView} to show resource.
  *
  * @author JavaSaBr
  */
@@ -33,16 +32,16 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     private static final FileIconManager ICON_MANAGER = FileIconManager.getInstance();
 
     /**
-     * The tooltip of this resource.
-     */
-    @NotNull
-    private final Tooltip tooltip;
-
-    /**
      * The icon.
      */
     @NotNull
     private final ImageView icon;
+
+    /**
+     * The tooltip of this resource.
+     */
+    @Nullable
+    private Tooltip tooltip;
 
     /**
      * Instantiates a new Resource tree cell.
@@ -100,19 +99,12 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
         final ResourceTree treeView = (ResourceTree) getTreeView();
 
         if (event.getButton() == MouseButton.SECONDARY) {
-
             final ContextMenu contextMenu = treeView.getContextMenu(item);
             if (contextMenu == null) return;
-
             contextMenu.show(this, Side.BOTTOM, 0, 0);
-
         } else if (!isFolder && event.getButton() == MouseButton.PRIMARY && event.getClickCount() > 1) {
-
             final Consumer<ResourceElement> openFunction = treeView.getOpenFunction();
-
-            if (openFunction != null) {
-                openFunction.accept(item);
-            }
+            if (openFunction != null) openFunction.accept(item);
         }
     }
 
@@ -120,15 +112,15 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
     protected void updateItem(@Nullable final ResourceElement item, boolean empty) {
         super.updateItem(item, empty);
 
+        removeToolTip();
+
         if (item == null) {
             setText(StringUtils.EMPTY);
             setGraphic(null);
-            Tooltip.uninstall(this, tooltip);
             return;
         } else if (item instanceof LoadingResourceElement) {
             setText(StringUtils.EMPTY);
             setGraphic(new ProgressIndicator());
-            Tooltip.uninstall(this, tooltip);
             return;
         }
 
@@ -139,22 +131,18 @@ public class ResourceTreeCell extends TreeCell<ResourceElement> {
 
         setText(fileName.toString());
         setGraphic(icon);
-
-        final EditorConfig editorConfig = EditorConfig.getInstance();
-        final Path currentAsset = editorConfig.getCurrentAsset();
-
-        if (file.equals(currentAsset)) {
-            Tooltip.install(this, tooltip);
-            updateTooltip(file.toString());
-        } else {
-            Tooltip.uninstall(this, tooltip);
-        }
+        createToolTip();
     }
 
-    /**
-     * Update the tooltip.
-     */
-    private void updateTooltip(@NotNull final String text) {
-        tooltip.setText(text);
+    private void removeToolTip() {
+        if (tooltip == null) return;
+        Tooltip.uninstall(this, tooltip);
+        tooltip = null;
+    }
+
+    private void createToolTip() {
+        tooltip = getItem().createToolTip();
+        if (tooltip == null) return;
+        Tooltip.install(this, tooltip);
     }
 }

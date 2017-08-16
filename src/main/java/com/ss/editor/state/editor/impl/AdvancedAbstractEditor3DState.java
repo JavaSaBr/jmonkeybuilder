@@ -343,6 +343,11 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     private float prevHRotation;
 
     /**
+     * The previous camera speed.
+     */
+    private float prevCameraSpeed;
+
+    /**
      * The camera speed.
      */
     private float cameraSpeed;
@@ -1034,6 +1039,38 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         return prevCameraLocation;
     }
 
+    /**
+     * @return the camera speed.
+     */
+    @FromAnyThread
+    private float getCameraSpeed() {
+        return cameraSpeed;
+    }
+
+    /**
+     * @param cameraSpeed the camera speed.
+     */
+    @FromAnyThread
+    private void setCameraSpeed(final float cameraSpeed) {
+        this.cameraSpeed = cameraSpeed;
+    }
+
+    /**
+     * @return the prev camera speed.
+     */
+    @FromAnyThread
+    private float getPrevCameraSpeed() {
+        return prevCameraSpeed;
+    }
+
+    /**
+     * @param prevCameraSpeed the prev camera speed.
+     */
+    @FromAnyThread
+    private void setPrevCameraSpeed(final float prevCameraSpeed) {
+        this.prevCameraSpeed = prevCameraSpeed;
+    }
+
     @Override
     public void update(float tpf) {
         super.update(tpf);
@@ -1083,29 +1120,30 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         final Vector3f prevCameraLocation = getPrevCameraLocation();
         final Vector3f cameraLocation = nodeForCamera.getLocalTranslation();
 
-        if (!prevCameraLocation.equals(cameraLocation)) {
-            changes++;
-        }
-
         final float prevHRotation = getPrevHRotation();
         final float hRotation = editorCamera.getHorizontalRotation();
 
         final float prevVRotation = getPrevVRotation();
         final float vRotation = editorCamera.getVerticalRotation();
 
-        if (prevHRotation != hRotation || prevVRotation != vRotation) {
-            changes++;
-        }
-
         final float prevTargetDistance = getPrevTargetDistance();
         final float targetDistance = editorCamera.getTargetDistance();
 
-        if (prevTargetDistance != targetDistance) {
+        final float cameraSpeed = getCameraSpeed();
+        final float prevCameraSpeed = getPrevCameraSpeed();
+
+        if (!prevCameraLocation.equals(cameraLocation)) {
+            changes++;
+        } else if (prevHRotation != hRotation || prevVRotation != vRotation) {
+            changes++;
+        } else if (prevTargetDistance != targetDistance) {
+            changes++;
+        } else if (cameraSpeed != prevCameraSpeed) {
             changes++;
         }
 
         if (changes > 0) {
-            notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance);
+            notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
         }
 
         prevCameraLocation.set(cameraLocation);
@@ -1113,31 +1151,36 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         setPrevHRotation(hRotation);
         setPrevVRotation(vRotation);
         setPrevTargetDistance(targetDistance);
+        setPrevCameraSpeed(cameraSpeed);
     }
 
     /**
-     * Notify about changed camera.
+     * Notify about changed camera's settings.
      *
-     * @param cameraLocation the camera location
-     * @param hRotation      the h rotation
-     * @param vRotation      the v rotation
-     * @param targetDistance the target distance
-     */
-    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                       final float vRotation, final float targetDistance) {
-    }
-
-    /**
-     * Update the editor camera.
-     *
-     * @param cameraLocation the camera location
-     * @param hRotation      the h rotation
-     * @param vRotation      the v rotation
-     * @param targetDistance the target distance
+     * @param cameraLocation the camera location.
+     * @param hRotation      the h rotation.
+     * @param vRotation      the v rotation.
+     * @param targetDistance the target distance.
+     * @param cameraSpeed    the camera speed.
      */
     @JMEThread
-    public void updateCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                             final float vRotation, final float targetDistance) {
+    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                               final float vRotation, final float targetDistance,
+                                               final float cameraSpeed) {
+    }
+
+    /**
+     * Update the editor camera settings.
+     *
+     * @param cameraLocation the camera location.
+     * @param hRotation      the h rotation.
+     * @param vRotation      the v rotation.
+     * @param targetDistance the target distance.
+     * @param cameraSpeed    the camera speed.
+     */
+    @JMEThread
+    public void updateCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                     final float vRotation, final float targetDistance, final float cameraSpeed) {
 
         final EditorCamera editorCamera = getEditorCamera();
         if (editorCamera == null) return;
@@ -1152,6 +1195,8 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
         setPrevHRotation(hRotation);
         setPrevVRotation(vRotation);
         setPrevTargetDistance(targetDistance);
+        setPrevCameraSpeed(cameraSpeed);
+        setCameraSpeed(cameraSpeed);
 
         editorCamera.update(1F);
     }

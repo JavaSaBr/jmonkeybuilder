@@ -1,6 +1,7 @@
 package com.ss.editor.ui.dialog;
 
 import com.ss.editor.Messages;
+import com.ss.editor.annotation.FXThread;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.util.EditorUtil;
@@ -24,37 +25,37 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * The constant DEFAULT_LABEL_W_PERCENT.
      */
-    protected static final double DEFAULT_LABEL_W_PERCENT = 0.4;
+    public static final double DEFAULT_LABEL_W_PERCENT = 0.4;
 
     /**
      * The constant DEFAULT_FIELD_W_PERCENT.
      */
-    protected static final double DEFAULT_FIELD_W_PERCENT = 0.6;
+    public static final double DEFAULT_FIELD_W_PERCENT = 0.6;
 
     /**
      * The constant DEFAULT_LABEL_W_PERCENT2.
      */
-    protected static final double DEFAULT_LABEL_W_PERCENT2 = 0.5;
+    public static final double DEFAULT_LABEL_W_PERCENT2 = 0.5;
 
     /**
      * The constant DEFAULT_FIELD_W_PERCENT2.
      */
-    protected static final double DEFAULT_FIELD_W_PERCENT2 = 0.5;
+    public static final double DEFAULT_FIELD_W_PERCENT2 = 0.5;
 
     /**
      * The constant DEFAULT_LABEL_W_PERCENT3.
      */
-    protected static final double DEFAULT_LABEL_W_PERCENT3 = 0.6;
+    public static final double DEFAULT_LABEL_W_PERCENT3 = 0.6;
 
     /**
      * The constant DEFAULT_FIELD_W_PERCENT3.
      */
-    protected static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
+    public static final double DEFAULT_FIELD_W_PERCENT3 = 0.4;
 
     /**
      * The constant DEFAULT_FIELD_W_PERCENT4.
      */
-    protected static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
+    public static final double DEFAULT_FIELD_W_PERCENT4 = 0.3;
 
     /**
      * The constant EXECUTOR_MANAGER.
@@ -210,6 +211,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle ok button.
      */
+    @FXThread
     protected void processOk() {
         hide();
     }
@@ -217,6 +219,7 @@ public abstract class AbstractSimpleEditorDialog extends EditorDialog {
     /**
      * Handle cancel button.
      */
+    @FXThread
     protected void processClose() {
         hide();
     }

@@ -1,13 +1,11 @@
 package com.ss.editor.file.converter;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
-
+import com.ss.rlib.util.array.Array;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
 import java.util.function.Supplier;
-
-import com.ss.rlib.util.array.Array;
 
 /**
  * The description of a file converter.
@@ -39,7 +37,7 @@ public class FileConverterDescription {
     @NotNull
     @FXThread
     public Array<String> getExtensions() {
-        return Objects.requireNonNull(extensions);
+        return notNull(extensions);
     }
 
     /**
@@ -60,7 +58,7 @@ public class FileConverterDescription {
     @NotNull
     @FXThread
     public Supplier<FileConverter> getConstructor() {
-        return Objects.requireNonNull(constructor);
+        return notNull(constructor);
     }
 
     /**

@@ -1,9 +1,8 @@
 package com.ss.editor.ui.control.model.tree.action;
 
 import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.LOADED_MODEL_KEY;
-import static com.ss.editor.util.EditorUtil.getAssetFile;
-import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
+import static com.ss.editor.util.EditorUtil.*;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Node;
@@ -22,7 +21,6 @@ import com.ss.editor.ui.control.model.tree.action.operation.AddChildOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
 import com.ss.editor.ui.util.UIUtils;
-import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.scene.image.Image;
@@ -86,10 +84,10 @@ public class LoadModelAction extends AbstractNodeAction<ModelChangeConsumer> {
     protected void processOpen(@NotNull final Path file) {
 
         final NodeTree<?> nodeTree = getNodeTree();
-        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
-        final SceneLayer defaultLayer = EditorUtil.getDefaultLayer(consumer);
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
+        final SceneLayer defaultLayer = getDefaultLayer(consumer);
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final ModelKey modelKey = new ModelKey(assetPath);

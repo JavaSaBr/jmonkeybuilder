@@ -551,6 +551,10 @@
     -fx-padding: 3px;
 }
 
+.check-box:editable {
+    -fx-background-color: red;
+}
+
 .check-box:hover .box {
     -fx-border-color: -fx-focus-color;
     -fx-background: -var-button-hover-background-color;

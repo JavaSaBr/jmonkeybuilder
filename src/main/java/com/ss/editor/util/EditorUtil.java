@@ -17,7 +17,7 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.SceneNode;
-import com.ss.editor.manager.CustomClasspathManager;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -191,6 +191,18 @@ public abstract class EditorUtil {
     @NotNull
     public static InputStream getInputStream(@NotNull final String path) {
         return JFXApplication.class.getResourceAsStream(path);
+    }
+
+    /**
+     * Gets input stream.
+     *
+     * @param path        the path to resource.
+     * @param classLoader the class loader.
+     * @return the input stream of the resource or null.
+     */
+    @NotNull
+    public static InputStream getInputStream(@NotNull final String path, @NotNull final ClassLoader classLoader) {
+        return classLoader.getResourceAsStream(path);
     }
 
     /**
@@ -567,7 +579,7 @@ public abstract class EditorUtil {
                                               @NotNull final Class<T> resultType) {
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
-        final CustomClasspathManager customClasspathManager = CustomClasspathManager.getInstance();
+        final ClasspathManager classpathManager = ClasspathManager.getInstance();
 
         Object newExample = null;
         try {
@@ -585,10 +597,10 @@ public abstract class EditorUtil {
                 }
             }
 
-            final URLClassLoader additionalCL = customClasspathManager.getAdditionalCL();
-            if (additionalCL != null) {
+            final URLClassLoader librariesLoader = classpathManager.getLibrariesLoader();
+            if (librariesLoader != null) {
                 try {
-                    final Class<?> targetClass = additionalCL.loadClass(className);
+                    final Class<?> targetClass = librariesLoader.loadClass(className);
                     newExample = ClassUtils.newInstance(targetClass);
                 } catch (final ClassNotFoundException ex) {
                     LOGGER.warning(owner, e);

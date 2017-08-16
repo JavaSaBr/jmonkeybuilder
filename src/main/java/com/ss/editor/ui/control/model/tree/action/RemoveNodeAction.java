@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -58,7 +57,7 @@ public class RemoveNodeAction extends AbstractNodeAction<ModelChangeConsumer> {
         final Spatial spatial = (Spatial) element;
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RemoveChildOperation(spatial, spatial.getParent()));
     }
 }

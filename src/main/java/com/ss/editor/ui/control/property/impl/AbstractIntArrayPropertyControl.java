@@ -4,7 +4,6 @@ import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.ArrayUtils;
@@ -95,8 +94,6 @@ public abstract class AbstractIntArrayPropertyControl<C extends ChangeConsumer, 
      * Update the value.
      */
     private void updateValue(@Nullable final KeyEvent event) {
-        UIUtils.consumeIfIsNotHotKey(event);
-
         if (isIgnoreListener() || (event != null && event.getCode() != KeyCode.ENTER)) return;
 
         final String textValue = getValueField().getText();

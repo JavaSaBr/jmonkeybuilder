@@ -1,11 +1,11 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.Messages;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -62,7 +62,7 @@ public abstract class ResourcePropertyEditorControl<T> extends PropertyEditorCon
         changeButton.setGraphic(new ImageView(Icons.ADD_16));
         changeButton.setOnAction(event -> processSelect());
 
-        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(0.5));
+        resourceLabel.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         final HBox container = new HBox(resourceLabel, changeButton);
 

@@ -1,9 +1,8 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
-import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
@@ -33,12 +32,22 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
         super.createComponents();
 
         valueField = new IntegerTextField();
-        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> change());
-        valueField.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        valueField.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
 
         FXUtils.addClassTo(valueField, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(valueField, this);
+    }
+
+    /**
+     * Set min/max values.
+     *
+     * @param min the min value.
+     * @param max the max value.
+     */
+    public void setMinMax(final float min, final float max) {
+        if (Float.isNaN(min) || Float.isNaN(max)) return;
+        getValueField().setMinMax((int) min, (int) max);
     }
 
     @NotNull
@@ -54,8 +63,8 @@ public class IntegerPropertyEditorControl extends PropertyEditorControl<Integer>
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         setPropertyValue(getValueField().getValue());
-        super.change();
+        super.changeImpl();
     }
 }

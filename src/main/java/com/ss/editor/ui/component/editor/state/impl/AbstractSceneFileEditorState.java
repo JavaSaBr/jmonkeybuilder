@@ -14,7 +14,7 @@ public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 3;
+    public static final long serialVersionUID = 4;
 
     /**
      * The transformation type.

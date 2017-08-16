@@ -1,9 +1,9 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
 import com.ss.rlib.ui.util.FXUtils;
 import com.ss.rlib.util.VarTable;
 import javafx.scene.control.ComboBox;
@@ -41,7 +41,8 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
 
         enumComboBox = new ComboBox<>();
         enumComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> change());
-        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(0.5F));
+        enumComboBox.prefWidthProperty().bind(widthProperty().multiply(DEFAULT_FIELD_W_PERCENT));
+        enumComboBox.setVisibleRowCount(20);
 
         FXUtils.addClassTo(enumComboBox, CSSClasses.ABSTRACT_PARAM_CONTROL_COMBO_BOX);
         FXUtils.addToPane(enumComboBox, this);
@@ -64,10 +65,10 @@ public class EnumPropertyEditorControl<T extends Enum<T>> extends PropertyEditor
     }
 
     @Override
-    protected void change() {
+    protected void changeImpl() {
         final ComboBox<T> enumComboBox = getEnumComboBox();
         final SingleSelectionModel<T> selectionModel = enumComboBox.getSelectionModel();
         setPropertyValue(selectionModel.getSelectedItem());
-        super.change();
+        super.changeImpl();
     }
 }

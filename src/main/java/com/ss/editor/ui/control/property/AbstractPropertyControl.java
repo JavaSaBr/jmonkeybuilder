@@ -13,6 +13,7 @@ import com.ss.editor.ui.component.asset.tree.context.menu.action.RenameFileActio
 import com.ss.editor.ui.control.UpdatableControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
@@ -165,6 +166,8 @@ public abstract class AbstractPropertyControl<C extends ChangeConsumer, D, T> ex
         this.changeConsumer = changeConsumer;
         this.changeHandler = changeHandler;
 
+        setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
+        setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
         setPropertyValue(propertyValue);
         createComponents();
         setIgnoreListener(true);

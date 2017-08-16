@@ -1,6 +1,7 @@
 package com.ss.editor;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
+import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static java.nio.file.Files.newOutputStream;
 import com.jme3.renderer.Renderer;
@@ -29,6 +30,7 @@ import com.ss.editor.ui.css.CSSRegistry;
 import com.ss.editor.ui.dialog.ConfirmDialog;
 import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.util.OpenGLVersion;
+import com.ss.editor.util.svg.SvgImageLoaderFactory;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
@@ -36,7 +38,6 @@ import com.ss.rlib.util.ArrayUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import com.ss.rlib.util.array.ConcurrentArray;
-import de.codecentric.centerdevice.javafxsvg.SvgImageLoaderFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -142,11 +143,11 @@ public class JFXApplication extends Application {
             return;
         }
 
+        InitializeManager.register(ClasspathManager.class);
         InitializeManager.register(ResourceManager.class);
         InitializeManager.register(JavaFXImageManager.class);
         InitializeManager.register(FileIconManager.class);
         InitializeManager.register(WorkspaceManager.class);
-        InitializeManager.register(CustomClasspathManager.class);
         InitializeManager.register(PluginManager.class);
         InitializeManager.initialize();
 
@@ -395,6 +396,7 @@ public class JFXApplication extends Application {
 
         final FrameTransferSceneProcessor sceneProcessor = bind(editor, scene.getCanvas(), editor.getViewPort());
         sceneProcessor.setEnabled(false);
+        sceneProcessor.setTransferMode(ON_CHANGES);
 
         this.sceneProcessor = sceneProcessor;
 

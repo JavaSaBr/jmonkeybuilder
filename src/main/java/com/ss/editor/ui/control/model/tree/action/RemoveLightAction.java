@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.light.Light;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
@@ -65,7 +64,7 @@ public class RemoveLightAction extends AbstractNodeAction<ModelChangeConsumer> {
         final Object parent = parentNode.getElement();
         if (!(parent instanceof Node)) return;
 
-        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RemoveLightOperation(light, (Node) parent));
     }
 }

@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
 import com.ss.editor.annotation.FXThread;
@@ -11,12 +10,10 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.action.operation.OptimizeGeometryOperation;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javafx.scene.image.Image;
 import jme3tools.optimize.GeometryBatchFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The action to optimize a geometry.
@@ -59,7 +56,7 @@ public class OptimizeGeometryAction extends AbstractNodeAction<ModelChangeConsum
 
         GeometryBatchFactory.optimize(newElement);
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new OptimizeGeometryOperation(newElement, oldElement, oldElement.getParent()));
     }
 }

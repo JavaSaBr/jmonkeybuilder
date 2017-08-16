@@ -101,7 +101,7 @@ public class ColorMaterialParamControl extends MaterialParamControl {
             return;
         }
 
-        final ColorRGBA colorRGBA = UIUtils.convertColor(newValue);
+        final ColorRGBA colorRGBA = UIUtils.from(newValue);
 
         final String parameterName = getParameterName();
         final Material material = getMaterial();

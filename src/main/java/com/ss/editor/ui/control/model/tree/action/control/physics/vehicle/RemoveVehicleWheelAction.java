@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.control.physics.vehicle;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.bullet.control.VehicleControl;
 import com.jme3.bullet.objects.VehicleWheel;
 import com.ss.editor.Messages;
@@ -51,12 +51,12 @@ public class RemoveVehicleWheelAction extends AbstractNodeAction<ModelChangeCons
 
         final TreeNode<?> node = getNode();
         final Object element = node.getElement();
-        final TreeNode<?> nodeParent = requireNonNull(node.getParent());
+        final TreeNode<?> nodeParent = notNull(node.getParent());
         final VehicleControl vehicleControl = (VehicleControl) nodeParent.getElement();
         final VehicleWheel vehicleWheel = (VehicleWheel) element;
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RemoveVehicleWheelOperation(vehicleControl, vehicleWheel));
     }
 }

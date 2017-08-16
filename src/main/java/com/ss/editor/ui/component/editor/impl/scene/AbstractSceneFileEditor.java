@@ -4,6 +4,7 @@ import static com.ss.editor.state.editor.impl.scene.AbstractSceneEditor3DState.L
 import static com.ss.editor.util.EditorUtil.*;
 import static com.ss.editor.util.MaterialUtils.saveIfNeedTextures;
 import static com.ss.editor.util.MaterialUtils.updateMaterialIdNeed;
+import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static javafx.collections.FXCollections.observableArrayList;
@@ -72,6 +73,7 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.ui.util.UIUtils;
+import com.ss.editor.util.LocalObjects;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.editor.util.NodeUtils;
 import com.ss.rlib.ui.util.FXUtils;
@@ -79,12 +81,11 @@ import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,12 +116,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private static final int EDITING_TOOL = 1;
 
     @NotNull
-    private static final Array<String> ACCEPTED_FILES = ArrayFactory.newArray(String.class);
-
-    static {
-        ACCEPTED_FILES.add(FileExtensions.JME_MATERIAL);
-        ACCEPTED_FILES.add(FileExtensions.JME_OBJECT);
-    }
+    private static final Array<String> ACCEPTED_FILES = ArrayFactory.asArray(
+            FileExtensions.JME_MATERIAL,
+            FileExtensions.JME_OBJECT);
 
     @NotNull
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
@@ -319,6 +317,11 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @FXThread
     protected StackPane createRoot() {
         return new StackPane();
+    }
+
+    @Override
+    protected boolean needListenEventsFromPage() {
+        return false;
     }
 
     /**
@@ -567,14 +570,17 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final float hRotation = editorState.getCameraHRotation();
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
+        final float cameraSpeed = editorState.getCameraSpeed();
 
-        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCameraSettings(cameraLocation, hRotation,
+                vRotation, tDistance, cameraSpeed));
     }
 
     @Override
     @FXThread
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                    final float vRotation, final float targetDistance) {
+    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                            final float vRotation, final float targetDistance,
+                                            final float cameraSpeed) {
 
         final ES editorState = getEditorState();
         if (editorState == null) return;
@@ -583,18 +589,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editorState.setCameraVRotation(vRotation);
         editorState.setCameraTDistance(targetDistance);
         editorState.setCameraLocation(cameraLocation);
-    }
-
-    @Override
-    @FXThread
-    protected void processKeyReleased(@NotNull final KeyEvent event) {
-        super.processKeyReleased(event);
-
-        final KeyCode code = event.getCode();
-
-        if (handleKeyActionImpl(code, false, event.isControlDown(), isButtonMiddleDown())) {
-            event.consume();
-        }
+        editorState.setCameraSpeed(cameraSpeed);
     }
 
     @Override
@@ -602,35 +597,31 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
 
-        if (isPressed) {
-            return false;
-        }
-
         final MA editor3DState = getEditor3DState();
 
         if (editor3DState.isCameraMoving()) {
             return false;
         }
 
-        if (isControlDown && keyCode == KeyCode.Z) {
+        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
             undo();
             return true;
-        } else if (isControlDown && keyCode == KeyCode.Y) {
+        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
             redo();
             return true;
-        } else if (keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.G && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton moveToolButton = getMoveToolButton();
             moveToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.R && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.R && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton rotationToolButton = getRotationToolButton();
             rotationToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton scaleToolButton = getScaleToolButton();
             scaleToolButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.DELETE) {
+        } else if (isPressed && keyCode == KeyCode.DELETE) {
 
             final ModelNodeTree modelNodeTree = getModelNodeTree();
             final TreeNode<?> selected = modelNodeTree.getSelected();
@@ -654,7 +645,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             return true;
         }
 
-        return super.handleKeyActionImpl(keyCode, false, isControlDown, isButtonMiddleDown);
+        return super.handleKeyActionImpl(keyCode, isPressed, isControlDown, isButtonMiddleDown);
     }
 
     /**
@@ -795,33 +786,28 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
     }
 
-    @Override
     @FXThread
-    public void notifyFXReplaced(@NotNull final Node parent, @NotNull final Spatial oldChild, @NotNull final Spatial newChild) {
+    @Override
+    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild,
+                                 @Nullable final Object newChild, final boolean needExpand,
+                                 final boolean needDeepExpand) {
 
         final MA editor3DState = getEditor3DState();
         final Spatial currentModel = getCurrentModel();
 
-        if (currentModel == oldChild) {
+        if (currentModel == oldChild && newChild != null) {
             setCurrentModel(unsafeCast(newChild));
             editor3DState.openModel(unsafeCast(newChild));
         }
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyReplace(parent, oldChild, newChild);
+        modelNodeTree.notifyReplace(parent, oldChild, newChild, needExpand, needDeepExpand);
     }
 
     @Override
     @FXThread
-    public void notifyFXReplaced(@NotNull final Object parent, @Nullable final Object oldChild, @Nullable final Object newChild) {
-        final ModelNodeTree modelNodeTree = getModelNodeTree();
-        modelNodeTree.notifyReplace(parent, oldChild, newChild);
-    }
-
-    @Override
-    @FXThread
-    public void notifyFXMoved(@NotNull final Node prevParent, @NotNull final Node newParent,
-                              @NotNull final Spatial child, final int index, final boolean needSelect) {
+    public void notifyFXMoved(@NotNull final Object prevParent, @NotNull final Object newParent,
+                              @NotNull final Object child, final int index, final boolean needSelect) {
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.notifyMoved(prevParent, newParent, child, index);
@@ -929,7 +915,7 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         updateSelection(spatial);
 
         if (spatial != null && !isIgnoreCameraMove() && !isVisibleOnEditor(spatial)) {
-            editor3DState.moveCameraTo(spatial.getWorldTranslation());
+            editor3DState.cameraLookAt(spatial.getWorldTranslation());
         }
 
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
@@ -942,13 +928,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     @FXThread
     private boolean isVisibleOnEditor(@NotNull final Spatial spatial) {
 
-        final Camera camera = EDITOR.getCamera();
+        final MA editor3DState = getEditor3DState();
+        final Camera camera = editor3DState.getCamera();
 
         final Vector3f position = spatial.getWorldTranslation();
         final Vector3f coordinates = camera.getScreenCoordinates(position, new Vector3f());
 
-        boolean invisible = coordinates.getZ() < 0;
-        invisible = invisible || !isInside(coordinates.getX(), camera.getHeight() - coordinates.getY());
+        boolean invisible = coordinates.getZ() < 0F || coordinates.getZ() > 1F;
+        invisible = invisible || !isInside(coordinates.getX(), camera.getHeight() - coordinates.getY(), Event.class);
 
         return !invisible;
     }
@@ -979,15 +966,23 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     @FXThread
-    public boolean isInside(final double sceneX, final double sceneY) {
+    public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
 
-        final Pane editorAreaPane = getEditorAreaPane();
-        final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
-        final boolean result = editorAreaPane.contains(point2D);
+        final Pane page = eventType.isAssignableFrom(MouseEvent.class) ||
+                eventType.isAssignableFrom(ScrollEvent.class) ?
+                getEditorAreaPane() : getPage();
 
-        if (Config.DEV_DEBUG_JFX_KEY_INPUT && LOGGER.isEnabledDebug()) {
-            LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
-                    ", localY = " + point2D.getY() + " is inside " + result);
+        final Point2D point2D = page.sceneToLocal(sceneX, sceneY);
+        final boolean result = page.contains(point2D);
+
+        if (LOGGER.isEnabledDebug()) {
+            if (Config.DEV_DEBUG_JFX_KEY_INPUT && eventType.isAssignableFrom(KeyEvent.class)) {
+                LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
+                        ", localY = " + point2D.getY() + " is inside " + result);
+            } else if (Config.DEV_DEBUG_JFX_MOUSE_INPUT && eventType.isAssignableFrom(MouseEvent.class)) {
+                LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
+                        ", localY = " + point2D.getY() + " is inside " + result);
+            }
         }
 
         return result;
@@ -1216,6 +1211,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         editor3DArea = new BorderPane();
         editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
+        editor3DArea.setOnKeyReleased(Event::consume);
+        editor3DArea.setOnKeyPressed(Event::consume);
 
         statsContainer = new VBox();
         statsContainer.setMouseTransparent(true);
@@ -1342,8 +1339,12 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      */
     @FXThread
     private void dragDropped(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this, dragEvent, AbstractSceneFileEditor::addNewModel);
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this, dragEvent, AbstractSceneFileEditor::applyMaterial);
+
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
+                dragEvent, AbstractSceneFileEditor::addNewModel);
+
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_MATERIAL, this,
+                dragEvent, AbstractSceneFileEditor::applyMaterial);
     }
 
     /**
@@ -1366,20 +1367,21 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
+        final MA editor3DState = getEditor3DState();
         final MaterialKey materialKey = new MaterialKey(assetPath);
-
-        final Camera camera = EDITOR.getCamera();
+        final Camera camera = editor3DState.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final MA editor3DState = getEditor3DState();
             final Geometry geometry = editor3DState.getGeometryByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
 
             if (geometry == null) return;
+            final Object linkNode = findParent(geometry, AssetLinkNode.class::isInstance);
+            if (linkNode != null) return;
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Material material = assetManager.loadAsset(materialKey);
@@ -1405,19 +1407,31 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         final M currentModel = getCurrentModel();
         if (!(currentModel instanceof Node)) return;
 
+        final ModelNodeTree modelNodeTree = getModelNodeTree();
+        final Object selected = modelNodeTree.getSelectedObject();
+
+        final Node parent;
+
+        if (selected instanceof Node && findParent((Spatial) selected, AssetLinkNode.class::isInstance) == null) {
+            parent = (Node) selected;
+        } else {
+            parent = (Node) currentModel;
+        }
+
         final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
+        final MA editor3DState = getEditor3DState();
         final ModelKey modelKey = new ModelKey(assetPath);
-        final Camera camera = EDITOR.getCamera();
+        final Camera camera = editor3DState.getCamera();
 
         final BorderPane area = get3DArea();
         final Point2D areaPoint = area.sceneToLocal(dragEvent.getSceneX(), dragEvent.getSceneY());
 
         EXECUTOR_MANAGER.addJMETask(() -> {
 
-            final MA editor3DState = getEditor3DState();
             final SceneLayer defaultLayer = getDefaultLayer(this);
+            final LocalObjects local = LocalObjects.get();
 
             final AssetManager assetManager = EDITOR.getAssetManager();
             final Spatial loadedModel = assetManager.loadModel(modelKey);
@@ -1430,12 +1444,14 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 SceneLayer.setLayer(defaultLayer, assetLinkNode);
             }
 
-            final Vector3f screenPoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
+            final Vector3f scenePoint = editor3DState.getScenePosByScreenPos((float) areaPoint.getX(),
                     camera.getHeight() - (float) areaPoint.getY());
+            final Vector3f result = local.nextVector(scenePoint)
+                    .subtractLocal(parent.getWorldTranslation());
 
-            assetLinkNode.setLocalTranslation(screenPoint);
+            assetLinkNode.setLocalTranslation(result);
 
-            execute(new AddChildOperation(assetLinkNode, (Node) currentModel));
+            execute(new AddChildOperation(assetLinkNode, parent, false));
         });
     }
 

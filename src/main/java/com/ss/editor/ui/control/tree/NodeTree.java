@@ -209,7 +209,7 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
      * @return the context menu
      */
     @FXThread
-    ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
+    public ContextMenu getContextMenu(@NotNull final TreeNode<?> treeNode) {
 
         final C changeConsumer = getChangeConsumer();
         if (changeConsumer == null) return null;
@@ -260,7 +260,13 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
 
         final TreeNode<?> newParentTreeNode = newParentItem.getValue();
         newParentTreeNode.notifyChildAdded(node);
-        newParentItem.getChildren().add(index, nodeItem);
+
+        if (index >= 0) {
+            newParentItem.getChildren().add(index, nodeItem);
+        } else {
+            newParentItem.getChildren().add(nodeItem);
+        }
+
         newParentTreeNode.notifyChildAdded(node);
 
         EXECUTOR_MANAGER.addFXTask(() -> select(node.getElement()));
@@ -313,39 +319,31 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
     /**
      * Notify about replacing the element.
      *
-     * @param parent   the parent
-     * @param oldChild the old child
-     * @param newChild the new child
+     * @param parent         the parent.
+     * @param oldChild       the old child.
+     * @param newChild       the new child.
+     * @param needExpand     true if need to expand new node.
+     * @param needDeepExpand true if need to expand new node deeply.
      */
     @FXThread
     public void notifyReplace(@Nullable final Object parent, @Nullable final Object oldChild,
-                              @Nullable final Object newChild) {
-        notifyReplace(FACTORY_REGISTRY.createFor(parent), FACTORY_REGISTRY.createFor(oldChild),
-                FACTORY_REGISTRY.createFor(newChild));
-    }
-
-    /**
-     * Notify about replacing the element.
-     */
-    @FXThread
-    private void notifyReplace(@Nullable final TreeNode<?> parent, @Nullable final TreeNode<?> oldChild,
-                               @Nullable final TreeNode<?> newChild) {
+                              @Nullable final Object newChild, final boolean needExpand, final boolean needDeepExpand) {
 
         final TreeView<TreeNode<?>> treeView = getTreeView();
         final TreeItem<TreeNode<?>> parentItem = findItemForValue(treeView, parent);
 
         if (parentItem == null) {
             if (newChild == null) return;
-            final TreeItem<TreeNode<?>> childItem = new TreeItem<>(newChild);
-            childItem.setExpanded(true);
-            fill(childItem, true, -1);
+            final TreeItem<TreeNode<?>> childItem = new TreeItem<>(FACTORY_REGISTRY.createFor(newChild));
+            fill(childItem, needDeepExpand, -1);
+            childItem.setExpanded(needExpand);
             treeView.setRoot(childItem);
             return;
         }
 
         int index = 0;
-        boolean needExpand = false;
 
+        final TreeNode<?> parentNode = parentItem.getValue();
         final MultipleSelectionModel<TreeItem<TreeNode<?>>> selectionModel = treeView.getSelectionModel();
         final ObservableList<TreeItem<TreeNode<?>>> children = parentItem.getChildren();
         final TreeItem<TreeNode<?>> oldChildItem = oldChild == null ? null : findItemForValue(treeView, oldChild);
@@ -354,23 +352,23 @@ public abstract class NodeTree<C extends ChangeConsumer> extends VBox {
         final boolean needSelect = selectedItem == oldChildItem;
 
         if (oldChildItem != null) {
-            parent.notifyChildPreRemove(oldChild);
+            final TreeNode<?> oldChildNode = oldChildItem.getValue();
+            parentNode.notifyChildPreRemove(oldChildNode);
             index = children.indexOf(oldChildItem);
-            needExpand = oldChildItem.isExpanded();
             children.remove(oldChildItem);
-            parent.notifyChildRemoved(oldChild);
+            parentNode.notifyChildRemoved(oldChildNode);
         }
 
         if (newChild == null) return;
 
-        final TreeItem<TreeNode<?>> childItem = new TreeItem<>(newChild);
+        final TreeItem<TreeNode<?>> childItem = new TreeItem<>(FACTORY_REGISTRY.createFor(newChild));
+        final TreeNode<?> newChildNode = childItem.getValue();
+        fill(childItem, needExpand, -1);
         childItem.setExpanded(needExpand);
 
-        fill(childItem, true, -1);
-
-        parent.notifyChildPreAdd(newChild);
+        parentNode.notifyChildPreAdd(newChildNode);
         children.add(index, childItem);
-        parent.notifyChildAdded(newChild);
+        parentNode.notifyChildAdded(newChildNode);
 
         if (needSelect) selectionModel.select(childItem);
     }

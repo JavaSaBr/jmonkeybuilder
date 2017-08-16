@@ -1,6 +1,6 @@
 package com.ss.editor.state.editor.impl.scene;
 
-import static com.ss.editor.state.editor.impl.model.ModelEditorUtils.findToSelect;
+import static com.ss.editor.util.NodeUtils.findParent;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.state.AppState;
 import com.jme3.asset.AssetManager;
@@ -23,10 +23,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.*;
 import com.jme3.scene.debug.Grid;
 import com.jme3.scene.debug.WireBox;
 import com.jme3.scene.debug.WireSphere;
@@ -59,6 +56,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tonegod.emitter.ParticleEmitterNode;
+import tonegod.emitter.geometry.ParticleGeometry;
 
 /**
  * The base implementation of the {@link AppState} for the editor.
@@ -75,13 +74,6 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
      */
     @NotNull
     public static String LOADED_MODEL_KEY = EditorTransformSupport.class.getName() + ".loadedModel";
-
-    /**
-     * The constant SKY_NODE_KEY.
-     */
-    @NotNull
-    public static String SKY_NODE_KEY = EditorTransformSupport.class.getName() + ".isSkyNode";
-
 
     private static final String KEY_S = "SSEditor.sceneEditorState.S";
     private static final String KEY_G = "SSEditor.sceneEditorState.G";
@@ -438,6 +430,16 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     @FromAnyThread
     protected Node getPresentableNode() {
         return presentableNode;
+    }
+
+    @Override
+    protected void redo() {
+        getFileEditor().redo();
+    }
+
+    @Override
+    protected void undo() {
+        getFileEditor().undo();
     }
 
     /**
@@ -909,7 +911,7 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
         final Spatial editedModel = EditingUtils.getEditedModel(control);
         if (editedModel == null) return;
 
-        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel);
+        final Vector3f contactPoint = GeomUtils.getContactPointFromCursor(editedModel, getCamera());
 
         if (contactPoint != null) {
             cursorNode.setLocalTranslation(contactPoint);
@@ -1337,85 +1339,110 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     private void processSelect() {
         if (isEditingMode()) return;
 
-        final Geometry geometry = GeomUtils.getGeometryFromCursor(getModelNode());
+        final Geometry anyGeometry = GeomUtils.getGeometryFromCursor(notNull(getModelNode()), getCamera());
 
-        if (geometry == null) {
-            EXECUTOR_MANAGER.addFXTask(() -> notifySelected(null));
-            return;
+        Object toSelect = anyGeometry == null ? null : findToSelect(anyGeometry);
+
+        if (toSelect == null && anyGeometry != null) {
+            final Geometry modelGeometry = GeomUtils.getGeometryFromCursor(notNull(getCurrentModel()), getCamera());
+            toSelect = modelGeometry == null ? null : findToSelect(modelGeometry);
         }
 
-        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(findToSelect(this, geometry)));
+        final Object result = toSelect;
+
+        EXECUTOR_MANAGER.addFXTask(() -> notifySelected(result));
     }
 
     /**
-     * Get a position on a scene for a cursor position on a screen.
+     * Find to select object.
      *
-     * @param worldX the x position on screen.
-     * @param worldY the y position on screen.
-     * @return the position on a scene.
+     * @param object the object
+     * @return the object
      */
-    @NotNull
-    @JMEThread
-    public Vector3f getScenePosByScreenPos(final float worldX, final float worldY) {
+    @Nullable
+    protected Object findToSelect(@NotNull final Object object) {
 
-        final Camera camera = EDITOR.getCamera();
+        if (object instanceof ParticleGeometry) {
+            final Spatial parent = findParent((Spatial) object, ParticleEmitterNode.class::isInstance);
+            if (parent != null && parent.isVisible()) return parent;
+        }
 
-        final Vector2f cursor = new Vector2f(worldX, worldY);
-        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
-        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f).subtractLocal(click3d).normalizeLocal();
+        if (object instanceof Geometry) {
 
-        final Ray ray = new Ray();
-        ray.setOrigin(click3d);
-        ray.setDirection(dir);
+            final Spatial spatial = (Spatial) object;
 
-        final CollisionResults results = new CollisionResults();
+            Spatial parent = NodeUtils.findParent(spatial, 2);
 
-        final Node stateNode = getStateNode();
-        stateNode.updateModelBound();
-        stateNode.collideWith(ray, results);
+            final EditorLightNode lightNode = parent == null ? null : getLightNode(parent);
+            if (lightNode != null) return lightNode;
 
-        final CollisionResult closestCollision = results.getClosestCollision();
-        if (closestCollision == null) return Vector3f.ZERO;
+            final EditorAudioNode audioNode = parent == null ? null : getAudioNode(parent);
+            if (audioNode != null) return audioNode;
 
-        return closestCollision.getContactPoint();
+            parent = NodeUtils.findParent(spatial, AssetLinkNode.class::isInstance);
+            if (parent != null) return parent;
+
+            parent = NodeUtils.findParent(spatial, p -> Boolean.TRUE.equals(p.getUserData(LOADED_MODEL_KEY)));
+            if (parent != null) return parent;
+        }
+
+        if (object instanceof Spatial) {
+
+            final Spatial spatial = (Spatial) object;
+
+            if (!spatial.isVisible()) {
+                return null;
+            } else if (findParent(spatial, sp -> !sp.isVisible()) != null) {
+                return null;
+            } else if (findParent(spatial, sp -> sp == getCurrentModel()) == null) {
+                return null;
+            }
+        }
+
+        return object;
     }
 
     /**
      * Get a geometry on a scene for a position on a screen.
      *
-     * @param worldX the x position on screen.
-     * @param worldY the y position on screen.
+     * @param screenX the x position on screen.
+     * @param screenY the y position on screen.
      * @return the position on a scene.
      */
     @Nullable
     @JMEThread
-    public Geometry getGeometryByScreenPos(final float worldX, final float worldY) {
-
-        final Camera camera = EDITOR.getCamera();
-
-        final Vector2f cursor = new Vector2f(worldX, worldY);
-        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
-        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f).subtractLocal(click3d).normalizeLocal();
-
-        final Ray ray = new Ray();
-        ray.setOrigin(click3d);
-        ray.setDirection(dir);
-
-        final CollisionResults results = new CollisionResults();
-
-        final M currentModel = notNull(getCurrentModel());
-        currentModel.updateModelBound();
-        currentModel.collideWith(ray, results);
-
-        final CollisionResult closestCollision = results.getClosestCollision();
-        if (closestCollision == null) return null;
-
-        return closestCollision.getGeometry();
+    public Geometry getGeometryByScreenPos(final float screenX, final float screenY) {
+        return GeomUtils.getGeometryFromScreenPos(notNull(getCurrentModel()), getCamera(), screenX, screenY);
     }
 
     @JMEThread
     private void notifySelected(@Nullable final Object object) {
         getFileEditor().notifySelected(object);
+    }
+
+    /**
+     * Get a position on a scene for a cursor position on a screen.
+     *
+     * @param screenX the x position on screen.
+     * @param screenY the y position on screen.
+     * @return the position on a scene.
+     */
+    @NotNull
+    @JMEThread
+    public Vector3f getScenePosByScreenPos(final float screenX, final float screenY) {
+
+        final Camera camera = getCamera();
+        final M currentModel = notNull(getCurrentModel());
+
+        Vector3f result = GeomUtils.getContactPointFromScreenPos(currentModel, camera, screenX, screenY);
+
+        if (result != null) {
+            return result;
+        }
+
+        result = GeomUtils.getContactPointFromScreenPos(getGrid(), camera, screenX, screenY);
+
+        return result == null ? Vector3f.ZERO : result;
     }
 
     /**
@@ -1752,6 +1779,20 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     /**
+     * Look at the position from the camera.
+     *
+     * @param location the location.
+     */
+    @FromAnyThread
+    public void cameraLookAt(@NotNull final Vector3f location) {
+        EXECUTOR_MANAGER.addJMETask(() -> {
+            final EditorCamera editorCamera = notNull(getEditorCamera());
+            editorCamera.setTargetDistance(location.distance(getCamera().getLocation()));
+            getNodeForCamera().setLocalTranslation(location);
+        });
+    }
+
+    /**
      * Remove a light.
      *
      * @param light the light.
@@ -2014,10 +2055,13 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @FromAnyThread
-    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                       final float vRotation, final float targetDistance) {
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    @JMEThread
+    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                               final float vRotation, final float targetDistance,
+                                               final float cameraSpeed) {
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
+                        vRotation, targetDistance, cameraSpeed));
     }
 
     /**

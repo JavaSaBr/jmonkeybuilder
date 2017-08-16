@@ -46,6 +46,9 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     private static final PseudoClass DRAGGED_PSEUDO_CLASS = PseudoClass.getPseudoClass("dragged");
 
     @NotNull
+    private static final PseudoClass EDITING_PSEUDO_CLASS = PseudoClass.getPseudoClass("editing");
+
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
 
     @NotNull
@@ -108,6 +111,26 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         @Override
         public String getName() {
             return "drop available";
+        }
+    };
+
+    /**
+     * The editing state.
+     */
+    @NotNull
+    private final BooleanProperty editing = new BooleanPropertyBase(false) {
+        public void invalidated() {
+            pseudoClassStateChanged(EDITING_PSEUDO_CLASS, get());
+        }
+
+        @Override
+        public Object getBean() {
+            return NodeTreeCell.this;
+        }
+
+        @Override
+        public String getName() {
+            return "editing";
         }
     };
 
@@ -218,6 +241,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         }
 
         UIUtils.updateEditedCell(this);
+        editing.setValue(true);
     }
 
     /**
@@ -237,6 +261,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     @Override
     public void cancelEdit() {
         super.cancelEdit();
+        editing.setValue(false);
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
         setText(StringUtils.EMPTY);
@@ -245,6 +270,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
     @Override
     public void commitEdit(@NotNull final TreeNode<?> newValue) {
         super.commitEdit(newValue);
+        editing.setValue(false);
         final TreeItem<TreeNode<?>> treeItem = getTreeItem();
         if (treeItem != null) treeItem.setGraphic(content);
         setText(StringUtils.EMPTY);
@@ -353,7 +379,7 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         if (treeView.getRoot() == treeItem) return;
 
         TransferMode transferMode = item.canMove() ? TransferMode.MOVE : null;
-        transferMode = item.canCopy() ? TransferMode.COPY : transferMode;
+        transferMode = item.canCopy() && mouseEvent.isControlDown() ? TransferMode.COPY : transferMode;
         if (transferMode == null) return;
 
         final Dragboard dragBoard = startDragAndDrop(transferMode);
@@ -379,50 +405,29 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
 
+        final Set<TransferMode> transferModes = dragboard.getTransferModes();
+        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+
+        final M nodeTree = getNodeTree();
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
+
         if (objectId != null) {
 
             final TreeView<TreeNode<?>> treeView = getTreeView();
             final TreeItem<TreeNode<?>> dragTreeItem = findItem(treeView, objectId);
             final TreeNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-            if (dragItem == null || !item.canAccept(dragItem)) return;
+            if (dragItem == null || !item.canAccept(dragItem, isCopy)) return;
 
             final TreeItem<TreeNode<?>> newParentItem = findItemForValue(treeView, item);
             if (newParentItem == null) return;
 
-            final Set<TransferMode> transferModes = dragboard.getTransferModes();
-            final boolean isCopy = transferModes.contains(TransferMode.COPY);
-
-
-            final Object element = dragItem.getElement();
-
-            if (processDragDropped(dragTreeItem, dragItem, item, isCopy, newParentItem, element)) return;
+            item.accept(changeConsumer, dragItem.getElement(), isCopy);
 
         } else if (item.canAcceptExternal(dragboard)) {
-
-            final M nodeTree = getNodeTree();
-            final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
-
             item.acceptExternal(dragboard, changeConsumer);
         }
 
         dragEvent.consume();
-    }
-
-    /**
-     * Process drag dropped boolean.
-     *
-     * @param dragTreeItem  the drag tree item
-     * @param dragItem      the drag item
-     * @param item          the item
-     * @param isCopy        the is copy
-     * @param newParentItem the new parent item
-     * @param element       the element
-     * @return the boolean
-     */
-    protected boolean processDragDropped(@NotNull final TreeItem<TreeNode<?>> dragTreeItem, @NotNull final TreeNode<?> dragItem,
-                                         @NotNull final TreeNode<?> item, final boolean isCopy,
-                                         @NotNull final TreeItem<TreeNode<?>> newParentItem, @NotNull final Object element) {
-        return true;
     }
 
     /**
@@ -436,19 +441,19 @@ public abstract class NodeTreeCell<C extends ChangeConsumer, M extends NodeTree<
         final Dragboard dragboard = dragEvent.getDragboard();
         final Long objectId = (Long) dragboard.getContent(DATA_FORMAT);
 
+        final Set<TransferMode> transferModes = dragboard.getTransferModes();
+        final boolean isCopy = transferModes.contains(TransferMode.COPY);
+
         if (objectId != null) {
 
             final TreeView<TreeNode<?>> treeView = getTreeView();
             final TreeItem<TreeNode<?>> dragTreeItem = findItem(treeView, objectId);
             final TreeNode<?> dragItem = dragTreeItem == null ? null : dragTreeItem.getValue();
-            if (dragItem == null || !item.canAccept(dragItem)) return;
+            if (dragItem == null || !item.canAccept(dragItem, isCopy)) return;
 
         } else if (!item.canAcceptExternal(dragboard)) {
             return;
         }
-
-        final Set<TransferMode> transferModes = dragboard.getTransferModes();
-        final boolean isCopy = transferModes.contains(TransferMode.COPY);
 
         dragEvent.acceptTransferModes(isCopy ? TransferMode.COPY : TransferMode.MOVE);
         dragEvent.consume();

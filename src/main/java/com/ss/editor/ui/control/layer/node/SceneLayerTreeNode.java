@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.layer.node;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.scene.Spatial;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.editor.SceneChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.node.spatial.NodeTreeNode;
-import com.ss.editor.ui.control.model.node.spatial.SpatialTreeNode;
+import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
 import com.ss.editor.ui.control.model.tree.action.RenameNodeAction;
 import com.ss.editor.ui.control.model.tree.action.operation.RenameNodeOperation;
 import com.ss.editor.ui.control.model.tree.action.operation.scene.ChangeVisibleSceneLayerOperation;
@@ -58,7 +58,7 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
 
         final SceneLayer element = getElement();
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RenameNodeOperation(element.getName(), newName, element));
     }
 
@@ -74,7 +74,7 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
         final SceneLayer element = getElement();
 
         final Array<TreeNode<?>> result = ArrayFactory.newArray(TreeNode.class);
-        final ModelChangeConsumer changeConsumer = (ModelChangeConsumer) requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = (ModelChangeConsumer) notNull(nodeTree.getChangeConsumer());
 
         final Spatial currentModel = changeConsumer.getCurrentModel();
         currentModel.depthFirstTraversal(spatial -> {
@@ -88,11 +88,31 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
     }
 
     @Override
-    public boolean canAccept(@NotNull final TreeNode<?> child) {
-        if (!(child instanceof SpatialTreeNode<?>)) return false;
-        final SpatialTreeNode<?> spatialNode = (SpatialTreeNode<?>) child;
-        final Spatial element = spatialNode.getElement();
-        return SceneLayer.getLayer(element) != getElement();
+    public boolean canAccept(@NotNull final TreeNode<?> child, final boolean isCopy) {
+        final Object element = child.getElement();
+        return element instanceof Spatial && SceneLayer.getLayer((Spatial) element) != getElement();
+    }
+
+    @Override
+    public void accept(@NotNull final ChangeConsumer changeConsumer, @NotNull final Object object,
+                       final boolean isCopy) {
+
+        final SceneLayer targetLayer = getElement();
+
+        if (object instanceof Spatial && !isCopy) {
+
+            final Spatial spatial = (Spatial) object;
+            final SceneLayer currentLayer = SceneLayer.getLayer(spatial);
+
+            final ModelPropertyOperation<Spatial, SceneLayer> operation =
+                    new ModelPropertyOperation<>(spatial, SceneLayer.KEY, targetLayer, currentLayer);
+
+            operation.setApplyHandler((sp, layer) -> SceneLayer.setLayer(layer, sp));
+
+            changeConsumer.execute(operation);
+        }
+
+        super.accept(changeConsumer, object, isCopy);
     }
 
     @NotNull
@@ -130,13 +150,13 @@ public class SceneLayerTreeNode extends TreeNode<SceneLayer> implements Hideable
 
     @Override
     public void show(@NotNull final NodeTree<SceneChangeConsumer> nodeTree) {
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), true));
     }
 
     @Override
     public void hide(@NotNull final NodeTree<SceneChangeConsumer> nodeTree) {
-        final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
         consumer.execute(new ChangeVisibleSceneLayerOperation(getElement(), false));
     }
 }

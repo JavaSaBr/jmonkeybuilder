@@ -8,6 +8,7 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.AssetLinkNode;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -190,48 +191,53 @@ public class GeomUtils {
      *
      * @param node    the node
      * @param spatial the spatial
+     * @param isCopy  true if the spatial need to copy.
      * @return true if the spatial can be attached to the node.
      */
-    public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial) {
+    public static boolean canAttach(@NotNull final Node node, @NotNull final Spatial spatial, final boolean isCopy) {
 
-        Spatial parent = node;
-
-        while (parent != null) {
-            if (parent == spatial) return false;
-            parent = parent.getParent();
+        if (spatial.getParent() == node && !isCopy) {
+            return false;
+        } else if (node instanceof AssetLinkNode) {
+            return false;
         }
 
-        return true;
+        final AssetLinkNode linkNode =
+                isCopy ? null : NodeUtils.findParent(spatial.getParent(), AssetLinkNode.class::isInstance);
+
+        return linkNode == null;
     }
 
     /**
      * Get a context point on spatial from cursor position.
      *
      * @param spatial the spatial.
+     * @param camera  the camera.
      * @return the contact point or null.
      */
     @Nullable
-    public static Vector3f getContactPointFromCursor(@NotNull final Spatial spatial) {
+    public static Vector3f getContactPointFromCursor(@NotNull final Spatial spatial, @NotNull final Camera camera) {
 
         final Editor editor = Editor.getInstance();
         final InputManager inputManager = editor.getInputManager();
         final Vector2f cursor = inputManager.getCursorPosition();
 
-        return getContactPointFromScreenPos(spatial, cursor.getX(), cursor.getY());
+        return getContactPointFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
     /**
-     * Get a context point on spatial from screen position.
+     * Get a contact point on spatial from screen position.
      *
      * @param spatial the spatial.
+     * @param camera  the camera.
      * @param screenX the screen X coord.
      * @param screenY the screen Y coord.
      * @return the contact point or null.
      */
     @Nullable
-    public static Vector3f getContactPointFromScreenPos(@NotNull final Spatial spatial, final float screenX,
-                                                        final float screenY) {
-        final CollisionResult collision = getCollisionFromScreenPos(spatial, screenX, screenY);
+    public static Vector3f getContactPointFromScreenPos(@NotNull final Spatial spatial, @NotNull final Camera camera,
+                                                        final float screenX, final float screenY) {
+        final CollisionResult collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
         return collision == null ? null : collision.getContactPoint();
     }
 
@@ -239,30 +245,32 @@ public class GeomUtils {
      * Get a geometry on spatial from cursor position.
      *
      * @param spatial the spatial.
+     * @param camera  the camera.
      * @return the geometry or null.
      */
     @Nullable
-    public static Geometry getGeometryFromCursor(@NotNull final Spatial spatial) {
+    public static Geometry getGeometryFromCursor(@NotNull final Spatial spatial, @NotNull final Camera camera) {
 
         final Editor editor = Editor.getInstance();
         final InputManager inputManager = editor.getInputManager();
         final Vector2f cursor = inputManager.getCursorPosition();
 
-        return getGeometryFromScreenPos(spatial, cursor.getX(), cursor.getY());
+        return getGeometryFromScreenPos(spatial, camera, cursor.getX(), cursor.getY());
     }
 
     /**
      * Get a geometry on spatial from screen position.
      *
      * @param spatial the spatial.
+     * @param spatial the camera.
      * @param screenX the screen X coord.
      * @param screenY the screen Y coord.
      * @return the geometry or null.
      */
     @Nullable
-    public static Geometry getGeometryFromScreenPos(@NotNull final Spatial spatial, final float screenX,
-                                                    final float screenY) {
-        final CollisionResult collision = getCollisionFromScreenPos(spatial, screenX, screenY);
+    public static Geometry getGeometryFromScreenPos(@NotNull final Spatial spatial, @NotNull final Camera camera,
+                                                    final float screenX, final float screenY) {
+        final CollisionResult collision = getCollisionFromScreenPos(spatial, camera, screenX, screenY);
         return collision == null ? null : collision.getGeometry();
     }
 
@@ -270,28 +278,30 @@ public class GeomUtils {
      * Get a collision on spatial from screen position.
      *
      * @param spatial the spatial.
+     * @param camera  the camera.
      * @param screenX the screen X coord.
      * @param screenY the screen Y coord.
      * @return the collision or null.
      */
     @Nullable
-    public static CollisionResult getCollisionFromScreenPos(@NotNull final Spatial spatial, final float screenX,
+    public static CollisionResult getCollisionFromScreenPos(@NotNull final Spatial spatial,
+                                                            @NotNull final Camera camera,
+                                                            final float screenX,
                                                             final float screenY) {
 
-        final Editor editor = Editor.getInstance();
-        final Camera camera = editor.getCamera();
+        final LocalObjects local = LocalObjects.get();
 
-        final Vector2f cursor = new Vector2f(screenX, screenY);
-        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f);
-        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f)
+        final Vector2f cursor = local.nextVector(screenX, screenY);
+        final Vector3f click3d = camera.getWorldCoordinates(cursor, 0f, local.nextVector());
+        final Vector3f dir = camera.getWorldCoordinates(cursor, 1f, local.nextVector())
                 .subtractLocal(click3d)
                 .normalizeLocal();
 
-        final Ray ray = new Ray();
+        final Ray ray = local.nextRay();
         ray.setOrigin(click3d);
         ray.setDirection(dir);
 
-        final CollisionResults results = new CollisionResults();
+        final CollisionResults results = local.nextCollisionResults();
 
         spatial.updateModelBound();
         spatial.collideWith(ray, results);

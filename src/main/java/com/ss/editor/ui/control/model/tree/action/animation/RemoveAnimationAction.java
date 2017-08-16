@@ -1,5 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.animation;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Animation;
 import com.ss.editor.Messages;
@@ -13,8 +14,6 @@ import com.ss.editor.ui.control.tree.node.TreeNode;
 import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * The implementation of the {@link AbstractNodeAction} to remove an animation from the {@link AnimControl}.
@@ -66,7 +65,7 @@ public class RemoveAnimationAction extends AbstractNodeAction<ModelChangeConsume
 
         final AnimControl parent = (AnimControl) parentNode.getElement();
 
-        final ModelChangeConsumer changeConsumer = Objects.requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new RemoveAnimationNodeOperation(animation, parent));
     }
 }

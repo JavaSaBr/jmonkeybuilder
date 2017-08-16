@@ -4,6 +4,7 @@ import static com.jme3.environment.LightProbeFactory.makeProbe;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.run;
 import static java.nio.file.Files.createDirectories;
+import com.jme3.app.DebugKeysAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.audio.AudioRenderer;
@@ -188,12 +189,6 @@ public class Editor extends JmeToJFXApplication {
     private LightProbe previewLightProbe;
 
     /**
-     * The processor of post effects.
-     */
-    @Nullable
-    private FilterPostProcessor postProcessor;
-
-    /**
      * The FXAA filter.
      */
     @Nullable
@@ -258,6 +253,8 @@ public class Editor extends JmeToJFXApplication {
 
     @Override
     public void simpleInitApp() {
+        super.simpleInitApp();
+
         renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
         renderManager.setSinglePassLightBatchSize(15);
 
@@ -295,8 +292,8 @@ public class Editor extends JmeToJFXApplication {
         flyCam.setDragToRotate(true);
         flyCam.setEnabled(false);
 
-        postProcessor = new FilterPostProcessor(assetManager);
-        postProcessor.initialize(renderManager, viewPort);
+
+        final FilterPostProcessor postProcessor = getPostProcessor();
 
         fxaaFilter = new FXAAFilter();
         fxaaFilter.setEnabled(editorConfig.isFXAA());
@@ -317,8 +314,6 @@ public class Editor extends JmeToJFXApplication {
 
         SceneLoader.install(this, postProcessor);
 
-        viewPort.addProcessor(postProcessor);
-
         if (Config.ENABLE_PBR) {
             environmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
             previewEnvironmentCamera = new EnvironmentCamera(64, Vector3f.ZERO);
@@ -327,6 +322,7 @@ public class Editor extends JmeToJFXApplication {
         }
 
         createLightProbes();
+        stateManager.detach(stateManager.getState(DebugKeysAppState.class));
 
         new EditorThread(new ThreadGroup("JavaFX"), JFXApplication::start, "JavaFX Launch").start();
     }

@@ -35,21 +35,29 @@ import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.impl.MaterialFileEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
+import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,7 +92,6 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
      * THe default flag of enabling light.
      */
     public static final boolean DEFAULT_LIGHT_ENABLED = true;
-
 
     @NotNull
     private static final ResourceManager RESOURCE_MANAGER = ResourceManager.getInstance();
@@ -241,12 +248,8 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final Path file = event.getFile();
 
         EXECUTOR_MANAGER.addJMETask(() -> {
-
             final Material newMaterial = updateMaterialIdNeed(file, currentMaterial);
-
-            if (newMaterial == null) {
-                EXECUTOR_MANAGER.addFXTask(() -> reload(currentMaterial));
-            } else {
+            if (newMaterial != null) {
                 EXECUTOR_MANAGER.addFXTask(() -> reload(newMaterial));
             }
         });
@@ -334,41 +337,28 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     @FXThread
-    protected void processKeyReleased(@NotNull final KeyEvent event) {
-        super.processKeyReleased(event);
-
-        final KeyCode code = event.getCode();
-
-        if (handleKeyActionImpl(code, false, event.isControlDown(), false)) {
-            event.consume();
-        }
-    }
-
-    @Override
-    @FXThread
     protected boolean handleKeyActionImpl(@NotNull final KeyCode keyCode, final boolean isPressed,
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
-        if (isPressed) return false;
 
-        if (isControlDown && keyCode == KeyCode.Z) {
+        if (isPressed && isControlDown && keyCode == KeyCode.Z) {
             undo();
             return true;
-        } else if (isControlDown && keyCode == KeyCode.Y) {
+        } else if (isPressed && isControlDown && keyCode == KeyCode.Y) {
             redo();
             return true;
-        } else if (keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.C && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton cubeButton = getCubeButton();
             cubeButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.S && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton sphereButton = getSphereButton();
             sphereButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.P && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.P && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton planeButton = getPlaneButton();
             planeButton.setSelected(true);
             return true;
-        } else if (keyCode == KeyCode.L && !isControlDown && !isButtonMiddleDown) {
+        } else if (isPressed && keyCode == KeyCode.L && !isControlDown && !isButtonMiddleDown) {
             final ToggleButton lightButton = getLightButton();
             lightButton.setSelected(!lightButton.isSelected());
             return true;
@@ -408,6 +398,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         changeHandler = this::handleChanges;
         editorAreaPane = new BorderPane();
         editorAreaPane.setOnMousePressed(event -> editorAreaPane.requestFocus());
+        editorAreaPane.setOnDragOver(this::dragOver);
+        editorAreaPane.setOnDragDropped(this::dragDropped);
+        editorAreaPane.setOnKeyReleased(Event::consume);
+        editorAreaPane.setOnKeyPressed(Event::consume);
 
         materialTexturesComponent = new MaterialTexturesComponent(changeHandler);
         materialColorsComponent = new MaterialColorsComponent(changeHandler);
@@ -434,6 +428,52 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     }
 
     /**
+     * Handle dropped texture.
+     */
+    private void dragDropped(@NotNull final DragEvent dragEvent) {
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
+                dragEvent, this::applyTexture);
+    }
+
+    /**
+     * Try to apply dropped texture.
+     *
+     * @param editor    the editor.
+     * @param dragEvent the drag event.
+     * @param path      the path to the texture.
+     */
+    private void applyTexture(@NotNull final MaterialFileEditor editor, @NotNull final DragEvent dragEvent,
+                              @NotNull final Path path) {
+
+        final String textureName = path.getFileName().toString();
+        final int textureType = MaterialUtils.getPossibleTextureType(textureName);
+
+        if (textureType == 0) {
+            return;
+        }
+
+        final String[] paramNames = MaterialUtils.getPossibleParamNames(textureType);
+        final MaterialTexturesComponent component = editor.materialTexturesComponent;
+
+        for (final String paramName : paramNames) {
+            final Texture2DMaterialParamControl control = component.findControl(paramName, Texture2DMaterialParamControl.class);
+            if (control == null) {
+                continue;
+            }
+
+            control.addTexture(path);
+            break;
+        }
+    }
+
+    /**
+     * Handle drag objects.
+     */
+    private void dragOver(@NotNull final DragEvent dragEvent) {
+        UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
+    }
+
+    /**
      * @return the pane of editor area.
      */
     @NotNull
@@ -444,10 +484,14 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     @FXThread
-    public boolean isInside(final double sceneX, final double sceneY) {
-        final Pane editorAreaPane = getEditorAreaPane();
-        final Point2D point2D = editorAreaPane.sceneToLocal(sceneX, sceneY);
-        return editorAreaPane.contains(point2D);
+    public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
+
+        final Pane page = eventType.isAssignableFrom(MouseEvent.class) ||
+                eventType.isAssignableFrom(ScrollEvent.class) ?
+                getEditorAreaPane() : getPage();
+
+        final Point2D point2D = page.sceneToLocal(sceneX, sceneY);
+        return page.contains(point2D);
     }
 
     /**
@@ -516,8 +560,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
 
     @Override
     @FXThread
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                    final float vRotation, final float targetDistance) {
+    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                            final float vRotation, final float targetDistance,
+                                            final float cameraSpeed) {
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
 
         final MaterialFileEditorState editorState = getEditorState();
         if (editorState == null) return;
@@ -526,6 +572,7 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         editorState.setCameraVRotation(vRotation);
         editorState.setCameraTDistance(targetDistance);
         editorState.setCameraLocation(cameraLocation);
+        editorState.setCameraSpeed(cameraSpeed);
     }
 
     /**
@@ -562,8 +609,10 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
         final float hRotation = editorState.getCameraHRotation();
         final float vRotation = editorState.getCameraVRotation();
         final float tDistance = editorState.getCameraTDistance();
+        final float cameraSpeed = editorState.getCameraSpeed();
 
-        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCamera(cameraLocation, hRotation, vRotation, tDistance));
+        EXECUTOR_MANAGER.addJMETask(() -> editorAppState.updateCameraSettings(cameraLocation,
+                hRotation, vRotation, tDistance, cameraSpeed));
     }
 
     /**
@@ -617,6 +666,11 @@ public class MaterialFileEditor extends AbstractFileEditor<StackPane> implements
     @FXThread
     protected boolean needToolbar() {
         return true;
+    }
+
+    @Override
+    protected boolean needListenEventsFromPage() {
+        return false;
     }
 
     @Override

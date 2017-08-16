@@ -3,7 +3,6 @@ package com.ss.editor.ui.control.filter.dialog;
 import static com.ss.editor.util.EditorUtil.tryToCreateUserObject;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.dictionary.DictionaryFactory.newObjectDictionary;
-import static java.util.Objects.requireNonNull;
 import com.ss.editor.Messages;
 import com.ss.editor.extension.scene.SceneNode;
 import com.ss.editor.extension.scene.app.state.SceneAppState;
@@ -203,7 +202,7 @@ public class CreateSceneFilterDialog extends AbstractSimpleEditorDialog {
             final SingleSelectionModel<String> selectionModel = builtInBox.getSelectionModel();
             final String name = selectionModel.getSelectedItem();
 
-            final SceneFilter example = requireNonNull(BUILT_IN.get(name));
+            final SceneFilter example = notNull(BUILT_IN.get(name));
             final SceneFilter newExample = ClassUtils.newInstance(example.getClass());
 
             check(appStates, filters, newExample);

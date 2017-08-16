@@ -5,7 +5,6 @@ import com.ss.editor.annotation.FXThread;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.property.AbstractPropertyControl;
 import com.ss.editor.ui.css.CSSClasses;
-import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.function.SixObjectConsumer;
 import com.ss.rlib.ui.control.input.FloatTextField;
 import com.ss.rlib.ui.util.FXUtils;
@@ -50,7 +49,6 @@ public abstract class AbstractFloatPropertyControl<C extends ChangeConsumer, T>
         super.createComponents(container);
 
         valueField = new FloatTextField();
-        valueField.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
         valueField.addChangeListener((observable, oldValue, newValue) -> updateValue());
         valueField.prefWidthProperty()
                 .bind(widthProperty().multiply(CONTROL_WIDTH_PERCENT));

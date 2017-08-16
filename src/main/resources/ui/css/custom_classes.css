@@ -75,7 +75,7 @@
 .dialog-label-warning {
     -fx-alignment: center;
     -fx-text-alignment: center;
-    -fx-min-height: 28px;
+    -fx-min-height: -var-default-field-height;
     -fx-pref-height: -fx-min-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 800px;
@@ -90,11 +90,12 @@
     -fx-text-alignment: right;
     -fx-min-width: 150;
     -fx-pref-width: -fx-min-width;
-    -fx-padding: 0px 6px 0px 0px;
+    -fx-padding: 0px 0px 0px 0px;
 }
 
 .dialog-field {
     -fx-pref-height: -fx-min-height;
+    -fx-min-height: -var-default-field-height;
     -fx-max-height: -fx-min-height;
     -fx-min-width: 20;
 }
@@ -216,7 +217,7 @@
 
 /*******************************************************************************
  *                                                                             *
- * Transparent Text Field                                                        *
+ * Transparent Text Field                                                      *
  *                                                                             *
  ******************************************************************************/
 
@@ -237,6 +238,20 @@
     -fx-border-insets: 0;
     -fx-padding: 0px 0px 0px 0px;
     -fx-prompt-text-fill: transparent;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Text Filed in Combo Box                                                     *
+ *                                                                             *
+ ******************************************************************************/
+
+.text-field-in-combo-box {
+    -fx-padding: 0px 0px 0px 4px;
+}
+
+.text-field-in-combo-box:focused {
+    -fx-padding: 0px 0px 0px 4px;
 }
 
 /*******************************************************************************
@@ -434,6 +449,10 @@
     -fx-background-color: -var-tree-cell-selected-color;
 }
 
+.abstract-node-tree-cell:editing {
+    -fx-padding: 4px;
+}
+
 /*******************************************************************************
  *                                                                             *
  * Transparent Tree View                                                       *
@@ -469,11 +488,6 @@
     -fx-padding: 0px 0px 0px 4px;
 }
 
-.choose-texture-control > .label {
-    -fx-alignment: center-right;
-    -fx-padding: 0px 0px 0px 0px;
-}
-
 .choose-texture-control-texture-label {
     -fx-alignment: center-left;
 }
@@ -495,6 +509,7 @@
 
 .choose-resource-control {
     -fx-padding: 0px 0px 0px 4px;
+    -fx-alignment: center-left;
 }
 
 /*******************************************************************************
@@ -570,13 +585,13 @@
 .settings-dialog > .dialog-content-root > .tab-pane > .tab-content-area > .vbox {
     -fx-spacing: 2px;
     -fx-padding: 6px 0px 0px 0px;
-    -fx-max-width: 645px;
+    -fx-max-width: 685px;
     -fx-min-height: 300px;
 }
 
 .settings-dialog-label {
     -fx-alignment: center-right;
-    -fx-min-width: 250px;
+    -fx-min-width: 290px;
     -fx-pref-width: -fx-min-width;
     -fx-max-width: -fx-min-width;
     -fx-min-height: 26px;
@@ -695,7 +710,7 @@
     -fx-text-alignment: center;
     -fx-wrap-text: true;
     -fx-min-height: 60px;
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
 }
 
 /*******************************************************************************
@@ -1078,11 +1093,16 @@
     -fx-alignment: center-left;
 }
 
+.file-creator-dialog > .hbox > .vbox > .grid-pane,
 .file-creator-dialog > .hbox > .grid-pane {
     -fx-alignment: top-left;
-    -fx-vgap: 2;
-    -fx-hgap: 2;
+    -fx-vgap: 2px;
+    -fx-hgap: 2px;
 }
+
+.file-creator-dialog > .hbox > .vbox > .border-pane {
+}
+
 
 /*******************************************************************************
  *                                                                             *
@@ -1220,6 +1240,21 @@
 .image-channel-preview {
     -fx-hgap: 4px;
     -fx-vgap: 4px;
+}
+
+/*******************************************************************************
+ *                                                                             *
+ * Image Preview                                                               *
+ *                                                                             *
+ ******************************************************************************/
+
+.image-preview {
+    -fx-min-height: 200px;
+    -fx-pref-height: -fx-min-height;
+    -fx-max-height: -fx-min-height;
+    -fx-min-width: 200px;
+    -fx-pref-width: -fx-min-width;
+    -fx-max-width: -fx-min-width;
 }
 
 /*******************************************************************************

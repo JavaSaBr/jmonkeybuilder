@@ -6,6 +6,7 @@ import com.ss.editor.ui.control.choose.ChooseFolderControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.dialog.AbstractSimpleEditorDialog;
 import com.ss.rlib.ui.util.FXUtils;
+import com.ss.rlib.util.FileUtils;
 import com.ss.rlib.util.StringUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -76,7 +77,7 @@ public class ModelConverterDialog extends AbstractSimpleEditorDialog {
                                 @NotNull final Consumer<ModelConverterDialog> callback) {
         this.callback = callback;
         getDestinationControl().setFolder(destination.getParent());
-        getFilenameField().setText(destination.getFileName().toString());
+        getFilenameField().setText(FileUtils.getNameWithoutExtension(destination.getFileName()));
     }
 
     @Override

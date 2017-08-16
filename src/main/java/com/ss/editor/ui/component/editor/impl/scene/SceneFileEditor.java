@@ -583,7 +583,7 @@ public class SceneFileEditor extends
         if (parent instanceof LayersRoot) {
             layerNodeTree.notifyRemoved(parent, removed);
         } else if (removed instanceof Spatial) {
-            layerNodeTree.notifyRemoved(null, removed);
+            layerNodeTree.notifyRemoved((Spatial) removed);
         }
 
         EXECUTOR_MANAGER.addJMETask(() -> getCurrentModel().notifyRemoved(removed));

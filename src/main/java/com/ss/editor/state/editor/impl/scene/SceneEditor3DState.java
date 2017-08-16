@@ -54,18 +54,6 @@ public class SceneEditor3DState extends AbstractSceneEditor3DState<SceneFileEdit
     }
 
     @Override
-    protected void undo() {
-        final SceneFileEditor fileEditor = getFileEditor();
-        fileEditor.undo();
-    }
-
-    @Override
-    protected void redo() {
-        final SceneFileEditor fileEditor = getFileEditor();
-        fileEditor.redo();
-    }
-
-    @Override
     protected void attachModel(@NotNull final SceneNode model, @NotNull final Node modelNode) {
     }
 

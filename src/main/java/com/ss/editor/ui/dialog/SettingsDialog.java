@@ -1,6 +1,7 @@
 package com.ss.editor.ui.dialog;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import com.jme3.asset.AssetManager;
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FXAAFilter;
 import com.jme3.post.filters.ToneMapFilter;
@@ -9,7 +10,7 @@ import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.Messages;
 import com.ss.editor.config.EditorConfig;
-import com.ss.editor.manager.CustomClasspathManager;
+import com.ss.editor.manager.ClasspathManager;
 import com.ss.editor.manager.ExecutorManager;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.ui.Icons;
@@ -44,6 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * The dialog with settings.
@@ -53,7 +55,7 @@ import java.nio.file.Path;
 public class SettingsDialog extends EditorDialog {
 
     @NotNull
-    private static final Point DIALOG_SIZE = new Point(660, -1);
+    private static final Point DIALOG_SIZE = new Point(700, -1);
 
     @NotNull
     private static final Array<Integer> ANISOTROPYCS = ArrayFactory.newArray(Integer.class);
@@ -176,10 +178,16 @@ public class SettingsDialog extends EditorDialog {
     private CheckBox defaultCameraLampEnabledCheckBox;
 
     /**
-     * The additional classpath field.
+     * The libraries folder field.
      */
     @Nullable
-    private TextField additionalClasspathField;
+    private TextField librariesFolderField;
+
+    /**
+     * The classes folder field.
+     */
+    @Nullable
+    private TextField classesFolderField;
 
     /**
      * The additional envs field.
@@ -200,10 +208,16 @@ public class SettingsDialog extends EditorDialog {
     private IntegerTextField cameraAngleField;
 
     /**
-     * The additional classpath folder.
+     * The libraries folder.
      */
     @Nullable
-    private Path additionalClasspathFolder;
+    private Path librariesFolder;
+
+    /**
+     * The classes folder.
+     */
+    @Nullable
+    private Path classesFolder;
 
     /**
      * The additional envs folder.
@@ -282,7 +296,8 @@ public class SettingsDialog extends EditorDialog {
         createToneMapFilterWhitePointControl(graphicsRoot);
 
         createThemeControl(otherRoot);
-        createAdditionalClasspathControl(otherRoot);
+        createLibrariesFolderControl(otherRoot);
+        createClassesFolderControl(otherRoot);
         createAdditionalEnvsControl(otherRoot);
         createGoogleAnalyticsControl(otherRoot);
         createAutoTangentGeneratingControl(otherRoot);
@@ -298,37 +313,75 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Create the additional classpath control.
+     * Create the libraries folder control.
      */
-    private void createAdditionalClasspathControl(@NotNull final VBox root) {
+    private void createLibrariesFolderControl(@NotNull final VBox root) {
 
         final HBox container = new HBox();
         container.setAlignment(Pos.CENTER_LEFT);
 
-        final Label label = new Label(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_LABEL + ":");
+        final Label label = new Label(Messages.SETTINGS_DIALOG_USER_LIBRARIES_FOLDER_LABEL + ":");
         final HBox fieldContainer = new HBox();
 
-        additionalClasspathField = new TextField();
-        additionalClasspathField.setEditable(false);
-        additionalClasspathField.prefWidthProperty().bind(root.widthProperty());
+        librariesFolderField = new TextField();
+        librariesFolderField.setEditable(false);
+        librariesFolderField.prefWidthProperty().bind(root.widthProperty());
 
         final Button addButton = new Button();
         addButton.setGraphic(new ImageView(Icons.ADD_12));
-        addButton.setOnAction(event -> processAddCF());
+        addButton.setOnAction(event -> processAddLibrariesFolder());
 
         final Button removeButton = new Button();
         removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
-        removeButton.setOnAction(event -> processRemoveCF());
-        removeButton.disableProperty().bind(additionalClasspathField.textProperty().isEmpty());
+        removeButton.setOnAction(event -> processRemoveLibrariesFolder());
+        removeButton.disableProperty().bind(librariesFolderField.textProperty().isEmpty());
 
         FXUtils.addToPane(label, fieldContainer, container);
-        FXUtils.addToPane(additionalClasspathField, addButton, removeButton, fieldContainer);
+        FXUtils.addToPane(librariesFolderField, addButton, removeButton, fieldContainer);
         FXUtils.addToPane(container, root);
 
-        FXUtils.addClassTo(additionalClasspathField, CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(librariesFolderField, CSSClasses.TRANSPARENT_TEXT_FIELD);
         FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
         FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
-        FXUtils.addClassTo(additionalClasspathField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassTo(librariesFolderField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
+        FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
+                CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
+
+        DynamicIconSupport.addSupport(addButton, removeButton);
+    }
+
+    /**
+     * Create the classes folder control.
+     */
+    private void createClassesFolderControl(@NotNull final VBox root) {
+
+        final HBox container = new HBox();
+        container.setAlignment(Pos.CENTER_LEFT);
+
+        final Label label = new Label(Messages.SETTINGS_DIALOG_USER_CLASSES_FOLDER_LABEL + ":");
+        final HBox fieldContainer = new HBox();
+
+        classesFolderField = new TextField();
+        classesFolderField.setEditable(false);
+        classesFolderField.prefWidthProperty().bind(root.widthProperty());
+
+        final Button addButton = new Button();
+        addButton.setGraphic(new ImageView(Icons.ADD_12));
+        addButton.setOnAction(event -> processAddClassesFolder());
+
+        final Button removeButton = new Button();
+        removeButton.setGraphic(new ImageView(Icons.REMOVE_12));
+        removeButton.setOnAction(event -> processRemoveClassesFolder());
+        removeButton.disableProperty().bind(classesFolderField.textProperty().isEmpty());
+
+        FXUtils.addToPane(label, fieldContainer, container);
+        FXUtils.addToPane(classesFolderField, addButton, removeButton, fieldContainer);
+        FXUtils.addToPane(container, root);
+
+        FXUtils.addClassTo(classesFolderField, CSSClasses.TRANSPARENT_TEXT_FIELD);
+        FXUtils.addClassTo(fieldContainer, CSSClasses.TEXT_INPUT_CONTAINER);
+        FXUtils.addClassTo(label, CSSClasses.SETTINGS_DIALOG_LABEL);
+        FXUtils.addClassTo(classesFolderField, fieldContainer, CSSClasses.SETTINGS_DIALOG_FIELD);
         FXUtils.addClassesTo(addButton, removeButton, CSSClasses.FLAT_BUTTON,
                 CSSClasses.INPUT_CONTROL_TOOLBAR_BUTTON);
 
@@ -376,10 +429,20 @@ public class SettingsDialog extends EditorDialog {
     /**
      * Process of removing the additional classpath.
      */
-    private void processRemoveCF() {
-        setAdditionalClasspathFolder(null);
+    private void processRemoveLibrariesFolder() {
+        setLibrariesFolder(null);
 
-        final TextField textField = getAdditionalClasspathField();
+        final TextField textField = getLibrariesFolderField();
+        textField.setText(StringUtils.EMPTY);
+    }
+
+    /**
+     * Process of removing the additional classpath.
+     */
+    private void processRemoveClassesFolder() {
+        setClassesFolder(null);
+
+        final TextField textField = getClassesFolderField();
         textField.setText(StringUtils.EMPTY);
     }
 
@@ -394,11 +457,19 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return the additional classpath field.
+     * @return the libraries folder field.
      */
     @NotNull
-    private TextField getAdditionalClasspathField() {
-        return notNull(additionalClasspathField);
+    private TextField getLibrariesFolderField() {
+        return notNull(librariesFolderField);
+    }
+
+    /**
+     * @return the classes folder field.
+     */
+    @NotNull
+    private TextField getClassesFolderField() {
+        return notNull(classesFolderField);
     }
 
     /**
@@ -410,25 +481,46 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * Process of adding the additional classpath.
+     * Add a new libraries folder.
      */
-    private void processAddCF() {
+    private void processAddLibrariesFolder() {
 
         final DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
 
         final EditorConfig config = EditorConfig.getInstance();
-        final Path currentAdditionalCP = config.getAdditionalClasspath();
-        final File currentFolder = currentAdditionalCP == null ? null : currentAdditionalCP.toFile();
+        final Path librariesPath = config.getLibrariesPath();
+        final File currentFolder = librariesPath == null ? null : librariesPath.toFile();
         if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        final File folder = chooser.showDialog(scene.getWindow());
+        final File folder = chooser.showDialog(getDialog());
         if (folder == null) return;
 
-        setAdditionalClasspathFolder(folder.toPath());
+        setLibrariesFolder(folder.toPath());
 
-        final TextField textField = getAdditionalClasspathField();
+        final TextField textField = getLibrariesFolderField();
+        textField.setText(folder.toString());
+    }
+
+    /**
+     * Add a new classes folder.
+     */
+    private void processAddClassesFolder() {
+
+        final DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle(Messages.SETTINGS_DIALOG_CLASSPATH_FOLDER_CHOOSER_TITLE);
+
+        final EditorConfig config = EditorConfig.getInstance();
+        final Path classesPath = config.getClassesPath();
+        final File currentFolder = classesPath == null ? null : classesPath.toFile();
+        if (currentFolder != null) chooser.setInitialDirectory(currentFolder);
+
+        final File folder = chooser.showDialog(getDialog());
+        if (folder == null) return;
+
+        setClassesFolder(folder.toPath());
+
+        final TextField textField = getClassesFolderField();
         textField.setText(folder.toString());
     }
 
@@ -1059,21 +1151,28 @@ public class SettingsDialog extends EditorDialog {
         final IntegerTextField cameraAngleField = getCameraAngleField();
         cameraAngleField.setValue(editorConfig.getCameraAngle());
 
-        final Path additionalClasspath = editorConfig.getAdditionalClasspath();
+        final Path librariesPath = editorConfig.getLibrariesPath();
+        final Path classesPath = editorConfig.getClassesPath();
         final Path additionalEnvs = editorConfig.getAdditionalEnvs();
 
-        final TextField additionalClasspathField = getAdditionalClasspathField();
+        final TextField librariesFolderField = getLibrariesFolderField();
+        final TextField classesFolderField = getClassesFolderField();
         final TextField additionalEnvsField = getAdditionalEnvsField();
 
-        if (additionalClasspath != null) {
-            additionalClasspathField.setText(additionalClasspath.toString());
+        if (librariesPath != null) {
+            librariesFolderField.setText(librariesPath.toString());
+        }
+
+        if (classesPath != null) {
+            classesFolderField.setText(classesPath.toString());
         }
 
         if (additionalEnvs != null) {
             additionalEnvsField.setText(additionalEnvs.toString());
         }
 
-        setAdditionalClasspathFolder(additionalClasspath);
+        setLibrariesFolder(librariesPath);
+        setClassesFolder(classesFolder);
         setAdditionalEnvsFolder(additionalEnvs);
     }
 
@@ -1094,18 +1193,33 @@ public class SettingsDialog extends EditorDialog {
     }
 
     /**
-     * @return the additional classpath folder.
+     * @return the libraries folder.
      */
     @Nullable
-    private Path getAdditionalClasspathFolder() {
-        return additionalClasspathFolder;
+    private Path getLibrariesFolder() {
+        return librariesFolder;
     }
 
     /**
-     * @param additionalClasspathFolder the additional classpath folder.
+     * @return the classes folder.
      */
-    private void setAdditionalClasspathFolder(@Nullable final Path additionalClasspathFolder) {
-        this.additionalClasspathFolder = additionalClasspathFolder;
+    @Nullable
+    private Path getClassesFolder() {
+        return classesFolder;
+    }
+
+    /**
+     * @param librariesFolder the libraries folder.
+     */
+    private void setLibrariesFolder(@Nullable final Path librariesFolder) {
+        this.librariesFolder = librariesFolder;
+    }
+
+    /**
+     * @param classesFolder the classes folder.
+     */
+    private void setClassesFolder(@Nullable final Path classesFolder) {
+        this.classesFolder = classesFolder;
     }
 
     /**
@@ -1149,6 +1263,7 @@ public class SettingsDialog extends EditorDialog {
     private void processOk() {
 
         int needRestart = 0;
+        int needUpdateClasspath = 0;
 
         final EditorConfig editorConfig = EditorConfig.getInstance();
 
@@ -1218,6 +1333,15 @@ public class SettingsDialog extends EditorDialog {
             needRestart++;
         }
 
+        final Path librariesPath = editorConfig.getLibrariesPath();
+        final Path classesPath = editorConfig.getClassesPath();
+
+        if (!Objects.equals(librariesPath, getLibrariesFolder())) {
+            needUpdateClasspath++;
+        } else if (!Objects.equals(classesPath, getClassesFolder())) {
+            needUpdateClasspath++;
+        }
+
         editorConfig.setAnisotropy(anisotropy);
         editorConfig.setFXAA(fxaa);
         editorConfig.setAnalytics(analytics);
@@ -1225,7 +1349,8 @@ public class SettingsDialog extends EditorDialog {
         editorConfig.setStopRenderOnLostFocus(isStopRenderOnLostFocus);
         editorConfig.setToneMapFilter(toneMapFilter);
         editorConfig.setToneMapFilterWhitePoint(toneMapFilterWhitePoint);
-        editorConfig.setAdditionalClasspath(getAdditionalClasspathFolder());
+        editorConfig.setLibrariesPath(getLibrariesFolder());
+        editorConfig.setClassesPath(getClassesFolder());
         editorConfig.setAdditionalEnvs(getAdditionalEnvsFolder());
         editorConfig.setFrameRate(frameRate);
         editorConfig.setCameraAngle(cameraAngle);
@@ -1251,8 +1376,14 @@ public class SettingsDialog extends EditorDialog {
             filter.setWhitePoint(editorConfig.getToneMapFilterWhitePoint());
         });
 
-        final CustomClasspathManager customClasspathManager = CustomClasspathManager.getInstance();
-        customClasspathManager.updateAdditionalCL();
+        if (needUpdateClasspath > 0) {
+
+            final ClasspathManager classpathManager = ClasspathManager.getInstance();
+            classpathManager.reload();
+
+            final AssetManager assetManager = EDITOR.getAssetManager();
+            assetManager.clearCache();
+        }
 
         final ResourceManager resourceManager = ResourceManager.getInstance();
         resourceManager.updateAdditionalEnvs();

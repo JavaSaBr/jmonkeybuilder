@@ -2,7 +2,7 @@ package com.ss.editor.ui.control.model.tree.action.particle.emitter.toneg0d.shap
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.asset.AssetManager;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
@@ -83,9 +83,9 @@ public class LoadModelShapeEmitterAction extends AbstractNodeAction<ModelChangeC
     protected void processOpen(@NotNull final Path file) {
 
         final NodeTree<ModelChangeConsumer> nodeTree = getNodeTree();
-        final ModelChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ModelChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Not found asset file for " + file);
+        final Path assetFile = notNull(getAssetFile(file), "Not found asset file for " + file);
         final String assetPath = toAssetPath(assetFile);
 
         final AssetManager assetManager = EDITOR.getAssetManager();

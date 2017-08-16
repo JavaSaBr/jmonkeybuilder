@@ -1,6 +1,8 @@
 package com.ss.editor.ui.component.editor.impl;
 
 import static com.ss.rlib.util.ObjectUtils.notNull;
+import static java.nio.file.StandardCopyOption.ATOMIC_MOVE;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import com.jme3.math.Vector3f;
 import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
@@ -18,8 +20,8 @@ import com.ss.editor.ui.component.editor.FileEditor;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.FXEventManager;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
-import com.ss.editor.ui.scene.EditorFXScene;
 import com.ss.editor.ui.util.DynamicIconSupport;
+import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.ui.util.FXUtils;
@@ -45,9 +47,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -200,10 +202,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root = createRoot();
-        root.setOnKeyPressed(this::processKeyPressed);
-        root.setOnKeyReleased(this::processKeyReleased);
-        root.setOnMouseReleased(this::processMouseReleased);
-        root.setOnMousePressed(this::processMousePressed);
+
+        if (needListenEventsFromPage()) {
+            root.setOnKeyPressed(this::processKeyPressed);
+            root.setOnKeyReleased(this::processKeyReleased);
+            root.setOnMouseReleased(this::processMouseReleased);
+            root.setOnMousePressed(this::processMousePressed);
+        }
 
         createContent(root);
 
@@ -216,6 +221,13 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
         }
 
         root.prefWidthProperty().bind(container.widthProperty());
+    }
+
+    /**
+     * @return true if need to listen to events from root page of this editor.
+     */
+    protected boolean needListenEventsFromPage() {
+        return true;
     }
 
     /**
@@ -248,8 +260,8 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
 
         final KeyCode code = event.getCode();
 
-        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
-            save();
+        if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+            event.consume();
         }
     }
 
@@ -289,6 +301,14 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FXThread
     protected void processKeyPressed(@NotNull final KeyEvent event) {
+
+        final KeyCode code = event.getCode();
+
+        if (code == KeyCode.S && event.isControlDown() && isDirty()) {
+            save();
+        } else if (handleKeyActionImpl(code, true, event.isControlDown(), false)) {
+            event.consume();
+        }
     }
 
     /**
@@ -334,17 +354,22 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
             final String editorId = description.getEditorId();
 
             final Path tempFile = Utils.get(editorId, prefix -> Files.createTempFile(prefix, "toSave.tmp"));
-
             final long stamp = EDITOR.asyncLock();
             try {
+
                 doSave(tempFile);
-                Files.copy(tempFile, getEditFile(), StandardCopyOption.REPLACE_EXISTING);
+                try {
+                    Files.move(tempFile, getEditFile(), REPLACE_EXISTING, ATOMIC_MOVE);
+                } catch (final AtomicMoveNotSupportedException e) {
+                    Files.move(tempFile, getEditFile(), REPLACE_EXISTING);
+                }
+
             } catch (final IOException e) {
+                FileUtils.delete(tempFile);
                 LOGGER.warning(this, e);
                 EXECUTOR_MANAGER.addFXTask(this::notifyFinishSaving);
             } finally {
                 EDITOR.asyncUnlock(stamp);
-                FileUtils.delete(tempFile);
             }
 
             EXECUTOR_MANAGER.addFXTask(this::postSave);
@@ -501,16 +526,18 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     }
 
     /**
-     * Notify about changing editor camera.
+     * Notify about changed editor camera settings.
      *
-     * @param cameraLocation the camera location
-     * @param hRotation      the h rotation
-     * @param vRotation      the v rotation
-     * @param targetDistance the target distance
+     * @param cameraLocation the camera location.
+     * @param hRotation      the h rotation.
+     * @param vRotation      the v rotation.
+     * @param targetDistance the target distance.
+     * @param cameraSpeed    the camera speed.
      */
     @FXThread
-    public void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                    final float vRotation, final float targetDistance) {
+    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                            final float vRotation, final float targetDistance,
+                                            final float cameraSpeed) {
     }
 
     @Override
@@ -685,8 +712,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FXThread
     protected void notifyStartSaving() {
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.incrementLoading();
+        EditorUtil.incrementLoading();
         setSaving(true);
     }
 
@@ -696,7 +722,6 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
     @FXThread
     protected void notifyFinishSaving() {
         setSaving(false);
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
-        scene.decrementLoading();
+        EditorUtil.decrementLoading();
     }
 }

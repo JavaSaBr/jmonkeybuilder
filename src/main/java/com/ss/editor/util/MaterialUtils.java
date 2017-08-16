@@ -1,7 +1,11 @@
 package com.ss.editor.util;
 
 import static com.ss.editor.util.EditorUtil.*;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
+import static com.ss.rlib.util.array.ArrayFactory.toArray;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.MaterialKey;
@@ -40,6 +44,80 @@ public class MaterialUtils {
 
     @NotNull
     private static final Editor EDITOR = Editor.getInstance();
+
+    @NotNull
+    private static final String[][] TEXTURE_TYPE_PARAM_NAMES = {
+            toArray(""),
+            toArray("DiffuseMap", "BaseColorMap"),
+            toArray("NormalMap"),
+            toArray("EmissiveMap", "GlowMap"),
+            toArray("MetallicMap"),
+            toArray("RoughnessMap"),
+            toArray("SpecularMap"),
+    };
+
+    private static final int TEXTURE_DIFFUSE = 1;
+    private static final int TEXTURE_NORMAL = 2;
+    private static final int TEXTURE_EMISSIVE = 3;
+    private static final int TEXTURE_METALIC = 4;
+    private static final int TEXTURE_ROUGHNESS = 5;
+    private static final int TEXTURE_SPECULAR = 6;
+
+    /**
+     * Get a possible texture type of dropped texture.
+     *
+     * @param textureName the texture name.
+     * @return the texture type or 0.
+     */
+    public static int getPossibleTextureType(@NotNull final String textureName) {
+
+        if (textureName.contains("NORMAL") || textureName.contains("Normal") || textureName.contains("normal")) {
+            return TEXTURE_NORMAL;
+        } else if (textureName.contains("_NRM") || textureName.contains("_nrm")) {
+            return TEXTURE_NORMAL;
+        } else if (textureName.contains("_NM") || textureName.contains("_nm")) {
+            return TEXTURE_NORMAL;
+        } else if (textureName.contains("_N.") || textureName.contains("_n.")) {
+            return TEXTURE_NORMAL;
+        } else if (textureName.contains("ALBEDO") || textureName.contains("albedo")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("_CLR") || textureName.contains("_clr")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("DIFFUSE") || textureName.contains("diffuse")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("_DIFF") || textureName.contains("_diff")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("_D.") || textureName.contains("_d.")) {
+            return TEXTURE_DIFFUSE;
+        }  else if (textureName.contains("_C.") || textureName.contains("_c.")) {
+            return TEXTURE_DIFFUSE;
+        } else if (textureName.contains("EMISSION") || textureName.contains("emission")) {
+            return TEXTURE_EMISSIVE;
+        } else if (textureName.contains("GLOW") || textureName.contains("glow")) {
+            return TEXTURE_EMISSIVE;
+        } else if (textureName.contains("METALLIC") || textureName.contains("metallic")) {
+            return TEXTURE_METALIC;
+        } else if (textureName.contains("SPECULAR") || textureName.contains("specular")) {
+            return TEXTURE_SPECULAR;
+        } else if (textureName.contains("_SPC") || textureName.contains("_spc")) {
+            return TEXTURE_SPECULAR;
+        } else if (textureName.contains("_S.") || textureName.contains("_s.")) {
+            return TEXTURE_SPECULAR;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Get possible param names for the texture type.
+     *
+     * @param textureType the texture type.
+     * @return the array of possible param names.
+     */
+    @NotNull
+    public static String[] getPossibleParamNames(final int textureType) {
+        return TEXTURE_TYPE_PARAM_NAMES[textureType];
+    }
 
     /**
      * Update a material if need.
@@ -102,7 +180,7 @@ public class MaterialUtils {
 
         final MaterialDef materialDef = material.getMaterialDef();
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Can't get an asset file.");
+        final Path assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
 
         return containsShader(materialDef, assetPath);
@@ -118,7 +196,7 @@ public class MaterialUtils {
     @Nullable
     private static String containsTexture(@NotNull final Material material, @NotNull final Path file) {
 
-        final Path assetFile = requireNonNull(getAssetFile(file), "Can't get an asset file.");
+        final Path assetFile = notNull(getAssetFile(file), "Can't get an asset file.");
         final String assetPath = toAssetPath(assetFile);
 
         return containsTexture(material, assetPath) ? assetPath : null;
@@ -312,7 +390,7 @@ public class MaterialUtils {
         final Collection<MatParam> params = material.getParams();
         params.stream().filter(matParam -> matParam.getVarType() == VarType.Texture2D)
                 .map(MatParam::getValue)
-                .map(value -> (Texture) value)
+                .map(Texture.class::cast)
                 .forEach(MaterialUtils::saveIfNeedTexture);
     }
 
@@ -327,10 +405,10 @@ public class MaterialUtils {
         if (!image.isChanged()) return;
 
         final AssetKey key = texture.getKey();
-        final Path file = requireNonNull(getRealFile(key.getName()));
+        final Path file = notNull(getRealFile(key.getName()));
         final BufferedImage bufferedImage = ImageToAwt.convert(image, false, true, 0);
 
-        try (final OutputStream out = Files.newOutputStream(file)) {
+        try (final OutputStream out = Files.newOutputStream(file, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(bufferedImage, "png", out);
         } catch (final IOException e) {
             e.printStackTrace();

@@ -1,6 +1,6 @@
 package com.ss.editor.manager;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import static com.ss.rlib.util.Utils.get;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
@@ -111,7 +111,7 @@ public class WorkspaceManager {
         Workspace workspace;
 
         try {
-            workspace = EditorUtil.deserialize(requireNonNull(get(workspaceFile, Files::readAllBytes)));
+            workspace = EditorUtil.deserialize(notNull(get(workspaceFile, Files::readAllBytes)));
         } catch (final RuntimeException e) {
             workspace = new Workspace();
         }

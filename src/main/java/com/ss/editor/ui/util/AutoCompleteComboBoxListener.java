@@ -1,5 +1,6 @@
 package com.ss.editor.ui.util;
 
+import com.ss.rlib.util.StringUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -9,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NotNull;
-import com.ss.rlib.util.StringUtils;
 
 /**
  * The implementation of autocomplete for combobox.
@@ -55,6 +55,12 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
         comboBox.setEditable(true);
         comboBox.setOnKeyPressed(event -> comboBox.hide());
         comboBox.setOnKeyReleased(AutoCompleteComboBoxListener.this);
+        comboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            final StringConverter<T> converter = comboBox.getConverter();
+            final String presentation = converter.toString(newValue);
+            final int caret = presentation == null ? 0 : presentation.length();
+            comboBox.getEditor().positionCaret(caret);
+        });
     }
 
     /**
@@ -126,7 +132,6 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
 
             filtered.add(value);
         });
-
 
         comboBox.setItems(filtered);
         editor.setText(editorText);

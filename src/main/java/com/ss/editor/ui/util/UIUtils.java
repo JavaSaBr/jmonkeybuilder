@@ -1,6 +1,8 @@
 package com.ss.editor.ui.util;
 
 import static com.ss.rlib.util.ClassUtils.unsafeCast;
+import static com.ss.rlib.util.ReflectionUtils.getStaticField;
+import static java.lang.Math.min;
 import com.jme3.math.ColorRGBA;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.annotation.FXThread;
@@ -18,6 +20,7 @@ import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
+import javafx.event.EventTarget;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -35,6 +38,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -264,44 +268,34 @@ public class UIUtils {
      */
     public static void overrideTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis,
                                                int closeDelayInMillis) {
-
         try {
 
-            Class<?> tooltipBehaviourClass = null;
-            Class<?>[] declaredClasses = Tooltip.class.getDeclaredClasses();
+            // fix auto hiding tooltips
+            final Field xOffsetField = getStaticField(Tooltip.class, "TOOLTIP_XOFFSET");
+            xOffsetField.setAccessible(true);
+            xOffsetField.set(null, 14);
 
-            for (Class<?> declaredClass : declaredClasses) {
-                if (declaredClass.getCanonicalName().equals("javafx.scene.control.Tooltip.TooltipBehavior")) {
-                    tooltipBehaviourClass = declaredClass;
-                    break;
-                }
-            }
+            final Field yOffsetField = getStaticField(Tooltip.class, "TOOLTIP_YOFFSET");
+            yOffsetField.setAccessible(true);
+            yOffsetField.set(null, 14);
+
+            final Class<?> tooltipBehaviourClass = Arrays.stream(Tooltip.class.getDeclaredClasses())
+                    .filter(type -> type.getCanonicalName().equals(Tooltip.class.getName() + ".TooltipBehavior"))
+                    .findAny().orElse(null);
 
             if (tooltipBehaviourClass == null) {
                 return;
             }
 
-            Constructor<?> constructor = tooltipBehaviourClass.
+            final Constructor<?> constructor = tooltipBehaviourClass.
                     getDeclaredConstructor(Duration.class, Duration.class, Duration.class, boolean.class);
-
-            if (constructor == null) {
-                return;
-            }
-
             constructor.setAccessible(true);
 
-            Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis),
+            final Object tooltipBehaviour = ClassUtils.newInstance(constructor, new Duration(openDelayInMillis),
                     new Duration(visibleDurationInMillis), new Duration(closeDelayInMillis), false);
 
-            Field field = Tooltip.class.getDeclaredField("BEHAVIOR");
-
-            if (field == null) {
-                return;
-            }
-
+            final Field field = getStaticField(Tooltip.class, "BEHAVIOR");
             field.setAccessible(true);
-
-            // Cache the default behavior if needed.
             field.get(Tooltip.class);
             field.set(Tooltip.class, tooltipBehaviour);
 
@@ -456,14 +450,61 @@ public class UIUtils {
     /**
      * Convert a color from {@link Color} to {@link ColorRGBA}.
      *
-     * @param newValue the new value
-     * @return the color rgba
+     * @param color the color
+     * @return the jme color
      */
-    @NotNull
+    @Nullable
     @FXThread
-    public static ColorRGBA convertColor(@NotNull final Color newValue) {
-        return new ColorRGBA((float) newValue.getRed(), (float) newValue.getGreen(),
-                (float) newValue.getBlue(), (float) newValue.getOpacity());
+    public static ColorRGBA from(@Nullable final Color color) {
+        if (color == null) return null;
+        return new ColorRGBA((float) color.getRed(), (float) color.getGreen(),
+                (float) color.getBlue(), (float) color.getOpacity());
+    }
+
+    /**
+     * Convert a color from {@link ColorRGBA} to {@link Color}.
+     *
+     * @param color the color
+     * @return the FX color
+     */
+    @Nullable
+    @FXThread
+    public static Color from(@Nullable final ColorRGBA color) {
+        if (color == null) return null;
+
+        final float red = min(color.getRed(), 1F);
+        final float green = min(color.getGreen(), 1F);
+        final float blue = min(color.getBlue(), 1F);
+        final float alpha = min(color.getAlpha(), 1F);
+
+        return new Color(red, green, blue, alpha);
+    }
+
+    /**
+     * @param event the event.
+     * @return true if the event is not hotkey.
+     */
+    @FXThread
+    public static boolean isNotHotKey(@Nullable final KeyEvent event) {
+        if (event == null) return false;
+
+        final String text = event.getText();
+        if (text.isEmpty()) return false;
+
+        final KeyCode code = event.getCode();
+        final EventTarget target = event.getTarget();
+
+        if (code == KeyCode.TAB && !(target instanceof TextInputControl)) {
+            return false;
+        }
+
+        if (event.isControlDown()) {
+            return false;
+        } else if (event.isShiftDown()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -473,10 +514,9 @@ public class UIUtils {
      */
     @FXThread
     public static void consumeIfIsNotHotKey(@Nullable final KeyEvent event) {
-        if (event == null || event.isControlDown() || event.isShiftDown()) {
-            return;
+        if (isNotHotKey(event)) {
+            event.consume();
         }
-        event.consume();
     }
 
     /**
@@ -494,7 +534,6 @@ public class UIUtils {
             hbox.setAlignment(Pos.CENTER_LEFT);
             hbox.setMinHeight(cell.getMinHeight());
         } else if (graphic instanceof Control) {
-            ((Control) graphic).setMinHeight(cell.getMinHeight());
         }
     }
 

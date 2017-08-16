@@ -1,6 +1,7 @@
 package com.ss.editor.manager;
 
 import static com.jme3x.jfx.injfx.JmeToJFXIntegrator.bind;
+import static com.jme3x.jfx.injfx.processor.FrameTransferSceneProcessor.TransferMode.ON_CHANGES;
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
 import static com.ss.rlib.util.FileUtils.getExtension;
@@ -357,6 +358,7 @@ public class JMEFilePreviewManager extends AbstractControl {
         rootNode.attachChild(modelNode);
 
         processor = bind(editor, imageView, imageView, editor.getPreviewViewPort(), false);
+        processor.setTransferMode(ON_CHANGES);
         processor.setEnabled(false);
 
         return processor;

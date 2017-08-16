@@ -1,7 +1,6 @@
 package com.ss.editor.ui.control.model.tree.action.audio;
 
-import static java.util.Objects.requireNonNull;
-
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.audio.AudioNode;
 import com.jme3.scene.Node;
 import com.ss.editor.Messages;
@@ -61,7 +60,7 @@ public class CreateAudioNodeAction extends AbstractNodeAction<ModelChangeConsume
         final TreeNode<?> treeNode = getNode();
         final Node parent = (Node) treeNode.getElement();
 
-        final ChangeConsumer changeConsumer = requireNonNull(nodeTree.getChangeConsumer());
+        final ChangeConsumer changeConsumer = notNull(nodeTree.getChangeConsumer());
         changeConsumer.execute(new AddChildOperation(node, parent));
     }
 }

@@ -12,7 +12,7 @@ public class ModelFileEditorState extends AbstractSceneFileEditorState {
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 3;
+    public static final long serialVersionUID = 4;
 
     /**
      * The sky type.

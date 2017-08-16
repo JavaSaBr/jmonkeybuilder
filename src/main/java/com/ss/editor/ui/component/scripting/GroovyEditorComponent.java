@@ -119,6 +119,7 @@ public class GroovyEditorComponent extends VBox {
         codeArea.prefWidthProperty().bind(widthProperty());
         codeArea.setEditable(editable);
         codeArea.setOnKeyReleased(UIUtils::consumeIfIsNotHotKey);
+        codeArea.setOnKeyPressed(UIUtils::consumeIfIsNotHotKey);
 
 
         FXUtils.addToPane(codeArea, this);

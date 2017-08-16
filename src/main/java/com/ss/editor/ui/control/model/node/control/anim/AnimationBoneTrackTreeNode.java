@@ -1,6 +1,6 @@
 package com.ss.editor.ui.control.model.node.control.anim;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.Bone;
 import com.jme3.animation.BoneTrack;
@@ -31,7 +31,7 @@ public class AnimationBoneTrackTreeNode extends AnimationTrackTreeNode<BoneTrack
     @Override
     protected String computeName() {
         final BoneTrack boneTrack = getElement();
-        final AnimControl control = requireNonNull(getControl());
+        final AnimControl control = notNull(getControl());
         final Skeleton skeleton = control.getSkeleton();
         final Bone bone = skeleton.getBone(boneTrack.getTargetBoneIndex());
         return "Bone track : " + bone.getName();

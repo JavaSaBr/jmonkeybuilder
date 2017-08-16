@@ -8,6 +8,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CssColorTheme;
 import com.ss.editor.util.EditorUtil;
+import com.ss.editor.util.svg.SvgImageLoader;
 import com.ss.rlib.logging.Logger;
 import com.ss.rlib.logging.LoggerManager;
 import com.ss.rlib.manager.InitializeManager;
@@ -18,14 +19,12 @@ import com.ss.rlib.util.dictionary.DictionaryFactory;
 import com.ss.rlib.util.dictionary.IntegerDictionary;
 import com.ss.rlib.util.dictionary.ObjectDictionary;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,6 +78,7 @@ public class FileIconManager {
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_SCENE, "sse");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL, "text");
         EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.JME_MATERIAL_DEFINITION, "text");
+        EXTENSION_TO_CONTENT_TYPE.put(FileExtensions.MODEL_GLTF, "cube");
 
         EXTENSION_TO_CONTENT_TYPE.put("obj", "x-office-drawing");
         EXTENSION_TO_CONTENT_TYPE.put("blend", "application-x-blender");
@@ -185,12 +185,13 @@ public class FileIconManager {
             for (final BiFunction<Path, String, String> iconFinder : iconFinders) {
 
                 final String url = iconFinder.apply(path, extension);
+                final ClassLoader classLoader = iconFinder.getClass().getClassLoader();
 
-                if (url == null || !EditorUtil.checkExists(url, iconFinder.getClass().getClassLoader())) {
+                if (url == null || !EditorUtil.checkExists(url, classLoader)) {
                     continue;
                 }
 
-                return buildImage(url, size);
+                return buildImage(url, EditorUtil.getInputStream(url, classLoader), size);
             }
         }
 
@@ -292,8 +293,19 @@ public class FileIconManager {
 
     @NotNull
     private Image buildImage(@NotNull final String url, final int size) {
+        return buildImage(url, null, size);
+    }
 
-        final Image image = new Image(url, size, size, false, true);
+    @NotNull
+    private Image buildImage(@NotNull final String url, @Nullable final InputStream in, final int size) {
+
+        final Image image;
+
+        if (in != null) {
+            image = new Image(in, size, size, false, true);
+        } else {
+            image = new Image(url, size, size, false, true);
+        }
 
         if (!url.contains("icons/svg/")) {
             originalImageCache.put(image, image);
@@ -307,29 +319,26 @@ public class FileIconManager {
             try {
 
                 final Color iconColor = theme.getIconColor();
+                final Image coloredImage;
 
-                final int width = (int) image.getWidth();
-                final int height = (int) image.getHeight();
+                SvgImageLoader.OVERRIDE_COLOR.set(iconColor);
+                try {
 
-                final WritableImage wimage = new WritableImage(width, height);
-
-                final PixelWriter pixelWriter = wimage.getPixelWriter();
-                final PixelReader pixelReader = image.getPixelReader();
-
-                for (int i = 0; i < width; i++) {
-                    for (int j = 0; j < height; j++) {
-                        final Color color = pixelReader.getColor(i, j);
-                        if (color.getOpacity() > 0.1) {
-                            pixelWriter.setColor(i, j, new Color(iconColor.getRed(), iconColor.getGreen(), iconColor.getBlue(), color.getOpacity()));
-                        }
+                    if (in != null) {
+                        coloredImage = new Image(in, size, size, false, true);
+                    } else {
+                        coloredImage = new Image(url, size, size, false, true);
                     }
+                } finally {
+                    SvgImageLoader.OVERRIDE_COLOR.set(null);
                 }
 
-                originalImageCache.put(wimage, image);
+                originalImageCache.put(coloredImage, image);
 
-                return wimage;
+                return coloredImage;
 
             } catch (final Throwable e) {
+                e.printStackTrace();
                 supportedRepaint = false;
             }
         }

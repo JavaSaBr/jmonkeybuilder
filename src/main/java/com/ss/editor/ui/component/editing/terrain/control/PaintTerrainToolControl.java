@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editing.terrain.control;
 
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -169,7 +169,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     @Override
     public void updateEditing(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput currentInput = requireNonNull(getCurrentInput());
+        final EditingInput currentInput = notNull(getCurrentInput());
 
         switch (currentInput) {
             case MOUSE_PRIMARY:
@@ -183,7 +183,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     @Override
     public void finishEditing(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput currentInput = requireNonNull(getCurrentInput());
+        final EditingInput currentInput = notNull(getCurrentInput());
 
         switch (currentInput) {
             case MOUSE_PRIMARY:
@@ -213,7 +213,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         final Array<ColorPoint> colorPoints = getColorPoints();
         colorPoints.clear();
 
-        final Texture alphaTexture = requireNonNull(getAlphaTexture());
+        final Texture alphaTexture = notNull(getAlphaTexture());
         final Image image = alphaTexture.getImage();
         final ByteBuffer data = image.getData(0);
 
@@ -259,7 +259,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
      */
     @NotNull
     private ByteBuffer getPrevBuffer() {
-        return requireNonNull(prevBuffer);
+        return notNull(prevBuffer);
     }
 
     /**
@@ -268,7 +268,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
     private void commitChanges() {
 
         final ByteBuffer prevBuffer = getPrevBuffer();
-        final Texture alphaTexture = requireNonNull(getAlphaTexture());
+        final Texture alphaTexture = notNull(getAlphaTexture());
         final Image image = alphaTexture.getImage();
 
         final Array<ColorPoint> colorPoints = getColorPoints();
@@ -413,7 +413,7 @@ public class PaintTerrainToolControl extends TerrainToolControl {
         if (alphaTexture == null) return;
 
         final LocalObjects local = LocalObjects.get();
-        final Spatial terrainNode = requireNonNull(getEditedModel());
+        final Spatial terrainNode = notNull(getEditedModel());
         final Terrain terrain = (Terrain) terrainNode;
         final Image image = alphaTexture.getImage();
 

@@ -5,6 +5,8 @@ import com.ss.editor.Editor;
 import com.ss.editor.JFXApplication;
 import com.ss.editor.analytics.google.GAEvent;
 import com.ss.editor.analytics.google.GAnalytics;
+import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.css.CSSRegistry;
@@ -132,6 +134,7 @@ public class EditorDialog {
      *
      * @param root the root container.
      */
+    @FXThread
     protected void createControls(@NotNull final VBox root) {
 
         final VBox actionsContainer = new VBox();
@@ -162,6 +165,7 @@ public class EditorDialog {
      * @return the stage of this dialog.
      */
     @NotNull
+    @FromAnyThread
     protected Stage getDialog() {
         return dialog;
     }
@@ -170,6 +174,7 @@ public class EditorDialog {
      * @return the width property of this dialog.
      */
     @NotNull
+    @FXThread
     protected ReadOnlyDoubleProperty widthProperty() {
         return getContainer().widthProperty();
     }
@@ -178,6 +183,7 @@ public class EditorDialog {
      * @return the height property of this dialog.
      */
     @NotNull
+    @FXThread
     protected ReadOnlyDoubleProperty heightProperty() {
         return getContainer().heightProperty();
     }
@@ -187,6 +193,7 @@ public class EditorDialog {
      *
      * @param container the root container.
      */
+    @FXThread
     protected void configureSize(@NotNull final VBox container) {
         configureSize(container, getSize());
     }
@@ -197,6 +204,7 @@ public class EditorDialog {
      * @param container the root container.
      * @param size      the size.
      */
+    @FXThread
     private void configureSize(@NotNull final VBox container, @NotNull final Point size) {
 
         final Stage dialog = getDialog();
@@ -223,6 +231,7 @@ public class EditorDialog {
      * @return The content container.
      */
     @NotNull
+    @FromAnyThread
     protected VBox getContainer() {
         return container;
     }
@@ -232,11 +241,13 @@ public class EditorDialog {
      *
      * @param size the size of the dialog.
      */
+    @FXThread
     public void updateSize(@NotNull final Point size) {
         configureSize(getContainer(), size);
     }
 
     @NotNull
+    @FromAnyThread
     protected Point getSize() {
         return DEFAULT_SIZE;
     }
@@ -246,6 +257,7 @@ public class EditorDialog {
      *
      * @param event the event
      */
+    @FXThread
     protected void processKey(@NotNull final KeyEvent event) {
         event.consume();
         if (event.getCode() == KeyCode.ESCAPE) {
@@ -258,8 +270,17 @@ public class EditorDialog {
      *
      * @param owner the owner.
      */
+    @FXThread
     public void show(@NotNull final Node owner) {
         show(owner.getScene().getWindow());
+    }
+
+    /**
+     * Show this dialog.
+     */
+    @FXThread
+    public void show() {
+        show(JFXApplication.getInstance().getLastWindow());
     }
 
     /**
@@ -267,6 +288,7 @@ public class EditorDialog {
      *
      * @param owner the owner.
      */
+    @FXThread
     public void show(@NotNull final Window owner) {
 
         final Scene scene = owner.getScene();
@@ -302,6 +324,7 @@ public class EditorDialog {
         return getClass().getSimpleName();
     }
 
+    @FXThread
     public void hide() {
 
         final Duration duration = Duration.between(showedTime, LocalTime.now());
@@ -334,6 +357,7 @@ public class EditorDialog {
      *
      * @param root the root
      */
+    @FXThread
     protected void createContent(@NotNull final VBox root) {
     }
 
@@ -342,6 +366,7 @@ public class EditorDialog {
      *
      * @param root the root
      */
+    @FXThread
     protected void createContent(@NotNull final GridPane root) {
     }
 
@@ -350,6 +375,7 @@ public class EditorDialog {
      *
      * @return true if this dialog has grid structure.
      */
+    @FromAnyThread
     protected boolean isGridStructure() {
         return false;
     }
@@ -359,6 +385,7 @@ public class EditorDialog {
      *
      * @param root the root
      */
+    @FXThread
     protected void createActions(@NotNull final VBox root) {
     }
 
@@ -368,6 +395,7 @@ public class EditorDialog {
      * @return the title of this dialog.
      */
     @NotNull
+    @FromAnyThread
     protected String getTitleText() {
         return "Title";
     }

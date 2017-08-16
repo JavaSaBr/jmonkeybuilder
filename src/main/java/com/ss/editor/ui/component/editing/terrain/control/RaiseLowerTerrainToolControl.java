@@ -2,7 +2,7 @@ package com.ss.editor.ui.component.editing.terrain.control;
 
 import static com.ss.editor.util.EditingUtils.calculateHeight;
 import static com.ss.editor.util.EditingUtils.isContains;
-import static java.util.Objects.requireNonNull;
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -55,7 +55,7 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
     @Override
     public void updateEditing(@NotNull final Vector3f contactPoint) {
 
-        final EditingInput editingInput = requireNonNull(getCurrentInput());
+        final EditingInput editingInput = notNull(getCurrentInput());
 
         switch (editingInput) {
             case MOUSE_PRIMARY:
@@ -69,7 +69,7 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
     public void finishEditing(@NotNull final Vector3f contactPoint) {
         super.finishEditing(contactPoint);
 
-        final EditingInput editingInput = requireNonNull(getCurrentInput());
+        final EditingInput editingInput = notNull(getCurrentInput());
 
         switch (editingInput) {
             case MOUSE_PRIMARY:
@@ -89,7 +89,7 @@ public class RaiseLowerTerrainToolControl extends ChangeHeightTerrainToolControl
     private void modifyHeight(@NotNull final EditingInput editingInput, @NotNull final Vector3f contactPoint) {
 
         final LocalObjects local = LocalObjects.get();
-        final Node terrainNode = (Node) requireNonNull(getEditedModel());
+        final Node terrainNode = (Node) notNull(getEditedModel());
 
         final Vector3f worldTranslation = terrainNode.getWorldTranslation();
         final Vector3f localScale = terrainNode.getLocalScale();

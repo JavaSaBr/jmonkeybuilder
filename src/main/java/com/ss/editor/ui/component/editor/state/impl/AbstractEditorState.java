@@ -11,6 +11,7 @@ import com.ss.rlib.util.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -24,7 +25,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 3;
+    public static final long serialVersionUID = 4;
 
     /**
      * The constant EDITOR_CONFIG.
@@ -67,6 +68,11 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     protected volatile float cameraHRotation;
 
     /**
+     * The camera speed.
+     */
+    protected volatile float cameraSpeed;
+
+    /**
      * The camera zoom.
      */
     protected volatile float cameraTDistance;
@@ -92,6 +98,7 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
         this.cameraVRotation = FastMath.PI / 6;
         this.cameraTDistance = 20;
         this.cameraHRotation = 0;
+        this.cameraSpeed = 1;
     }
 
     @Override
@@ -225,6 +232,26 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
     }
 
     /**
+     * Set the camera speed.
+     *
+     * @param cameraSpeed the camera speed.
+     */
+    public void setCameraSpeed(final float cameraSpeed) {
+        final boolean changed = getCameraSpeed() != cameraSpeed;
+        this.cameraSpeed = cameraSpeed;
+        if (changed) notifyChange();
+    }
+
+    /**
+     * Get the camera speed.
+     *
+     * @return the camera speed.
+     */
+    public float getCameraSpeed() {
+        return cameraSpeed;
+    }
+
+    /**
      * Sets camera v rotation.
      *
      * @param cameraVRotation the new vertical rotation.
@@ -246,13 +273,9 @@ public abstract class AbstractEditorState implements EditorState, EditorToolConf
 
     @Override
     public String toString() {
-        return "AbstractEditorState{" +
-                "cameraLocation=" + cameraLocation +
-                ", cameraVRotation=" + cameraVRotation +
-                ", cameraHRotation=" + cameraHRotation +
-                ", cameraTDistance=" + cameraTDistance +
-                ", toolWidth=" + toolWidth +
-                ", toolCollapsed=" + toolCollapsed +
-                '}';
+        return "AbstractEditorState{" + "additionalStates=" + Arrays.toString(additionalStates) + ", cameraLocation=" +
+                cameraLocation + ", cameraVRotation=" + cameraVRotation + ", cameraHRotation=" + cameraHRotation +
+                ", cameraSpeed=" + cameraSpeed + ", cameraTDistance=" + cameraTDistance + ", toolWidth=" + toolWidth +
+                ", toolCollapsed=" + toolCollapsed + '}';
     }
 }

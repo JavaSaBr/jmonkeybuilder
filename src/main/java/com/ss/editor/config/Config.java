@@ -36,7 +36,7 @@ public abstract class Config {
      * The constant APP_VERSION.
      */
     @NotNull
-    public static final Version APP_VERSION = new Version("0.9.12");
+    public static final Version APP_VERSION = new Version("1.0.0");
 
     /**
      * The constant STRING_VERSION.
@@ -79,6 +79,10 @@ public abstract class Config {
      */
     public static final boolean DEV_DEBUG_JFX;
     /**
+     * The flag to enable debug of mouse input from javaFX to jME.
+     */
+    public static final boolean DEV_DEBUG_JFX_MOUSE_INPUT;
+    /**
      * The flag to enable debug of key input from javaFX to jME.
      */
     public static final boolean DEV_DEBUG_JFX_KEY_INPUT;
@@ -97,6 +101,7 @@ public abstract class Config {
         DEV_DEBUG = vars.getBoolean("Dev.debug", false);
         DEV_CAMERA_DEBUG = vars.getBoolean("Dev.cameraDebug", false);
         DEV_TRANSFORMS_DEBUG = vars.getBoolean("Dev.transformsDebug", false);
+        DEV_DEBUG_JFX_MOUSE_INPUT = vars.getBoolean("Dev.jfxMouseInput", false);
         DEV_DEBUG_JFX_KEY_INPUT = vars.getBoolean("Dev.jfxKeyInput", false);
         DEV_DEBUG_JFX = vars.getBoolean("Dev.debugJFX", false);
         ENABLE_PBR = vars.getBoolean("Graphics.enablePBR", true);

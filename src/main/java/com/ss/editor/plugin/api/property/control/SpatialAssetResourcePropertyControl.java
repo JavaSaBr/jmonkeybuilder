@@ -1,4 +1,4 @@
-package com.ss.editor.ui.dialog.factory.control;
+package com.ss.editor.plugin.api.property.control;
 
 import static com.ss.editor.util.EditorUtil.getAssetFile;
 import static com.ss.editor.util.EditorUtil.toAssetPath;
@@ -10,7 +10,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.scene.Spatial;
 import com.ss.editor.FileExtensions;
-import com.ss.editor.ui.dialog.factory.PropertyDefinition;
+import com.ss.editor.plugin.api.property.PropertyDefinition;
 import com.ss.rlib.util.VarTable;
 import com.ss.rlib.util.array.Array;
 import com.ss.rlib.util.array.ArrayFactory;

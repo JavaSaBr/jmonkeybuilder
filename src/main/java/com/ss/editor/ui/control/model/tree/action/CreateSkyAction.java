@@ -7,12 +7,9 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.control.model.tree.dialog.sky.CreateSkyDialog;
 import com.ss.editor.ui.control.tree.NodeTree;
 import com.ss.editor.ui.control.tree.node.TreeNode;
-import com.ss.editor.ui.scene.EditorFXScene;
-
+import javafx.scene.image.Image;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javafx.scene.image.Image;
 
 /**
  * The action to create sky.
@@ -48,9 +45,13 @@ public class CreateSkyAction extends AbstractNodeAction<ModelChangeConsumer> {
     protected void process() {
         super.process();
 
-        final EditorFXScene scene = JFX_APPLICATION.getScene();
+        final CreateSkyDialog dialog = createDialog();
+        dialog.show();
+    }
 
-        final CreateSkyDialog dialog = new CreateSkyDialog(getNode(), getNodeTree());
-        dialog.show(scene.getWindow());
+    @NotNull
+    @FXThread
+    protected CreateSkyDialog createDialog() {
+        return new CreateSkyDialog(getNode(), getNodeTree());
     }
 }

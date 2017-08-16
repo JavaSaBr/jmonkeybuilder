@@ -4,7 +4,6 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -48,25 +47,28 @@ public class OptimizeGeometryOperation extends AbstractEditorOperation<ModelChan
 
     @Override
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
-
-            final int index = parent.getChildIndex(oldSpatial);
-            parent.detachChildAt(index);
-            parent.attachChildAt(newSpatial, index);
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(parent, oldSpatial, newSpatial));
-        });
+        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, oldSpatial, newSpatial));
     }
 
     @Override
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, newSpatial, oldSpatial));
+    }
 
-            final int index = parent.getChildIndex(newSpatial);
-            parent.detachChildAt(index);
-            parent.attachChildAt(oldSpatial, index);
+    /**
+     * Apply changes.
+     *
+     * @param consumer   the change consumer.
+     * @param newSpatial the new spatial.
+     * @param oldSpatial the new old spatial.
+     */
+    private void apply(@NotNull final ModelChangeConsumer consumer, @NotNull final Spatial newSpatial,
+                       @NotNull final Spatial oldSpatial) {
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXReplaced(parent, newSpatial, oldSpatial));
-        });
+        final int index = parent.getChildIndex(newSpatial);
+        parent.detachChildAt(index);
+        parent.attachChildAt(oldSpatial, index);
+
+        EXECUTOR_MANAGER.addFXTask(() -> consumer.notifyFXReplaced(parent, newSpatial, oldSpatial, true, false));
     }
 }

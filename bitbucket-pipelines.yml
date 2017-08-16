@@ -5,8 +5,13 @@
 # You can specify a custom docker image from Docker Hub as your build environment.
 # image: atlassian/default-image:latest
 
+image: java:8
 pipelines:
   default:
     - step:
+        caches:
+          - gradle
         script:
-          - echo "Everything is awesome!"
+          - apt-get update
+          - apt-get install -y openjfx
+          - bash ./gradlew install

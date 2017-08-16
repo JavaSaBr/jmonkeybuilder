@@ -20,7 +20,6 @@ import com.jme3.renderer.RendererException;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
@@ -142,7 +141,7 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
 
         final AssetManager assetManager = EDITOR.getAssetManager();
 
-        final Spatial sky = SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
+        final Geometry sky = (Geometry) SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
                 SkyFactory.EnvMapType.EquirectMap);
 
         final Node stateNode = getStateNode();
@@ -443,9 +442,12 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     }
 
     @Override
-    protected void notifyChangedCamera(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                       final float vRotation, final float targetDistance) {
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCamera(cameraLocation, hRotation, vRotation, targetDistance));
+    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
+                                               final float vRotation, final float targetDistance,
+                                               final float cameraSpeed) {
+        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
+        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
+                vRotation, targetDistance, cameraSpeed));
     }
 
     /**

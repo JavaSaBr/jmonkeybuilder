@@ -11,6 +11,7 @@ import com.jme3.math.Vector4f;
 import com.jme3.shader.VarType;
 import com.jme3.texture.Texture;
 import com.jme3.texture.Texture2D;
+import com.jme3.texture.TextureCubeMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -106,10 +107,27 @@ public class MaterialSerializer {
                 final StringBuilder builder = new StringBuilder();
                 if (textureKey.isFlipY()) builder.append("Flip ");
 
-                if (texture2D.getWrap(Texture.WrapAxis.T) == Texture.WrapMode.Repeat) {
-                    builder.append("Repeat ");
-                }
+                builder.append("Wrap").append(texture2D.getWrap(Texture.WrapAxis.T)).append("_T").append(' ');
+                builder.append("Wrap").append(texture2D.getWrap(Texture.WrapAxis.S)).append("_S").append(' ');
+                builder.append("Mag").append(texture2D.getMagFilter()).append(' ');
+                builder.append("Min").append(texture2D.getMinFilter()).append(' ');
+                builder.append(textureKey.getName());
 
+                return builder.toString();
+            }
+            case TextureCubeMap: {
+
+                final TextureCubeMap textureCubeMap = (TextureCubeMap) value;
+                final TextureKey textureKey = (TextureKey) textureCubeMap.getKey();
+
+                final StringBuilder builder = new StringBuilder();
+                if (textureKey.isFlipY()) builder.append("Flip ");
+
+                builder.append("Wrap").append(textureCubeMap.getWrap(Texture.WrapAxis.T)).append("_T").append(' ');
+                builder.append("Wrap").append(textureCubeMap.getWrap(Texture.WrapAxis.S)).append("_S").append(' ');
+                builder.append("Wrap").append(textureCubeMap.getWrap(Texture.WrapAxis.R)).append("_R").append(' ');
+                builder.append("Mag").append(textureCubeMap.getMagFilter()).append(' ');
+                builder.append("Min").append(textureCubeMap.getMinFilter()).append(' ');
                 builder.append(textureKey.getName());
 
                 return builder.toString();

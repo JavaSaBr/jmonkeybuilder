@@ -1,6 +1,5 @@
 package com.ss.editor.model.undo.editor;
 
-import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.JMEThread;
@@ -85,22 +84,15 @@ public interface ModelChangeConsumer extends ChangeConsumer {
     /**
      * Notify about replaced child from FX thread.
      *
-     * @param parent   the parent
-     * @param oldChild the old child
-     * @param newChild the new child
+     * @param parent         the parent.
+     * @param oldChild       the old child.
+     * @param newChild       the new child.
+     * @param needExpand     true of need to expand new node.
+     * @param needDeepExpand true of need to expand new node deeply.
      */
     @FXThread
-    void notifyFXReplaced(@NotNull Node parent, @NotNull Spatial oldChild, @NotNull Spatial newChild);
-
-    /**
-     * Notify about replaced child from FX thread.
-     *
-     * @param parent   the parent
-     * @param oldChild the old child
-     * @param newChild the new child
-     */
-    @FXThread
-    void notifyFXReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild);
+    void notifyFXReplaced(@NotNull Object parent, @Nullable Object oldChild, @Nullable Object newChild,
+                          boolean needExpand, boolean needDeepExpand);
 
     /**
      * Notify about moved child from FX thread.
@@ -112,6 +104,6 @@ public interface ModelChangeConsumer extends ChangeConsumer {
      * @param needSelect true if need select this object.
      */
     @FXThread
-    void notifyFXMoved(@NotNull Node prevParent, @NotNull Node newParent, @NotNull Spatial child, int index,
+    void notifyFXMoved(@NotNull Object prevParent, @NotNull Object newParent, @NotNull Object child, int index,
                        boolean needSelect);
 }

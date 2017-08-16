@@ -40,6 +40,10 @@ public interface CSSClasses {
      * The constant DEF_STACK_PANE.
      */
     String DEF_STACK_PANE = "stack-pane";
+    /**
+     * The constant DEF_BORDER_PANE.
+     */
+    String DEF_BORDER_PANE = "border-pane";
 
     /**
      * The constant DIALOG_ROOT.
@@ -68,7 +72,7 @@ public interface CSSClasses {
     /**
      * The constant DIALOG_FIELD.
      */
-    String DIALOG_FIELD = "EditorDialogField";
+    String DIALOG_FIELD = "dialog-field";
 
     /**
      * The constant TEXT_INPUT_CONTAINER.
@@ -93,6 +97,10 @@ public interface CSSClasses {
      */
     String CHOOSE_RESOURCE_CONTROL = "choose-resource-control";
 
+    /**
+     * The constant TEXT_FIELD_IN_COMBO_BOX.
+     */
+    String TEXT_FIELD_IN_COMBO_BOX = "text-field-in-combo-box";
     /**
      * The constant TRANSPARENT_SPINNER.
      */
@@ -473,6 +481,11 @@ public interface CSSClasses {
      * The constant IMAGE_CHANNEL_PREVIEW.
      */
     String IMAGE_CHANNEL_PREVIEW = "image-channel-preview";
+
+    /**
+     * The constant IMAGE_PREVIEW.
+     */
+    String IMAGE_PREVIEW = "image-preview";
 
     /**
      * The constant PLUGIN_LIST_CELL.

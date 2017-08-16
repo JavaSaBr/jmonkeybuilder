@@ -2,6 +2,9 @@ package com.ss.editor.manager;
 
 import static com.ss.rlib.util.array.ArrayFactory.asArray;
 import static java.awt.Image.SCALE_DEFAULT;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.nio.file.StandardOpenOption.WRITE;
 import com.jme3.asset.AssetManager;
 import com.jme3.texture.Texture;
 import com.ss.editor.Editor;
@@ -227,9 +230,18 @@ public class JavaFXImageManager {
         } else if (FileExtensions.IMAGE_TGA.equals(extension)) {
 
             final byte[] content = Utils.get(url, first -> IOUtils.toByteArray(first.openStream()));
+            final BufferedImage awtImage;
+            try {
+                awtImage = (BufferedImage) TGAReader.getImage(content);
+            } catch (final Exception e) {
+                LOGGER.warning(e);
+                writeDefaultToCache(cacheFile);
+                return Icons.IMAGE_512;
+            }
 
-            final BufferedImage awtImage = (BufferedImage) TGAReader.getImage(content);
-            if (awtImage == null) return Icons.IMAGE_512;
+            if (awtImage == null) {
+                return Icons.IMAGE_512;
+            }
 
             final int imageWidth = awtImage.getWidth();
             final int imageHeight = awtImage.getHeight();
@@ -238,6 +250,15 @@ public class JavaFXImageManager {
         }
 
         return Icons.IMAGE_512;
+    }
+
+    private void writeDefaultToCache(@NotNull final Path cacheFile) {
+        final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(Icons.IMAGE_512, null);
+        try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
+            ImageIO.write(bufferedImage, "png", out);
+        } catch (final IOException ex) {
+            LOGGER.warning(ex);
+        }
     }
 
     @NotNull
@@ -299,7 +320,7 @@ public class JavaFXImageManager {
 
         final BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
 
-        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+        try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(bufferedImage, "png", out);
         } catch (final IOException e) {
             LOGGER.warning(e);
@@ -315,7 +336,7 @@ public class JavaFXImageManager {
 
         final BufferedImage newImage = scaleImage(targetWidth, targetHeight, textureImage, currentWidth, currentHeight);
 
-        try (final OutputStream out = Files.newOutputStream(cacheFile)) {
+        try (final OutputStream out = Files.newOutputStream(cacheFile, WRITE, TRUNCATE_EXISTING, CREATE)) {
             ImageIO.write(newImage, "png", out);
             return new Image(cacheFile.toUri().toString());
         } catch (final IOException e) {

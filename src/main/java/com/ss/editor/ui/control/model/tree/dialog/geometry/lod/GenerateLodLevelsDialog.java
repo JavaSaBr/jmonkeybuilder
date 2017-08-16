@@ -2,7 +2,6 @@ package com.ss.editor.ui.control.model.tree.dialog.geometry.lod;
 
 import static com.ss.editor.ui.FXConstants.DIALOG_LIST_WIDTH_PERCENT;
 import static com.ss.rlib.util.ObjectUtils.notNull;
-import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
@@ -325,7 +324,7 @@ public class GenerateLodLevelsDialog extends AbstractSimpleEditorDialog {
         EXECUTOR_MANAGER.addFXTask(() -> {
 
             final NodeTree<?> nodeTree = getNodeTree();
-            final ChangeConsumer consumer = requireNonNull(nodeTree.getChangeConsumer());
+            final ChangeConsumer consumer = notNull(nodeTree.getChangeConsumer());
 
             final ModelPropertyOperation<Geometry, VertexBuffer[]> operation =
                     new ModelPropertyOperation<>(geometry, Messages.MODEL_PROPERTY_LOD, newLodLevels, prevLodLevels);
