@@ -1,4 +1,4 @@
-# jMonkeyEngine 3 SpaceShift Editor 0.9.12 #
+# jMonkeyEngine 3 SpaceShift Editor 1.0.1 #
 ## License: Apache Version 2.0 ##
 
 [![Join the chat at https://gitter.im/jME3-SpaceShift-Editor/Lobby](https://badges.gitter.im/jME3-SpaceShift-Editor/Lobby.svg)](https://gitter.im/jME3-SpaceShift-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -10,6 +10,18 @@
 * [Youtube channel](https://www.youtube.com/playlist?list=PLNdOH0eRoQMBkLPBvTIDn02UFhcTJWsh7)
 
 ## [Video about this editor](https://youtu.be/h6azH-D28qk) ##
+
+## ver. 1.0.1 ##
+* -Implemented D&D of controls in a model tree.
+* -Implemented to load compiled classes from any IDE to improve integration with IDE's.
+* -Updated toneg0d.emitter library.
+* -Added glTF loader.
+* -Implemented auto-finding all available controls to create it in model tree.
+* -Added to show custom objects from user data of Spatial.
+* -Included jME font creator plugin.
+* -Added to create editable sky nodes.
+* -Added image preview tooltips to Asset tree.
+* -Improved usability and fixed a lot of little bugs with UI.
 
 ## ver. 0.9.12 ##
 * -Downgraded tonegod.emitter to java 7
