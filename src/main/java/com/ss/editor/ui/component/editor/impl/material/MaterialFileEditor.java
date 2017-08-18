@@ -22,7 +22,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
-import com.ss.editor.plugin.api.editor.Base3DEditorWithRightTool;
+import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithRightTool;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
 import com.ss.editor.state.editor.impl.material.MaterialEditor3DState.ModelType;
@@ -62,7 +62,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class MaterialFileEditor extends
-        Base3DEditorWithRightTool<MaterialEditor3DState, EditorMaterialEditorState> implements MaterialChangeConsumer {
+        Advanced3DFileEditorWithRightTool<MaterialEditor3DState, EditorMaterialEditorState> implements MaterialChangeConsumer {
 
     /**
      * The constant DESCRIPTION.

@@ -5,12 +5,10 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
-import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.LightProbe;
 import com.jme3.material.Material;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -27,7 +25,7 @@ import com.jme3.util.SkyFactory;
 import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
+import com.ss.editor.plugin.api.editor.part3d.AdvancedPBR3DEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.BooleanFloatConsumer;
@@ -42,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<MaterialFileEditor> {
+public class MaterialEditor3DState extends AdvancedPBR3DEditorState<MaterialFileEditor> {
 
     @NotNull
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
@@ -72,16 +70,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
         TRIGGERS.put(KEY_L, new KeyTrigger(KeyInput.KEY_L));
     }
 
-    @NotNull
-    private final JobProgressAdapter<LightProbe> probeHandler = new JobProgressAdapter<LightProbe>() {
-
-        @Override
-        public void done(final LightProbe result) {
-            if (!isInitialized()) return;
-            attachModelNode();
-        }
-    };
-
     /**
      * The test box.
      */
@@ -101,10 +89,10 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     private final Geometry testQuad;
 
     /**
-     * The model node.
+     * The camera node.
      */
     @Nullable
-    private Node modelNode;
+    private Node cameraNode;
 
     /**
      * The current model mode.
@@ -116,11 +104,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
      * The flag of enabling light.
      */
     private boolean lightEnabled;
-
-    /**
-     * The count of frames.
-     */
-    private int frame;
 
     /**
      * Instantiates a new Material editor app state.
@@ -153,6 +136,8 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
         final EditorCamera editorCamera = notNull(getEditorCamera());
         editorCamera.setDefaultHorizontalRotation(H_ROTATION);
         editorCamera.setDefaultVerticalRotation(V_ROTATION);
+
+        getModelNode().attachChild(getNodeForCamera());
     }
 
     @Override
@@ -174,34 +159,23 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     }
 
     /**
-     * Attach model node to state node.
-     */
-    private void attachModelNode() {
-        final Node stateNode = getStateNode();
-        stateNode.attachChild(modelNode);
-    }
-
-    /**
      * @return the test box.
      */
-    @NotNull
-    private Geometry getTestBox() {
+    private @NotNull Geometry getTestBox() {
         return testBox;
     }
 
     /**
      * @return the test quad.
      */
-    @NotNull
-    private Geometry getTestQuad() {
+    private @NotNull Geometry getTestQuad() {
         return testQuad;
     }
 
     /**
      * @return the test sphere.
      */
-    @NotNull
-    private Geometry getTestSphere() {
+    private @NotNull Geometry getTestSphere() {
         return testSphere;
     }
 
@@ -237,14 +211,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
             testQuad.setMaterial(EDITOR.getDefaultMaterial());
             testSphere.setMaterial(EDITOR.getDefaultMaterial());
         }
-    }
-
-    /**
-     * @return the model node.
-     */
-    @NotNull
-    private Node getModelNode() {
-        return notNull(modelNode);
     }
 
     /**
@@ -309,28 +275,17 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     @Override
     public void initialize(@NotNull final AppStateManager stateManager, @NotNull final Application application) {
         super.initialize(stateManager, application);
-
         changeModeImpl(getCurrentModelType());
-
-        frame = 0;
     }
 
     @Override
-    public void cleanup() {
-        super.cleanup();
+    protected @NotNull Node getNodeForCamera() {
 
-        final Node modelNode = getModelNode();
-        modelNode.detachAllChildren();
+        if (cameraNode == null) {
+            cameraNode = new Node("CameraNode");
+        }
 
-        final Node stateNode = getStateNode();
-        stateNode.detachChild(modelNode);
-    }
-
-    @NotNull
-    @Override
-    protected Node getNodeForCamera() {
-        if (modelNode == null) modelNode = new Node("TreeNode");
-        return modelNode;
+        return cameraNode;
     }
 
     @Override
@@ -408,8 +363,6 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
     public void update(float tpf) {
         super.update(tpf);
 
-        if (frame == 2) EDITOR.updateLightProbe(probeHandler);
-
         final Geometry testQuad = getTestQuad();
 
         if (testQuad.getParent() != null) {
@@ -420,34 +373,11 @@ public class MaterialEditor3DState extends AdvancedAbstractEditor3DState<Materia
             localRotation.lookAt(camera.getLocation(), camera.getUp());
             testQuad.setLocalRotation(localRotation);
         }
-
-        frame++;
-    }
-
-    @Override
-    protected void undo() {
-        final MaterialFileEditor fileEditor = getFileEditor();
-        fileEditor.undo();
-    }
-
-    @Override
-    protected void redo() {
-        final MaterialFileEditor fileEditor = getFileEditor();
-        fileEditor.redo();
     }
 
     @Override
     protected boolean needUpdateCameraLight() {
         return false;
-    }
-
-    @Override
-    protected void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                               final float vRotation, final float targetDistance,
-                                               final float cameraSpeed) {
-        super.notifyChangedCameraSettings(cameraLocation, hRotation, vRotation, targetDistance, cameraSpeed);
-        EXECUTOR_MANAGER.addFXTask(() -> getFileEditor().notifyChangedCameraSettings(cameraLocation, hRotation,
-                vRotation, targetDistance, cameraSpeed));
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.ss.editor.plugin.api.editor;
 
 import com.ss.editor.annotation.FXThread;
-import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
+import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
@@ -16,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The base implementation of an editor with 3D scene and with right tool panel.
+ * The advanced implementation of 3D editor.
  *
  * @author JavaSaBr
  */
-public abstract class Base3DEditorWithRightTool<T extends AdvancedAbstractEditor3DState, S extends Editor3DWithEditorToolEditorState> extends
-        Base3DFileEditor<T, S> {
+public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEditorState, S extends Editor3DWithEditorToolEditorState>
+        extends Advanced3DFileEditor<T, S> {
 
     /**
      * The main split container.

@@ -66,9 +66,8 @@ public abstract class AbstractEditor3DState<T extends FileEditor> extends Abstra
      *
      * @return the root node.
      */
-    @NotNull
     @FromAnyThread
-    protected Node getStateNode() {
+    protected @NotNull Node getStateNode() {
         return stateNode;
     }
 
@@ -77,9 +76,8 @@ public abstract class AbstractEditor3DState<T extends FileEditor> extends Abstra
      *
      * @return the owner editor.
      */
-    @NotNull
     @FromAnyThread
-    protected T getFileEditor() {
+    protected @NotNull T getFileEditor() {
         return fileEditor;
     }
 }
