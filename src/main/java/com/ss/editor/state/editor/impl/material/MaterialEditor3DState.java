@@ -3,7 +3,6 @@ package com.ss.editor.state.editor.impl.material;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.app.Application;
 import com.jme3.app.state.AppStateManager;
-import com.jme3.asset.AssetManager;
 import com.jme3.asset.AssetNotFoundException;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -21,11 +20,10 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Quad;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.util.SkyFactory;
 import com.ss.editor.EditorThread;
 import com.ss.editor.model.EditorCamera;
 import com.ss.editor.model.tool.TangentGenerator;
-import com.ss.editor.plugin.api.editor.part3d.AdvancedPBR3DEditorState;
+import com.ss.editor.plugin.api.editor.part3d.AdvancedPBRWithStudioSky3DEditorState;
 import com.ss.editor.ui.component.editor.impl.material.MaterialFileEditor;
 import com.ss.editor.util.EditorUtil;
 import com.ss.rlib.function.BooleanFloatConsumer;
@@ -40,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author JavaSaBr
  */
-public class MaterialEditor3DState extends AdvancedPBR3DEditorState<MaterialFileEditor> {
+public class MaterialEditor3DState extends AdvancedPBRWithStudioSky3DEditorState<MaterialFileEditor> {
 
     @NotNull
     private static final Vector3f QUAD_OFFSET = new Vector3f(0, -2, 2);
@@ -121,14 +119,6 @@ public class MaterialEditor3DState extends AdvancedPBR3DEditorState<MaterialFile
         TangentGenerator.useMikktspaceGenerator(testBox);
         TangentGenerator.useMikktspaceGenerator(testSphere);
         TangentGenerator.useMikktspaceGenerator(testQuad);
-
-        final AssetManager assetManager = EDITOR.getAssetManager();
-
-        final Geometry sky = (Geometry) SkyFactory.createSky(assetManager, "graphics/textures/sky/studio.hdr",
-                SkyFactory.EnvMapType.EquirectMap);
-
-        final Node stateNode = getStateNode();
-        stateNode.attachChild(sky);
 
         final DirectionalLight light = notNull(getLightForCamera());
         light.setDirection(LIGHT_DIRECTION);
@@ -360,8 +350,8 @@ public class MaterialEditor3DState extends AdvancedPBR3DEditorState<MaterialFile
     }
 
     @Override
-    public void update(float tpf) {
-        super.update(tpf);
+    protected void postCameraUpdate(final float tpf) {
+        super.postCameraUpdate(tpf);
 
         final Geometry testQuad = getTestQuad();
 

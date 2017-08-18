@@ -1071,37 +1071,56 @@ public abstract class AdvancedAbstractEditor3DState<T extends FileEditor> extend
     @Override
     public void update(float tpf) {
         super.update(tpf);
+        preCameraUpdate(tpf);
+        cameraUpdate(tpf);
+        postCameraUpdate(tpf);
+    }
 
-        final EditorCamera editorCamera = getEditorCamera();
-
-        if (editorCamera != null) {
-
-            final boolean[] cameraKeysState = getCameraKeysState();
-
-            if (isCameraMoving()) {
-                if (cameraKeysState[0]) {
-                    moveSideCamera(tpf * 30, false, false, 0);
-                }
-                if (cameraKeysState[1]) {
-                    moveSideCamera(-tpf * 30, false, false, 1);
-                }
-                if (cameraKeysState[2]) {
-                    moveDirectionCamera(tpf * 30, false, false, 2);
-                }
-                if (cameraKeysState[3]) {
-                    moveDirectionCamera(-tpf * 30, false, false, 3);
-                }
-            }
-
-            checkCameraChanges(editorCamera);
-        }
+    @JMEThread
+    protected void postCameraUpdate(final float tpf) {
 
         final DirectionalLight lightForCamera = getLightForCamera();
+        final EditorCamera editorCamera = getEditorCamera();
 
         if (editorCamera != null && lightForCamera != null && needUpdateCameraLight()) {
             final Camera camera = EDITOR.getCamera();
             lightForCamera.setDirection(camera.getDirection().normalize());
         }
+    }
+
+    @JMEThread
+    protected void cameraUpdate(final float tpf) {
+
+        final EditorCamera editorCamera = getEditorCamera();
+        if (editorCamera == null) {
+            return;
+        }
+
+        editorCamera.update(tpf);
+
+        final boolean[] cameraKeysState = getCameraKeysState();
+
+        if (isCameraMoving()) {
+            if (cameraKeysState[0]) {
+                moveSideCamera(tpf * 30, false, false, 0);
+            }
+            if (cameraKeysState[1]) {
+                moveSideCamera(-tpf * 30, false, false, 1);
+            }
+            if (cameraKeysState[2]) {
+                moveDirectionCamera(tpf * 30, false, false, 2);
+            }
+            if (cameraKeysState[3]) {
+                moveDirectionCamera(-tpf * 30, false, false, 3);
+            }
+        }
+
+        checkCameraChanges(editorCamera);
+    }
+
+    @JMEThread
+    protected void preCameraUpdate(final float tpf) {
+
     }
 
     /**

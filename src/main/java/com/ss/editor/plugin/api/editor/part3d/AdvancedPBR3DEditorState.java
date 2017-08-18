@@ -9,7 +9,7 @@ import com.ss.editor.plugin.api.editor.Advanced3DFileEditor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The advanced implementation of 3D part of an editor.
+ * The advanced implementation of 3D part of an editor with PBR Light probe.
  *
  * @author JavaSaBr
  */

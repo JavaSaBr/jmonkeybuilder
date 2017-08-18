@@ -815,9 +815,8 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
     }
 
     @Override
-    @JMEThread
-    public void update(final float tpf) {
-        super.update(tpf);
+    protected void preCameraUpdate(final float tpf) {
+        super.preCameraUpdate(tpf);
 
         final Node transformToolNode = getTransformToolNode();
         final Transform selectionCenter = getTransformCenter();
@@ -839,9 +838,11 @@ public abstract class AbstractSceneEditor3DState<T extends AbstractSceneFileEdit
                 control.processTransform();
             }
         }
+    }
 
-        final EditorCamera editorCamera = getEditorCamera();
-        if (editorCamera != null) editorCamera.update(tpf);
+    @Override
+    protected void postCameraUpdate(final float tpf) {
+        super.postCameraUpdate(tpf);
 
         final Array<EditorLightNode> lightNodes = getLightNodes();
         lightNodes.forEach(EditorLightNode::updateModel);
