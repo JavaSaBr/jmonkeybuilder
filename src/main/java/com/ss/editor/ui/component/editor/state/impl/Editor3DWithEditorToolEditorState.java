@@ -26,11 +26,17 @@ public class Editor3DWithEditorToolEditorState extends Editor3DEditorState imple
     protected volatile boolean toolCollapsed;
 
     /**
+     * Opened editor tool.
+     */
+    private volatile int openedTool;
+
+    /**
      * Instantiates a new Abstract editor state.
      */
     public Editor3DWithEditorToolEditorState() {
         this.toolWidth = 250;
         this.toolCollapsed = false;
+        openedTool = 0;
     }
 
     @Override
@@ -55,6 +61,29 @@ public class Editor3DWithEditorToolEditorState extends Editor3DEditorState imple
         final boolean changed = isToolCollapsed() != toolCollapsed;
         this.toolCollapsed = toolCollapsed;
         if (changed) notifyChange();
+    }
+
+    /**
+     * Gets opened tool.
+     *
+     * @return the opened tool.
+     */
+    public int getOpenedTool() {
+        return openedTool;
+    }
+
+    /**
+     * Sets opened tool.
+     *
+     * @param openedTool the opened tool.
+     */
+    public void setOpenedTool(final int openedTool) {
+        final boolean changed = getOpenedTool() != openedTool;
+        this.openedTool = openedTool;
+        final Runnable changeHandler = getChangeHandler();
+        if (changed && changeHandler != null) {
+            changeHandler.run();
+        }
     }
 
     @Override

@@ -7,8 +7,8 @@ import com.ss.editor.model.undo.EditorOperation;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
-import com.ss.editor.state.editor.Editor3DState;
-import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
+import com.ss.editor.state.editor.impl.AdvancedAbstractEditor3DState;
+import com.ss.editor.ui.component.editor.state.impl.Editor3DEditorState;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public abstract class Base3DFileEditor<T extends Editor3DState, S extends Editor3DWithEditorToolEditorState> extends
+public abstract class Base3DFileEditor<T extends AdvancedAbstractEditor3DState, S extends Editor3DEditorState> extends
         BaseFileEditor<S> implements UndoableEditor, ChangeConsumer {
 
     /**
@@ -70,6 +70,28 @@ public abstract class Base3DFileEditor<T extends Editor3DState, S extends Editor
     @Override
     protected boolean needListenEventsFromPage() {
         return false;
+    }
+
+    @Override
+    @FXThread
+    protected void loadState() {
+        super.loadState();
+
+        final S editorState = getEditorState();
+        if (editorState == null) {
+            return;
+        }
+
+        final T editor3DState = getEditor3DState();
+        final Vector3f cameraLocation = editorState.getCameraLocation();
+
+        final float hRotation = editorState.getCameraHRotation();
+        final float vRotation = editorState.getCameraVRotation();
+        final float tDistance = editorState.getCameraTDistance();
+        final float cameraSpeed = editorState.getCameraSpeed();
+
+        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCameraSettings(cameraLocation,
+                hRotation, vRotation, tDistance, cameraSpeed));
     }
 
     /**

@@ -16,7 +16,7 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 4;
+    public static final long serialVersionUID = 5;
 
     @NotNull
     private static transient final RenderQueue.Bucket[] BUCKETS = RenderQueue.Bucket.values();
@@ -32,11 +32,6 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
     private volatile int bucketTypeId;
 
     /**
-     * Opened editor tool.
-     */
-    private volatile int openedTool;
-
-    /**
      * Is light enable.
      */
     private volatile boolean lightEnable;
@@ -47,7 +42,6 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
     public EditorMaterialEditorState() {
         modelType = MaterialEditor3DState.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
-        openedTool = 0;
         lightEnable = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
     }
 
@@ -81,29 +75,6 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
      */
     public int getBucketTypeId() {
         return bucketTypeId;
-    }
-
-    /**
-     * Gets opened tool.
-     *
-     * @return the opened tool.
-     */
-    public int getOpenedTool() {
-        return openedTool;
-    }
-
-    /**
-     * Sets opened tool.
-     *
-     * @param openedTool the opened tool.
-     */
-    public void setOpenedTool(final int openedTool) {
-        final boolean changed = getOpenedTool() != openedTool;
-        this.openedTool = openedTool;
-        final Runnable changeHandler = getChangeHandler();
-        if (changed && changeHandler != null) {
-            changeHandler.run();
-        }
     }
 
     /**
@@ -157,7 +128,6 @@ public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState
         return "EditorMaterialEditorState{" +
                 "modelType=" + modelType +
                 ", bucketTypeId=" + bucketTypeId +
-                ", openedTool=" + openedTool +
                 ", lightEnable=" + lightEnable +
                 "} " + super.toString();
     }

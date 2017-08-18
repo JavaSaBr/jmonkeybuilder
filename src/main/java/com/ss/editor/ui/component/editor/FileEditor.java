@@ -24,25 +24,23 @@ public interface FileEditor {
     /**
      * The Empty states.
      */
-    Array<Editor3DState> EMPTY_3D_STATES = ArrayFactory.newArray(Editor3DState.class);
+    @NotNull Array<Editor3DState> EMPTY_3D_STATES = ArrayFactory.newArray(Editor3DState.class);
 
     /**
      * Get the page for showing the editor.
      *
      * @return the page for showing the editor.
      */
-    @NotNull
     @FXThread
-    Parent getPage();
+    @NotNull Parent getPage();
 
     /**
      * Gets an area to place 3D scene.
      *
      * @return the area to place 3D scene.
      */
-    @Nullable
     @FXThread
-    default BorderPane get3DArea() {
+    default @Nullable BorderPane get3DArea() {
         return null;
     }
 
@@ -51,18 +49,16 @@ public interface FileEditor {
      *
      * @return the file name of the current opened file.
      */
-    @NotNull
     @FXThread
-    String getFileName();
+    @NotNull String getFileName();
 
     /**
      * Gets edit file.
      *
      * @return the editing file.
      */
-    @NotNull
     @FXThread
-    Path getEditFile();
+    @NotNull Path getEditFile();
 
     /**
      * Open the file.
@@ -77,9 +73,8 @@ public interface FileEditor {
      *
      * @return the dirty property of this editor.
      */
-    @NotNull
     @FXThread
-    BooleanProperty dirtyProperty();
+    @NotNull BooleanProperty dirtyProperty();
 
     /**
      * Is dirty boolean.
@@ -101,9 +96,8 @@ public interface FileEditor {
      *
      * @return the 3D part of this editor.
      */
-    @NotNull
     @FXThread
-    default Array<Editor3DState> get3DStates() {
+    default @NotNull Array<Editor3DState> get3DStates() {
         return EMPTY_3D_STATES;
     }
 
@@ -139,9 +133,8 @@ public interface FileEditor {
      *
      * @return the description of this editor.
      */
-    @NotNull
     @FromAnyThread
-    EditorDescription getDescription();
+    @NotNull EditorDescription getDescription();
 
     /**
      * Notify that this editor was showed.

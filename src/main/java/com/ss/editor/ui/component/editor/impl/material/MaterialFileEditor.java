@@ -13,7 +13,6 @@ import com.jme3.asset.MaterialKey;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
 import com.jme3.material.RenderState;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.queue.RenderQueue;
 import com.ss.editor.FileExtensions;
 import com.ss.editor.Messages;
@@ -23,7 +22,7 @@ import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.manager.ResourceManager;
 import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
-import com.ss.editor.plugin.api.editor.Base3DFileEditor;
+import com.ss.editor.plugin.api.editor.Base3DEditorWithRightTool;
 import com.ss.editor.serializer.MaterialSerializer;
 import com.ss.editor.state.editor.impl.material.MaterialEditor3DState;
 import com.ss.editor.state.editor.impl.material.MaterialEditor3DState.ModelType;
@@ -31,8 +30,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
-import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
-import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
+import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.event.impl.FileChangedEvent;
@@ -41,7 +39,6 @@ import com.ss.editor.ui.util.UIUtils;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
@@ -49,9 +46,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -66,8 +61,8 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, EditorMaterialEditorState> implements
-        MaterialChangeConsumer {
+public class MaterialFileEditor extends
+        Base3DEditorWithRightTool<MaterialEditor3DState, EditorMaterialEditorState> implements MaterialChangeConsumer {
 
     /**
      * The constant DESCRIPTION.
@@ -118,18 +113,6 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
     private MaterialRenderParamsComponent materialRenderParamsComponent;
 
     /**
-     * The main split container.
-     */
-    @Nullable
-    private EditorToolSplitPane mainSplitContainer;
-
-    /**
-     * Editor tool component.
-     */
-    @Nullable
-    private ScrollableEditorToolComponent editorToolComponent;
-
-    /**
      * The current editing material.
      */
     @Nullable
@@ -171,11 +154,6 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
     @Nullable
     private ComboBox<String> materialDefinitionBox;
 
-    /**
-     * The pane of editor area.
-     */
-    @Nullable
-    private BorderPane editorAreaPane;
 
     private MaterialFileEditor() {
         super();
@@ -268,51 +246,18 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
     }
 
     @Override
-    @FXThread
-    public @Nullable BorderPane get3DArea() {
-        return editorAreaPane;
-    }
-
-    @Override
-    @FXThread
-    protected void createContent(@NotNull final StackPane root) {
-        editorAreaPane = new BorderPane();
-        editorAreaPane.setOnMousePressed(event -> editorAreaPane.requestFocus());
-        editorAreaPane.setOnDragOver(this::dragOver);
-        editorAreaPane.setOnDragDropped(this::dragDropped);
-        editorAreaPane.setOnKeyReleased(Event::consume);
-        editorAreaPane.setOnKeyPressed(Event::consume);
+    protected void createToolComponents(@NotNull final EditorToolComponent container) {
+        super.createToolComponents(container);
 
         materialTexturesComponent = new MaterialTexturesComponent(this);
         materialColorsComponent = new MaterialColorsComponent(this);
         materialRenderParamsComponent = new MaterialRenderParamsComponent(this);
         materialOtherParamsComponent = new MaterialOtherParamsComponent(this);
 
-        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
-
-        editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
-        editorToolComponent.prefHeightProperty().bind(root.heightProperty());
-        editorToolComponent.addComponent(materialTexturesComponent, Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
-        editorToolComponent.addComponent(materialColorsComponent, Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
-        editorToolComponent.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
-        editorToolComponent.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
-        editorToolComponent.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            final EditorMaterialEditorState editorState = getEditorState();
-            if (editorState != null) editorState.setOpenedTool(newValue.intValue());
-        });
-
-        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
-
-        FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
-    }
-
-    /**
-     * Handle dropped texture.
-     */
-    private void dragDropped(@NotNull final DragEvent dragEvent) {
-        UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
-                dragEvent, this::applyTexture);
+        container.addComponent(materialTexturesComponent, Messages.MATERIAL_FILE_EDITOR_TEXTURES_COMPONENT_TITLE);
+        container.addComponent(materialColorsComponent, Messages.MATERIAL_FILE_EDITOR_COLORS_COMPONENT_TITLE);
+        container.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
+        container.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
     }
 
     /**
@@ -346,10 +291,16 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
         }
     }
 
-    /**
-     * Handle drag objects.
-     */
-    private void dragOver(@NotNull final DragEvent dragEvent) {
+    @Override
+    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+        super.dragDropped(dragEvent);
+        UIUtils.handleDroppedFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS, this,
+                dragEvent, this::applyTexture);
+    }
+
+    @Override
+    protected void dragOver(@NotNull final DragEvent dragEvent) {
+        super.dragOver(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, FileExtensions.TEXTURE_EXTENSIONS);
     }
 
@@ -419,21 +370,8 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
                 break;
         }
 
-        editorToolComponent.getSelectionModel().select(editorState.getOpenedTool());
         bucketComboBox.getSelectionModel().select(editorState.getBucketType());
-        mainSplitContainer.updateFor(editorState);
         lightButton.setSelected(editorState.isLightEnable());
-
-        final MaterialEditor3DState editor3DState = getEditor3DState();
-        final Vector3f cameraLocation = editorState.getCameraLocation();
-
-        final float hRotation = editorState.getCameraHRotation();
-        final float vRotation = editorState.getCameraVRotation();
-        final float tDistance = editorState.getCameraTDistance();
-        final float cameraSpeed = editorState.getCameraSpeed();
-
-        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCameraSettings(cameraLocation,
-                hRotation, vRotation, tDistance, cameraSpeed));
     }
 
     @Override
