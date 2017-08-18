@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public class MaterialFileEditorState extends AbstractEditorState {
+public class EditorMaterialEditorState extends Editor3DWithEditorToolEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -44,7 +44,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
     /**
      * Instantiates a new Material file editor state.
      */
-    public MaterialFileEditorState() {
+    public EditorMaterialEditorState() {
         modelType = MaterialEditor3DState.ModelType.BOX.ordinal();
         bucketTypeId = RenderQueue.Bucket.Inherit.ordinal();
         openedTool = 0;
@@ -154,7 +154,7 @@ public class MaterialFileEditorState extends AbstractEditorState {
 
     @Override
     public String toString() {
-        return "MaterialFileEditorState{" +
+        return "EditorMaterialEditorState{" +
                 "modelType=" + modelType +
                 ", bucketTypeId=" + bucketTypeId +
                 ", openedTool=" + openedTool +

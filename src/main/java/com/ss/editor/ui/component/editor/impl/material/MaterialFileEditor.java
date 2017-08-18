@@ -30,7 +30,7 @@ import com.ss.editor.state.editor.impl.material.MaterialEditor3DState.ModelType;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.MaterialFileEditorState;
+import com.ss.editor.ui.component.editor.state.impl.EditorMaterialEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.ScrollableEditorToolComponent;
 import com.ss.editor.ui.control.material.Texture2DMaterialParamControl;
@@ -66,7 +66,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, MaterialFileEditorState> implements
+public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, EditorMaterialEditorState> implements
         MaterialChangeConsumer {
 
     /**
@@ -297,7 +297,7 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
         editorToolComponent.addComponent(materialRenderParamsComponent, Messages.MATERIAL_FILE_EDITOR_RENDER_PARAMS_COMPONENT_TITLE);
         editorToolComponent.addComponent(materialOtherParamsComponent, Messages.MATERIAL_FILE_EDITOR_OTHER_COMPONENT_TITLE);
         editorToolComponent.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            final MaterialFileEditorState editorState = getEditorState();
+            final EditorMaterialEditorState editorState = getEditorState();
             if (editorState != null) editorState.setOpenedTool(newValue.intValue());
         });
 
@@ -438,7 +438,7 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
 
     @Override
     protected @Nullable Supplier<EditorState> getEditorStateFactory() {
-        return MaterialFileEditorState::new;
+        return EditorMaterialEditorState::new;
     }
 
     /**
@@ -562,7 +562,7 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
         final MaterialEditor3DState editor3DState = getEditor3DState();
         editor3DState.changeBucketType(newValue);
 
-        final MaterialFileEditorState editorState = getEditorState();
+        final EditorMaterialEditorState editorState = getEditorState();
         if (editorState != null) editorState.setBucketType(newValue);
     }
 
@@ -603,7 +603,7 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
         final MaterialEditor3DState editor3DState = getEditor3DState();
         editor3DState.updateLightEnabled(newValue);
 
-        final MaterialFileEditorState editorState = getEditorState();
+        final EditorMaterialEditorState editorState = getEditorState();
         if (editorState != null) editorState.setLightEnable(newValue);
     }
 
@@ -678,7 +678,7 @@ public class MaterialFileEditor extends Base3DFileEditor<MaterialEditor3DState, 
             editor3DState.changeMode(modelType);
         }
 
-        final MaterialFileEditorState editorState = getEditorState();
+        final EditorMaterialEditorState editorState = getEditorState();
         if (editorState != null) editorState.setModelType(modelType);
     }
 

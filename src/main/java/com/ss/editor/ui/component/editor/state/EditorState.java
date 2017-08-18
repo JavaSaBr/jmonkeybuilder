@@ -1,6 +1,6 @@
 package com.ss.editor.ui.component.editor.state;
 
-import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
+import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -28,6 +28,6 @@ public interface EditorState extends Serializable {
      * @param <T>     the type of the state.
      * @return the additional editor state.
      */
-    @NotNull <T extends AbstractEditorState> T getOrCreateAdditionalState(@NotNull Class<T> type,
-                                                                          @NotNull Supplier<T> factory);
+    @NotNull <T extends AdditionalEditorState> T getOrCreateAdditionalState(@NotNull Class<T> type,
+                                                                            @NotNull Supplier<T> factory);
 }

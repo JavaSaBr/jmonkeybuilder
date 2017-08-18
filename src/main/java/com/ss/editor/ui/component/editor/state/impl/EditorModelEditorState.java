@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.editor.impl.model.ModelFileEditor;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditorState extends AbstractSceneFileEditorState {
+public class EditorModelEditorState extends BaseEditorSceneEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -27,7 +27,7 @@ public class ModelFileEditorState extends AbstractSceneFileEditorState {
     /**
      * Instantiates a new Model file editor state.
      */
-    public ModelFileEditorState() {
+    public EditorModelEditorState() {
         this.skyType = 0;
         this.enableLight = EDITOR_CONFIG.isDefaultEditorCameraEnabled();
     }
@@ -74,7 +74,7 @@ public class ModelFileEditorState extends AbstractSceneFileEditorState {
 
     @Override
     public String toString() {
-        return "ModelFileEditorState{" +
+        return "EditorModelEditorState{" +
                 "skyType=" + skyType +
                 ", enableLight=" + enableLight +
                 "} " + super.toString();

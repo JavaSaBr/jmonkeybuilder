@@ -22,7 +22,7 @@ import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.ModelFileEditorState;
+import com.ss.editor.ui.component.editor.state.impl.EditorModelEditorState;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.MaterialUtils;
@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditor3DState, ModelFileEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditor3DState, EditorModelEditorState> {
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -153,7 +153,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     protected void loadState() {
         super.loadState();
 
-        final ModelFileEditorState editorState = notNull(getEditorState());
+        final EditorModelEditorState editorState = notNull(getEditorState());
 
         final ComboBox<String> fastSkyComboBox = getFastSkyComboBox();
         fastSkyComboBox.getSelectionModel().select(editorState.getSkyType());
@@ -165,7 +165,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
     @NotNull
     @Override
     protected Supplier<EditorState> getStateConstructor() {
-        return ModelFileEditorState::new;
+        return EditorModelEditorState::new;
     }
 
     @Override
@@ -241,7 +241,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
 
         if (NO_FAST_SKY.equals(newSky)) {
             editor3DState.changeFastSky(null);
-            final ModelFileEditorState editorState = getEditorState();
+            final EditorModelEditorState editorState = getEditorState();
             if (editorState != null) editorState.setSkyType(0);
             return;
         }
@@ -260,7 +260,7 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         final SingleSelectionModel<String> selectionModel = fastSkyComboBox.getSelectionModel();
         final int selectedIndex = selectionModel.getSelectedIndex();
 
-        final ModelFileEditorState editorState = getEditorState();
+        final EditorModelEditorState editorState = getEditorState();
         if (editorState != null) editorState.setSkyType(selectedIndex);
     }
 

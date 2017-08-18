@@ -58,7 +58,7 @@ import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.AbstractSceneFileEditorState;
+import com.ss.editor.ui.component.editor.state.impl.BaseEditorSceneEditorState;
 import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
@@ -109,7 +109,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
-        MA extends AbstractSceneEditor3DState<IM, M>, ES extends AbstractSceneFileEditorState>
+        MA extends AbstractSceneEditor3DState<IM, M>, ES extends BaseEditorSceneEditorState>
         extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;

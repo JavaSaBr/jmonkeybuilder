@@ -23,7 +23,7 @@ import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.editor.EditorDescription;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.SceneFileEditorState;
+import com.ss.editor.ui.component.editor.state.impl.EditorSceneEditorState;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.app.state.list.AppStateList;
 import com.ss.editor.ui.control.filter.list.FilterList;
@@ -55,7 +55,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class SceneFileEditor extends
-        AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditor3DState, SceneFileEditorState> implements
+        AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditor3DState, EditorSceneEditorState> implements
         SceneChangeConsumer {
 
     private static final int LAYERS_TOOL = 3;
@@ -378,7 +378,7 @@ public class SceneFileEditor extends
     protected void loadState() {
         super.loadState();
 
-        final SceneFileEditorState editorState = notNull(getEditorState());
+        final EditorSceneEditorState editorState = notNull(getEditorState());
         getLightButton().setSelected(editorState.isShowedLight());
         getAudioButton().setSelected(editorState.isShowedAudio());
     }
@@ -493,7 +493,7 @@ public class SceneFileEditor extends
     @NotNull
     @Override
     protected Supplier<EditorState> getStateConstructor() {
-        return SceneFileEditorState::new;
+        return EditorSceneEditorState::new;
     }
 
     /**

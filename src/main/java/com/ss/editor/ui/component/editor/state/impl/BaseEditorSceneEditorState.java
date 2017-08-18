@@ -9,12 +9,12 @@ import com.ss.editor.ui.component.editor.impl.scene.AbstractSceneFileEditor;
  *
  * @author JavaSaBr
  */
-public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
+public abstract class BaseEditorSceneEditorState extends Editor3DWithEditorToolEditorState {
 
     /**
      * The constant serialVersionUID.
      */
-    public static final long serialVersionUID = 4;
+    public static final long serialVersionUID = 1;
 
     /**
      * The transformation type.
@@ -44,7 +44,7 @@ public abstract class AbstractSceneFileEditorState extends AbstractEditorState {
     /**
      * Instantiates a new Abstract model file editor state.
      */
-    public AbstractSceneFileEditorState() {
+    public BaseEditorSceneEditorState() {
         this.enableGrid = true;
         this.enableSelection = true;
         this.transformationMode = TransformationMode.GLOBAL.ordinal();

@@ -8,7 +8,7 @@ import com.ss.editor.model.undo.EditorOperationControl;
 import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.state.editor.Editor3DState;
-import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
+import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author JavaSaBr
  */
-public abstract class Base3DFileEditor<T extends Editor3DState, S extends AbstractEditorState> extends
+public abstract class Base3DFileEditor<T extends Editor3DState, S extends Editor3DWithEditorToolEditorState> extends
         BaseFileEditor<S> implements UndoableEditor, ChangeConsumer {
 
     /**

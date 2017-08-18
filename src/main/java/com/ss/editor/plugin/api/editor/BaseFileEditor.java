@@ -7,7 +7,6 @@ import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.workspace.Workspace;
 import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.state.EditorState;
-import com.ss.editor.ui.component.editor.state.impl.AbstractEditorState;
 import javafx.event.Event;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -22,7 +21,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public abstract class BaseFileEditor<S extends AbstractEditorState> extends AbstractFileEditor<StackPane> {
+public abstract class BaseFileEditor<S extends EditorState> extends AbstractFileEditor<StackPane> {
     /**
      * The state of this editor.
      */

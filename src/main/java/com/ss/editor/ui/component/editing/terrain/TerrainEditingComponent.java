@@ -51,8 +51,7 @@ import java.util.function.Function;
  *
  * @author JavaSaBr
  */
-public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer,
-        TerrainEditingState> implements EditingComponent {
+public class TerrainEditingComponent extends AbstractProcessingComponent<TerrainQuad, EditingComponentContainer, TerrainEditingStateWithEditorTool> implements EditingComponent {
 
     /**
      * The constant LABEL_PERCENT.
@@ -375,7 +374,7 @@ public class TerrainEditingComponent extends AbstractProcessingComponent<Terrain
     @FXThread
     @Override
     public void loadState(@NotNull final EditorState editorState) {
-        this.state = editorState.getOrCreateAdditionalState(TerrainEditingState.class, TerrainEditingState::new);
+        this.state = editorState.getOrCreateAdditionalState(TerrainEditingStateWithEditorTool.class, TerrainEditingStateWithEditorTool::new);
         getLevelControlLevelField().setValue(state.getLevelValue());
         getLevelControlUseMarker().setSelected(state.isLevelUseMarker());
         getLevelControlSmoothly().setSelected(state.isLevelSmoothly());

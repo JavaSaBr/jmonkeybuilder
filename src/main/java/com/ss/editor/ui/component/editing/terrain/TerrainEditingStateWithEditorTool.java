@@ -9,7 +9,7 @@ import com.ss.editor.ui.component.editor.state.impl.AdditionalEditorState;
  *
  * @author JavaSaBr
  */
-public class TerrainEditingState extends AbstractEditorState implements AdditionalEditorState {
+public class TerrainEditingStateWithEditorTool extends AbstractEditorState implements AdditionalEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -30,7 +30,7 @@ public class TerrainEditingState extends AbstractEditorState implements Addition
     private volatile boolean slopeLimited;
     private volatile boolean slopeSmoothly;
 
-    public TerrainEditingState() {
+    public TerrainEditingStateWithEditorTool() {
         this.brushSize = 10;
         this.brushPower = 1;
         this.levelValue = 1;

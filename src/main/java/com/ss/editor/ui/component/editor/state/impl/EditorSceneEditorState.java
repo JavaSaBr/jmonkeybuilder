@@ -7,7 +7,7 @@ import com.ss.editor.ui.component.editor.impl.scene.SceneFileEditor;
  *
  * @author JavaSaBr
  */
-public class SceneFileEditorState extends AbstractSceneFileEditorState {
+public class EditorSceneEditorState extends BaseEditorSceneEditorState {
 
     /**
      * The constant serialVersionUID.
@@ -27,7 +27,7 @@ public class SceneFileEditorState extends AbstractSceneFileEditorState {
     /**
      * Instantiates a new Scene file editor state.
      */
-    public SceneFileEditorState() {
+    public EditorSceneEditorState() {
         this.showedAudio = true;
         this.showedLight = true;
     }
@@ -74,6 +74,6 @@ public class SceneFileEditorState extends AbstractSceneFileEditorState {
 
     @Override
     public String toString() {
-        return "SceneFileEditorState{" + "showedLight=" + showedLight + ", showedAudio=" + showedAudio + '}';
+        return "EditorSceneEditorState{" + "showedLight=" + showedLight + ", showedAudio=" + showedAudio + '}';
     }
 }
