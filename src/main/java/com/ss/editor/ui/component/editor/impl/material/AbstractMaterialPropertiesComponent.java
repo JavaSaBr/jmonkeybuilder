@@ -3,7 +3,7 @@ package com.ss.editor.ui.component.editor.impl.material;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
 import com.jme3.material.MaterialDef;
-import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * The component for editing material properties.
@@ -26,29 +25,24 @@ import java.util.function.Consumer;
 public abstract class AbstractMaterialPropertiesComponent extends VBox {
 
     /**
-     * The changes handler.
+     * The change consumer.
      */
     @NotNull
-    private final Consumer<EditorOperation> changeHandler;
+    private final ChangeConsumer changeConsumer;
 
-    /**
-     * Instantiates a new Abstract material properties component.
-     *
-     * @param changeHandler the change handler
-     */
-    public AbstractMaterialPropertiesComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
-        this.changeHandler = changeHandler;
+    public AbstractMaterialPropertiesComponent(@NotNull final ChangeConsumer changeConsumer) {
+        this.changeConsumer = changeConsumer;
         FXUtils.addClassTo(this, CSSClasses.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
     }
 
     /**
-     * Gets change handler.
+     * Gets change consumer.
      *
-     * @return the changes handler.
+     * @return the changes consumer.
      */
     @NotNull
-    protected Consumer<EditorOperation> getChangeHandler() {
-        return changeHandler;
+    protected ChangeConsumer getChangeConsumer() {
+        return changeConsumer;
     }
 
     /**

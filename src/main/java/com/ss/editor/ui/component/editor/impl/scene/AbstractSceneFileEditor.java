@@ -742,9 +742,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
     @Override
     @FXThread
-    public void notifyFXChangePropertyCount(@Nullable final Object parent, @NotNull final Object object) {
+    public void notifyFXChangePropertyCount(@NotNull final Object object) {
         final ModelPropertyEditor modelPropertyEditor = getModelPropertyEditor();
-        modelPropertyEditor.rebuildFor(object, parent);
+        modelPropertyEditor.rebuildFor(object, null);
     }
 
     @Override
@@ -1004,13 +1004,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         } catch (final IOException e) {
             LOGGER.warning(this, e);
         }
-    }
-
-    @Override
-    @FXThread
-    protected void postSave() {
-        super.postSave();
-        setDirty(false);
     }
 
     @Override

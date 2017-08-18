@@ -1,8 +1,6 @@
 package com.ss.editor.model.undo.editor;
 
 import com.jme3.material.Material;
-import com.ss.editor.annotation.FXThread;
-
 import com.ss.editor.annotation.FromAnyThread;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,28 +9,13 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author JavaSaBr
  */
-public interface MaterialChangeConsumer {
+public interface MaterialChangeConsumer extends ChangeConsumer{
 
     /**
      * Gets current material.
      *
      * @return the current material.
      */
-    @NotNull
     @FromAnyThread
-    Material getCurrentMaterial();
-
-    /**
-     * Notify about a changed parameter.
-     *
-     * @param paramName the param name
-     */
-    @FXThread
-    void notifyChangeParam(@NotNull final String paramName);
-
-    /**
-     * Notify about changed render state.
-     */
-    @FXThread
-    void notifyChangedRenderState();
+    @NotNull Material getCurrentMaterial();
 }

@@ -3,15 +3,13 @@ package com.ss.editor.ui.control.material;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
-import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.material.operation.IntegerMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.control.input.IntegerTextField;
 import com.ss.rlib.ui.util.FXUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 /**
  * The base implementation of control for editing integer material parameter.
@@ -29,12 +27,13 @@ public class IntegerMaterialParamControl extends MaterialParamControl {
     /**
      * Instantiates a new Integer material param control.
      *
-     * @param changeHandler the change handler
-     * @param material      the material
-     * @param parameterName the parameter name
+     * @param changeConsumer the change handler
+     * @param material       the material
+     * @param parameterName  the parameter name
      */
-    public IntegerMaterialParamControl(final Consumer<EditorOperation> changeHandler, final Material material, final String parameterName) {
-        super(changeHandler, material, parameterName);
+    public IntegerMaterialParamControl(final ChangeConsumer changeConsumer, final Material material,
+                                       final String parameterName) {
+        super(changeConsumer, material, parameterName);
     }
 
     @Override

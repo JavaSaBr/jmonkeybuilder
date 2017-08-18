@@ -4,7 +4,6 @@ import com.jme3.material.Material;
 import com.jme3.shader.VarType;
 import com.ss.editor.model.undo.editor.MaterialChangeConsumer;
 import com.ss.editor.model.undo.impl.AbstractEditorOperation;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,34 +67,24 @@ public abstract class AbstractMaterialParamOperation<T> extends AbstractEditorOp
 
     @Override
     protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, editor.getCurrentMaterial(), newValue));
+    }
 
-            final Material currentMaterial = editor.getCurrentMaterial();
+    private void apply(@NotNull final MaterialChangeConsumer editor, @NotNull final Material currentMaterial,
+                       @Nullable final T newValue) {
 
-            if (newValue != null) {
-                currentMaterial.setParam(getParamName(), getVarType(), newValue);
-            } else {
-                currentMaterial.clearParam(getParamName());
-            }
+        if (newValue != null) {
+            currentMaterial.setParam(getParamName(), getVarType(), newValue);
+        } else {
+            currentMaterial.clearParam(getParamName());
+        }
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeParam(getParamName()));
-        });
+        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(currentMaterial, getParamName()));
     }
 
     @Override
     protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
-
-            final Material currentMaterial = editor.getCurrentMaterial();
-
-            if (oldValue != null) {
-                currentMaterial.setParam(getParamName(), getVarType(), oldValue);
-            } else {
-                currentMaterial.clearParam(getParamName());
-            }
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeParam(getParamName()));
-        });
+        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, editor.getCurrentMaterial(), oldValue));
     }
 
     @Override

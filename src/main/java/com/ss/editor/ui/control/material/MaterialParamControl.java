@@ -4,6 +4,7 @@ import com.jme3.material.Material;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.config.EditorConfig;
 import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.UIUtils;
 import com.ss.rlib.logging.Logger;
@@ -12,8 +13,6 @@ import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Consumer;
 
 /**
  * The base implementation of control for editing material parameter.
@@ -52,10 +51,10 @@ public class MaterialParamControl extends HBox {
     protected static final EditorConfig EDITOR_CONFIG = EditorConfig.getInstance();
 
     /**
-     * The change handler.
+     * The change consumer.
      */
     @NotNull
-    private final Consumer<EditorOperation> changeHandler;
+    private final ChangeConsumer changeConsumer;
 
     /**
      * The current material.
@@ -82,13 +81,13 @@ public class MaterialParamControl extends HBox {
     /**
      * Instantiates a new Material param control.
      *
-     * @param changeHandler the change handler
+     * @param changeConsumer the change handler
      * @param material      the material
      * @param parameterName the parameter name
      */
-    protected MaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler, @NotNull final Material material,
-                         @NotNull final String parameterName) {
-        this.changeHandler = changeHandler;
+    protected MaterialParamControl(@NotNull final ChangeConsumer changeConsumer, @NotNull final Material material,
+                                   @NotNull final String parameterName) {
+        this.changeConsumer = changeConsumer;
         this.material = material;
         this.parameterName = parameterName;
 
@@ -112,7 +111,7 @@ public class MaterialParamControl extends HBox {
      */
     @FromAnyThread
     protected void execute(@NotNull final EditorOperation operation) {
-        changeHandler.accept(operation);
+        changeConsumer.execute(operation);
     }
 
     /**

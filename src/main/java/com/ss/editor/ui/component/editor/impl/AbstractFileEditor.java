@@ -390,6 +390,7 @@ public abstract class AbstractFileEditor<R extends Pane> implements FileEditor {
      */
     @FXThread
     protected void postSave() {
+        setDirty(false);
     }
 
     /**

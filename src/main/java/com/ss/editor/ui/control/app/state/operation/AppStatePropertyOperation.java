@@ -36,7 +36,7 @@ public class AppStatePropertyOperation<D, T> extends AbstractPropertyOperation<S
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
             editor.notifyJMEChangeProperty(target, propertyName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(null, target, propertyName));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 
@@ -45,7 +45,7 @@ public class AppStatePropertyOperation<D, T> extends AbstractPropertyOperation<S
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);
             editor.notifyJMEChangeProperty(target, propertyName);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(null, target, propertyName));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(target, propertyName));
         });
     }
 }

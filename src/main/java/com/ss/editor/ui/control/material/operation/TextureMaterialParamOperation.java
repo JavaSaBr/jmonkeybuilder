@@ -20,7 +20,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TextureMaterialParamOperation extends AbstractEditorOperation<MaterialChangeConsumer> {
 
+    @NotNull
     private static final ExecutorManager EXECUTOR_MANAGER = ExecutorManager.getInstance();
+
+    @NotNull
     private static final Editor EDITOR = Editor.getInstance();
 
     /**
@@ -85,60 +88,36 @@ public class TextureMaterialParamOperation extends AbstractEditorOperation<Mater
 
     @Override
     protected void redoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
+        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, editor.getCurrentMaterial(), newTextureKey));
+    }
 
-            final Material currentMaterial = editor.getCurrentMaterial();
+    private void apply(@NotNull final MaterialChangeConsumer editor, @NotNull final Material currentMaterial,
+                       @Nullable final TextureKey textureKey) {
 
-            if (newTextureKey == null) {
-                currentMaterial.clearParam(getParamName());
-            } else {
+        if (textureKey == null) {
+            currentMaterial.clearParam(getParamName());
+        } else {
 
-                final AssetManager assetManager = EDITOR.getAssetManager();
+            final AssetManager assetManager = EDITOR.getAssetManager();
 
-                final Texture texture;
-                try {
-                    texture = assetManager.loadTexture(newTextureKey);
-                } catch (final Exception e) {
-                    EditorUtil.handleException(null, this, e);
-                    return;
-                }
-
-                texture.setWrap(newWrapMode);
-
-                currentMaterial.setTextureParam(getParamName(), VarType.Texture2D, texture);
+            final Texture texture;
+            try {
+                texture = assetManager.loadTexture(textureKey);
+            } catch (final Exception e) {
+                EditorUtil.handleException(null, this, e);
+                return;
             }
 
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeParam(getParamName()));
-        });
+            texture.setWrap(newWrapMode);
+
+            currentMaterial.setTextureParam(getParamName(), VarType.Texture2D, texture);
+        }
+
+        EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangeProperty(currentMaterial, getParamName()));
     }
 
     @Override
     protected void undoImpl(@NotNull final MaterialChangeConsumer editor) {
-        EXECUTOR_MANAGER.addJMETask(() -> {
-
-            final Material currentMaterial = editor.getCurrentMaterial();
-
-            if (oldTextureKey == null) {
-                currentMaterial.clearParam(getParamName());
-            } else {
-
-                final AssetManager assetManager = EDITOR.getAssetManager();
-
-                final Texture texture;
-
-                try {
-                    texture = assetManager.loadTexture(oldTextureKey);
-                } catch (final Exception e) {
-                    EditorUtil.handleException(null, this, e);
-                    return;
-                }
-
-                texture.setWrap(oldWrapModel);
-
-                currentMaterial.setTextureParam(getParamName(), VarType.Texture2D, texture);
-            }
-
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyChangeParam(getParamName()));
-        });
+        EXECUTOR_MANAGER.addJMETask(() -> apply(editor, editor.getCurrentMaterial(), oldTextureKey));
     }
 }

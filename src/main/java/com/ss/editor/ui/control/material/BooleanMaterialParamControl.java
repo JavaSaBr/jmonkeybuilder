@@ -3,15 +3,13 @@ package com.ss.editor.ui.control.material;
 import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.jme3.material.MatParam;
 import com.jme3.material.Material;
-import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.control.material.operation.BooleanMaterialParamOperation;
 import com.ss.editor.ui.css.CSSClasses;
 import com.ss.rlib.ui.util.FXUtils;
 import javafx.scene.control.CheckBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 /**
  * The implementation of a control for editing boolean properties.
@@ -29,13 +27,13 @@ public class BooleanMaterialParamControl extends MaterialParamControl {
     /**
      * Instantiates a new Boolean material param control.
      *
-     * @param changeHandler the change handler
-     * @param material      the material
-     * @param parameterName the parameter name
+     * @param changeConsumer the change handler
+     * @param material       the material
+     * @param parameterName  the parameter name
      */
-    public BooleanMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
-                                       @NotNull final Material material, @NotNull final String parameterName) {
-        super(changeHandler, material, parameterName);
+    public BooleanMaterialParamControl(@NotNull final ChangeConsumer changeConsumer, @NotNull final Material material,
+                                       @NotNull final String parameterName) {
+        super(changeConsumer, material, parameterName);
     }
 
     @Override

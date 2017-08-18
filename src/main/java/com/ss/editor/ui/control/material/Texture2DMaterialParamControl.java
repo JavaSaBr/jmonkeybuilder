@@ -16,7 +16,7 @@ import com.jme3.texture.Texture2D;
 import com.jme3.texture.Texture3D;
 import com.ss.editor.Editor;
 import com.ss.editor.manager.JavaFXImageManager;
-import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.Icons;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.DeleteFileAction;
 import com.ss.editor.ui.component.asset.tree.context.menu.action.NewFileAction;
@@ -39,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -87,13 +86,13 @@ public class Texture2DMaterialParamControl extends MaterialParamControl {
     /**
      * Instantiates a new Texture 2 d material param control.
      *
-     * @param changeHandler the change handler
-     * @param material      the material
-     * @param parameterName the parameter name
+     * @param changeConsumer the change handler
+     * @param material       the material
+     * @param parameterName  the parameter name
      */
-    public Texture2DMaterialParamControl(@NotNull final Consumer<EditorOperation> changeHandler,
-                                         @NotNull final Material material, @NotNull final String parameterName) {
-        super(changeHandler, material, parameterName);
+    public Texture2DMaterialParamControl(@NotNull final ChangeConsumer changeConsumer, @NotNull final Material material,
+                                         @NotNull final String parameterName) {
+        super(changeConsumer, material, parameterName);
         setOnDragOver(this::dragOver);
         setOnDragDropped(this::dragDropped);
     }

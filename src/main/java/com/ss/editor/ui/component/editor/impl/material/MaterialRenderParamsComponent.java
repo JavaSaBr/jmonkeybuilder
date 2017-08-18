@@ -8,7 +8,7 @@ import com.jme3.material.RenderState;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.material.RenderState.FaceCullMode;
 import com.ss.editor.Messages;
-import com.ss.editor.model.undo.EditorOperation;
+import com.ss.editor.model.undo.editor.ChangeConsumer;
 import com.ss.editor.ui.component.editor.impl.material.operation.RenderStateOperation;
 import com.ss.editor.ui.control.material.MaterialParamControl;
 import com.ss.editor.ui.css.CSSClasses;
@@ -23,8 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 /**
  * The component for editing material other properties.
@@ -42,8 +40,7 @@ public class MaterialRenderParamsComponent extends VBox {
     /**
      * The changes handler.
      */
-    @NotNull
-    private final Consumer<EditorOperation> changeHandler;
+    private final @NotNull ChangeConsumer changeConsumer;
 
     /**
      * The combo box to choose FaceCullMode.
@@ -107,10 +104,10 @@ public class MaterialRenderParamsComponent extends VBox {
     /**
      * Instantiates a new Material render params component.
      *
-     * @param changeHandler the change handler
+     * @param changeConsumer the change handler
      */
-    MaterialRenderParamsComponent(@NotNull final Consumer<EditorOperation> changeHandler) {
-        this.changeHandler = changeHandler;
+    MaterialRenderParamsComponent(@NotNull final ChangeConsumer changeConsumer) {
+        this.changeConsumer = changeConsumer;
         createControls();
         FXUtils.addClassTo(this, CSSClasses.MATERIAL_FILE_EDITOR_PROPERTIES_COMPONENT);
     }
@@ -132,9 +129,8 @@ public class MaterialRenderParamsComponent extends VBox {
     /**
      * @return the changes handler.
      */
-    @NotNull
-    private Consumer<EditorOperation> getChangeHandler() {
-        return changeHandler;
+    private @NotNull ChangeConsumer getChangeConsumer() {
+        return changeConsumer;
     }
 
     /**
@@ -260,8 +256,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isWireframe(), RenderState::setWireframe));
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(newValue, renderState.isWireframe(), RenderState::setWireframe));
     }
 
     /**
@@ -273,8 +269,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isDepthTest(), RenderState::setDepthTest));
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(newValue, renderState.isDepthTest(), RenderState::setDepthTest));
     }
 
     /**
@@ -286,8 +282,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isColorWrite(), RenderState::setColorWrite));
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(newValue, renderState.isColorWrite(), RenderState::setColorWrite));
     }
 
     /**
@@ -299,8 +295,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(newValue, renderState.isDepthWrite(), RenderState::setDepthWrite));
+        final ChangeConsumer changeHandler = getChangeConsumer();
+        changeHandler.execute(new RenderStateOperation<>(newValue, renderState.isDepthWrite(), RenderState::setDepthWrite));
     }
 
     /**
@@ -312,8 +308,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(newUnits, renderState.getPolyOffsetUnits(),
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(newUnits, renderState.getPolyOffsetUnits(),
                 (state, value) -> state.setPolyOffset(state.getPolyOffsetFactor(), value)));
     }
 
@@ -326,8 +322,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(newFactor, renderState.getPolyOffsetFactor(),
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(newFactor, renderState.getPolyOffsetFactor(),
                 (state, value) -> state.setPolyOffset(value, state.getPolyOffsetUnits())));
 
     }
@@ -341,8 +337,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(blendMode, renderState.getBlendMode(), RenderState::setBlendMode));
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(blendMode, renderState.getBlendMode(), RenderState::setBlendMode));
     }
 
     /**
@@ -354,8 +350,8 @@ public class MaterialRenderParamsComponent extends VBox {
         final Material currentMaterial = getCurrentMaterial();
         final RenderState renderState = currentMaterial.getAdditionalRenderState();
 
-        final Consumer<EditorOperation> changeHandler = getChangeHandler();
-        changeHandler.accept(new RenderStateOperation<>(faceCullMode, renderState.getFaceCullMode(), RenderState::setFaceCullMode));
+        final ChangeConsumer changeConsumer = getChangeConsumer();
+        changeConsumer.execute(new RenderStateOperation<>(faceCullMode, renderState.getFaceCullMode(), RenderState::setFaceCullMode));
     }
 
     /**

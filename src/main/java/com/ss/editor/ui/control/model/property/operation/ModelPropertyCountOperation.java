@@ -35,7 +35,7 @@ public class ModelPropertyCountOperation<D, T> extends AbstractPropertyOperation
     protected void redoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, newValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(null, target));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(target));
         });
     }
 
@@ -43,7 +43,7 @@ public class ModelPropertyCountOperation<D, T> extends AbstractPropertyOperation
     protected void undoImpl(@NotNull final ModelChangeConsumer editor) {
         EXECUTOR_MANAGER.addJMETask(() -> {
             apply(target, oldValue);
-            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(null, target));
+            EXECUTOR_MANAGER.addFXTask(() -> editor.notifyFXChangePropertyCount(target));
         });
     }
 }

@@ -1,6 +1,7 @@
 package com.ss.editor.model.undo;
 
 import com.ss.editor.annotation.FXThread;
+import com.ss.editor.annotation.FromAnyThread;
 
 /**
  * The interface to implement an undoable editor.
@@ -20,4 +21,16 @@ public interface UndoableEditor {
      */
     @FXThread
     void decrementChange();
+
+    /**
+     * Redo the last operation.
+     */
+    @FromAnyThread
+    void redo();
+
+    /**
+     * Undo the last operation.
+     */
+    @FromAnyThread
+    void undo();
 }
