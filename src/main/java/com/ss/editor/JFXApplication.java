@@ -156,23 +156,19 @@ public class JFXApplication extends Application {
     }
 
     private static void startJMEApplication(@NotNull final JmeToJFXApplication application) {
+
         final PluginManager pluginManager = PluginManager.getInstance();
         pluginManager.onBeforeCreateJMEContext();
-        try {
 
-            application.start();
+        application.start();
 
-            final JmeContext context = application.getContext();
-            final Renderer renderer = context.getRenderer();
+        final JmeContext context = application.getContext();
+        final Renderer renderer = context.getRenderer();
 
-            if (renderer == null) {
-                final EditorConfig editorConfig = EditorConfig.getInstance();
-                editorConfig.setOpenGLVersion(OpenGLVersion.GL_20);
-                editorConfig.save();
-            }
-
-        } finally {
-            pluginManager.onBeforeCreateJMEContext();
+        if (renderer == null) {
+            final EditorConfig editorConfig = EditorConfig.getInstance();
+            editorConfig.setOpenGLVersion(OpenGLVersion.GL_20);
+            editorConfig.save();
         }
     }
 
