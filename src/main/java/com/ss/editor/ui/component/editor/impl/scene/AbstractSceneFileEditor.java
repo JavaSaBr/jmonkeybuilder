@@ -32,18 +32,13 @@ import com.ss.editor.annotation.BackgroundThread;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.annotation.FromAnyThread;
 import com.ss.editor.annotation.JMEThread;
-import com.ss.editor.config.Config;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformType;
 import com.ss.editor.control.transform.EditorTransformSupport.TransformationMode;
 import com.ss.editor.extension.scene.SceneLayer;
 import com.ss.editor.extension.scene.ScenePresentable;
-import com.ss.editor.manager.WorkspaceManager;
 import com.ss.editor.model.editor.ModelEditingProvider;
-import com.ss.editor.model.undo.EditorOperation;
-import com.ss.editor.model.undo.EditorOperationControl;
-import com.ss.editor.model.undo.UndoableEditor;
 import com.ss.editor.model.undo.editor.ModelChangeConsumer;
-import com.ss.editor.model.workspace.Workspace;
+import com.ss.editor.plugin.api.editor.Advanced3DFileEditorWithSplitRightTool;
 import com.ss.editor.scene.EditorAudioNode;
 import com.ss.editor.scene.EditorLightNode;
 import com.ss.editor.scene.EditorPresentableNode;
@@ -55,11 +50,8 @@ import com.ss.editor.ui.component.container.ProcessingComponent;
 import com.ss.editor.ui.component.editing.EditingComponent;
 import com.ss.editor.ui.component.editing.EditingComponentContainer;
 import com.ss.editor.ui.component.editing.terrain.TerrainEditingComponent;
-import com.ss.editor.ui.component.editor.impl.AbstractFileEditor;
 import com.ss.editor.ui.component.editor.scripting.EditorScriptingComponent;
-import com.ss.editor.ui.component.editor.state.EditorState;
 import com.ss.editor.ui.component.editor.state.impl.BaseEditorSceneEditorState;
-import com.ss.editor.ui.component.split.pane.EditorToolSplitPane;
 import com.ss.editor.ui.component.tab.EditorToolComponent;
 import com.ss.editor.ui.control.model.property.ModelPropertyEditor;
 import com.ss.editor.ui.control.model.property.operation.ModelPropertyOperation;
@@ -83,10 +75,17 @@ import com.ss.rlib.util.array.ArrayFactory;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Point2D;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tonegod.emitter.filter.TonegodTranslucentBucketFilter;
@@ -97,20 +96,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 /**
  * The base implementation of a model file editor.
  *
- * @param <IM> the type of {@link AbstractSceneFileEditor}
  * @param <M>  the type edited object.
  * @param <MA> the type of {@link AbstractSceneEditor3DState}
  * @param <ES> the type of an editor state.
  * @author JavaSaBr
  */
-public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor, M extends Spatial,
-        MA extends AbstractSceneEditor3DState<IM, M>, ES extends BaseEditorSceneEditorState>
-        extends AbstractFileEditor<StackPane> implements UndoableEditor, ModelChangeConsumer, ModelEditingProvider {
+public abstract class AbstractSceneFileEditor<M extends Spatial, MA extends AbstractSceneEditor3DState, ES extends BaseEditorSceneEditorState> extends
+        Advanced3DFileEditorWithSplitRightTool<MA, ES> implements ModelChangeConsumer, ModelEditingProvider {
 
     private static final int OBJECTS_TOOL = 0;
     private static final int EDITING_TOOL = 1;
@@ -124,28 +120,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private static final ObservableList<TransformationMode> TRANSFORMATION_MODES = observableArrayList(TransformationMode.values());
 
     /**
-     * The 3D part of this editor.
-     */
-    @NotNull
-    private final MA editor3DState;
-
-    /**
      * The stats app state.
      */
     @NotNull
     private final Stats3DState statsAppState;
-
-    /**
-     * The operation control.
-     */
-    @NotNull
-    private final EditorOperationControl operationControl;
-
-    /**
-     * The changes counter.
-     */
-    @NotNull
-    private final AtomicInteger changeCounter;
 
     /**
      * The opened model.
@@ -214,36 +192,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private VBox statsContainer;
 
     /**
-     * The state of this editor.
-     */
-    @Nullable
-    protected ES editorState;
-
-    /**
-     * The main split container.
-     */
-    @Nullable
-    private EditorToolSplitPane mainSplitContainer;
-
-    /**
-     * The editor tool component.
-     */
-    @Nullable
-    private EditorToolComponent editorToolComponent;
-
-    /**
-     * The pane of editor area.
-     */
-    @Nullable
-    private StackPane editorAreaPane;
-
-    /**
-     * The pane of 3D editor area.
-     */
-    @Nullable
-    private BorderPane editor3DArea;
-
-    /**
      * The selection toggle.
      */
     @Nullable
@@ -280,11 +228,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     private ToggleButton scaleToolButton;
 
     /**
-     * The flag of ignoring listeners.
-     */
-    private boolean ignoreListeners;
-
-    /**
      * The flag of ignoring camera moving.
      */
     private boolean ignoreCameraMove;
@@ -293,57 +236,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      * Instantiates a new Abstract scene file editor.
      */
     public AbstractSceneFileEditor() {
-        this.editor3DState = createEditor3DState();
-        this.operationControl = new EditorOperationControl(this);
-        this.changeCounter = new AtomicInteger();
         this.statsAppState = new Stats3DState(statsContainer);
-        addEditorState(editor3DState);
         addEditorState(statsAppState);
         statsAppState.setEnabled(true);
         processChangeTool(-1, OBJECTS_TOOL);
-    }
-
-    /**
-     * Create editor app state ma.
-     *
-     * @return the ma
-     */
-    @NotNull
-    @FXThread
-    protected abstract MA createEditor3DState();
-
-    @NotNull
-    @Override
-    @FXThread
-    protected StackPane createRoot() {
-        return new StackPane();
-    }
-
-    @Override
-    protected boolean needListenEventsFromPage() {
-        return false;
-    }
-
-    /**
-     * Gets editor app state.
-     *
-     * @return the 3D part of this editor.
-     */
-    @NotNull
-    @FXThread
-    protected MA getEditor3DState() {
-        return editor3DState;
-    }
-
-    /**
-     * Gets editor state.
-     *
-     * @return the state of this editor.
-     */
-    @Nullable
-    @FXThread
-    protected ES getEditorState() {
-        return editorState;
     }
 
     /**
@@ -351,9 +247,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      *
      * @return the model tree.
      */
-    @NotNull
     @FXThread
-    protected ModelNodeTree getModelNodeTree() {
+    protected @NotNull ModelNodeTree getModelNodeTree() {
         return notNull(modelNodeTree);
     }
 
@@ -362,46 +257,49 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
      *
      * @return the model property editor.
      */
-    @NotNull
     @FXThread
-    protected ModelPropertyEditor getModelPropertyEditor() {
+    protected @NotNull ModelPropertyEditor getModelPropertyEditor() {
         return notNull(modelPropertyEditor);
     }
 
     /**
      * @return the container of editing components.
      */
-    @NotNull
     @FXThread
-    private EditingComponentContainer getEditingComponentContainer() {
+    private @NotNull EditingComponentContainer getEditingComponentContainer() {
         return notNull(editingComponentContainer);
     }
 
     /**
      * @return the container of property editor in objects tool.
      */
-    @NotNull
     @FXThread
-    private VBox getPropertyEditorObjectsContainer() {
+    private @NotNull VBox getPropertyEditorObjectsContainer() {
         return notNull(propertyEditorObjectsContainer);
     }
 
     /**
      * @return the container of model node tree in editing tool.
      */
-    @NotNull
     @FXThread
-    private VBox getModelNodeTreeEditingContainer() {
+    private @NotNull VBox getModelNodeTreeEditingContainer() {
         return notNull(modelNodeTreeEditingContainer);
     }
 
     /**
      * @return the container of model node tree in objects tool.
      */
-    @NotNull
     @FXThread
-    private VBox getModelNodeTreeObjectsContainer() {
+    private @NotNull VBox getModelNodeTreeObjectsContainer() {
         return notNull(modelNodeTreeObjectsContainer);
+    }
+
+    /**
+     * @return the scripting component.
+     */
+    @FXThread
+    private @NotNull EditorScriptingComponent getScriptingComponent() {
+        return notNull(scriptingComponent);
     }
 
     @Override
@@ -508,11 +406,10 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         audioNodes.forEach(editor3DState, (audioNode, state) -> state.removeAudioNode(audioNode));
     }
 
-    /**
-     * Load the saved state.
-     */
+    @Override
     @FXThread
     protected void loadState() {
+        super.loadState();
 
         scriptingComponent.addVariable("root", getCurrentModel());
         scriptingComponent.addVariable("assetManager", EDITOR.getAssetManager());
@@ -529,12 +426,8 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         scriptingComponent.setExampleCode("root.attachChild(\nnew Node(\"created from Groovy\"));");
         scriptingComponent.buildHeader();
 
-        final WorkspaceManager workspaceManager = WorkspaceManager.getInstance();
-        final Workspace currentWorkspace = notNull(workspaceManager.getCurrentWorkspace(),
-                "Current workspace can't be null.");
+        final ES editorState = notNull(getEditorState());
 
-        editorState = currentWorkspace.getEditorState(getEditFile(), getStateConstructor());
-        mainSplitContainer.updateFor(editorState);
         gridButton.setSelected(editorState.isEnableGrid());
         statisticsButton.setSelected(editorState.isShowStatistics());
         selectionButton.setSelected(editorState.isEnableSelection());
@@ -563,33 +456,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 break;
             }
         }
-
-        final MA editor3DState = getEditor3DState();
-        final Vector3f cameraLocation = editorState.getCameraLocation();
-
-        final float hRotation = editorState.getCameraHRotation();
-        final float vRotation = editorState.getCameraVRotation();
-        final float tDistance = editorState.getCameraTDistance();
-        final float cameraSpeed = editorState.getCameraSpeed();
-
-        EXECUTOR_MANAGER.addJMETask(() -> editor3DState.updateCameraSettings(cameraLocation, hRotation,
-                vRotation, tDistance, cameraSpeed));
-    }
-
-    @Override
-    @FXThread
-    public void notifyChangedCameraSettings(@NotNull final Vector3f cameraLocation, final float hRotation,
-                                            final float vRotation, final float targetDistance,
-                                            final float cameraSpeed) {
-
-        final ES editorState = getEditorState();
-        if (editorState == null) return;
-
-        editorState.setCameraHRotation(hRotation);
-        editorState.setCameraVRotation(vRotation);
-        editorState.setCameraTDistance(targetDistance);
-        editorState.setCameraLocation(cameraLocation);
-        editorState.setCameraSpeed(cameraSpeed);
     }
 
     @Override
@@ -598,7 +464,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                                           final boolean isControlDown, final boolean isButtonMiddleDown) {
 
         final MA editor3DState = getEditor3DState();
-
         if (editor3DState.isCameraMoving()) {
             return false;
         }
@@ -649,44 +514,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
     }
 
     /**
-     * Redo the last operation.
-     */
-    @FromAnyThread
-    public void redo() {
-        final EditorOperationControl operationControl = getOperationControl();
-        operationControl.redo();
-    }
-
-    /**
-     * Undo the last operation.
-     */
-    @FromAnyThread
-    public void undo() {
-        final EditorOperationControl operationControl = getOperationControl();
-        operationControl.undo();
-    }
-
-    /**
-     * Is ignore listeners boolean.
-     *
-     * @return true if needs to ignore events.
-     */
-    @FXThread
-    protected boolean isIgnoreListeners() {
-        return ignoreListeners;
-    }
-
-    /**
-     * Sets ignore listeners.
-     *
-     * @param ignoreListeners true if needs to ignore events.
-     */
-    @FXThread
-    protected void setIgnoreListeners(final boolean ignoreListeners) {
-        this.ignoreListeners = ignoreListeners;
-    }
-
-    /**
      * @return true if need to ignore moving camera.
      */
     @FXThread
@@ -712,10 +539,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         this.currentModel = currentModel;
     }
 
-    @NotNull
     @Override
     @FXThread
-    public M getCurrentModel() {
+    public @NotNull M getCurrentModel() {
         return notNull(currentModel);
     }
 
@@ -817,22 +643,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         }
     }
 
-    @Override
-    @FromAnyThread
-    public void execute(@NotNull final EditorOperation operation) {
-        final EditorOperationControl operationControl = getOperationControl();
-        operationControl.execute(operation);
-    }
-
-    /**
-     * @return the operation control.
-     */
-    @NotNull
-    @FXThread
-    private EditorOperationControl getOperationControl() {
-        return operationControl;
-    }
-
     /**
      * Handle the selected object.
      *
@@ -857,15 +667,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
             setIgnoreCameraMove(false);
         }
     }
-
-    /**
-     * Gets state constructor.
-     *
-     * @return the state constructor
-     */
-    @NotNull
-    @FXThread
-    protected abstract Supplier<EditorState> getStateConstructor();
 
     /**
      * Handle the selected object from the Tree.
@@ -955,39 +756,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editor3DState.updateSelection(selection);
     }
 
-    /**
-     * @return the editor are panel.
-     */
-    @NotNull
-    @FXThread
-    private Pane getEditorAreaPane() {
-        return notNull(editorAreaPane);
-    }
-
-    @Override
-    @FXThread
-    public boolean isInside(final double sceneX, final double sceneY, @NotNull final Class<? extends Event> eventType) {
-
-        final Pane page = eventType.isAssignableFrom(MouseEvent.class) ||
-                eventType.isAssignableFrom(ScrollEvent.class) ?
-                getEditorAreaPane() : getPage();
-
-        final Point2D point2D = page.sceneToLocal(sceneX, sceneY);
-        final boolean result = page.contains(point2D);
-
-        if (LOGGER.isEnabledDebug()) {
-            if (Config.DEV_DEBUG_JFX_KEY_INPUT && eventType.isAssignableFrom(KeyEvent.class)) {
-                LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
-                        ", localY = " + point2D.getY() + " is inside " + result);
-            } else if (Config.DEV_DEBUG_JFX_MOUSE_INPUT && eventType.isAssignableFrom(MouseEvent.class)) {
-                LOGGER.debug("Coords sceneX = " + sceneX + ", sceneY = " + sceneY + ", localX = " + point2D.getX() +
-                        ", localY = " + point2D.getY() + " is inside " + result);
-            }
-        }
-
-        return result;
-    }
-
     @Override
     @BackgroundThread
     public void doSave(@NotNull final Path toStore) {
@@ -1012,44 +780,27 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         return true;
     }
 
-    @Override
-    @FXThread
-    public void incrementChange() {
-        final int result = changeCounter.incrementAndGet();
-        setDirty(result != 0);
-    }
-
-    @Override
-    @FXThread
-    public void decrementChange() {
-        final int result = changeCounter.decrementAndGet();
-        setDirty(result != 0);
-    }
-
     /**
      * @return the scaling tool toggle.
      */
-    @NotNull
     @FXThread
-    private ToggleButton getScaleToolButton() {
+    private @NotNull ToggleButton getScaleToolButton() {
         return notNull(scaleToolButton);
     }
 
     /**
      * @return the move tool toggle.
      */
-    @NotNull
     @FXThread
-    private ToggleButton getMoveToolButton() {
+    private @NotNull ToggleButton getMoveToolButton() {
         return notNull(moveToolButton);
     }
 
     /**
      * @return the rotation tool toggle.
      */
-    @NotNull
     @FXThread
-    private ToggleButton getRotationToolButton() {
+    private @NotNull ToggleButton getRotationToolButton() {
         return notNull(rotationToolButton);
     }
 
@@ -1186,26 +937,24 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         FXUtils.addToPane(scaleToolButton, container);
     }
 
-    @Nullable
-    @Override
-    @FXThread
-    public BorderPane get3DArea() {
-        return editor3DArea;
-    }
-
     @Override
     @FXThread
     protected void createContent(@NotNull final StackPane root) {
         this.selectionNodeHandler = this::selectNodeFromTree;
 
-        editorAreaPane = new StackPane();
-        editorAreaPane.setOnDragOver(this::dragOver);
-        editorAreaPane.setOnDragDropped(this::dragDropped);
+        propertyEditorObjectsContainer = new VBox();
+        modelNodeTreeEditingContainer = new VBox();
+        modelNodeTreeObjectsContainer = new VBox();
 
-        editor3DArea = new BorderPane();
-        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
-        editor3DArea.setOnKeyReleased(Event::consume);
-        editor3DArea.setOnKeyPressed(Event::consume);
+        editingComponentContainer = new EditingComponentContainer(this, this);
+        editingComponentContainer.addComponent(new TerrainEditingComponent());
+
+        scriptingComponent = new EditorScriptingComponent(this::refreshTree);
+        scriptingComponent.prefHeightProperty().bind(root.heightProperty());
+
+        super.createContent(root);
+
+        final StackPane editorAreaPane = getEditorAreaPane();
 
         statsContainer = new VBox();
         statsContainer.setMouseTransparent(true);
@@ -1217,45 +966,20 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelPropertyEditor = new ModelPropertyEditor(this);
         modelPropertyEditor.prefHeightProperty().bind(root.heightProperty());
 
-        propertyEditorObjectsContainer = new VBox();
-        modelNodeTreeEditingContainer = new VBox();
-        modelNodeTreeObjectsContainer = new VBox();
-
-        editingComponentContainer = new EditingComponentContainer(this, this);
-        editingComponentContainer.addComponent(new TerrainEditingComponent());
-
-        scriptingComponent = new EditorScriptingComponent(this::refreshTree);
-
-        final SplitPane objectsSplitContainer = new SplitPane(modelNodeTreeObjectsContainer, propertyEditorObjectsContainer);
-        objectsSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        objectsSplitContainer.prefWidthProperty().bind(root.widthProperty());
-
-        final SplitPane editingSplitContainer = new SplitPane(modelNodeTreeEditingContainer, editingComponentContainer);
-        editingSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        editingSplitContainer.prefWidthProperty().bind(root.widthProperty());
-
-        mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
-
-        editorToolComponent = new EditorToolComponent(mainSplitContainer, 1);
-        editorToolComponent.prefHeightProperty().bind(root.heightProperty());
-        editorToolComponent.addComponent(objectsSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
-        editorToolComponent.addComponent(editingSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
-        editorToolComponent.addComponent(scriptingComponent, Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
-        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
-
-        mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
-
-        FXUtils.addToPane(mainSplitContainer, root);
-        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addToPane(statsContainer, editorAreaPane);
-        FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
-        FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
-        FXUtils.addClassTo(objectsSplitContainer, editingSplitContainer, CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
         FXUtils.addClassTo(statsContainer, CSSClasses.SCENE_EDITOR_STATS_CONTAINER);
         FXUtils.addClassTo(modelNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
+    }
 
-        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(objectsSplitContainer));
-        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(editingSplitContainer));
+    @Override
+    protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
+        super.createToolComponents(container, root);
+
+        container.addComponent(buildSplitComponent(getModelNodeTreeObjectsContainer(), getPropertyEditorObjectsContainer(), root),
+                Messages.SCENE_FILE_EDITOR_TOOL_OBJECTS);
+        container.addComponent(buildSplitComponent(getModelNodeTreeEditingContainer(), getEditingComponentContainer(), root),
+                Messages.SCENE_FILE_EDITOR_TOOL_EDITING);
+        container.addComponent(getScriptingComponent(), Messages.SCENE_FILE_EDITOR_TOOL_SCRIPTING);
     }
 
     /**
@@ -1268,17 +992,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
 
         final ModelNodeTree modelNodeTree = getModelNodeTree();
         modelNodeTree.fill(currentModel);
-    }
-
-    /**
-     * Gets editor tool component.
-     *
-     * @return the editor tool component.
-     */
-    @NotNull
-    @FXThread
-    protected EditorToolComponent getEditorToolComponent() {
-        return notNull(editorToolComponent);
     }
 
     /**
@@ -1327,11 +1040,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         editor3DState.changeEditingMode(newIndex == EDITING_TOOL);
     }
 
-    /**
-     * Handle dropped files to editor.
-     */
-    @FXThread
-    private void dragDropped(@NotNull final DragEvent dragEvent) {
+    @Override
+    protected void dragDropped(@NotNull final DragEvent dragEvent) {
+        super.dragDropped(dragEvent);
 
         UIUtils.handleDroppedFile(dragEvent, FileExtensions.JME_OBJECT, this,
                 dragEvent, AbstractSceneFileEditor::addNewModel);
@@ -1340,11 +1051,9 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
                 dragEvent, AbstractSceneFileEditor::applyMaterial);
     }
 
-    /**
-     * Handle drag over.
-     */
-    @FXThread
-    private void dragOver(@NotNull final DragEvent dragEvent) {
+    @Override
+    protected void dragOver(@NotNull final DragEvent dragEvent) {
+        super.dragOver(dragEvent);
         UIUtils.acceptIfHasFile(dragEvent, ACCEPTED_FILES);
     }
 
@@ -1448,15 +1157,6 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         });
     }
 
-    /**
-     * Calc v split size.
-     *
-     * @param splitContainer the split container
-     */
-    @FXThread
-    static void calcVSplitSize(@NotNull final SplitPane splitContainer) {
-        splitContainer.setDividerPosition(0, 0.3);
-    }
 
     /**
      * Handle changing select visibility.
@@ -1525,17 +1225,15 @@ public abstract class AbstractSceneFileEditor<IM extends AbstractSceneFileEditor
         modelPropertyEditor.syncFor(toUpdate);
     }
 
-    @NotNull
     @Override
     @JMEThread
-    public Node getCursorNode() {
+    public @NotNull Node getCursorNode() {
         return getEditor3DState().getCursorNode();
     }
 
-    @NotNull
     @Override
     @JMEThread
-    public Node getMarkersNode() {
+    public  @NotNull Node getMarkersNode() {
         return getEditor3DState().getMarkersNode();
     }
 }

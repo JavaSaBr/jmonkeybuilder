@@ -47,6 +47,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -246,8 +247,8 @@ public class MaterialFileEditor extends
     }
 
     @Override
-    protected void createToolComponents(@NotNull final EditorToolComponent container) {
-        super.createToolComponents(container);
+    protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
+        super.createToolComponents(container, root);
 
         materialTexturesComponent = new MaterialTexturesComponent(this);
         materialColorsComponent = new MaterialColorsComponent(this);

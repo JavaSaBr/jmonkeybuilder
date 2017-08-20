@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  *
  * @author JavaSaBr
  */
-public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Spatial, ModelEditor3DState, EditorModelEditorState> {
+public class ModelFileEditor extends AbstractSceneFileEditor<Spatial, ModelEditor3DState, EditorModelEditorState> {
 
     @NotNull
     private static final String NO_FAST_SKY = Messages.MODEL_FILE_EDITOR_NO_SKY;
@@ -93,32 +93,30 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         super();
     }
 
-    @NotNull
     @Override
-    protected ModelEditor3DState createEditor3DState() {
+    @FXThread
+    protected @NotNull ModelEditor3DState create3DEditorState() {
         return new ModelEditor3DState(this);
     }
 
     /**
      * @return the list of fast skies.
      */
-    @NotNull
-    private ComboBox<String> getFastSkyComboBox() {
+    private @NotNull ComboBox<String> getFastSkyComboBox() {
         return notNull(fastSkyComboBox);
     }
 
     /**
      * @return the light toggle.
      */
-    @NotNull
-    private ToggleButton getLightButton() {
+    private @NotNull ToggleButton getLightButton() {
         return notNull(lightButton);
     }
 
-    @FXThread
     @Override
-    public void openFile(@NotNull final Path file) {
-        super.openFile(file);
+    @FXThread
+    protected void doOpenFile(@NotNull final Path file) {
+        super.doOpenFile(file);
 
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
@@ -145,8 +143,6 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         } finally {
             setIgnoreListeners(false);
         }
-
-        EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
     @Override
@@ -162,9 +158,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         lightButton.setSelected(editorState.isEnableLight());
     }
 
-    @NotNull
     @Override
-    protected Supplier<EditorState> getStateConstructor() {
+    protected @Nullable Supplier<EditorState> getEditorStateFactory() {
         return EditorModelEditorState::new;
     }
 
@@ -186,9 +181,8 @@ public class ModelFileEditor extends AbstractSceneFileEditor<ModelFileEditor, Sp
         }
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
     }
 

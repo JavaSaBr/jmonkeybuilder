@@ -35,7 +35,6 @@ import com.ss.editor.ui.css.CSSClasses;
 import com.ss.editor.ui.util.DynamicIconSupport;
 import com.ss.editor.util.MaterialUtils;
 import com.ss.rlib.ui.util.FXUtils;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
@@ -55,8 +54,7 @@ import java.util.function.Supplier;
  * @author JavaSaBr
  */
 public class SceneFileEditor extends
-        AbstractSceneFileEditor<SceneFileEditor, SceneNode, SceneEditor3DState, EditorSceneEditorState> implements
-        SceneChangeConsumer {
+        AbstractSceneFileEditor<SceneNode, SceneEditor3DState, EditorSceneEditorState> implements SceneChangeConsumer {
 
     private static final int LAYERS_TOOL = 3;
     private static final int APP_STATES_TOOL = 4;
@@ -132,16 +130,21 @@ public class SceneFileEditor extends
         setNeedSyncSelection(true);
     }
 
-    @NotNull
     @Override
-    protected SceneEditor3DState createEditor3DState() {
+    @FXThread
+    protected @NotNull SceneEditor3DState create3DEditorState() {
         return new SceneEditor3DState(this);
     }
 
-    @FXThread
     @Override
-    public void openFile(@NotNull final Path file) {
-        super.openFile(file);
+    protected @Nullable Supplier<EditorState> getEditorStateFactory() {
+        return EditorSceneEditorState::new;
+    }
+
+    @Override
+    @FXThread
+    protected void doOpenFile(@NotNull final Path file) {
+        super.doOpenFile(file);
 
         final Path assetFile = notNull(getAssetFile(file), "Asset file for " + file + " can't be null.");
         final ModelKey modelKey = new ModelKey(toAssetPath(assetFile));
@@ -167,8 +170,6 @@ public class SceneFileEditor extends
         } finally {
             setIgnoreListeners(false);
         }
-
-        EXECUTOR_MANAGER.addFXTask(this::loadState);
     }
 
     @Override
@@ -195,48 +196,42 @@ public class SceneFileEditor extends
     /**
      * @return the list with app states.
      */
-    @NotNull
-    private AppStateList getAppStateList() {
+    private @NotNull AppStateList getAppStateList() {
         return notNull(appStateList);
     }
 
     /**
      * @return the list with filters.
      */
-    @NotNull
-    private FilterList getFilterList() {
+    private @NotNull FilterList getFilterList() {
         return notNull(filterList);
     }
 
     /**
      * @return the tree with layers.
      */
-    @NotNull
-    private LayerNodeTree getLayerNodeTree() {
+    private @NotNull LayerNodeTree getLayerNodeTree() {
         return notNull(layerNodeTree);
     }
 
     /**
      * @return the container of property editor in layers tool.
      */
-    @NotNull
-    private VBox getPropertyEditorLayersContainer() {
+    private @NotNull VBox getPropertyEditorLayersContainer() {
         return notNull(propertyEditorLayersContainer);
     }
 
     /**
      * @return the container of property editor in filters tool.
      */
-    @NotNull
-    private VBox getPropertyEditorFiltersContainer() {
+    private @NotNull VBox getPropertyEditorFiltersContainer() {
         return notNull(propertyEditorFiltersContainer);
     }
 
     /**
      * @return the container of property editor in app states tool.
      */
-    @NotNull
-    private VBox getPropertyEditorAppStateContainer() {
+    private @NotNull VBox getPropertyEditorAppStateContainer() {
         return notNull(propertyEditorAppStateContainer);
     }
 
@@ -290,7 +285,6 @@ public class SceneFileEditor extends
 
     @Override
     protected void createContent(@NotNull final StackPane root) {
-        super.createContent(root);
 
         appStateList = new AppStateList(this::selectAppStateFromList, this);
         propertyEditorAppStateContainer = new VBox();
@@ -300,31 +294,22 @@ public class SceneFileEditor extends
 
         layerNodeTree = new LayerNodeTree(this::selectNodeFromLayersTree, this);
         propertyEditorLayersContainer = new VBox();
-        
-        final SplitPane appStateSplitContainer = new SplitPane(appStateList, propertyEditorAppStateContainer);
-        appStateSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        appStateSplitContainer.prefWidthProperty().bind(root.widthProperty());
 
-        final SplitPane filtersSplitContainer = new SplitPane(filterList, propertyEditorFiltersContainer);
-        filtersSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        filtersSplitContainer.prefWidthProperty().bind(root.widthProperty());
-
-        final SplitPane layersSplitContainer = new SplitPane(layerNodeTree, propertyEditorLayersContainer);
-        layersSplitContainer.prefHeightProperty().bind(root.heightProperty());
-        layersSplitContainer.prefWidthProperty().bind(root.widthProperty());
-
-        final EditorToolComponent editorToolComponent = getEditorToolComponent();
-        editorToolComponent.addComponent(layersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
-        editorToolComponent.addComponent(appStateSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
-        editorToolComponent.addComponent(filtersSplitContainer, Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
+        super.createContent(root);
 
         FXUtils.addClassTo(layerNodeTree.getTreeView(), CSSClasses.TRANSPARENT_TREE_VIEW);
-        FXUtils.addClassTo(filtersSplitContainer, appStateSplitContainer, layersSplitContainer,
-                CSSClasses.FILE_EDITOR_TOOL_SPLIT_PANE);
+    }
 
-        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(appStateSplitContainer));
-        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(filtersSplitContainer));
-        root.heightProperty().addListener((observableValue, oldValue, newValue) -> calcVSplitSize(layersSplitContainer));
+    @Override
+    protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
+        super.createToolComponents(container, root);
+
+        container.addComponent(buildSplitComponent(getLayerNodeTree(), getPropertyEditorLayersContainer(), root),
+                Messages.SCENE_FILE_EDITOR_TOOL_LAYERS);
+        container.addComponent(buildSplitComponent(getAppStateList(), getPropertyEditorAppStateContainer(), root),
+                Messages.SCENE_FILE_EDITOR_TOOL_APP_STATES);
+        container.addComponent(buildSplitComponent(getFilterList(), getPropertyEditorFiltersContainer(), root),
+                Messages.SCENE_FILE_EDITOR_TOOL_FILTERS);
     }
 
     @Override
@@ -361,16 +346,14 @@ public class SceneFileEditor extends
     /**
      * @return the light toggle.
      */
-    @NotNull
-    private ToggleButton getLightButton() {
+    private @NotNull ToggleButton getLightButton() {
         return notNull(lightButton);
     }
 
     /**
      * @return the audio toggle.
      */
-    @NotNull
-    private ToggleButton getAudioButton() {
+    private @NotNull ToggleButton getAudioButton() {
         return notNull(audioButton);
     }
 
@@ -484,16 +467,9 @@ public class SceneFileEditor extends
         }
     }
 
-    @NotNull
     @Override
-    public EditorDescription getDescription() {
+    public @NotNull EditorDescription getDescription() {
         return DESCRIPTION;
-    }
-
-    @NotNull
-    @Override
-    protected Supplier<EditorState> getStateConstructor() {
-        return EditorSceneEditorState::new;
     }
 
     /**
@@ -685,15 +661,15 @@ public class SceneFileEditor extends
         getFilterList().fill(getCurrentModel());
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void notifyHided() {
         super.notifyHided();
         EXECUTOR_MANAGER.addJMETask(EDITOR::enableLightProbe);
     }
 
-    @FXThread
     @Override
+    @FXThread
     public void notifyShowed() {
         super.notifyShowed();
         EXECUTOR_MANAGER.addJMETask(EDITOR::disableLightProbe);

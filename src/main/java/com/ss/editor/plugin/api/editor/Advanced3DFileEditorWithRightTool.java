@@ -1,5 +1,6 @@
 package com.ss.editor.plugin.api.editor;
 
+import static com.ss.rlib.util.ObjectUtils.notNull;
 import com.ss.editor.annotation.FXThread;
 import com.ss.editor.plugin.api.editor.part3d.Advanced3DEditorState;
 import com.ss.editor.ui.component.editor.state.impl.Editor3DWithEditorToolEditorState;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The advanced implementation of 3D editor.
+ * The advanced implementation of 3D editor with a right tool.
  *
  * @author JavaSaBr
  */
@@ -39,33 +40,56 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
      * The pane of editor area.
      */
     @Nullable
-    private BorderPane editorAreaPane;
+    private StackPane editorAreaPane;
+
+    /**
+     * The pane of 3D editor area.
+     */
+    @Nullable
+    private BorderPane editor3DArea;
 
     @Override
     @FXThread
     protected void createContent(@NotNull final StackPane root) {
-        editorAreaPane = new BorderPane();
-        editorAreaPane.setOnMousePressed(event -> editorAreaPane.requestFocus());
+
+        editorAreaPane = new StackPane();
         editorAreaPane.setOnDragOver(this::dragOver);
         editorAreaPane.setOnDragDropped(this::dragDropped);
-        editorAreaPane.setOnKeyReleased(Event::consume);
-        editorAreaPane.setOnKeyPressed(Event::consume);
+
+        editor3DArea = new BorderPane();
+        editor3DArea.setOnMousePressed(event -> editor3DArea.requestFocus());
+        editor3DArea.setOnKeyReleased(Event::consume);
+        editor3DArea.setOnKeyPressed(Event::consume);
 
         mainSplitContainer = new EditorToolSplitPane(JFX_APPLICATION.getScene(), root);
 
         editorToolComponent = new ScrollableEditorToolComponent(mainSplitContainer, 1);
         editorToolComponent.prefHeightProperty().bind(root.heightProperty());
+
+        createToolComponents(editorToolComponent, root);
+
+        editorToolComponent.addChangeListener((observable, oldValue, newValue) -> processChangeTool(oldValue, newValue));
         editorToolComponent.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             final S editorState = getEditorState();
             if (editorState != null) editorState.setOpenedTool(newValue.intValue());
         });
 
-        createToolComponents(editorToolComponent);
-
         mainSplitContainer.initFor(editorToolComponent, editorAreaPane);
 
         FXUtils.addToPane(mainSplitContainer, root);
+        FXUtils.addToPane(editor3DArea, editorAreaPane);
         FXUtils.addClassTo(mainSplitContainer, CSSClasses.FILE_EDITOR_MAIN_SPLIT_PANE);
+        FXUtils.addClassTo(editorAreaPane, CSSClasses.FILE_EDITOR_EDITOR_AREA);
+    }
+
+    /**
+     * Process change tool.
+     *
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
+    @FXThread
+    protected void processChangeTool(@Nullable final Number oldValue, @NotNull final Number newValue) {
     }
 
     @Override
@@ -85,15 +109,24 @@ public abstract class Advanced3DFileEditorWithRightTool<T extends Advanced3DEdit
     @Override
     @FXThread
     public @Nullable BorderPane get3DArea() {
-        return editorAreaPane;
+        return editor3DArea;
+    }
+
+    /**
+     * @return the pane of editor area.
+     */
+    @FXThread
+    protected @NotNull StackPane getEditorAreaPane() {
+        return notNull(editorAreaPane);
     }
 
     /**
      * Create and add tool components to the container.
      *
      * @param container the tool container.
+     * @param container the root.
      */
-    protected void createToolComponents(@NotNull final EditorToolComponent container) {
+    protected void createToolComponents(@NotNull final EditorToolComponent container, @NotNull final StackPane root) {
     }
 
     /**
